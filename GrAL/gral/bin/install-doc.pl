@@ -2,7 +2,7 @@
 
 use Getopt::Long;
 
-$STL = "http://www.sgi.com/Technology/STL";
+$STL = "http://www.sgi.com/tech/stl";
 $GRALCONCEPTS = "file:/home/berti/CVS-work/gral/base/doc/hyperlatex/html";
 $ROOT = "file:/home/berti/CVS-work/";
 $DOXYPATH = "doxygen/html";

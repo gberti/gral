@@ -32,7 +32,7 @@ endif
 # here some utility scripts can be found,
 # typically for collective operations on all modules
 export SCRIPTS=$(CONFIGURATION)/scripts
-export STLURL="http://www.sgi.com/Technology/STL"
+export STLURL=http://www.sgi.com/tech/stl
 
 
 # targets for tree makefiles (directory makefiles calling subdir makefiles) 
