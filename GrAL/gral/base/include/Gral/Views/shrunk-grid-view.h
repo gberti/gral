@@ -446,7 +446,7 @@ template<class GRID>
 struct element_traits<shrink_grid_view::cell_iterator<GRID> >
   : public element_traits_cell_base<shrink_grid_view::grid_view<GRID> > 
 {
-  typedef element_traits_vertex_base<shrink_grid_view::grid_view<GRID> >  base;
+  typedef element_traits_cell_base<shrink_grid_view::grid_view<GRID> >  base;
   typedef typename base::element_type   element_type;
   typedef typename base::handle_type    handle_type;
 
@@ -471,6 +471,23 @@ class grid_function<shrink_grid_view::vertex_iterator<GRID>, T>
   : public grid_function_hash<shrink_grid_view::vertex_iterator<GRID>, T>
 {
   typedef grid_function_hash<shrink_grid_view::vertex_iterator<GRID>, T>  base;
+public:
+  typedef typename base::grid_type grid_type;
+
+  grid_function() {}
+  grid_function(grid_type const& g) : base(g) {}
+  grid_function(grid_type const& g,
+		T         const& t0) : base(g,t0) {}
+};
+
+/*! 
+   \todo This could reuse underlying grid function on base cells
+ */
+template<class GRID, class T>
+class grid_function<shrink_grid_view::cell_iterator<GRID>, T>
+  : public grid_function_hash<shrink_grid_view::cell_iterator<GRID>, T>
+{
+  typedef grid_function_hash<shrink_grid_view::cell_iterator<GRID>, T>  base;
 public:
   typedef typename base::grid_type grid_type;
 
