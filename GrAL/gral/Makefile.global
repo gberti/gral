@@ -1,7 +1,7 @@
 
 ALLROOT=$(shell pwd)
 SUBDIRS= configuration utilities external-control sequence geometry \
-         gral
+         graphics-device function-algebra gral
 
 clean:
 	@set -e; \
@@ -51,6 +51,20 @@ check:
 
 # predoc  = generate docs
 # postdoc = install docs (replace dummy links)
+
+doxy:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) doxy ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+installdox:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) installdox ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
 
 doc: predoc postdoc
 
