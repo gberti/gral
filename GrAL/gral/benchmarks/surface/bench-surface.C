@@ -27,6 +27,7 @@
 #undef  protected
 
 
+using namespace GrAL;
 
 typedef coordN<2>    coord_type;
 typedef point_traits<coord_type> pt;
@@ -107,8 +108,6 @@ private:
     mutable coord_type normal;
 };
 
-struct grid_types< neumann_triang2d<cartesian2d::RegGrid2D> >
-  : public grid_types_nt2d<cartesian2d::RegGrid2D > {};
 
 int main(int argc, char* argv[]) {
   using namespace std;

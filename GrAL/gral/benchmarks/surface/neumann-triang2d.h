@@ -23,6 +23,7 @@
 */
 //----------------------------------------------------------------
 
+namespace GrAL {
 
 template<class GRID>
 class neumann_triang2d {
@@ -175,12 +176,11 @@ struct grid_types_nt2d  {
 };
 
 
-// this has to be done 'by hand' if partial specialization
-// is not available.
-
 template<class GRID>
 struct grid_types<neumann_triang2d<GRID> > 
   : public grid_types_nt2d<GRID>  {};
 
+
+} // namespace GrAL
 
 #endif

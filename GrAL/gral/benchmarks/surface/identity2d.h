@@ -5,13 +5,14 @@
 
 #include "Geometry/point-traits.h"
 
+
 template<class P2D>
 struct identity2d {
 public:
   typedef P2D        coord_type;
   typedef coord_type result_type;
   typedef coord_type argument_type;
-  typedef typename point_traits<P2D>::component_type real;
+  typedef typename GrAL::point_traits<P2D>::component_type real;
   
   static unsigned dim_of_image()  { return 2;}
   static unsigned dim_of_domain() { return 2;}
