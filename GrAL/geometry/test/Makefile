@@ -1,7 +1,7 @@
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 
-SUBDIRS = ap
+SUBDIRS = ap intersections affine-mapping
 
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)

@@ -171,6 +171,7 @@ Triangles [0 0 0,1 0 0,0 0 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
 Triangles [0 0 0,0 1 0,0 0 1]  [0 0 0,0 1 0,0 0 1]   do intersect.
 Triangles [0 0 0,0 1 0,0 0 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
 Triangles [1 0 0,0 1 0,0 0 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Segment/triangle
 Segment/Triangle [0 0 0,0 2 0]  [0 0 0,1 0 0,0 1 0]   do intersect.
 Segment/Triangle [0 0 0,0 2 0]  [0 0 0,1 0 0,0 0 1]   do intersect.
 Segment/Triangle [0 0 0,0 2 0]  [0 0 0,0 1 0,0 0 1]   do intersect.
@@ -191,3 +192,27 @@ Segment/Triangle [-1 -1 -1,1 1 1]  [0 0 0,1 0 0,0 1 0]   do intersect.
 Segment/Triangle [-1 -1 -1,1 1 1]  [0 0 0,1 0 0,0 0 1]   do intersect.
 Segment/Triangle [-1 -1 -1,1 1 1]  [0 0 0,0 1 0,0 0 1]   do intersect.
 Segment/Triangle [-1 -1 -1,1 1 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Tet/Tet
+Tets [0 0 0,1 0 0,0 1 0,0 0 1]  [0 0 0,1 0 0,0 1 0,0 0 1]   do intersect.
+Tets [0 0 0,1 0 0,0 1 0,0 0 1]  [1 1 1,1 0 0,0 1 0,0 0 1]   do intersect.
+Tets [0 0 0,1 0 0,0 1 0,0 0 1]  [0 0 0,-1 0 0,0 -1 0,0 0 -1]   do intersect.
+Tets [0 0 0,1 0 0,0 1 0,0 0 1]  [-1 -1 -1,-1 0 0,0 -1 0,0 0 -1]   do not intersect.
+Tets [1 1 1,1 0 0,0 1 0,0 0 1]  [1 1 1,1 0 0,0 1 0,0 0 1]   do intersect.
+Tets [1 1 1,1 0 0,0 1 0,0 0 1]  [0 0 0,-1 0 0,0 -1 0,0 0 -1]   do not intersect.
+Tets [1 1 1,1 0 0,0 1 0,0 0 1]  [-1 -1 -1,-1 0 0,0 -1 0,0 0 -1]   do not intersect.
+Tets [0 0 0,-1 0 0,0 -1 0,0 0 -1]  [0 0 0,-1 0 0,0 -1 0,0 0 -1]   do intersect.
+Tets [0 0 0,-1 0 0,0 -1 0,0 0 -1]  [-1 -1 -1,-1 0 0,0 -1 0,0 0 -1]   do intersect.
+Tets [-1 -1 -1,-1 0 0,0 -1 0,0 0 -1]  [-1 -1 -1,-1 0 0,0 -1 0,0 0 -1]   do intersect.
+Point/Tet
+Point 0 0 0  & Tet  [0 0 0,1 0 0,0 1 0,0 0 1]   do intersect.
+Point 0 0 0  & Tet  [1 1 1,1 0 0,0 1 0,0 0 1]   do not intersect.
+Point 0 0 0  & Tet  [0 0 0,-1 0 0,0 -1 0,0 0 -1]   do intersect.
+Point 0 0 0  & Tet  [-1 -1 -1,-1 0 0,0 -1 0,0 0 -1]   do not intersect.
+Point 0.5 0.5 0.5  & Tet  [0 0 0,1 0 0,0 1 0,0 0 1]   do not intersect.
+Point 0.5 0.5 0.5  & Tet  [1 1 1,1 0 0,0 1 0,0 0 1]   do intersect.
+Point 0.5 0.5 0.5  & Tet  [0 0 0,-1 0 0,0 -1 0,0 0 -1]   do not intersect.
+Point 0.5 0.5 0.5  & Tet  [-1 -1 -1,-1 0 0,0 -1 0,0 0 -1]   do not intersect.
+Point 1 1 1  & Tet  [0 0 0,1 0 0,0 1 0,0 0 1]   do not intersect.
+Point 1 1 1  & Tet  [1 1 1,1 0 0,0 1 0,0 0 1]   do intersect.
+Point 1 1 1  & Tet  [0 0 0,-1 0 0,0 -1 0,0 0 -1]   do not intersect.
+Point 1 1 1  & Tet  [-1 -1 -1,-1 0 0,0 -1 0,0 0 -1]   do not intersect.
