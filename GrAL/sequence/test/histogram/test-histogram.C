@@ -1,3 +1,6 @@
+/*! \file Test harness for histogram_table and compute_histogram
+ */
+
 #include "Container/histogram-table.h"
 #include "Container/sequence-algorithms.h"
 #include "Utility/pre-post-conditions.h"
