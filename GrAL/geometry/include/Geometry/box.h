@@ -81,6 +81,9 @@ public:
   const coord& the_max() const { return maxc;}
   coord        center()  const { return 0.5*(minc+maxc);}
 
+  unsigned dimension()       const { return pt::Dim(minc);}
+  unsigned space_dimension() const { return pt::Dim(minc);}
+
   // function interface
   typedef coord argument_type;
   typedef coord result_type;
@@ -245,6 +248,28 @@ typename box<COORD>::scalar_type diameter(box<COORD> const& b)
   typedef algebraic_primitives<COORD> ap;
   return ap::distance(b.the_min(), b.the_max());
 }
+
+
+/*
+template<class COORD>
+polytope_directions<box<COORD> > :  public polytope_directions_base<box<COORD> >
+{
+  typedef  polytope_directions_base<tetrahedron<COORD> > base;
+  typedef  box<COORD>                                    object_type;
+  typedef  algebraic_primitives<COORD>                   ap;
+  typedef  COORD                                         coord_type;
+ public:
+  typedef typename base::dir_sequence dir_sequence;
+  polytope_directions(object_type const& obj) : base(obj) 
+    {
+      for(int k = 1; k < obj.space_dimension(); ++k) {
+	// put all combinations of k unit directions into dirs[k]
+	// for(int d = 1; d <= obj.space_dimension(); ++d)
+        // dirs[k].push_back(ap::unit_vector(d));
+      }
+    }
+};
+*/
 
 } // namespace GrAL 
 
