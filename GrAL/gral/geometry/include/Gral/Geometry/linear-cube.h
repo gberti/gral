@@ -16,6 +16,8 @@
 
 #include <vector>
 
+
+
 template<class COORD>
 class midpoint_cubature_cube {
 public:
@@ -92,6 +94,7 @@ public:
 */
 template<class GEOM, class F, class GT = grid_types<typename GEOM::grid_type> >
 class linear_cube_interpolator {
+  typedef linear_cube_interpolator<GEOM,F,GT> self;
 public:
   typedef GEOM geom_type;
   typedef F    function_type;
@@ -119,8 +122,10 @@ private:
   ref_ptr<geom_type const>     the_geom;
   ref_ptr<function_type const> f;
   Cell                         c;
-  static cubature_type                cubature_rule;
+  static cubature_type         cubature_rule;
 
+  std::vector<scalar_type>  jacdet_cub;
+  std::vector<coord_type>   global_cub;
 public:
   enum { dim = grid_type::dim};
   enum { two_power_dim = compile_time_functions::power<2,dim>::value};
@@ -129,27 +134,56 @@ public:
   typedef typename index_map_type::index_type index_type;
 
   static index_map_type  cart_index_map;
-  static int cart2mesh[two_power_dim];
-  static int mesh2cart[two_power_dim];
+  static std::vector<int> cart2mesh;
+  static std::vector<int> mesh2cart;
+  //  static int cart2mesh[two_power_dim];
+  //  static int mesh2cart[two_power_dim];
 
   static void init() { 
     cart_index_map = index_map_type(index_type(0), index_type(2)); 
+    cart2mesh = std::vector<int>(two_power_dim);
+    mesh2cart = std::vector<int>(two_power_dim);
     // this could be done by archetype mapping
     for(int i = 0; i < two_power_dim; ++i)
       cart2mesh[i] = mesh2cart[i] = i;
   }
-  static int        index2mesh(index_type idx) { return cart2mesh[cart_index_map(idx)];}
+  static int        index2mesh(index_type idx) { 
+    return cart2mesh[cart_index_map(idx)];
+}
   static index_type mesh2index(int v)          { cv(v); return cart_index_map(mesh2cart[v]);}
 
-  static bool valid(int v) { return (0 <= v && v < two_power_dim);}
+  static bool valid(int v) { return (0 <= v && v < (int)mesh2cart.size());}
   static void cv   (int v) { REQUIRE(valid(v), " v=" << v, 1); }
+
+  static void print(std::ostream& out) 
+  {
+    out << "cart_index_map: ["
+	<< cart_index_map.min_tuple() << "," << cart_index_map.beyond_tuple() << "]" << std::endl;
+    out << "cart2mesh: ";
+    for(unsigned i = 0; i < cart2mesh.size(); ++i)
+      out << cart2mesh[i] << std::endl;
+    out << "mesh2cart: ";
+    for(unsigned i = 0; i < mesh2cart.size(); ++i)
+      out << mesh2cart[i] << std::endl;
+  }
+
 public:
   linear_cube_interpolator() {}
   linear_cube_interpolator(geom_type     const& geo,
 			   function_type const& ff,
 			   Cell cc)
-    : the_geom(geo), f(ff), c(cc) {}
+    : the_geom(geo), f(ff), c(cc) 
+  { REQUIRE_ALWAYS(cc.valid()," cc=" << cc.handle() << "," << & (cc.TheGrid()),1); }
 
+  void init_integration() {
+    jacdet_cub = std::vector<scalar_type>(cubature_rule.size());
+    global_cub = std::vector<coord_type> (cubature_rule.size());
+    for(int i = 0; i < (int)cubature_rule.size(); ++i) {
+      jacdet_cub[i] = jacdet(cubature_rule.point(i));
+      global_cub[i] = global(cubature_rule.point(i));
+    }
+  }
+  bool cub_initialized() const { return (jacdet_cub.size() == cubature_rule.size());}
 
   result_type operator()(coord_type X) const {
     local_coord_type x = local(X);
@@ -168,26 +202,18 @@ public:
 
 
   local_coord_type local(coord_type X) const {
-    // std::cout << "local(" << X << ") " << std::flush;
     local_coord_type res;
     matrix_type L2G;
     coord_type X0 = XV(index2mesh(index_type(0)));
-    //coord_type X0 = coord(Vertex(c.TheGrid(), index2mesh(index_type(0))));
     for(int i = 0; i < dim; ++i) {
       index_type ei(0); // = ap::unit_vector(i);
       ei[i] = 1;
-      //std::cout << " ei=" << ei << " index2mesh(ei)=" << index2mesh(ei) << " " << std::flush;
       L2G[i+pt::LowerIndex(X0)] = XV(index2mesh(ei)) - X0;
-      // std::cout << "L2G[" << i << "]= " << L2G[i+pt::LowerIndex(X0)] << " " << std::flush;
-      //L2G[i+pt::LowerIndex(X0)] = coord(Vertex(c.TheGrid(), index2mesh(ei))) - X0;
     }
     ap::solve(L2G,res,X-X0);
     scalar_type dist = ap::distance(X, global(res));
     scalar_type eps = 0.00001 * ap::distance(X0, XV(index2mesh(index_type(1))));
-    // std::cout << " res=" << res << " global(res)=" << global(res) << " dist=" << dist << " eps=" << eps << " ";
-    //scalar_type eps = 0.00001 * ap::distance(X0, coord(Vertex(c.TheGrid(), index2mesh(index_type(1)))));
     while(dist > eps) {
-      // std::cout << " res=" << res << std::endl;
       coord_type delta;
       ap::solve(jacobian(res), delta, global(res)-X);
       res = res - delta;
@@ -198,34 +224,29 @@ public:
 
   coord_type global(local_coord_type x) const {
     coord_type res(0.0);
-    //    for(int  v= 0; v < (int)c.NumOfVertices(); ++v) {
     int vcnt = 0;
     for(VertexOnCellIterator v(c); !v.IsDone(); ++v, ++vcnt) {
        result_type prod = coord(*v);
        index_type idx = mesh2index(vcnt);
-      // std::cout << " v=" << v  << " idx(v)=" << idx;
-      for(int i = 0; i < dim; ++i)
-	prod *= (1.0-idx[i]) + (2*idx[i]-1)*x[i+ptl::LowerIndex(x)];
-      res += prod;
+       for(int i = 0; i < dim; ++i)
+	 prod *= (1.0-idx[i]) + (2*idx[i]-1)*x[i+ptl::LowerIndex(x)];
+       res += prod;
     }
     return res;
   }
-  coord_type cubature_global_coord(int i) const { return global(cubature_rule.point(i));}
+  coord_type cubature_global_coord(int i) const { REQUIRE(cub_initialized(), "", 1); return global_cub[i];}
 
 
   Vertex      V(int v)       const { 
-    //std::cout << " V(" << v << ")=" << TheCell()->V(v).handle() << " " << std::flush;
     return TheCell()->V(v);
   }
   coord_type XV(int v)       const { 
-    //std::cout << " XV(" << v<< ")=" << TheGeometry()->coord(V(v)) << " " << std::flush;
     return TheGeometry()->coord(V(v));
   }
   coord_type coord(Vertex v) const { return TheGeometry()->coord(v);}
 
   ref_ptr<Cell const>      TheCell()     const { return ref_ptr<Cell const>(c);}
   ref_ptr<geom_type const> TheGeometry() const { return the_geom;}
-  //  static ref_ptr<cubature_type const> TheCubature()       { return ref_ptr<cubature_type const>(cubature_rule);}
   static ref_ptr<cubature_type>       TheCubature()       { return ref_ptr<cubature_type >     (cubature_rule);}
 
 
@@ -235,7 +256,6 @@ public:
   {
     matrix_type res(0.0);
     for(int j = 0; j < dim; ++j) {
-      //for(int  v= 0; v < (int)c.NumOfVertices(); ++v) {
       int vcnt = 0;
       for(VertexOnCellIterator v(c); !v.IsDone(); ++v, ++vcnt) {
  	coord_type prod = coord(*v);
@@ -254,6 +274,7 @@ public:
   /*! \brief Determinant of the Jacobian
    */
   scalar_type jacdet(local_coord_type x) const { return ap::det(jacobian(x));}
+  scalar_type jacdet(int i)              const { REQUIRE(cub_initialized(), "", 1); return jacdet_cub[i];}
 
   /*! \brief Integrate a function defined in global coordinates over the simplex
       
@@ -261,9 +282,12 @@ public:
   template<class GLOBF>
   typename GLOBF::result_type integrate_global(GLOBF const& f) const 
   {
+    if(! cub_initialized())
+      const_cast<self *>(this)->init_integration();
+
     typename GLOBF::result_type res(0.0);
     for(int i = 0; i < (int)cubature_rule.size(); ++i)
-      res += f(cubature_global_coord(i)) * jacdet(cubature_rule.point(i)) * cubature_rule.weight(i);
+      res += f(cubature_global_coord(i)) * jacdet(i) * cubature_rule.weight(i);
     return res;
   }
 
@@ -274,6 +298,7 @@ template<class GEOM, class F, class GT>
 typename linear_cube_interpolator<GEOM,F,GT>::index_map_type
 linear_cube_interpolator<GEOM,F,GT>::cart_index_map;
 
+/*
 template<class GEOM, class F, class GT>
 int 
 linear_cube_interpolator<GEOM,F,GT>::cart2mesh[linear_cube_interpolator<GEOM,F,GT>::two_power_dim];
@@ -281,6 +306,15 @@ linear_cube_interpolator<GEOM,F,GT>::cart2mesh[linear_cube_interpolator<GEOM,F,G
 template<class GEOM, class F, class GT>
 int 
 linear_cube_interpolator<GEOM,F,GT>::mesh2cart[linear_cube_interpolator<GEOM,F,GT>::two_power_dim];
+*/
+template<class GEOM, class F, class GT>
+std::vector<int> 
+linear_cube_interpolator<GEOM,F,GT>::cart2mesh;
+
+template<class GEOM, class F, class GT>
+std::vector<int> 
+linear_cube_interpolator<GEOM,F,GT>::mesh2cart;
+
 
 template<class GEOM, class F, class GT>
 typename linear_cube_interpolator<GEOM,F,GT>::cubature_type
