@@ -204,7 +204,7 @@ inline matrix<N,N,OFF> operator*(coord_N_component ls, const matrix<N,N,OFF>& rs
     \ingroup matrixalg
 */
 template<unsigned N, unsigned M, int OFF>
-inline ::std::ostream& operator<<(::std::ostream& out, const matrix<M,N,OFF>& rs)
+inline std::ostream& operator<<(std::ostream& out, const matrix<M,N,OFF>& rs)
 {
   for(unsigned i = OFF; i< M+OFF; i++) {
     for(unsigned j = OFF; j < N+OFF; j++)
@@ -218,7 +218,7 @@ inline ::std::ostream& operator<<(::std::ostream& out, const matrix<M,N,OFF>& rs
     \ingroup matrixalg
 */
 template<unsigned N, unsigned M, int OFF>
-inline ::std::istream& operator>>(::std::istream& in, matrix<M,N,OFF>& rs)
+inline std::istream& operator>>(std::istream& in, matrix<M,N,OFF>& rs)
 {
   for(unsigned i = OFF; i< M+OFF; i++) {
     for(unsigned j = OFF; j < N+OFF; j++)
@@ -232,13 +232,17 @@ inline ::std::istream& operator>>(::std::istream& in, matrix<M,N,OFF>& rs)
 /*! \brief matrix traits specialization 
     \ingroup matrixalg
 */
+
 template<unsigned N, unsigned M, int OFF>
-struct matrix_traits<matrix<M,N,OFF> >
-  : public matrix_traits_fixed_dim_base<M,N, matrix<M,N,OFF> > 
+struct matrix_traits_matrixNMOFF
+  : public matrix_traits_fixed_dim_base<M,N, matrix<M,N,OFF>, double, OFF > 
 {
   typedef matrix<M,N,OFF> matrix_type;
-  typedef double component_type;
-  
+  typedef matrix<N,M,OFF> transpose_type;
+  typedef double          component_type;
+
+  static void ConstructWithDim(matrix_type &, int, int) {}
+  /*
   static int LowerRowIndex()  { return OFF;}
   static int UpperRowIndex()  { return OFF+M-1;}
   static int LowerColIndex()  { return OFF;}
@@ -247,10 +251,24 @@ struct matrix_traits<matrix<M,N,OFF> >
   static int UpperRowIndex(matrix_type const&)  { return OFF+M-1;}
   static int LowerColIndex(matrix_type const&)  { return OFF;}
   static int UpperColIndex(matrix_type const&)  { return OFF+N-1;}
+  */
 
   // matrix_type identity();
   // template<class P>
   // matrix_type scaling(P s);
+};
+
+template<unsigned N, unsigned M, int OFF>
+struct matrix_traits<matrix<M,N,OFF> > :
+//  : public matrix_traits_transpose<matrix_traits_matrixNMOFF<M,N,OFF> >
+  
+  public matrix_traits_matrixNMOFF<M,N,OFF>,
+  public matrix_traits_transpose<matrix_traits_matrixNMOFF<M,N,OFF>,
+				 matrix_traits_matrixNMOFF<N,M,OFF> >,
+  public matrix_traits_inverse  <matrix_traits_matrixNMOFF<M,N,OFF>,
+				 matrix_traits_matrixNMOFF<M,M,OFF> >
+{
+
 };
 
 } // namespace GrAL
