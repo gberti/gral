@@ -2,7 +2,7 @@ passed
 passed
 
 GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/utilities/include/Utility/selective-ostream.h
-      FUNCTION on, LINE 46
+      FUNCTION on, 
       precondition violated: out != 0 cannot do output: no stream!
 Continuing.
 passed
