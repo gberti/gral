@@ -24,9 +24,14 @@
 
 namespace GrAL {
 
+  /*! \defgroupd geometricsearching Geometric searching on grids
+
+  */
+
 /*! \brief Point location in a grid by bucketing
     
-    \test test-point-locator.C
+    \ingroup geometricsearching
+    \see Tested in \ref test-point-locator.C
 */
 template<class GRID, class GEOM, class GT = grid_types<GRID> >
 class point_locator 
