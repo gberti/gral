@@ -1,0 +1,117 @@
+export CONFIG:=$(shell pwd)/mk.config
+#unexport PWD
+include $(CONFIG)
+
+SUBDIRS =  base complex2d distributed partitioning cartesian2d testing \
+           gmv-io geomview-io cartesian3d complex3d triang2d 
+
+#include $(ALLROOT)/configuration/defs/recursive-targets
+
+TARGET=all
+
+all:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) all CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+new: libclean
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+generic:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) $(TARGET) CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+
+
+#SHELL=/bin/bash
+
+install-headers: 
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) install CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+module-clean:
+	rm -f doxy.tags doxy.log
+
+clean: stdclean
+
+realclean: clean
+	rm -rf doxygen/
+
+test:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) test CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+module-check:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) check CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+doc: doc-recursive
+predoc: predoc-recursive
+postdoc: postdoc-recursive
+
+
+additional-doxy: doxy-recursive
+additional-installdox: installdox-recursive
+
+doxy-recursive:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) doxy CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+installdox-recursive:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) installdox CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+
+doc-recursive: predoc-recursive postdoc-recursive
+
+predoc-recursive:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) predoc CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+postdoc-recursive:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) postdoc CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+
+
+
