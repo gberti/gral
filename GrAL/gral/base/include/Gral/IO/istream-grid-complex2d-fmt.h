@@ -68,15 +68,19 @@ class OstreamComplex2DFmt {
 protected:
   std::ostream * out;
   bool      owned;
+  int       offset;
 public: 
-  OstreamComplex2DFmt(std::ostream& ot) 
-    : out(&ot), owned(false) {}
-  OstreamComplex2DFmt(std::string const& nm) 
-    : out(new std::ofstream(nm.c_str())), owned(true) {}
+  OstreamComplex2DFmt(std::ostream& ot, int off = 0) 
+    : out(&ot), owned(false), offset(off) {}
+  OstreamComplex2DFmt(std::string const& nm, int off = 0) 
+    : out(new std::ofstream(nm.c_str())), owned(true), offset(off) {}
+
   ~OstreamComplex2DFmt()
   { if(owned) delete out;}
 
   std::ostream& Out() { return *out;}
+
+  int Offset() const { return offset;}
 };
 
 /*! \brief ConstructGrid overload for OstreamComplex2DFmt
@@ -91,7 +95,7 @@ template<class GRID>
 void ConstructGrid0(OstreamComplex2DFmt& Out, 
 		    GRID const& G)
 {
-  write_complex2d(G, Out.Out(), 0);
+  write_complex2d(G, Out.Out(), Out.Offset());
 }
 /*! \brief ConstructGrid overload for OstreamComplex2DFmt
   \ingroup complex2dformat
@@ -105,7 +109,7 @@ template<class GRID, class GEOM>
 void ConstructGrid(OstreamComplex2DFmt& Out, 
                    GRID const& G, GEOM const& Geom)
 {
-  write_complex2d(G, Geom, Out.Out(), 0);
+  write_complex2d(G, Geom, Out.Out(), Out.Offset());
 }
 
 /*! \brief ConstructGrid overload for OstreamComplex2DFmt
@@ -122,7 +126,7 @@ void ConstructGrid(OstreamComplex2DFmt& Out,
                    OstreamComplex2DFmt&, // dummy output geom
                    GRID const& G, GEOM const& Geom)
 {
-  write_complex2d(G, Geom, Out.Out(), 0);
+  write_complex2d(G, Geom, Out.Out(), Out.Offset());
 }
 
 
