@@ -3,6 +3,15 @@
 
 #include "Container/my-hash-map.h"
 
+
+/*! \brief Table for managing histograms
+
+    \ingroup containers
+
+    \see compute_histogram
+    \test test-histogram.C
+    
+*/
 template<class T>
 class histogram_table {
 public:
@@ -21,6 +30,9 @@ private:
 public:
   histogram_table() {}
 
+  /*! \brief Write access. Returns 0 if key \k does not exist.
+    \Note: This inserts a new entry if none exists for the key \c k.
+   */
   size_type& operator[](key_type const& k)
   { 
     iterator ik = the_map.find(k);
@@ -30,6 +42,7 @@ public:
     return ik->second;
   }
 
+  //! Read-only access. Returns 0 if key \k does not exist.
   size_type operator()(key_type const& k)
   {
     iterator ik = the_map.find(k);
@@ -38,10 +51,18 @@ public:
     return 0;
   }
 
+  //! number of different entries
+  size_type size() const { return the_map.size();}
+
+  /*! \brief STL conforming iterators
+   */
+  //@{
   iterator begin() { return the_map.begin();}
   iterator end()   { return the_map.end();}
   const_iterator begin() const { return the_map.begin();}
   const_iterator end()   const { return the_map.end();}
+  //@}
+
 };
 
 // could be specialized for small data types, say range is one byte

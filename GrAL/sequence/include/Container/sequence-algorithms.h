@@ -1,8 +1,15 @@
 #ifndef GRAL_GB_SEQUENCE_ALGORITHMS_H
 #define GRAL_GB_SEQUENCE_ALGORITHMS_H
 
+
+
 namespace sequence {
 
+  /*!
+      \ingroup algorithms
+
+      \see histogram_table
+  */
   template<class ForwardIterator, class Map>
   void compute_histogram(ForwardIterator begin, ForwardIterator end, Map & hist)
   {
@@ -23,6 +30,9 @@ namespace sequence {
     bool operator()(Pair const& p1, Pair const& p2) const { return p1.second < p2.second;}
   };
 
+  /*!
+      \ingroup algorithms
+  */
 
   template<class Map>
   typename Map::const_iterator arg_max_map(Map const& map)
@@ -40,7 +50,9 @@ namespace sequence {
     return max_iter;
   }
 
-
+  /*!
+      \ingroup algorithms
+  */
  template <typename InputIterator, typename Predicate>
   inline bool exists(InputIterator first, InputIterator last, Predicate p) {
     while(first != last) {

@@ -28,7 +28,7 @@
 
 
 
-/*! \defgroup algorithms  Algorithms on Sequences
+/*! \defgroup algorithms  Algorithms on Sequences and Sets
 
    This module contains algorithms on sequences, 
    mostly slight variations on STL algorithms for convenience.

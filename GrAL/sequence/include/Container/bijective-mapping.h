@@ -5,11 +5,12 @@
 // $LICENSE
 
 
-#include "Container/my-hash-map.h" // STL
+#include "Container/my-hash-map.h" 
 #include "Container/mapped-value-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
 /*! \defgroup bijectivemapping Representations for one-to-one mappings 
+
     \ingroup mappings
 
   \b Contents
