@@ -42,7 +42,7 @@ public:
 
   std::ostream& Out() { return *out;}
 
-  template<unsigned N>
+  template<int N>
   int element_tag(vertex_type_tag, grid_dim_tag<N>) const { return 1;}
   int element_tag(cell_type_tag,   grid_dim_tag<3>) const { return 0;} 
   int element_tag(cell_type_tag,   grid_dim_tag<2>) const { return 2;} 
