@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 ./test-refcount >  out 2>&1
 /bin/echo "\n"
 for i in out
