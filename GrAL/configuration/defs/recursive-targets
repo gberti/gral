@@ -26,6 +26,12 @@ else
 
 TARGET=dummy # must be called with "gmake generic TARGET=<target>"
 
+all:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) all;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
 generic:
 	@set -e; \
 	for i in $(SUBDIRS); \
@@ -52,11 +58,6 @@ check:
 	echo "LEAVING  directory" $$i;cd ..; done
 
 
-all:
-	@set -e; \
-	for i in $(SUBDIRS); \
-	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) all;\
-	echo "LEAVING  directory" $$i;cd ..; done
 
 compile:
 	@set -e; \
