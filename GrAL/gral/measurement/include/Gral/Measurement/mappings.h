@@ -1,10 +1,14 @@
-#ifndef SIMBIO_GRIDQUALITY_MAPPINGS_H
-#define SIMBIO_GRIDQUALITY_MAPPINGS_H
+#ifndef GRAL_GB_MEASUREMENT_MAPPINGS_H
+#define GRAL_GB_MEASUREMENT_MAPPINGS_H
+
+// $LICENSE 
 
 // some mappings for producing distorted elements.
 
 #include "Geometry/point-traits.h"
 #include <cmath>
+
+namespace measurement {
 
 template<class P>
 class identity3d {
@@ -50,6 +54,6 @@ public:
 
 };
 
-
+} // namespace measurement
 
 #endif

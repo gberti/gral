@@ -4,6 +4,9 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Subranges/enumerated-subrange.h"
 
+
+namespace measurement {
+
 /*! \brief Class for checking edge/facet intersections of cells
 
     This class server to find degenerated cells by checking if
@@ -65,6 +68,7 @@ private:
   void find_non_incident_facet_edge_pairs();
 };
 
+} //  namespace measurement;
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Measurement/check-edge-facet-intersections.C"

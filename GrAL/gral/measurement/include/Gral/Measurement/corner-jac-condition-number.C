@@ -9,6 +9,9 @@
 #include "Gral/Base/cell-archetype-map.h"
 #include "Gral/Algorithms/calculate-vertex-stars.h"
 
+
+namespace measurement {
+
 template<class GRID, class GEOM>
 void 
 corner_jacobian<GRID,GEOM>::set_vertex_stars
@@ -75,5 +78,7 @@ corner_jacobian<GRID,GEOM>
 			   typename ap::Norm_frobenius());
   return q;
 }
+
+} // namespace measurement;
 
 #endif

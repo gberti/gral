@@ -1,5 +1,9 @@
 
-/* Test the detection of edge-facet-intersections,
+// $LICENSE_NEC
+
+/* \file
+   
+    Test the detection of edge-facet-intersections,
    indicating invalid elements (e.g. for hexahedral cells).
 
  */
@@ -38,6 +42,7 @@ int main(int argc, char* argv[]) {
   using std::cout;
   using cartesian3d::CartesianGrid3D;
   using cartesian3d::mapped_geometry;
+  namespace ms = measurement;
 
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"map.in","main");
   double wf = 0.0;// warping factor.
@@ -51,7 +56,7 @@ int main(int argc, char* argv[]) {
 
   typedef CartesianGrid3D                           reg_grid_type;
   typedef point                                     coord_type;
-  typedef warping3d<coord_type>                     mapping_type;
+  typedef ms::warping3d<coord_type>                 mapping_type;
   typedef mapped_geometry<mapping_type> reg_geom_type;
   typedef simple_geometry<Complex3D,coord_type>     geom_type;
   typedef grid_types<CartesianGrid3D>               reggt;
@@ -74,7 +79,7 @@ int main(int argc, char* argv[]) {
   for(reggt::VertexIterator v(R); ! v.IsDone(); ++v)
     GeomG.coord(v_corr(*v)) = GeomR.coord(*v);
 
-  check_edge_facet_intersections<grid_type,geom_type> check_efi(G,GeomG);
+  ms::check_edge_facet_intersections<grid_type,geom_type> check_efi(G,GeomG);
   check_efi.check_all_cells();
 
   for(gt::FacetIterator f(G); ! f.IsDone(); ++f)

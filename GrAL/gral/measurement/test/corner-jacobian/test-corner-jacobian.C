@@ -1,4 +1,8 @@
 
+// $LICENSE_NEC
+
+/*! \file
+ */
 
 
 // GRAL
@@ -29,6 +33,7 @@ int main(int argc, char* argv[]) {
   using std::cout;
   using cartesian3d::CartesianGrid3D;
   using cartesian3d::mapped_geometry;
+  namespace ms = measurement;
 
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"map.in","main");
   double wf = 0.0;// warping factor.
@@ -43,7 +48,7 @@ int main(int argc, char* argv[]) {
   Ctrl.update();
 
   typedef CartesianGrid3D                           grid_type;
-  typedef warping3d<point>                          mapping_type;
+  typedef ms::warping3d<point>                      mapping_type;
   typedef mapped_geometry<mapping_type>             geom_type;
   typedef grid_types<CartesianGrid3D>               gt;
     
@@ -52,7 +57,7 @@ int main(int argc, char* argv[]) {
 
 
   // now loop over cells of R, check quality of (R,GeomR)
-  corner_jacobian<grid_type,geom_type> jac(G,Geom);
+  ms::corner_jacobian<grid_type,geom_type> jac(G,Geom);
  
   cout << "Measuring corner jacobian condition numbers\n";
   for(gt::CellIterator c(G); ! c.IsDone(); ++c) {
