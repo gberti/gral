@@ -63,7 +63,8 @@ namespace cartesiannd {
   template<class CARTGRID, unsigned K, unsigned M>
   struct incidence_iterator_type_aux<CARTGRID,K,M,1> 
   { typedef upward_inc_iterator_t<CARTGRID,K,M> type; };
-
+  
+  
   // K > M => <M>On<K> is downward
   template<class CARTGRID, unsigned K, unsigned M>
   struct incidence_iterator_type_aux<CARTGRID,K,M,0>
