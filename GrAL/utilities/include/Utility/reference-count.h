@@ -8,9 +8,13 @@
 /*! \class copy_on_write_ptr 
     \brief A smart copy-on-write pointer.
 
+   \ingroup memory
+
    This class has been adapted from Scott Meyers "More Effective C++".
    The class can be used also for pointers to abstract classes,
    due to replacement of `new T' by copy_traits<T>::clone(T*).
+
+   \note Deprecated. Use \c ref_ptr if possible.
 */
 
 #include "Utility/copy-traits.h"
@@ -18,7 +22,8 @@
 namespace GrAL {
 
 
-/*! \brief base class for reference counted objects
+/*! \internal
+     \brief base class for reference counted objects
 
      \see copy_on_write_ptr
 */

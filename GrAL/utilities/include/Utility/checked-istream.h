@@ -9,13 +9,15 @@
 
 namespace GrAL {
 
-/*! \brief Wrapper for istream, checking successful read operation.
+/*! \brief Wrapper for \c std::istream, checking for successful read operation.
+
+    \ingroup io
 
     Example:
     \code
     int i,j;
     checked_istream checked_cin(&cin);
-    checked_in >> in >> j;
+    checked_in >> i >> j;
     \endcode
 
     \see Tested in \ref test-checked-istream.C
@@ -27,9 +29,17 @@ public:
   checked_istream(std::istream* in_ = 0) : in(in_) {}
 
   operator void*() const   { REQUIRE(in != 0, "", 1); return (in->fail() ? (void *)0 : (void *)(-1));}
-  operator std::istream&() { REQUIRE(in != 0, "",1); return *in;}
 
-  //  bool is_good() const { return (in != 0? in->is_good() : false);}
+  /*! \brief Implicit conversion to \c istream
+      
+      This allows one to use the idiom
+      \code
+        (while in >> i) {
+          // ...
+        }
+      \endcode
+  */
+  operator std::istream&() { REQUIRE(in != 0, "",1); return *in;}
 
   template<class T>
   friend checked_istream& operator>>(checked_istream& in, T & t)
@@ -39,6 +49,8 @@ public:
 
     *(in.in) >> t; 
 
+    // These macros must be on one line, else different compilers will report different line number
+    // for the errors, and regression fails.
     REQUIRE( (in.in->eof() || !in.in->fail()), "reading value " << t << " of type " << typeid(T).name() << " caused an error!\n",1);
     REQUIRE( (!in.in->bad()), "bad istream, reading " << t << " of type " << typeid(T).name()  << " caused an error!\n",1);
     return in;

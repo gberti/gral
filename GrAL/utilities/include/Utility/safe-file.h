@@ -11,9 +11,12 @@
 
 namespace GrAL {
 
-//--------------------------------------------------------------
-//! Try to open a file and ask if it does not exist.
-/*! 
+
+
+/*! \brief Try to open a file and ask if it does not exist.
+ 
+    \ingroup io
+
    This class povides some functions to open and close
    files in a robust (?) manner.
    If a file with a given name does not exist,
@@ -34,8 +37,8 @@ namespace GrAL {
    file_interactive::open_gz(in,"xyz.dat");
    in >> x >> y >> z;
    \endcode
-   This tries to open "xyz.dat" or, failing this, "xyz.dat.gz".
-*/ //--------------------------------------------------------------
+   This tries to open \c "xyz.dat" or, failing this, \c "xyz.dat.gz".
+*/ 
 
 
 

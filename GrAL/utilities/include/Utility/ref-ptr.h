@@ -8,19 +8,28 @@
 
 namespace GrAL {
 
-template<class T>
-inline bool is_stack_address(T * const& ptr)
-{
-  // assuming downwards growing stack
-  char i;
-  unsigned long ptr_long = (unsigned long)ptr;
-  unsigned long irf_long = (unsigned long)(&i);
-  return ( ptr_long > irf_long ? true : false);
-}
+  /*! \brief Simplistic method for determining if a pointer resides on the stack
+    
+  \ingroup memory
+
+     The implementation assumes a downward growing stack.
+  */
+  template<class T>
+  inline bool is_stack_address(T * const& ptr)
+  {
+    // assuming downwards growing stack
+    char i;
+    unsigned long ptr_long = (unsigned long)ptr;
+    unsigned long irf_long = (unsigned long)(&i);
+    return ( ptr_long > irf_long ? true : false);
+  }
 
 
 /*! \brief class for disallowing taking the address of temporary.
     \author Guntram Berti
+
+    \ingroup memory
+    \see \c ref_ptr
 
     The intent of this class is to forbid taking the address of temporary objects
     returned from function calls (see docs of ref_ptr for an example).
@@ -65,6 +74,8 @@ struct  ref_ptr_base {
 
 /*! \brief class for maintaining a assignable reference to another (often const) object 
     \author Guntram Berti
+
+   \ingroup memory
     
    The purpose of this class is to maintain a reference (pointer) to an object
    which may by allocated statically or dynamically. 

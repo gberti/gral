@@ -18,6 +18,8 @@
 namespace GrAL {
 
 /*! \brief Convert any type into a string
+
+    \ingroup io
    
     The type T is required to have an output operator <tt> >> </tt>
     to <tt>::std::ostream</tt> defined.
