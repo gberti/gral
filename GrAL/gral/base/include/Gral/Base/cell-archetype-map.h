@@ -38,7 +38,12 @@ public:
 
   // Archetype vertices <-> Cell vertices
   typename agt::vertex_handle operator()(typename gt::VertexOnCellIterator vc) const
-    { return vc.local_handle();}
+  { return v(vc);}
+  typename agt::vertex_handle v(typename gt::VertexOnCellIterator vc) const 
+  { return vc.local_handle();}
+  typename agt::Vertex V(typename gt::VertexOnCellIterator vc) const
+  { return typename agt::Vertex(c.TheGrid().ArchetypeOf(c), v(vc));}
+
   
   typename agt::vertex_handle operator()(typename gt::vertex_handle const& v) const
     { 
