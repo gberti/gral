@@ -501,6 +501,8 @@ public:
   i.e. if the sequence of vertices is exactly the set of adjacent
   vertices to the sequence of cells. This has to be ensured at
   construction time, for example by using \ref ConstructSubrange.
+
+  \todo Edges work correctly only for 2D.  
   
 */
 //----------------------------------------------------------------
@@ -632,7 +634,8 @@ public:
   i.e. if the sequence of vertices is exactly the set of adjacent
   vertices to the sequence of cells. This has to be ensured by
   the underlying grid range.
-  
+
+  \todo Facets work correctly only for 2D.  
 */
 template<class Grid>
 class enumerated_subrange_ref {
@@ -754,11 +757,6 @@ struct grid_types_esr_ref  {
   typedef typename bgt::CellOnCellIterator    CellOnCellIterator;
 };
 
-/*
-enable this when partial specialization is available:
-*/
-
-#ifdef NMWR_PARTIAL_SPEC
 
 /*! Partial specializaton of grid_types traits for enumerated_subrange<Grid>.
     \ingroup traits enumsubranges
@@ -778,10 +776,7 @@ template<class Grid>
 struct grid_types<enumerated_subrange_ref<Grid> >
  :  public grid_types_esr_ref<Grid> {};
 
-#endif
 
-
-  
 
 
 //----------------------------------------------------------------
@@ -790,11 +785,25 @@ struct grid_types<enumerated_subrange_ref<Grid> >
 
    \templateparams
     - Range: (a possible type is  enumerated_subrange)
-       - Model of $GrAL GridCellRange
+       - Model of $GrAL CellRange
        - \c Range::append_cell(cell_handle) 
        - \c Range::append_vertex(vertex_handle)
-    - CellIt: $GrAL GridCellIterator
+    - CellIt: $GrAL CellIterator
 
+    \param R [OUT] 
+        is the subrange to be constructed 
+    \param Cit [IN] 
+        range of \c Cit is the cell subrange
+        to be copied
+
+   \pre
+     - R is empty before
+     - return type of \c CellIt::operator*
+       is convertible to  \c Range::Cell
+   
+   \post
+     - \c R contains all cells in the range of \c Cit
+     - \c R contains all vertices incident to cell in \c R
  */
 //----------------------------------------------------------------
 
