@@ -1,18 +1,10 @@
-#ifndef NMWR_GB_GRIDS_TRIANG2D__CONSTRUCT_C
-#define NMWR_GB_GRIDS_TRIANG2D__CONSTRUCT_C
+#ifndef GRAL_GB_GRIDS_TRIANG2D_CONSTRUCT_C
+#define GRAL_GB_GRIDS_TRIANG2D_CONSTRUCT_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1999
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+// $LICENSE
 
 
-#include "map.h" // STL
-
-#include "Grids/Triang2D/generic/copy.h"
+#include "Gral/Grids/Triang2D/copy.h"
 
 #include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"

@@ -1,12 +1,12 @@
-#ifndef NMWR_GB_GRIDS_TEST_TRIANG2D_H
-#define NMWR_GB_GRIDS_TEST_TRIANG2D_H
+#ifndef GRAL_GB_GRIDS_TEST_TRIANG2D_H
+#define GRAL_GB_GRIDS_TEST_TRIANG2D_H
 
-#include <iostream.h>
+#include <iostream>
 
 #include "IO/control-device.h"
 
-#include "Grids/Triang2D/triang2d.h"
-#include "Grids/Triang2D/grid-functions.h"
+#include "Gral/Grids/Triang2D/triang2d.h"
+#include "Gral/Grids/Triang2D/grid-functions.h"
 
 
 class TestTriang2D  : public controlable {
@@ -27,10 +27,10 @@ private:
 
 public:
   TestTriang2D();
-  virtual void register_at(ControlDevice& Ctrl, const string& prefix);
+  virtual void register_at(ControlDevice& Ctrl, std::string const& prefix);
   virtual void register_at(ControlDevice& Ctrl) { register_at(Ctrl,"");}
-  void test_iterators(const Triang2D& CC,
-		      ostream& out);
+  void test_iterators(Triang2D const& CC,
+		      std::ostream&   out);
 };
 
 #endif

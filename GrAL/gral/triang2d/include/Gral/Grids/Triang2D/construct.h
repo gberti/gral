@@ -1,31 +1,21 @@
-#ifndef NMWR_GB_GRIDS_TRIANG2D_CONSTRUCT_H
-#define NMWR_GB_GRIDS_TRIANG2D_CONSTRUCT_H
+#ifndef GRAL_GB_GRIDS_TRIANG2D_CONSTRUCT_H
+#define GRAL_GB_GRIDS_TRIANG2D_CONSTRUCT_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1999
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+// $LICENSE 
 
 
-#include "Grids/Algorithms/construct-grid.h"
-#include "Grids/Triang2D/triang2d.h"
+#include "Gral/Base/construct-grid.h"
+#include "Gral/Grids/Triang2D/triang2d.h"
 
-//----------------------------------------------------------------
-// copy-construct a Triang2D <dest> from another 2D grid <source_grid>
-// supporting 
-//  - grid_types<>, 
-//  - CellIterator, VertexIterator, VertexOnCellIterator,
-//  - vertex_handle
-// This template is defined in generic/construct.C
-//----------------------------------------------------------------
 
-//----------------------------------------------------------------
-//  Partial specializations of the templates in 
-//  Grids/Algorithms/construct-grid.h
-//----------------------------------------------------------------
+/*! copy-construct a Triang2D <dest> from another 2D grid <source_grid>
+   supporting 
+    - grid_types<>, 
+    - CellIterator, VertexIterator, VertexOnCellIterator,
+    - vertex_handle
+  This template is defined in generic/construct.C
+*/
+
 
 template<class Geom, class G2, class Geom2>
 extern  void 
@@ -70,7 +60,7 @@ ConstructGrid0(Triang2D      & destG,
 // for inclusion model
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Triang2D/generic/construct.C"
+#include "Gral/Grids/Triang2D/construct.C"
 #endif
 
 #endif

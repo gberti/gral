@@ -1,15 +1,9 @@
-#ifndef NMWR_GB_GRIDS_TRIANG2D_COPY_CELLS_C
-#define NMWR_GB_GRIDS_TRIANG2D_COPY_CELLS_C
+#ifndef GRAL_GB_GRIDS_TRIANG2D_COPY_CELLS_C
+#define GRAL_GB_GRIDS_TRIANG2D_COPY_CELLS_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1999
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+// $LICENSE
 
-#include "Grids/Triang2D/generic/copy.h"
+#include "Gral/Grids/Triang2D/copy.h"
 
 template<class Conn, class VtxCorr, class CellCorr>
 void copy_cells(Triang2D       & G, 
