@@ -11,7 +11,7 @@
 //----------------------------------------------------------------
 
 
-#include "Grids/grid-functions.h"
+#include "Gral/Base/grid-functions.h"
 
 //----------------------------------------------------------------
 //
@@ -62,8 +62,8 @@ public:
 
   //------------------ comparision ---------------------
 
-  friend bool operator== __STL_NULL_TMPL_ARGS(const self& ls, const self& rs);
-  friend bool operator<  __STL_NULL_TMPL_ARGS(const self& ls, const self& rs);
+  friend bool operator== <> (const self& ls, const self& rs);
+  friend bool operator<  <> (const self& ls, const self& rs);
 private:
   //------- DATA ---------
   E_iter it;
