@@ -133,6 +133,7 @@ public:
   FacetOnCellIterator  FirstFacet () const;
   EdgeOnCellIterator   FirstEdge  () const;
   VertexOnCellIterator FirstVertex() const;
+  VertexOnCellIterator EndVertex  () const;
 
   unsigned NumOfVertices() const { return 3;}
   unsigned NumOfEdges()    const { return 3;}
@@ -199,7 +200,7 @@ private:
 public:
   Triang2D_VertexOnCellIterator() : vc(-1) {}
   explicit
-  Triang2D_VertexOnCellIterator(Cell const& cc) : c(cc), vc(0) {}
+  Triang2D_VertexOnCellIterator(Cell const& cc, int vvc = 0) : c(cc), vc(vvc) {}
   
   self& operator++() { cv();  ++vc; return *this;}
   Vertex operator*() const 
@@ -411,6 +412,10 @@ Triang2D::FirstCell() const { return CellIterator(*this);}
 inline
 Triang2D_VertexOnCellIterator
 Triang2D_Cell::FirstVertex() const { return VertexOnCellIterator(*this);}
+
+inline
+Triang2D_VertexOnCellIterator
+Triang2D_Cell::EndVertex()  const { return VertexOnCellIterator(*this, NumOfVertices());}
 
 
 inline
