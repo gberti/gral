@@ -40,7 +40,8 @@
 //----------------------------------------------------------------
 
 
-template<class CoarseGrid, class FineGrid>
+template<class CoarseGrid, class FineGrid, 
+         template<class U> class OVLP_RANGES = overlap_ranges>
 class overlap {
 public:
   typedef CoarseGrid                   coarse_grid_type;
@@ -48,6 +49,7 @@ public:
   typedef typename cgt::Cell           CoarseCell;
 
   typedef FineGrid                   grid_type;
+  typedef FineGrid                   fine_grid_type;
   typedef grid_types<grid_type>      gt;
   //  typedef typename gt::vertex_handle vertex_handle;
   //  typedef typename gt::cell_handle   cell_handle;
@@ -58,10 +60,14 @@ public:
   typedef tp<Facet>                  tpF;
   typedef tp<Cell>                   tpC;
 
-  typedef overlap_ranges<Vertex>                         v_range_type;
-  typedef overlap_ranges<Facet>                          f_range_type;
-  typedef overlap_ranges<Cell>                           c_range_type;
-  typedef enumerated_subrange_ref<grid_type>           range_type_ref;
+  // instead of missing template typedef
+  template<class U>
+  struct  overlap_ranges_t { typedef OVLP_RANGES<U> type;};
+
+  typedef typename overlap_ranges_t<Vertex>::type v_range_type;
+  typedef typename overlap_ranges_t<Facet >::type f_range_type;                          
+  typedef typename overlap_ranges_t<Cell  >::type c_range_type;                        
+  typedef enumerated_subrange_ref<grid_type>      range_type_ref;
 
   //  typedef typename v_range_type::range_ref  vertex_range_type_ref;
   //  typedef typename c_range_type::range_ref  cell_range_type_ref;
@@ -94,6 +100,7 @@ private:
   //-------- owned ---------
 
   // partial (neighbour) ranges
+  // contain reference to coarse grid.
   v_neighbour_range_map neighbour_ranges_v;
   c_neighbour_range_map neighbour_ranges_c;
 
@@ -111,6 +118,20 @@ public:
 
   overlap() : the_grid(0) {}  
 
+  void  init(coarse_grid_type const& cg,
+             fine_grid_type   const& fg)
+  {
+    set_coarse_grid(cg);
+    set_fine_grid  (fg);
+  }
+
+  void init_bilateral_vertex_range(CoarseCell const& Nb) {}
+  void init_bilateral_cell_range  (CoarseCell const& Nb) {}
+
+  void calc_dependent_information() { set_neighbours();}
+
+private:
+
   void set_coarse_grid(const coarse_grid_type& cg) {
     neighbour_ranges_v.set_grid(cg);
     neighbour_ranges_c.set_grid(cg);
@@ -125,6 +146,8 @@ public:
   }
 
   void set_neighbours();
+
+public:
 
   //----------------- component access ---------------------
 
@@ -174,6 +197,12 @@ public:
 };
 
 
+/*! \brief Copy an overlap range
+    \ingroup overlapds
+*/
+template<class SrcRange, class DestRange, class Filter>
+void copy_overlap_ranges(const SrcRange& src, DestRange& dest, const Filter& f);
+
 
 //----------------------------------------------------------------
 /*! \brief Create a layered range from separate ranges.
@@ -203,6 +232,8 @@ void copy_overlap_ranges(                      const SrcRange& exp,
 /*! Copy an entire overlap range modulo grid morphisms
     \ingroup overlapds
  */
+
+/*
 template<class CG1, class FG1, class Ovlp2, class CoarseCCorr, class FineVCorr, class FineCCorr>
 void CopyOverlap(overlap<CG1,FG1>       &  dest,            // out
 		 Ovlp2             const&  src,             // in
@@ -211,7 +242,7 @@ void CopyOverlap(overlap<CG1,FG1>       &  dest,            // out
 		 FG1               const&  fg_dest,         // in
 		 FineVCorr         const&  src2dest_v,      // in 
 		 FineCCorr         const&  src2dest_c);     // in
-
+*/
 
 
 /*! Pretty-print an overlap
