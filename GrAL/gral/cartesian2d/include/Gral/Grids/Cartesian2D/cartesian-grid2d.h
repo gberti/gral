@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+/*! \file
+ */
 
 #include <string>
 
@@ -20,12 +22,18 @@
 
 namespace cartesian2d {
 
-class RegGrid2D;
-typedef RegGrid2D CartesianGrid2D;
+  class RegGrid2D;
+
+  //! Alias for consistency with Cartesian3D
+  typedef RegGrid2D CartesianGrid2D;
 
 /*! \brief A two-dimensional cartesian grid type
 
+    \ingroup cartesian2dmodule
+
     RegGrid2D implements the full kernel interface.
+
+    \see Tests in <tt> \ref test-cartesian-iterators.C </tt>
 
     \todo The constructors are not consistent, allow only
      constructors of the form 
@@ -35,9 +43,6 @@ typedef RegGrid2D CartesianGrid2D;
 
 class RegGrid2D {
 public:
-  //@{ 
-  // typedef int dummy;
-  //@} dummy group (work around)
 
   typedef xmjr_indexmap2D indexmap_type;
   // iteration is done in y-direction.
@@ -66,30 +71,48 @@ private:
 public:
   enum { dim = 2};
 
-  /*! @name Constructors  */
   //@{ 
-  RegGrid2D(int pts = 2) // default: 1 cell, 4 vertices
-    :ll_(0,0), ur_(pts-1,pts-1)
+  /*! @name Constructors  */
+  /*! \brief Grid with \c n points in each direction
+      \post
+         <tt> ll() == (0,0)</tt> and <tt>ur() == (n-1,n-1)</tt>
+   */
+  RegGrid2D(int n = 2) // default: 1 cell, 4 vertices
+    :ll_(0,0), ur_(n-1,n-1)
   { init(); }
- 
+  /*! \brief Grid with \c nv_x points in x direction and \c nv_y in y-direction
+      \post
+         <tt> ll() == (0,0)</tt> and <tt>ur() == (nv_x1,nv_y-1)</tt>
+   */
   RegGrid2D(int nv_x, int nv_y) 
     : ll_(0,0), ur_(nv_x-1,nv_y-1)
   { init(); }
 
+  /*! \brief Grid with \c nv[0] points in x direction and \c nv[1] in y-direction
+      \post
+         <tt> ll() == (0,0)</tt> and <tt>ur() == nv-(1,1)</tt>
+   */
   RegGrid2D(const index_type& nv)
     : ll_(0,0), ur_(nv-index_type(1,1))
   { init(); }
 
+
+  /*! \brief Grid with \c urx-llx+1 points in x direction and \c ury-lly in y-direction
+      \post
+         <tt> ll() == (llx,lly)</tt> and <tt>ur() == (urx,ury)</tt>
+   */
   RegGrid2D(int llx, int lly,int urx, int ury)
     : ll_(llx,lly), ur_(urx,ury)
   { init(); }
 
+
+  /*! \brief Grid with \c UR[0]-LL[0]+1 points in x direction and \c UR[1]-LL[1] in y-direction
+      \post
+         <tt> ll() == LL</tt> and <tt>ur() == UR</tt>
+   */
   RegGrid2D(const index_type& LL, const index_type& UR)
     :  ll_(LL), ur_(UR)
   { init(); }
-
-
- 
   //@}
 
 private:
@@ -104,13 +127,21 @@ private:
     }
 
 public:
-  /*! @name access to shape information */
   //@{  
+  /*! @name access to shape information
+      \brief Bounds are inclusive vertex bounds
+  */
+  //! lower vertex bound
   const index_type& ll() const { return ll_;}
+  //! upper vertex bound
   const index_type& ur() const { return ur_;}
+  //! lower vertex  bound in x-direction
   int llx() const { return ll_.x();}
+  //! lower vertex  bound in y-direction
   int lly() const { return ll_.y();}
+  //! upper vertex  bound in x-direction
   int urx() const { return ur_.x();}
+  //! upper vertex  bound in y-direction
   int ury() const { return ur_.y();}
 
   index_type vertex_size() const { return ur_ - ll_ + index_type(1);}
@@ -209,9 +240,12 @@ public:
 
   typedef vertex_on_edge_iterator<RegGrid2D> VertexOnEdgeIterator;
 
+  //! Combinarorial dimension
   unsigned dimension() const { return 2;}
 
-  /*! \name Checking functions */
+  /*! \name Checking functions 
+      \brief Check validity of handles
+  */
  /*@{*/ 
   void cv(vertex_handle e) const { REQUIRE(valid_handle(e), "",1);}
   bool valid_handle(vertex_handle e) const { return (0 <= e && e < (int)NumOfVertices()); }
@@ -280,7 +314,6 @@ public:
     Vertex(const vertex_base& v, const Grid& g) :  elem_base(&g), _v(v) {}
     int x() const { return _v.x();}
     int y() const { return _v.y();}
- 
     
     inline VertexOnVertexIterator FirstVertex() const;
     inline VertexOnVertexIterator EndVertex() const;
@@ -429,7 +462,7 @@ public:
     edge_handle GlobalNumber() const { return TheGrid().edge_num(*this); }
     edge_handle handle      () const { return TheGrid().edge_num(*this); }
 
-  private:
+ private:
     direction dir;
     vertex_base v1_;
   };
@@ -497,7 +530,7 @@ public:
     Vertex V(int i)    const { return vertex(corner(i));}
     Vertex V       (archgt::Vertex const& lV) const { return V(lV.handle());}
     vertex_handle v(archgt::Vertex const& lV) const { return V(lV).handle();}
-
+ 
     /// information for these calculations could go into
     /// some static tables of RegGrid2D
     Vertex vertex(corner v) const
@@ -979,26 +1012,22 @@ public:
   //---------------  Operations of RegGrid2D  ----------------------------- 
   //----------------------------------------------------------------------- 
 
-  /*! @name Size operations */
   //@{ 
+  /*! @name Cartesian size information
+     \brief Number of elements in each direction
+  */
+  //! equal to <tt> urx() - llx() + 1 </tt>
+  int NumOfXVertices() const { return xpoints;}
+  int NumOfYVertices() const { return ypoints;}
+  int NumOfXEdges() const { return xpoints-1;}
+  int NumOfYEdges() const { return ypoints-1;}
+  int NumOfXCells() const { return xpoints-1;}
+  int NumOfYCells() const { return ypoints-1;}
 
-  int NumOfVertices() const { return TheVertexMap().range_size();}
-  int NumOfEdges()    const { return (NumOfXEdges() + NumOfYEdges());}
-  int NumOfFacets()   const { return NumOfEdges();}
-  int NumOfFaces()    const { return NumOfCells();}
-  int NumOfCells()    const { return TheCellMap().range_size();}
-
-  int NumOfXEdges() const { return TheXEdgeMap().range_size();}
-  int NumOfYEdges() const { return TheYEdgeMap().range_size();}
-  int NumOfHorizontalEdges() const { return NumOfXEdges();}
-  int NumOfVerticalEdges()   const { return NumOfYEdges();}
-
-
-  int NumOfBoundaryVertices() const { return (2*(xpoints   + ypoints) -4);}
-  int NumOfBoundaryEdges()    const { return (2*(xpoints-1 + ypoints-1));}
-  int NumOfBoundaryFacets()   const { return NumOfBoundaryEdges();}
-  int NumOfBoundaryFaces()    const { return NumOfBoundaryCells();}
-  int NumOfBoundaryCells()    const { return (2*(xpoints-1 + ypoints-1) -4);}
+  //! Number of \e all edges in x-direction
+  int NumOfHorizontalEdges() const { return TheXEdgeMap().range_size();}
+  //! Number of \e all edges in y-direction
+  int NumOfVerticalEdges()   const { return TheYEdgeMap().range_size();} 
   //@}
 
   int Offset(const Vertex&) const {return TheVertexMap().n0();}
@@ -1006,11 +1035,11 @@ public:
   int Offset(const Cell&  ) const {return TheCellMap().n0();}
 
 
-  int NumXpoints() const { return xpoints;}
-  int NumYpoints() const { return ypoints;}
   
-  /*! @name Sequence iteration */
   //@{ 
+  /*! @name Sequence iteration 
+      \brief STL-style iterator ranges.
+  */
   VertexIterator FirstVertex() const { return VertexIterator(MinVertexNum(),this);}
   EdgeIterator   FirstEdge()   const { return EdgeIterator(MinEdgeNum(),this);}
   EdgeIterator   FirstFacet()  const { return EdgeIterator(MinEdgeNum(),this);}
@@ -1021,10 +1050,18 @@ public:
   EdgeIterator   EndFacet()    const { return EdgeIterator(MaxEdgeNum()+1,this);}
   CellIterator   EndFace()     const { return EndCell();}
   CellIterator   EndCell()     const { return CellIterator(MaxCellNum()+1,this);}
+
+  int NumOfVertices() const { return TheVertexMap().range_size();}
+  int NumOfEdges()    const { return NumOfHorizontalEdges()+NumOfVerticalEdges();}
+  int NumOfFacets()   const { return NumOfEdges();}
+  int NumOfFaces()    const { return NumOfCells();}
+  int NumOfCells()    const { return TheCellMap().range_size();}
   //@}
 
-  /*! @name Element validity tests */
   //@{ 
+  /*! @name Element validity tests 
+      \brief Check validity of elements
+    */
   inline bool IsValid(const vertex_base& v) const { return TheVertexMap().IsInRange(v);}
   inline bool IsValidCellBase(const vertex_base& v) const { 
     return TheCellMap().IsInRange(v);
@@ -1032,8 +1069,10 @@ public:
   bool IsValid(const Cell& C)     const;
   //@}
 
-  /*! @name Boundary tests */
   //@{ 
+  /*! @name Boundary related functions
+     \brief See $GrAL Grid-With-Boundary concept
+  */
   bool IsOnBoundary(const Vertex& V) const { return IsOnBoundary(V.index());}
   inline bool IsOnBoundary(const vertex_base&) const;
   inline bool IsOnBoundary(const Edge&   E) const;
@@ -1041,6 +1080,12 @@ public:
 
   bool IsInside(const CellIterator& C) const;
   bool IsInside(const Cell& C)    const;
+
+  int NumOfBoundaryVertices() const { return (2*(xpoints   + ypoints) -4);}
+  int NumOfBoundaryEdges()    const { return (2*(xpoints-1 + ypoints-1));}
+  int NumOfBoundaryFacets()   const { return NumOfBoundaryEdges();}
+  int NumOfBoundaryFaces()    const { return NumOfBoundaryCells();}
+  int NumOfBoundaryCells()    const { return (2*(xpoints-1 + ypoints-1) -4);}
   //@}
 
 
@@ -1057,7 +1102,10 @@ public:
   friend class EdgeOnCellIterator;
   friend class CellOnCellIterator;
 
-  /*! @name element to handle mappings */
+  /*! @name element to handle mappings 
+
+      \brief A handle is a unique identifier for an Element, but only within a fixed grid.
+  */
   //@{ 
   vertex_handle handle(const Vertex& V) const { return vertex_num(V.x(),V.y());} 
   vertex_handle handle(const VertexIterator& V) const { return V.GlobalNumber();}
@@ -1098,7 +1146,9 @@ public:
   Cell   cell(int llx, int lly) const { return Cell(this,vertex_base(llx,lly));}
   //@}
  
-  /*! @name intervals for element handles */
+  /*! @name intervals for element handles 
+     \brief These are inclusive bounds.
+  */
   //@{ 
   vertex_handle MinVertexNum() const { return  TheVertexMap().n0();}
   vertex_handle MaxVertexNum() const { return  TheVertexMap().nmax();}
@@ -1117,6 +1167,8 @@ public:
   //@}
 
   /*! @name switch operator 
+
+      \todo Test these operators
    */
   //@{
   inline void switch_vertex(Vertex& v, Edge const& e) const 
@@ -1138,6 +1190,7 @@ public:
   //@}
 
   /*! \name Archetype handling
+     \see $GrAL ArchetypedGrid
    */
   /*@{*/ 
   static archetype_iterator BeginArchetype() { return sd.the_archetype; }
@@ -1240,7 +1293,7 @@ struct grid_types_cart2d {
 
 
 
-/*! \brief specialization of grid_types template for RegGrid2D
+/*! \brief specialization of grid_types primary template for RegGrid2D
  */
 template<>
 struct grid_types<cartesian2d::RegGrid2D> : public grid_types_base<cartesian2d::grid_types_cart2d> 
@@ -1448,9 +1501,9 @@ RegGrid2D::get_edge(edge_handle e) const
 	   "RegGrid2D::get_edge(e) : e = " << e
 	   << " not in [0," << NumOfEdges()-1 << "]!", 1);
 
-  return (e < NumOfXEdges()
+  return (e < NumOfHorizontalEdges()
 	  ? Edge(Edge::x_dir,TheXEdgeMap().index(e),this)
-	  : Edge(Edge::y_dir,TheYEdgeMap().index(e-NumOfXEdges()),this));
+	  : Edge(Edge::y_dir,TheYEdgeMap().index(e-NumOfHorizontalEdges()),this));
 }
 
 
@@ -1460,7 +1513,7 @@ RegGrid2D::edge_num(const RegGrid2D::Edge& E) const
 {
   return ( E.dir == Edge::x_dir
 	   ? TheXEdgeMap().number(E.v1_)
-	   : TheYEdgeMap().number(E.v1_) + NumOfXEdges());
+	   : TheYEdgeMap().number(E.v1_) + NumOfHorizontalEdges());
 }
 
 
