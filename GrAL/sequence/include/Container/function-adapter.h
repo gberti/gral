@@ -112,6 +112,40 @@ unary_map_composition<M1,M2>
 compose_map( M1 const& m1, M2 const& m2)
 { return unary_map_composition<M1,M2>(m1,m2);}
  
+/*! \brief Constant function
+
+*/
+
+template<class ARG, class RES> 
+class constant : public std::unary_function<ARG,RES> {
+  RES r;
+public:
+  constant() {}
+  constant(RES rr) : r(rr) {}
+
+  RES operator()(ARG const&) const { return r;}
+};
+
+
+
+template<class F, class ARG = typename F::argument_type, class RES = typename F::result_type>
+class map_is_equal {
+public:
+  typedef F   mapping_type;
+  typedef ARG argument_type;
+  typedef RES map_result_type;
+  typedef bool result_type;
+
+private:
+  ref_ptr<mapping_type const> f;
+  map_result_type             res;
+public:
+  map_is_equal() {}
+  map_is_equal(mapping_type const& ff, map_result_type r) : f(ff), res(r) {}
+  bool operator()(argument_type const& a) const { return (*f)(a) == res;}
+};
+
+
 
 /*
 template<class Map>
