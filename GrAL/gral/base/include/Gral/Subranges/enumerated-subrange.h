@@ -11,6 +11,7 @@
 
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
+#include "Utility/ref-ptr.h"
 
 #include "Gral/Base/archetypes-from-base.h"
 #include "Gral/Base/mapped-iterators.h"
@@ -136,22 +137,30 @@ private:
   int ebeg, eend;
   // HIt ebeg;
   // HIt eend;
-  const range_type* the_range;
-  const grid_type * the_grid;
+  ref_ptr<const range_type> the_range;
+  ref_ptr<const grid_type>  the_grid;
 public:
   //---------------------- construction -------------------------
 
   //element_range_ref(HIt b, HIt e, const grid_type& g) : ebeg(b), eend(e), the_grid(&g) {}
-  element_range_ref() : ebeg(0), eend(0), the_range(0), the_grid(0) {}
+  element_range_ref() : ebeg(0), eend(0) {}
 
   // should this be the empty range or the whole range ??
   element_range_ref(const grid_type& g) 
-    : ebeg(0), eend(0), the_range(0), the_grid(&g) {}
+    : ebeg(0), eend(0), the_grid(g) {}
+  element_range_ref(ref_ptr<const grid_type> g) 
+    : ebeg(0), eend(0), the_grid(g) {}
+
   element_range_ref(const range_type& r, const grid_type& g) 
-    : ebeg(0), eend(0), the_range(&r), the_grid(&g) {}
+    : ebeg(0), eend(0), the_range(r), the_grid(g) {}
+  element_range_ref(ref_ptr<const range_type> r, ref_ptr<const grid_type> g) 
+    : ebeg(0), eend(0), the_range(r), the_grid(g) {}
 
   element_range_ref(int b, int e, const range_type& r,  const grid_type& g) 
-    : ebeg(b), eend(e), the_range(&r), the_grid(&g) {}
+    : ebeg(b), eend(e), the_range(r), the_grid(g) {}
+  element_range_ref(int b, int e, ref_ptr<const range_type> r, ref_ptr<const grid_type> g) 
+    : ebeg(b), eend(e), the_range(r), the_grid(g) {}
+
 
   element_range_ref(const enumerated_element_range<E>& er);
 
@@ -387,18 +396,22 @@ public:
 
 
 protected:
-  const grid_type* the_grid;
+  ref_ptr<grid_type const> the_grid;
   elt_sequence     elements;
 
 public:
   //-------------------- construction --------------------------
 
-  enumerated_element_range() : the_grid(0) {}
-  enumerated_element_range(const grid_type& g) : the_grid(&g) {}
+  enumerated_element_range() {}
+  enumerated_element_range(const grid_type& g) : the_grid(g) {}
+  enumerated_element_range(ref_ptr<grid_type const> g) : the_grid(g) {}
 
-  void set_grid(const grid_type& g) {
+  void set_grid(ref_ptr<grid_type const> g) {
     REQUIRE(elements.empty(), "set_grid(): range is not empty!",1);
-    the_grid = &g;
+    the_grid = g;
+  }
+  void set_grid(const grid_type& g) {
+    set_grid(const_ref_to_ref_ptr(g));
   }
 
   void append(element_handle v) { elements.push_back(v);}
@@ -662,7 +675,7 @@ public:
   typedef cell_range_ref  <grid_type, cell_sequence  >  cell_range_type;
 
 private:
-  const grid_type* the_grid;
+  ref_ptr<const grid_type> the_grid;
 
   vertex_sequence vertices;
   //  edge_sequence   edges;
@@ -677,10 +690,15 @@ public:
   //-------------------- construction --------------------------
   /*! \brief  Default constructor, results in unbound range.
    */
-  enumerated_subrange()                   : the_grid(0),  initialized(false) { init_counts(); }
-  enumerated_subrange(const grid_type& g) : the_grid(&g), initialized(false) { init_counts(); }
+  enumerated_subrange()                           :              initialized(false) { init_counts(); }
+  enumerated_subrange(const grid_type& g)         : the_grid(g), initialized(false) { init_counts(); }
+  enumerated_subrange(ref_ptr<const grid_type> g) : the_grid(g), initialized(false) { init_counts(); }
+
   //! delayed constructor
-  void init(const grid_type& g) { clear(); the_grid = &g; initialized = false; init_counts(); }
+  void init(ref_ptr<const grid_type> g) { clear(); the_grid = g; initialized = false; init_counts(); }
+  //! delayed constructor
+  void init(const grid_type& g) { init(const_ref_to_ref_ptr(g));}
+
   //! make this an empty range. 
   void clear() { 
     vertices.clear();
@@ -691,14 +709,24 @@ public:
   /*! \brief Copy from cell range \c CR  
  
    */
+
+  template<class CELLRANGE>
+  enumerated_subrange(ref_ptr<const grid_type> g, 
+		      ref_ptr<CELLRANGE> CR) :  
+    the_grid(g), initialized(false) 
+  { 
+    construct(CR->FirstCell());
+    init_counts();
+  }
+  
   template<class CELLRANGE>
   enumerated_subrange(const grid_type& g, CELLRANGE const& CR) :  
-    the_grid(&g), initialized(false) 
+    the_grid(g), initialized(false) 
   { 
     construct(CR.FirstCell());
     init_counts();
   }
-  
+
 
   template<class CELLIT>
   void construct(CELLIT c);
