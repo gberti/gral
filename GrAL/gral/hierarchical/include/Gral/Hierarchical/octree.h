@@ -8,7 +8,7 @@
 #include "Gral/Hierarchical/hierarchical-grid-table.h"
 #include "Gral/Hierarchical/hierarchical-partial-grid-function.h"
 
-#include "Utility/const-ptr.h"
+#include "Utility/ref-ptr.h"
 
 #include "Container/sequence-algorithms.h"
 
@@ -43,6 +43,12 @@ namespace octree {
   isActive_pred<PREDCLASS> isActivePred(PREDCLASS const& pr) { return isActive_pred<PREDCLASS>(pr);}
 
 
+  template<class GRID, class GT = grid_types<GRID> >
+  class octree_element_base_t;
+
+  template<class ELEMBASE>
+  class leaf_cell_iterator_t;
+
 /*! \brief Generalized octree
 
     \author Guntram Berti
@@ -69,10 +75,17 @@ public:
   typedef typename hgt::HierCell                   HierCell;
   typedef typename hgt::CellChildIterator          HierCellChildIterator;
   typedef typename flatgt::CellIterator            FlatCellIterator;
+  typedef typename flatgt::Cell                    FlatCell;
+
+  typedef octree_element_base_t<flat_grid_type, flatgt> element_base_type;
+  typedef leaf_cell_iterator_t<element_base_type>       LeafCellIterator;
 
   //FIXME: these should be separate types instead of typedefs
   typedef HierCell              OctCell;
   typedef HierCellChildIterator OctCellChildIterator;
+
+  typedef OctCell               Cell;
+  typedef OctCellChildIterator  CellChildIterator;
 
   typedef size_t size_type;
 
@@ -84,7 +97,7 @@ public:
   typedef hier::hier_partial_grid_function<HierCell, bool>  subrange_table_type;
   typedef typename subrange_table_type::flat_gf_type          grid_range_type;
 
-  typedef typename grid_range_type::CellIterator ActiveRangeCellIterator;
+  typedef typename grid_range_type::CellIterator ActiveLevelCellIterator;
 private:  
   hier_grid_type      levels;
   subrange_table_type active_range;
@@ -92,8 +105,8 @@ private:
   
 
   // Forbidden for the moment
-  Octree(Octree const&);
-  Octree& operator=(Octree const&);
+  //  Octree(Octree const&);
+  //  Octree& operator=(Octree const&);
 public:
   /*! \name Constructors
    */
@@ -112,12 +125,12 @@ public:
 	    pattern_grid_type   const& refpat);
   //@}
 
-
-  const_ptr<hier_grid_type>     TheHGrid() const { return const_ptr<hier_grid_type>(&levels);}
-  const_ptr<flat_grid_type>     LevelGrid(level_handle lev) const 
-  { return const_ptr<flat_grid_type>(&(levels(lev)));}
-  const_ptr<grid_range_type>    ActiveRange(level_handle lev) const
-  { return const_ptr<grid_range_type>(&(active_range(lev)));}
+  ref_ptr<const self>               TheOctree() const { return ref_ptr<const self>(this);}
+  ref_ptr<const hier_grid_type>     TheHierGrid() const { return ref_ptr<const hier_grid_type>(&levels);}
+  ref_ptr<const flat_grid_type>     LevelGrid(level_handle lev) const 
+  { return ref_ptr<const flat_grid_type>(levels(lev));}
+  ref_ptr<const grid_range_type>    ActiveRange(level_handle lev) const
+  { return ref_ptr<const grid_range_type>(active_range(lev));}
 
   /*! \name Modifying operations
    */
@@ -182,17 +195,17 @@ public:
    */
   //@{
   //! get the coarsest (root) level
-  level_handle  coarsest_level()   const { return TheHGrid()->coarsest_level();}
+  level_handle  coarsest_level()   const { return TheHierGrid()->coarsest_level();}
   //! get the finest level
-  level_handle  finest_level() const { return TheHGrid()->finest_level();}
+  level_handle  finest_level() const { return TheHierGrid()->finest_level();}
   /*! \brief get handle of next finer level
       \pre <tt> lev != finest_level() </tt>
    */
-  level_handle  next_finer_level  (level_handle lev) const { return TheHGrid()->next_finer_level(lev);}
+  level_handle  next_finer_level  (level_handle lev) const { return TheHierGrid()->next_finer_level(lev);}
   /*! \brief  get handle of next coarser level
       \pre <tt> lev != coarsest_level() </tt>
   */
-  level_handle  next_coarser_level(level_handle lev) const { return TheHGrid()->next_coarser_level(lev);}
+  level_handle  next_coarser_level(level_handle lev) const { return TheHierGrid()->next_coarser_level(lev);}
   //! get the number of levels
   size_type     num_of_levels() const { return levels.num_of_levels();}
   //@}
@@ -202,6 +215,12 @@ public:
      subsequent calls to \c split_cell() / \c join_cells().
    */
   bool          empty()         const { return num_of_levels()==0;}
+
+  //! Number of active cells
+  size_type NumOfCells()     const;
+  //! Numbdr of leaf cells
+  size_type NumOfLeafCells() const;
+
 
   /*! \brief true if level \c lev does not contain active cells.
       This means that also all finer levels are empty.
@@ -231,6 +250,118 @@ private:
 }; // class Octree
 
 
+  // element_base_t: plugin to construct element types (and sequence iterators)
+  // referring to octree
+  template<class GRID, class GT /* = grid_types<GRID> */ >
+  class octree_element_base_t {
+    typedef octree_element_base_t<GRID,GT> self;
+  public:
+    typedef Octree<GRID, GT>                     octree_type;
+
+    typedef octree_type                          grid_type;
+    typedef grid_type                            gt;
+
+    typedef octree_type                          ogt;
+    typedef typename ogt::hier_grid_type         hier_grid_type;
+    typedef hier_grid_type                       hgt;
+
+    typedef typename hgt::flat_grid_type         flat_grid_type;
+    typedef typename hgt::flatgt                 flatgt;
+    typedef typename hgt::level_handle           level_handle;
+    // typedef typename hgt::FlatCell               FlatCell;
+
+    // typedef typename octree_type::OctVertex      Vertex;
+    typedef typename ogt::OctCell        OctCell;
+
+    typedef typename gt::Cell            Cell;
+
+  protected:
+    ref_ptr<const octree_type> oct;
+    level_handle               lev;
+  public:
+    octree_element_base_t() {}
+    explicit
+    octree_element_base_t(octree_type const* o,         level_handle l = o->coarsest_level()) 
+      : oct(o), lev(l) {}
+    explicit
+    octree_element_base_t(ref_ptr<const octree_type> o, level_handle l = o->coarsest_level()) 
+      : oct(o), lev(l) {}
+
+    bool bound() const { return oct != 0;}
+    void cb()    const { REQUIRE(bound(), "", 1); }
+    level_handle level() const { return lev;}
+
+    //    ref_ptr<const grid_type>      TheGrid()     const { return oct;}
+    grid_type const& TheGrid() const { return *oct;}
+    ref_ptr<const octree_type>    TheOctree()   const { return oct;}
+    ref_ptr<const hier_grid_type> TheHierGrid() const { return oct->TheHierGrid();}
+    ref_ptr<const flat_grid_type> TheFlatGrid() const { return oct->LevelGrid(lev);}
+
+    ref_ptr<const flat_grid_type> Grid(tp<flat_grid_type>) const { return TheFlatGrid();}
+    ref_ptr<const hier_grid_type> Grid(tp<hier_grid_type>) const { return TheHierGrid();} 
+    ref_ptr<const octree_type>    Grid(tp<octree_type>)    const { return TheOctree();} 
+    // ref_ptr<const grid_type>      Grid(tp<grid_type>)      const { return TheGrid();}
+
+  }; // class element_base_t<GRID,GT> 
+
+
+
+  template<class ELEMBASE>
+  class leaf_cell_iterator_t : public ELEMBASE {
+    typedef leaf_cell_iterator_t<ELEMBASE> self;
+  public:
+    typedef ELEMBASE            base;
+    typedef typename base::grid_type grid_type;
+    typedef typename base::octree_type octree_type;
+    typedef typename base::gt        gt;
+    typedef typename gt  ::Cell      Cell;
+
+    typedef typename base::ogt      ogt;   
+    typedef typename ogt::OctCell   OctCell;
+    typedef typename ogt::ActiveLevelCellIterator ActiveLevelCellIterator;
+
+    typedef typename base::hgt       hgt;
+    typedef typename hgt::FlatCell   FlatCell;
+
+  private:
+    ActiveLevelCellIterator c;
+  public:
+    leaf_cell_iterator_t() {}
+    leaf_cell_iterator_t(grid_type const& o)
+      : base(&o, o.TheOctree()->coarsest_level()),
+      c(o.TheOctree()->ActiveRange(o.TheOctree()->coarsest_level())->FirstCell())
+    { make_valid();}
+    leaf_cell_iterator_t(ref_ptr<const grid_type> o)
+      : base(o, o->TheOctree()->coarsest_level()),
+      c(oct->ActiveRange(o->TheOctree()->coarsest_level())->FirstCell())
+    { make_valid();}
+
+    bool IsDone()    const { cb(); return level() > TheOctree()->finest_level();}
+    Cell operator*() const { cv(); return Cell(TheGrid(), *c, level());}    
+    self& operator++() {
+      cv();  ++c; make_valid(); return *this;
+    }
+
+    FlatCell Flat() const { return *c;}
+    bool valid() const { return ! IsDone() && on_leaf();}
+    void cv()    const { REQUIRE( (bound() && valid()), "", 1);}
+  private:
+    void make_valid() {
+      while(! IsDone() && ! on_leaf()) {
+	make_valid_c();
+	if( c.IsDone()) {
+	  ++lev;
+	  if(lev <= TheOctree()->finest_level())
+	    c=TheOctree()->ActiveRange(lev)->FirstCell(); 
+	}
+      }
+    }
+    void make_valid_c() { while(!c.IsDone() && ! on_leaf()) ++c;}
+    bool on_leaf() const { return ! c.IsDone() && TheOctree()->isLeaf(OctCell(* TheHierGrid(), *c, level()));}
+  }; // class leaf_cell_iterator_t<BASE>
+
+
+   
 
 } // namespace octree
 
