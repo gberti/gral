@@ -62,18 +62,10 @@ void write_complex2d(GRID const& G,  ostream& out, int offset,
   }
   out << "\n";
 
-  grid_function<Cell,int> CNum(baseG);
   int cnum = offset;
-  CellIterator c;
-  for(c = G.FirstCell(); !c.IsDone(); ++c){
-   CNum[*c] = cnum;
-   G2Out_c[c.handle()] = cnum;
-   cnum++;
-  }
-
-
   for(c = G.FirstCell(); !c.IsDone(); ++c){
     out	<< (*c).NumOfVertices() << "   ";
+    G2Out_c[c.handle()] = cnum; ++cnum;
     for(VertexOnCellIterator vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc)
       out << VNum[*vc] << " ";
     out << "\n";
@@ -118,16 +110,8 @@ void write_complex2d(GRID const& G, GEOM const& Geo, ostream& out, int offset)
   }
   out << "\n";
 
-  grid_function<Cell,int> CNum(baseG);
-  int cnum = offset;
-  CellIterator c;
-  for(c = G.FirstCell(); !c.IsDone(); ++c){
-   CNum[*c] = cnum;
-   cnum++;
-  }
 
-
-  for(c = G.FirstCell(); !c.IsDone(); ++c){
+  for(CellIterator c = G.FirstCell(); !c.IsDone(); ++c){
     out	<< (*c).NumOfVertices() << "   ";
     for(VertexOnCellIterator vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc)
       out << VNum[*vc] << " ";
