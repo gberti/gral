@@ -9,8 +9,9 @@ clobber:   realclean
 # with templates, it is wise to concentrate this information.
 # Intended usage is 
 # clean: stdclean
+
 stdclean: moduleclean
-	rm -f *.rpo *.d *.ti *.ii
+	rm -f *~ *.o *.rpo *.d *.ti *.ii
 	rm -rf ti_files # KCC template DB
 
 .SUFFIXES: .C .cc .d .f
