@@ -24,7 +24,7 @@ install-headers:
 
 install: install-headers  install-libs
 
-clean:
+clean: stdclean
 	(cd src;  $(MAKE) clean DEPS="")
 	(cd test;  $(MAKE) clean DEPS="")
 	find include -name "*~" -exec rm {} \; -print
