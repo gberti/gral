@@ -422,6 +422,12 @@ namespace cartesiannd {
     grid(vertex_index_type low, vertex_index_type beyond)
     { init(low, beyond);}
 
+    //! Grid with vertex indices \f$ (x_1,x_2) \in [0, b_1[\times[0,b_2[ \f$  (only 2D)
+    grid(int b1, int b2);
+
+    //! Grid with vertex indices \f$ (x_1,x_2,x_3) \in [0, b_1[\times[0,b_2[ \times[0,b_3[ \f$  (only 3D)
+    grid(int b1, int b2, int b3);
+
     ref_ptr<self const> BaseGrid() const { return ref_ptr<self const>(*this);}
 
     template<unsigned K>
@@ -646,6 +652,9 @@ namespace cartesiannd {
     // this is useful only for cells, i.e. K=DIM
     Vertex        V(typename archetype_type::Vertex const& av) const { return Vertex(TheGrid(), index() + av.index());}
     vertex_handle v(typename archetype_type::Vertex const& av) const { return TheGrid().get_vertex_handle(index()+av.index());}
+
+    Vertex        V(index_type local) const { return Vertex(TheGrid(), index() + local);}
+    vertex_handle v(index_type local) const { TheGrid().get_vertex_handle(index() + local);}
 
     ref_ptr<grid_type const> TheAnchor() const { return g;}
     // ref_ptr<grid_type const> TheGrid() const { return g;}
@@ -922,6 +931,11 @@ namespace cartesiannd {
     }
   } 
 
+  template<>
+  grid<2>::grid(int b1, int b2)         { init(vertex_index_type(0), vertex_index_type(b1,b2)); }
+
+  template<>
+  grid<3>::grid(int b1, int b2, int b3) { init(vertex_index_type(0), vertex_index_type(b1,b2,b3)); }
 
 }; // namespace cartesiannd
 
