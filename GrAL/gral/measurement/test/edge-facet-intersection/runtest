@@ -1,0 +1,27 @@
+#!/bin/sh
+
+out=out
+EXEC=./test-edge-facet-intersection
+
+if ! $EXEC  > $out 2>&1
+then
+    echo "ERROR running $EXEC
+Output was:
+"
+cat $out
+echo "
+End output
+"
+else
+/bin/echo "\n"
+for i in  $out
+do
+if diff $i $i.exp
+then 
+/bin/echo "\t\t\t" $i OK
+else
+/bin/echo "\t\t\t" ERROR in $i
+fi
+done
+/bin/echo "\n"
+fi
