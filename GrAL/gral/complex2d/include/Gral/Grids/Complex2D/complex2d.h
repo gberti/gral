@@ -300,6 +300,24 @@ public:
   inline CellIterator     EndCell()      const;
   //@}
 
+  //@{ @name switch operations
+  inline void switch_vertex(Vertex& v, Edge const& e) const;
+  inline void switch_edge(Vertex const& v, Edge & e, Cell const& c) const;
+  inline void switch_facet(Vertex const& v, Edge & e, Cell const& c) const
+    { switch_edge(v,e,c);}
+  inline void switch_cell(Edge const& e, Cell & c) const;
+
+  inline Vertex switched_vertex(Vertex const& v, Edge const& e) const
+    { Vertex sv(v); switch_vertex(sv,e); return sv;}
+  inline Edge switched_edge(Vertex const& v, Edge const& e, Cell const& c) const
+    { Edge se(e); switch_edge(v,se,c); return se;}
+  inline Facet switched_facet(Vertex const& v, Edge const& e, Cell const& c) const
+    { Edge se(e); switch_edge(v,se,c); return se;}
+  inline Cell switched_cell(Edge & e, Cell const& c) const
+    { Cell sc(c); switch_cell(e,sc); return sc;}
+  //@}
+
+
   //@{ @name Boundary iteration
   // boundary iteration -- still somewhat incomplete.
   // there could be access to the 1D boundary grid as a whole,
@@ -314,14 +332,16 @@ public:
   // now here some work has still to be done ...
   // int NumOfBoundaryCells() const 
   //   { return NumOfBoundaryFacets() - # cells w. multiple bd}
-  int NumOfBoundaryComponents() const { return 1;} // not always correct, of course !!!
+
+  // FIXME: only correct for genus = genus(S^2) / genus [0,1]^2
+  int NumOfBoundaryComponents() const { return (NumOfBoundaryFacets() > 0 ? 1 : 0);} 
   //@}
 
   //---------------- size information ------------
 
   //@{ @name Size information
   int NumOfVertices() const  {return (_vertices.size());}
-  int NumOfEdges()    const  // only correct for genus = genus(S2) -1
+  int NumOfEdges()    const  
     {return (NumOfCells() == 0 ? 0 : -2 + NumOfVertices() + NumOfCells() + NumOfBoundaryComponents());}
   int NumOfFacets()   const { return NumOfEdges();}
   int NumOfFaces()    const  {return NumOfCells();}
@@ -403,8 +423,8 @@ public:
 
   //------------------------- handles -> elements  ------------------
 
-  Vertex vertex(const vertex_handle& v) const { return Vertex(v,*this);}
-  Cell   cell  (const cell_handle&   c) const { return Cell(c,*this);}
+  Vertex vertex(const vertex_handle& v) const { return Vertex(*this,v);}
+  Cell   cell  (const cell_handle&   c) const { return Cell  (*this,c);}
   inline Edge   edge  (const edge_handle& e) const;
   inline Edge   facet (const edge_handle& e) const;
   //@}
@@ -521,6 +541,8 @@ struct grid_types<Complex2D>  : public complex2d_types {
   typedef hash_cell2d   hash_cell;
 
   typedef  vertex_base::CoordType CoordType;
+
+  typedef grid_dim_tag<2> dimension_tag;
   static int dimension(const Cell& ) { return 2;}
   static int dimension(const Facet&) { return 1;} 
    
