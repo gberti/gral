@@ -1,0 +1,19 @@
+n 4
+sub1 
+ {
+#  flag-off 0
+# flag-on 0
+ sub1.1 
+  {
+  name1 ""
+  name2 blubb
+  }
+ sub1.2 
+  {
+  name1 bu
+  name2 zck
+  }
+ #x 1
+ y 2
+ }
+

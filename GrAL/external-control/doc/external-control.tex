@@ -1,0 +1,158 @@
+\documentclass{article}
+\usepackage{hyperlatex}
+
+\title{Control Device: External Parameter Control}
+\htmltitle{Control Device: External Parameter Control}
+\author{Guntram Berti}
+\htmladdress{\xlink{Guntram Berti}{mailto:berti@math.tu-cottbus.de}}
+\htmlattributes{TABLE}{BORDER}
+\htmldepth{0}
+\htmldirectory{html_dir}
+
+\begin{document}
+ \section{Control Device: External Parameter Control}
+ 
+ A first very basic abstraction concerns the control of parameters
+ in a program. Almost every nontrivial class contributing to the
+ overall behavior of a program contains some parameters, that should
+ be modifiable at startup or at runtime, e.g. the size of a regular grid,
+ filename for input and output etc. All these classes play the role of a
+ {\tt  controlable }, that is, they have some parameters to be 
+ controled by some {\tt  ControlDevice } which is the counterpart.
+ A {\tt  ControlDevice } could be, for example,
+
+ \begin{itemize}
+ \item  a parameter file,
+ \item  a GUI-dialog 
+ \item  an interactive shell like tcl or
+ \item  command-line parameters.
+ \end{itemize}
+
+\subsection{The interfaces}
+The basic interface  for {\tt controlable} looks like this:
+
+\begin{verbatim}
+class controlable {
+public:
+  virtual void register_at(ControlDevice&,const string& prefix) = 0;
+  virtual void register_at(ControlDevice&);
+  virtual void notify()  {} // may be used to signal a change
+  virtual ~controlable() {}
+};
+\end{verbatim}
+    
+The other side ({\tt ControlDevice} has the following outlook:
+
+\begin{verbatim}
+class ControlDevice  {
+public:
+  ControlDevice(control_device_impl* imp = 0) : impl(imp) {}
+  void add(const string& nm, Mutator* value_ref);
+  void update();
+  string name() const;
+  void print_values(ostream&) const;
+  ControlDevice getSubDevice(const string& name);
+private:
+  control_device_impl* impl;
+};
+\end{verbatim}
+    
+    Now how does it work? A {\tt  controlable } will {\tt  register\_at(..) }
+    a given  {\tt  ControlDevice } (e.g. via the method {\tt  add(..) } for
+    basic parameters). This {\tt  ControlDevice } will then be able to change
+    the parameters, for example upon a call to {\tt  update() }, which would
+    in the case of a parameter-file cause the file to be read in.
+    Where's the big deal of it? The advantage of this abstract approach is
+    twofold: First, the code does not get littered with statements to read in
+    parameters. Second, one gains flexibility in choosing the user interface:
+    The implementation of the classes with parameters  does not have to change, 
+    wether we have a GUI-interface, a simple parameter file or something 
+    completely different.
+ 
+    How does it work? Looking at the interface of {\tt  ControlDevice }, 
+    you see the function 
+\begin{verbatim}
+  void add(const string& nm,Mutator* value_ref);
+\end{verbatim}
+   This is a name-value-pair ({\tt nm,value\_ref }). The name is used
+    to reference the right variable from the outside (e.g. in a file or as
+    label in a window), the value reference is used to change the underlying
+    variable. The interface of class {\tt  Mutator } follows:
+    
+\begin{verbatim}
+class Mutator {
+public:
+  virtual void read (istream& in)  = 0;
+  virtual void print(ostream& out) const = 0;
+  virtual void print(ostream& out, const string& name) const = 0;
+  virtual string description() const;
+  virtual ~Mutator() {}
+};
+\end{verbatim}
+
+    The value is actually changed via reading from a stream, which could be a string
+    typed in at a window. A simple implementation of this interface is supplied
+    by the following template:
+
+\begin{verbatim}
+template<class T>
+class TypedMutator : public Mutator {
+protected:
+  T& v;
+public:
+  TypedMutator(T& vv) : v(vv) {}
+  T value() {return v;}
+  vir1tual void read(istream& in)   { in >> v;}
+  virtual void print(ostream& out) const 
+    { out << v;}
+  virtual void print(ostream& out, const string& prefix = "") const 
+    { out << prefix << v;}
+};
+\end{verbatim}
+
+There are other {\tt  Mutators}, see  elsewhere  for more
+or the  header file . You can attach a (simple) Mutator
+to  a variable like this:
+
+\begin{verbatim}
+ControlDevice Ctrl(GetFileControlDevice("myparameters.in"));
+...
+double x;
+    Ctrl.add("x",GetMutator(x));
+    // RegisterAt(Ctrl,"x",x) is a synomym for the above.
+\end{verbatim}
+
+The file {\tt  myparameters.in } could then contain the name-value-pair
+{\tt  x 0.43 }, and on {\tt  Ctrl.update() } the variable {\tt  x } 
+would be set
+to {\tt  0.43} . This example also shows how to create a {\tt  ControlDevice }
+More examples of how this works are found in an 
+example program  
+with a  sample input file.
+It shows also how to use other types of Mutators and how
+to build hierarchical (i.e. nested) name-value-structures.
+
+
+\subsection{Testing status \& reliability }
+
+\begin{itemize}
+\item  As this is intensively used, it should be considered rather
+  reliable ( for file and command-line devices).
+\end{itemize}
+
+\subsection{Bugs, shortcomings, ToDo}
+
+\begin{itemize}
+ \item  The integration into a GUI will require some additional
+   functionality of {\tt  Mutator } (in spite of the claims 
+   made above ;-),
+   if we want to to select a (type-)specific input mode other 
+   than typing in a string,
+   for example we want to be able
+   to select a boolean flag by a button, 
+   to adjust a real number via a ruler etc.
+ \item {\tt  ControlDevice } should issue warnings if the input
+   contains  unrecognised strings. 
+ \end{itemize}
+ 
+\end{document}
