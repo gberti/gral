@@ -52,19 +52,23 @@ namespace octree {
   typedef non_conforming_leafgrid<octree3d_type>::element_base_type elem_base3d_type;
 
   
-  template class hierarchical::h_vertex_t<elem_base2d_type>;
-  template class hierarchical::h_vertex_t<elem_base3d_type>;
-  // cannot instantiate this, because CellChildIterator is not defined.
-  // template class hierarchical::h_cell_t  <elem_base2d_type>;
 
-  template class hierarchical::h_incidence_iterator_t<elem_base2d_type, vertex_type_tag, cell_type_tag>;
-  template class hierarchical::h_incidence_iterator_t<elem_base3d_type, vertex_type_tag, cell_type_tag>;
 
-  typedef  leafgrid2d::CellIterator CellIterator2d;
-  template class vertex_iterator_of_cell_set<CellIterator2d, leafgrid2d>;
-  typedef  leafgrid3d::CellIterator CellIterator3d;
-  template class vertex_iterator_of_cell_set<CellIterator3d, leafgrid3d>;
 }
+
+namespace hierarchical {
+  template class h_vertex_t<octree::elem_base2d_type>;
+  template class h_vertex_t<octree::elem_base3d_type>;
+  // cannot instantiate this, because CellChildIterator is not defined.
+  // template class h_cell_t  <octree::elem_base2d_type>;
+  template class h_incidence_iterator_t<octree::elem_base2d_type, vertex_type_tag, cell_type_tag>;
+  template class h_incidence_iterator_t<octree::elem_base3d_type, vertex_type_tag, cell_type_tag>;
+
+}
+
+
+template class vertex_iterator_of_cell_set<octree::leafgrid2d::CellIterator, octree::leafgrid2d>;
+template class vertex_iterator_of_cell_set<octree::leafgrid3d::CellIterator, octree::leafgrid3d>;
 
 
 double f(tuple<double,2> X) {
