@@ -12,23 +12,19 @@
 #include "Container/mapped-value-iterator.h"
 
 //----------------------------------------------------------------
-//
-// template<class Cont> class ValueMask:
-//
-// This class provides a wrapper for an associative container 
-// storing <key,value> pairs.
-// It gives a const view to the sequence of value-items of the container.
-//
-// CONSTRAINTS on type of template parameter:
-//  * Cont
-//    This is a sequence (STL) of pair<key,value> items.
-//    typedef pair<key,value> value_type;
-//    typedef const_iterator; (which derefences to value_type)
-//
-// could be extended to KeyMask<Cont>.
-//----------------------------------------------------------------
+/*! \brief This class gives a const view to the values sequences
+     of an associative container.
+    \ingroup containers
 
-/* use gives internal compiler error with gcc 2.8 */
+  <b> Template parameters: </b>
+  - Cont:
+    This is a sequence (STL) of pair<key,value> items.
+    - typedef pair<key,value> value_type;
+    - typedef const_iterator; (which derefences to value_type)
+
+  \todo 
+   Could be extended to KeyMask<Cont>.
+*/
 
 template<class Cont>
 class ValueMask {

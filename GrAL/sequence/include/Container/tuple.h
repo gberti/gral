@@ -1,13 +1,23 @@
 #ifndef NMWR_GB_TUPLE_T_N_H
 #define NMWR_GB_TUPLE_T_N_H
 
-///////////////////////////////////////////
-//
-//  simple fixed-size container
-//  with "STL- begin() / end()"
-//
-///////////////////////////////////////////
-#include "Work-around/do-nothing-but-suppress-unused-warning.h"
+//----------------------------------------------------------------
+//   (c) Guntram Berti, 1998
+//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
+//   TU Cottbus - Germany
+//   http://math-s.math.tu-cottbus.de/NMWR
+//   
+//----------------------------------------------------------------
+
+
+/*! \brief simple fixed-size container  with STL-style  begin() / end()
+    \ingroup containers
+
+    Tuple<T,N> is a model of STL Random Access Container (except reverse iterators).
+ 
+    \todo
+    Add reverse iterators.
+*/
 
 template<class T, unsigned N>
 class tuple {
@@ -37,8 +47,8 @@ public:
   const_iterator begin() const { return &(X[0]);}
   const_iterator end()   const { return (begin() + N);}
 
-  unsigned size() const { return N;}
-  bool empty()    const { return false;}
+  unsigned size()   const { return N;}
+  bool     empty()  const { return false;}
 private:
   T X[N];
 };

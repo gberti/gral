@@ -11,38 +11,37 @@
 
 #include "Container/set-traits.h"
 
-//----------------------------------------------------------------
-//
-// This file is intended to collect routines related to 
-// set operations.
-// Currently contained functions:
-//  * bool is_subset(begin,end,S) : predicate function
-//  * is_element_of_pred<It,T>    : predicate class
-//    is_element_of(b,e)          : corresponding helper function
-//
-//----------------------------------------------------------------
+/*! \defgroup setalgorithms Set Algorithms
+    \ingroup  algorithms
+
+   This module  collects routines related to 
+   set operations.
+*/
 
 
 
 //------------------- is_subset(b,e,S) ---------------------------
-//
-//  DESCRIPTION:
-//  is_subset(b,e,s2) tests the sequence [b,e)  for inclusion in the set s2.
-//  is_subset(b,e,s2) == true    <=>   [b,e) \subset s2
-//
-//  CONTRAINTS  for template parameters:
-//  * It is a forward iterator (-> STL)
-//  * S2 is a set with a membership testing fct:
-//      + bool is_member(const It::value_type x)
-//        is_member(x) = true  <=> x \in S2
-//
-//  PRECONDITIONS:
-//  * end must be reachable from beg, i.e. \exists n >= 0: beg+n = end
-//    
+/*! \brief  Tests a sequence [b,e)  for inclusion in the set s2.
+  \ingroup setalgorithms
+
+   <tt> is_subset(b,e,s2) == true </tt>  \f$ \iff [b,e) \subset s2 \f$
+
+  
+  <b> Template parameters: </b>
+
+  - It is a Forward Iterator
+  - S2 is a set with a membership testing fct:
+      -  bool is_member(const It::value_type x)
+      -  is_member(x) = true  \f$ \iff x \in S2 \f$
+
+  \b Preconditions:
+   -  end must be \e reachable from beg, i.e. \f$ \exists n \geq 0: beg+n = end \f$
+
+  \todo 
+  Enable set_traits.
+ */    
 //----------------------------------------------------------------
 
-// set_traits are not used, because it requires partial specialization
-// in order to work in a useful manner.
 
 template<class It, class S2>
 inline bool is_subset(It beg, It end, const S2& s2)
@@ -58,20 +57,20 @@ inline bool is_subset(It beg, It end, const S2& s2)
 
 
 //----------------------------------------------------------------
-//
-//  template<class It, class T>  class is_element_of_pred:
-//
-//  A predicate class for testing of a value t (type T) for inclusion
-//  in a range [begin,end)
-//
-//  CONSTRAINTS on template parameters:
-//  * It: is a forward iterator
-//  * T : is equality-comparable
-// 
+/*! \brief  Predicate class for testing if \f$ t \in [b,e) \f$
+     \ingroup setalgorithms
+
+  <b> Template parameters: </b>
+  - It: is a Forward Iterator
+  - T : is Equality Comparable
+
+  \todo
+  T could be derived from It 
+  (T == iterator_traits<It>::value_type)
+
+*/ 
 //----------------------------------------------------------------
 
-// T could be derived from It 
-// (T == iterator_traits<It>::value_type)
 template<class It, class T>
 class is_element_of_pred {
 private:
@@ -84,6 +83,8 @@ public:
   typedef T    argument_type;
   typedef bool result_type;
 
+  /*! returns false \f$ \iff \f$ std::find(begin,end,t) == end. 
+  */
   bool operator()(const T& t) const {
     bool found = false;
     It i = begin;
@@ -95,14 +96,23 @@ public:
   }
 };
 
-
+/*! \brief creator function for is_element_of_pred<It,T>
+   \ingroup setalgorithms
+   \relates is_element_of_pred
+ */
 template<class It,class T>
 inline is_element_of_pred<It,T> 
 is_element_of(It b, It e, const T* /*dummy */)
 { return is_element_of_pred<It,T>(b,e);}
 
+
+/*! \brief creator function for is_element_of_pred<It,T>
+   \ingroup setalgorithms
+   \relates is_element_of_pred
+*/
 template<class Cont>
-inline is_element_of_pred<typename Cont::const_iterator, typename Cont::value_type>
+inline is_element_of_pred<typename Cont::const_iterator, 
+                         typename Cont::value_type>
 is_element_of(const Cont& c)
 { 
   typedef typename Cont::const_iterator it;
