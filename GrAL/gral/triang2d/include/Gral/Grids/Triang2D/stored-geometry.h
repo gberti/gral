@@ -21,6 +21,7 @@ public:
   typedef Triang2D              grid_type; 
   typedef grid_types<grid_type> gt;
   typedef gt::Vertex            Vertex;
+  typedef gt::Cell              Cell;
 private:
   grid_type const* g;
   double         * xy;
@@ -46,6 +47,7 @@ public:
     init_xy();
   }
 
+  unsigned space_dimension() const { return 2;}
 private:
   void clear() { if (owned) delete [] xy; xy = 0;}
   void init_xy() {
@@ -69,7 +71,9 @@ public:
   public:
     coord_proxy(double* xy_v_) : xy_v(xy_v_) {}
     inline void operator=(coord_type const& coo);
-    
+    template<class COORD>
+    void operator=(COORD const& coo);
+
     double  operator[](int i) const { cr(i); return xy_v[i]; }
     double& operator[](int i)       { cr(i); return xy_v[i]; }
 
@@ -85,6 +89,8 @@ public:
     coord_type() {}
     coord_type(coord_proxy p)            { init(p.xy_v);}
     coord_type(double const* xy_)        { init(xy_);}
+    coord_type(double d)                 { xy[0] = xy[1] = d;}
+    coord_type(double x, double y)       { xy[0] = x; xy[1] = y;}
     coord_type& operator=(coord_proxy p) { init(p.xy_v); return *this;}
 
 
@@ -106,6 +112,8 @@ public:
     { return coord_proxy(xy + 2*v.handle());}
   coord_type  coord(Vertex const& v) const 
     { return coord_type (xy + 2*v.handle());}
+
+  coord_type center(Cell const& c) const { return (coord(c.V(0)) + coord(c.V(1)) + coord(c.V(2)))/3.0;}
 };
 
 
@@ -122,6 +130,17 @@ inline void
 stored_geometry_triang2d::coord_proxy::operator=
 (stored_geometry_triang2d::coord_type const& p)
 {  xy_v[0] = p[0]; xy_v[1] = p[1]; }
+
+template<class COORD>
+inline void
+stored_geometry_triang2d::coord_proxy::operator=
+(COORD const& p)
+{ 
+  typedef point_traits<COORD> pt;
+  xy_v[0] = pt::x(p);
+  xy_v[1] = pt::y(p);
+  // std::cout << xy_v[0] << " " << xy_v[1] << std::endl;
+}
 
 template<>
 struct point_traits<stored_geometry_triang2d::coord_type> 
