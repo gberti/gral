@@ -12,8 +12,11 @@
       Used for example in the class template grid_function<E,T>.
 
       This has to be specialized for concrete element classes, e.g.:
+
       \code
-      class MyVertex;
+      class MyVertex { ... };
+
+      template<>
       struct element_traits<MyVertex> {
         typedef  grid_type;
         typedef  element_type;
@@ -21,18 +24,49 @@
         typedef  element_handle;
         typedef  hasher_type;
         typedef  element_type_tag;
+	typedef  consecutive_tag; // elements consecutively numbered?
+	typedef  grid_dimension_tag;
+	typedef  element_dimension_tag;
+	typedef  element_codimension_tag;
 
         static ElementIterator FirstElement(const grid_type& g);
         static unsigned        size        (const grid_type& g);
         static handle_type     handle      (element_type const& e);
+        static element_type    element     (grid_type const& g, 
+                                            handle_type      h);
+      };
+      \endcode
+
+      All of these (except hasher_type) can be obtained
+      by inheriting from a default definition, 
+      in this case for vertex types:
+
+      \code
+      template<>
+      struct element_traits<MyVertex> 
+         : public element_traits_vertex_base<MyVertex::grid_type> 
+      {
+             typedef xxx hasher_type;
       };
       \endcode
 */
 //----------------------------------------------------------------
 
+struct non_consecutive_tag {};
+
+template<int N>
+struct consecutive_integer_tag 
+{ enum { offset = N }; };
 
 template<class E>
 struct element_traits {};
+
+template<class GRID>
+struct element_traits_base 
+{
+  // default: elements not numbered consecutively
+  typedef non_consecutive_tag            consecutive_tag; 
+};
 
 /*! \brief basic definition to derive from for actual specializations
      of element_traits<>
@@ -40,7 +74,8 @@ struct element_traits {};
   \relates element_traits
 */
 template<class GRID>
-struct element_traits_vertex_base {
+struct element_traits_vertex_base 
+ : public element_traits_base<GRID>  {
   typedef GRID                           grid_type;
   typedef grid_types<grid_type>          gt;
   typedef typename gt::Vertex            element_type;
@@ -50,6 +85,7 @@ struct element_traits_vertex_base {
   typedef typename gt::dimension_tag     grid_dimension_tag;
   typedef element_codim_tag<grid_dimension_tag::dim> element_codimension_tag;
   typedef element_dim_tag<0>                         element_dimension_tag;
+
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstVertex();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfVertices();}
@@ -67,7 +103,8 @@ struct element_traits_vertex_base {
   \relates element_traits
 */
 template<class GRID>
-struct element_traits_edge_base {
+struct element_traits_edge_base 
+ : public element_traits_base<GRID>  {
   typedef GRID grid_type;
   typedef grid_types<grid_type>          gt;
   typedef typename gt::Edge              element_type;
@@ -109,7 +146,8 @@ struct element_traits_edge2d_base
   \relates element_traits
 */
 template<class GRID>
-struct element_traits_facet_base {
+struct element_traits_facet_base 
+  : public element_traits_base<GRID>  {
   typedef GRID grid_type;
   typedef grid_types<grid_type>          gt;
   typedef typename gt::Facet              element_type;
@@ -137,7 +175,8 @@ struct element_traits_facet_base {
   \relates element_traits
 */
 template<class GRID>
-struct element_traits_cell_base {
+struct element_traits_cell_base 
+  : public element_traits_base<GRID>  {
   typedef GRID grid_type;
   typedef grid_types<grid_type>          gt;
   typedef typename gt::Cell              element_type;
