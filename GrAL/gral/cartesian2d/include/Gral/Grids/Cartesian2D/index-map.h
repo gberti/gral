@@ -1,46 +1,45 @@
-#ifndef NMWR_GB_INDEXMAP_H
-#define NMWR_GB_INDEXMAP_H
+#ifndef NMWR_GB_GRAL_CARTESIAN2D_INDEXMAP_H
+#define NMWR_GB_GRAL_CARTESIAN2D_INDEXMAP_H
 
-//////////////////////////////////////////////////////////////////
-//
-// This class implements a bijective map between
-// the subset [n0,n0+size-1] of Z and the subset
-// [llx,urx]x[lly,ury] of Z^2 via the x-major-scheme
-// (y varies fastest) :
-//
-// (llx,ury)                                 (urx,ury)
-//          +  n0+ny                         +  n0+(nx*ny) -1
-//          .
-//          .
-//
-//          +  n0+1
-//
-//          +  n0     + n0+ny+1             +
-// (llx,lly)                                  (urx,lly)
-//
-//
-//   (c) Guntram Berti
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//
-//   Created: Oct. 01, 1997
-//
-//////////////////////////////////////////////////////////////////
+// $LICENSE
 
-#include <iostream.h>
+#include <iostream>
 #include "Utility/pre-post-conditions.h"
-#include "Grids/Reg2D/index-type.h"
+#include "Gral/Grids/Cartesian2D/index-type.h"
+
+/*! \brief Mapping between integer intervals and integer rectangles
+
+ This class implements a bijective map between
+ the subset [n0,n0+size-1] of Z and the subset
+ [llx,urx]x[lly,ury] of Z^2 via the x-major-scheme
+ (y varies fastest) :
+
+  \code
+ (llx,ury)                                 (urx,ury)
+          +  n0+ny                        +  n0+(nx*ny) -1
+          .
+          .
+
+          +  n0+1
+
+          +  n0     + n0+ny+1   ...       +
+ (llx,lly)                                  (urx,lly)
+  \endcode
+
+*/
+
 
 
 class xmjr_indexmap2D {
 public:
   typedef int_index_type index_type;
 
+  /*! simple range type
+   */
   struct range {
     int x,y;
     range(int xx, int yy) : x(xx), y(yy) {}
-    friend ostream& operator<<(ostream& out, const range& r) {
+    friend std::ostream& operator<<(std::ostream& out, const range& r) {
       return (out << '[' << r.x << ',' << r.y << ']');
     }
   };
@@ -108,7 +107,7 @@ public:
   int range_size() const { return rect_size;}
 
 private:
-  // an specialized version could set 
+  // a specialized version could set 
   // n0 = 0 and ll_ = (0,0)
   index_type  ll_,ur_;
   int n0_;

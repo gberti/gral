@@ -1,18 +1,27 @@
 #ifndef NMWR_GB_REG2D_GRIDFUNCTIONS_H
 #define NMWR_GB_REG2D_GRIDFUNCTIONS_H
 
+// $LICENSE
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+#include "Gral/Grids/Cartesian2D/element-traits.h" 
+#include "Gral/Base/grid-function-vector.h"
 
-#include "Grids/Reg2D/element-traits.h" 
-#include "Grids/grid-function-vector.h"
+/*! \defgroup dummy Dummy group
 
+ */
+
+
+/*! \defgroup gridfunctionsreggrid2d Total grid functions for RegGrid2D
+
+    \see $GrAL TotalGridFunction
+ */
+
+
+/*!  \brief Specialization of grid_function for RegGrid2D::Vertex
+
+  Model of $GrAL TotalGridFunction
+   \ingroup gridfunctionsreggrid2d
+ */
 template<class T>
 class grid_function<RegGrid2D::Vertex,T> 
   : public grid_function_vector<RegGrid2D::Vertex,T>
@@ -26,6 +35,11 @@ public:
 };
 
 
+/*! \brief Specialization of grid_function for RegGrid2D::Edge
+
+  Model of $GrAL TotalGridFunction
+  \ingroup gridfunctionsreggrid2d
+ */
 template<class T>
 class grid_function<RegGrid2D::Edge,T> 
   : public grid_function_vector<RegGrid2D::Edge,T>
@@ -39,6 +53,11 @@ public:
 };
 
 
+/*! \brief Specialization of grid_function for RegGrid2D::Cell
+
+  Model of $GrAL TotalGridFunction
+  \ingroup gridfunctionsreggrid2d
+ */
 template<class T>
 class grid_function<RegGrid2D::Cell,T> 
   : public grid_function_vector<RegGrid2D::Cell,T>
@@ -51,9 +70,6 @@ public:
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
 };
 
-
-
-#define SPECIALIZATION_GRIDFUNCTION_REGGRID2D(E,T) 
 
 
 #endif

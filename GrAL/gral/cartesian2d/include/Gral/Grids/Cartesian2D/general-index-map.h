@@ -1,52 +1,49 @@
 #ifndef NMWR_GB_GENERAL_INDEXMAP_H
 #define NMWR_GB_GENERAL_INDEXMAP_H
 
-//////////////////////////////////////////////////////////////////
-//
-// This class implements a bijective map between
-// the subset [n0,n0+size-1] of Z and the subset
-// [v1,v2] := [min(v1.x,v2.x), max(v1.x,v2.x)]x[min(v1.y,v2.y), max(v1.y,v2.y)] of ZxZ 
-// with given minor direction (varies fastest) :
-//
-// (llx,ury)  = v2 (e.g)                     (urx,ury)
-//
-//          +  n0+(nx*ny)-1                  +  n0+n_minor
-//          .
-//          .                                ^
-//                                           | minor direction
-//          +  
-//                                 maj. dir.
-//          +  n0+(nx*(ny-1)) -1      <-     + n0
-//
-// (llx,lly)                                  (urx,lly) = v1 (e.g)
-//
-//
-//   (c) Guntram Berti
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//
-//   Created: Feb. 05, 1998
-//   Tested : Feb. 06, 1998 ($(NMWRROOT)/test/index-map/)
-//
-//   Shortcomings: Empty ranges cannot be represented by now
-//   ( in contrast to xmjr_indexmap2D, where ur < ll indicates
-//   an empty range)
-//
-//////////////////////////////////////////////////////////////////
+// $LICENSE
 
-#include <iostream.h>
+#include <iostream>
 #include "Utility/pre-post-conditions.h"
-#include "Grids/Reg2D/index-type.h"
+#include "Gral/Grids/Cartesian2D/index-type.h"
 
-template<class T>
-int sign(const T& t)
-{ return (t < 0 ? -1 : (t == 0 ? 0 : 1)); }
+/*! \brief Bijection between subsets of \f$ \Z \f$ and \f$ \Z \times \Z \f$
 
-template<class T>
-T abs(const T& t) { return ( t < 0 ? -t : t);}
+ This class implements a bijective map between
+ the subset [n0,n0+size-1] of Z and the subset
+ [v1,v2] := [min(v1.x,v2.x), max(v1.x,v2.x)]x[min(v1.y,v2.y), max(v1.y,v2.y)] of ZxZ 
+ with given minor direction (varies fastest) :
+
+ \code
+ (llx,ury)  = v2 (e.g)                     (urx,ury)
+
+          +  n0+(nx*ny)-1                  +  n0+n_minor
+          .
+          .                                ^
+                                           | minor direction
+          +  
+                                 maj. dir.
+          +  n0+(nx*(ny-1)) -1      <-     + n0
+
+ (llx,lly)                                  (urx,lly) = v1 (e.g)
+ \endcode
+
+   \todo  Empty ranges cannot be represented 
+   (in contrast to xmjr_indexmap2D, where ur < ll indicates
+     an empty range)
+*/
+
+
 
 class general_indexmap2D {
+private:
+  // helper functions
+  template<class T>
+  int sign(const T& t) const { return (t < 0 ? -1 : (t == 0 ? 0 : 1)); }
+
+  template<class T>
+  T abs(const T& t) const { return ( t < 0 ? -t : t);}
+
 public:
   typedef int_index_type index_type;
   typedef general_indexmap2D self;
@@ -60,17 +57,19 @@ public:
   };
 
 
-
- general_indexmap2D(const index_type& V2 = index_type(0,0))
+  //@{ @name Constructors
+  general_indexmap2D(const index_type& V2 = index_type(0,0))
    : v1(0,0),v2(V2), dir(0,1), n0_(0) { init();}
- general_indexmap2D(int urx, int ury)
+  general_indexmap2D(int urx, int ury)
    : v1(0,0), v2(urx,ury), dir(0,1), n0_(0) { init();}
-
- general_indexmap2D(const index_type& V1,
+  
+  general_indexmap2D(const index_type& V1,
 		 const index_type& V2, 
 		 const index_type& Dir)
    : v1(V1), v2(V2), dir(Dir), n0_(0) { init();}
+  //@}
 
+private:
   void init() { 
     ll_ = v1; ur_ = v2;
     make_ordered(ll_,ur_);
@@ -87,7 +86,7 @@ public:
     nmax_ = n0_ + rect_size_p -1;
   }
   
- 
+public:
   int x0()   const { return ll_.x;}
   int xmax() const { return ur_.x;}
   int y0()   const { return ll_.y;}
@@ -147,7 +146,7 @@ public:
   }
 
   int range_size() const { return rect_size_p;}
-  void pretty_print(ostream& out);
+  void pretty_print(std::ostream& out);
 
 
   // return an enlarged or shrinked range

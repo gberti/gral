@@ -1,33 +1,28 @@
 #ifndef NMWR_GB_REG2D_ELEMENT_TRAITS_H
 #define NMWR_GB_REG2D_ELEMENT_TRAITS_H
 
+// $LICENSE 
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+#include "Gral/Base/element-traits.h"
+#include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
-#include "Grids/element-traits.h"
-#include "Grids/Reg2D/cartesian-grid2d.h"
+/*! \defgroup elementtraitsreggrid2d element traits for RegGrid2D
 
-//----------------------------------------------------------------
-//
-//  traits classes for enabling uniform treatment
-//  of different element types (vertex, edge etc)
-//  for example in the template class grid_function<E,T>.
-//
-//----------------------------------------------------------------
+    Specialization of the template element_traits for the
+    element types of RegGrid2D
+ */
 
 
+/*! \ingroup elementtraitsreggrid2d
+ */
 template<class E> 
 struct hasher_for_reg2d {
   int operator()(const E& e) const { return e.GlobalNumber();}
 };
 
 
+/*! \ingroup elementtraitsreggrid2d
+ */
 template<>
 struct element_traits<RegGrid2D::Vertex> 
 : public element_traits_vertex_base<RegGrid2D>
@@ -38,6 +33,8 @@ struct element_traits<RegGrid2D::Vertex>
 };
 
 
+/*! \ingroup elementtraitsreggrid2d
+ */
 template<>
 struct element_traits<RegGrid2D::Edge>
   : public element_traits_edge2d_base<RegGrid2D>
@@ -49,6 +46,8 @@ struct element_traits<RegGrid2D::Edge>
 };
 
 
+/*! \ingroup elementtraitsreggrid2d
+ */
 template<>
 struct element_traits<RegGrid2D::Cell> 
   : public element_traits_cell2d_base<RegGrid2D>

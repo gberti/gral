@@ -1,22 +1,26 @@
 #ifndef NMWR_GB_BOUNDARY_REG2D_H
 #define NMWR_GB_BOUNDARY_REG2D_H
 
-#include "Grids/boundary.h"
-#include "Grids/boundary-iterator.h"
-#include "Grids/grid-functors.h"
+// $LICENSE
 
-#include "Grids/Reg2D/cartesian-grid2d.h"
+#include "Gral/Base/boundary.h"
+#include "Gral/Base/grid-functors.h"
 
+#include "Gral/Iterators/boundary-iterator.h"
 
+#include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
+
+/*! \brief Specialization of the BoundaryRange template for RegGrid2D
+
+ */
 class BoundaryRange<RegGrid2D> {
 public:
 
   typedef RegGrid2D                grid_type;
   typedef grid_types<grid_type>    gt;
-  typedef  gt::Edge        Edge;
-  typedef  gt::Vertex      Vertex;
+  typedef gt::Edge                 Edge;
+  typedef gt::Vertex               Vertex;
 
-  // typedef isonboundary_pred<Edge>  inside_p;
   typedef iscellinside_pred<grid_type>                          inside_p;
   typedef BoundaryComponentVertexIterator2D<grid_type,inside_p> VertexIterator;
   typedef BoundaryComponentEdgeIterator2D  <grid_type,inside_p> EdgeIterator;

@@ -1,19 +1,15 @@
-#ifndef NMWR_GB_INDEX_TYPE_H
-#define NMWR_GB_INDEX_TYPE_H
+#ifndef NMWR_GB_GRAL_CARTESIAN2D_INDEX_TYPE_H
+#define NMWR_GB_GRAL_CARTESIAN2D_INDEX_TYPE_H
 
+// $LICENSE
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+#include <algorithm> // STL
 
-#include "compiler-config.h"
-#include "algorithm" // STL
+#include "Config/compiler-config.h"
 
+/*! \brief 2D integer coordinate
 
+ */
 struct int_index_type {
   typedef int_index_type self;
 
@@ -47,30 +43,31 @@ struct int_index_type {
     { return ((ls.x <  rs.x) || ((ls.x == rs.x) && ( ls.y < rs.y)));}
   
   // output operators
-  friend ostream& operator<<(ostream& out, const self& idx)
+  friend std::ostream& operator<<(std::ostream& out, const self& idx)
     { return(out << idx.x << ' ' << idx.y); }
 
-  friend istream& operator>>(istream& in, self& idx)
+  friend std::istream& operator>>(std::istream& in, self& idx)
     { return(in >> idx.x >> idx.y); }
 };
 
-inline void make_ordered(int_index_type& ll, int_index_type& ur)
-/*  make sure that ll really is the lower left corner 
+/*!  make sure that ll really is the lower left corner 
 
+    \code
     ur                                        ur
       +-------------+         +-------------+
       |             |         |             |      
       |             |   -->   |             |
       |             |         |             |
-      +-------------+ ll    ll+-------------+ 
-
+      +-------------+ ll   ll +-------------+ 
+     \endcode
 */
+inline void make_ordered(int_index_type& ll, int_index_type& ur)
 
     {
       if(ll.x > ur.x)
-	__STD::swap(ll.x,ur.x);
+	std::swap(ll.x,ur.x);
       if(ll.y > ur.y)
-	__STD::swap(ll.y,ur.y);
+	std::swap(ll.y,ur.y);
     }
 
 

@@ -2,35 +2,20 @@
 #define NMWR_GB_REG2D_SUBRANGE_H
 
 
-//----------------------------------------------------------------
-//
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+// $LICENSE
 
-#include "Grids/Reg2D/cartesian-grid2d.h"
+#include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
-//----------------------------------------------------------------
-//
-//   This class allows it to describe a rectangular subrange
-//   of a regular 2D-grid. It defines altered versions of
-//   the sequence iterators bounded by the range, but it
-//   does not behave like a (sub)grid, the underlying grid
-//   is still considered to be the original one.
-//   Especially there is no means to iterate over the boundary
-//   of the subrange.
-//
-//   Created: Oct. 08, 1997
-//
-//   Changes:
-//    Oct. 16, 1997: Added support for cell-iteration
-//    Oct. 23, 1997: Added support for edge-iteration
-//    Jan. 13, 1998: Added definition of range_types<SubrangReg2D>
-//
-//----------------------------------------------------------------
+/*! \brief Rectangular subrange of RegGrid2D
+
+   This class allows it to describe a rectangular subrange
+   of a regular 2D-grid. It defines altered versions of
+   the sequence iterators bounded by the range, but it
+   does not behave like a (sub)grid, the underlying grid
+   is still considered to be the original one.
+   Especially there is no means to iterate over the boundary
+   of the subrange.
+*/
 
 
 class SubrangeReg2D {
@@ -262,6 +247,9 @@ private:
 };
 
 
+/*! \brief specialization of grid_types for SubrangeReg2D
+
+ */
 struct grid_types<SubrangeReg2D> {
   typedef SubrangeReg2D range_type;
   typedef  range_type::VertexIterator VertexIterator;
