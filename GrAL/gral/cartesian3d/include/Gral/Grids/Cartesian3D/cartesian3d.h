@@ -46,7 +46,8 @@ struct grid_types_Cartesian3D {
     At present, this implements only a 
     $GrAL CellVertexInputGrid.
   
-    \todo Implement the full set of grid iterators.
+    \todo Implement the full set of grid elements and iterators,
+    in particular Edge and Facet types.
     \todo CartesianGrid3D(1,1,1) gives an error in cell_map
           (division by 0). Check this in index_map_nd<>.
  */

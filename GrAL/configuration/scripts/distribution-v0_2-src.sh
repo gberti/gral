@@ -14,10 +14,11 @@ for i in ${MODULES}
 do
  cvs -d ${CVSREPO} export -r ${TAG} $i;
 done;
-mv gral/README .
-mv gral/LICENSE .
-mv gral/MODULES .
-mv gral/INSTALL .
+mv gral/v0_2/README  .
+mv gral/LICENSE      .
+mv gral/v0_2/MODULES .
+mv gral/v0_2/INSTALL .
+mv gral/NEWS         .
 mv gral/Makefile.global ./Makefile
 
 rm -rf configuration/scripts

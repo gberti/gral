@@ -1,0 +1,64 @@
+Short description of GrAL v0.2 modules:
+=======================================
+
+1) non-grid-related utility modules:
+------------------------------------
+
+configuration: Some basic config parameters shared by all modules.
+
+utility: Some macros (pre/post-conditions) and some other basic stuff.
+         Used by all other modules (except configuration module)
+
+external-control: Classes for controling parameters of classes, by parameter
+     files or command line. 
+     Used by some test programs.
+     Rather well documented (using doxygen and Hyperlatex).
+
+geometry: Basic geometric types and some geometric primitives. 
+     Used by gral/complex2d
+     Not documented. 
+
+sequence: STL-like stuff. Neither complete nor systematic.
+     Used by gral/base, gral/complex2d
+     Somewhat documented (doxygen).
+
+
+2) grid-related, proper GrAL modules:
+-------------------------------------
+
+gral/base: Basic stuff for grids, mainly generic.
+     Used by all other gral modules
+     Documented: 2 Doc trees, one for code (doxygen), 
+     one for the generic concepts (hyperlatex)
+
+gral/testing:  Components for testing grid implementations
+       (e.g. functionality of iterators and grid functions)
+
+
+
+gral/complex2d: A concrete 2D grid component
+     Documented (doxygen)
+
+gral/triang2d: 2D triangulation. Example of how to adapt
+     existing data structure to GrAL
+
+gral/cartesian2d: 2D structured grid. Rather complete.
+
+gral/complex3d: 3D unstructured grid. Still incomplete.
+
+gral/cartesian3d: 3D structured grid. Incomplete. 
+
+
+
+gral/distributed: Distributed grids, on top of an arbitrary
+       sequential grid data structure
+
+gral/partitioning: (very) basic support for grid partitioning
+
+
+
+gral/gmvio: Output in the GMV format (General Mesh Viewer, 
+     see http://www-xdiv.lanl.gov/XCM/gmv/GMVHome.html)
+
+gral/geomview-io: Output in the geomview / OFF format
+     (see http://www.geomview.org)
