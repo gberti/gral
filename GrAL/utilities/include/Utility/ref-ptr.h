@@ -27,6 +27,38 @@ namespace GrAL {
     return ( ptr_long > irf_long ? true : false);
   }
 
+  /*
+  // Enable direct construction ref_ptr<const T>(ref_ptr<T>)
+  // but this does not suffice to enable implicit conversion
+  // where a ref_ptr<const T> is expected. 
+  template<class T>
+  struct constref2ref { 
+  private:
+    struct dummy_type {};
+  public:
+    typedef dummy_type type; 
+  };
+
+  template<class T>
+  struct constref2ref<const T> { 
+    typedef T type; 
+  };
+
+  template<class T>
+  struct ref2constref { 
+    typedef const T type; 
+  };
+
+  template<class T>
+  struct ref2constref<const T> { 
+  private:
+    struct dummy_type {};
+  public:
+    typedef dummy_type type; 
+  };
+  */
+
+
 
 /*! \brief class for disallowing taking the address of temporary.
     \author Guntram Berti
@@ -249,8 +281,13 @@ public:
     }
     return *this;
   }
+  /* this seems to lead to ambigous conversions, while not allowing implicit conversions
+  // if T is 'const U', allow construction from ref_ptr<U>
+  ref_ptr(ref_ptr<typename constref2ref<T>::type> const& rhs) : ptr(rhs.get_ptr()) {}
 
-
+  typedef ref_ptr<typename ref2constref<T>::type> const_ref_ptr; 
+  operator const_ref_ptr() const { return const_ref_ptr(*this);}
+  */
 
   // disabled - too dangerous.
   /*  \brief Set to reference to tptr
@@ -337,6 +374,63 @@ public:
 
 template<class T>
 temporary<T>::operator ref_ptr<T> () const { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
+
+
+  /*! \defgroup refptrgenerator Generator functions for ref_ptr
+      
+      These generator functions make it easier/more convenient to generate a ref_ptr
+
+      \ingroup memory
+      \relates ref_ptr
+ */
+
+  /*! \brief Copy \c t to a ref_ptr
+     \relates ref_ptr
+     \ingroup refptrgenerator
+  */
+  template<class T>
+  inline ref_ptr<T> copy_to_ref_ptr(T const& t) { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
+
+  // superflous
+  template<class T>
+  inline ref_ptr<T> copy_to_ref_ptr(T      & t) { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
+
+
+  /*! \brief Convert newly allocated pointer to ref_ptr
+
+      \ingroup refptrgenerator
+   
+      It is assumed that \c t is newly allocated, and no \c delete is called.
+      Example:
+      \code
+      {
+      // ...
+      ref_ptr<MyClass> r = new_ref_ptr(new MyClass(myargs));
+      return r;
+      // note: Ownership is taken by r.
+      }
+      \endcode
+   */
+  template<class T>
+  inline ref_ptr<T> new_ref_ptr(T * t) { return ref_ptr<T>(t, ref_ptr_base::shared);}
+
+
+
+
+  /*! \brief Copy \c t to a const ref_ptr
+    \relates ref_ptr
+  */
+  template<class T>
+  inline ref_ptr<const T> copy_to_const_ref_ptr(T const& t)
+  { return ref_ptr<const T>(new T(t), ref_ptr_base::shared);}
+  
+
+
+  template<class T>
+  inline ref_ptr<T>  ref_to_ref_ptr(T & t) { return ref_ptr<T>(t);}
+
+  template<class T>
+  inline ref_ptr<const T> const_ref_to_ref_ptr(T const& t) { return ref_ptr<const T>(t); }
 
 
 } // namespace GrAL 
