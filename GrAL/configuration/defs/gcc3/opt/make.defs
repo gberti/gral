@@ -1,5 +1,5 @@
 THISDIR = $(COMPILERDIR)
 include $(THISDIR)/../make.defs
 
-OPTFLAGS += -O3 -finline-functions 
+OPTFLAGS += -O2 -finline-functions 
 CCFLAGS  += $(OPTFLAGS)
