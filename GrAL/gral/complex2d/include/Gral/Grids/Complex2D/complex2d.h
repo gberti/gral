@@ -147,6 +147,8 @@ struct edge_handle_complex2d {
   typedef edge_handle_complex2d self;
   friend bool operator==(const self& ls, const self& rs)
     { return ((ls.c == rs.c) && (ls.le == rs.le)); }
+  friend bool operator!=(const self& ls, const self& rs)
+    { return !(ls == rs);}
   friend bool operator< (const self& ls, const self& rs)
     { return ((ls.c <rs.c)  || ((ls.c == rs.c) &&  (ls.le < rs.le))); }
 
