@@ -8,6 +8,7 @@
 
 #include "Utility/pre-post-conditions.h"
 
+#include <vector>
 
 template<class P>
 void check_intersections(P const& s0, P const& s1,
@@ -139,6 +140,32 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
 
 
 
+  // matrix type
+  typename ap::matrix_type A(0);
+  typename ap::matrix_type B(ap::matrix_type::UnitMatrix());
+  typename ap::matrix_type C = A*B;
+  out << "A= " << A[li+0] << "  " << A[li+1] << "  " << A[li+2] << "\n"
+      << "B= " << B[li+0] << "  " << B[li+1] << "  " << B[li+2] << "\n"
+      << "C= " << C[li+0] << "  " << C[li+1] << "  " << C[li+2] << "\n";
+  A(li+0,li+0) = 1;
+  A(li+1,li+1) = 2;
+  A(li+2,li+2) = 3;
+  out << "A= " << A[li+0] << "  " << A[li+1] << "  " << A[li+2] << "\n";
+  C = A*B;
+  out << "C= " << C[li+0] << "  " << C[li+1] << "  " << C[li+2] << "\n";
+  typename ap::matrix_type D(0);
+  D(li+0, li+1) = 1;
+  D(li+1, li+2) = 1;
+  out << "D= " << D[li+0] << "  " << D[li+1] << "  " << D[li+2] << "\n";
+  D *= D;
+  out << "D= " << D[li+0] << "  " << D[li+1] << "  " << D[li+2] << "\n";
+
+  out << "det(A)= " << ap::det(A) << "\n"
+      << "|A|_1  = " << ap::matrixnorm_1(A) << "\n"
+      << "|A|_oo = " << ap::matrixnorm_infinity(A) << "\n"
+      << "|A|_F  = " << ap::matrixnorm_frobenius(A) << "\n";
+
+
   typedef segment<POINT>   segment3;
   typedef ray<POINT>       ray3;
   typedef triangle<POINT>  triangle3;
@@ -219,6 +246,23 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
   }
 
 
+
+  std::vector<POINT> d1(e, e+1);
+  std::vector<POINT> d2(e, e+2);
+  std::vector<POINT> d3(1, e[0]+e[1]);  
+  std::vector<POINT> d4(2); d4[0]= e[0]+e[1]; d4[1] = e[1]+e[2];
+
+  std::vector<POINT> c1 = ap::basis_completion(d1);
+  std::vector<POINT> c2 = ap::basis_completion(d2);
+  std::vector<POINT> c3 = ap::basis_completion(d3);
+  std::vector<POINT> c4 = ap::basis_completion(d4);
+
+  out << "ap::basis_completion(" << d1[0] << ") = " << c1[0] << "; " << c1[1] << std::endl;
+  out << "ap::basis_completion(" << d2[0] << "; " << d2[1] << ") = " << c2[0] << std::endl;
+  out << "ap::basis_completion(" << d3[0] << ") = " << c3[0] << "; " << c3[1] << std::endl;
+  out << "ap::basis_completion(" << d4[0] << "; " << d4[1] << ") = " << c4[0] << std::endl;
+
+  
 }
 
 #endif
