@@ -1,6 +1,11 @@
 #ifndef GRAL_GB_SEQUENCE_COMBINATORIAL_H
 #define GRAL_GB_SEQUENCE_COMBINATORIAL_H
 
+// $LICENSE_NEC
+
+#include "Utility/pre-post-conditions.h"
+
+
 /*! \defgroup combinatorialalgorithms Combinatorial algorithms
     \brief Algorithms calculating combinatorial functions, such as binomial coefficients
 
