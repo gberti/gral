@@ -12,6 +12,38 @@
 
 */
 
+/*! \brief factorial
+  \ingroup combinatorialalgorithms
+
+  \todo Test for overflow
+ */
+template<class I>
+I factorial(I n) {
+  REQUIRE_ALWAYS(n >= 0, " n=" << n,1);
+  return (n == 0 ? 1 :n*factorial(n-1));
+}
+
+
+namespace compile_time_functions {
+
+/*! \brief Compile-time power
+    \ingroup combinatorialalgorithms
+
+    \todo Test for overflow
+ */
+template<unsigned BASE, unsigned EXP>
+struct power {
+  enum { value = BASE * power<BASE,EXP-1>::value};
+};
+
+template<unsigned BASE>
+struct power<BASE,0> {
+  enum { value = 1};
+};
+
+} // compile_time_functions
+
+namespace compile_time_functions {
 /*! \brief Compile time binomial coefficient
     \ingroup combinatorialalgorithms
 
@@ -25,6 +57,10 @@ struct binomial_coefficient<N,0> { enum { value=1};};
 
 template<unsigned N>
 struct binomial_coefficient<N,N> { enum { value=1};};
+
+} // compile_time_functions
+
+
 
 /*! \brief Runtime recursive binomial coefficient
     \ingroup combinatorialalgorithms
