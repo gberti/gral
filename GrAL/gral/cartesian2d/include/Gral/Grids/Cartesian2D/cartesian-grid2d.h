@@ -1361,6 +1361,9 @@ inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 } // namespace cartesian2d 
 
 
+namespace cartesian2d {
+  class SubrangeReg2D;
+}; 
 
 /*! \brief specialization of grid_types template for RegGrid2D
  */
@@ -1430,6 +1433,8 @@ struct grid_types<cartesian2d::RegGrid2D> {
   typedef grid_type::archetype_handle   archetype_handle;
   typedef grid_type::archetype_iterator archetype_iterator;
   typedef grid_types<archetype_type>    archgt;
+
+  typedef cartesian2d::SubrangeReg2D    cartesian_subrange_type;
 };
 
 
