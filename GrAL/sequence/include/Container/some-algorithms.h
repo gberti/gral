@@ -10,17 +10,17 @@
 //----------------------------------------------------------------
 
 
-//----------------------------------------------------------------
-//
-//  some extensions to STL algorithms.
-//
-//----------------------------------------------------------------
+/*! \file 
+  Some extensions to STL algorithms
+*/
 
 template<class InputIt>
+inline
 InputIt next(InputIt i)
 { ++i; return i;}
 
 template<class InputIt>
+inline
 InputIt next(InputIt i, unsigned n)
 { 
   while(n > 0) {
@@ -30,12 +30,19 @@ InputIt next(InputIt i, unsigned n)
   return i;
 }
 
-// this algorithm could also be expressed using std copy
-// and an iterator-adaptor of InputIt using Filter,
-// however, as a filter rather operates on the
-// corresponding value_type, this version seems to be 
-// more natural.
+/*! \brief copy [b,e) to [dest, ...), mapping values with f.
+    \ingroup algorithms
+
+    The output is the sequence f(*b), ... f(*(e-1)).
+
+    This algorithm could also be expressed using std::copy
+    and an iterator-adaptor of InputIt using Filter.
+    However, as a filter rather operates on the
+    corresponding value_type, this version seems to be 
+    more natural.
+*/
 template<class InputIt, class OutputIt, class Filter>
+inline
 OutputIt copy_filter(InputIt b, InputIt e, OutputIt dest, Filter f)
 {
   while( b != e) {
@@ -45,14 +52,17 @@ OutputIt copy_filter(InputIt b, InputIt e, OutputIt dest, Filter f)
   return dest;
 }
 
-// find_if_preference tries to find an element that satisfies both
-// predicates.
-// Return value:
-//    i, where i is the first in [b,e) that satisfies must_be && should_be
-// or i, where i is the first in [b,e) that satisfies must_be, 
-//       and no element in [b,e) satisfies should_be
-// e if no element in [b,e) satisfies must_be.
+/*! \brief find_if_preference tries to find an element that satisfies both predicates.
+    \ingroup algorithms
+
+ Return value:
+ -# i, where i is the first in [b,e) that satisfies must_be && should_be
+ -# i, where i is the first in [b,e) that satisfies must_be, 
+        and no element in [b,e) satisfies should_be
+ -# e, if no element in [b,e) satisfies must_be.
+*/
 template<class FwdIt, class P1, class P2>
+inline
 FwdIt find_if_preference(FwdIt b, FwdIt e, const P1& must_be, const P2& should_be)
 {
   FwdIt found = e;
@@ -68,6 +78,16 @@ FwdIt find_if_preference(FwdIt b, FwdIt e, const P1& must_be, const P2& should_b
   return found;
 }
 
+/*! \brief Copy a mapping by iterating through its domain
+    \ingroup algorithms
+
+    <b> Template parameters </b>
+    - M1: operator[]
+    - M2:
+      - operator[]
+      - typedef domain_type
+      - domain_type domain()
+ */
 template<class M1, class M2>
 void mapping_assign(M1& dest, M2 const& src)
 {
