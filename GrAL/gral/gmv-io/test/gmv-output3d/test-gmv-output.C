@@ -54,6 +54,21 @@ int main() {
     // ConstructGrid(Out,R,GeomR, (heterogeneous_list::BEGIN, gf1, gf2));
   } 
 
+  {
+    c3d::CartesianGrid3D R(3,3,3);
+    c3d::mapped_geometry<mapping_type> GeomR(R, mapping_type());
+    grid_function<gt::Cell, int> mat(R,0);
+    for(gt::CellIterator c(R); !c.IsDone(); ++c)
+      mat[*c] = c.index()[0];
+    grid_function<gt::Vertex, float> gf2(R,2.4);
+    OstreamGMV3DFmt Out("3x3x3-mat.out");
+    Out.output_materials();
+    namespace hl = heterogeneous_list;
+    hl::BEGIN B;
+    ConstructGrid_GF(Out,R,GeomR,
+		     (B, Out.pair("material",mat), Out.pair("gf2",gf2)));
+  } 
+
 
 
 }

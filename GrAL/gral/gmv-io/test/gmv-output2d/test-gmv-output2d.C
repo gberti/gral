@@ -63,6 +63,27 @@ int main() {
     // pairs to pass to GMV.
   } 
 
+  {
+    grid_type R(3,3);
+    geometry_type GeomR(R, mapping_type());
+    grid_function<gt::Cell, int> mat(R,0);
+    for(gt::CellIterator c(R); !c.IsDone(); ++c)
+      mat[*c] = (*c).index()[0];
+
+    partial_grid_function<gt::Vertex, int> gf2(R,2);
+    OstreamGMV2DFmt Out("3x3-mat.out");
+    Out.output_materials();
+    // Try the  experimental version of passing an abritrary list
+    // of grid functions to GMV
+    namespace hl = heterogeneous_list;
+    hl::BEGIN B;
+    ConstructGrid_GF(Out,R,GeomR,
+		     (B, Out.pair("material",mat), Out.pair("gf2",gf2)));
+    // the construct (B, Out.pair(name, gf), ...) uses an overloaded
+    // operator, (comma-operator) to create a list of (name,grid-function)
+    // pairs to pass to GMV.
+  } 
+
 
 
 }
