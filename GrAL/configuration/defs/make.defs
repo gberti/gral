@@ -108,3 +108,8 @@ LDFLAGS += -L$(PREFIX)/lib/$(LIBPATH)
 endif
 
 IFLAGS += $(LOCAL_IFLAGS)
+
+
+ifdef PROFILING
+include $(CONFIGURATION)/defs/$(CCNAME)/profiling.defs
+endif
