@@ -7,10 +7,12 @@
 #include "Gral/Grids/CartesianND/all.h"
 
 #include "Geometry/algebraic-primitives.h"
+#include "Geometry/affine-mapping.h"
+#include "Geometry/matrix.h"
+
 
 #include "Container/index-map-nd.h"
 #include "Container/combinatorial.h"
-#include "Container/functions.h"
 
 #include "Utility/ref-ptr.h"
 
@@ -65,10 +67,10 @@ public:
     typedef cartesiannd::grid<dim>     cart_grid_type;
     typedef grid_types<cart_grid_type> gt;
     typedef typename gt::index_type    index_type;
-    typedef stdext::identity<coord_type> mapping_type;
-
+    typedef matrix<dim,dim,0> matrix_type;
+    typedef affine_mapping<matrix_type, coord_type>  mapping_type;
     cart_grid_type  G(index_type(0), index_type(n+1));
-    cartesiannd::mapped_geometry<cart_grid_type, mapping_type> GeomG(G);
+    cartesiannd::mapped_geometry<cart_grid_type, mapping_type> GeomG(G, mapping_type::identity());
  
     scalar_type w = 1.0/G.NumOfCells();
     weight_ = std::vector<scalar_type>(G.NumOfCells(),w);
