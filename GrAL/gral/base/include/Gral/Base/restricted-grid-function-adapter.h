@@ -8,6 +8,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+#include <boost/type_traits.hpp>
+
 namespace GrAL {
 
 /*! \defgroup restrictedgridfunctions Restrictions of grid functions
@@ -32,6 +34,30 @@ inline bool operator< (restr_gf_iterator_adapter<GF,E_iter> const& ls,
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 
+  namespace detail {
+
+    template<class GF, bool IsConst> 
+    struct deref_aux {
+      typedef typename GF::const_reference reference;
+      
+      template<class E>
+      reference operator()(GF & f, E const& e) const { return f(e);}
+    };
+
+    template<class GF>
+    struct deref_aux<GF, false> {
+      typedef typename GF::reference reference;
+      
+      template<class E>
+      reference operator()(GF & f, E const& e) const { return f[e];}
+    };
+
+
+    template<class GF>
+    struct deref : public deref_aux<GF, boost::is_const<GF>::value> {};
+      
+  } // detail
+
 /*! \internal
     \brief Wrapper class for E_iter type: Has value-type of GF   instead of E_iter
     \ingroup restrictedgridfunctions
@@ -41,8 +67,10 @@ inline bool operator< (restr_gf_iterator_adapter<GF,E_iter> const& ls,
 */
 
 template<class GF, class E_iter>
-class restr_gf_iterator_adapter {
+class restr_gf_iterator_adapter : public detail::deref<GF> {
   typedef restr_gf_iterator_adapter<GF,E_iter> self;
+  typedef detail::deref<GF> base;
+  typedef typename base::reference reference;
 public:
   //------------------ construction -------------------
 
@@ -54,12 +82,8 @@ public:
 
   typedef typename GF::value_type value_type;
 
-  self& operator++()    { ++it; return *this;}
-  value_type&    operator*() const  { return (*gf)[*it];}
-  //T& operator*() const  { return (*gf)[it.GlobalNumber()];} // more eff. than (*gf)[*it]
-  // not yet defined for arbitrary iterators!
-  //  bool IsDone()  const  { return it.IsDone();}
-  //  bool IsDone()  const  { return it == stop;}
+  self&     operator++() { ++it; return *this;}
+  reference operator*()  { return base::operator()(*gf, *it);}
 
   //------------------ comparision ---------------------
 
@@ -136,6 +160,139 @@ Restriction(GF& gf, const ERange& R)
   typedef typename ERange::const_iterator e_iter;
   return restricted_grid_function_adapter<GF,e_iter>(gf,R.begin(),R.end(),R.size());
 }
+
+
+  template<class E, class T, class GF = grid_function<typename E::base_element_type, T> >
+  class grid_function_view;
+
+  namespace detail {
+
+    /*    
+    template<class GF, class EIT>
+    struct gf_view_stl_aux_base {
+    private:
+      typedef EIT ElementIterator;
+      GF const& to_derived() const { return static_cast<GF const&>(*this);}
+    public:
+      typedef restr_gf_iterator_adapter<GF const, ElementIterator> const_iterator;
+      const_iterator begin() const { return const_iterator(to_derived().FirstElement(), to_derived());}
+      const_iterator end()   const { return const_iterator(to_derived().EndElement(),   to_derived());}
+    };
+    */
+
+    template<class GF, class EIT, bool IsConst>  
+    struct gf_view_stl_aux  {// : public gf_view_stl_aux_base<GF, EIT> {};
+    private:
+      typedef EIT ElementIterator;
+      GF const& to_derived() const { return static_cast<GF const&>(*this);}
+    public:
+      typedef restr_gf_iterator_adapter<GF const, ElementIterator> const_iterator;
+      const_iterator begin() const { return const_iterator(to_derived().FirstElement(), to_derived());}
+      const_iterator end()   const { return const_iterator(to_derived().EndElement(),   to_derived());}
+
+    };
+
+    template<class GF, class EIT>
+    struct gf_view_stl_aux<GF, EIT, false> { // : public gf_view_stl_aux_base<GF, EIT> {
+    private:
+      typedef EIT ElementIterator;
+      GF const& to_derived() const { return static_cast<GF const&>(*this);}
+      GF      & to_derived()       { return static_cast<GF &>(*this);}
+    public:
+      typedef restr_gf_iterator_adapter<GF const, ElementIterator> const_iterator;
+      const_iterator begin() const { return const_iterator(to_derived().FirstElement(), to_derived());}
+      const_iterator end()   const { return const_iterator(to_derived().EndElement(),   to_derived());}
+
+      typedef restr_gf_iterator_adapter<GF, ElementIterator> iterator;
+      iterator begin()  { return iterator(to_derived().FirstElement(), to_derived());}
+      iterator end()    { return iterator(to_derived().EndElement(),   to_derived());}
+    };
+
+    /*
+    template<class E, class T, class BASEGF> class gf_view_stl 
+      : public gf_view_stl_aux<grid_function_view<E,T,BASEGF>, 
+			       typename element_traits<E>::ElementIterator,
+    	       boost::is_const<BASEGF>::value> {};
+    */  
+  }
+
+
+
+  /*! \brief Wrapper for grid functions of base grid
+      
+       \ingroup restrictedgridfunctions
+       \see Module \ref restrictedgridfunctions
+
+       In many contexts, one might use the underlying grid function on the base grid as well.
+       However, these do not provide correct size() and TheGrid() functions.
+
+       Example:
+       \code
+        my_grid_t G;
+	typedef grid_function<grid_types<my_grid_t>::Vertex, int> my_gf_t;
+	my_gf_t gf(G, 0);
+        ...
+	namespace rgv = restricted_grid_view;
+	typedef in_circle_pred pred_t; // define some predicate on the cells of G
+	typedef rgv::grid_view<my_grid_t, pred_t> view_t;
+	typedef grid_types<view_t> vgt;
+
+	pred_t  in_circle(origin,radius);
+	view_t  ball(G, in_circle);
+
+        // type of GF parameter is deduced
+	rgv::grid_function_view<vgt::Vertex, int> ballgf(ball,gf);
+
+	my_algorithm(ball, ballgf);
+       \endcode
+
+       \todo Provide iterators
+  */
+
+  template<class E, class T, class GF> //  = grid_function<typename E::base_element_type, T> >
+  class grid_function_view 
+    : public   detail::gf_view_stl_aux<grid_function_view<E,T,GF>,
+				       typename element_traits<E>::ElementIterator,
+				       boost::is_const<GF>::value
+                                      > 
+  { 
+    typedef grid_function_view<E,T,GF> self;
+  public:
+    typedef E                             element_type;     //!< Element type this grid function is defined on
+    typedef element_traits<E>             et;
+    typedef typename et::grid_type        grid_type;        //!< The underlying grid view type
+    typedef typename et::ElementIterator  ElementIterator;  //!< Iterator over the domain of this gf
+
+    typedef GF                                 base_gf_type;
+    typedef typename GF::element_type          base_element_type;
+    typedef typename GF::value_type            value_type;      //!< value type  of the grid function 
+    typedef typename GF::reference             reference;       //!< reference to value type, type of operator[]
+    typedef typename GF::const_reference       const_reference; //!< const reference to value type, type of operator()
+    typedef typename GF::size_type             size_type;       //!< type returned by size()
+
+
+  private:
+    ref_ptr<grid_type const> g;
+    ref_ptr<base_gf_type>    gf;
+  public:
+    grid_function_view(grid_type const& gg, base_gf_type &  ggf)
+      : g(gg), gf(ggf) {}
+    grid_function_view(ref_ptr<grid_type const> gg, ref_ptr<base_gf_type>  ggf)
+      : g(gg), gf(ggf) {}
+
+		       
+    const_reference operator()(element_type const& e) const { return (*gf)(e);}
+    reference       operator[](element_type const& e)       { return (*gf)[e];}
+    
+    ElementIterator FirstElement() const { return et::FirstElement(*g);}
+    ElementIterator EndElement()   const { return et::EndElement(*g);}
+
+    grid_type const& TheGrid() const { return *g;}
+    size_type size() const { return et::size(*g);}
+    
+  };
+
+
 
 } // namespace GrAL 
 
