@@ -4,7 +4,9 @@ CONFIG=$(PWD)/../mk.config
 SUBDIRS = affine-mapping \
           ap \
           box \
+          coordN \
           intersections \
+          matrix \
           simplex \
 
 
