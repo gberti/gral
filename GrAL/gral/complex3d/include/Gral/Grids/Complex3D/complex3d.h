@@ -10,6 +10,7 @@
 
 #include "Gral/Iterators/generic-edge-iterators.h"
 #include "Gral/Iterators/generic-facet-iterators.h"
+#include "Gral/Iterators/vertex-on-edge-iterator.h"
 
 class Complex3D;
 
@@ -57,7 +58,16 @@ struct grid_types_Complex3D
    < generic_edge::grid_types_edge<
          grid_types_Complex3D_base> 
    >
-{};
+{
+  typedef facet_handle          face_handle;
+  typedef Facet                 Face;
+  typedef FacetIterator         FaceIterator;
+  typedef FacetOnCellIterator   FaceOnCellIterator;
+  typedef VertexOnFacetIterator VertexOnFaceIterator;
+  typedef EdgeOnFacetIterator   EdgeOnFaceIterator;
+
+  typedef vertex_on_edge_iterator<Complex3D> VertexOnEdgeIterator;
+};
 
 
 class Complex3D : public grid_types_Complex3D {
@@ -77,7 +87,7 @@ class Complex3D : public grid_types_Complex3D {
 
   void clear(); // make this an empty grid
 
-  
+  unsigned dimension() const { return 3;}  
   size_type NumOfVertices() const { return num_of_vertices;}
   size_type NumOfCells()    const { return cell_archetype.size();}
 
@@ -253,13 +263,20 @@ public:
     return (lhs.h <  rhs.h);
   }
 
+  inline FaceOnCellIterator FirstFace() const { return FirstFacet();}
+  inline FaceOnCellIterator EndFace()   const { return EndFacet();}
+  inline int NumOfFaces() const { return NumOfFacets();}
+
   inline VertexOnCellIterator FirstVertex() const;
+  inline VertexOnCellIterator EndVertex() const;
   unsigned NumOfVertices() const { 
    c_();  return TheGrid().offset[h+1] - TheGrid().offset[h];
   }
   vertex_handle v(archgt::vertex_handle lv) const 
     { c_(); return TheGrid().cells[TheGrid().offset[h]+lv];}
   inline Vertex V(archgt::Vertex v) const;
+
+  inline edge_handle e(archgt::edge_handle le) const;
 };
 
 
@@ -393,24 +410,27 @@ Cell_Complex3D::FirstVertex() const
 { c_(); return VertexOnCellIterator(*this);}
 
 inline
+VertexOnCellIterator_Complex3D
+Cell_Complex3D::EndVertex() const
+{ c_(); return VertexOnCellIterator(*this, NumOfVertices());}
+
+inline
 Vertex_Complex3D
 Cell_Complex3D::V(Cell_Complex3D::archgt::Vertex vv) const
 { return Vertex(TheGrid(), v(vv.handle())); }
 
+inline 
+Cell_Complex3D::edge_handle
+Cell_Complex3D::e(Cell_Complex3D::archgt::edge_handle le) const { return (EdgeOnCellIterator(*this, le).handle());}
 
 // grid_types
 
 template<>
 struct grid_types<Complex3D> 
-  : public grid_types_Complex3D
+  : public grid_types_base<grid_types_Complex3D>
 {
   typedef grid_type::archetype_iterator archetype_iterator;
 
-  typedef facet_handle          face_handle;
-  typedef Facet                 Face;
-  typedef FacetIterator         FaceIterator;
-  typedef FacetOnCellIterator   FaceOnCellIterator;
-  typedef VertexOnFacetIterator VertexOnFaceIterator;
 };
 
 
