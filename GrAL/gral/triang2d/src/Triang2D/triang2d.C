@@ -1,7 +1,8 @@
-#include "Grids/Triang2D/triang2d.h"
 
-#include "IO/iomgr.h"
-#include <vector.h>
+#include "Gral/Grids/Triang2D/triang2d.h"
+
+#include <vector>
+
 
 Triang2D::Triang2D(Triang2D const& rhs) {
   cells     = rhs.cells;
@@ -10,6 +11,7 @@ Triang2D::Triang2D(Triang2D const& rhs) {
   do_copy(); 
   owned = true; 
 }
+
 Triang2D& Triang2D::operator=(Triang2D const& rhs) {
   if( this != &rhs) {
     clear();
@@ -27,7 +29,7 @@ Triang2D::~Triang2D() { clear();}
 void Triang2D::clear() 
 {
   if(owned) {
-    delete cells;
+    delete [] cells; // !!
   }
   cells = 0;
   owned = false;
@@ -52,7 +54,8 @@ int Triang2D::calc_num_of_vertices()
   // verify that vertices are consecutive
   for(; v < 3*ncells; ++v)
     if (found_vertices[v])
-      IOMgr::Error()  << "Vertices not consecutive: v = " << v << endl;
+      //      IOMgr::Error()  << "Vertices not consecutive: v = " << v << endl;
+      std::cerr << "Vertices not consecutive: v = " << v << std::endl;
   return nvertices;
 }
 
@@ -74,3 +77,5 @@ void Triang2D::Steal(int* c, int nc, int nv)
   nvertices = nv;
   owned = true;
 }
+
+

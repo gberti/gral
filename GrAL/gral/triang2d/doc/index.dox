@@ -1,26 +1,28 @@
-/*! \mainpage Index of the GrAL Cartesian3D Grid Module
+/*! \mainpage Index of the GrAL Triang2D Grid Module
 
-   This module contains the concrete grid component CartesianGrid3D.
-   An object of type CartesianGrid3D represents a finite Cartesian grid.
-   Hence, there is no explicit incidence information stored, all
-   iterator functionality is implemented via index calculations.
+   This module contains the concrete grid component Triang2D.
+   An object of type Triang2D represents a two-dimensional triangulation.
+   The only incidence relation stored is cell-vertex incidence,
+   in a simple integer array.
 
-  <EM> This class is still incomplete, and does not include all
-       planned functionality 
-  </EM>	
+   The module also serves as an example how to adapt a given
+   ``classical'' grid data structure to the GrAL interface.
+   Therefore, most things are kept simple, even if much shorter
+   implementations would be possible by reusing generic components
+   for defining iterators.
 
    
    The main classes one might use are:
-   (headers under the path Gral/Grids/Cartesian3D)
-   -  CartesianGrid3D (cartesian-grid3d.h): The combinatorial grid
-   -  mapped_geometry_cartesian3d (mapped-geometry.h): 
-        A grid geometry using a mapping from a default embedding in \f$ [0,1]^2 \f$
+   (headers under the path Gral/Grids/Triang2D)
+   - Triang2D (triang2d.h): The combinatorial grid
    - total grid function (see $GrAL TotalGridFunction concept, grid-functions.h)
    - partial grid functions 
      (see $GrAL PartialGridFunction concept, partial-grid-functions.h )
+   - ConstructGrid0(Triang2D,...) for copying an arbitrary grid into
+     a Triang2D grid (construct.h)
    - all.h for all of the above.
 
    \status 
-   - there are no edges and facets defined, just vertices and cells.
-
+   - a stored grid geometry has to be added
+   - switch operators have to be defined (for edges and vertices)
 */

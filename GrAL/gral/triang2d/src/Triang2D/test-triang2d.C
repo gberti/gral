@@ -1,15 +1,17 @@
-#include "Grids/Triang2D/test-triang2d.h"
-#include "Grids/Triang2D/partial-grid-functions.h"
+#include "Gral/Grids/Triang2D/test-triang2d.h"
+#include "Gral/Grids/Triang2D/partial-grid-functions.h"
 
-#include "Grids/Algorithms/cell-neighbor-search.h"
+#include "Gral/Algorithms/cell-neighbor-search.h"
+
 
 struct nb_type {
   nb_type(int * nbs) : nb(nbs) {}
   int& operator[](Triang2D::FacetOnCellIterator const& fc)
-  { return nb[3*fc.TheCell().handle() + fc.LocalNumber()]; }
+  { return nb[3*fc.TheCell().handle() + fc.local_handle()]; }
 private:
   int * nb;
 };
+
 
 TestTriang2D::TestTriang2D()
   : test_vertices(true), 
@@ -26,7 +28,7 @@ TestTriang2D::TestTriang2D()
     test_cell_edge_flip(false)
 {}
 
-void TestTriang2D::register_at(ControlDevice& Ctrl, const string&) {
+void TestTriang2D::register_at(ControlDevice& Ctrl, const std::string&) {
   RegisterAt(Ctrl, "test_vertices",test_vertices);
   RegisterAt(Ctrl, "test_cells",test_cells);
   RegisterAt(Ctrl, "test_edges",test_edges);
@@ -42,7 +44,7 @@ void TestTriang2D::register_at(ControlDevice& Ctrl, const string&) {
 }
 
 void TestTriang2D::test_iterators(const Triang2D& CC,
-				  ostream& out) 
+				  std::ostream& out) 
 {
 
   typedef grid_types<Triang2D> gt;
@@ -82,6 +84,7 @@ void TestTriang2D::test_iterators(const Triang2D& CC,
      CNum[*ci] += 1;
      CNum[*ci] -= 1;
    }
+
   // calculate cell neighbors
   int* nbs = new int[3*CC.NumOfCells()];
   nb_type Nbs(nbs);
@@ -109,6 +112,7 @@ void TestTriang2D::test_iterators(const Triang2D& CC,
 	for(vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc)
 	  out << VNum[*vc] << " ";
       }
+
       // loop over all neighbors  
       if(test_cell_neighbours) {
 	out << "\n"
@@ -116,20 +120,20 @@ void TestTriang2D::test_iterators(const Triang2D& CC,
 	for(gt::FacetOnCellIterator fc(c); ! fc.IsDone(); ++fc)
 	  out << Nbs[fc] << ' ';
       }
-
+      
       // loop over all edges e of c, print e.V(1) and e.V(2)
       if(test_cell_edges) {
 	out << "\n"
 	    << "  Edges:  ";
 	 gt::EdgeOnCellIterator e((*c));
 	for(; ! e.IsDone(); ++e) {
-	  out << " No. " << e.LocalNumber() << " : ("
+	  out << " No. " << e.local_handle() << " : ("
 	      << (*e).V1().handle()  << ","
 	      << (*e).V2().handle()  << "), ";
 	}
 	out << '\n';
       } 
-      
+
     } // for ( gt::CellIterator c=CC.FirstCell(); ...
   } // if (test_cells)
   
