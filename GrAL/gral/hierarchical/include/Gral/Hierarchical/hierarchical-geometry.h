@@ -38,7 +38,7 @@ namespace hierarchical {
     typedef typename table_type::const_reference   const_reference;
 
     template<class ELEMBASE>
-    struct vertex_template { typedef typename hier_grid_type::vertex_template<ELEMBASE>::type type;};
+    struct vertex_template { typedef typename hier_grid_type::template vertex_template<ELEMBASE>::type type;};
   private:
     table_type geoms;
  

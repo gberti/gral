@@ -61,9 +61,11 @@ namespace hierarchical {
     typedef value_type const& const_reference;
   private:
     // this type essentially must be a bivector<>
-    typedef typename hier_grid_type::table_type_template<GE>::type  table_type;
+    typedef typename hier_grid_type::template table_type_template<GE>::type  table_type;
     table_type                entities;
     ref_ptr<const hier_grid_type> g;
+
+
   public:
     hier_grid_table();
     hier_grid_table(hier_grid_type const& gg);
