@@ -3,7 +3,21 @@
 
 // $LICENSE_NEC
 
+#include <boost/shared_ptr.hpp>
+#include "Utility/pre-post-conditions.h"
+
 namespace GrAL {
+
+template<class T>
+inline bool is_stack_address(T * const& ptr)
+{
+  // assuming downwards growing stack
+  char i;
+  unsigned long ptr_long = (unsigned long)ptr;
+  unsigned long irf_long = (unsigned long)(&i);
+  return ( ptr_long > irf_long ? true : false);
+}
+
 
 /*! \brief class for disallowing taking the address of temporary.
     \author Guntram Berti
@@ -24,6 +38,8 @@ template<class T>
 class temporary {
   typedef temporary<T> self;
   T t;
+
+  // Forbidden
   self* operator&() { return this;}
 public:
   explicit temporary(T tt) : t(tt) {}
@@ -38,9 +54,13 @@ public:
   T const* operator->() const { return &t;}
 };
 
+struct null_deleter
+{
+  void operator()(void const *) const {}
+};
 
 struct  ref_ptr_base {
-  enum ownership { not_owned, excl_owned};
+  enum ownership { referenced, shared};
 };
 
 /*! \brief class for maintaining a assignable reference to another (often const) object 
@@ -91,133 +111,171 @@ struct  ref_ptr_base {
 
 
    The challenge is now to put everything under the hood of a unique pointer-like interface,
-   and to use the constructor to differentiate between the cases.
+   and to use the constructor to differentiate between the cases (which does not work automatically).
 
    In case 1 and 3, we just pass a plain reference or pointer to the object to the
    constructor of \c ref_ptr<>. <br>
    For filtering out case 2, we rely on the temporary object being wrappend into
    the \c temporary<> template. <br>
-   Case 4 is not yet supported.
+   For handling case 4, we also pass in a pointer, but must explicitely enable shared ownership.
 
-  \todo Extend the class to be able to hold instances of true reference-counted smart pointers.
 */
 
 template<class T>
 class ref_ptr : public ref_ptr_base {
   typedef ref_ptr<T> self;
-  T    * ptr;
-  bool owned_;
+
+  boost::shared_ptr<T> ptr;
 public:
+  ref_ptr()  {} 
+  ~ref_ptr() {}
 
-
-  ref_ptr() : owned_(false)   { ptr=0;}
   // Cannot overload for T const& and T. So caller must make sure that temporary<T> is passed instead of T.
   // If we disable this, at least the caller must apply the address-of operator&
   // which could inhibit some misuse.
-  explicit ref_ptr(T  &     t) : owned_(false) 
-  { ptr = &t; } // ::std::cout << "ref_ptr(T const&     t)" << ::std::endl;}
+
+  /*! \brief Store a reference to \c t
+       
+      \post \c is_reference()
+   */
+  explicit ref_ptr(T  &     t) : ptr(&t , null_deleter()) 
+  { ENSURE(is_reference(),"",1); }
 
   // FIXME: This might result in memory leak if called with newly allocated ptr and own=false
   // Perhaps add shared_ptr<T> to data and allow only ref_ptr(shared_ptr<T>) ?
-  explicit ref_ptr(T *   tptr, ownership own = not_owned) : owned_( (own == not_owned ? false : true))
-  { ptr = tptr; }
-  // explicit 
-  ref_ptr(temporary<T> t) : owned_(true)  
-  { ptr = new T(t.value()); } // ::std::cout << "ref_ptr(temporary<T> t)" << ::std::endl;} 
 
+  /*! \brief Store a reference to \c *tptr
+
+      If \c tptr points to dynamically allocated memory, 
+      deallocation  remains in the responsibility of the caller.
+
+      \post \c is_reference()
+   */
+  explicit ref_ptr(T *   tptr) 
+    : ptr(tptr , null_deleter())
+  { 
+    ENSURE(is_reference(),"",1);
+  } 
+
+  /*! \brief Store either a reference or a shared pointer to \c *tptr
+      \pre if <tt> own == shared </tt> then \c tptr must point to dynamically allocated memory,
+      i.e. calling <tt> delete tptr </tt> must be legal.
+      \post if <tt> own == referenced </tt> then <tt> is_referenced() == true</tt>
+            <br>
+            if <tt> own == shared </tt> then <tt> is_shared() == true</tt>
+  */
+  ref_ptr(T *   tptr, ownership own) 
+  { 
+    if(own == referenced) {
+      ptr.reset(tptr, null_deleter());
+      ENSURE(is_reference(),"",1);
+    }
+    else { // own == shared
+      // this cannot check if tptr is a pointer to a heap-allocated array element,
+      // which is equally forbidden.
+      REQUIRE(!is_stack_address(tptr), "Attempt to create shared pointer from automatic (stack) variable!",1);
+      ptr.reset(tptr);
+      ENSURE(is_shared(),"",1);
+    } 
+  }
+
+  // explicit 
+  ref_ptr(temporary<T> t) : ptr(new T(t.value())) 
+  {     ENSURE(is_shared(),"",1); }  
+
+  
   template<class U>
   explicit
-  ref_ptr(temporary<U> t) : owned_(true)  
-  { ptr = new T(t.value()); } // ::std::cout << "ref_ptr(temporary<T> t)" << ::std::endl;} 
+  ref_ptr(temporary<U> t) : ptr(new T(t.value())) 
+  {     ENSURE(is_shared(),"",1); } 
 
   // copy constructors and assigment
-  ref_ptr(ref_ptr<T> const& rhs) { copy(rhs);}
+  ref_ptr(ref_ptr<T> const& rhs) : ptr(rhs.ptr) {} 
   ref_ptr<T> & operator=(ref_ptr<T> const& rhs) { 
     if(this != &rhs) {
-      clear();
-      copy(rhs);
+      ptr = rhs.ptr;
     }
     return *this;
   }
 
-  // conversion constructors and assigment
+  /*! \brief Set to reference to tptr
+    
+      \post \c is_reference()
+   */
+  /*
+  ref_ptr<T> & operator=(T * tptr) { 
+    //REQUIRE(!is_stack_address(tptr), "Stack objects must be passed as reference!", 1);
+    // ptr.reset(tptr); 
+    make_ref(tptr);
+    return *this;
+    ENSURE(is_reference(),"",1);
+  }
+  */
+ 
+
+  //! conversion constructors 
   template<class U>
-  ref_ptr(ref_ptr<U> const& rhs) { copy(rhs);}
+  ref_ptr(ref_ptr<U> const& rhs) : ptr(rhs.get_ptr()) {}  
+
+  //! conversion assignment
   template<class U>
-  ref_ptr<T> & operator=(ref_ptr<U> const& rhs) { 
-    // no need to check for equality: this would be caught by copy assigment above  
-   // if(this != &rhs) {
-      clear();
-      copy(rhs);
-      // }
+  ref_ptr<T> & operator=(ref_ptr<U> const& rhs) {
+    ptr = rhs.get_ptr();
     return *this;
   }
 
+  /*! \brief Set to a shared pointer to \c uptr
+      \pre \c tuptr must point to dynamically allocated memory,
+      i.e. calling <tt> delete uptr </tt> must be legal. 
+      \post \c is_shared()
+   */
   template<class U>
-  void make_own(U * rhs) 
+  void make_shared(U * uptr) 
   {
-    clear();
-    ptr = rhs; // new T(*rhs);
-    owned_ = true;
+    // uptr must point to a dynamically allocated object, i.e. delete uptr must be OK.
+    REQUIRE(!is_stack_address(uptr), "Stack objects must be passed as reference!", 1);
+    ptr.reset(uptr);
+    ENSURE(is_shared(),"",1);
   }
-  void make_copy()
+
+  //! Set to a reference to uptr
+  template<class U>
+  void make_ref(U * uptr)
   {
-    if(ptr != 0 && !owned_) {
-      owned_ = true;
-      T * ptr2 = new T(*ptr);
-      ptr = ptr2;
+    ptr.reset(uptr, null_deleter());
+    ENSURE(is_reference(),"",1);
+  }
+
+  /*! \brief make a copy of the pointee
+      \pre  <tt> valid() </tt>
+      \post <tt> valid() && shared() </tt>
+   */
+  void make_copy() {
+    if(ptr) {
+      ptr.reset(new T(*ptr));
+      ENSURE(is_shared(),"",1);
     }
   }
 
-  template<class U>
-  void make_ref   (U * rhs)
-  {
-    clear();
-    ptr = rhs;
-    owned = false;
-  }
-  // void make_shared(T * rhs);
-
-
-  template<class U>
-  ref_ptr<T> & operator=(U const* tptr) { clear(); owned_ = false; ptr =tptr; return *this;}
-
-  //  template<class U>
-  //  ref_ptr<U> get_ref() const { return ref_ptr<U>(this->operator*());}
-
-  //  ref_ptr<T> get_ref() const { return ref_ptr<T>(this->operator*());}
-
-  //  template<class U = T>
-  // ref_ptr<U> get_copy() {}
-
-  ~ref_ptr() { clear();}
 
   // validity check
   bool valid() const { return ptr != 0;}
-  bool owned() const { return owned_;}
+  void clear() { ptr.reset();}
 
-  friend bool operator==(self const& c, T         * p) { return c.ptr == p;}
-  friend bool operator==(T         * p, self const& c) { return c.ptr == p;}
-  friend bool operator!=(self const& c, T         * p) { return c.ptr != p;}
-  friend bool operator!=(T         * p, self const& c) { return c.ptr != p;}
+  bool is_shared()    const { return (boost::get_deleter<null_deleter>(ptr) != 0 ? false : true);}
+  bool is_reference() const { return !is_shared();}
+
+
+  friend bool operator==(self const& c, T         * p) { return c.get() == p;}
+  friend bool operator==(T         * p, self const& c) { return c.get() == p;}
+  friend bool operator!=(self const& c, T         * p) { return c.get() != p;}
+  friend bool operator!=(T         * p, self const& c) { return c.get() != p;}
 private:
-  template<class U>
-  void copy(ref_ptr<U> const& rhs) { 
-    /*
-    owned_ = false;
-    ptr = rhs.get();
-    */
-    owned_ = rhs.owned();
-    if(owned_)
-      ptr= new T(*rhs);
-    else 
-      ptr = rhs.get();
-  }
-  void clear()  { if(owned_) delete ptr; ptr = 0;}
 public:
-  T * get()        const { return ptr;}
-  T * operator->() const { return ptr;} 
+  T * get()        const { return ptr.get();}
+  T * operator->() const { return ptr.get();} 
   T & operator* () const { return *ptr;}
+  boost::shared_ptr<T> const& get_ptr() const { return ptr;}
 };
 
 

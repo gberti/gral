@@ -6,6 +6,9 @@
 
 using namespace GrAL;
 
+
+template class ref_ptr<int>;
+
 class A_ {
 public:
   int i;
@@ -32,17 +35,30 @@ public:
   Y(int ii = 2) : i(ii) {}
 };
 
+class Noisy {
+private:
+  static int i;
+public:
+  Noisy(Noisy const& rhs) { i++;  std::cerr << "Noisy::Noisy(Noisy(" << i << "))" << std::endl; }
+  Noisy()  {  i++; std::cerr << "Noisy::Noisy(" << i <<")"  << std::endl; }
+  ~Noisy() { std::cerr << "Noisy::~Noisy(" << i << ")" << std::endl; i--; }
+};
+
+int Noisy::i;
+
+
 class G {
   ref_ptr<X const> x;
   ref_ptr<Y const> y1;
-  Y       y_owned;
+  Y                y_owned;
   ref_ptr<Y>       y_excl_owned;
 public:
   G() : 
-    x(new X(88), ref_ptr_base::excl_owned), 
-    y1(new Y(99), ref_ptr_base::excl_owned), 
-    y_excl_owned(new Y(44),  ref_ptr_base::excl_owned)
+    x           (new X(88), ref_ptr_base::shared), 
+    y1          (new Y(99), ref_ptr_base::shared), 
+    y_excl_owned(new Y(44), ref_ptr_base::shared) 
  {}
+
   G(ref_ptr<X const> xx) : x(xx) {}
   G(ref_ptr<Y const> yy) : y1(yy), y_owned(*yy) {}
 
@@ -61,20 +77,23 @@ int main() {
 
   A_ a;
 
-  ref_ptr<int> pi1(a.f1()); REQUIRE_ALWAYS( !pi1.owned(), "", 1);
+  ref_ptr<int> pi1(a.f1()); REQUIRE_ALWAYS( !pi1.is_shared(), "", 1);
 #ifdef COMPILE_FAIL
   ref_ptr<int> pi2(a.f2()); // compile fail
   ref_ptr<int> pi3(a.f3()); // compile fail
 #endif
-  ref_ptr<int> pi4(a.f4()); REQUIRE_ALWAYS(  pi4.owned(), "", 1);
+  ref_ptr<int> pi4(a.f4()); REQUIRE_ALWAYS(  pi4.is_shared(), "", 1);
 
-  ref_ptr<int const> pci1(a.f1());  REQUIRE_ALWAYS( !pci1.owned(), "", 1);
-  ref_ptr<int const> pci2(a.f2());  REQUIRE_ALWAYS( !pci2.owned(), "", 1);
+  ref_ptr<int const> pci1(a.f1());  REQUIRE_ALWAYS( !pci1.is_shared(), "", 1);
+  ref_ptr<int const> pci2(a.f2());  REQUIRE_ALWAYS( !pci2.is_shared(), "", 1);
 
-  // DANGER!! this creates a reference-to-temporary! 
-  ref_ptr<int const> pci3(a.f3());  REQUIRE_ALWAYS( !pci3.owned(), "", 1);
+  // This creates a reference-to-temporary! 
+  // This combination of returning a temporary (object by value) and using ref_ptr<>
+  // must be avoided, e.g by returning temporary<T> as in A_::f4() in the next example
+  ref_ptr<int const> pci3(a.f3());  REQUIRE_ALWAYS( !pci3.is_shared(), "", 1);
 
-  ref_ptr<int const> pci4(a.f4());  REQUIRE_ALWAYS(  pci4.owned(), "", 1);
+  // Correct way to use temporary objects with 
+  ref_ptr<int const> pci4(a.f4());  REQUIRE_ALWAYS(  pci4.is_shared(), "", 1);
 
   int* orig_addr = &(a.i);
   REQUIRE_ALWAYS( (orig_addr == &(*pi1)), "", 1);
@@ -86,10 +105,10 @@ int main() {
 
   pci4 = pci1;
   REQUIRE_ALWAYS( (orig_addr == &(*pci4)), "", 1);
-  REQUIRE_ALWAYS(  !pci4.owned(), "", 1);
+  REQUIRE_ALWAYS(  !pci4.is_shared(), "", 1);
   pci4 = pi1;
   REQUIRE_ALWAYS( (orig_addr == &(*pci4)), "", 1);
-  REQUIRE_ALWAYS(  !pci4.owned(), "", 1);
+  REQUIRE_ALWAYS(  !pci4.is_shared(), "", 1);
 
 
   /* not reproducible
@@ -133,11 +152,12 @@ int main() {
     ref_ptr<const int> rci (ri); //.get_ref<const int>());
     ref_ptr<const int> rci2(ri);
 
-    cout << "ri:   " << (ri  .owned() ? "" : "not") << " owned" << endl;
-    cout << "ri2:  " << (ri1 .owned() ? "" : "not") << " owned" << endl;
-    cout << "rci:  " << (rci .owned() ? "" : "not") << " owned" << endl;
-    cout << "rci2: " << (rci2.owned() ? "" : "not") << " owned" << endl;
+    cout << "ri:   " << (ri  .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "ri2:  " << (ri1 .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "rci:  " << (rci .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "rci2: " << (rci2.is_shared() ? "" : "not") << " owned" << endl;
   }
+
   {
     int i;
     ref_ptr<int> ri(i);
@@ -147,33 +167,51 @@ int main() {
     ref_ptr<int>       ri2(ri);
     ref_ptr<const int> rci2(ri);
 
-    cout << "ri:   " << (ri  .owned() ? "" : "not") << " owned" << endl;
-    cout << "ri1:  " << (ri1 .owned() ? "" : "not") << " owned" << endl;
-    cout << "ri2:  " << (ri2 .owned() ? "" : "not") << " owned" << endl;
-    cout << "rci:  " << (rci .owned() ? "" : "not") << " owned" << endl;
-    cout << "rci2: " << (rci2.owned() ? "" : "not") << " owned" << endl;
+    cout << "ri:   " << (ri  .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "ri1:  " << (ri1 .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "ri2:  " << (ri2 .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "rci:  " << (rci .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "rci2: " << (rci2.is_shared() ? "" : "not") << " owned" << endl;
 
     ri1.make_copy();
     ri2.make_copy();
     rci2.make_copy();
     rci.make_copy();
 
-    cout << "ri:   " << (ri  .owned() ? "" : "not") << " owned" << endl;
-    cout << "ri1:  " << (ri1 .owned() ? "" : "not") << " owned" << endl;
-    cout << "ri2:  " << (ri2 .owned() ? "" : "not") << " owned" << endl;
-    cout << "rci:  " << (rci .owned() ? "" : "not") << " owned" << endl;
-    cout << "rci2: " << (rci2.owned() ? "" : "not") << " owned" << endl;
+    cout << "ri:   " << (ri  .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "ri1:  " << (ri1 .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "ri2:  " << (ri2 .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "rci:  " << (rci .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "rci2: " << (rci2.is_shared() ? "" : "not") << " owned" << endl;
 
     ri = ri1;
     rci = ri;
     rci2 = rci;
-    cout << "ri:   " << (ri  .owned() ? "" : "not") << " owned" << endl;
-    cout << "ri1:  " << (ri1 .owned() ? "" : "not") << " owned" << endl;
-    cout << "ri2:  " << (ri2 .owned() ? "" : "not") << " owned" << endl;
-    cout << "rci:  " << (rci .owned() ? "" : "not") << " owned" << endl;
-    cout << "rci2: " << (rci2.owned() ? "" : "not") << " owned" << endl;
+    cout << "ri:   " << (ri  .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "ri1:  " << (ri1 .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "ri2:  " << (ri2 .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "rci:  " << (rci .is_shared() ? "" : "not") << " owned" << endl;
+    cout << "rci2: " << (rci2.is_shared() ? "" : "not") << " owned" << endl;
 
   }
 
+  int i = 1;
+  // ref_ptr<int> p(&i);  // Exception: cannot pass statically allocated object as pointer!
+
+  ref_ptr<Noisy> rpn1(new Noisy(), ref_ptr_base::shared);
+  Noisy n2;
+  ref_ptr<Noisy> rpn2(n2);
+  Noisy *  pn3 = new Noisy();
+  ref_ptr<Noisy> rpn3(pn3);
+  rpn3.make_copy();
+  
+  ref_ptr<Noisy> rpn4; 
+  rpn4.make_shared(pn3);
+
+  ref_ptr<const Noisy> rpn5(rpn4);
+
+#ifdef COMPILE_FAIL
+  ref_ptr<Noisy>       rpn6(rpn5);
+#endif
 
 }
