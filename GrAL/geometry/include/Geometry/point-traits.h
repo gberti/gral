@@ -15,19 +15,33 @@ struct point_traits;
 struct fixed_dimension_tag    {};
 struct variable_dimension_tag {};
 
+struct tag_unknown_dim {};
 struct tag1D : public fixed_dimension_tag {};
 struct tag2D : public fixed_dimension_tag {};
 struct tag3D : public fixed_dimension_tag {};
 struct tag4D : public fixed_dimension_tag {};
 
-/* template<unsigned N>
-struct dim_tag {};
+template<unsigned N>
+struct dim_tag {
+  // not quite true, but who cares. 
+  // Important cases are specialized below.
+  typedef tag_unknown_dim dimension_tag;
+};
 
-typedef dim_tag<1> tag1D;
-*/
+template<> struct dim_tag<1> { typedef tag1D dimension_tag;};
+template<> struct dim_tag<2> { typedef tag2D dimension_tag;};
+template<> struct dim_tag<3> { typedef tag3D dimension_tag;};
+template<> struct dim_tag<4> { typedef tag4D dimension_tag;};
+
+
+template<class POINT>
+struct point_traits_base 
+{
+ typedef tag_unknown_dim dimension_tag;
+};
 
 template<class REAL>
-struct real_point_traits { 
+struct real_point_traits : public point_traits_base<REAL> { 
   typedef REAL Ptype;
   typedef tag1D dimension_tag;
   typedef REAL component_type;

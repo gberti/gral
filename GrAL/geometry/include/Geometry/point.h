@@ -133,8 +133,10 @@ public:
 
 #include "Geometry/point-traits.h"
 
- 
-struct point_traits<point> {
+template<>
+struct point_traits<point> 
+  : public point_traits_base<point> 
+{
   typedef point                  Ptype;
   typedef double                 component_type;
   typedef variable_dimension_tag dimension_tag;
