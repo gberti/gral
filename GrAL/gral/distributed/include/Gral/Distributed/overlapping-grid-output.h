@@ -38,6 +38,9 @@ public:
   //----------------------   construction   ----------------------
   
   overlapping_grid_output() : the_coarse_grid(0) {} 
+  overlapping_grid_output(coarse_grid_type const& cg, 
+			  std::string      const& basenm_)
+  { init(cg,basenm_);}
 
   void init(coarse_grid_type const& cg, 
             std::string      const& basenm_) 
