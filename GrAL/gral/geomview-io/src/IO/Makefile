@@ -5,7 +5,6 @@ include  $(CONFIG)
 LOCALSOURCES= $(shell ls *.C) 
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
-ALLDEPMODULES += gral/complex2d geometry
 
 OBJDIR=obj.tmp
 

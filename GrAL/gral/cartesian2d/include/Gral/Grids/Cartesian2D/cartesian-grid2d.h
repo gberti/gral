@@ -1284,6 +1284,7 @@ struct grid_types<RegGrid2D> {
   typedef  Grid::VertexOnVertexIterator   VertexNeighbourIterator;
   typedef  Grid::CellOnVertexIterator     CellOnVertexIterator;
   typedef  vertex_on_edge_iterator<Grid>  VertexOnEdgeIterator;
+  typedef  VertexOnEdgeIterator           VertexOnFacetIterator;
 
   typedef  Grid::VertexOnCellIterator   VertexOnCellIterator;
   typedef  Grid::EdgeOnCellIterator     EdgeOnCellIterator;

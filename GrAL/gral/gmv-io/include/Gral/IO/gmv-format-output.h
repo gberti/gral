@@ -51,7 +51,7 @@ public:
 
   template<class GF>
   struct gf_name_pair {
-    string        name;
+    std::string   name;
     GF const*     gf;
     gf_name_pair(std::string const& nm, GF const& ggf)
       : name(nm), gf(&ggf) {}

@@ -40,7 +40,7 @@ int Triang2D::calc_num_of_vertices()
 {
   // should test if vertices are numbered consecutively from 0..nv !
   // VertexIterator relies on this!
-  vector<bool>  found_vertices(3*ncells, false); // max. number of cells
+  std::vector<bool>  found_vertices(3*ncells, false); // max. number of cells
   for(int c = 0; c < ncells; ++c)
     for(int vc = 0; vc < 3; ++vc)
       found_vertices[cells[3*c+vc]] = true;

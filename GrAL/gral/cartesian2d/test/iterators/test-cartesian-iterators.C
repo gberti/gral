@@ -8,6 +8,7 @@
 #include "Utility/pre-post-conditions.h"
 
 int main() {
+  using std::ofstream;
 
   ofstream* out = new ofstream("vertex-iterator.out");
   int NX = 4, NY = 4;
