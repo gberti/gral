@@ -4,7 +4,7 @@ include $(CONFIG)
 
 SUBDIRS =  base complex2d distributed partitioning cartesian2d testing \
            gmv-io geomview-io cartesian3d complex3d triang2d measurement \
-           hierarchical cartesiannd 
+           hierarchical cartesiannd complexnd
 
 #include $(GRALROOT)/configuration/defs/recursive-targets
 

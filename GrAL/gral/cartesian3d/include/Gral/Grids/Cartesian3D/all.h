@@ -7,6 +7,7 @@
 #include "Gral/Grids/Cartesian3D/grid-functions.h"
 #include "Gral/Grids/Cartesian3D/partial-grid-functions.h"
 #include "Gral/Grids/Cartesian3D/mapped-geometry.h"
+#include "Gral/Grids/Cartesian3D/integer-lattice-geometry.h"
 
 
 #endif
