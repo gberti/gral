@@ -60,16 +60,17 @@ public:
    \ingroup  geomintersections 
 
    \note This is a general implementation; it is not the most efficient implementation.
-    I uses vectors of vectors to hold directions.
+    It uses vectors of vectors to hold directions.
     Specializations of the \c polytope_directions<> template can do better
 */
 template<class OBJ>
 class polytope_directions_base {
 protected:
-  typedef typename OBJ::coord_type coord_type;
-  typedef ::std::vector<coord_type>   dir_sequence;
-  typedef ::std::vector<dir_sequence> dimension_dirs;
-  ::std::vector<dimension_dirs> dirs;
+  typedef typename OBJ::coord_type  coord_type;
+  typedef std::vector<coord_type>   dir_sequence;
+  typedef std::vector<dir_sequence> dimension_dirs;
+
+  std::vector<dimension_dirs>       dirs;
 
 public:
   typedef typename dimension_dirs::const_iterator dir_sequence_iterator;
@@ -274,6 +275,9 @@ public:
     typedef point_traits<coord_type>         pt;
     int sdim = o1.space_dimension();
 
+    // Optimization: first test a standard direction.
+    // In the case of small distant objects (like cells of a mesh),
+    // this should avoid tests for most objects
     coord_type e1 = pt::Origin(sdim);
     pt::x(e1) = 1; //ap::unit_vector(1);
     line_projector<coord_type> p(e1);
