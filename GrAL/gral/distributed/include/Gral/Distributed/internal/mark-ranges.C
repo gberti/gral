@@ -60,9 +60,10 @@ void mark_layers(FacetRange    boundary_f,
    if    (ovtag == vertex_tag) {
      range_assign(visited,VerticesOfFacets(boundary_f).FirstVertex(),level);
      ++level;
+     bool dummy = false;
      mark_on_vertices(VerticesOfFacets(boundary_f).FirstVertex(),
 		      dummy_v_layer, tmp_c_layer,
-		      visited,ovlppattern,level,inside);
+		      visited,ovlppattern,level,inside, dummy);
    }
    else if (ovtag == cell_tag) {
      // seed cells are those cells adjacent to facets in seed_f, that
@@ -81,9 +82,10 @@ void mark_layers(FacetRange    boundary_f,
        }
      }
      ++level;
+     bool dummy = false;
      mark_on_cells(seed_cells.FirstElement(),
 		   dummy_v_layer,tmp_c_layer,
-		   visited, ovlppattern,level,inside);
+		   visited, ovlppattern,level,inside, dummy);
    }
   
    // there could be "make_layered(range)" to add layer functionality
