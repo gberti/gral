@@ -9,6 +9,7 @@
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 
+#include "Gral/Base/archetypes.h"
 #include "Gral/Base/mapped-iterators.h"
 #include "Gral/Base/map-element-iter-names.h"
 #include "Gral/Base/grid-functors.h"
@@ -556,9 +557,11 @@ public:
 //----------------------------------------------------------------
 
 template<class Grid>
-class enumerated_subrange {
+class enumerated_subrange : public archetypes<enumerated_subrange<Grid>, Grid>  {
   typedef enumerated_subrange<Grid> self;
 public:
+  using archetypes<enumerated_subrange<Grid>, Grid>::handle;
+
   //------- referenced types ------------------
   typedef Grid grid_type;
   typedef grid_types<Grid> gt;
@@ -567,10 +570,6 @@ public:
   typedef typename gt::Cell                 Cell;
   typedef typename gt::Vertex               Vertex;
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
-
-  typedef typename gt::archetype_type     archetype_type;
-  typedef typename gt::archetype_handle   archetype_handle;
-  typedef typename gt::archetype_iterator archetype_iterator;
 
   typedef tp<Vertex> tpV;
   typedef tp<Cell>   tpC;
@@ -682,18 +681,11 @@ public:
   cell_range_type   Cells() const 
     { init(); return cell_range_type  (0,(int) cells.size(),    cells,    *the_grid);}
 
-  const grid_type& TheGrid() const { return *the_grid;}
+  const grid_type& TheGrid()  const { return *the_grid;}
+  const grid_type& BaseGrid() const { return *the_grid;}
   cell_handle   handle(const Cell& C)   const { return TheGrid().handle(C);}
   vertex_handle handle(const Vertex& V) const { return TheGrid().handle(V);}
 
-  archetype_iterator BeginArchetype() const { return TheGrid().BeginArchetype();}
-  archetype_iterator EndArchetype()   const { return TheGrid().EndArchetype();}
-  unsigned NumOfArchetypes() const { return TheGrid().NumOfArchetypes();}
-  archetype_type const& ArchetypeOf(Cell const& c) const { return TheGrid().ArchetypeOf(c);}
-  archetype_type const& ArchetypeOf(cell_handle c) const { return TheGrid().ArchetypeOf(c);}
-  archetype_handle archetype_of(Cell const& c) const { return TheGrid().archetype_of(c);}
-  archetype_handle archetype_of(cell_handle c) const { return TheGrid().archetype_of(c);}
-  archetype_type const& Archetype(archetype_handle a) const { return TheGrid().Archetype(a);}
 };
   
 
@@ -716,9 +708,10 @@ public:
   \todo Cannot be used to copy 3D grids from it (missing archetype stuff)
 */
 template<class Grid>
-class enumerated_subrange_ref {
+class enumerated_subrange_ref : public archetypes<enumerated_subrange_ref<Grid>, Grid>  {
   typedef enumerated_subrange_ref<Grid> self;
 public:
+  using archetypes<enumerated_subrange_ref<Grid>, Grid>::handle;
   //------- referenced types ------------------
   typedef Grid grid_type;
   typedef grid_types<Grid> gt;
@@ -729,10 +722,6 @@ public:
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
   typedef tp<Vertex> tpV;
   typedef tp<Cell>   tpC;
-
-  typedef typename gt::archetype_type     archetype_type;
-  typedef typename gt::archetype_handle   archetype_handle;
-  typedef typename gt::archetype_iterator archetype_iterator;
 
   //---------- own types ----------------------
 
@@ -746,7 +735,7 @@ private:
   //  edge_range_ref   edges;
   cell_range_ref_t   cells;
   // note : consistency in the sence that vertices = V(cells)
-  // (set of adj. vertices of cells) cannot be ensured here!
+  // (set of incident vertices of cells) cannot be ensured here!
 
 public:
   //-------------------- construction --------------------------
@@ -789,30 +778,11 @@ public:
   grid_type const& TheGrid() const { return vertices.TheGrid();}
   cell_handle   handle(const Cell& C)   const { return TheGrid().handle(C);}
   vertex_handle handle(const Vertex& V) const { return TheGrid().handle(V);}
-
-  archetype_iterator BeginArchetype() const { return TheGrid().BeginArchetype();}
-  archetype_iterator EndArchetype()   const { return TheGrid().EndArchetype();}
-  unsigned NumOfArchetypes() const { return TheGrid().NumOfArchetypes();}
-  archetype_type const& ArchetypeOf(Cell const& c) const { return TheGrid().ArchetypeOf(c);}
-  archetype_type const& ArchetypeOf(cell_handle c) const { return TheGrid().ArchetypeOf(c);}
-  archetype_handle archetype_of(Cell const& c) const { return TheGrid().archetype_of(c);}
-  archetype_handle archetype_of(cell_handle c) const { return TheGrid().archetype_of(c);}
-  archetype_type const& Archetype(archetype_handle a) const { return TheGrid().Archetype(a);}
-
 };
   
 
 template<class Grid, class GT  = grid_types<Grid> >
 struct grid_types_esr : public GT {
-  /*
-  typedef grid_types<Grid> bgt;
-
-  typedef typename bgt::grid_type   grid_type;
-  typedef typename bgt::Cell   Cell;
-  typedef typename bgt::Vertex Vertex;
-  typedef typename bgt::vertex_handle         vertex_handle;
-  typedef typename bgt::cell_handle           cell_handle;
-  */
 
   typedef enumerated_subrange<Grid>           range_type;
   typedef enumerated_subrange<Grid>           vertex_range_type;
@@ -824,13 +794,6 @@ struct grid_types_esr : public GT {
   typedef typename range_type::EdgeIterator   EdgeIterator;
   typedef typename range_type::FacetIterator  FacetIterator;
   typedef typename range_type::CellIterator   CellIterator;
-
-  /*
-  typedef typename bgt::VertexOnCellIterator  VertexOnCellIterator;
-  typedef typename bgt::EdgeOnCellIterator    EdgeOnCellIterator;
-  typedef typename bgt::FacetOnCellIterator   FacetOnCellIterator;
-  typedef typename bgt::CellOnCellIterator    CellOnCellIterator;
-  */
 };
 
 
