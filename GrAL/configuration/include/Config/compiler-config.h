@@ -30,15 +30,15 @@
 #include "stl_config.h"
 
 #else /* KCC */
-#define __STL_EXPLICIT_FUNCTION_TMPL_ARGS  1
-#define __STL_CLASS_PARTIAL_SPECIALIZATION 1
-#define KAI_NONSTD_FUNCTIONAL 1
-#include "KCC/stl_config.h"
-#define USING_NS_STD  using namespace std
-#define USING_STD(x)  using std:: x
-#include <algobase.h>
-using namespace std;
-using namespace std::rel_ops;
+//#define __STL_EXPLICIT_FUNCTION_TMPL_ARGS  1
+//#define __STL_CLASS_PARTIAL_SPECIALIZATION 1
+//#define KAI_NONSTD_FUNCTIONAL 1
+// #include "KCC/stl_config.h"
+//#define USING_NS_STD  using namespace std
+//#define USING_STD(x)  using std:: x
+//#include <algobase.h>
+//using namespace std;
+//using namespace std::rel_ops;
 #endif
 
 #elif defined(__xlC__)
