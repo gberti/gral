@@ -19,7 +19,6 @@ surfvars
 gf2 1
 2 2 2 2 2 2 2 2 2 
 endsvars
-material 2 
-mat0 mat1 
+surfmats
 1 1 2 2 
 endgmv

@@ -64,6 +64,20 @@ public:
   std::string element_tag(cell_type_tag,   grid_dim_tag<2>) const { return "";} 
   std::string element_tag(facet_type_tag,  grid_dim_tag<3>) const { return "2";}
 
+  template<class ELEM_TAG>
+  std::string material_description(ELEM_TAG,           grid_dim_tag<2>,          int nmats, std::string matnames) const { 
+    return "surfmats";
+  }
+
+  template<class ELEM_TAG>
+  std::string material_description(ELEM_TAG  elem_tag, grid_dim_tag<3> grid_tag, int nmats, std::string matnames) const { 
+    std::string res = "material ";
+    res += (as_string(nmats) + " ");
+    res += as_string(element_tag(elem_tag, grid_tag));
+    res += "\n";
+    res += matnames;
+    return res;
+  }
 
   template<class GF>
   struct gf_name_pair {
@@ -134,15 +148,14 @@ private:
     // map possible extraneous materials
     for(unsigned m = nmats; m < mat.size(); ++m)
       new_mat[mat[m]] = nmats;
-
-
-    *out << "material "
-	 << nmats << " "
-	 << element_tag(element_type_tag(), grid_dimension_tag())
-	 << "\n";
+    std::string matnames;
     for(unsigned m = 0; m < nmats; ++m)
-      *out << "mat" << mat[m] << " ";
-    *out << "\n";
+      matnames +=  (std::string("mat") + as_string(mat[m]) + " ");
+
+
+
+    *out << material_description(element_type_tag(), grid_dimension_tag(), nmats, matnames) 
+	 << "\n";
     for(typename et::ElementIterator e(gf.TheGrid()); ! e.IsDone(); ++e) {
       *out << new_mat(gf(*e)) << " ";
     }
