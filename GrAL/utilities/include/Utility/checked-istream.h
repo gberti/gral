@@ -26,7 +26,8 @@ class checked_istream {
 private:
   std::istream* in;
 public:
-  checked_istream(std::istream* in_ = 0) : in(in_) {}
+  checked_istream(std::istream* in_ = 0) : in( in_) {}
+  checked_istream(std::istream& in_)     : in(&in_) {}
 
   operator void*() const   { REQUIRE(in != 0, "", 1); return (in->fail() ? (void *)0 : (void *)(-1));}
 
