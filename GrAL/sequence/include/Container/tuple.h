@@ -248,7 +248,7 @@ inline
 std::ostream& operator<<(std::ostream& out, tuple<T,N> const& t)
 {
   for(unsigned i = 0; i < N; ++i)
-    out << t[i] << ' ';
+    out << t[i] << (i < N-1 ? " " : "");
   return out;
 }
 
