@@ -109,9 +109,10 @@ class tuple<T,2> : public tuple_base<T,2> {
   using base::end;
 
   tuple() {}
-  explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
+  //explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
+  explicit tuple(T t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
-  tuple(const_iterator b, const_iterator /*e */)
+  explicit tuple(const_iterator b, const_iterator /*e */)
   { 
     for(iterator it = begin(); it != end(); ++it,++b) 
       *it = *b; 
@@ -124,7 +125,8 @@ class tuple<T,2> : public tuple_base<T,2> {
     REQUIRE( (b == e), "invalid range in constructor!\n",1);
   }
   */
-  tuple(T const& t1, T const& t2) { X[0] = t1; X[1] = t2;}
+  //tuple(T const& t1, T const& t2) { X[0] = t1; X[1] = t2;}
+  tuple(T        t1, T        t2) { X[0] = t1; X[1] = t2;}
 
   template<class U>
   tuple(tuple<U,2> const& rhs) { X[0] = T(rhs[0]); X[1] = T(rhs[1]);}
@@ -145,7 +147,6 @@ class tuple<T,3> : public tuple_base<T,3> {
   typedef tuple_base<T,3> base;
   using base::X;
  public:
-  // should not be necessary ... but problems with gcc 2.96
   typedef typename base::iterator       iterator;
   typedef typename base::const_iterator const_iterator;
   typedef typename base::c_array        c_array;
@@ -353,11 +354,11 @@ tuple<T,N> operator-(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
  */
 template<class T, unsigned N>
 inline
-tuple<T,N> operator*(T t, tuple<T,N> const& rhs)
+tuple<T,N> operator*(T u, tuple<T,N> const& rhs)
 {
   tuple<T,N> tmp;
   for(unsigned k = 0; k < N; ++k)
-    tmp[k] = t*rhs[k];
+    tmp[k] = u*rhs[k];
   return tmp;
 }
 
@@ -367,8 +368,8 @@ tuple<T,N> operator*(T t, tuple<T,N> const& rhs)
  */
 template<class T, unsigned N>
 inline
-tuple<T,N> operator*(tuple<T,N> const& lhs, T t)
-{ return t*lhs;}
+tuple<T,N> operator*(tuple<T,N> const& lhs, T u)
+{ return u*lhs;}
 
 /*! \brief division by scalar
    
