@@ -439,6 +439,8 @@ namespace cartesiannd {
     typedef grid_types<CARTGRID> gt;
 
     enum   { dim = CARTGRID::dim -1};
+    typedef grid_dim_tag<dim> dimension_tag;
+
     unsigned dimension() const { return dim;}
     typedef typename gt::Facet  Cell;
     typedef typename gt::Vertex Vertex;
@@ -627,6 +629,16 @@ namespace cartesiannd {
 
     //! for \f$ K \neq 0, D \f$, \c index() is not unique!
     index_type index()  const { cb(); return g->handle2index(h,m);} //  g->maps[K][m](h - g->offsets[K][m]);}
+    index_type vertex_index_low () const { return index();}
+    index_type vertex_index_high() const { 
+      index_type res(index()); 
+      res += delta_map<griddim>::template num2index<index_type>(K,m);
+      /*
+      for(int d = 0; d < dirs.size(); ++d)
+	res[dirs[d]] += 1;
+      */
+      return res;
+    }
 
     typedef typename base::archetype_type archetype_type;
     typedef typename base::Vertex         Vertex;
