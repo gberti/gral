@@ -7,63 +7,53 @@
   <body>
     <h1>GrAL TODO</h1>
 
-   <A HREF="gitter-erweiterungen/index.html"> Ideen </A>
 
 <BR>
 <BR>
 <TABLE BORDER>
       <TR> 
-        <TH> Was? </TH>         
-        <TH> <A HREF="#Dringlich">D</A> </TH> 
-        <TH> <A HREF="#Schwierig">S</A> </TH> 
-        <TH> Eintrag vom: </TH>
-        <TH> Bis Wann? </TH>
-        <TH> Erledigt </TH>       
-        <TH> Kommentar </TH>
+        <TH> What? </TH>         
+        <TH> <A HREF="#Urgent">U</A> </TH> 
+        <TH> <A HREF="#Difficult">D</A> </TH> 
+        <TH> entry date: </TH>
+        <TH> till when? </TH>
+        <TH> done </TH>       
+        <TH> comment </TH>
       </TR>
       <TR> 
         <TD COLSPAN=7 ALIGN=CENTER> 
-          <B> Allgemein </B>
+          <B> General </B>
         </TD>
       </TR> 
       <TR> 
-        <TD> Technik f&uuml;r GrAL-Release</TD> 
+        <TD> GrAL-Release technology</TD> 
         <TD> 7</TD> 
         <TD> 5</TD> 
         <TD> 29.08.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Branch in CVS f&uuml;r neue Entwicklungen?</TD> 
+        <TD> Branching for new developments?</TD> 
       </TR>
 
       <TR> 
-        <TD> Utility-Programme -> GrAL </TD> 
+        <TD> Utility-Programs for GrAL </TD> 
         <TD> 3 </TD> 
         <TD> 5 </TD> 
         <TD> 22.03.2001 </TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Wichtiger: viewcomplex2d <BR> 
-             main -> template? </TD> 
+        <TD> e.g. viewcomplex2d <BR> 
+             main program as template? </TD> 
       </TR>
       <TR> 
         <TD> mk.config -> mk.config.master <BR>
-             setup - Skript cp .master mk.config </TD> 
+             setup - Script cp .master mk.config </TD> 
         <TD> 2 </TD> 
         <TD> 1</TD> 
         <TD> 22.03.2001 </TD> 
         <TD> </TD> 
         <TD> </TD> 
         <TD> </TD> 
-      </TR>
-      <TR> 
-        <TD> KCC &amp; Hash </TD> 
-        <TD> 4</TD> 
-        <TD> 4 </TD> 
-        <TD> 22.03.2001 </TD> 
-        <TD> </TD> 
-        <TD> </TD> 
-        <TD> STLport? Klappt nicht (Stand:02/2001)</TD> 
       </TR>
       <TR> 
         <TD> Header: NMWR->GRAL </TD> 
@@ -75,37 +65,26 @@
         <TD> </TD> 
       </TR>
       <TR BGCOLOR="#F0FFFF"> 
-        <TD>Automatische Tests </TD> 
+        <TD>Automatic tests </TD> 
         <TD>7 </TD> 
         <TD>2 </TD> 
         <TD>22.03.2001 </TD> 
         <TD> </TD> 
         <TD>04.05.2001 </TD> 
-        <TD> Auf Fuchs. <BR>
-                        <BR>
-          ToDo: Ausgabe als HTML
+        <TD>
+          Not all components are tested. <BR> 
+          ToDo: post-process results
         </TD> 
       </TR>
       <TR BGCOLOR="#FF8080">
-        <TD> Namespaces f&uuml;r GrAL </TD> 
+        <TD> Namespaces for GrAL </TD> 
         <TD> 7</TD> 
         <TD> 2</TD> 
         <TD> 23.03.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Welche NS f&uuml;r nicht-Kern-Module? <BR>
-             Geometry:: oder GrAL::Geometry? <BR>
-             evtl. f&uuml;r jedes Modul Header ns.h mit Makro.
+        <TD> sub-namespaces? GrALaux for utilities? <BR>
         </TD> 
-      </TR>
-      <TR> 
-        <TD> bug in gral-doc.tar.gz (success)</TD>
-        <TD> 5</TD> 
-        <TD> ?</TD> 
-        <TD> 22.08.20011</TD> 
-        <TD> </TD> 
-        <TD> </TD> 
-        <TD> einige Dateien auf top-level!</TD>
       </TR>
 
      <TR> 
@@ -114,7 +93,7 @@
         </TD>
       </TR> 
             <TR> 
-        <TD> Doxygen-Logs auswerten </TD> 
+        <TD> read Doxygen-Logs </TD> 
         <TD> 2</TD> 
         <TD> 2</TD> 
         <TD> 22.03.2001</TD> 
@@ -123,22 +102,22 @@
         <TD> </TD> 
       </TR>
       <TR BGCOLOR="#F0FFFF"> 
-        <TD> Checkbot regelm&auml;ssig</TD> 
+        <TD> use Checkbot </TD> 
         <TD> 5</TD> 
         <TD> 2</TD> 
         <TD> 30.05.01</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> F&uuml;r release OK. </TD> 
+        <TD> at least for release </TD> 
       </TR>
       <TR> 
-        <TD> Entwicklungs-Stand bei jedem Modul</TD>
+        <TD> Give development state for modules</TD>
         <TD> 2</TD> 
         <TD> 2</TD> 
         <TD> 11.04..2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> z.B. 
+        <TD> for instance
           <BR> completeness 
           <BR>  docs missing 
           <BR>  tested
@@ -152,18 +131,16 @@
         <TD> 29.05.01 </TD> 
         <TD>  </TD> 
         <TD>  </TD> 
-        <TD> Betriff RegGrid2D, 
-          Testfall c++/doxygen/groups/local-classes.h<BR>
-          in doxygen 1.2.10 immer noch vorhanden</TD> 
+        <TD> to be checked which bugs are still there. </TD> 
       </TR>
       <TR> 
-        <TD>Weg von Hyperlatex 2.3.1 </TD> 
+        <TD>replace Hyperlatex 2.3.1 with newer</TD> 
         <TD>4 </TD> 
         <TD>5 </TD> 
         <TD> 29.05.01</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Underscores ersetzen ...</TD> 
+        <TD> problem with underscores </TD> 
       </TR>
 
      <TR> 
@@ -176,17 +153,17 @@
         <TD> </TD> 
       </TR> 
       <TR BGCOLOR="#F0FFFF">
-        <TD> Tutorial Adaption ausbauen </TD>
+        <TD> extend tutorial </TD>
         <TD>7 </TD> 
         <TD>2 </TD> 
         <TD>29.05.2001 </TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Aus Leipzig-Paper nehmen,
-             geht schnell</TD> 
+        <TD> may from  Leipzig-Paper 
+             </TD> 
       </TR>
       <TR> 
-        <TD> valid / bound dokumentieren</TD>
+        <TD> document valid / bound </TD>
         <TD> 2</TD> 
         <TD> 3</TD> 
         <TD> 22.08.2001</TD> 
@@ -197,61 +174,51 @@
 
       <TR> 
         <TD COLSPAN=7 ALIGN=CENTER> 
-          <B> Gral allgemein </B>
+          <B> Gral general </B>
         </TD>
       </TR> 
      <TR> 
-        <TD> verschachtelte Views </TD> 
+        <TD>better support nested Views </TD> 
         <TD> 6</TD> 
         <TD> 7</TD> 
         <TD> 29.05.01 </TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Probleme mit Referenzen auf temp. 
-             Daten </TD> 
+        <TD> Problems with refs to temporaries <BR>
+             -> ref_ptr<> </TD> 
       </TR>
       <TR> 
-        <TD> Konzept: Konstruktoren </TD> 
+        <TD> Concepts: Constructors </TD> 
         <TD> 4</TD> 
         <TD> 1</TD> 
         <TD> 14.08.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Kein Interface fuer Konstruktoren von Iteratoren festgelegt.
-           Vorschlag: Default + Iter(Grid) + Iter(Grid, handle)
-	  <BR> Vorsicht: Complex3D / generic_edge: EdgeIter(G,handle) ist
-               nicht moeglich, zumindest nicht in O(1)!</TD> 
+        <TD> no interface for iterator constructors fixed. <BR>
+           Maybe: Default + Iter(Grid) + Iter(Grid, handle)
+	  <BR> Attn: Complex3D / generic_edge: EdgeIter(G,handle) not
+               in O(1) possible!</TD> 
       </TR>
       <TR> 
-        <TD> Konzept f&uuml;r switch op. </TD> 
+        <TD> Conzept for switch op. </TD> 
         <TD> 4</TD> 
         <TD> 4</TD> 
         <TD> 17.08.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
         <TD> grid_types::flip_vertex(flag)? Flag.flip_vertex()?
-        <BR> const-Versionen: Vertex flipped_vertex()</TD> 
-      </TR>
-      <TR BGCOLOR="#F0FFFF"> 
-        <TD> tags f&uuml;r Gitter-Dimension </TD> 
-        <TD> 4 </TD> 
-        <TD> 2</TD> 
-        <TD> 15.08.2001</TD> 
-        <TD> </TD> 
-        <TD> 17.09.2001</TD> 
-        <TD> sowohl Gitter (grid_types) 
-             als auch Elemente (element_traits) </TD> 
+        <BR> const-Version: Vertex flipped_vertex()</TD> 
       </TR>
       <TR> 
-        <TD> Archetypen f&uuml;r 2D-Zellen</TD> 
+        <TD> Consisten archetype support </TD>
         <TD> 3 </TD> 
         <TD> 3</TD> 
         <TD> 17.08.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Zellen mit Loechern; Kantennumerierung.
-          Z.B. Euler -Loeser: Diagonalen in Vierecken sonst nicht moeglich
-          (mit switch-op. schon)</TD> 
+        <TD> support cells with holes?
+           Number also edges?
+          </TD> 
       </TR>
       <TR> 
         <TD> Interface arch-handle -> global handle</TD>
@@ -260,7 +227,7 @@
         <TD> 23.08.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Momentan: <tt> Cell2D::vertex(v) </tt>, <tt> Complex3D::Cell::v(v) </tt></TD>
+        <TD> Now not consistent  <tt> Cell2D::vertex(v) </tt>, <tt> Complex3D::Cell::v(v) </tt></TD>
       </TR>
       <TR> 
         <TD> print_debug Routine </TD> 
@@ -269,16 +236,16 @@
         <TD> 23.08.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> fuer Elemente etc.</TD> 
+        <TD> for elements etc.</TD> 
       </TR>
 
       <TR> 
         <TD COLSPAN=7 ALIGN=CENTER> 
-          <B> Modul utilities </B>
+          <B> Module utilities </B>
         </TD>
       </TR> 
       <TR> 
-        <TD>Inkonsistenz: libutilities aber include Utility/ </TD> 
+        <TD>Inconsistency: <tt>libutilities.a</tt>  but <tt>#include Utility/</tt> </TD> 
         <TD> 2 </TD> 
         <TD> 1 </TD> 
         <TD> 2.8.2001</TD> 
@@ -292,28 +259,14 @@
           <B> Modul Gral/base </B>
         </TD>
       </TR> 
-      <TR BGCOLOR="#F0FFFF"> 
-        <TD> GMV-Output </TD> 
-        <TD> 6</TD> 
-        <TD> 3</TD> 
-        <TD> 30.08.2001</TD> 
-        <TD> v 0.2 ?</TD> 
-        <TD> 19.09.2001</TD> 
-        <TD> 2D durch surfaces unterstuetzt.
-        <BR> Mapping von archetypes auf GMV-Archetypes: Nutze construct-isomorphism-modul.
-        <BR> Ausgabe von Gitter-Funktionen? <BR>
-             Gel&ouml;st durch List<>-template <BR>
-             Allg. Problem: Gitterfkt und IO-Adapter.</TD> 
-      </TR>
-
       <TR> 
-        <TD> Base - Testprogramme </TD> 
+        <TD> Base - Testprograms </TD> 
         <TD> 4</TD> 
         <TD> 5</TD> 
         <TD> 22.03.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> viel Arbeit. Jedes Template sollte mind 1x instanziiert werden.</TD> 
+        <TD> each template should be instantiate at least once </TD>
       </TR>
        <TR> 
         <TD> BoundaryRange -> boundary_range </TD> 
@@ -322,78 +275,52 @@
         <TD> 29.05.01</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Konsistente Benamung! </TD> 
+        <TD> Consistent naming </TD> 
       </TR>
       <TR> 
-        <TD> Komp. f&uuml;r einfache Adaption</TD> 
+        <TD> create components for painless Adaption</TD> 
         <TD> 4</TD> 
         <TD> 7</TD> 
         <TD> 17.08.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Angefangen bereits in generic_edge, generic_facet.
-	  Klassen int_vertex_iterator, int_cell_iterator 
-          aus IO/complex2d-format-output.h rausziehen. (OK) 
+        <TD> started in generic_edge, generic_facet.
 	  <BR>
-          Mixin-Technik?</TD> 
+          Mixin-Technique?</TD> 
       </TR>
       <TR> 
-        <TD> Doku construct-grid.h</TD> 
+        <TD> Docu construct-grid.h</TD> 
         <TD> 6</TD> 
         <TD> 2</TD> 
         <TD> 17.08.2001</TD> 
         <TD> vor v. 0.2</TD> 
         <TD> </TD> 
-        <TD> Fehlerhaft??</TD> 
+        <TD> still erronous</TD> 
       </TR>
       <TR> 
-        <TD> element-ranges: map_element_syntax technik </TD> 
+        <TD> element-ranges: map_element_syntax technique </TD> 
         <TD> 2</TD> 
         <TD> 3</TD> 
         <TD> 17.08.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Reduktion der Codemenge, analog partial_grid_function</TD> 
+        <TD> Reduction of  code, analoguuous partial_grid_function</TD> 
       </TR>
-      <TR> 
-        <TD> element-ranges: keine grid_types! </TD> 
-        <TD> 3</TD> 
-        <TD> 2</TD> 
-        <TD> 20.08.2001</TD> 
-        <TD> </TD> 
-        <TD> </TD> 
-        <TD> aus Konsistenz-Gr&uuml;nden</TD>
-      </TR>
-
      <TR> 
-        <TD COLSPAN=7 ALIGN=CENTER> 
-          <B> Modul Gral/testing </B>
-        </TD>
-      </TR> 
-      <TR BGCOLOR="#F0FFFF"> 
-        <TD> Testprogramme f&uuml;r Gitter </TD> 
-        <TD> 4</TD> 
-        <TD> 3</TD> 
-        <TD> 17.05.2001</TD> 
-        <TD> </TD> 
-        <TD> 4.9.2001</TD> 
-        <TD>Vergleichbarkeit verschiedener Gittertests 
-          <BR> Jetzt vorhanden: Sequenz-Iteratoren, XxxOnCellIteratoren, Gitterfkt</TD>
-      </TR>
      <TR> 
         <TD COLSPAN=7 ALIGN=CENTER> 
           <B> Modul Gral/cartesian3d </B>
         </TD>
       </TR> 
       <TR> 
-        <TD>Crash R(x,y,z) wenn eines kleiner 2! </TD> 
+        <TD>Crash R(x,y,z) if one is &lt; 2! </TD> 
         <TD>15.08.2001 </TD> 
         <TD> 4 </TD> 
         <TD> 2</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD>Koennte x,y,z &lt; 2 verbieten
-	  oder index_map so umbiegen, dass niederdim Gitter erscheint. </TD> 
+        <TD>could forbid x,y,z &lt; 
+	  or tweak index_map such that lower-dim Grid results</TD>
       </TR>
 
       <TR> 
@@ -401,39 +328,14 @@
           <B> Modul Gral/distributed </B>
         </TD>
       </TR> 
-     <TR BGCOLOR="#F0FFFF"> 
-        <TD> Bugs in ConstructComposite </TD> 
-        <TD> 7</TD> 
-        <TD> 6</TD> 
-        <TD> 22.03.2001</TD> 
-        <TD> </TD> 
-        <TD> 06.04.2001 
-         <BR> Falsche input Dateien!</TD> 
-        <TD> DDD kann nicht in ConstructLocalOverlappingGrid 
-          hineinsteppen!</TD> 
-      </TR>
-
       <TR> 
-        <TD> Konzept-Doku verteilte Gitter</TD> 
+        <TD> Concept-Docu distributed grid</TD> 
         <TD> 5 </TD> 
         <TD> 6 </TD> 
         <TD> 22.03.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Einstweilen Verweis auf Diss</TD> 
-      </TR>
-      <TR BGCOLOR="#F0FFFF"> 
-        <TD> Kopier-Bug distr. gf </TD> 
-        <TD> 6</TD> 
-        <TD> 2</TD> 
-        <TD> 04.04. 2001 </TD> 
-        <TD> </TD> 
-        <TD> 05.05.2001 </TD> 
-        <TD> Wie schon in distr_gf_adapter <BR> 
-          L&ouml;sung: <BR>
-          mpi_distributed_gridfunction <BR>
-          ersetzt durch <BR>
-          mpi_distributed_gridfunction_adapter</TD> 
+        <TD> now only in dissertation</TD> 
       </TR>
 
        <TR> 
@@ -448,47 +350,36 @@
         <TD> 22.03.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Zwar nicht wirklich schlimm, aber unsch&ouml;n</TD> 
+        <TD> ugly. Use ref_ptr.</TD>
       </TR>
       <TR> 
         <TD COLSPAN=7 ALIGN=CENTER> 
           <B> Modul graphics-device </B>
         </TD>
       </TR>
-        <TR BGCOLOR="#F0FFFF"> 
-          <TD> Graphics -> GrAL</TD> 
-          <TD> 5 </TD> 
-          <TD> 5 </TD> 
-          <TD> 22.03.2001</TD> 
-          <TD> - </TD> 
-          <TD> 26.03.2001</TD> 
-          <TD> -> Viewer f&uuml;r Gitter <BR>
-            OpenGL-Version? <BR>
-          </TD>
-        </TR>
         <TR> 
-          <TD> Test-Programme </TD> 
+          <TD> test programs </TD> 
           <TD> 5 </TD> 
           <TD> 3 </TD> 
           <TD> 04.04.2001</TD> 
           <TD> </TD> 
           <TD> </TD> 
-          <TD> Alle Primitive austesten.</TD> 
+          <TD> tes all primitives.</TD> 
         </TR>
         <TR> 
-          <TD> GraphicsDevice als template? <BR> </TD> 
+          <TD> GraphicsDevice as template? <BR> </TD> 
           <TD> 4</TD> 
           <TD> 4</TD> 
           <TD> </TD> 
           <TD> </TD> 
           <TD> </TD> 
-          <TD> + Effizienter <BR>
-            + Abh. von point verringert
+          <TD>  more effiziente <BR>
+            reduced dep. on point class
           </TD> 
       </TR>
       <TR> 
         <TD COLSPAN=7 ALIGN=CENTER> 
-          <B> Neue Module (aus nmwrlib) </B>
+          <B> New modules (from nmwrlib) </B>
         </TD>
      <TR> 
         <TD> Visualization -> GrAL</TD> 
@@ -497,21 +388,7 @@
         <TD> 22.03.2001 </TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Umbau n&ouml;tig. <BR>
-             Erst Teile? Zun&auml;chst GraphicsDevice -> GrAL</TD> 
-      </TR>
-      <TR BGCOLOR="#F0FFFF"> 
-        <TD> Triang2D -> GrAL</TD> 
-        <TD> 3</TD> 
-        <TD> 3 </TD> 
-        <TD> 22.03.2001 </TD> 
-        <TD> </TD> 
-        <TD> 25.10.2001</TD> 
-        <TD> Wichtig f&uuml;r Benchmarks
-          <BR> Anfrage Toon Knapen
-          <BR> stored_geometry fehlt noch
-          
-        </TD> 
+        <TD> Must be reorganized </TD>
       </TR>
       <TR> 
         <TD> Domain -> GrAL </TD> 
@@ -521,18 +398,16 @@
         <TD> </TD> 
         <TD> </TD> 
         <TD> z.B. DistrGriddedDomain <BR>
-          Konzept noch nicht ausgereift!</TD> 
+          concepts not yet mature</TD> 
       </TR>
       <TR> 
-        <TD> Euler L&ouml;ser -> GrAL </TD> 
+        <TD> Euler solver -> GrAL </TD> 
         <TD> 5 </TD> 
         <TD> 5 </TD> 
         <TD> 22.03.2001</TD> 
         <TD> </TD> 
         <TD> </TD> 
-        <TD> Wichtig als Demo. <BR>
-          Num. Qualit&auml;t? <BR>
-         Angefangen: 09.04.2002 (CVS-work/euler2d) </TD> 
+        <TD> may be important demo for GrAL. <BR> </TD> 
       </TR>
       <TR> 
         <TD> </TD> 
@@ -567,9 +442,9 @@
 <BR>
 <BR>
 <BR>
-    <A NAME="Schwierig"> S = Schwierigkeitsgrad (1-10): 1 = Pipifax, 10 = Forschungsprojekt </A>
+    <A NAME="Difficult"> D = Difficulty (1-10): 1 = trivial, 10 = research project </A>
 <BR>
-    <A NAME="Dringlich"> D = Dringlichkeitsgrad (1-10): 1 = nice to have, 10 = vorgestern </A>
+    <A NAME="Urgent"> U = Urgency (1-10): 1 = nice to have, 10 = ASAP </A>
 <BR>
 
 
@@ -577,7 +452,7 @@
     <address><a href="mailto:berti@math.tu-cottbus.de">Guntram Berti</a></address>
 <!-- Created: Thu Mar 22 10:30:03 MET 2001 -->
 <!-- hhmts start -->
-Last modified: Wed Apr 10 13:36:28 MESZ 2002
+Last modified: Fri Mar 11 12:46:35 CET 2005
 <!-- hhmts end -->
   </body>
 </html>
