@@ -200,6 +200,7 @@ public:
   class EdgeOnCellIterator;
   class CellOnCellIterator;
 
+  unsigned dimension() const { return 2;}
 
   /*! \name Checking functions */
  /*@{*/ 
