@@ -5,6 +5,7 @@
 // $LICENSE
 
 
+
 /*! geometric functions specific to 3D
 
  This can be used to specialize dimension_dependent_primitives<POINT>
@@ -21,7 +22,7 @@ struct dimension_dependent_primitives_3d
    */
   static scalar det3(const POINT& p1, const POINT& p2, const POINT& p3)
     {
-      int l = LowerIndex(p1);
+      int l = pt::LowerIndex(p1);
       return(
 	     p1[l]*(p2[l+1]*p3[l+2] - p2[l+2]*p3[l+1])
 	     -p1[l+1]*(p2[l]*p3[l+2] - p2[l+2]*p3[l])
@@ -154,9 +155,15 @@ struct dimension_dependent_primitives_3d
       inverse(A1,A2,A3,inv[0],inv[1],inv[2]);
       return N(A1,A2,A3) * N(inv[0],inv[1],inv[2]);
     }
+
+
 };
 
+
+
 #endif
+
+
 
 
 
