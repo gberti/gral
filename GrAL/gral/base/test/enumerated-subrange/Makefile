@@ -32,11 +32,11 @@ all : $(TARGETS)
 test-enumerated-subrange: $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
-run:
+run:	
 	$(EXEC) 
 
 check:
-	./runtest
+	./runtest $(EXEC) 
 
 clean: stdclean
 	rm -f $(EXEC)

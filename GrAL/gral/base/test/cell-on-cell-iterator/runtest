@@ -1,0 +1,28 @@
+#!/bin/sh
+
+
+exec=$1
+out=${exec}.out
+echo='echo -e'
+if ! $exec > $out 2>&1
+then
+    echo "ERROR running $exec
+Output was:
+"
+cat $out
+echo "
+End output
+"
+else
+$echo "\n"
+for i in  *out
+do
+if diff $i $i.exp
+then 
+$echo "\t\t\t" $i OK
+else
+$echo "\t\t\t" ERROR in $i
+fi
+done
+$echo "\n"
+fi

@@ -38,7 +38,7 @@ run:
 	$(EXEC) 
 
 check:
-	./runtest
+	./runtest $(EXEC) 
 
 clean: stdclean
 	rm -f $(EXEC)

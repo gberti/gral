@@ -1,0 +1,18 @@
+Vertex range Sv: 9 vertices
+Vertices: V0 = [0 0]  V1 = [0 1]  V2 = [0 2]  V3 = [1 0]  V4 = [1 1]  V5 = [1 2]  V6 = [2 0]  V7 = [2 1]  V8 = [2 2]  
+Element range Sev: 9 vertices
+Vertices: V0 = [0 0]  V1 = [0 1]  V2 = [0 2]  V3 = [1 0]  V4 = [1 1]  V5 = [1 2]  V6 = [2 0]  V7 = [2 1]  V8 = [2 2]  
+Vertex range ref Svr: 9 vertices
+Vertices: V0 = [0 0]  V1 = [0 1]  V2 = [0 2]  V3 = [1 0]  V4 = [1 1]  V5 = [1 2]  V6 = [2 0]  V7 = [2 1]  V8 = [2 2]  
+Element range Sevr: 9 vertices
+Vertices: V0 = [0 0]  V1 = [0 1]  V2 = [0 2]  V3 = [1 0]  V4 = [1 1]  V5 = [1 2]  V6 = [2 0]  V7 = [2 1]  V8 = [2 2]  
+
+Cell range Sc: 4 cells
+Cells: C0 = [0 0]  C1 = [0 1]  C2 = [1 0]  C3 = [1 1]  
+Element range Sec: 4 cells
+Cells: C0 = [0 0]  C1 = [0 1]  C2 = [1 0]  C3 = [1 1]  
+Cell range ref Scr: 4 cells
+Cells: C0 = [0 0]  C1 = [0 1]  C2 = [1 0]  C3 = [1 1]  
+Element range Secr: 4 cells
+Cells: C0 = [0 0]  C1 = [0 1]  C2 = [1 0]  C3 = [1 1]  
+
