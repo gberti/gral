@@ -5,6 +5,7 @@
 // $LICENSE
 
 #include "Container/set-traits.h"
+#include <iterator>
 
 namespace GrAL {
 
@@ -58,17 +59,13 @@ inline bool is_subset(It beg, It end, const S2& s2)
      \ingroup setalgorithms
 
   <b> Template parameters: </b>
-  - It: is a Forward Iterator
-  - T : is Equality Comparable
+  - It : ForwardIterator
 
-  \todo
-  T could be derived from It 
-  (T == iterator_traits<It>::value_type)
 
 */ 
 //----------------------------------------------------------------
 
-template<class It, class T>
+template<class It>
 class is_element_of_pred {
 private:
   It begin;
@@ -77,12 +74,14 @@ public:
   //  is_element_of_pred() {}
   is_element_of_pred(It b, It e) : begin(b), end(e) {}
 
-  typedef T    argument_type;
+  typedef std::iterator_traits<It> it;
+  typedef typename it::value_type argument_type;
+  //  typedef T    argument_type;
   typedef bool result_type;
 
   /*! returns false \f$ \iff \f$ ::std::find(begin,end,t) == end. 
   */
-  bool operator()(const T& t) const {
+  bool operator()(const argument_type& t) const {
     bool found = false;
     It i = begin;
     while( !found && (i != end)) {
@@ -97,10 +96,10 @@ public:
    \ingroup setalgorithms
    \relates is_element_of_pred
  */
-template<class It,class T>
-inline is_element_of_pred<It,T> 
-is_element_of(It b, It e, const T* /*dummy */)
-{ return is_element_of_pred<It,T>(b,e);}
+template<class It>
+inline is_element_of_pred<It>
+is_element_of(It b, It e)
+{ return is_element_of_pred<It>(b,e);}
 
 
 /*! \brief creator function for is_element_of_pred<It,T>
@@ -108,13 +107,12 @@ is_element_of(It b, It e, const T* /*dummy */)
    \relates is_element_of_pred
 */
 template<class Cont>
-inline is_element_of_pred<typename Cont::const_iterator, 
-                         typename Cont::value_type>
+inline is_element_of_pred<typename Cont::const_iterator>
 is_element_of(const Cont& c)
 { 
   typedef typename Cont::const_iterator it;
   typedef typename Cont::value_type     val;
-  return  is_element_of_pred<it,val>(c.begin(),c.end());
+  return  is_element_of_pred<it>(c.begin(),c.end());
 } 
 
 } // namespace GrAL 
