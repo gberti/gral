@@ -9,10 +9,9 @@
 /*! \brief Associate data which each cell-facet incidence
     \ingroup gridfunctions
     
-    This class can be used e.g. for cell-cell neighborhood calculations.
-    (see cell_neighbor_search)
-    \ingroup gridfunctions
-   
+    This class can be used e.g. for 
+    \link cell_neighbor_search cell-cell neighborhood calculations. \endlink 
+
 
     \todo The implementation contains some overhead in terms of storage:
     The grid function on archetype cells (i.e. cell facets) does not

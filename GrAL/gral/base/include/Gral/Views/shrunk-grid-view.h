@@ -88,7 +88,7 @@ namespace shrink_grid_view {
     };
 
 
-  /*! \brief helper class to map element types of base grid to corresponding
+  /*  helper class to map element types of base grid to corresponding
       types of grid_view. 
 
       Repeated in grid_view as map_types.
