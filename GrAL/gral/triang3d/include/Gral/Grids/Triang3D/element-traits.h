@@ -10,7 +10,8 @@ template<>
 struct element_traits<Triang3D_Vertex> 
   : public element_traits_vertex_base<Triang3D> 
 { 
-  struct hasher_type : public hasher_type_base<Triang3D, Triang3D_Vertex> {
+  typedef element_traits_vertex_base<Triang3D> base;
+  struct hasher_type : public base::hasher_type_elem_base {
     size_t operator()(Triang3D_Vertex const& v) const { return v.handle();}
   };
   // vertices are numbered consecutively 
@@ -57,8 +58,9 @@ struct element_traits<Triang3D::Facet>
 template<>
 struct element_traits<Triang3D_Cell> 
   : public element_traits_cell_base<Triang3D> 
-{ 
-  struct hasher_type : public hasher_type_base<Triang3D, Triang3D_Cell> {
+{
+  typedef element_traits_cell_base<Triang3D>  base;
+  struct hasher_type : public base::hasher_type_elem_base {
     size_t operator()(Triang3D_Cell const& c) const { return c.handle();}
   };
   // cells are numbered consecutively
