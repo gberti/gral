@@ -20,8 +20,10 @@ class simple_geometry : public grid_types<GRID> {
   typedef grid_types<GRID>    gt;
   typedef GRID                grid_type;
   typedef typename gt::Vertex Vertex;
+  typedef typename gt::Cell   Cell;
 
   typedef point_traits<coord_type> pt;
+  typedef typename pt::component_type scalar_type;
  private:
   grid_function<Vertex,coord_type> coords;
 
@@ -45,6 +47,15 @@ public:
 
   coord_type const& coord(Vertex const& v) const { cb(); return coords(v);}
   coord_type      & coord(Vertex const& v)       { cb(); return coords[v];}
+
+  coord_type barycenter(Cell const& c) const { 
+    cb();
+    coord_type res(0.0);
+    for(typename gt::VertexOnCellIterator vc(c); !vc.IsDone(); ++vc)
+      res += coord(*vc);
+    res *= scalar_type(1.0/c.NumOfVertices());
+    return res;
+  }
  
   bool bound() const { return coords.bound();}
   void cb() const { REQUIRE(bound(), "", 1);}
