@@ -56,7 +56,7 @@ private:
   void init()
     {
       prod[N-1] = 1;
-      for(int k = N-2; k >= 0; --k) {
+      for(int k = (int)N-2; k >= 0; --k) {
 	// sort out degenerate cases:
 	// n[k+1] <= 0 means empty range: nk1 = 0,=> prod[0] = 0
 	int nk1 = (n[k+1] > 0 ? n[k+1] : 0);
