@@ -5,8 +5,10 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Container/my-hash-map.h"
+
 #include <vector>
 #include <algorithm> // sort
+#include <iostream> 
 
 namespace generic_facet {
 
@@ -75,6 +77,9 @@ namespace generic_facet {
 	bool operator!=(self const& rhs) const 
 	  { return !((*this) == rhs);}
       };
+    template<class gt>
+    std::ostream& operator<<(std::ostream& out, facet_handle_t<gt> const& h)
+      { return (out << h.c << ' ' << h.lh);}
 
 
 
