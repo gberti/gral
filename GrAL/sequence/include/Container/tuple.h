@@ -30,6 +30,7 @@ public:
   const_iterator begin() const { return &(X[0]);}
   const_iterator end()   const { return (begin() + N);}
 
+
   unsigned size()   const { return N;}
   bool     empty()  const { return false;}
 protected:
@@ -80,7 +81,10 @@ class tuple : public tuple_base<T,N> {
   tuple(tuple<U,N> const& rhs) 
    { for(int i = 0; i < N; ++i) X[i] = rhs[i];}
 
-
+  tuple<T,N> operator-() const { tuple<T,N> res; for(int i = 0; i < N; ++i) res[i] = -X[i]; return res;}
+  
+  tuple<T,N>& operator+=(tuple<T,N> const& rhs) { for(int i = 0; i < N; ++i) X[i] += rhs[i]; return *this;}
+  tuple<T,N>& operator*=(T a)                   { for(int i = 0; i < N; ++i) X[i] *= a;      return *this;}
 };
 
 template<class T>
@@ -100,13 +104,14 @@ class tuple<T,2> : public tuple_base<T,2> {
     for(iterator it = begin(); it != end(); ++it,++b) 
       *it = *b; 
   }
+  /*
   template<class It>
   tuple(It b, It e) {
     for(iterator it = begin(); it != end(); ++it,++b) 
       *it = *b; 
     REQUIRE( (b == e), "invalid range in constructor!\n",1);
   }
-
+  */
   tuple(T const& t1, T const& t2) { X[0] = t1; X[1] = t2;}
 
   template<class U>
@@ -116,6 +121,11 @@ class tuple<T,2> : public tuple_base<T,2> {
   T  y() const { return X[1];}
   T& x()       { return X[0];}
   T& y()       { return X[1];}
+
+  tuple<T,2> operator-() const { return tuple<T,2>(-X[0],-X[1]);}
+  tuple<T,2>& operator+=(tuple<T,2> const& rhs) { for(int i = 0; i < 2; ++i) X[i] += rhs[i]; return *this;}
+  tuple<T,2>& operator*=(T a)                   { for(int i = 0; i < 2; ++i) X[i] *= a;      return *this;}
+
 };
 
 template<class T>
@@ -154,6 +164,10 @@ class tuple<T,3> : public tuple_base<T,3> {
   T& x()       { return X[0];}
   T& y()       { return X[1];}
   T& z()       { return X[2];}
+
+  tuple<T,3> operator-() const { return tuple<T,3>(-X[0],-X[1],-X[2]);}
+  tuple<T,3>& operator+=(tuple<T,3> const& rhs) { for(int i = 0; i < 3; ++i) X[i] += rhs[i]; return *this;}
+  tuple<T,3>& operator*=(T a)                   { for(int i = 0; i < 3; ++i) X[i] *= a;      return *this;}
 };
 
 template<class T>
@@ -199,7 +213,7 @@ inline bool operator==(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 
 template<class T, unsigned N>
 inline bool operator!=(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
-{ return compare(lhs,rhs, relational_operators::neq());}
+{ return !(lhs == rhs);}
 
 /*! \brief Component-wise less.
 
@@ -343,7 +357,7 @@ power(tuple<T,N> const& a, U k)
 { 
   tuple<T,N> res(1);
   for(unsigned i = 0; i < N; ++i)
-    for(unsigned kk = 0; kk < k; ++kk)
+    for(U kk = 0; kk < k; ++kk)
       res[i] *= a(i);
   return res;
 }
