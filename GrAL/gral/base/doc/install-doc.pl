@@ -27,8 +27,11 @@ else { # relative path: prepend
 # filter html files
 while(<>) {
     # doxygen transforms:
-    # xxx.h -> xxx_h.html
-    # class A_B -> classA__B.html
+    # 1. class A_B -> classA__B.html
+    # 2. xxx.h -> xxx_h.html
+    # 3. classns_1_1A_B  -> classns1_1A__B
+
+    ## 1.
     $n = 0;
     $first = 0;   
     while(substr($_,$n) =~ m|[^a-zA-Z_0-9]struct[^.]*\.html|) {
@@ -51,9 +54,13 @@ while(<>) {
     }
 
 
-   #s|class[^.]*\.html
+   # 2.
    s|\.h\.html|_h\.html|g;
    s|\.C\.html|_C\.html|g;
+   # 3.
+   # for a class 'Cls' in a namespaces 'ns', the generated file name 
+   # looks like classns_1_1Cls.html
+   s|__1__1|_1_1|g;
 
   # replace dummies set by gen-tex-paths.pl
   s|STLURL|$STL|g;
