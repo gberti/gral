@@ -73,10 +73,15 @@ private:
   typedef partial_grid_function<bucket_cell, cell_set_type> bucket_type;
   bucket_type                                               intersecting;  
  
-  double edge_length;  // prescribed edge length of bucket grid
+  double edge_length;      // prescribed edge length of bucket grid
   bool   assume_cartesian; // try to build optimal bucket grid for Cartesian target grid
-  double shrink_factor;  // control location of additional points used to associate cells to buckets
-                         // = 0.0: use vertices, = 0.5: use midpoints between centers and vertices
+  // control location of additional points used to associate cells to buckets
+  // = 0.0: use vertices, = 0.5: use midpoints between centers and vertices
+  double shrink_factor;  
+  // control size of search region when no cell in initial bucket is found.
+  // The maximal cell diameter is multiplied by this number. Default: 1.0
+  double search_region_growth_factor; 
+
   double max_cell_radius;
   double max_projection_distance; // declare points as outside when farther away from grid
 
@@ -105,6 +110,8 @@ public:
     edge_length      = -1.0; 
     shrink_factor    = 0.25; 
     assume_cartesian = false;
+    search_region_growth_factor = 1.0;
+ 
     max_cell_radius  = 0.0;
     max_projection_distance = 0.0;
     init_statistics();
@@ -137,7 +144,13 @@ public:
 
 
   void do_assume_cartesian() { assume_cartesian = true;}
-  void set_edge_length(double el) { edge_length = el;}
+  void set_edge_length(double el) { 
+    edge_length = el;
+  }
+  void set_search_region_growth(double gr) { 
+    REQUIRE_ALWAYS(gr >= 0.0, "Must use positive growth factor",1);
+    search_region_growth_factor = gr;
+  }
 
   void calculate_max_cell_radius();
   /*! \brief Find a cell containing \c p
@@ -179,6 +192,7 @@ template<class COORD>
 typename point_locator<GRID,GEOM,GT>::location_result_type
 point_locator<GRID,GEOM,GT>::locate(COORD const& p) const
 {
+  // std::cout << "locate(" << p << ") " << "\n";
   current_point_in_cell_tests = 0;
   //  typedef point_location_result<gt, COORD> location_result_type;
   typedef typename cart_geom_type::location_result_type cart_result_type;
@@ -226,6 +240,8 @@ template<class COORD>
 typename point_locator<GRID,GEOM,GT>::location_result_type
 point_locator<GRID,GEOM,GT>::project(COORD const& p, typename point_locator<GRID,GEOM,GT>::bucket_cell const& loc) const
 {
+  //  std::cout << "project(" << p << "," << loc.index() << ")\n";
+ 
   // no cell in intersects[loc] contains p
 
   // consider a neighborhood of loc
@@ -238,11 +254,17 @@ point_locator<GRID,GEOM,GT>::project(COORD const& p, typename point_locator<GRID
   high = clamp_tuple(TheBucketGrid()->low_vertex_index(), TheBucketGrid()->high_vertex_index(), high);
   typename cgt::cartesian_subrange_type R(TheBucketGrid(), low, high+index_type(1));
   */
-  COORD rmax(max_cell_radius); // could be max_cell_radius(loc) 
+  COORD rmax(search_region_growth_factor*max_cell_radius); // could be max_cell_radius(loc) 
   typename cgt::cartesian_subrange_type R(TheBucketGrid(),
 					  TheBucketGeometry()->locate(p-rmax).TheCell(),
 					  TheBucketGeometry()->locate(p+rmax).TheCell());
-
+  /*
+  std::cout << "R= [" 
+	    << TheBucketGeometry()->coord(bucket_vertex(TheBucketGrid(), R.low_vertex_index()))
+	    << ",  "
+	    << TheBucketGeometry()->coord(bucket_vertex(TheBucketGrid(), R.high_vertex_index()))
+	    << "]\n";
+  */
   typedef grid_types<typename cgt::cartesian_subrange_type> rgt;
   // diameter of R is larger than maximal possible distance of cell in R to point p
   double diamR = apcart::distance(TheBucketGeometry()->coord(bucket_vertex(TheBucketGrid(), R.low_vertex_index())),
@@ -251,6 +273,7 @@ point_locator<GRID,GEOM,GT>::project(COORD const& p, typename point_locator<GRID
   Cell   mincell;
   coord_type proj;
 
+  //std::cout << "mindist=" << mindist << "\n";
   // search all cells intersecting the range
   for(typename rgt::CellIterator xloc(R); !xloc.IsDone(); ++xloc)
     for(typename cell_set_type::const_iterator c=intersecting(*xloc).begin(); c != intersecting(*xloc).end(); ++c) {
@@ -259,15 +282,19 @@ point_locator<GRID,GEOM,GT>::project(COORD const& p, typename point_locator<GRID
       ++current_point_in_cell_tests;
       if(vol_c.is_inside(p))
 	return location_result_type(C, convert_point<coord_type>(p), location_result_type::inside_tag);
+      // use minimal distance to vertex of C as distance(p,C), and treat minimal vertex as projection.
       for(typename gt::VertexOnCellIterator vc(C); !vc.IsDone(); ++vc) {
 	double dist = ap::distance(convert_point<coord_type>(p), TheGeometry()->coord(*vc));
 	if(dist < mindist) {
+	  //std::cout << "C=" << C.handle() << "@" << TheGeometry()->coord(* C.FirstVertex()) << " "
+	  //	    << "d=" << dist << "  ";
 	  mindist = dist;
 	  proj    = TheGeometry()->coord(*vc);
 	  mincell = C;
 	}
       }
     }
+  //  std::cout << std::endl;
   if(mindist < diamR)
     return location_result_type(mincell, proj, location_result_type::projection_tag);
   else
