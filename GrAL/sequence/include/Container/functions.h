@@ -9,6 +9,5 @@ template <class T>
 struct my_identity : public std::unary_function<T, T> {
   const T& operator()(const T& x) const { return x; }
 };
-#endif
 
 #endif
