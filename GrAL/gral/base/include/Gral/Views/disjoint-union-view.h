@@ -311,7 +311,7 @@ public:
     Cell_view(grid_type const& g, cell_handle c) 
       : base(g)
       {
-	if(c.which == 1) {
+	if(c.which() == 1) {
 	  c1_ = CellIterator1(g.Grid1(),c.c1());
 	  c2_ = CellIterator2(g.Grid2());
 	}
