@@ -36,7 +36,7 @@ public:
     { 
       a[0] = a0; a[1] = a1; a[2] = a2;
     }      
-    matrix_type(scalar s) 
+    explicit matrix_type(scalar s) 
     { 
       init();
       for(int i = 0; i < 3; ++i)
@@ -204,8 +204,8 @@ public:
      The inverse I = (i1,i2,i3) of the matrix (r1,r2,r3) 
      with the rows ri is calculated using Cramer's rule.
    */
-  static void inverse(POINT const& r1, POINT const& r2, POINT const& r3,
-		      POINT      & i1, POINT      & i2, POINT      & i3)
+  static void invert(POINT const& r1, POINT const& r2, POINT const& r3,
+		     POINT      & i1, POINT      & i2, POINT      & i3)
     {
       // inversion by Cramer's rule 
       scalar d = det3(r1,r2,r3);
@@ -235,7 +235,7 @@ public:
   static matrix_type inverse(matrix_type const& A)
   {
     matrix_type res;
-    inverse(A.a[0], A.a[1], A.a[2],  res.a[0], res.a[1], res.a[2]);
+    invert(A.a[0], A.a[1], A.a[2],  res.a[0], res.a[1], res.a[2]);
     return res;
   }
 
@@ -265,8 +265,8 @@ public:
   /*! \brief Solve \f$ A x = b \f$ for \f$ x \f$
       The implementation uses Cramer's rule. 
   */
-  static POINT solve(matrix_type const& A, 
-		     POINT const& b)
+  static POINT solution(matrix_type const& A, 
+			POINT const& b)
   { 
     POINT x; 
     pt::ConstructWithDim(pt::Dimension(b), x);
@@ -367,7 +367,7 @@ public:
       if(fabs(det3(A1,A2,A3)) <= (eps*(norm_2(A1) + norm_2(A2) + norm_2(A3))))
 	return 1.0e100;
      
-      inverse(A1,A2,A3,inv[0],inv[1],inv[2]);
+      invert(A1,A2,A3,inv[0],inv[1],inv[2]);
       return N(A1,A2,A3) * N(inv[0],inv[1],inv[2]);
     }
   template<class NORM>
