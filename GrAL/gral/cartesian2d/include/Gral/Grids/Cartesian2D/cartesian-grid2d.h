@@ -17,12 +17,19 @@
 #include "Gral/Grids/Cartesian2D/index-map.h"
 
 
+namespace cartesian2d {
+
 class RegGrid2D;
 typedef RegGrid2D CartesianGrid2D;
 
 /*! \brief A two-dimensional cartesian grid type
 
     RegGrid2D implements the full kernel interface.
+
+    \todo The constructors are not consistent, allow only
+     constructors of the form 
+     - \c  RegGrid2D(vertex_size_type nv)
+     -  <tt>RegGrid2D(vertex_index_type low, vertex_index_type high) </tt>
  */ 
 
 class RegGrid2D {
@@ -43,8 +50,8 @@ private:
                         // ll does not have to be (0,0)
   int xpoints, ypoints; // number of vertices in x and y direction
   // this is redundant information: 
-  //   xpoints == ur_.x -ll_.x + 1
-  //   ypoints == ur_.y -ll_.y + 1
+  //   xpoints == ur_.x() -ll_.x() + 1
+  //   ypoints == ur_.y() -ll_.y() + 1
 
   // maps between 1D and 2D integer indices
   // see init_maps for information about their relationship
@@ -62,9 +69,9 @@ public:
      xpoints(pts), ypoints(pts)
     { init_maps(ll_,ur_);}
  
-  RegGrid2D(int x, int y) 
-    : ll_(0,0), ur_(x-1,y-1),
-      xpoints(x), ypoints(y)
+  RegGrid2D(int nv_x, int nv_y) 
+    : ll_(0,0), ur_(nv_x-1,nv_y-1),
+      xpoints(nv_x), ypoints(nv_y)
     {init_maps(ll_,ur_);}
 
   RegGrid2D(int llx, int lly,int urx, int ury)
@@ -75,9 +82,17 @@ public:
 
   RegGrid2D(const index_type& LL, const index_type& UR)
     :  ll_(LL), ur_(UR),
-       xpoints(UR.x - LL.x +1), 
-       ypoints(UR.y - LL.y +1)
+       xpoints(UR.x() - LL.x() +1), 
+       ypoints(UR.y() - LL.y() +1)
     { init_maps(ll_,ur_);}
+
+  // not consistent!
+  RegGrid2D(const index_type& nv)
+    : ll_(0,0), ur_(UR-index_type(1,1)),
+      xpoints(ur_.x() - ll_.x() +1), 
+      ypoints(ur_.y() - ll_.y() +1)
+    { init_maps(ll_,ur_);}
+ 
   //@}
 
 private:
@@ -85,9 +100,9 @@ private:
 		 const index_type& ur)
     { 
       vertex_index_map = indexmap_type(ll,ur);
-      cell_index_map   = indexmap_type(ll,index_type(ur.x-1,ur.y-1)); 
-      xedge_index_map  = indexmap_type(ll,index_type(ur.x-1,ur.y  )); 
-      yedge_index_map  = indexmap_type(ll,index_type(ur.x,  ur.y-1)); 
+      cell_index_map   = indexmap_type(ll,index_type(ur.x()-1,ur.y()-1)); 
+      xedge_index_map  = indexmap_type(ll,index_type(ur.x()-1,ur.y()  )); 
+      yedge_index_map  = indexmap_type(ll,index_type(ur.x(),  ur.y()-1)); 
     }
 
 public:
@@ -95,10 +110,12 @@ public:
   //@{  
   const index_type& ll() const { return ll_;}
   const index_type& ur() const { return ur_;}
-  int llx() const { return ll_.x;}
-  int lly() const { return ll_.y;}
-  int urx() const { return ur_.x;}
-  int ury() const { return ur_.y;}
+  int llx() const { return ll_.x();}
+  int lly() const { return ll_.y();}
+  int urx() const { return ur_.x();}
+  int ury() const { return ur_.y();}
+
+  index_type cell_size() const { return ur_ - ll_;}
   //@}
 
 private:
@@ -141,10 +158,10 @@ public:
   static const index_type& direction(int s)     { return direction_[--s];}
   static const index_type& outer_normal(int s)  { return side_offset_[--s];}
 
-  index_type side_vertex1(int s) const { return index_type(llx()+(xpoints-1)*side_vertex_1_[s-1].x,
-							   lly()+(ypoints-1)*side_vertex_1_[s-1].y);}
-  index_type side_vertex2(int s) const { return index_type(llx()+(xpoints-1)*side_vertex_2_[s-1].x,
-							   lly()+(ypoints-1)*side_vertex_2_[s-1].y);}
+  index_type side_vertex1(int s) const { return index_type(llx()+(xpoints-1)*side_vertex_1_[s-1].x(),
+							   lly()+(ypoints-1)*side_vertex_1_[s-1].y());}
+  index_type side_vertex2(int s) const { return index_type(llx()+(xpoints-1)*side_vertex_2_[s-1].x(),
+							   lly()+(ypoints-1)*side_vertex_2_[s-1].y());}
 public:
   typedef RegGrid2D Grid;
   
@@ -223,8 +240,8 @@ public:
 
     Vertex(const vertex_base& v, const Grid* g) :  elem_base(g),  _v(v) {}
     Vertex(const vertex_base& v, const Grid& g) :  elem_base(&g), _v(v) {}
-    int x() const { return _v.x;}
-    int y() const { return _v.y;}
+    int x() const { return _v.x();}
+    int y() const { return _v.y();}
  
     
     inline VertexOnVertexIterator FirstVertex() const;
@@ -247,13 +264,13 @@ public:
     }
 
     vertex_base get_nb_base(int nb) const { // 1 <= nb <= 4, no check if Neighbour exists!
-      return vertex_base(x() + TheGrid().side_offset((int)nb).x,
-			 y() + TheGrid().side_offset((int)nb).y);
+      return vertex_base(x() + TheGrid().side_offset((int)nb).x(),
+			 y() + TheGrid().side_offset((int)nb).y());
     }
 
     vertex_base get_cell_base(int c) const { // 1 <= nb <= 4, no check if Neighbour exists!
-      return vertex_base(x() + TheGrid().corner_offset((int)c).x -1,
-			 y() + TheGrid().corner_offset((int)c).y -1);
+      return vertex_base(x() + TheGrid().corner_offset((int)c).x() -1,
+			 y() + TheGrid().corner_offset((int)c).y() -1);
     }
    
     Vertex vertex(int nb) const { return Vertex(get_nb_base(nb),TheGrid());}
@@ -298,16 +315,16 @@ public:
 
     void init(const vertex_base& w1, const vertex_base& w2)
       {
-	REQUIRE((    (w1.x == w2.x) && (w1.y == w2.y+1 || w1.y == w2.y-1)
-		  || (w1.y == w2.y) && (w1.x == w2.x+1 || w1.x == w2.x-1)),
+	REQUIRE((    (w1.x() == w2.x()) && (w1.y() == w2.y()+1 || w1.y() == w2.y()-1)
+		  || (w1.y() == w2.y()) && (w1.x() == w2.x()+1 || w1.x() == w2.x()-1)),
 		"Edge(w1,w2): (w1,w2) = (" << w1 << ','  << w2 << ')' << "is no edge!\n",1);
-	if(w1.y == w2.y) {
+	if(w1.y() == w2.y()) {
 	  dir = x_dir;
-	  v1_ = ( w1.x < w2.x ? w1 : w2);
+	  v1_ = ( w1.x() < w2.x() ? w1 : w2);
 	}
 	else {
 	  dir = y_dir;
-	  v1_ = ( w1.y < w2.y ? w1 : w2);
+	  v1_ = ( w1.y() < w2.y() ? w1 : w2);
 	}
       }
 
@@ -318,8 +335,8 @@ public:
     Vertex V1() const { return Vertex(v1_,_g);}
     Vertex V2() const { 
       return Vertex((dir==x_dir 
-		     ? vertex_base(v1_.x+1,v1_.y)
-		     : vertex_base(v1_.x,  v1_.y+1)),TheGrid());
+		     ? vertex_base(v1_.x()+1,v1_.y())
+		     : vertex_base(v1_.x(),  v1_.y()+1)),TheGrid());
     }
     vertex_handle v1() const { return V1().handle();}
     vertex_handle v2() const { return V2().handle();}
@@ -369,8 +386,8 @@ public:
     Cell() : elem_base(0) {}
     Cell(const Grid& g, cell_handle c) { *this = g.cell(c); }
 
-    Cell(const vertex_base& b, const Grid* g) : elem_base(g),  llv(b)  {}
-    Cell(const vertex_base& b, const Grid& g) : elem_base(&g), llv(b)  {}
+    Cell(const Grid* g, const vertex_base& b) : elem_base(g),  llv(b)  {}
+    Cell(const Grid& g, const vertex_base& b) : elem_base(&g), llv(b)  {}
 
 
     VertexOnCellIterator FirstVertex()    const;
@@ -391,10 +408,10 @@ public:
     int NumOfBoundaryFacets() const
       {
 	int n = 0; 
-	n += ((llv.x   == TheGrid().llx()) ? 1 : 0);
-	n += ((llv.y   == TheGrid().lly()) ? 1 : 0);
-	n += ((llv.x+1 == TheGrid().urx()) ? 1 : 0);
-	n += ((llv.y+1 == TheGrid().ury()) ? 1 : 0);
+	n += ((llv.x()   == TheGrid().llx()) ? 1 : 0);
+	n += ((llv.y()   == TheGrid().lly()) ? 1 : 0);
+	n += ((llv.x()+1 == TheGrid().urx()) ? 1 : 0);
+	n += ((llv.y()+1 == TheGrid().ury()) ? 1 : 0);
 	return n;
       }
  
@@ -420,19 +437,20 @@ public:
     Vertex vertex(corner v) const
     {
       REQUIRE(((1<=v) && (v<=4)),"Cartesian2D::Cell::vertex(v) : v = " << (int)v , 1);
-      return Vertex(vertex_base(llv.x + TheGrid().corner_offset((int)v).x,
-				llv.y + TheGrid().corner_offset((int)v).y),
+      return Vertex(vertex_base(llv.x() + TheGrid().corner_offset((int)v).x(),
+				llv.y() + TheGrid().corner_offset((int)v).y()),
 				TheGrid());
     }
 
     vertex_base ll() const { return llv;}
+    index_type  index() const { return llv;}
     
     Edge edge(side e) const 
       {
 	REQUIRE(((S<=e) && (e<=W)),"Cartesian2D::Cell::edge(e) : e = " << (int)e , 1);
 	return ( e == S ? Edge(Edge::x_dir,llv,TheGrid())
-		 : e == E ? Edge(Edge::y_dir,vertex_base(llv.x+1,llv.y),TheGrid())
-		 : e == N ? Edge(Edge::x_dir,vertex_base(llv.x,  llv.y+1),TheGrid())
+		 : e == E ? Edge(Edge::y_dir,vertex_base(llv.x()+1,llv.y()),TheGrid())
+		 : e == N ? Edge(Edge::x_dir,vertex_base(llv.x(),  llv.y()+1),TheGrid())
 		 :          Edge(Edge::y_dir,llv,TheGrid()));
       } 
     
@@ -442,7 +460,7 @@ public:
 	REQUIRE(TheGrid().IsValidCellBase(bv),
 		"Cell::Neighbour(nb) : nb = " << (int)nb << " not in grid!\n"
 		<< " llv = " << llv << " bv = " << bv << '\n',1);
-	return Cell(bv,TheGrid()); 
+	return Cell(TheGrid(),bv); 
     }
     Cell Nb(side nb) const { return neighbour(nb);}
 
@@ -453,8 +471,8 @@ public:
   protected:
     //    cell_base _b;
     vertex_base get_nb_base(side nb) const { // no check
-      return vertex_base(llv.x + TheGrid().side_offset((int)nb).x,
-			 llv.y + TheGrid().side_offset((int)nb).y);
+      return vertex_base(llv.x() + TheGrid().side_offset((int)nb).x(),
+			 llv.y() + TheGrid().side_offset((int)nb).y());
     }
 
     /// DATA 
@@ -520,10 +538,11 @@ public:
 
     Vertex   operator*() const { return TheGrid().vertex(v);} 
     // random access
-    Vertex operator()(int i, int j) const { 
+    /* Vertex operator()(int i, int j) const { 
+      // vertex_handle + int is not defined!
       return TheGrid().vertex(v + TheGrid().TheVertexMap().offset(i,j));
     }
-
+    */
     bool     IsDone()    const { return  (v > TheGrid().MaxVertexNum());}
     operator bool() const { return !IsDone();} 
     vertex_handle GlobalNumber() const { return v;}
@@ -954,7 +973,7 @@ public:
 
   // vertex_handle  <-> Vertex
   vertex_handle vertex_num(int x, int y)     const { return TheVertexMap().number(x,y);}
-  vertex_handle vertex_num(const vertex_base& V) const { return vertex_num(V.x,V.y);} 
+  vertex_handle vertex_num(const vertex_base& V) const { return vertex_num(V.x(),V.y());} 
   vertex_handle vertex_num(const Vertex& V) const { return vertex_num(V.x(),V.y());}
   vertex_base get_vertex(vertex_handle v) const { return TheVertexMap().index(v);}
   Vertex vertex(vertex_handle v) const { return Vertex(get_vertex(v),this);}
@@ -971,12 +990,12 @@ public:
   // cell_handle <-> Cell
   // (x,y) == lower left corner == int-coordinates of box center
   cell_handle cell_num(int llx, int lly) const { return TheCellMap().number(llx,lly);}
-  cell_handle cell_num(const vertex_base& llv) const {return cell_num(llv.x,llv.y);}
+  cell_handle cell_num(const vertex_base& llv) const {return cell_num(llv.x(),llv.y());}
   cell_handle cell_num(const Cell& C) const { return cell_num(C.ll());}
   vertex_base   get_cell_llv(cell_handle c)   const { return TheCellMap().index(c);}
-  Cell   cell(cell_handle c)    const { return Cell(get_cell_llv(c),this);}
-  Cell   cell(vertex_base llv)  const { return Cell(llv,this);}
-  Cell   cell(int llx, int lly) const { return Cell(vertex_base(llx,lly),this);}
+  Cell   cell(cell_handle c)    const { return Cell(this,get_cell_llv(c));}
+  Cell   cell(vertex_base llv)  const { return Cell(this,llv);}
+  Cell   cell(int llx, int lly) const { return Cell(this,vertex_base(llx,lly));}
   //@}
  
   /*! @name intervals for element handles */
@@ -1068,7 +1087,7 @@ RegGrid2D::Vertex::EndCell() const { return CellOnVertexIterator(5,*this,&TheGri
 inline 
 RegGrid2D::Cell 
 RegGrid2D::Vertex::cell(int c) const 
-{ return Cell(get_cell_base(c),TheGrid());}
+{ return Cell(TheGrid(),get_cell_base(c));}
 
 
 
@@ -1096,13 +1115,13 @@ inline
 RegGrid2D::Edge::C1()   const  { // lower resp. left cell
   /*
   REQUIRE((dir == x_dir 
-	   ?TheGrid().TheCellMap().IsInRange(index_type(v1.x,  v1.y-1))
-	   :TheGrid().TheCellMap().IsInRange(index_type(v1.x-1,v1.y  ))),
+	   ?TheGrid().TheCellMap().IsInRange(index_type(v1.x(),  v1.y()-1))
+	   :TheGrid().TheCellMap().IsInRange(index_type(v1.x()-1,v1.y()  ))),
 	  "Edge::C1() : Edge on Boundary",1);
 	  */
   return (dir == x_dir 
-	  ? Cell(vertex_base(v1_.x,  v1_.y-1),TheGrid())
-	  : Cell(vertex_base(v1_.x-1,v1_.y  ),TheGrid()));
+	  ? Cell(TheGrid(),vertex_base(v1_.x(),  v1_.y()-1))
+	  : Cell(TheGrid(),vertex_base(v1_.x()-1,v1_.y()  )));
 }    
 
 inline  
@@ -1110,7 +1129,7 @@ inline
 RegGrid2D::Edge::C2()   const  {  // upper resp. right cell
   // REQUIRE(TheGrid().TheCellMap().IsInRange(v1),
   //	  "Edge::C1() : Edge on Boundary",1);
-  return Cell(v1_,TheGrid()); 
+  return Cell(TheGrid(),v1_); 
 }
 
 inline  
@@ -1226,27 +1245,27 @@ RegGrid2D::edge_num(const RegGrid2D::Edge& E) const
 
 inline bool RegGrid2D::IsOnBoundary(const RegGrid2D::vertex_base& V) const
 {
- return (   (V.x == llx()) || (V.x == urx())
-	 || (V.y == lly()) || (V.y == ury()));
+ return (   (V.x() == llx()) || (V.x() == urx())
+	 || (V.y() == lly()) || (V.y() == ury()));
 }
 
 inline  bool RegGrid2D::IsOnBoundary(const RegGrid2D::Edge&   E) const
 {
-  return (  (E.dir == Edge::x_dir && (E.v1_.y == lly() || E.v1_.y == ury()))
-	  ||(E.dir == Edge::y_dir && (E.v1_.x == llx() || E.v1_.x == urx())));
+  return (  (E.dir == Edge::x_dir && (E.v1_.y() == lly() || E.v1_.y() == ury()))
+	  ||(E.dir == Edge::y_dir && (E.v1_.x() == llx() || E.v1_.x() == urx())));
 }
 
 inline  bool RegGrid2D::IsOnBoundary(const RegGrid2D::EdgeOnCellIterator& F) const
 { 
   vertex_base bv = F.TheCell().get_nb_base(F.e);
-  return ( ! TheCellMap().IsInRange(bv.x,bv.y));
+  return ( ! TheCellMap().IsInRange(bv.x(),bv.y()));
 }
 
 
 inline bool RegGrid2D::IsInside(const RegGrid2D::Cell& C) const
 {
   vertex_base bv = C.ll();
-  return ( TheCellMap().IsInRange(bv.x,bv.y));
+  return ( TheCellMap().IsInRange(bv.x(),bv.y()));
 }
 
 inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
@@ -1255,14 +1274,18 @@ inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 }
 
 
+} // namespace cartesian2d 
+
 
 
 /*! \brief specialization of grid_types template for RegGrid2D
  */
-struct grid_types<RegGrid2D> {
+struct grid_types<cartesian2d::RegGrid2D> {
 
-  typedef RegGrid2D             Grid;
-  typedef RegGrid2D             grid_type;
+  typedef cartesian2d::RegGrid2D  Grid;
+  typedef cartesian2d::RegGrid2D  grid_type;
+  typedef Grid::index_type        index_type;
+
   typedef  Grid::Vertex Vertex;
   typedef  Grid::Edge   Edge;
   typedef  Grid::Edge   Facet;
@@ -1310,6 +1333,8 @@ struct grid_types<RegGrid2D> {
   static bool is_cell_valid (grid_type const& G, Cell const& c) { return (G.IsValid(c));}
   static bool is_cell_inside(grid_type const& G, Cell const& c) { return (G.IsInside(c));}
 };
+
+
 
 #include "Gral/Grids/Cartesian2D/element-traits.h"
 
