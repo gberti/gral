@@ -276,15 +276,15 @@ namespace complexnd {
   struct element_handle_base {
     typedef GRID grid_type;
     typedef element_handle_base<GRID, D, CD> self;
-    unsigned h_;
+    int     h_;
   public:
     element_handle_base() {}
     element_handle_base(unsigned hh) : h_(hh) {}
     
-    unsigned  h() const { return h_;}
-    unsigned& h()       { return h_;}
+    int  h() const { return h_;}
+    int& h()       { return h_;}
     
-    operator unsigned() const { return h_;} 
+    operator int() const { return h_;} 
     self& operator++() { ++h_; return *this;}
   };
 
@@ -438,6 +438,7 @@ namespace complexnd {
        <tt> ComplexND<ANY> </tt> is a grid with runtime determined dimension.
    
       \ingroup complexndstuff
+      \todo Calculate incidence information
    */
   template<int D>
   class ComplexND : public grid_types_ComplexND<D>, public dimension_mixin_grid<D> {
@@ -452,8 +453,10 @@ namespace complexnd {
     typedef typename gt::FacetIterator      FacetIterator;
     typedef typename gt::CellIterator       CellIterator;
 
-    typedef typename gt::cell_handle        cell_handle;
-    typedef typename gt::Cell               Cell;
+    typedef typename gt::cell_handle         cell_handle;
+    typedef typename gt::Facet               Facet;
+    typedef typename gt::FacetOnCellIterator FacetOnCellIterator;
+    typedef typename gt::Cell                Cell;
 
     typedef typename gt::archetype_handle   archetype_handle;
     typedef typename gt::archetype_type     archetype_type;
@@ -461,7 +464,8 @@ namespace complexnd {
 
     // data structure to hold all possible incidences
     // TODO: reordered indexing incidences[d1][d2][e1][e2] would be more efficient
-    typedef std::vector<unsigned>                 incidence_sequence;       // [0, |I_{k,j}(e)| )
+    // typedef std::vector<unsigned>                 incidence_sequence;       // [0, |I_{k,j}(e)| )
+    typedef std::vector<int>                      incidence_sequence;       // [0, |I_{k,j}(e)| )
     typedef std::vector<incidence_sequence>       element_incidences;       // index j \in [0,d]
     typedef std::vector<element_incidences>       element_incidences_table; // index e \in [0, n(k)-1]
     typedef std::vector<element_incidences_table> incidence_table;          // index k \in [0,d]
@@ -501,7 +505,7 @@ namespace complexnd {
     //! only for  <tt>D==1</tt>
     explicit ComplexND(polygon pn);
     //! Only for  <tt>D==1</tt>
-    ComplexND(unsigned a[][2], unsigned N);
+    ComplexND(int a[][2], int N);
     //@}
 
     element_incidences const& Incidences(typename gt::AnyElement e) const { return incidences[e.dimension()][e.handle().h()];}
@@ -545,6 +549,14 @@ namespace complexnd {
     unsigned NumOfFacets()   const { return NumOfElements(dimension()-1);}
     unsigned NumOfCells()    const { return NumOfElements(dimension());}
     //@}
+
+    
+    Cell switched_cell(Facet const& f, Cell const& c) const {
+      return Cell(*this, 
+		  cell_handle((c.handle() == Incidences(f)[dimension()][0]
+			       ? Incidences(f)[dimension()][1] 
+			       : Incidences(f)[dimension()][0])));
+    }
 
     // must make them public because friend definition does not work
     // private:
@@ -594,7 +606,15 @@ namespace complexnd {
     //@} 
   private:
     void ca(archetype_handle a) const { REQUIRE(valid_archetype(a), "a = " << a,1); }
-    
+
+  public:
+    cell_handle outer_cell_handle() const { return cell_handle(-1);}
+    bool IsOnBoundary(FacetOnCellIterator const& fc) const { return IsOnBoundary(*fc);}
+    bool IsOnBoundary(Facet               const& f)  const { 
+      return Incidences(f)[dimension()][0] == outer_cell_handle() 
+	||   Incidences(f)[dimension()][1] == outer_cell_handle();
+    }
+
   }; // class ComplexND<D>
 
 
@@ -706,7 +726,7 @@ namespace complexnd {
 
     bool bound() const { return g != 0;}
     void cb()    const { REQUIRE(bound(), "", 1);}
-    bool valid() const { return bound() && 0 <= h && h < g->NumOfElements(dimension());}
+    bool valid() const { return bound() && 0 <= h && h < (int)g->NumOfElements(dimension());}
     void cv()    const { REQUIRE(valid(), "", 1);}
   protected:
     void incr() { ++h;}
@@ -983,6 +1003,7 @@ namespace complexnd {
     using mixin::dimension;
   private:
     anchor_type  a;
+  protected:
     unsigned     lh;
     
   public:
@@ -1009,15 +1030,17 @@ namespace complexnd {
     grid_type   const&   TheGrid()       const { cb(); return a.TheGrid();}
  
     bool bound() const { return a.bound();}
-    bool valid() const { return bound() && !IsDone();}
+    bool valid() const { return bound() &&  0 <= lh && lh < incidences().size();}
     void cb()    const { REQUIRE(bound(), "", 1);}
-    void cv()    const { REQUIRE(valid(), "", 1);}
+    void cv()    const { REQUIRE(valid(), "lh=" << lh, 1);}
 
     friend bool operator==(self const& lhs, self const& rhs) {  lhs.cb(); rhs.cb();  return lhs.lh == rhs.lh;}
     friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs==rhs);}
   protected:
+    // for cell-on-cell: should check if incidences[lh] is != outer_cell_handle()
     void incr()  { cv(); ++lh;}
-  private:
+    //private:
+  protected:
     incidence_sequence const& incidences() const 
 	{ cb(); return TheGrid().Incidences(TheAnchor())[dimension()];}
   }; // class incidence_iterator_base_t<GRID, D, K, CD, CK>
@@ -1042,6 +1065,40 @@ namespace complexnd {
     
 
   };
+
+
+  // partial specialization for CellOnCellIterator
+  template<int D> //, int D, int K, int CD, int CK>
+  class incidence_iterator_t<ComplexND<D>, D, D, 0,0> 
+    : public  incidence_iterator_base_t<ComplexND<D>, D, D, 0,0>
+  {
+    typedef  incidence_iterator_base_t<ComplexND<D>, D, D, 0, 0> base;
+    typedef  incidence_iterator_t     <ComplexND<D>, D, D, 0, 0> self;
+  public:
+    using base::handle;
+    using base::TheGrid;
+    using base::cv;
+
+    incidence_iterator_t() {}
+    incidence_iterator_t(typename base::anchor_type const& a) : base(a) 
+    {
+      while(base::lh < base::incidences().size() && handle() == TheGrid().outer_cell_handle()) 
+	base::incr();
+    }
+    
+    self& operator++() { 
+      do {
+	base::incr();
+      } while( base::lh < base::incidences().size() && handle() == TheGrid().outer_cell_handle());
+      return *this;
+    }
+
+    typename base::value_type  operator*() const { cv(); return typename base::value_type(TheGrid(), handle());}
+    
+
+  };
+
+
 
   // partial specialization for ANY
   template<class GRID, int D, int CD>
@@ -1212,13 +1269,22 @@ namespace complexnd {
     calculate_incidences();
   }
 
-  //  template<unsigned N>
-  inline ComplexND<1>::ComplexND( unsigned edges[][2], unsigned N) : incidences(dimension() +1) 
+
+  inline ComplexND<1>::ComplexND( int edges[][2], int NE) : incidences(dimension() +1) 
   {
-    incidences[0].resize(N);
-    incidences[1].resize(N);
-    //unsigned v = 0, e = 0;
-    for( unsigned e = 0;  e < N; ++e) {
+    // NE = number of edges/vertices of polygon.
+    // calculate Number of vertices from edges[]
+    int max_v = -1;
+    for(int e = 0; e < NE; ++e) {
+      for(int ve = 0; ve < 2; ++ve)
+	max_v = std::max(max_v, edges[e][ve]);
+    }
+    int NV = max_v + 1;
+      
+    incidences[0].resize(NV);
+    incidences[1].resize(NE);
+
+    for( int e = 0;  e < NE; ++e) {
       incidences[1][e].resize(dimension()+1);
       incidences[1][e][0].resize(2);
       incidences[1][e][0][0] = edges[e][0];
@@ -1229,7 +1295,53 @@ namespace complexnd {
     for(unsigned c = 0; c < NumOfCells(); ++c)
       cell_archetype[c] = a;
 
-    calculate_incidences();
+    // vertex incidences 
+    for(int v = 0; v < NV; ++v) {
+      incidences[0][v].resize(dimension() +1);
+    }
+    // edge-on-vertex
+    for(int e = 0;  e < NE; ++e) {
+      for(int ve = 0; ve < 2; ++ve) {
+	int v = incidences[1][e][0][ve];
+	incidences[0][v][1].push_back(e);
+      }
+    }
+
+    //vertex-on-vertex
+    for(int v = 0;  v < NV; ++v) {
+      for(int vv = 0; vv < (int)incidences[0][v][1].size(); ++vv) {
+	int e = incidences[0][v][1][vv];
+	incidences[0][v][0].push_back
+	  (v == incidences[1][e][0][0] ? incidences[1][e][0][1] : incidences[1][e][0][0]);
+      }
+    }
+
+    // edge-on-edge 
+    bool manifold_grid = true;
+    for(int e = 0; e < NE; ++e) {
+      for(int ve = 0; ve < 2; ++ve) {
+	int v = incidences[1][e][0][ve];
+	if(incidences[0][v][1].size() > 2 ) { // non-manifold
+	  manifold_grid = false;
+	  break;
+	}
+	incidences[1][e][1].resize(2);
+	// is this the Right Thing?
+	if(incidences[0][v][1].size() == 1) 
+	  incidences[1][e][1][ve] = outer_cell_handle();
+	else 
+	  incidences[1][e][1][ve] 
+	    = (incidences[0][v][1][ve] == e ? incidences[0][v][1][1-ve] : incidences[0][v][1][ve]);
+      }
+      if(! manifold_grid)
+	break;
+    }
+    // if this is not a manifold grid, cell-cell-incidences are not well defined.
+    if(! manifold_grid)
+      for(int e = 0; e < NE; ++e) 
+	incidences[0][e][1].clear();
+
+    // calculate_incidences();
   }
 
 
