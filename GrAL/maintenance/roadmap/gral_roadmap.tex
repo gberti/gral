@@ -1,0 +1,423 @@
+\documentclass[dvips,color,12pt]{refart}
+%\usepackage{doublespace}
+%\usepackage{showkeys}
+%\usepackage[T1]{polski}
+%\usepackage[latin2]{inputenc}
+\usepackage{hangcaption}
+\usepackage{amsmath}
+\usepackage{psfrag}
+\usepackage{graphicx}
+\usepackage{enumerate}
+\usepackage{url}
+\usepackage{cite}
+\usepackage{color}
+
+\newcommand{\Revision}{$Revision$}
+% indentation 
+\settextfraction{0.9}
+%\setlength{\topmargin}{-2cm}
+%\addtolength{\textheight}{4.0cm}
+
+%%%%%%%%%%%%%%% FIGURE RULES
+\DeclareGraphicsRule{.ps.gz}{eps}{.ps}{zcat #1}
+\graphicspath{{figures/}}
+
+%%%%%%%%%%%%%%% TITLE PAGE
+%
+\author{Roman Putanowicz\\
+%Institute of Computer Methods \\
+%in Civil Engineering (L5)\\
+%Cracow University of Technology\\
+$<$putanowr@twins.pk.edu.pl$>$\\
+%Instytyt Metod Komputerowych w\\
+%In¿ynierii L±dowej (L5)\\
+%Politechnika Krakowska
+%$<$putanowr@twins.pk.edu.pl$>$\\
+}
+\title{GrAL development roadmap}
+\date{\Revision\\%
+\today}
+%%%%%%%%%%%%%%%%%%%%%%%%
+
+\begin{document}
+\maketitle
+\tableofcontents
+\section{GrAL overview}
+\emph{FIXME: some general GrAL intro}
+\section{Future directions}
+\emph{FIXME: Short summary of GrAL future development}
+\section{GrAL core functionality}
+  \subsection{Grid functions algebra and calculus}
+  Module providing algebraic operations on grid functions (+ - * /)
+  and module providing basic calculus operation (gradient, divergence, curl,
+  etc.)
+  \subsection{Support for curved geometries}
+
+\section{GrAL plug-ins}
+\subsection{Grid generators}
+A valuable extension of GrAL library would be a module providing interface
+to some grid generation tools, e.g. Triangle, NetGen, GRUMMP. 
+
+\subsection{Storage formats}
+One point where GrAL library can be visibly enhanced is wider support
+for grid file formats for persistent grid storage. Various grid manipulation
+libraries offer their own I/O capabilities and writing adapters to their
+data structures enhances GrAL I/O capabilities. There are however some useful
+storage formats which are not tightly coupled with any particular grid data
+structures. Moreover, providing interface to a particular grid file format
+can be often easier than providing a fully fledged grid data structure adapter.
+The more file formats is supported by GrAL library, the bigger chances that 
+more users will pick it as a basis for their projects.
+
+Some formats to be supported:
+\begin{itemize}
+ \item HDF5
+ \item XML based format proposed by Adaptive Software Project
+ \item formats for FEM packages: ANSYS, FEAP
+\end{itemize}
+
+\subsubsection{Grid file format recognition tools}
+One useful addition to GrAL library would be a facility to recognize file
+formats. This facility would allow an automatic choice of a proper module for
+I/O operations.
+
+\subsubsection{Improvement of GrAL complex2d-format}
+GrAL complex2d-format comes in two flavours: 0-bases and 1-based numbering.
+The information about the numbering is external to a file and must be
+given as a parameter to grid reading function. Using wrong file type can result
+in strange behaviour or program crashes. Much improved interface can be
+provided by encoding the format type in the file itself, for instance
+in the first line of file as a kind of file meta-data:
+\begin{verbatim}
+# GrAL 0.2 0-based
+12 15
+.......
+\end{verbatim}
+\subsubsection{GrAL complex3d-format}
+Provide classes OstreamComplex3D and IstreamComplex3D.
+\subsubsection{Tutorial}
+Much needed would be a tutorial explaining step by step programming classes
+for I/O (especially archetype concept).
+\subsection{Grid structure adapters}
+
+Though GrAL library provides lot of functionality for grid manipulations,
+it is rather unrealistic to expect it will provide coverage and expected
+performance in all application areas. However, GrAL generic nature makes
+it a perfect link between various specialized libraries.
+
+Grid structure adapters are special classes which allow to transfer grid
+data both direction between GrAL data structures and specialized data
+structures of the particular library. Thanks to that, some highly specific
+grid processing can be delegated to more efficient implementation,
+while generic processing can be still done in GrAL.
+
+Candidates for grid structure adapters:
+
+\begin{itemize}
+  \item VTK (Visualization Toolkit) grid classes
+  \item OpenDX data structures
+  \item GTS (GNU Triangulated Surface) data structures
+  \item Boost Graph Library
+  \item CGAL ?
+\end{itemize}
+
+\section{GrAL development tools}
+This point concentrates on software engineering side of building GrAL.
+\subsection{Templates for new modules}
+Adding new modules can be made more automatic. A script can prepare suitable
+directory structure, makefiles, documentation files, etc.
+\subsection{Revision of current module management process}
+The module management process need some smoothing. 
+In current version it requires updating configuration files in each
+module directory.
+\subsection{Meta-programming based on GrAL concepts}
+GrAL's grid data structures implementation is firmly and consistently
+based on a hierarchy of abstract concepts. The concepts form an abstract grid
+interface. The description of each concept includes detailed specification
+of the methods and properties which must be provided in order to call an
+implementation a model of that concept.
+
+Combination of C++ templates and object oriented techniques minimizes the
+effort of providing required interface, but there is still 
+room for greater automation of that process.
+There should be possible to provide tools (some sort of IDE compiler; IDE --
+Interface Definition Language) which generates more or less elaborate code 
+skeletons for new GrAL modules.
+
+When programing a new grid data structure or an adapter to an existing one,
+programmer will specify what concepts is the class a models of.
+Then a "concepts compiler" will output code skeleton which will be subsequently
+filled and adapted. This "meta-programming" would make easier writing 
+traits classes, rudimentary documentation and would make the design decisions
+more visible.
+
+\section{Other language interfaces}
+\emph{FIXME: section explaining the need for scripted interface to GrAL
+functionality}
+\subsection{Python}
+\subsection{Java ??}
+\section{GrAL satellite technology}
+Success of GrAL will depend in large extent on devoted users base. To gain
+popularity GrAL must be available not only to developers but somehow also 
+to "ordinary" users facing gird manipulation problems. Some possible ideas of 
+providing GrAL "to masses" are listed below.
+
+\subsection{Unix-style tools}
+One end of the spectrum of grid technology consumers consists of developers
+building complex simulation system which handle large (hundred thousands and
+more cells) distributed and heterogeneous meshes.
+The other end consists
+of researchers who occasionally want to perform seemingly simple mesh
+manipulations like extracting mesh boundary, generating meshes in standard
+geometries (boxes, spheres, L-shapes, etc), mapping mesh geometry through
+simple mappings like rotations, scaling, or translating meshes between various
+formats. We say "seemingly simple" because after a while the algorithms
+involved in the above tasks get quite complicated, especially if one wants
+to handle general cases and because there is lack of standard tools for such
+manipulations. The second reason is our primary concern in this section.
+
+One may wonder if GrAL does not fit the description of a standard tool for 
+grid manipulations. Of course it does, but GrAL scope is somehow different. To
+better illustrate this point let us consider two situations.
+\begin{itemize}
+\item The first one is when a researcher having a finite element mesh wants to 
+extract mesh boundary in order to feed it into a boundary element method
+program. What he also wants is to keep track between corresponding nodes and
+elements in these two meshes. 
+\item The second case is when a user wants to calculate average value of some
+cell based grid function for the cells incident to a given node.
+\end{itemize}
+Knowing GrAL library these tasks are simple not to say trivial to program
+but the users in question does not know GrAL (or for the fact any other
+similar system) nor has he incentive or resources to learn it. What he wants,
+instead, is to use a simple tool, most likely command line based so his job
+can be automated if necessary. The usual solution to the above problems is
+that a) either the needed functionality is found in an all-in-one program or
+b) a local "grid toolsmith" prepares the needed tool or c) the
+user programs the task in ad-hoc manner which often precludes reuse. 
+
+The problem with all-in-one programs is that the more functionality they
+encompass the less convenient they are, not mentioning the increasing
+costs of maintaining them. Next, not all researchers work with skillful
+programmers and most of the time the researchers are building their own tools.
+However, instead of creating the tools from scratch, they should use convenient
+building blocks as the starting point. 
+
+There is an analogy between grid manipulations and text processing.
+Text processing is ubiquitous in research practice and is probably the most
+often performed activity. In some operating systems (most notably 
+UNIX and Linux of various flavours) text processing lies at the core of their
+design philosophy. Thus most of the information is stored in human readable 
+text files. Also many high level protocols are text based. Now, instead of
+providing specialized programs for each bit of different data, the users
+are given very generic set of text processing tools ({\tt tr, cat, tac, merge,
+paste, sort, uniq, grep, cut} and so on). What is important, the users are also
+given a mechanism -- unix pipes -- for connecting tools. The tools go beyond
+text processing capabilities found in most programming languages but are
+also generic 
+so they can be used in varying context. In authors' opinion this
+processing paradigm has been unmatched by anything else yet.
+
+The analogy between grid and text processing is such that for grids one can
+provide set of generic tools too. The tools will be canned pieces of GrAL
+functionality, relieving the user of the need to program in C++ with GrAL.
+Being small and simple such tools are easier to use and to maintain. 
+To complete the picture one need the way to interconnect the tools. 
+This it the reason why the tools should be command line and text oriented
+as shell and pipe mechanism is already in place. 
+
+Here we touch another common point between grid and text processing. Grids are
+most often saved in human readable text files and the standard text processing
+tools are often used to program various grid manipulations (e.g. searching for
+cell or node related data, splitting the grid, counting elements, etc.).
+However, standard text processing tools work well only with content which is
+organized in a linear fashion, and with algorithms sequential in nature. 
+That is often not the case of grid manipulation and one has to resort to
+programming in languages like C, C++, Fortran. 
+
+If the nonlinear and complex algorithms are wrapped as self contained,
+black box tools, then the whole potential of pipelined text processing can
+be fully utilized for grid manipulations.
+Let us illustrate the above concept with the already mentioned problem
+of calculating grid function average over cells incident to a given node.
+Suppose we have a grid file {\tt mesh.dat} with standard FEM incidence data 
+(i.e. the file
+lists nodes incident to each element). The format of this file is irrelevant
+at the moment. The grid function is specified in file {\tt gf.dat}
+in such way that each record contains element number and grid function value.
+The node has number 3. With such setup the solution may look like:
+\begin{tt}
+\begin{verbatim}
+  nodetocells mesh.dat 3 | sort -n | records gf.dat | average 2
+\end{verbatim}
+\end{tt}
+The key component of the above pipeline is program {\tt nodetocells}. 
+It takes mesh data file and node number as arguments and returns list
+of elements incident to the node. The list is the sorted using standard
+{\tt sort} utility. The {\tt records} selects specified records from file
+{\tt gf.dat} and {\tt average} calculates the average of values from column 2.
+Sorting tools like {\tt sort} are by default in all systems while 
+{\tt records} and {\tt average} can be programed within minutes as shown 
+in appendix \ref{app:tools}.
+The only problematic bit is {\tt nodetocells} as it has to invert the
+cell to nodes mapping stored in {\tt mesh.dat}. Though this is conceptually
+simple, practically may be not if different grid data structures or
+different file formats are considered. Moreover why should the wheel be
+invented over and over again?
+
+Because of its generic nature GrAL is perfect for building grid tools like
+the one presented above. Such tools can be written using general grid 
+abstractions provided by GrAL. The concreted data structures, file formats,
+etc. will be hidden behind GrAL interface.
+\subsubsection{To do}
+\begin{enumerate}
+  \item Recognize what kind of grid manipulations can be encapsulated as a
+  separate command line tools. Possible groups of tools include:
+  \begin{itemize}
+    \item format translators -- translate one grid file format to another as
+    closely as possible, 
+    \item grid characteristic queries -- display information on characteristic
+    grid properties -- number of nodes, cells, etc., 
+    \item grid archetype queries -- display information on number and type of
+    gird cell archetypes,
+    \item grid geometry queries -- display information about various measures
+    of grid geometric embedding (i.e. volume, surface area, etc.); geometric
+    measures of each grid element; gird gravity center; grid inertia axes; 
+    grid bounding box, 
+    \item grid geometry transformations -- apply basic affine transformations
+    (rotations, translations, scaling) to grid geometries as well as to single
+    grid points, 
+    \item grid incidence queries -- all sort of incidence queries
+    \item miscellaneous -- grid splitting and gluing
+  \end{itemize}
+  \item Design the tools interface with particular attention paid to use of the
+  tools as elements of text processing pipeline.
+  \item Build a common implementation skeleton (the tools will share command
+  line handling, error handling, etc.)
+  \item Documentation. Besides all other formats there should be documentation
+  in UNIX man page format (it is indispensible for this kind of tools).
+  \item Test cases.
+  \item Implementation.
+
+  \subsubsection{Critical view and polemic}
+  Possible criticism of the idea above may go along the following lines:
+  \begin{itemize}
+   \item {\it If the tools are basic, every one can implement them easily and
+   according to his need once having access to GrAL library.}\\
+   This approach would multiply cost and make harder the exchange of other
+   utilities base on these tools.
+   \item {\it The tools cover what would be equally well provided by wrapping
+   GrAL in a scripted language}.\\
+   Basically true, however command line approach
+   is programming language neutral. And still then, the command line tools
+   are a bit higher level than interface provided by scripted language mapping.
+   On the other hand if a scripting language interface was ready such tools
+   could be implemented in that language instead C++. 
+   \item {\it Instead of command line there should be graphical user
+   interface.}\\ Command line tools are cheaper to implement. Besides the whole
+   point behind the command line tools is that they can be easily combined
+   together. Achieving the same in graphical interface is much harder. 
+   One possible solution along the GUI line would be to provide OpenDX modules
+   specialized for grid processing and to use OpendDX graphical programming 
+   capabilities.  This way however one confines himself to a single environment.
+   \item {\it Command line is outlandish.} Not necessarily. There are examples
+   of successful command line environments - the already mentioned t{\tt
+   textutils} or closer to GrAL GMT (The Generic Mapping Tools)
+   \url{http://gmt.soest.hawaii.edu/}.
+   \item{The frequency of use of such tools will be low and their usefulness
+   dubious. They may end up playing an ornamental role.}\\ Well, these tools are
+   not a panacea for grid processing. The whole point in this exercise lies in
+   providing suitably grained environment for grid processing, as illustrated
+   on figure:
+   \begin{center}
+      \includegraphics{toolspyramid.eps}
+   \end{center}
+   Each level makes the picture complete and it is up to the user to chose the 
+   level he wants to operate on.
+   Command line tools can be very helpful when writing test scripts, in
+   debugging, and in rapid prototyping.
+  \end{itemize}
+\end{enumerate}
+\subsection{Lightweight web services base on GrAL}
+This point is more related to possible, though indirect, use of GrAL than to its
+development.
+
+Among the users of grids technology supposedly a large group are those ones
+who use grid generators, grid partitioners or grid format translators very
+sparingly, just to prepare an input for their programs and then they forget
+about the whole thing. Further, among them are users who work in environment
+prepared for them, as well as those, who build the environment for themselves.
+Whatever painless is (and often it is not) the installation and maintenance 
+of grid manipulation software in comparison with infrequency of its use
+renders it expensive. A possible cost cutting solution would be to use web
+based services for accessing tools like grid generators, partitioners,
+format translators or visualization.
+
+The whole idea is not knew and it is at the heart of the Grid technology.
+Here however, we talk about the really lightweight version of it (based 
+just on http protocol na CGI mechanism). On client side on has basically 
+everything what is needed that is web browser. One convenient addition could
+be a set of http enabled command line tools for processing grids in batch
+mode. 
+
+On server side, in turn, we have users who write grid processing tools.
+Very often they provide their codes as open source projects. However, also
+often they do not have resources, knowledge or time to provide their programs
+as services (very often we just talk about single person).
+
+Now, assume that the whole process of establishing web service for a particular
+tool can be made very simple (i.e. amounting to asking an administrator for
+CGI privilege and then to follow step by step an instruction filling some
+script templates). That should encourage people to publish their programs
+as web services because in that case possible gains outweigh the costs.
+The benefits include:
+\begin{description}
+  \item[publicity] -- It might be important to show people interest and project
+  usefulness in order to get founding. The service framework may provide means
+  for gathering usage statistics.
+  \item[availability] -- If the program depends on specific hardware or
+  software resources, it might be hard to publish it in a way other than a web
+  service.
+  \item[portability] -- Services are portable.
+  \item[feedback] -- Service users are automatically program testers. The
+  service framework can provide means for logging the user actions for
+  debugging purpose.
+\end{description}
+
+Where is role a place for GrAL in the above? 
+GrAL based tools can be used as grid file
+translators, grid data structures translators, data validation tools. In
+reverse, easier transfer or grid data thanks to web services will increase
+demand for such grid tools.
+
+Web services might be used by organizations working on GrAL to build users
+community.
+\subsection{GrAL + Corba for distributed grid processing}
+The aim of ths point is to investigate the use of GrAL with Corba 
+for building distributed grid processing programs. Justification for this
+is somehow similar as for web based services, though this point will
+serve a more illustratory purpose. It is aimed at users who know GrAL 
+but do not know Corba and at users who know Corba but do not know GrAL
+and shows how to use these two tools together.
+
+\subsection{GrAL + MPI for parallel grid processing}
+This point aims at providing better support for using GrAL with MPI for 
+transferring grids and grid related data between different processors in
+parallel programs. The idea is that calls to MPI services will be wrapped
+as a higher level interface relieving the user of the need to deal with
+common tasks or low level MPI internals. 
+\begin{center}
+\includegraphics{gps.eps}
+\end{center}
+An extension fo this project can be a generic interface to parallel services
+regardless of it being provided  by MPI, PVM or OpenMP.
+The interface would be parameterized by message passing mechanism giving
+the users a lot more flexibility at constructing their applications.
+
+\section{Users' support}
+
+\subsection{Users documentation}
+
+\subsection{Developers documentation}
+\appendix
+\end{document}
