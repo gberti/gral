@@ -21,7 +21,7 @@ EA(rendering_language& L) { L.end_attribute();}
 
 int main() {
 
-  std::ofstream out("out");
+  std::ofstream out("simple.out");
   GraphicsDevice dev(OOGLDevice(out));
   point zero(0,0,0), e1(1,0,0), e2(0,1,0), e3(0,0,1);
   RenderableGeom Q1 = RQuadrilateral(e1,e1+e2, e2, zero);

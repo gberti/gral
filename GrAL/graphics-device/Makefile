@@ -17,13 +17,13 @@ lib:
 	(cd src; $(MAKE) lib)
 
 
-test:
+test: standard-test
 
 demo:
 
-check:
+check: standard-check 
 
-test-check-clean:
+test-check-clean: standard-test-check-clean
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/GraphicsDevice

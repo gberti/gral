@@ -71,4 +71,9 @@ extern RenderableGeom RCube(RenderableGeom::coord_type const& c1,
  */
 extern RenderableGeom RCube(double a);
 
+/*
+extern RenderableGeom RCube(RenderableGeom::coord_type p000,
+			    RenderableGeom::coord_type p111)
+*/
+
 #endif

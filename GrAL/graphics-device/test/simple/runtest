@@ -1,0 +1,27 @@
+#!/bin/bash
+
+rm -f out simple.out
+exec=./test-simple-graphics
+out=out
+
+if ! $exec > $out 2>&1
+then
+    echo "ERROR running $exec
+Output was:
+"
+cat $out
+echo "
+End output
+"
+else
+for i in *.out
+do
+if diff $i $i.exp
+then 
+/bin/echo "\t\t\t" $i OK
+else
+/bin/echo "\t\t\t" ERROR in $i
+fi
+done
+/bin/echo "\n"
+fi

@@ -1,0 +1,134 @@
+(normalization world keep)
+(geometry "quads" {  LIST {
+{ QUAD
+1 0 0  1 1 0  0 1 0  0 0 0  }
+
+{ appearance { material { ka 1.0 diffuse 1 0 0 edgecolor 1 0 0}}
+LIST{
+{ INST 
+  transform {
+    1 0 0 0 
+    0 1 0 0 
+    0 0 1 0 
+    2 0 0 1 
+  }
+  geom { LIST { { QUAD
+1 0 0  1 1 0  0 1 0  0 0 0  }
+
+
+} } }
+
+}
+}
+{ appearance { material { ka 1.0 diffuse 0 0 1 edgecolor 0 0 1}}
+LIST{
+{ INST 
+  transform {
+    1 0 0 0 
+    0 6.12303177e-17 1 0 
+    0 -1 6.12303177e-17 0 
+    0 0 0 1 
+  }
+  geom { LIST { { QUAD
+1 0 0  1 1 0  0 1 0  0 0 0  }
+
+
+} } }
+
+}
+}
+{ appearance { material { ka 1.0 diffuse 0 1 0 edgecolor 0 1 0}}
+LIST{
+{ INST 
+  transform {
+    6.12303177e-17 0 -1 0 
+    0 1 0 0 
+    1 0 6.12303177e-17 0 
+    0 0 0 1 
+  }
+  geom { LIST { { QUAD
+1 0 0  1 1 0  0 1 0  0 0 0  }
+
+
+} } }
+
+}
+}
+{ appearance { material { ka 1.0 diffuse 0 0 0 edgecolor 0 0 0}}
+LIST{
+{ INST 
+  transform {
+    6.12303177e-17 1 0 0 
+    -1 6.12303177e-17 0 0 
+    0 0 1 0 
+    0 0 0 1 
+  }
+  geom { LIST { { QUAD
+1 0 0  1 1 0  0 1 0  0 0 0  }
+
+
+} } }
+
+}
+}
+} })
+(geometry "triangle" {  LIST {
+{ QUAD
+0 0 1  1 0 1  0 1 1  0 0 1  }
+
+} })
+(geometry "cube" {  LIST {
+{ INST 
+  transform {
+    0.25 0 0 0 
+    0 0.25 0 0 
+    0 0 0.25 0 
+    2 0 0 1 
+  }
+  geom { LIST { {  < "cube.off" }
+
+
+} } }
+} })
+(geometry "quad T o Rot" {  LIST {
+{ INST 
+  transform {
+    5.55111512e-17 1 0 0 
+    -1 5.55111512e-17 0 0 
+    0 0 1 0 
+    -0.5 -0.5 0 1 
+  }
+  geom { LIST { { appearance { material { ka 1.0 diffuse 1 0 1 edgecolor 1 0 1}}
+LIST{
+{ QUAD
+1 0 0  1 1 0  0 1 0  0 0 0  }
+
+
+}
+}
+
+} } }
+} })
+(geometry "quad Rot o T" {  LIST {
+{ INST 
+  transform {
+    5.55111512e-17 1 0 0 
+    -1 5.55111512e-17 0 0 
+    0 0 1 0 
+    0.5 -0.5 0 1 
+  }
+  geom { LIST { { appearance { material { ka 1.0 diffuse 1 1 0 edgecolor 1 1 0}}
+LIST{
+{ QUAD
+1 0 0  1 1 0  0 1 0  0 0 0  }
+
+
+}
+}
+
+} } }
+} })
+(geometry "Origin" {  LIST {
+{ SPHERE 0.1 0 0 0 }
+
+} })
