@@ -42,11 +42,4 @@ test:
 # depth + 1
 ADDRELPATH=..#
 
-additional-postdoc: 
-	(../bin/install-doc.pl -root $(RELROOT) \
-                               -path doxygen/html \
-                               -stl $(STLURL) \
-                               -gral $(RELROOT)/gral/base/doc/hyperlatex/html\
-         doxygen/html/*.html)
-
 

@@ -35,11 +35,4 @@ module-check: test-new-check-clean
 
 # depth + 1
 ADDRELPATH :=..#
-#RELROOT +=/..#
 
-additional-postdoc: 
-	(../bin/install-doc.pl -root $(RELROOT) \
-                               -path doxygen/html \
-                               -stl $(STLURL) \
-                               -gral $(RELROOT)/gral/base/doc/hyperlatex/html\
-         doxygen/html/*.html)

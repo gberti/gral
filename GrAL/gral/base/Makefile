@@ -53,11 +53,6 @@ additional-predoc:
 	(cd doc; $(MAKE) concepts)
 
 additional-postdoc: 
-	(../bin/install-doc.pl -root $(RELROOT) \
-                               -path doxygen/html \
-                               -stl $(STLURL) \
-                               -gral $(RELROOT)/gral/base/$(CONCEPTSPATH) \
-         doxygen/html/*.html)
 	(cd doc; $(MAKE) install-doc)
 
 additional-copydoc:
