@@ -1,7 +1,6 @@
 #ifndef GRAL_BASE_GB_TRANSFORMED_GEOMETRY_H
 #define GRAL_BASE_GB_TRANSFORMED_GEOMETRY_H
 
-
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
@@ -13,7 +12,7 @@
    \ingroup geometries
 
    The only function is currently transformation of vertices --
-   every other geometric primitives depends on the nature of
+   every other geometric primitive depends on the nature of
    the transformation, i.e linear or non-linear.
  
    \templateparams
@@ -45,6 +44,8 @@ public:
   transformed_geom(Geom const& geo, Trafo const& trf) : geom(&geo), f(&trf) {}
 
   coord_type coord(const Vertex& V) const { return (*f)(geom->coord(V));}
+
+  // FIXME: not correct for nonlinear mapping
   double     length(const Edge& E)  const { return ap::distance(coord(E.V1()),coord(E.V2()));}
 
   grid_type const& TheGrid() const { return geom->TheGrid();}
