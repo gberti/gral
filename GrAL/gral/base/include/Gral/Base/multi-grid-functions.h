@@ -47,6 +47,10 @@ namespace detail {
 
     grid_function<element_type, T> f;
   public:
+    typedef T                                                        value_type;
+    typedef typename grid_function<element_type, T>::reference       reference;
+    typedef typename grid_function<element_type, T>::const_reference const_reference;
+
     multi_gf_aux() {}
     multi_gf_aux(Grid const& g) : f(g) {}
     multi_gf_aux(Grid const& g, T const& t) :  f(g,t) {}
@@ -58,6 +62,7 @@ namespace detail {
     grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
     grid_type const& TheGrid() const { return f.TheGrid();} 
 
+    void set_value(value_type const& t) { f.set_value(t);}
   };
   
 
