@@ -104,6 +104,8 @@ public:
   //------------- Container interface ------------------------
 
   unsigned size() const { return table.size();}  
+  bool     empty() const { return table.empty();}
+  void     clear()       { table.clear();}
 
   typedef typename table_type::iterator base_it;
   class iter : public base_it {
