@@ -1,6 +1,6 @@
 
 GrAL - The Grid Algorithms Library
-==============================
+==================================
 
 Copyright (c) 1997-2001  Guntram Berti
 See the file LICENSE for details.
@@ -17,13 +17,18 @@ which have nothing to do with grids per se.
 See the file MODULES for a short description of 
 the individual modules.
 
+Many common makefile definitions and configuration settings
+have been factored out and can be found in the configuration
+module.
+
 The documentation is available separately,
 but it can also be extracted from the sources.
 See the file INSTALL for details.
 Please note that the documentation is still incomplete.
 
-If you have questions, suggestions, found a bug, or some
-helpful criticism, do not hesitate to contact me.
+If you have questions, suggestions, found a bug,
+helpful criticism, or even want to contribute,
+do not hesitate to contact me!
 
 ACKNOWLEDGEMENTS
 ----------------
@@ -36,6 +41,20 @@ Klaus-Dieter Krannich for porting to the SP-2 and
 many helpful criticism and discussions,
 and Klaus Schenk, who was the first user in the context
 of a Finite Volume solver for the 2D Euler equations.
+
+
+FUTURE PLANS
+------------
+
+The GrAL currently contains only a part of the components
+I have implemented. I am working on merging the following
+into GrAL (that means, modularizing  and documentating it):
+
+- hierachical grids and multigrid
+- grid refinement 
+- simple FEM system (2D Poisson equation)
+- simple FV solver  (2D Euler/Two-component Euler/Advection equation)
+- concrete components for regular grids and triangulations
 
 ----------------------------------------------------------
 

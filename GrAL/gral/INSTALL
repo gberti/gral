@@ -6,7 +6,7 @@ Building it:
 ------------
 0) Environment:
 
-   - Works with g++ 2.95 (tested on Solaris).
+   - Works with g++ 2.95 (tested on Solaris and Red Hat Linux).
      In principle, any fairly standard compliant C++ compiler
      should do.
 
@@ -17,9 +17,9 @@ Building it:
 1) Unpack the stuff:
 $ tar -xfv <gral>.tar
 
-There is no global build procedure for making all modules at once.
 Most global configuration is found in configuration/ .
-You might want to look into configuration/defs/make.defs .
+You might want to look into configuration/defs/make.defs
+and configuration/defs/suffix-targets.
 Here, you can set globally compiler and architecture
 (needed to select appropriate options).
 

@@ -1,0 +1,57 @@
+
+ALLROOT=$(HOME)/CVS-work/
+SUBDIRS= configuration utilities external-control sequence geometry \
+         gral
+
+# gral/complex2d gral/distributed gral/partitioning
+
+
+#include $(ALLROOT)/configuration/defs/recursive-targets
+
+clean:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) clean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+new:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+
+TARGET=new
+
+# In theory, all targets can be made by executing
+# gmake generic TARGET=<target>
+generic:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) $(TARGET) ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+# predoc  = generate docs
+# postdoc = install docs (replace dummy links)
+doc: predoc postdoc
+
+predoc:	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) predoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+postdoc:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) postdoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;

@@ -1,32 +1,68 @@
 export CONFIG:=$(PWD)/mk.config
-unexport PWD
+#unexport PWD
 include $(CONFIG)
 
+SUBDIRS =  base complex2d distributed partitioning
+
+#include $(ALLROOT)/configuration/defs/recursive-targets
 
 TARGET=all
 
 all:
 
 new:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+generic:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) $(TARGET) CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
 
 
-compile:
 
-lib:
+#SHELL=/bin/bash
 
-#DIRS =  base complex2d distributed partitioning
+install-headers: 
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) install CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
 
-SHELL=/bin/bash
-
-install-headers:
+module-clean:
+	rm -f doxy.tags doxy.log
 
 clean: stdclean
-	rm -f doxy.tags doxy.log
 
 realclean: clean
 	rm -rf doxygen/
 
 test:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) test CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+doc: doc-recursive
+
+doc-recursive:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) doc CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
 
 
 additional-postdoc: install-doc

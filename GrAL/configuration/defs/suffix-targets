@@ -30,7 +30,7 @@ stdclean: moduleclean
 	find . -name "*~" -exec rm {} \; -print
 	rm -rf ti_files # KCC template DB
 	rm -f .nfs*     # NFS garbage
-	rm -f *.tmp
+	rm -rf *.tmp
 	rm -f doxy.log 
 
 clean: stdclean

@@ -10,13 +10,18 @@ gen-paths:
 install-doc:
 	./install-doc.pl -stl $(STLURL) -gralroot "../../.."  hyperlatex/html/*.html
 
-concepts: gen-paths
+concepts: gen-paths latex make-links
+
+latex:
 	(cd hyperlatex;\
            rm -f html/*; \
           (cd bilder; gmake all; gmake clean);\
-          hyperlatex-2.3.1 top; \
+          hyperlatex-2.3.1 top;)
+
+make-links:
+	(cd hyperlatex;\
           cp $(HOME)/WWW/icons/*.xbm html/;\
-         (cd html; rm -f bilder; ln -s ../bilder ./; \
+          (cd html; rm -f bilder; ln -s ../bilder ./; \
           ln -s top.html index.html;\
           ln -s GridVertex.html  Vertex.html;\
           ln -s GridEdge.html   Edge.html;\
@@ -26,10 +31,11 @@ concepts: gen-paths
           ln -s VertexGridRange.html EdgeRange.html;\
           ln -s VertexGridRange.html FacetRange.html;\
           ln -s VertexGridRange.html CellRange.html;\
-          \n -s Vertex-On-CellIterator.html VertexOnCellIterator.html; \
-          \n -s Vertex-On-CellIterator.html EdgeOnCellIterator.html; \
-          \n -s Vertex-On-CellIterator.html FacetOnCellIterator.html; \
+          ln -s Vertex-On-CellIterator.html VertexOnCellIterator.html; \
+          ln -s Vertex-On-CellIterator.html EdgeOnCellIterator.html; \
+          ln -s Vertex-On-CellIterator.html FacetOnCellIterator.html; \
           ))
+
 
 clean: stdclean
 	rm -f *.dvi *.log *.aux *~ 
