@@ -118,6 +118,8 @@ public:
   inline FacetIterator  FirstFacet()  const;
   inline CellIterator   FirstCell()   const;
 
+  bool valid(vertex_handle v) const { return 0 <= v && v < nvertices;}
+  bool valid(cell_handle   c) const { return 0 <= c && c < ncells;}
 
   // inline void switch_vertex(Vertex      & v, Edge const& e) const { return (v == e.V1() ? e.V2() : e.V1());}
   // inline void switch_edge  (Vertex const& v, Edge      & e, Face const& f) const;
