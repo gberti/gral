@@ -34,14 +34,20 @@ class G {
   ref_ptr<X const> x;
   ref_ptr<Y const> y1;
   Y       y_owned;
+  ref_ptr<Y>       y_excl_owned;
 public:
-  G() : x(new X(88)), y1(new Y(99)) {}
+  G() : 
+    x(new X(88), ref_ptr_base::excl_owned), 
+    y1(new Y(99), ref_ptr_base::excl_owned), 
+    y_excl_owned(new Y(44),  ref_ptr_base::excl_owned)
+ {}
   G(ref_ptr<X const> xx) : x(xx) {}
   G(ref_ptr<Y const> yy) : y1(yy), y_owned(*yy) {}
 
   ref_ptr<X const> TheX()  const { return x;}
   ref_ptr<Y const> TheY1() const { return y1;}
   ref_ptr<Y const> TheYOwned() const { return ref_ptr<Y const>(y_owned);}
+  ref_ptr<Y const> TheYExclOwned() const { return  y_excl_owned;}
 
   temporary<X const>   AnX() const { return temporary<X const>(X(66));}
   temporary<Y>         AnY() const { return temporary<Y>(Y(77));}
@@ -115,4 +121,5 @@ int main() {
   Y y1(* g1.TheY1());
   Y y2(* g1.TheYOwned());
   Y y3(g1.AnY());
+  Y y4(* g1.TheYExclOwned());
 }

@@ -37,6 +37,10 @@ public:
 };
 
 
+struct  ref_ptr_base {
+  enum ownership { not_owned, excl_owned};
+};
+
 /*! \brief class for maintaining a assignable reference to another (often const) object 
     \author Guntram Berti
     
@@ -101,20 +105,22 @@ public:
 */
 
 template<class T>
-class ref_ptr {
+class ref_ptr : public ref_ptr_base {
   typedef ref_ptr<T> self;
   T    * ptr;
   bool owned_;
 public:
+
+
   ref_ptr() : owned_(false)   { ptr=0;}
   // Cannot overload for T const& and T. So caller must make sure that temporary<T> is passed instead of T.
   // If we disable this, at least the caller must apply the address-of operator&
   // which could inhibit some misuse.
   explicit ref_ptr(T  &     t) : owned_(false) 
   { ptr = &t; } // std::cout << "ref_ptr(T const&     t)" << std::endl;}
-  // FIXME: This might result in memory leak if called with newly allocated ptr.
+  // FIXME: This might result in memory leak if called with newly allocated ptr and own=false
   // Perhaps add shared_ptr<T> to data and allow only ref_ptr(shared_ptr<T>) ?
-  explicit ref_ptr(T *   tptr) : owned_(false)
+  explicit ref_ptr(T *   tptr, ownership own = not_owned) : owned_( (own == not_owned ? false : true))
   { ptr = tptr; }
   // explicit 
   ref_ptr(temporary<T> t) : owned_(true)  
