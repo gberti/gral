@@ -1,10 +1,12 @@
 # gcc/make.defs
+# Settings for gcc 3.0.x, 3.1
 
 CCC      =  gcc3 
 CCFLAGS += -Wall
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += -DNMWR_PARTIAL_SPEC
 CCFLAGS += -ftemplate-depth-35
+CCFLAGS += -DGRAL_HAS_SSTREAM
 
 DEPEND    =$(CCC)
 DEPFLAGS += -MM $(CCFLAGS)
