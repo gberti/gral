@@ -26,94 +26,105 @@ Testing 2D primitives:
 
 ap::det2(e[0],e[1) = 1
 ap::det2(e[1],e[0) = -1
-1 1 
-1 1 
+1 1
+1 1
+1 -0  -0 1
+-0 1  1 -0
+A= 0 0  0 0
+B= 1 0  0 1
+C= 0 0  0 0
+A=   1 0  0 2
+A*B= 1 0  0 2
+A^-1 = 1 -0  -0 0.5
+D=     0 1  1 0
+D^-1 = -0 1  1 -0
+D^2 =  1 0  0 1
 
 Testing 3D primitives: 
 
 ap::det3(e[0],e[2],e[1]) = -1
 ap::det3(e[0],e[1],e[2]) = 1
-ap::vectorproduct(e[0],e[1]) = 0 0 1 
-ap::vectorproduct(e[0],e[2]) = 0 -1 0 
+ap::vectorproduct(e[0],e[1]) = 0 0 1
+ap::vectorproduct(e[0],e[2]) = 0 -1 0
 ap::det3(e[1],e[0],e[2]) = -1
 ap::det3(e[1],e[2],e[0]) = 1
-ap::vectorproduct(e[1],e[2]) = 1 0 0 
-ap::vectorproduct(e[1],e[0]) = 0 0 -1 
+ap::vectorproduct(e[1],e[2]) = 1 0 0
+ap::vectorproduct(e[1],e[0]) = 0 0 -1
 ap::det3(e[2],e[1],e[0]) = -1
 ap::det3(e[2],e[0],e[1]) = 1
-ap::vectorproduct(e[2],e[0]) = 0 1 0 
-ap::vectorproduct(e[2],e[1]) = -1 0 0 
-1 1 1 
-1 1 1 
-ap::inverse(e[0],e[1],e[2]) = 1 0 0   0 1 0   0 0 1 
-ap::inverse(e[0],e[2],e[1]) = 1 -0 -0   -0 -0 1   -0 1 -0 
+ap::vectorproduct(e[2],e[0]) = 0 1 0
+ap::vectorproduct(e[2],e[1]) = -1 0 0
+1 1 1
+1 1 1
+ap::inverse(e[0],e[1],e[2]) = 1 0 0  0 1 0  0 0 1
+ap::inverse(e[0],e[2],e[1]) = 1 -0 -0  -0 -0 1  -0 1 -0
 ap::condition(e[0],e[1],e[2],ap::Norm_frobenius()) = 3
 ap::condition(e[0],e[1],e[2],ap::Norm_1()) = 1
 ap::condition(e[0],e[1],e[2],ap::Norm_infinity()) = 1
-ap::inverse(a[0],a[1],a[2]) = 1 0 0   0 0.5 0   0 0 0.333333 
-ap::inverse(a[0],a[1],a[2]) = 1 -0 -0   -0 -0 0.5   -0 0.333333 -0 
+ap::inverse(a[0],a[1],a[2]) = 1 0 0  0 0.5 0  0 0 0.333333
+ap::inverse(a[0],a[1],a[2]) = 1 -0 -0  -0 -0 0.5  -0 0.333333 -0
 ap::matrixnorm_frobenius(a[0],a[1],a[2]) = 3.74166
 ap::matrixnorm_1(a[0],a[1],a[2]) = 3
 ap::matrixnorm_infinity(a[0],a[1],a[2]) = 3
 ap::condition(a[0],a[1],a[2],ap::Norm_frobenius()) = 4.36527
 ap::condition(a[0],a[1],a[2],ap::Norm_1()) = 3
 ap::condition(a[0],a[1],a[2],ap::Norm_infinity()) = 3
-A= 0 0 0   0 0 0   0 0 0 
-B= 1 0 0   0 1 0   0 0 1 
-C= 0 0 0   0 0 0   0 0 0 
-A= 1 0 0   0 2 0   0 0 3 
-C= 1 0 0   0 2 0   0 0 3 
-D= 0 1 0   0 0 1   0 0 0 
-D= 0 0 1   0 0 0   0 0 0 
+A= 0 0 0  0 0 0  0 0 0
+B= 1 0 0  0 1 0  0 0 1
+C= 0 0 0  0 0 0  0 0 0
+A= 1 0 0  0 2 0  0 0 3
+C= 1 0 0  0 2 0  0 0 3
+D= 0 1 0  0 0 1  0 0 0
+D= 0 0 1  0 0 0  0 0 0
 det(A)= 6
 |A|_1  = 3
 |A|_oo = 3
 |A|_F  = 3.74166
 
-Segment:  [0.25 0.25 -1 ,0.25 0.25 1 ]
-Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
-Ray:      [0.25 0.25 -1 ,0 0 2 ]
+Segment:  [0.25 0.25 -1,0.25 0.25 1]
+Triangle: [0 0 0,1 0 0,0 1 0]
+Ray:      [0.25 0.25 -1,0 0 2]
 segment does intersect plane
 segment does intersect triangle
-plane intersection: 0.25 0.25 0 
+plane intersection: 0.25 0.25 0
 line does intersect plane
 ray does intersect triangle
-plane intersection: 0.25 0.25 0 
+plane intersection: 0.25 0.25 0
 
-Segment:  [0.25 0.25 0.5 ,0.25 0.25 1 ]
-Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
-Ray:      [0.25 0.25 0.5 ,0 0 0.5 ]
+Segment:  [0.25 0.25 0.5,0.25 0.25 1]
+Triangle: [0 0 0,1 0 0,0 1 0]
+Ray:      [0.25 0.25 0.5,0 0 0.5]
 segment does not intersect plane
 segment does not intersect triangle
 line does not intersect plane
 ray does not intersect triangle
 
-Segment:  [0.5 0.5 0 ,0.5 0.5 1 ]
-Triangle: [-0.5 -0.5 0 ,-0.5 0.5 1 ,-0.5 -0.5 1 ]
-Ray:      [0.5 0.5 0 ,0 0 1 ]
+Segment:  [0.5 0.5 0,0.5 0.5 1]
+Triangle: [-0.5 -0.5 0,-0.5 0.5 1,-0.5 -0.5 1]
+Ray:      [0.5 0.5 0,0 0 1]
 segment does not intersect plane
 segment does not intersect triangle
 line does not intersect plane
 ray does not intersect triangle
 
-Segment:  [1 1 2 ,1 0 2 ]
-Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
-Ray:      [1 1 2 ,0 -1 0 ]
+Segment:  [1 1 2,1 0 2]
+Triangle: [0 0 0,1 0 0,0 1 0]
+Ray:      [1 1 2,0 -1 0]
 segment does not intersect plane
 segment does not intersect triangle
 line does not intersect plane
 ray does not intersect triangle
 
-Segment:  [0.5 0.5 -1 ,0.5 0.5 1 ]
-Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
-Ray:      [0.5 0.5 -1 ,0 0 2 ]
+Segment:  [0.5 0.5 -1,0.5 0.5 1]
+Triangle: [0 0 0,1 0 0,0 1 0]
+Ray:      [0.5 0.5 -1,0 0 2]
 segment does intersect plane
 segment does intersect triangle
-plane intersection: 0.5 0.5 0 
+plane intersection: 0.5 0.5 0
 line does intersect plane
 ray does intersect triangle
-plane intersection: 0.5 0.5 0 
-ap::basis_completion(1 0 0 ) = 0 0 -1 ; 0 -1 0 
-ap::basis_completion(1 0 0 ; 0 1 0 ) = 0 0 1 
-ap::basis_completion(1 1 0 ) = 0 0 -1 ; 1 -1 0 
-ap::basis_completion(1 1 0 ; 0 1 1 ) = 1 -1 1 
+plane intersection: 0.5 0.5 0
+ap::basis_completion(1 0 0) = 0 0 -1; 0 -1 0
+ap::basis_completion(1 0 0; 0 1 0) = 0 0 1
+ap::basis_completion(1 1 0) = 0 0 -1; 1 -1 0
+ap::basis_completion(1 1 0; 0 1 1) = 1 -1 1
