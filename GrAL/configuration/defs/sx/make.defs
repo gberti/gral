@@ -2,15 +2,19 @@
 
 CCC      = /SX/opt/sxc++/inst/bin/sxc++
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
-CCFLAGS += 
-
-CCFLAGS += -w all -T auto -prelink 
-CCFLAGS += -DSXCPP
 CCFLAGS += -DGRAL_HAS_SSTREAM
-LDFLAGS += -prelink
+CCFLAGS += -DSXCPP
+
+CCFLAGS += -wall 
+CCFLAGS += -woff=186  # 
+CCFLAGS += -woff=997  # hiding function
+CCFLAGS += -pvctl nomsg  # vectorization messages
+CCFLAGS += -Tlocal -Kexceptions,rtti
+
+LDFLAGS += -lC++_eh  #-prelink
 
 AR=/SX/usr/bin/sxar
-DEPEND    = gcc 
-DEPFLAGS += -MM 
+DEPEND    = $(CCC)
+DEPFLAGS += -M $(CCFLAGS)
 
 
