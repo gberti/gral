@@ -105,6 +105,7 @@ public:
   friend class Triang3D_VertexOnCellIterator;
   //friend class Triang3D_FacetOnCellIterator;
   friend class Triang3D_Cell;
+  friend class Triang3D_Cell_base;
   friend class Triang3D_Vertex;
 
   int NumOfCells   () const { return ncells   ;}
@@ -118,10 +119,12 @@ public:
   inline CellIterator   FirstCell()   const;
 
 
-  // inline void switch_vertex(Vertex      & v, Edge const& e) const;
-  //  inline void switch_edge  (Vertex const& v, Edge      & e, Cell const& c) const;
+  // inline void switch_vertex(Vertex      & v, Edge const& e) const { return (v == e.V1() ? e.V2() : e.V1());}
+  // inline void switch_edge  (Vertex const& v, Edge      & e, Face const& f) const;
+  // inline void switch_face  (Edge   const& e, Face      & f, Cell const& c) const;
   // inline Vertex switched_vertex(Vertex const& v, Edge const& e) const;
-  // inline Edge   switched_edge  (Vertex const& v, Edge const& e, Cell const& c) const;
+  // inline Edge   switched_edge  (Vertex const& v, Edge const& e, Face const& c) const;
+  // inline Face   switched_face  (Edge   const& e, Face const& f, Cell const& c) const;
 
 
   struct SD {
@@ -157,50 +160,77 @@ public:
 
 //------------ Cell / CellIterator ----------------
 
-
-class Triang3D_Cell : public grid_types_Triang3D  {
-  typedef Triang3D_Cell     self;
-  friend class     Triang3D_VertexOnCellIterator;
-  //  friend class     Triang3D_FacetOnCellIterator;
+class Triang3D_Cell_base : public grid_types_base_Triang3D {
+public:
+  typedef Triang3D grid_type;
 private: 
   grid_type const* g;
   cell_handle      c;
 public:
-  Triang3D_Cell() : g(0), c(-1) {}
+  Triang3D_Cell_base() : g(0), c(-1) {}
   explicit
-  Triang3D_Cell(grid_type const& gg) : g(&gg), c(0) {}
-  Triang3D_Cell(grid_type const& gg,
-		cell_handle      cc) : g(&gg), c(cc) {}
-  ~Triang3D_Cell() {}  
-  
-  bool IsDone()   const { return (c == g->ncells); }
-  self const& operator*() const { return *this;}
-  self & operator++() { ++c; return *this;}
-  
+  Triang3D_Cell_base(grid_type const& gg) : g(&gg), c(0) {}
+  Triang3D_Cell_base(grid_type const& gg,
+		     cell_handle      cc) : g(&gg), c(cc) {}
+protected:
+  void init(grid_type const& gg, cell_handle cc)
+    { g = &gg; c = cc;}
+public: 
+
+
   grid_type const& TheGrid() const { return *g;}
   cell_handle   handle() const { return c;}
 
-  FacetOnCellIterator  FirstFacet () const;
-  FaceOnCellIterator   FirstFace  () const;
-  EdgeOnCellIterator   FirstEdge  () const;
-  VertexOnCellIterator FirstVertex() const;
+  grid_type::archetype_type const& TheArchetype() const { return * g->BeginArchetype();}
 
-  unsigned NumOfVertices() const { return 4;}
-  unsigned NumOfEdges()    const { return 6;}
-  unsigned NumOfFacets()   const { return 4;}
+  bool IsDone()   const { return (c == g->ncells); }
+  void incr() { ++c;}
 
   vertex_handle v(int lv) const;
   Vertex        V(int lv) const;
   Vertex        V(archgt::Vertex) const;
-  grid_type::archetype_type const& TheArchetype() const { return * g->BeginArchetype();}
 
   // checking functions
   bool bound() const { return g != 0;}
   bool valid() const { return (bound() &&  (0 <= c) && (c < g->ncells));}
   void cb()    const { REQUIRE (bound(), "",1);}
   void cv()    const { REQUIRE (valid(), "",1);}
+  // compatibility with generic_edge/facet
+  void c_() const { cv();}
+};
 
-  friend bool operator==(self const& lhs, self const& rhs) { return lhs.c == rhs.c;}
+
+class Triang3D_Cell : public grid_types_Triang3D::cell_base_type {
+  typedef Triang3D_Cell                       self;
+  typedef grid_types_Triang3D::cell_base_type base;
+  friend class     Triang3D_VertexOnCellIterator;
+public:
+  Triang3D_Cell() {}
+  explicit
+  Triang3D_Cell(grid_type const& gg) { base::init(gg,0);}
+  Triang3D_Cell(grid_type const& gg,
+		cell_handle      cc) { base::init(gg,cc);}
+  ~Triang3D_Cell() {}  
+  
+  self const& operator*() const { return *this;}
+  self & operator++() { base::incr(); return *this;}
+  
+  /*
+  FacetOnCellIterator  FirstFacet () const;
+  FaceOnCellIterator   FirstFace  () const;
+  EdgeOnCellIterator   FirstEdge  () const;
+  */
+  VertexOnCellIterator FirstVertex() const;
+  VertexOnCellIterator EndVertex  () const;
+  typedef grid_types_Triang3D::FaceOnCellIterator FaceOnCellIterator;
+  FaceOnCellIterator FirstFace() const { return FirstFacet();}
+
+  unsigned NumOfVertices() const { return 4;}
+  unsigned NumOfEdges()    const { return 6;}
+  unsigned NumOfFacets()   const { return 4;}
+  unsigned NumOfFaces ()   const { return 4;}
+
+  friend bool operator==(self const& lhs, self const& rhs) { return lhs.handle() == rhs.handle();}
   friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
 };
 
@@ -251,7 +281,7 @@ private:
 public:
   Triang3D_VertexOnCellIterator() : vc(-1) {}
   explicit
-  Triang3D_VertexOnCellIterator(Cell const& cc) : c(cc), vc(0) {}
+  Triang3D_VertexOnCellIterator(Cell const& cc, int vcc = 0) : c(cc), vc(vcc) {}
   
   self& operator++() { cv();  ++vc; return *this;}
   Vertex operator*() const 
@@ -348,6 +378,11 @@ Triang3D::VertexOnCellIterator
 Triang3D_Cell::FirstVertex() const { return VertexOnCellIterator(*this);}
 
 inline
+Triang3D::VertexOnCellIterator
+Triang3D_Cell::EndVertex() const { return VertexOnCellIterator(*this, 4);}
+
+/*
+inline
 Triang3D::EdgeOnCellIterator
 Triang3D_Cell::FirstEdge() const { return  EdgeOnCellIterator(*this);}
 
@@ -358,21 +393,21 @@ Triang3D_Cell::FirstFacet() const { return FacetOnCellIterator(*this);}
 inline
 Triang3D::FaceOnCellIterator
 Triang3D_Cell::FirstFace()  const { return FaceOnCellIterator(*this);}
-
+*/
 
 
 
 inline 
 Triang3D::vertex_handle 
-Triang3D_Cell::v(int lv) const { return vertex_handle(g->cells[(grid_type::dim+1)*c+lv]);}
+Triang3D_Cell_base::v(int lv) const { return vertex_handle(g->cells[(grid_type::dim+1)*c+lv]);}
 
 inline 
 Triang3D_Vertex
-Triang3D_Cell::V(int lv) const { return Vertex(TheGrid(), v(lv));}
+Triang3D_Cell_base::V(int lv) const { return Vertex(TheGrid(), v(lv));}
 
 inline 
 Triang3D_Vertex
-Triang3D_Cell::V(Triang3D_Cell::archgt::Vertex lv) const { return Vertex(TheGrid(), v(lv.handle()));}
+Triang3D_Cell_base::V(Triang3D_Cell_base::archgt::Vertex lv) const { return Vertex(TheGrid(), v(lv.handle()));}
 
 //inline
 //Triang3D_Edge 
