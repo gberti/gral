@@ -15,13 +15,13 @@ compile:
 
 lib:
 
-test:
-	 (cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
+test: standard-test
 
 demo:
 
-module-check: 
-	(cd test; $(MAKE) check)
+check: standard-check 
+
+test-check-clean: standard-test-check-clean
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Geometry

@@ -18,6 +18,15 @@ lib:
 
 
 
+test: standard-test
+
+demo:
+
+check: standard-check 
+
+test-check-clean: standard-test-check-clean
+
+
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Cartesian2D
 	cp include/Gral/Grids/Cartesian2D/*.h  $(INSTALLHEADERS)/Gral/Grids/Cartesian2D
@@ -33,8 +42,6 @@ realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen/
 
-test:
-	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 # depth + 1
 ADDRELPATH=..#

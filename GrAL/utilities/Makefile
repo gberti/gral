@@ -17,10 +17,12 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
-test:
-	(cd test; $(MAKE) $(TARGET))
+test: standard-test
 
-module-check: test-new-check-clean
+check: standard-check 
+
+test-check-clean: standard-test-check-clean
+
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Utility

@@ -11,12 +11,22 @@ all:
 new: libclean
 	(cd src; $(MAKE) new)
 
-
-
-
 compile:
 
 lib:
+
+
+
+test: standard-test
+
+demo:
+
+check: standard-check 
+
+test-check-clean: standard-test-check-clean
+
+
+
 
 DIRS = Base Geometries IO Iterators Subranges Algorithms Algorithms/internal
 #SHELL=/bin/bash
@@ -43,14 +53,8 @@ realclean: tarclean
 	rm -rf doxygen/
 	(cd doc; $(MAKE) realclean)
 
-test:
-	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
-check: 
-	(cd test; $(MAKE) check)
 
-new-check-clean:
-	(cd test; $(MAKE) new-check-clean)
 
 doc: 
 

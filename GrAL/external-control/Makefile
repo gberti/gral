@@ -35,7 +35,13 @@ realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen
 
-test:
+# no test files yet ...
+
+test: demo
+
+check:
+
+test-check-clean:
 
 demo:
 	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))

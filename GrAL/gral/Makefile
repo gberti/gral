@@ -61,13 +61,24 @@ test:
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
-module-check:
+check:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
         $(MAKE) check CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
+
+demo:
+
+test-check-clean:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) test-check-clean CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
 
 doc: doc-recursive
 predoc: predoc-recursive

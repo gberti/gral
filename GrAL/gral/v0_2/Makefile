@@ -58,11 +58,11 @@ check:
         $(MAKE) check ALLROOT=$(ALLROOT) DEVELOP=user DEPS='' CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-new-check-clean:
+test-check-clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) new-check-clean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        $(MAKE) test-check-clean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 

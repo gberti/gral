@@ -15,6 +15,15 @@ compile:
 
 lib:
 
+test: standard-test
+
+demo:
+
+check: standard-check 
+
+test-check-clean: standard-test-check-clean
+
+
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Gral/Partitioning/internal
 	cp include/Gral/Partitioning/*.h  $(INSTALLHEADERS)/Gral/Partitioning
@@ -29,9 +38,6 @@ clean: stdclean
 realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen/
-
-test:
-	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 
 

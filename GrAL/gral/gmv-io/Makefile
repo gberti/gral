@@ -11,12 +11,18 @@ all:
 new: libclean
 	(cd src; $(MAKE) new)
 
-
-
-
 compile:
 
 lib:
+
+test: standard-test
+
+demo:
+
+check: standard-check 
+
+test-check-clean: standard-test-check-clean
+
 
 DIRS = IO
 #SHELL=/bin/bash
@@ -41,9 +47,6 @@ tarclean: clean
 realclean: tarclean
 	rm -rf doxygen/
 	(cd doc; $(MAKE) realclean)
-
-test:
-	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 
 doc: 

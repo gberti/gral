@@ -17,6 +17,14 @@ lib:
 	(cd src; $(MAKE) lib)
 
 
+test:
+
+demo:
+
+check:
+
+test-check-clean:
+
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/GraphicsDevice
 	mkdir -p $(INSTALLLIBRARIES)
@@ -33,9 +41,6 @@ realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen
 
-test:
-
-demo:
 
 
 #doc: doxy tex

@@ -16,6 +16,14 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
+test: standard-test
+
+demo:
+
+check: standard-check 
+
+test-check-clean: standard-test-check-clean
+
 
 
 install-headers:
@@ -35,8 +43,6 @@ realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen/
 
-test:
-	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 
 # depth + 1

@@ -33,9 +33,13 @@ realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen
 
-test:
+test: standard-test
 
 demo:
+
+check: standard-check 
+
+test-check-clean: standard-test-check-clean
 
 
 #doc: doxy tex

@@ -16,8 +16,11 @@ all:
 
 test:
 
+check:
 
 demo:
+
+test-check-clean:
 
 clean: stdclean
 
