@@ -1,4 +1,4 @@
-#include "Gral/Geometries/geometric-types-new.h"
+#include "Gral/Geometries/geometric-types-nd.h"
 
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"

@@ -1,0 +1,55 @@
+Constructing subrange from 3x3 grid ...  done.
+has    type vertex_handle
+has    type edge_handle
+has    type face_handle
+has    type facet_handle
+has    type cell_handle
+has    type Vertex
+has    type Edge
+has    type Face
+has    type Facet
+has    type Cell
+has    type VertexIterator
+has    type EdgeIterator
+has    type FaceIterator
+has    type FacetIterator
+has    type CellIterator
+has    type VertexOnVertexIterator
+has no type EdgeOnVertexIterator
+has    type FaceOnVertexIterator
+has no type FacetOnVertexIterator
+has    type CellOnVertexIterator
+has    type VertexOnEdgeIterator
+has no type FaceOnEdgeIterator
+has no type FacetOnEdgeIterator
+has no type CellOnEdgeIterator
+has    type VertexOnFaceIterator
+has    type EdgeOnFaceIterator
+has no type CellOnFaceIterator
+has    type VertexOnFacetIterator
+has no type EdgeOnFacetIterator
+has no type CellOnFacetIterator
+has    type VertexOnCellIterator
+has    type EdgeOnCellIterator
+has no type FaceOnCellIterator
+has    type FacetOnCellIterator
+has    type CellOnCellIterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator
+
+Subrange S: 4 cells, 9 vertices
+Cells: C 0 = [0 0]  C 1 = [0 1]  C 2 = [1 0]  C 3 = [1 1]  
+Vertices: V0 = [0 0]  V3 = [1 0]  V4 = [1 1]  V1 = [0 1]  V5 = [1 2]  V2 = [0 2]  V6 = [2 0]  V7 = [2 1]  V8 = [2 2]  
+
+Piecemeal constructed subrange: 4 cells, 9 vertices
+Cells: C0 = [0 0]  C1 = [0 1]  C2 = [1 0]  C3 = [1 1]  
+Vertices: V0 = [0 0]  V3 = [1 0]  V4 = [1 1]  V1 = [0 1]  V5 = [1 2]  V2 = [0 2]  V6 = [2 0]  V7 = [2 1]  V8 = [2 2]  
+
+Copied subrange: 4 cells, 9 vertices
+Cells: C0 = [0 0]  C1 = [0 1]  C2 = [1 0]  C3 = [1 1]  
+Vertices: V0 = [0 0]  V3 = [1 0]  V4 = [1 1]  V1 = [0 1]  V5 = [1 2]  V2 = [0 2]  V6 = [2 0]  V7 = [2 1]  V8 = [2 2]  
+
+Empty subrange: 0 cells, 0 vertices
+Cells: 
+Vertices: 

@@ -8,8 +8,10 @@ include $(CONFIG)
 LOCALSOURCES =  $(shell ls *.C)
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-cell-on-cell-iterator
-EXEC =  $(TARGETS)
+
+EXEC =  $(LOCALSOURCES:%.C=%.exe)
+TARGETS = $(EXEC)
+
 
 include $(DEPS)
 
@@ -32,7 +34,7 @@ new :  clean all
 all : $(TARGETS)
 
 
-test-cell-on-cell-iterator: $(LOCALOBJECTS)
+$(EXEC): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
