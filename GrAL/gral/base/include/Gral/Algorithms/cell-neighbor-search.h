@@ -104,6 +104,10 @@
 
 */
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Algorithms/internal/cell-neighbor-search.C"
+#else
+
 template<class NBF, class CELLSET, class FACETMAP, class CGT>
 void CalculateNeighborCells(NBF             &  Nb,         // out
 			    CELLSET    const&  cell_set,   // in
@@ -128,8 +132,7 @@ template<class NBF, class CELLSET>
 void CalculateNeighborCells(NBF             &  Nb,          // out
 			    CELLSET    const&  cell_set);   // in
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Algorithms/internal/cell-neighbor-search.C"
+
 #endif
 
 #endif
