@@ -42,7 +42,7 @@ check:
 test-check-clean:
 
 demo:
-	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
+	(cd demo; $(MAKE) new CONFIG=$(CONFIG))
 
 
 #doc: doxy tex
