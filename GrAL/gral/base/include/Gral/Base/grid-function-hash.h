@@ -116,9 +116,9 @@ public:
 
   //------------- Container interface ------------------------
 
-  unsigned size() const { return table.size();}  
+  unsigned size()  const { return table.size();}  
   bool     empty() const { return table.empty();}
-  void     clear()       { table.clear();}
+  void     clear()       { table.clear(); ENSURE_ALWAYS(empty(), "",1); }
 
   typedef typename table_type::iterator base_it;
   class iter : public base_it {
@@ -158,7 +158,13 @@ public:
 /*!  
    \brief Implements a total grid_function on hash-basis.
    \ingroup gridfunctions
+ 
+    Model of $GrAL TotalGridFunction.
+
    \see \ref gridfunctions module 
+   \todo Iteration does not work when a grid function is constructed
+   using only the grid (gives an empty sequence instead a full sequence of
+   undefined values).
 */
 template<class E, class T> 
 class grid_function_hash
