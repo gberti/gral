@@ -5,7 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/boundary.h"
-#include "Gral/Geometries/geometric-types-new.h"
+#include "Gral/Geometries/geometric-types-nd.h"
 
 #include "Geometry/geometric-shapes.h"
 #include "Geometry/geometric-primitives.h"
