@@ -14,6 +14,24 @@
 
 namespace GrAL {
 
+  /*!  \brief Generic boundary range for arbitrary grids
+
+       \ingroup boundary
+       \ingroup subranges
+
+       The class gives access to the boundary facets and vertices
+       of an arbitrary grid.
+       \templateparams
+        - \c GRID :
+          - Model of $GrAL CellRange
+          - types \c Facet,  \c FacetOnCellIterator
+          - types \c Vertex, \c VertexOnFacetIterator
+
+       \see Tested in \ref test-boundary-range-nd.C
+
+       \todo Specialization for grids already supporting boundary ranges.
+       \todo Support for edge iteration
+   */
 template<class GRID, class GT = grid_types<GRID> >
 class boundary_range_nd {
 public:

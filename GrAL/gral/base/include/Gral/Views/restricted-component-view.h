@@ -11,6 +11,7 @@
 namespace GrAL {
 
 /*! \brief Provide a view on a connected grid part defined by a predicate
+
     \ingroup gridviews
 
     A typical use would be to restrict analysis to a small patch
@@ -23,10 +24,11 @@ namespace GrAL {
     only the first intersection with the grid is of interest.
 
  
+
    \todo implement Edge/Facet if supported by \c GRID
    \todo reuse archetypes from GRID
    \see \ref gridviews module
-   \see Test in \ref test-restricted-component-view.C
+   \see Test in \ref test-restricted-components-view.C
 
 */
 
