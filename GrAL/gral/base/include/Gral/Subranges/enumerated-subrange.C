@@ -8,13 +8,6 @@
 
 namespace GrAL {
 
-//----------------------------------------------------------------
-//  ConstructSubrangeFromCells
-//
-//  This template function constructs an enumerated subrange 
-//  over a Grid G from  a set of cells described by the range of
-//  CellIt Cit.
-//----------------------------------------------------------------
 
 
 template<class GRID>
@@ -22,11 +15,14 @@ void enumerated_subrange<GRID>::init() const
 {
   if(! initialized) {
     initialized = true;
-    REQUIRE(vertices.empty(), "enumerated_subrange<GRID>::init(): Vertex range must be empty!\n",1);
-    cell_range_ref<GRID,cell_sequence> cell_wrapper(0, cells.end()-cells.begin(), cells, TheGrid());
-    ConstructVertexRange(cell_wrapper,
-			 const_cast<self *>(this)->vertices);
-   }
+    if(! cells.empty()) {
+      REQUIRE_ALWAYS(vertices.empty(), 
+		     "enumerated_subrange<GRID>::init(): Vertex range must be empty!\n",1);
+      cell_range_ref<GRID,cell_sequence> cell_wrapper(0, cells.end()-cells.begin(), cells, TheGrid());
+      ConstructVertexRange(cell_wrapper,
+			   const_cast<self *>(this)->vertices);
+    }
+  }
 }
 
 
@@ -34,12 +30,13 @@ template<class GRID>
 template<class CELLIT>
 void enumerated_subrange<GRID>::construct(CELLIT c) 
 {
-  REQUIRE(cells.empty(), "enumerated_subrange<GRID>::construct: cells must be empty!",1);
+  REQUIRE_ALWAYS(cells.empty(), "enumerated_subrange<GRID>::construct: cells must be empty!",1);
   while(! c.IsDone()) {
     append_cell(c.handle());
     ++c;
   }
   init();
+  init_counts();
 }
 
 template<class CELLRANGE, class VERTEXRANGE>  
