@@ -42,7 +42,9 @@ endif
 export RECURSIVETARGETS=$(CONFIGURATION)/defs/recursive-targets
 
 # Path for installation 
+ifndef PREFIX
 export PREFIX=$(HOME)/lib/gral#
+endif
 
 # Modules required by current module
 export ALLDEPMODULES += $(shell cat $(ROOT)/dependencies 2>/dev/null)

@@ -1,7 +1,7 @@
 
 ALLROOT=$(shell pwd)
 SUBDIRS= configuration utilities external-control sequence geometry \
-         gral
+         graphics-device function-algebra gral
 
 
 new:
