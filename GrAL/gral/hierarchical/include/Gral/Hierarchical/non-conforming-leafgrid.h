@@ -91,11 +91,14 @@ namespace octree {
 
     static archetype_iterator BeginArchetype()  { return flat_grid_type::BeginArchetype();}
     static archetype_iterator EndArchetype()    { return flat_grid_type::EndArchetype();}
+    static archetype_handle handle(archetype_iterator it) { return flat_grid_type::handle(it);}
+
     static unsigned NumOfArchetypes()           { return flat_grid_type::NumOfArchetypes();}
     static archetype_type const& ArchetypeOf(Cell const& c)  { return flat_grid_type::ArchetypeOf(c);}
     static archetype_type const& ArchetypeOf(cell_handle c)  { return flat_grid_type::ArchetypeOf(c);}
     static archetype_handle      archetype_of(Cell const& c) { return flat_grid_type::archetype_of(c);}
     static archetype_handle      archetype_of(cell_handle c) { return flat_grid_type::archetype_of(c);}
+
 
     static archetype_type const& Archetype(archetype_handle const& a) { return flat_grid_type::Archetype(a);}
 
@@ -340,6 +343,22 @@ class grid_function<octree::nc_leafgrid_vertex_t<
   grid_function(grid_type const& g, T const& t) : base(g,t) {}
 };
 
+
+namespace STDEXT {
+  template<class T> struct hash;
+  
+  template<class OCTREE, class FLATHANDLE>
+  struct hash<hierarchical::h_element_handle_t<octree::non_conforming_leafgrid<OCTREE>, FLATHANDLE> > {
+    typedef hierarchical::h_element_handle_t<octree::non_conforming_leafgrid<OCTREE>, FLATHANDLE> key_type;
+    typedef key_type        argument_type;
+    typedef unsigned        result_type;
+    // bad hash function - does not use level.
+    // hasher should use grid if possible.
+    // e.g. 2^{dim*(level-minlevel)} + hash(flat_handle)
+    result_type operator()(key_type const& h) const { hash<FLATHANDLE> hsh; return hsh(h.flat_handle());}
+  };
+  
+}
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Hierarchical/non-conforming-leafgrid.C"
