@@ -43,7 +43,7 @@ protected:
 private:
   void check_range(unsigned i) const {
     REQUIRE( (i < N), 
-	     " i = " << i << " must be in [0," << N << "]\n",1);
+	     " i = " << i << " must be in [0," << N << "[\n",1);
   }
 };
 
