@@ -32,19 +32,14 @@
 //
 //----------------------------------------------------------------
 
-// once again: lack of partial specialization
-typedef vector<int>::iterator vector_int_iter;
-struct grid_types< stream_grid_mask<vector_int_iter> >
-  : public grid_types_help_stream_grid_mask<vector_int_iter> {};
-
 
 template<class T>
-class vector_map : public vector<T>
+class vector_map : public std::vector<T>
 {
-  typedef vector<T> base;
+  typedef std::vector<T> base;
 public:
   vector_map() {}
-  vector_map(const vector<T>& v) : base(v) {}
+  vector_map(const std::vector<T>& v) : base(v) {}
   vector_map(size_t sz)          : base(sz) {}
   vector_map(size_t sz, const T& t) : base(sz,t) {}
 
@@ -68,16 +63,16 @@ void ConstructCoarsePartitionGrid(CoarseGrid& G,      // out
   typedef typename gt::Vertex             Vertex;
   //  typedef typename gt::BoundaryFacetIterator  BdFacetIterator;
 
-  partial_grid_function<Vertex, vector<int> > partitions_of_vertex(P.TheGrid());
+  partial_grid_function<Vertex, std::vector<int> > partitions_of_vertex(P.TheGrid());
 
   // fine vertices that correspond to vertices of coarse grid
-  vector<Vertex>                     coarse_vertices;
+  std::vector<Vertex>                     coarse_vertices;
   // the inverse function
   partial_grid_function<Vertex,int>  coarse_vertex_num(P.TheGrid());
 
   // numbers of coarse vertices of partitions 
   // {0 ... npart-1} --> P{ 0 ... nvert-1}
-  vector< vector<int> > local_vertices(P.NumOfPartitions());
+  std::vector< std::vector<int> > local_vertices(P.NumOfPartitions());
 
   //-----  collect adjacent partitions for all vertices on part. bd. ----
 
@@ -106,9 +101,9 @@ void ConstructCoarsePartitionGrid(CoarseGrid& G,      // out
 
   //---- flatten local vertex list ----------
 
-  typedef typename vector< vector<int> >::const_iterator vvi_iter;
-  typedef typename vector<int>::const_iterator vi_iter;
-  vector<int> vertex_list;
+  typedef std::vector< std::vector<int> >::const_iterator vvi_iter;
+  typedef std::vector<int>::const_iterator vi_iter;
+  std::vector<int> vertex_list;
   vertex_list.reserve(P.NumOfPartitions() * 5); // heuristical
   for(vvi_iter v = local_vertices.begin(); v != local_vertices.end(); ++v) {
     vertex_list.push_back((*v).size());

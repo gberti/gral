@@ -55,7 +55,7 @@ void partitioning<Grid>::read_partition(istream& in)
    }
  }
  else {
-   string format;
+   std::string format;
    in >> format;
    if(format == "handle-partition-pair")
      read_handle_partition_pair(*this,in);
