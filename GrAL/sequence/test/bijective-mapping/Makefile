@@ -1,31 +1,32 @@
 # $(NMWRROOT)/test/bijective-mapping
 
-include ../../nmwr.config
-include $(NMWRROOT)/defs/Makefile.test.leaf
+PWD=$(shell pwd)
+CONFIG=$(PWD)/../../mk.config
+include $(CONFIG)
 
 
 LOCALDIR = bijective-mapping
 LOCALSOURCES =  test-bijective.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
-LOCALTARGET = test-bijective
+DEPS = $(LOCALSOURCES:%.C=%.d)
+TARGETS = test-bijective
+EXEC =  $(TARGETS)
 
 include $(DEPS)
 
-EXEC =  $(LOCALTARGET)
 
-TARGETS =  local
 
-LIBS =  -lnmwr-io -lutility 
+LIBS =  -lcontrol-device -lutilities 
 
 
 
-new : clean  all
+new : clean all
 
 
 all : $(TARGETS)
 
 
-local: $(LOCALOBJECTS)
+test-bijective: $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
@@ -37,9 +38,6 @@ check:
 clean: stdclean
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
-	rm -f .depend *.oogl *.out /tmp/br-schenk*.tree
-
-
-depend:
+	rm -f .depend *.oogl *.out 
 
 
