@@ -1,7 +1,6 @@
 #ifndef NMWR_GB_OVERLAP_C
 #define NMWR_GB_OVERLAP_C
 
-
 // $LICENSE
 
 #include "Container/some-algorithms.h"
@@ -27,47 +26,6 @@ void overlap<CoarseGrid, FineGrid, OVLP_RANGES>::set_neighbours()
       neighbours.push_back(*CNb);
   }
 }
-
-
-template<class SrcRange, class DestRange, class Filter>
-void copy_overlap_ranges(const SrcRange& src, DestRange& dest, const Filter& f)
-{
-  dest.TheContainer().reserve(src.size());
-  copy_overlap_ranges(src.privee(), src.exposed(), src.shared(), src.copied(),
-		      dest, f);
-}
-
-template<class SrcRange, class DestRange, class Filter>
-void copy_overlap_ranges(const SrcRange& priv, const SrcRange& exp,
-			 const SrcRange& shd,  const SrcRange& cop,
-			 DestRange& dest,const Filter& f)
-{
-  copy_filter(priv.begin(),priv.end(), back_inserter(dest), f);
-  dest.set_exposed_begin();
-  copy_filter(exp.begin(),exp.end(), back_inserter(dest), f);
-  dest.set_shared_begin();
-  copy_filter(shd.begin(),shd.end(), back_inserter(dest), f);
-  dest.set_copied_begin();
-  copy_filter(cop.begin(),cop.end(), back_inserter(dest), f);
-  // dest.set_copied_end();
-}
-
-template<class SrcRange, class DestRange, class Filter>
-void copy_overlap_ranges(                      const SrcRange& exp,
-			 const SrcRange& shd,  const SrcRange& cop,
-			 DestRange& dest,const Filter& f)
-{ 
-  SrcRange priv(exp.TheGrid());
-  ENSURE( priv.empty() , " priv is not empty!",1);
-  copy_overlap_ranges(priv, exp,shd,cop,dest,f);
-}
-
-
-
-
-
-
-
 
 
 template<class Overlap>

@@ -197,54 +197,6 @@ public:
 };
 
 
-/*! \brief Copy an overlap range
-    \ingroup overlapds
-*/
-template<class SrcRange, class DestRange, class Filter>
-void copy_overlap_ranges(const SrcRange& src, DestRange& dest, const Filter& f);
-
-
-//----------------------------------------------------------------
-/*! \brief Create a layered range from separate ranges.
-    \ingroup overlapds
-
-    \templateparams
-    - \c SrcRange: STL ForwardContainer (value type element handle)
-    - \c DestRange: STL BackInsertionContainer
-    - \c Filter: <tt> SrcRange::value_type -> DestRange::value_type </tt>
- */
-//----------------------------------------------------------------
-
-
-
-template<class SrcRange, class DestRange, class Filter>
-void copy_overlap_ranges(const SrcRange& priv, const SrcRange& exp,
-			 const SrcRange& shd,  const SrcRange& cop,
-			 DestRange& dest,const Filter& f);
-
-/*! \overload 
- */
-template<class SrcRange, class DestRange, class Filter>
-void copy_overlap_ranges(                      const SrcRange& exp,
-			 const SrcRange& shd,  const SrcRange& cop,
-			 DestRange& dest,const Filter& f);
-
-/*! Copy an entire overlap range modulo grid morphisms
-    \ingroup overlapds
- */
-
-/*
-template<class CG1, class FG1, class Ovlp2, class CoarseCCorr, class FineVCorr, class FineCCorr>
-void CopyOverlap(overlap<CG1,FG1>       &  dest,            // out
-		 Ovlp2             const&  src,             // in
-		 CG1               const&  cg_dest,         // in
-		 CoarseCCorr       const&  crs_src2dest_c,  // in 
-		 FG1               const&  fg_dest,         // in
-		 FineVCorr         const&  src2dest_v,      // in 
-		 FineCCorr         const&  src2dest_c);     // in
-*/
-
-
 /*! Pretty-print an overlap
    \ingroup overlapds
  */
