@@ -4,3 +4,9 @@ INSTALLHEADERS=$(PREFIX)/include
 install:
 	mkdir -p $(INSTALLHEADERS)/Config
 	cp include/Config/*.h $(INSTALLHEADERS)/Config
+
+new:
+
+test:
+
+doc:
