@@ -27,6 +27,7 @@
     The range is referenced by the half-open range [b,e) (b,e : HIt)
     -  template<class E, class HIt> class element_range_ref;
     -  template<class Grid, class HIt> class vertex_range_ref;
+    -  template<class Grid, class HIt> class edge_range_ref;
     -  template<class Grid, class HIt> class facet_range_ref;
     -  template<class Grid, class HIt> class cell_range_ref;
     -  template<class Grid, class vit, class cit>
@@ -36,6 +37,7 @@
     iteration access to the corresponding elements.
      -  template<class E> class enumerated_element_range;
      -  template<class Grid> class enumerated_vertex_range;
+     -  template<class Grid> class enumerated_edge_range;
      -  template<class Grid> class enumerated_facet_range;
      -  template<class Grid> class enumerated_cell_range;
      - template<class Grid> class enumerated_subrange;
@@ -53,6 +55,7 @@
 
 template<class E> class enumerated_element_range;
 template<class Grid> class enumerated_vertex_range;
+template<class Grid> class enumerated_edge_range;
 template<class Grid> class enumerated_facet_range;
 template<class Grid> class enumerated_cell_range;
 
@@ -185,6 +188,35 @@ public:
 
 };
 
+
+
+
+//----------------------------------------------------------------
+/*! \brief Reference to a (possibly subset of) edge range.
+    \ingroup enumsubranges
+ */
+//----------------------------------------------------------------
+template<class Grid, class R>
+class edge_range_ref
+  : public element_range_ref<typename grid_types<Grid>::Edge, R>
+{
+  typedef element_range_ref<typename grid_types<Grid>::Edge, R> base;
+public:
+  typedef typename base::Element         Edge;
+  typedef typename base::ElementIterator EdgeIterator;
+
+  edge_range_ref() {}
+  edge_range_ref(const grid_type& g) : base(g) {}
+  edge_range_ref(const range_type& r, const grid_type& g) : base(r,g) {}
+  edge_range_ref(int b, int e, const range_type& r, const grid_type& g) 
+    : base(b,e,r,g) {}
+  edge_range_ref(const base& b) : base(b) {}
+  
+  unsigned      NumOfEdges() const { return size();}
+  EdgeIterator  FirstEdge()  const { return FirstElement();}
+  EdgeIterator  EndEdge()    const { return EndElement();}
+
+};
 
 
 //----------------------------------------------------------------
@@ -374,6 +406,34 @@ public:
 };
 
 
+/*! \brief Edge subrange of a grid, defined by listing the member edges
+    \ingroup enumsubranges
+ */        
+template<class Grid>
+class enumerated_edge_range 
+  : public enumerated_element_range<typename grid_types<Grid>::Edge>
+{
+  typedef enumerated_element_range<typename grid_types<Grid>::Edge> base;
+public:
+  typedef typename base::Element         Edge;
+  typedef typename base::ElementIterator EdgeIterator;
+  
+  typedef edge_range_ref<grid_type, elt_sequence>  range_type_ref;
+
+  enumerated_edge_range() {}
+  enumerated_edge_range(const grid_type& g) : base(g) {}
+  enumerated_edge_range(const base& b) : base(b) {}
+  
+  unsigned NumOfEdges()     const { return size();}
+  EdgeIterator FirstEdge() const { return FirstElement();}
+  EdgeIterator EndEdge()   const { return EndElement();}
+
+  range_type_ref range() const 
+    { return range_type_ref(0,size(),elements,*the_grid);}
+
+};
+
+
 /*! \brief Facet subrange of a grid, defined by listing the member facets
     \ingroup enumsubranges
  */        
@@ -400,6 +460,7 @@ public:
     { return range_type_ref(0,size(),elements,*the_grid);}
 
 };
+
 
 /*! \brief cell subrange of a grid, defined by listing the member cells
     \ingroup enumsubranges
