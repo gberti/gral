@@ -45,6 +45,7 @@ standard-test-check-clean-force:
 	(cd test; $(MAKE) new-check-clean-force)
 
 CHECKER=$(HOME)/bin/valgrind --leak-check=yes
+FILTER=cat
 
 run-check:
 	@(out=$(EXEC).out; \
@@ -61,7 +62,8 @@ run-check:
          $$echo "\n"; \
          for i in  *.out; \
          do \
-         if diff $$i $$i.exp; \
+         $(FILTER) $$i > $$i.filtered.out; \
+         if diff $$i.filtered.out $$i.exp; \
          then  $$echo "\t\t\t" $$i OK; \
          else  $$echo "\t\t\t" ERROR in $$i; \
          fi ;\
@@ -78,6 +80,7 @@ run-check:
 stdclean: moduleclean
 	@rm -f $(EXEC)
 	@rm -f *~ *.flc *.o  *.d *.ti *.ii core core.* out *.out
+	@rm -f *.valgrind
 	@find . -name "*~" -exec rm {} \; -print
 	@rm -rf ti_files # KCC template DB
 	@rm -rf *.tmp
@@ -165,7 +168,7 @@ doxy: local-doxy additional-doxy
 
 local-doxy:
 	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(GRALROOT) -binpath $(LOCALBINPATH) \
-        $(DOXYCFG)/doxy.paths.cfg                  > doxy.cfg.tmp
+        $(DOXYCFG)/doxy.paths.cfg                 >  doxy.cfg.tmp
 	echo "@INCLUDE_PATH = $(DOXYCFG)"         >> doxy.cfg.tmp
 	cat doxy.local.cfg                        >> doxy.cfg.tmp
 	echo "STRIP_FROM_PATH = $(ROOT)/include/ $(ROOT)/"   >> doxy.cfg.tmp
