@@ -13,14 +13,6 @@
  */
 
 
-/*! \ingroup elementtraitsreggrid2d
- */
-template<class E> 
-struct hasher_for_reg2d 
-  : public element_traits_base<E>::hasher_type_base<RegGrid2D, E> {
-  int operator()(const E& e) const { return e.GlobalNumber();}
-};
-
 
 /*! \ingroup elementtraitsreggrid2d
  */
@@ -28,7 +20,7 @@ template<>
 struct element_traits<RegGrid2D::Vertex> 
 : public element_traits_vertex_base<RegGrid2D>
 {
-  typedef hasher_for_reg2d<element_type> hasher_type;
+  struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>     consecutive_tag;
   static  RegGrid2D::Vertex  handle2element(grid_type const& g, handle_type h)
   { return (g.vertex(h));}
@@ -41,7 +33,7 @@ template<>
 struct element_traits<RegGrid2D::Edge>
   : public element_traits_edge_base<RegGrid2D>
 {
-  typedef hasher_for_reg2d<element_type> hasher_type;
+  struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>     consecutive_tag;
   static  RegGrid2D::Edge  handle2element(grid_type const& g, handle_type h)
   { return (g.edge(h));}
@@ -55,7 +47,7 @@ template<>
 struct element_traits<RegGrid2D::Cell> 
   : public element_traits_cell_base<RegGrid2D>
 {
-  typedef hasher_for_reg2d<element_type> hasher_type;
+  struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>     consecutive_tag;
   static  RegGrid2D::Cell  handle2element(grid_type const& g, handle_type h)
   { return (g.cell(h));}
