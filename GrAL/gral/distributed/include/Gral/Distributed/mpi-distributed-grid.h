@@ -76,6 +76,7 @@ public:
   MPIDistributedGrid(const coarse_grid_type& cg); 
 
   void set_coarse_grid(const coarse_grid_type& cg);
+  void coarse_grid_complete();
 
   void init();
 private:
@@ -107,7 +108,7 @@ public:
     return the_local_range;
   } 
 
-  // this cuases problems if some user class forwards LocalRange() as reference,
+  // this causes problems if some user class forwards LocalRange() as reference,
   // like all other grid data structures!
   //  range_type  LocalRange() const  { return the_ovrlp_grid.LocalRange() ;} 
 
