@@ -85,6 +85,20 @@ namespace shrink_grid_view {
     };
 
 
+  template<class GRID, class element_tag>
+    struct map_types_for_grid_view { };
+
+  template<class GRID>
+    struct map_types_for_grid_view<GRID, vertex_type_tag> {
+      typedef shrink_grid_view::vertex_iterator<GRID> element_type;
+    };
+
+  template<class GRID>
+    struct map_types_for_grid_view<GRID, cell_type_tag> {
+      typedef shrink_grid_view::cell_iterator<GRID> element_type;
+    };
+
+
   /*! \brief The combinatorial shrunk view
    */
   template<class GRID>
@@ -107,6 +121,9 @@ namespace shrink_grid_view {
       cell_iterator<GRID>   FirstCell()   const;
       vertex_iterator<GRID> FirstVertex() const;
       base_grid_type const& BaseGrid() const { return *g;}
+
+      template<class element_tag>
+      struct map_types : public map_types_for_grid_view<GRID,element_tag> {};
 
       ArchetypeIterator BeginArchetype() const 
 	{ return BaseGrid().BeginArchetype();}  
@@ -182,6 +199,7 @@ namespace shrink_grid_view {
       bool valid() const { return bound() && c.valid();}
 
       typename bgt::Cell const& BaseCell() const { return *c;}
+      typename bgt::Cell const& Base    () const { return *c;}
     };
   
 
@@ -232,6 +250,7 @@ namespace shrink_grid_view {
 
       Cell Cell_()  const { return Cell(*g,c.handle());}
       typename bgt::Vertex BaseVertex() const { return *vc;}
+      typename bgt::Vertex Base()       const { return *vc;}
     };
 
 
@@ -346,6 +365,27 @@ struct element_traits<shrink_grid_view::vertex_iterator<GRID> >
   };
 };
 
+
+template<class GRID>
+struct element_traits<shrink_grid_view::cell_iterator<GRID> >
+  : public element_traits_cell_base<shrink_grid_view::grid_view<GRID> > 
+{
+  typedef shrink_grid_view::local_grid_types<GRID> lgt; // gt of view
+  typedef typename lgt::bgt                        bgt; // gt of GRID
+  typedef typename lgt::cell_handle                element_handle;
+  typedef element_traits<typename bgt::Cell>       bet;
+  typedef typename bet::hasher_type                base_hasher_type;
+
+  struct hasher_type {
+    unsigned operator()(element_handle const&  v) const 
+      { base_hasher_type h; return h(v);}
+    unsigned operator()(element_type const&  v) const 
+      { return (*this)(v.handle());}
+  };
+};
+
+
+
 template<class GRID, class T>
 class grid_function<shrink_grid_view::vertex_iterator<GRID>, T>
   : public grid_function_hash<shrink_grid_view::vertex_iterator<GRID>, T>
@@ -357,6 +397,44 @@ public:
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g,
 		T         const& t0) : base(g,t0) {}
+};
+
+
+namespace shrink_grid_view {
+  /*! \brief adapter for grid functions on base grid
+      
+       This adapter forwards accesses through elements of 
+       shrink_grid_view::grid_view to accesses through their base
+       elements to the adaptee.
+
+
+   */
+
+  template<class GF>
+    class grid_function_view {
+    private:
+      typedef typename GF::grid_type    base_grid_type;
+      typedef typename GF::element_type base_element_type;
+      typedef element_traits<base_element_type> bet;
+      typedef typename bet::element_type_tag    btag;
+    public:
+      typedef typename GF::value_type   value_type;
+      typedef grid_view<base_grid_type> grid_type;
+      typedef typename grid_type::template map_types<btag> map_types;
+      typedef typename map_types::element_type element_type;
+      typedef element_traits<element_type> et;
+    private:
+      grid_view<base_grid_type> const* g;
+      GF                        const* gf;
+    public:
+      grid_function_view(grid_type const& g_,
+			 GF        const& gf_) : g(&g_), gf(&gf_) {}
+
+      value_type const& operator()(element_type const& e) const { return (*gf)(e.Base());}
+      grid_type  const& TheGrid() const { return *g;}
+      size_t             size() const { return et::size(*g);}
+    };
+
 };
 
 #endif
