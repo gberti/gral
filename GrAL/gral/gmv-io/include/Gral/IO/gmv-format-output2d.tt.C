@@ -5,6 +5,11 @@
 #include "Gral/Base/element-numbering.h"
 #include "Geometry/point-traits.h"
 
+template<class GRID,class GEOM, class GF, class MOREGFS>
+void ConstructGrid_GF(OstreamGMV2DFmt& Out, 
+		      GRID const& G,
+		      GEOM const& GEO,
+		      heterogeneous_list::List<GF,MOREGFS> GFS);
 
 template<class GRID,class GEOM>
 void ConstructGrid(OstreamGMV2DFmt& Out, 

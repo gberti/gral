@@ -52,7 +52,9 @@ protected:
   virtual void end_variable()   { Out() << "endsvars\n";}   
 };
 
-
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/IO/gmv-format-output2d.tt.C"
+#else
 
 /*! \brief ConstructGrid overload for OstreamGMV2DFmt
 
@@ -85,8 +87,7 @@ void ConstructGrid_GF(OstreamGMV2DFmt& Out,
 		      GEOM const& GEO,
 		      heterogeneous_list::List<GF,MOREGFS> GFS);
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/IO/gmv-format-output2d.tt.C"
+
 #endif
 
 
