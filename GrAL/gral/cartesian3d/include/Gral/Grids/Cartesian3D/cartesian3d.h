@@ -4,6 +4,7 @@
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
+#include "Gral/Grids/Complex2D/complex2d.h"
 
 #include "Gral/Grids/Cartesian3D/index-map-nd.h"
 
@@ -25,14 +26,17 @@ struct grid_types_Cartesian3D {
 
   typedef CartesianGrid3D         grid_type;
 
-  typedef int vertex_handle;
-  typedef int cell_handle;
+  typedef vertex_handle_int<grid_type> vertex_handle;
+  typedef cell_handle_int<grid_type>   cell_handle;
+  typedef int                          archetype_handle;
 
   typedef Vertex_Cartesian3D  Vertex;
   typedef Cell_Cartesian3D    Cell;
   typedef Vertex_Cartesian3D  VertexIterator;
   typedef Cell_Cartesian3D    CellIterator;
   typedef VertexOnCellIterator_Cartesian3D VertexOnCellIterator;
+
+  typedef grid_dim_tag<3>     dimension_tag;
 };
 
 
@@ -51,16 +55,46 @@ public:
   typedef index_map_nd<3>            index_map_type;
   typedef index_map_type::index_type index_type;
 
+  typedef Complex2D archetype_type;
+  typedef archetype_type const* archetype_iterator;
 private:
   index_map_type vertex_map; // maps vertex 3D integer coords to handles,
                              // and vice versa
   index_map_type cell_map;   // same for cells.
 
-  static index_type corner_offset[8]; // get 3D vertex index from cell index
-                                      // and local vertex number
-  typedef int c_index[3];
+  class SD {
+  public:
+    typedef CartesianGrid3D grid_type;
+    SD();
+    // get 3D vertex index from cell index
+    // and local vertex number. Acts as geometry for the archetype below.
+    grid_type::index_type corner_offset[8]; 
+                                        
+    // 2D grid of a cell surface.
+    // Although there is only one archetype, we
+    // use an array to easily get an iterator type.
+    grid_type::archetype_type  the_archetype[1]; 
+  };
+  static SD sd;
 
+  class archetype_geom {
+  public:
+    typedef CartesianGrid3D::index_type coord_type;
+   
+    typedef CartesianGrid3D::archetype_type grid_type;
+    typedef grid_types<archetype_type>      agt;
+  private:
+    grid_type const* g;
+  public:
+    archetype_geom(grid_type const& gg) : g(&gg) {}
 
+    coord_type const& coord(agt::Vertex const& v) const
+      { return CartesianGrid3D::sd.corner_offset[v.handle()];}
+  };
+public:
+  typedef archetype_geom archetype_geom_type;
+
+  friend class archetype_geom;
   friend class Vertex_Cartesian3D;
   friend class Cell_Cartesian3D;
   friend class VertexOnCellIterator_Cartesian3D;
@@ -85,10 +119,43 @@ public:
 
   unsigned NumOfVertices() const { return vertex_map.max_flat_index()+1;}
   unsigned NumOfCells   () const { return cell_map  .max_flat_index()+1;}
-  
   inline VertexIterator FirstVertex() const;
   inline CellIterator   FirstCell()   const;
 
+  unsigned NumOfXVertices() const { return vertex_map.max_tuple()[0]+1;}
+  unsigned NumOfYVertices() const { return vertex_map.max_tuple()[1]+1;}
+  unsigned NumOfZVertices() const { return vertex_map.max_tuple()[2]+1;}
+  unsigned NumOfXCells   () const { return vertex_map.max_tuple()[0]  ;}
+  unsigned NumOfYCells   () const { return vertex_map.max_tuple()[1]  ;}
+  unsigned NumOfZCells   () const { return vertex_map.max_tuple()[2]  ;}
+
+
+  static archetype_iterator BeginArchetype() 
+    { return archetype_iterator(sd.the_archetype);}
+  static archetype_iterator EndArchetype()  { return BeginArchetype() +1;}
+  unsigned NumOfArchetypes() const { return 1;}
+
+  archetype_type const& Archetype(int a) const {
+    REQUIRE(a == 0, "a = " << a,1);
+    return *BeginArchetype();
+  }
+
+  archetype_type   const& ArchetypeOf (Cell const&) const 
+    { return *BeginArchetype();}
+  archetype_type   const& ArchetypeOf (cell_handle) const 
+    { return *BeginArchetype();}
+
+  archetype_handle        archetype_of(cell_handle) const 
+    { return 0;}
+  archetype_handle        archetype_of(Cell const&) const 
+    { return 0;}
+
+  archetype_geom_type ArchetypeGeom(archetype_type const& A 
+				    = *BeginArchetype()) const 
+    { return archetype_geom_type(A); }
+
+  archetype_handle handle(archetype_iterator a) const 
+    { return a - BeginArchetype();}
 
 };
 
@@ -116,6 +183,7 @@ class Vertex_Cartesian3D : public elem_base_Cartesian3D {
   grid_type::index_type    I;
 public:
   Vertex_Cartesian3D() {}  
+  explicit
   Vertex_Cartesian3D(grid_type const&  gg, vertex_handle v = 0)
     : base(gg), h(v) 
     { I = TheGrid().vertex_map(h);}
@@ -142,6 +210,8 @@ public:
 class Cell_Cartesian3D : public elem_base_Cartesian3D {
   typedef Cell_Cartesian3D       self;
   typedef elem_base_Cartesian3D  base;
+  typedef grid_type::archetype_type archetype_type;
+  typedef grid_types<archetype_type> archgt;
 
   cell_handle              h;
   grid_type::index_type    I;
@@ -149,6 +219,7 @@ class Cell_Cartesian3D : public elem_base_Cartesian3D {
   //friend class VertexOnCellIterator_Cartesian3D;
 public:
   Cell_Cartesian3D() {}  
+  explicit
   Cell_Cartesian3D(grid_type const&  gg, cell_handle c = 0)
     : base(gg), h(c) 
     { I = TheGrid().cell_map(h);}
@@ -165,6 +236,14 @@ public:
 
   inline VertexOnCellIterator FirstVertex() const;
   unsigned NumOfVertices() const { return 8;}
+  Vertex V(archgt::vertex_handle lh) const { // local2global
+    return Vertex(TheGrid(), I+grid_type::sd.corner_offset[lh]);}
+  vertex_handle v(archgt::vertex_handle lh) const 
+    { return V(lh).handle();} // inefficient
+  Vertex        V(archgt::Vertex lv) const { return V(lv.handle());}
+  vertex_handle v(archgt::Vertex lv) const { return v(lv.handle());}
+
+  archetype_type const& TheArchetype() const { return TheGrid().ArchetypeOf(*this);}
 
   friend bool operator==(self const& lhs, self const& rhs)
   { return (lhs.h == rhs.h);}
@@ -183,9 +262,10 @@ class VertexOnCellIterator_Cartesian3D
   typedef VertexOnCellIterator_Cartesian3D self;
 private:
   Cell const* c;
-  int         lv;
+  int         lv; // archetype::vertex_handle?
 public:
   VertexOnCellIterator_Cartesian3D() : c(0) {}
+  explicit
   VertexOnCellIterator_Cartesian3D(Cell const& cc, int llv = 0) 
     : c(&cc), lv(llv) {}  
 
@@ -202,12 +282,13 @@ public:
 
   grid_type::index_type   index()  const { 
     REQUIRE(valid(), "Invalid VertexOnCellIterator! lv = " << lv,1);
-    return c->index() + grid_type::corner_offset[lv];
+    return c->index() + grid_type::sd.corner_offset[lv];
   }
   vertex_handle handle() const {
     REQUIRE(valid(), "Invalid VertexOnCellIterator! lv = " << lv,1);
     return TheGrid().vertex_map(index());
   }
+  int local_handle() const { return lv;}
 
   Cell      const& TheCell() const { return *c;}
   grid_type const& TheGrid() const { return c->TheGrid();}
@@ -248,6 +329,10 @@ template<>
 struct grid_types<CartesianGrid3D> 
   : public grid_types_Cartesian3D
 {
+  typedef grid_type::archetype_type      archetype_type;
+  //typedef grid_type::archetype_handle  archetype_handle;
+  typedef grid_type::archetype_iterator  ArchetypeIterator;
+  typedef grid_type::archetype_geom_type archetype_geom_type;
 };
 
 
@@ -272,14 +357,16 @@ template<>
 struct element_traits<Vertex_Cartesian3D>
   : public element_traits_vertex_base<CartesianGrid3D>
 {
- typedef std::hash<Vertex_Cartesian3D> hasher_type;
+  typedef std::hash<Vertex_Cartesian3D> hasher_type;
+  typedef consecutive_integer_tag<0>    consecutive_tag;
 };
 
 template<>
 struct element_traits<Cell_Cartesian3D>
   : public element_traits_cell_base<CartesianGrid3D>
 {
- typedef std::hash<Cell_Cartesian3D> hasher_type;
+  typedef std::hash<Cell_Cartesian3D> hasher_type;
+  typedef consecutive_integer_tag<0>  consecutive_tag;
 };
 
 
