@@ -104,7 +104,8 @@ void mark_on_vertices(VertexIt    seed,         // in : cell seed set
 		      EltMarker&  visited,      // inout: already visited elements
 		      AdjSeq&     adj_seq,      // inout: seq of adjacencies to handle
 		      int&        level,        // inout: current level of adj.
-		      CellPred    inside);
+		      CellPred    inside,
+		      bool&       end);
 
 
 template<class GT, class CellIt, class VSeq, class CSeq, class EltMarker, class AdjSeq, class CellPred>
@@ -114,10 +115,18 @@ void mark_on_cells(CellIt      seed,         // in : cell seed set
 		   EltMarker&  visited,      // inout: already visited elements
 		   AdjSeq&     adj_seq,      // inout: seq of adjacencies to handle
 		   int&        level,        // inout: current level of adj.
-		   CellPred    inside)
+		   CellPred    inside,
+		   bool&       end)
 {
-  if( adj_seq.empty() || seed.IsDone())
+  typedef grid_types<VSeq> vgt;
+  typedef grid_types<CSeq> cgt;
+
+  if( adj_seq.empty())
     return;
+  if(seed.IsDone()) {
+    end = true;
+    return;
+  }
 
   grid_element_tag et = adj_seq.front();
   adj_seq.pop();
@@ -127,18 +136,36 @@ void mark_on_cells(CellIt      seed,         // in : cell seed set
     vertex_seq.append_layer();
     mark_vertices_on_cells<GT>(seed,vertex_seq,visited,level);
     ++level;
+    /*
+    std::cout << "mark_on_vertices: v=" << vertex_seq.LastLayer().FirstVertex().handle() << " ";
+    if(vertex_seq.LastLayer().NumOfVertices() < 20) {
+      std::cout << " vertices = [";
+      for(typename VSeq::VertexIterator vv(vertex_seq.LastLayer().FirstVertex()); !vv.IsDone(); ++vv)
+	std::cout << vv.handle() << " ";
+      std::cout << "] " << std::flush;
+    }
+    */
     mark_on_vertices<GT>(vertex_seq.LastLayer().FirstVertex(),
-		     vertex_seq,cell_seq,visited,adj_seq,level, inside);
+			 vertex_seq,cell_seq,visited,adj_seq,level, inside, end);
     break;
   case cell_tag:
     cell_seq.append_layer();
     mark_cells_on_cells<GT>(seed,cell_seq,visited,level, inside);
     ++level;
+    /*
+    std::cout << "mark_on_cells: c= " << cell_seq.LastLayer().FirstCell().handle() << " ";
+      if(cell_seq.LastLayer().NumOfCells() < 10) {
+	std::cout << "cells = [";
+	for(typename CSeq::CellIterator cc(cell_seq.LastLayer().FirstCell()); !cc.IsDone(); ++cc)
+	  std::cout << cc.handle() << " ";
+	std::cout << "] " << std::flush;
+      }
+    */
     mark_on_cells<GT>(cell_seq.LastLayer().FirstCell(),
-		  vertex_seq,cell_seq,visited,adj_seq,level, inside);
+		  vertex_seq,cell_seq,visited,adj_seq,level, inside, end);
     break;
   default:
-    ENSURE(false, "element type " << (int)et << " not implemented!\n",1);
+    ENSURE_ALWAYS(false, "element type " << (int)et << " not implemented!\n",1);
     break;
   }
 }
@@ -151,10 +178,16 @@ void mark_on_vertices(VertexIt    seed,         // in : cell seed set
 		      EltMarker&  visited,      // inout: already visited elements
 		      AdjSeq&     adj_seq,      // inout: seq of adjacencies to handle
 		      int&        level,        // inout: current level of adj.
-		      CellPred    inside)
+		      CellPred    inside,
+		      bool&       end)
 {
-  if( adj_seq.empty() || seed.IsDone())
+  if( adj_seq.empty())
     return;
+  if(seed.IsDone()) {
+    // std::cout << "mark on vertices: Empty seed." << std::endl;
+    end = true;
+    return;
+  }
 
   grid_element_tag et = adj_seq.front();
   adj_seq.pop();
@@ -165,10 +198,10 @@ void mark_on_vertices(VertexIt    seed,         // in : cell seed set
     mark_cells_on_vertices<GT>(seed,cell_seq,visited,level, inside);
     ++level;
     mark_on_cells<GT>(cell_seq.LastLayer().FirstCell(),
-		  vertex_seq,cell_seq,visited,adj_seq,level, inside);
+		  vertex_seq,cell_seq,visited,adj_seq,level, inside, end);
     break;
   default:
-    ENSURE(false,"element type " << (int)et << " not implemented!\n",1);
+    ENSURE_ALWAYS(false,"element type " << (int)et << " not implemented!\n",1);
     break;
   }
 }

@@ -26,6 +26,7 @@
 #endif
 
 #include "Gral/Base/partial-multi-grid-functions.h"
+#include "Gral/Base/multi-grid-functions.h"
 #include "Gral/Subranges/layered-subrange.h"
 #include "Container/function-adapter.h"
 #include "Utility/ref-ptr.h"
@@ -118,7 +119,8 @@ void mark_on_cells(CellIt      seed,         // in : cell seed set
 		   EltMarker&  visited,      // inout: already visited elements
 		   AdjSeq&     adj_queue,    // inout: seq of adjacencies to handle
 		   int&        level,        // inout: current level of adj.
-		   CellPred    inside);
+		   CellPred    inside,
+		   bool &      end);
 
 
 template<class CellIt, 
@@ -133,10 +135,11 @@ void mark_on_cells(CellIt      seed,         // in : cell seed set
 		   EltMarker&  visited,      // inout: already visited elements
 		   AdjSeq&     adj_queue,    // inout: seq of adjacencies to handle
 		   int&        level,        // inout: current level of adj.
-		   CellPred    inside)
+		   CellPred    inside,
+		   bool&       end)
 {
  typedef grid_types<typename CellIt::grid_type> gt;
- mark_on_cells<gt>(seed, vertex_seq, cell_seq, visited, adj_queue, level, inside);
+ mark_on_cells<gt>(seed, vertex_seq, cell_seq, visited, adj_queue, level, inside, end);
 }
 
 
@@ -157,7 +160,8 @@ void mark_on_vertices(VertexIt    seed,         // in : vertex seed set
 		      EltMarker&  visited,      // inout: already visited elements
 		      AdjSeq&     adj_queue,    // inout: seq of adjacencies to handle
 		      int&        level,        // inout: current level of adj.
-		      CellPred    inside);
+		      CellPred    inside,
+		      bool&       end);
 
 template<class VertexIt, 
          class VSeq, 
@@ -171,10 +175,11 @@ void mark_on_vertices(VertexIt    seed,         // in : vertex seed set
 		      EltMarker&  visited,      // inout: already visited elements
 		      AdjSeq&     adj_queue,    // inout: seq of adjacencies to handle
 		      int&        level,        // inout: current level of adj.
-		      CellPred    inside)
+		      CellPred    inside,
+		      bool&       end)
 {
  typedef grid_types<typename VertexIt::grid_type> gt;
- mark_on_vertices<gt>(seed, vertex_seq, cell_seq, visited, adj_queue, level, inside);
+ mark_on_vertices<gt>(seed, vertex_seq, cell_seq, visited, adj_queue, level, inside, end);
 }
 
 
@@ -207,6 +212,7 @@ private:
   vertex_range v_layers;
   cell_range   c_layers;
   partial_multi_grid_function<grid_type, int> visited;
+  //multi_grid_function<grid_type, int> visited;
 public:
   incidence_hull() {}
   incidence_hull(range_type const& seed, stencil_type const& stencil, periodic_flag p_flag = non_periodic);
@@ -297,8 +303,9 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
  typename incidence_hull<RANGE, STENCIL, GT>::periodic_flag p_flag,
  PRED pred)
 {
-  int level = 1;
-  int cnt   = 1; 
+  int  level = 1;
+  int  cnt   = 1; 
+  bool end = false;
   stencil_type s = stencil;
   if(s.front() == vertex_tag) {
     s.pop();
@@ -307,14 +314,18 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
       v_layers.append(*v);
       visited[*v] = level;
     }
-    while(v_layers.LastLayer().NumOfVertices() > 0 && cnt > 0) {
+    while(!end && cnt > 0) { 
+    //while (v_layers.LastLayer().NumOfVertices() > 0 && cnt > 0) {
       stencil_type s2 = s;
+      //std::cout << "VLayer: last layer " << v_layers.LastLayer().NumOfVertices() << " " << std::flush;
       mark_on_vertices<GT>(v_layers.LastLayer().FirstVertex(),
 			   v_layers, c_layers,
 			   visited,
 			   s2,
 			   level,
-			   pred);
+			   pred,
+			   end);
+      //std::cout << "VLayer " << level << std::endl;
       if(p_flag == non_periodic)
 	--cnt;
     }
@@ -326,20 +337,35 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
       c_layers.append(*c);
       visited[*c] = level;
     }
-    while(c_layers.LastLayer().NumOfCells() > 0 && cnt > 0) {
+    // int num_v_last = 1; // TMP
+    while( ! end && cnt > 0) { 
+    //while (c_layers.LastLayer().NumOfCells() > 0 && cnt > 0) {
       stencil_type s2 = s;
+      /* 
+     std::cout << "CLayer: last layer " << c_layers.LastLayer().NumOfCells() << "cells,  "
+		<< "c=" << c_layers.LastLayer().FirstCell().handle() << " " << std::flush;
+      if(c_layers.LastLayer().NumOfCells() < 10) {
+	std::cout << "cells = [";
+	for(rgeCellIterator cc(c_layers.LastLayer().FirstCell()); !cc.IsDone(); ++cc)
+	  std::cout << cc.handle() << " ";
+	std::cout << "] " << std::flush;
+      }
+      */
       mark_on_cells<GT>(c_layers.LastLayer().FirstCell(),
 			v_layers, c_layers,
 			visited,
 			s2,
 			level,
-			pred);
+			pred,
+			end);
+      // std::cout << "CLayer level=" << level << std::endl;
       if(p_flag == non_periodic)
 	--cnt;
+      // num_v_last = v_layers.LastLayer().NumOfVertices(); // TMP
     }
-  } // cell
+  } // if cell_tag
   else {
-     ::std::cerr << "Incidence hull: Unsupported element type: " << s.front() <<  ::std::endl;
+     std::cerr << "Incidence hull: Unsupported element type: " << s.front() <<  ::std::endl;
   }
   if(p_flag == periodic) {
     if(v_layers.LastLayer().NumOfVertices() == 0)
