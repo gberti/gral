@@ -7,6 +7,7 @@
 #include "Geometry/point-traits.h"
 //#include "Container/integer-iterator.h"
 
+#include "Container/sequence-algorithms.h"
 #include <algorithm>
 
 template<unsigned K, class P = int>
@@ -29,6 +30,7 @@ public:
   { p[0] = apex; std::copy(base.begin(), base.end(), p+1);}
 
   coord_type const& operator[](int i) const { return p[i];}
+  coord_type      & operator[](int i)       { return p[i];}
   coord_type const& operator()(int i) const { return p[i];}
 
   int dimension() const { return K;}
@@ -103,6 +105,79 @@ public:
   simplex(P const& P0, P const& P1, P const& P2, P const& P3) { p[0]=P0;p[1]=P1;p[2]=P2;p[3]=P3;}
   simplex(P const& P0, simplex<2,P> const& b) : base(P0, b) {}
 };
+
+
+
+
+struct compare_ordered {
+  template<unsigned K, class P>
+  static bool less(simplex<K,P> const& lhs, simplex<K,P> const& rhs) 
+  { 
+    simplex<K,P> sorted_lhs(lhs); sequence::bubble_sort(sorted_lhs.begin(), sorted_lhs.end());
+    simplex<K,P> sorted_rhs(rhs); sequence::bubble_sort(sorted_rhs.begin(), sorted_rhs.end());
+    return std::lexicographical_compare(sorted_lhs.begin(), sorted_lhs.end(),
+					sorted_rhs.begin(), sorted_rhs.end());
+  }
+  
+  template<unsigned K, class P>
+  bool operator()(simplex<K,P> const& lhs, simplex<K,P> const& rhs) const { return less(lhs,rhs);}
+};
+
+
+struct compare_unordered {
+  template<unsigned K, class P>
+  static bool less(simplex<K,P> const& lhs, simplex<K,P> const& rhs) 
+  { 
+    return std::lexicographical_compare(lhs.begin(), lhs.end(),
+					rhs.begin(), rhs.end());
+  }
+  template<unsigned K, class P>
+  bool operator()(simplex<K,P> const& lhs, simplex<K,P> const& rhs) const { return less(lhs,rhs);}
+};
+
+struct equal_ordered {
+  template<unsigned K, class P>
+  static bool equal(simplex<K,P> const& lhs, simplex<K,P> const& rhs) 
+  { 
+    simplex<K,P> sorted_lhs(lhs); sequence::bubble_sort(sorted_lhs.begin(), sorted_lhs.end());
+    simplex<K,P> sorted_rhs(rhs); sequence::bubble_sort(sorted_rhs.begin(), sorted_rhs.end());
+    return std::equal(sorted_lhs.begin(), sorted_lhs.end(),
+		      sorted_rhs.begin());
+  }
+
+  template<unsigned K, class P>
+  bool operator()(simplex<K,P> const& lhs, simplex<K,P> const& rhs)  const { return equal(lhs, rhs);}
+};
+
+struct equal_unordered {
+  template<unsigned K, class P>
+  static bool equal(simplex<K,P> const& lhs, simplex<K,P> const& rhs)
+  { 
+    return std::equal(lhs.begin(), lhs.end(),
+		      rhs.begin());
+  }
+  template<unsigned K, class P>
+  bool operator()(simplex<K,P> const& lhs, simplex<K,P> const& rhs)  const { return equal(lhs, rhs);}
+};
+
+
+template<unsigned K, class P>
+bool operator<(simplex<K,P> const& lhs, simplex<K,P> const& rhs) 
+{ return compare_ordered::less(lhs,rhs); }
+
+template<unsigned K, class P>
+bool operator>(simplex<K,P> const& lhs, simplex<K,P> const& rhs) 
+{ return (rhs < lhs);}
+
+template<unsigned K, class P>
+bool operator==(simplex<K,P> const& lhs, simplex<K,P> const& rhs) 
+{ return equal_ordered::equal(lhs,rhs); }
+
+template<unsigned K, class P>
+bool operator!=(simplex<K,P> const& lhs, simplex<K,P> const& rhs) 
+{ return !(lhs==rhs);}
+
+
 
 
 
