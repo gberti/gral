@@ -1,16 +1,72 @@
 #ifndef GRAL_BASE_GB_MULTI_GRIDFUNCTIONS_H
 #define GRAL_BASE_GB_MULTI_GRIDFUNCTIONS_H
 
-
-
 // $LICENSE
 
 #include "Config/compiler-config.h"
 #include "Gral/Base/common-grid-basics.h"
 
-//----------------------------------------------------------------
-//                   multi_grid_function
-//----------------------------------------------------------------
+
+
+
+namespace detail {
+
+  template<class Grid, class T, int GD, int ED>
+  class multi_gf_aux : public multi_gf_aux<Grid,T,GD,ED-1> 
+  {
+  public:
+    typedef Grid grid_type;
+  private:
+    typedef typename grid_types<Grid>::element_d<ED>::type element_type;
+    typedef multi_gf_aux<Grid,T,GD,ED-1>                 base;
+
+    grid_function<element_type, T> f;
+  public:
+    multi_gf_aux() {}
+    multi_gf_aux(Grid const& g) : base(g), f(g) {}
+    multi_gf_aux(Grid const& g, T const& t) : base(g,t), f(g,t) {}
+
+    using base::operator();
+    using base::operator[];
+    //  using base::ElementFunction_();
+    T  operator()(element_type const& e) const { return f(e);}
+    T& operator[](element_type const& e)       { return f[e];}
+
+    grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
+    grid_type const& TheGrid() const { return f.TheGrid();} 
+ };
+
+  // end recursion
+  template<class Grid, class T, int GD>
+  class multi_gf_aux<Grid, T, GD, 0> 
+  {
+  public:
+    typedef Grid grid_type;
+  private:
+    typedef typename grid_types<Grid>::Vertex  element_type;
+
+    grid_function<element_type, T> f;
+  public:
+    multi_gf_aux() {}
+    multi_gf_aux(Grid const& g) : f(g) {}
+    multi_gf_aux(Grid const& g, T const& t) :  f(g,t) {}
+
+
+    T  operator()(element_type const& e) const { return f(e);}
+    T& operator[](element_type const& e)       { return f[e];}
+
+    grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
+    grid_type const& TheGrid() const { return f.TheGrid();} 
+
+  };
+  
+
+  
+
+} // namespace detail
+
+
+
 
 /*! \brief Total grid function defined on all element types of <Grid>.
     \ingroup gridfunctions
@@ -21,127 +77,37 @@
    These classes are  fully generic and do not need any further
    specialization, because they build on grid_function<Elt,T>.
 
-   \todo
-    Extend to 3D: <tt>operator()(Facet const&)</tt>
-
    \see partial_multi_grid_function<Grid,T>
    \see Module \ref gridfunctions
 */
 //----------------------------------------------------------------
 
 
-
 template<class Grid, class T>
-class multi_grid_function {
-  // Functionality:
-  // grid_function(size_type n);  // allocate memory
-  // Elt \in {Vertex,Edge,Cell}       (2D)
-  // Elt \in {Vertex,Edge,Facet,Cell} (3D)
-  // T operator()(const Elt&) const; // get value
-  // T& operator[](const Elt&);      // set value
-  // maybe:
-  // bool defined(const Elt& e) const; // is the mapping defined for e?
+class multi_grid_function : public detail::multi_gf_aux<Grid, T,  
+							grid_types<Grid>::dim, 
+							grid_types<Grid>::dim>
+{
+  typedef detail::multi_gf_aux<Grid, T,  
+			       grid_types<Grid>::dim, 
+			       grid_types<Grid>::dim> base;
 
-  typedef grid_types<Grid>            gt;
-  typedef Grid                        grid_type;
-  typedef typename gt::Vertex         Vertex;
-  typedef typename gt::Edge           Edge;
-  typedef typename gt::Cell           Cell;
-  typedef typename gt::VertexIterator VertexIterator;
-  typedef typename gt::EdgeIterator   EdgeIterator;
-  typedef typename gt::CellIterator   CellIterator;
+public: 
+  typedef Grid grid_type;
+  typedef T    value_type;
 
-  typedef T                           value_type;
-
-
-private:
-  grid_function<Vertex,T> vgf;
-  grid_function<Edge  ,T> egf;
-  grid_function<Cell  ,T> cgf;
-
-public:
   multi_grid_function() {}
-  multi_grid_function(const grid_type& g) : vgf(g), egf(g), cgf(g) {}
-  
-  //--------------------- data access  ---------------------------
+  multi_grid_function(const grid_type& g) :  base(g) {}
+  multi_grid_function(const grid_type& g, T const& t) :  base(g,t) {}
 
-  T& operator[](const Vertex& V) { return vgf[V];}
-  T& operator[](const Edge&   E) { return egf[E];}
-  T& operator[](const Cell&   C) { return cgf[C];}
-  const T& operator()(const Vertex& V) const { return vgf(V);}
-  const T& operator()(const Edge&   E) const { return egf(E);}
-  const T& operator()(const Cell&   C) const { return cgf(C);}
+  template<class E>
+  grid_function<E,T> const& ElementFunction() const { return ElementFunction_(E());}
 
-  const grid_type& TheGrid() const { return vgf.TheGrid();}
-
-  const grid_function<Vertex,T>& TheVertexFunction() const { return vgf;}
-  const grid_function<Edge,T>  & TheEdgeFunction()   const { return egf;}
-  const grid_function<Cell,T>  & TheCellFunction()   const { return cgf;}
+  template<class E>
+  unsigned size() const { return ElementFunction<E>().size();}
 };
 
 
-
-//----------------------------------------------------------------
-//                partial_multi_grid_function
-//----------------------------------------------------------------
-/*! \brief Partial grid function defined on all element types of <Grid>.
-    \ingroup gridfunctions
-
-   partial_multi_grid_function<Grid,T> defines a mapping
-   \f$ V(G) \cup E(G) \cup C(G) \mapsto T \f$ ( in the 2d case)
-
-   These classes are  fully generic and do not need any further
-   specialization, because they build on partial_grid_function<Elt,T>.
-
-   \todo
-    Extend to 3D: <tt>operator()(Facet const&)</tt>
-
-   \see multi_grid_function<Grid,T>
-   \see Module \ref gridfunctions
-*/
-//----------------------------------------------------------------
-
-
-template<class Grid, class T>
-class partial_multi_grid_function {
-  typedef grid_types<Grid>            gt;
-  typedef Grid                        grid_type;
-  typedef typename gt::Vertex         Vertex;
-  typedef typename gt::Edge           Edge;
-  typedef typename gt::Cell           Cell;
-  typedef typename gt::VertexIterator VertexIterator;
-  typedef typename gt::EdgeIterator   EdgeIterator;
-  typedef typename gt::CellIterator   CellIterator;
-
-  typedef T                           value_type;
-
-private:
-  partial_grid_function<Vertex,T> vgf;
-  partial_grid_function<Edge  ,T> egf;
-  partial_grid_function<Cell  ,T> cgf;
-
-public:
-  partial_multi_grid_function() {}
-  partial_multi_grid_function(const grid_type& g) : vgf(g), egf(g), cgf(g) {}
-  partial_multi_grid_function(const grid_type& g, const T& t) 
-    : vgf(g,t), egf(g,t), cgf(g,t) {}
-  
-  //--------------------- data access  ---------------------------
-
-  T& operator[](const Vertex& V) { return vgf[V];}
-  T& operator[](const Edge&   E) { return egf[E];}
-  T& operator[](const Cell&   C) { return cgf[C];}
-  const T& operator()(const Vertex& V) const { return vgf(V);}
-  const T& operator()(const Edge&   E) const { return egf(E);}
-  const T& operator()(const Cell&   C) const { return cgf(C);}
-
-  const grid_type& TheGrid() const { return vgf.TheGrid();}
-
-  const partial_grid_function<Vertex,T>& TheVertexFunction() const { return vgf;}
-  const partial_grid_function<Edge,T>  & TheEdgeFunction()   const { return egf;}
-  const partial_grid_function<Cell,T>  & TheCellFunction()   const { return cgf;}
-
-};
 
 
 #endif
