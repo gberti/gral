@@ -170,7 +170,7 @@ public:
 
   CellImg operator()(CellDef const& c) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return CellImg(*g_img,c);
+    return CellImg(*g_img,c.handle());
   }
 
   cell_handle_img operator()(cell_handle_def c) const {
