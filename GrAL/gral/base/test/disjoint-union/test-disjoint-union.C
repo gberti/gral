@@ -18,9 +18,9 @@ int main() {
   CartesianGrid2D R(3,3);
   typedef coordN<2> coord_type;
   typedef std::identity<coord_type>  mapping_type;
-  typedef mapped_geometry_reg2d<mapping_type> reg_geom_type;
+  typedef mapped_geometry_cartesian2d<mapping_type> reg_geom_type;
   mapping_type id; 
-  reg_geom_type GeomR(id, R);
+  reg_geom_type GeomR(R, id);
 
 
   // create unstructured grid & geometry
