@@ -12,6 +12,7 @@ SUBDIRS = boundary-grid  \
           disjoint-union \
           edge-iterator-of-cell-set \
           element-grid \
+          element-numbering \
           element-range \
           enumerated-subrange \
           extend-grid-types \
