@@ -161,6 +161,7 @@ namespace STDEXT  {
   template<class T> class hash;
   struct hash<edge_handle_complex2d> {
   public:
+    typedef edge_handle_complex2d key_type;
     typedef edge_handle_complex2d argument_type;
     typedef size_t                result_type;
     
@@ -569,7 +570,11 @@ struct grid_types<Complex2D> : public grid_types_base<grid_types_Complex2D> {};
 struct hash_vertex2d {
   typedef grid_types<Complex2D> gt;
   typedef  gt::Vertex   Vertex;
-  int operator()(const Vertex& V) const { return gt::hash(V);}
+  typedef Vertex key_type;
+  typedef Vertex argument_type;
+  typedef size_t result_type;
+
+  result_type operator()(const Vertex& V) const { return gt::hash(V);}
 
   void operator=(hash_vertex2d const&) {} // suppress warnings about statement w/o effect
 };
@@ -580,7 +585,7 @@ struct hash_edge2d {
   typedef Edge   key_type;
   typedef Edge   argument_type;
   typedef size_t result_type;
-  size_t  operator()(const Edge& E) const { return gt::hash(E);}
+  result_type operator()(const Edge& E) const { return gt::hash(E);}
 
   void operator=(hash_edge2d const&) {} // suppress warnings about statement w/o effect
 };
@@ -588,7 +593,11 @@ struct hash_edge2d {
 struct hash_cell2d {
   typedef grid_types<Complex2D> gt;
   typedef gt::Cell     Cell;
-  int operator()(const Cell& C) const { return gt::hash(C);}
+  typedef Cell   key_type;
+  typedef Cell   argument_type;
+  typedef size_t result_type;
+
+  result_type operator()(const Cell& C) const { return gt::hash(C);}
 
   void operator=(hash_cell2d const&) {} // suppress warnings about statement w/o effect
 };

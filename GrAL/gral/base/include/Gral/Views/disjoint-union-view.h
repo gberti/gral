@@ -554,7 +554,9 @@ namespace STDEXT {
      typedef disjoint_union_view::grid_types_base<GRID1,GRID2> gta;
      typedef hash<typename gta::vertex_handle_1> hash1;
      typedef hash<typename gta::vertex_handle_2> hash2;
-
+     typedef vertex_handle key_type;
+     typedef vertex_handle argument_type;
+     typedef size_t        result_type;
      hash1 h1;
      hash2 h2;
 
@@ -572,6 +574,9 @@ namespace STDEXT {
      typedef disjoint_union_view::grid_types_base<GRID1,GRID2> gta;
      typedef hash<typename gta::cell_handle_1> hash1;
      typedef hash<typename gta::cell_handle_2> hash2;
+     typedef cell_handle key_type;
+     typedef cell_handle argument_type;
+     typedef size_t      result_type;
 
      hash1 h1;
      hash2 h2;

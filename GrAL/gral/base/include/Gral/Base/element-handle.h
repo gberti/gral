@@ -28,10 +28,14 @@ std::istream& operator>>(std::istream& in, element_handle_int<GRID, element_tag>
 { return (in >> h.h); }
 
 namespace STDEXT {
+
   template<class T> struct hash;
 
   template<class GRID, class element_tag>
     struct  hash<element_handle_int<GRID, element_tag> > { 
+      typedef element_handle_int<GRID, element_tag> key_type;
+      typedef element_handle_int<GRID, element_tag> argument_type;
+      typedef size_t                                result_type;
       size_t operator()(element_handle_int<GRID, element_tag> h) const { return h.h;}
     };
 }
@@ -44,7 +48,7 @@ namespace STDEXT {
     function for different handle types (impossible if
     handles are just typedefs for int).
  */
-
+   
 template<class GRID>  //, class GT = grid_types<GRID> >
 struct vertex_handle_int 
 {
@@ -166,18 +170,30 @@ namespace STDEXT  {
 
   template<class GRID>
     struct  hash<vertex_handle_int<GRID> > { 
+      typedef vertex_handle_int<GRID> key_type;
+      typedef vertex_handle_int<GRID> argument_type;
+      typedef size_t                  result_type;
       size_t operator()(vertex_handle_int<GRID> const& h) const { return h.h;}
     };
   template<class GRID>
     struct  hash<edge_handle_int<GRID> > { 
+      typedef edge_handle_int<GRID> key_type;
+      typedef edge_handle_int<GRID> argument_type;
+      typedef size_t                result_type;
       size_t operator()(edge_handle_int<GRID> h) const { return h.h;}
     };
   template<class GRID>
     struct  hash<facet_handle_int<GRID> > { 
+      typedef facet_handle_int<GRID> key_type;
+      typedef facet_handle_int<GRID> argument_type;
+      typedef size_t                 result_type;
       size_t operator()(facet_handle_int<GRID> h) const { return h.h;}
     };
   template<class GRID>
     struct  hash<cell_handle_int<GRID> > { 
+      typedef cell_handle_int<GRID> key_type;
+      typedef cell_handle_int<GRID> argument_type;
+      typedef size_t                result_type;
       size_t operator()(cell_handle_int<GRID> h) const { return h.h;}
     };
 }
