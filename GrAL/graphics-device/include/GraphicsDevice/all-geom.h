@@ -6,8 +6,8 @@
 #include <string>
 
 #include "Geometry/point-traits.h"
-
 #include "GraphicsDevice/renderable-geom.h"
+
 
 class rgb_color;
 class GraphicsDevice;
@@ -15,8 +15,13 @@ class GraphicsDevice;
 extern GraphicsDevice OOGLDevice(ostream&);
 extern GraphicsDevice OOGLDevice(const std::string& name);
 
+
+extern RenderableGeom RFileGeom(std::string const&);
+
 // g++ does not correctly take the special version RSegment(point,point)
 // instead of the template version, therefore the hack with "_1" - suffix.
+
+
 
 extern RenderableGeom RSegment_1(RenderableGeom::coord_type const& c1,
                                  RenderableGeom::coord_type const& c2);
@@ -61,7 +66,7 @@ extern RenderableGeom RTriangle_1(RenderableGeom::coord_type const& c1,
 
 template<class P>
 inline RenderableGeom RTriangle(const P& c1, const P& c2, const P& c3) {
- typedef RenderableGeom::coord_type_traits<P> pt;
+ typedef point_traits<P> pt;
  return RTriangle_1(RenderableGeom::coord_type(pt::x(c1),pt::y(c1),pt::z(c1)),
                     RenderableGeom::coord_type(pt::x(c2),pt::y(c2),pt::z(c2)),
                     RenderableGeom::coord_type(pt::x(c3),pt::y(c3),pt::z(c3)));

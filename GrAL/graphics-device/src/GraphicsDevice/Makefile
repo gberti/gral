@@ -22,8 +22,9 @@ LOCALSOURCES= attribute.C \
               cylinder.C \
               segment.C \
               word.C \
-              letter.C 
-
+              letter.C \
+              file-geom.C\
+              group-geom.C
 #              xfig.C \
 
 

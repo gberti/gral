@@ -14,7 +14,7 @@
 class geom_group : public geom {
   typedef geom_group self;
 public:
-  geom_group() {}
+  geom_group();
   virtual self * clone() const { return new self(*this); }
 
   virtual void write_geom_to(rendering_language& L) const;
