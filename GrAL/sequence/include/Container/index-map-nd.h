@@ -130,6 +130,8 @@ public:
   int        min_flat_index() const { return 0;}
   /*! \brief Maximal flat index, = \f$ \prod_{k=0}^{N-1} n_k -1 \f$ */
   int        max_flat_index() const { return n[0]*prod[0] -1;}
+  /*! \brief Linear size */
+  unsigned flat_size() const { return 1+ max_flat_index() - min_flat_index();}
   /*@}*/
 
 private:
