@@ -1,4 +1,4 @@
-SUBDIRS = composite
+SUBDIRS = composite mpi
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config

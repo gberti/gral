@@ -1,0 +1,37 @@
+#!/bin/bash
+MPIRUN=$1
+
+rm -f grid.complex2d grid.part
+cp    grid2x2.complex2d grid.complex2d
+cp    grid2x2.p.2x1     grid.part
+
+${MPIRUN} -v -np 2 -machinefile ./mpihosts test-distributed > 2x2.out 2>&1
+mv grid.0.out grid2x2.0.out
+mv grid.1.out grid2x2.1.out
+mv dgf.0 dgf2x2.0.out
+mv dgf.1 dgf2x2.1.out
+
+
+
+rm -f grid.complex2d grid.part
+cp    grid4x2.complex2d grid.complex2d
+cp    grid4x2.p.2x1     grid.part
+
+${MPIRUN} -v -np 2 -machinefile ./mpihosts test-distributed > 4x2.out 2>&1
+mv grid.0.out grid4x2.0.out
+mv grid.1.out grid4x2.1.out
+mv dgf.0 dgf4x2.0.out
+mv dgf.1 dgf4x2.1.out
+
+/bin/echo "\n"
+for i in grid2x2.*.out dgf2x2.?.out grid4x2.*.out dgf4x2.?.out
+do
+if diff $i $i.exp
+then 
+/bin/echo "\t\t\t" $i OK
+else
+/bin/echo "\t\t\t" ERROR in $i
+fi
+done
+/bin/echo "\n"
+
