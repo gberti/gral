@@ -17,7 +17,8 @@ latex:
 	(cd hyperlatex;\
            rm -f html/*; \
           (cd bilder; $(MAKE) all; $(MAKE) clean);\
-          hyperlatex-2.3.1 top;)
+          hyperlatex-2.3.1 top;\
+          cp not-yet-done.html html/)
 
 make-links:
 	(cd hyperlatex;\
