@@ -28,8 +28,8 @@ public:
 };
 
 template<>
-struct copy_traits<geom> {
-  static geom* clone(geom const& g) { return g.clone();}
+struct copy_traits<geom> : public copy_traits_base<geom> {
+    static geom* clone(geom const& g) { return g.clone();}
 };
 
 

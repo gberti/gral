@@ -53,6 +53,7 @@ public:
 
 template<>
 struct copy_traits<function_algebra_impl>
+    : public copy_traits_base<function_algebra_impl>
 {
   static function_algebra_impl* clone(function_algebra_impl const& f)
   { return f.clone();}

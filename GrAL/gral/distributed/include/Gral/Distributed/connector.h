@@ -64,7 +64,7 @@ public:
 
 /*! \brief specialization of copy_traits for connector_impl
  */
-struct copy_traits<connector_impl> {
+struct copy_traits<connector_impl> : public copy_traits_base<connector_impl> {
   static connector_impl* clone(connector_impl const& c) { return c.clone();}
 };
 
