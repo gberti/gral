@@ -30,6 +30,62 @@ public:
 };
 
 
+
+
+/*! \internal
+    \brief  Specialization for 1D grid, boundary of cells -> 0D grid
+ */
+template<class E>
+class boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<1> > 
+  : public boundary_grid_types_base<E, cell_type_tag, grid_dim_tag<1> >
+{
+  typedef boundary_grid_types_base<E, cell_type_tag, grid_dim_tag<1> > base;
+  typedef typename base::bgt          bgt;
+public:
+  typedef grid_dim_tag<0> dimension_tag;
+
+  typedef typename bgt::VertexOnEdgeIterator VertexIterator;
+  typedef typename bgt::Vertex               Cell;
+  typedef typename bgt::vertex_handle        cell_handle;
+  typedef typename bgt::VertexOnEdgeIterator CellIterator;
+};
+
+
+/*! \internal
+    \brief Specialization for 1D grid, boundary of cells -> 0D grid
+ */
+template<class E>
+class boundary_grid_aux<E, cell_type_tag, grid_dim_tag<1> > 
+  : public  boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<1> >
+{
+public:
+  typedef boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<1> > base;
+  typedef typename base::Vertex         Vertex;
+  typedef typename base::Cell           Cell;
+  typedef typename base::VertexIterator VertexIterator;
+  typedef typename base::CellIterator   CellIterator;
+
+  typedef E BaseCell;
+private:
+
+  BaseCell  bc;
+public:
+  boundary_grid_aux() {}
+  boundary_grid_aux(BaseCell bbc) : bc(bbc) {}
+
+  // for usage as in VertexIterator v(g); where g is of typeof(*this) 
+  operator BaseCell const&() const { return bc;}
+
+
+  VertexIterator FirstVertex()   const { return VertexIterator(bc);}
+  CellIterator   FirstCell()     const { return CellIterator(bc);}
+  unsigned       NumOfVertices() const { return 2; } 
+  unsigned       NumOfCells()    const { return 2; } 
+};
+
+
+
+
 /*! \internal
     \brief  Specialization for 2D grid, boundary of cells -> 1D grid
  */
@@ -290,6 +346,8 @@ public:
 
    \see \ref boundary module
    \see Test in \ref test-boundary-grid.C
+
+   \todo Implement a dimension-independent version
  */
 template<class E>
 class boundary_grid 
