@@ -22,7 +22,7 @@
 
   A sample use can be found in test-triang2d-construct.C.
 
-  \param   nbf [OUT]: A mapping Cell x int -> cell_handle
+  \param   nbf [OUT]: A mapping FacetOnCellIterator -> cell_handle
   \param   cell_set [IN]:  set of cells on which to calculate neighbors
   \param   facet_map [INOUT]: a (possibly empty) mapping
     from facet vertex sets to FacetOnCellIterators
@@ -77,12 +77,10 @@
  \templateparams
 
   - \c NBF
-     - <tt> nb_type& operator[](CGT::Cell C) </tt>
-        where nb_type satisfies:
-         <tt>  cell_handle& operator[](int nb) </tt>
-         \f$ nb \in [0, C.NumOfFacets() [ \f$
-     - \b Examples: <tt> grid_function<CGT::Cell, cell_handle[3]> </tt>
-     (for a triangulation, <tt> c.NumOfFacets() == 3 </tt> \f$ \forall \f$ cells c)
+     - <tt> cell_handle & operator[](CGT::FacetOnCellIterator fc) </tt>
+     - \b Examples:
+        - <tt> facet_on_cell_function<CGT::grid_type, CGT::cell_handle> </tt>
+        - <tt> STDHASH::hash_map<CGT::FacetOnCellIterator fc, CGT::cell_handle> </tt>
   - \c CGT (default: \c grid_types<CELLSET>)
      -  type \c Cell 
      -  type \c CellIterator
