@@ -1,0 +1,4 @@
+COPTFLAGS= -funroll-all-loops -O3 -ffast-math -fexpensive-optimizations \
+           -finline-limit=1000000 \
+           -DEXTERNC
+CCOMP=gcc3

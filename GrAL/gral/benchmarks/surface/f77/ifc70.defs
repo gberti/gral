@@ -1,0 +1,2 @@
+F77=/usr/net/lnx/INTEL/FORTRAN/compiler70/ia32/bin/ifc
+F77OPTFLAGS = -O2

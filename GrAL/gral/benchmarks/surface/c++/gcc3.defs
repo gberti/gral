@@ -1,0 +1,1 @@
+CCOPTFLAGS=-O3 -finline-functions -funroll-loops  -finline-limit=1000000

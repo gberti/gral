@@ -1,0 +1,2 @@
+CCOPTFLAGS=-O3 -fno-alias -opt_report -vec_report=5 -axW -std=c99
+CCOMP=$(CCC)
