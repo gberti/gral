@@ -52,11 +52,11 @@ void ConstructGrid0(Complex3D     & G_dest,
 
   // (3) copy cells
   for(typename sgt::CellIterator c_src(G_src); ! c_src.IsDone(); ++c_src) {
-    src_arch_handle a_src = G_src.archetype_of(c_src.handle());
+    src_arch_handle a_src = G_src.archetype_of((*c_src).handle());
     dst_arch_handle a_dst = arch_corr(a_src);
 
     gt::cell_handle c = G_dest.add_cell(a_dst);
-    c_corr[c] = c_src.handle();    
+    c_corr[(*c_src).handle()] = c;    
 
     //    int lv = 0; // should be sgt::archetype_type::VertexIterator
     typename grid_types<src_archetype>::VertexIterator 
