@@ -65,34 +65,34 @@ namespace restricted_grid_component_view {
   */
   template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
   class grid_view : public archetypes_from_base<grid_view<GRID, INSIDE_PRED, GT>, GRID, GT>  {
-   
-    public:
-      typedef GRID        grid_type;
-      typedef INSIDE_PRED pred_type;
-      
-      typedef typename  GT::Vertex baseVertex;
-      typedef typename  GT::Cell   baseCell;
-      typedef typename  GT::CellOnCellIterator   baseCellOnCellIterator;
-      typedef typename  GT::VertexOnCellIterator baseVertexOnCellIterator;
-      typedef typename  GT::vertex_handle vertex_handle;
-      typedef typename  GT::cell_handle   cell_handle;
+  public:
+    typedef GRID        grid_type;
+    typedef INSIDE_PRED pred_type;
+    
+    typedef typename  GT::Vertex baseVertex;
+    typedef typename  GT::Cell   baseCell;
+    typedef typename  GT::CellOnCellIterator   baseCellOnCellIterator;
+    typedef typename  GT::VertexOnCellIterator baseVertexOnCellIterator;
+    typedef typename  GT::vertex_handle vertex_handle;
+    typedef typename  GT::cell_handle   cell_handle;
+    
+    typedef enumerated_subrange<GRID> range_type;
+  private:
+    grid_type const*   g;
+    pred_type          inside;
+    baseCell           germ;
+    
+    mutable range_type range;
+    mutable bool       initialized;
+  public:
+    grid_view() {}
+    grid_view(grid_type const& gg,
+	      pred_type        ins,
+	      baseCell  const& grm)
+      : g(&gg), inside(ins), germ(grm), range(gg),  initialized(false)  {}
 
-      typedef enumerated_subrange<GRID> range_type;
-    private:
-      grid_type const*   g;
-      pred_type          inside;
-      baseCell           germ;
-      
-      mutable range_type range;
-      mutable bool       initialized;
-    public:
-      grid_view(grid_type const& gg,
-		pred_type        ins,
-		baseCell  const& grm)
-	: g(&gg), inside(ins), germ(grm), range(gg),  initialized(false)  {}
-      
     void init() const;
-  
+
     friend class restricted_grid_component_view::vertex_iterator<GRID,INSIDE_PRED, GT>;
     friend class restricted_grid_component_view::cell_iterator  <GRID,INSIDE_PRED, GT>;
     

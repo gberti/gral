@@ -63,6 +63,8 @@ template<class VOLUME,
          class GRIDGEOMETRY, 
          class GT = grid_types<typename GRIDGEOMETRY::grid_type > >
 class cell_intersects {
+  typedef cell_intersects<VOLUME,GRIDGEOMETRY,GT> self;
+
   typedef GRIDGEOMETRY  grid_geom_type;
   typedef VOLUME        volume_type;
   typedef typename GT::grid_type grid_type;
@@ -74,7 +76,7 @@ class cell_intersects {
   volume_type           volume;
 
 public:
-
+  cell_intersects() {}
   cell_intersects(volume_type           vol,
 		  grid_geom_type const& geo)
 	      
