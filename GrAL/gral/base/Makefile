@@ -14,7 +14,7 @@ compile:
 
 lib:
 
-DIRS = Base Geometries IO Iterators Subranges
+DIRS = Base Geometries IO Iterators Subranges Algorithms Algorithms/internal
 SHELL=/bin/bash
 install-headers:
 	for i in $(DIRS);\

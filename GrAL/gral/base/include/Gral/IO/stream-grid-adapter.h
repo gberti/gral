@@ -56,6 +56,8 @@ private:
   const stream_grid_mask<It>* the_grid;
   int v;
 public:
+  stream_grid_mask_vertex(const grid_type& g)
+    { *this = g.FirstVertex();}
   stream_grid_mask_vertex(const grid_type& g, int vv)
     : the_grid(&g), v(vv) {}
   
@@ -88,6 +90,8 @@ private:
   int numv;
   It  vertices;
 public:
+  stream_grid_mask_cell(const grid_type& g)
+    { *this = g.FirstCell();}
   stream_grid_mask_cell(const grid_type& g, int cc, It v) 
     : the_grid(&g), c(cc), numv(*v), vertices(v) {}
   
@@ -133,6 +137,8 @@ private:
 
   typedef stream_grid_mask_vertex_on_cell<It> self;
 public:
+  stream_grid_mask_vertex_on_cell(Cell const& cc)
+    { *this = cc.FirstVertex();}
   stream_grid_mask_vertex_on_cell(const grid_type& g, int cc, It v) 
     : the_grid(&g), c(cc), numv(*v), vertices(++v), cnt(1) {}
   

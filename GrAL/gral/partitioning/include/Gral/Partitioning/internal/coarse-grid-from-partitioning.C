@@ -139,7 +139,7 @@ void ConstructCoarsePartitionGrid(CoarseGrid& G,      // out
 		 CoarseCellCorr);
 
   for(unsigned v0 = 0; v0 < coarse_vertices.size(); ++v0)
-    coarse2fine_v[CoarseVertexCorr[v0]] = P.TheGrid().handle(coarse_vertices[v0]);  
+    coarse2fine_v[CoarseVertexCorr[v0]] = coarse_vertices[v0].handle();  
   
   for(unsigned c = 0; c < P.NumOfPartitions(); ++c)
     coarsecell2part[CoarseCellCorr[c]] = c;

@@ -11,9 +11,9 @@
 
 
 
-#include "Gral/Base/boundary-iterator.h"
+#include "Gral/Iterators/boundary-iterator.h"
 #include "Gral/Base/grid-functors.h"
-#include "Gral/Base/Algorithms/find-boundary-components.h"
+#include "Gral/Subranges/find-boundary-components.h"
 
 #include "list.h"
 

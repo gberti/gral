@@ -24,38 +24,50 @@
      out << range(C.begin(), C.end());
     \endcode
 
-    \todo:
-     Generalize to arbitrary containers / iterators.
 */
 
-template<class T>
+template<class It>
 struct iter_range {
-  T const* b;
-  T const* e;
-  iter_range(T const* bb, T const* ee) : b(bb), e(ee) {}
+  It b;
+  It e;
+  iter_range(It bb, It ee) : b(bb), e(ee) {}
 };
 
 /*! \brief creator function for iter_range<T>
    \ingroup iteratorrange
  */
-template<class T>
+template<class It>
 inline 
-iter_range<T> range(T const* bb, T const* ee) 
-{ return iter_range<T>(bb,ee); }
+iter_range<It> range(It bb, It ee) 
+{ return iter_range<It>(bb,ee); }
 
 
 /*! \brief output operator for iter_range<T>
    \ingroup iteratorrange
 */
-template<class T>
+template<class It>
 inline
-ostream& operator<<(ostream& out, iter_range<T> r)
+ostream& operator<<(ostream& out, iter_range<It> r)
 {
   while(r.b != r.e) {
     out << *(r.b) << ' ';
     ++r.b;
   }
   return out;
+}
+
+/*! \brief inputput operator for iter_range<T>
+   \ingroup iteratorrange
+*/
+template<class It>
+inline
+istream& operator>>(istream& in, iter_range<It> r)
+{
+  while(r.b != r.e) {
+    in  >> *(r.b);
+    ++r.b;
+  }
+  return in;
 }
 
 #endif

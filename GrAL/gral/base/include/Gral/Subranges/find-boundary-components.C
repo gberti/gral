@@ -10,11 +10,11 @@
 //----------------------------------------------------------------
 
 #include "Container/dummy-container.h"
-#include "Grids/Algorithms/find-boundary-components.h"
+#include "Gral/Subranges/find-boundary-components.h"
 
-#include "Grids/common-grid-basics.h"
-#include "Grids/boundary-iterator.h"
-#include "Grids/grid-functors.h"
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Iterators/boundary-iterator.h"
+#include "Gral/Base/grid-functors.h"
 
 template<class GRID>
 int count_boundary_facets(GRID const& G)

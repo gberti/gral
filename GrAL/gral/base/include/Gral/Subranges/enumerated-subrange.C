@@ -34,7 +34,7 @@ void ConstructSubrangeFromCells
   partial_grid_function<Vertex,bool> visited(G,false);
   while(! Cit.IsDone()) {
     Cell C(*Cit);
-    R.append_cell(G.handle(C));
+    R.append_cell(C.handle());
     for(VertexOnCellIterator vc = C.FirstVertex(); ! vc.IsDone(); ++vc) {
       if(!visited(*vc)) {
 	visited[*vc] = true;

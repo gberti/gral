@@ -5,6 +5,6 @@ CONFIG=$(PWD)/../mk.config
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
 
-SUBDIRS = construct
+SUBDIRS = construct 
 
 

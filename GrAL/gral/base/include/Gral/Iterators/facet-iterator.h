@@ -100,7 +100,7 @@ private:
   // already visited from the other side.
   bool is_new_facet() { 
     return (   TheGrid().IsOnBoundary(fc)
-	       || (fc.OtherCell() < *c));
+	       || (fc.other_cell() < c.handle()));
   }
 
 };

@@ -311,9 +311,9 @@ public:
   }
 
   void append(elt_handle v) { elements.push_back(v);}
-  void append(Element v)    { elements.push_back(TheGrid().handle(v));}
+  void append(Element v)    { elements.push_back(v.handle());}
   void push_back(elt_handle v) { elements.push_back(v);}
-  void push_back(Element v)    { elements.push_back(TheGrid().handle(v));}
+  void push_back(Element v)    { elements.push_back(v.handle());}
 
   //-------------------- component access ----------------------
 

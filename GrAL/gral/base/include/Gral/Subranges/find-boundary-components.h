@@ -59,7 +59,7 @@ void find_boundary_component_germs(GRID const& G, FACETSET & C,
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Base/Algorithms/find-boundary-components.C"
+#include "Gral/Subranges/find-boundary-components.C"
 #endif
 
 #endif

@@ -4,41 +4,37 @@ include $(CONFIG)
 
 TARGET=all
 
-HEADERS= $(shell ls include/Container/*.h)
 all:
 
 new:
-
 
 compile:
 
 lib:
 
-
 install-headers:
-	mkdir -p $(INSTALLHEADERS)/Container
-	cp include/Container/*.h $(INSTALLHEADERS)/Container
-	cp include/Container/*.C $(INSTALLHEADERS)/Container
+	mkdir -p $(INSTALLHEADERS)/Gral/Partitioning/internal
+	cp include/Gral/Partitioning/*.h  $(INSTALLHEADERS)/Gral/Partitioning
+	cp include/Gral/Partitioning/internal/*.C \
+           $(INSTALLHEADERS)/Gral/Partitioning/internal
+
+install: install-headers 
 
 clean:
-	(cd test; $(MAKE) clean DEPS="")
-	(cd doc;  $(MAKE) clean DEPS="")
-	rm -f *~ include/*~ include/*/*~
+	find . -name "*~" -exec rm {} \; -print
 
 realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen/
 
 test:
-	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
-doc: doxy tex
 
 doxy:
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(PWD); export TEXINPUTS; doxygen doxy.cfg;)
 
-tex:
+docs:
 	(cd doc; $(MAKE) $(TARGET))
 	rm -f $(ROOT)/doxygen/html/external-control.html
 	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html

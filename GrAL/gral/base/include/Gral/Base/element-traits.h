@@ -57,6 +57,8 @@ struct element_traits_vertex_base {
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstVertex();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfVertices();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
+  static element_type    handle2element(grid_type const& g, handle_type h)
+  { return g.vertex(h);}
 };
 
 /*! \brief basic definition to derive from for actual specializations
@@ -77,7 +79,8 @@ struct element_traits_edge2d_base {
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstEdge();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfEdges();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
-};
+  static element_type    handle2element(grid_type const& g, handle_type h)
+  { return g.edge(h);}};
 
 /*! \brief basic definition to derive from for actual specializations
      of element_traits<>
@@ -97,7 +100,8 @@ struct element_traits_cell_base {
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstCell();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfCells();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
-};
+  static element_type    handle2element(grid_type const& g, handle_type h)
+  { return g.cell(h);}};
 
 
 /*! \brief basic definition to derive from for actual specializations

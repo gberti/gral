@@ -91,6 +91,20 @@ public:
   \see Module \ref mutatingoperations
   \see \ref ConstructGrid
  */
+template<class GRID>
+void ConstructGrid0(OstreamComplex2DFmt& Out, 
+		    GRID const& G)
+{
+  write_complex2d(G, Out.Out());
+}
+/*! \brief ConstructGrid overload for OstreamComplex2DFmt
+  \ingroup complex2dformat
+  \relates OstreamComplex2DFmt
+  
+  \see Module \ref complex2dformat
+  \see Module \ref mutatingoperations
+  \see \ref ConstructGrid
+ */
 template<class GRID, class GEOM>
 void ConstructGrid(OstreamComplex2DFmt& Out, 
                    GRID const& G, GEOM const& Geom)

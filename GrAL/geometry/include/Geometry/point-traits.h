@@ -99,4 +99,13 @@ inline void assign_point(P & p, T const* b, T const* e)
     p[ip] = *b; 
 }  
 
+template<class P>
+void assign_point(P& p, P const& q) { p = q;}
+
+template<class P>
+void assign_point(float& p, P const& q) 
+
+{ p = point_traits<P>::x(q);}
+
+void assign_point(float& p, float q) { p = q;}
 #endif

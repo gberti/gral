@@ -22,6 +22,7 @@ demo:
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Geometry
 	cp include/Geometry/*.h $(INSTALLHEADERS)/Geometry
+	cp include/Geometry/*.C $(INSTALLHEADERS)/Geometry
 
 clean:
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
@@ -32,7 +33,6 @@ tarclean: clean
 
 realclean: tarclean
 	rm -rf doxygen/
-	(cd doc; gmake realclean)
 
 doxy:
 

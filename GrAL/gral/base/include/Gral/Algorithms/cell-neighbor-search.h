@@ -115,7 +115,7 @@ void CalculateNeighborCells(NBF             &  Nb,          // out
 			    CELLSET    const&  cell_set);   // in
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Algorithms/generic/cell-neighbor-search.C"
+#include "Gral/Algorithms/internal/cell-neighbor-search.C"
 #endif
 
 #endif

@@ -33,7 +33,7 @@
     \see Module \ref  writecomplex2d
 */
 template<class GRID>
-void write_complex2d(GRID const& G,  ostream& out);
+void write_complex2d(GRID const& G,  ostream& out, int offset = 1);
 
 /*! \ingroup writecomplex2d
     

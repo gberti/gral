@@ -52,20 +52,20 @@ public:
 
   Vertex operator() (const Vertex& V) const 
     { 
-      return ( vertex_map.defined(TheGrid().handle(V)) ? 
-	       TheGrid().vertex(vertex_map(TheGrid().handle(V)))
+      return ( vertex_map.defined(V.handle()) ? 
+	       TheGrid().vertex(vertex_map(V.handle()))
 	       : V);
 	}
   Facet operator() (const Facet& F) const 
     { 
-      return ( facet_map.defined(TheGrid().handle(F)) ? 
-	       TheGrid().facet(facet_map(TheGrid().handle(F)))
+      return ( facet_map.defined(F.handle()) ? 
+	       TheGrid().facet(facet_map(F.handle()))
 	       : F);
 	}
   Cell operator() (const Cell& C) const 
     { 
-      return ( cell_map.defined(TheGrid().handle(C)) ? 
-	       TheGrid().cell(cell_map(TheGrid().handle(C)))
+      return ( cell_map.defined(C.handle()) ? 
+	       TheGrid().cell(cell_map(C.handle()))
 	       : C);
 	}
   

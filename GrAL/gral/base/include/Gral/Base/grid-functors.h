@@ -97,7 +97,7 @@ public:
 
   result_type operator()(const argument_type& c) const {
     REQUIRE((g != 0), "no grid!\n",1);
-    return g->handle(c);
+    return c.handle();
   }
 
   grid_type const& TheGrid() const { 
@@ -190,7 +190,7 @@ public:
 
   result_type operator()(const argument_type& c) const { 
     REQUIRE((g != 0), "no grid!\n",1);
-    return g->handle(c);
+    return c.handle();
   }
   grid_type const& TheGrid() const {
     REQUIRE((g!=0),"no grid!\n",1);
@@ -284,7 +284,7 @@ public:
 
   result_type operator()(const argument_type& e) const {
     REQUIRE((g != 0), "no grid!\n",1);
-    return g->handle(e);
+    return e.handle();
   }
   grid_type const& TheGrid() const { 
     REQUIRE((g!=0),"no grid!\n",1);

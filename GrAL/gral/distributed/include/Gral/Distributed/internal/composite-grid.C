@@ -33,37 +33,36 @@ void check_composite_grid(const CompositeGrid<CoarseG,FineG>& CG)
 
   grid_function<Cell,int> Num(CG.TheCoarseGrid());
   enumerate(CG.TheCoarseGrid(),Num,0);
-  /*  
   for(CellIterator C = CG.TheCoarseGrid().FirstCell(); ! C.IsDone(); ++C) {
-    IOMgr::Info() << "-------------------------------------------------\n"
+    cerr << "-------------------------------------------------\n"
 		  << "checking cell " << Num(*C) << "\n\n";
     for(NeighbourIterator Nb = CG.FirstNeighbour(*C); ! Nb.IsDone(); ++Nb) {
-      IOMgr::Info() << "   |CopiedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+      cerr << "   |CopiedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).vertices(*C ).copied() .size() << " = "
 		    <<  CG.Overlap(*C).vertices(*Nb ).exposed() .size() << " = "
 		    << "|ExposedVertices(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-      IOMgr::Info() << "   |CopiedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+      cerr << "   |CopiedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).cells(*C ).copied() .size() << " = "
 		    <<  CG.Overlap(*C).cells(*Nb ).exposed() .size() << " = "
 		    << "|ExposedCells(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-      IOMgr::Info() << "   |SharedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+      cerr << "   |SharedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).vertices(*C ).shared() .size() << " = "
 		    <<  CG.Overlap(*C).vertices(*Nb ).shared() .size() << " = "
 		    << "|SharedVertices(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-      IOMgr::Info() << "   |SharedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+      cerr << "   |SharedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).cells(*C ).shared() .size() << " = "
 		    <<  CG.Overlap(*C).cells(*Nb ).shared() .size() << " = "
 		    << "|SharedCells(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
 
 
     }
-    IOMgr::Info() << "-------------------------------------------------\n";
-        
+    cerr << "-------------------------------------------------\n";
+
   }
-  */
+  
 }
 
 

@@ -82,7 +82,7 @@ void mark_cells_on_vertices(VertexIt   seed,
  
   while(! seed.IsDone()) {
     Vertex V = *seed;
-    for(CellOnVertexIterator cv = V.FirstCell(); ! cv.IsDone(); ++cv)
+    for(CellOnVertexIterator cv(V); ! cv.IsDone(); ++cv)
       if( inside(*cv)) {
 	Cell C(*cv);
 	if(visited(C) == 0) {

@@ -7,7 +7,7 @@ TARGET=all
 all:
 	(cd src; $(MAKE) all)
 
-new:
+new: realclean
 	(cd src; $(MAKE) new)
 
 

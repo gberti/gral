@@ -7,7 +7,7 @@ TARGET=all
 all:
 	(cd src; $(MAKE) all)
 
-new:
+new: realclean
 	(cd src; $(MAKE) new)
 
 compile:
@@ -17,13 +17,16 @@ lib:
 	(cd src; $(MAKE) lib)
 
 install-headers:
-	mkdir -p $(INSTALLHEADERS)/Gral/Distributed
+	mkdir -p $(INSTALLHEADERS)/Gral/Distributed/internal
 	cp include/Gral/Distributed/*.h  $(INSTALLHEADERS)/Gral/Distributed
+	cp include/Gral/Distributed/internal/*.h  $(INSTALLHEADERS)/Gral/Distributed/internal
+	cp include/Gral/Distributed/internal/*.C  $(INSTALLHEADERS)/Gral/Distributed/internal
 
 install: install-headers  install-libs
 
 clean:
 	(cd src;  $(MAKE) clean DEPS="")
+	(cd test;  $(MAKE) clean DEPS="")
 	find include -name "*~" -exec rm {} \; -print
 
 realclean: clean

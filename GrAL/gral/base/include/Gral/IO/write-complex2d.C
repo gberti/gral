@@ -21,7 +21,7 @@
 
 
 template<class GRID>
-void write_complex2d(GRID const& G,  ostream& out)
+void write_complex2d(GRID const& G,  ostream& out, int offset = 1)
 {
   typedef grid_types<GRID>                  gt;
   typedef typename gt::Vertex               Vertex;

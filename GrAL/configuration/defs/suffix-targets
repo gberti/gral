@@ -5,6 +5,7 @@
 distclean: realclean
 clobber:   realclean
 
+
 # This is the central place of specifying which files to clean
 # As every C++ compiler leaves different stuff behind when dealing
 # with templates, it is wise to concentrate this information.
@@ -14,7 +15,7 @@ clobber:   realclean
 stdclean: moduleclean
 	rm -f *~ *.o *.rpo *.d *.ti *.ii
 	rm -rf ti_files # KCC template DB
-
+	rm -f .nfs*
 
 install-libs:
 	mkdir -p $(PREFIX)/lib/$(LIBPATH)

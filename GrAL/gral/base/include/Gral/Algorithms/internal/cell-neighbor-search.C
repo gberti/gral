@@ -9,10 +9,11 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/common-grid-basics.h"
-#include "Grids/Algorithms/cell-neighbor-search.h"
-#include "Grids/vtuple2d.h"
-#include "hash_map.h"
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Algorithms/cell-neighbor-search.h"
+#include "Gral/Base/vtuple2d.h"
+
+#include "Container/my-hash-map.h"
 
 //----------------------------------------------------------------
 //
@@ -42,8 +43,10 @@ void CalculateNeighborCells(NBF             &  Nb,          // out
   CalculateNeighborCells(Nb,cell_set,facet_map, gt()); 
 
   for(typename FACETMAP::const_iterator f = facet_map.begin();
-      f != facet_map.end(); ++f)
+      f != facet_map.end(); ++f) {
+    // gt::outer_cell() ?
     Nb[(*f).second] = gt::invalid_cell_handle(cell_set);
+  }
 }
 
 
@@ -74,8 +77,10 @@ void CalculateNeighborCells(NBF           &  NB,
         // do appropriate entries in the neighborlists
         //  & remove facet from the map.
         FacetOnCellIt NbIt((*nb).second);
-        NB[NbIt]    = CGT::handle(f.TheCell());
-        NB[f   ]    = CGT::handle(NbIt.TheCell());
+        NB[NbIt] = 0;
+	typename CGT::cell_handle fh = f.TheCell().handle();
+        NB[NbIt]    = fh;
+        NB[f   ]    = NbIt.TheCell().handle();
 
         facet_map.erase(nb);
       }

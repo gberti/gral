@@ -7,7 +7,7 @@ TARGET=all
 all:
 	(cd src; $(MAKE) all)
 
-new:
+new: realclean
 	(cd src; $(MAKE) new)
 
 compile:
@@ -27,6 +27,7 @@ install: install-headers  install-libs
 
 clean:
 	(cd src;  $(MAKE) clean DEPS="")
+	(cd test;  $(MAKE) clean DEPS="")
 	find include -name "*~" -exec rm {} \; -print
 
 realclean: clean
