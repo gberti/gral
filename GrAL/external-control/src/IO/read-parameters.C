@@ -58,8 +58,7 @@ void MutableVars::ReadVariable(::std::istream& is)
      ::std::map< ::std::string, Mutator*, ::std::less< ::std::string> >::iterator it;
     if( (it = table->find(s)) != table->end()) {
       //  cerr << "found: " << s << endl;
-      // (*table)[s]->read(is);//.the_istream()); // hier nur istream-Funktionalitaet!
-      (*it).second->read(is);//.the_istream()); // hier nur istream-Funktionalitaet!
+      (*it).second->read(is);
     }
     else if (s != "\n")
       unrecognized->push_back(s);
