@@ -84,7 +84,7 @@ public:
 
   virtual coord_type eval(const coord_type& x) const { return coord_type(atan(x[1]));}
 
-  virtual string name() const {return "function_algebra_atan";}
+  virtual std::string name() const {return "function_algebra_atan";}
 
   virtual std::string write_code_eval(std::ostream& out, int& vnum, 
                                       std::string const& var) const
@@ -93,7 +93,7 @@ public:
   virtual  std::string write_code_derive(std::ostream& out, int& vnum, 
                                          std::string const& varx, std::string const& varh) const
   {
-    string r(makename("d_atan",vnum++)); 
+    std::string r(makename("d_atan",vnum++)); 
     out << "double " << r << "(" << varh << "/(1+sqr( " << varx << ")));\n ";
     return r;
   } 

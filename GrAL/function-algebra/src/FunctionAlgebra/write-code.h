@@ -34,11 +34,11 @@ inline std::string write_code_eval_libfct(std::ostream     & out,
     return r;
 } 
 
-inline string write_code_derive_libfct(std::ostream     & out, 
-                                       int              & vnum, 
-                                       std::string const& varx,
-                                       std::string const& varh,
-				       std::string const& d_fct)
+inline std::string write_code_derive_libfct(std::ostream     & out, 
+					    int              & vnum, 
+					    std::string const& varx,
+					    std::string const& varh,
+					    std::string const& d_fct)
 {
     std::string r(makename(d_fct,vnum++)); 
     out << "double " << r << "(  " << d_fct << "(" << varx << ") *  " << varh << ");\n ";

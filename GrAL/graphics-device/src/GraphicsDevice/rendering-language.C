@@ -10,9 +10,9 @@
 
 class rlang_internals {
 public:
-  ostream* out;
-  stack<Transformation,vector<Transformation> > todo_trafo;
-  rlang_internals(ostream* o) : out(o), todo_trafo() {}
+  std::ostream* out;
+  std::stack<Transformation, std::vector<Transformation> > todo_trafo;
+  rlang_internals(std::ostream* o) : out(o), todo_trafo() {}
 };
 
 rlang_internals*  copy_traits<rlang_internals>::clone(rlang_internals const& t)

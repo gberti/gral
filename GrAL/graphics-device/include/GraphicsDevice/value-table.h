@@ -31,9 +31,9 @@ public:
 }
 
  void                setval(const generic_value<KEY>* v) { t=((typed_value<T,KEY>*)v)->t;} 
- void print(ostream& out) const {t.print(out);}
- T   Value()              const {return(t);}
- KEY   key()              const {return(t.key());}
+ void print(std::ostream& out) const {t.print(out);}
+ T   Value() const {return(t);}
+ KEY   key() const {return(t.key());}
 };
 
 

@@ -9,7 +9,7 @@
 #include "Utility/reference-count.h"
 
 
-typedef string               attr_key;
+typedef std::string          attr_key;
 typedef ValueTable<attr_key> attribute;
 
 

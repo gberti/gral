@@ -8,7 +8,7 @@ Commandline::Commandline(int argc, char* argv[]) : commands("") {
   ostrstream cmds;
   for(int i = 1; i < argc; ++i)
     cmds << argv[i] << " ";
-  cmds << '\n' << ends;
+  cmds << '\n' << std::ends;
   int n = strlen(cmds.str());
   char* copy = new char[n+1];
   strcpy(copy,cmds.str());

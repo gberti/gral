@@ -79,7 +79,7 @@ oogl * oogl::clone() const { return new oogl(*this);}
 void oogl::pause(double seconds) 
 { the_stream() << "\n(sleep-for " << seconds << ")\n";} 
 
-void oogl::read_from_file(const string& file)
+void oogl::read_from_file(const std::string& file)
 { the_stream() << "< " << '"' << file << '"'  << " ";}
 
 
@@ -91,7 +91,7 @@ void oogl::begin_object(const RenderableGeom& Obj)
 void oogl::end_object()  { the_stream() << "}\n";}
 
 
-void oogl::begin_group(const string& name)
+void oogl::begin_group(const std::string& name)
 {
   the_stream() << "(geometry " << name << " {  LIST {\n";
   //the_stream() << "LIST {";

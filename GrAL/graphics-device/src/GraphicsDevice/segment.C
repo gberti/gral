@@ -6,7 +6,7 @@
 void geom_segment_list::write_geom_to(rendering_language& L) const 
 { 
   L.begin_block();
-  typedef list<geom_segment>::const_iterator cit;
+  typedef std::list<geom_segment>::const_iterator cit;
   for (cit i=LI.begin();i!=LI.end();++i) {
     L.write_segment((*i));
   }

@@ -32,8 +32,8 @@ protected:
             coord_type  const& cc2,
             coord_type  const& cc3);
 public:
-  geom_word(const string& ss,coord_type const& cc1) {str=ss;c[0]=cc1;}
-  geom_word(const string& ss,
+  geom_word(const std::string& ss,coord_type const& cc1) {str=ss;c[0]=cc1;}
+  geom_word(const std::string& ss,
             coord_type const& cc1,
             coord_type const& cc2,
             coord_type const& cc3) 
@@ -42,7 +42,7 @@ public:
 
   virtual void write_geom_to(rendering_language& L) const; 
 
-  string text() const { return str;}
+  std::string text() const { return str;}
 
   coord_type const&  corner(int i) const 
     {
