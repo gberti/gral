@@ -18,7 +18,7 @@ Building it:
      (Not needed for the following steps)
 
 1) Unpack the stuff:
-$ tar -xfv gral-all.tar
+$ tar -xfv gral-src.tar
 
 This will create a directory GrAL (corresponds to ALLROOT in Makefiles).
 
@@ -31,15 +31,22 @@ and configuration/defs/suffix-targets.
 Here, you can set globally compiler and architecture
 (needed to select appropriate options).
 
+Some modules use 3rd party software, 
+the corresponding targets are disabled by default
+(see below).
+
+
 The following explanation refer to the case that you want to
 operate on all modules collectively (should be the normal case
 when starting).
-If you want to operate on individual modules, there are two choices:
-a)  Edit in mk.config the variable ALLROOT 
-   to point to the top level directory in the tar file (i.e. GrAL/). 
-   [This should hopefully be the only thing to edit in each module ...]
-b) Alternatively, add an argument ALLROOT=/path/to/GrAL to gmake calls.
 
+
+[ If you want to operate on individual modules, there are two choices:
+  a)  Edit in mk.config the variable ALLROOT 
+     to point to the top level directory in the tar file (i.e. GrAL/). 
+     [This should hopefully be the only thing to edit in each module ...]
+  b) Alternatively, add an argument ALLROOT=/path/to/GrAL to gmake calls.
+]
 
 2) Then run from ALLROOT
 $ gmake new
@@ -63,11 +70,19 @@ and PREFIX/include, resp.
 
 4) Build tests:
 
-To only build tests, call
+4a) To only build tests, call
 $ gmake test [PREFIX=/your/prefix]
 
-To perform the checks, call
+4b) To perform the checks, call
 $ gmake check [PREFIX=/your/prefix]
+
+
+4') To build & check at once, do
+$ gmake test-check-clean [PREFIX=/your/prefix]
+(will clean after check, so it does not need so much
+ temporary disk space)
+
+
 
 Notes on using GrAL parts depending 3rd party libraries
 -------------------------------------------------------
@@ -77,7 +92,7 @@ These are disabled by default.
 - If you want to test also  MPI-related stuff,
   use the above with setting WITHMPI=true,
   or set this variable in gral/distributed/mk.config
-- If you want to test Metis related stuff,
+- If you want to test Metis related stuff (in gral/partitioning),
   set WITHMETIS=true on the command line or in
   gral/partitioning/mk.config (here you have also to adapt
   some paths pointing to Metis)
