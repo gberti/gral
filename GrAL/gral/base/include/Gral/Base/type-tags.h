@@ -50,7 +50,7 @@ class tp {};
 
 /*! \ingroup elementtags
  */
-enum grid_element_tag { vertex_tag, edge_tag, facet_tag, cell_tag };
+enum grid_element_tag { vertex_tag, edge_tag, facet_tag, face_tag, cell_tag, invalid_tag };
 
 /*! \brief Type tag for vertices 
     \ingroup elementtags
@@ -58,9 +58,12 @@ enum grid_element_tag { vertex_tag, edge_tag, facet_tag, cell_tag };
 class vertex_type_tag {};
 
 /*! \ingroup elementtags
-
  */
 class edge_type_tag   {};
+
+/*! \ingroup elementtags
+ */
+class face_type_tag  {};
 
 /*! \ingroup elementtags
  */
