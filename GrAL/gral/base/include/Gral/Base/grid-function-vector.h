@@ -15,7 +15,9 @@ namespace GrAL {
 //----------------------------------------------------------------
 /*! \brief Implements a grid_function on vector-basis.
   \ingroup gridfunctions 
- 
+
+  Model of $GrAL TotalGridFunction.
+
   This can be used if
   elements of type E are numbered consecutively. 
 

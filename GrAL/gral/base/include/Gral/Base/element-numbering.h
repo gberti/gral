@@ -32,6 +32,7 @@ public:
 
   grid_type const& TheGrid() const { return *g;}
 
+  int offset() const { return offset_;}
 };
 
 
@@ -61,6 +62,7 @@ public:
 
   grid_type const& TheGrid() const { return num.TheGrid();}
 
+  int offset() const { return offset_;}
 };
 
 
@@ -77,6 +79,8 @@ public:
     \todo Make it deal correctly with grid subranges, where the
      \c consecutive_tag of underlying \c element_handle does not
      induce the Right Thing. 
+
+     \see Tested in \ref test-element-numbering.C
  */
 
 template<class E, class GT = grid_types<typename element_traits<E>::grid_type> >
@@ -85,8 +89,27 @@ class element_numbering :
 {
   typedef element_numbering_aux<E, GT, typename element_traits<E>::consecutive_tag> base;
 public:
+  //! \brief Construct with offset. Typical choices are 0 (default) and 1.
   element_numbering(typename base::grid_type const& g,
 		    int offset = 0) : base(g, offset) {}
+
+  /* The following is repeated for documentation purposes */
+
+  typedef int value_type;
+  typedef int result_type;
+  typedef typename base::element_type element_type;
+  typedef element_type argument_type;
+
+  /*! \brief Get number of element \c e.
+
+      \return The result will be within <tt>[offset, ne + offset[ </tt>
+      where \c ne is the number of elements of type \c element_type in the grid of \c e,
+      and \c offset has been specified in the constructor.
+   */
+  int operator()(element_type const& e) const { return base::operator()(e);}
+
+  //! \brief Return the value of the first element.
+  int offset() const { return base::offset();}
 };
 
 } // namespace GrAL 
