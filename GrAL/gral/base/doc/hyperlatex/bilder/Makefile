@@ -6,7 +6,7 @@ GIFFILES=$(PSTRICKS:%.tex=%.gif)
 JPGFILES=$(PSTRICKS:%.tex=%.jpeg)
 
 
-CONVERT = convert
+CONVERT = convert 
 #CONVERT = pstogif
 
 .SUFFIXES: .gif .eps .ps .tex .jpeg
@@ -25,6 +25,7 @@ CONVERT = convert
 	rm -r ${@}.1
 
 .eps.jpeg:
+	echo $(CONVERT)
 	$(CONVERT) $< $@
 	mv ${@}.0 $@ || echo " (OK) "
 	rm -f ${@}.1

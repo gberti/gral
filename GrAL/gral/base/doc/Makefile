@@ -49,6 +49,6 @@ clean: stdclean
 
 realclean: clean
 	rm -rf hyperlatex/html
-
+	(cd hyperlatex; gmake realclean)
 
 
