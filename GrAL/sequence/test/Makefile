@@ -4,6 +4,7 @@ SUBDIRS = bijective-mapping  \
           combinatorial \
           histogram \
           index-map-nd \
+          integer-range \
           sequence-algorithms \
           tuple 
 
