@@ -19,6 +19,7 @@ struct dimension_dependent_primitives_3d
   : public virtual basic_algebraic_primitives<POINT> {
 private:
   typedef basic_algebraic_primitives<POINT> base;
+  typedef typename base::pt                 pt;
 public:
   typedef typename base::scalar scalar;
   typedef typename base::real   real;
