@@ -204,12 +204,12 @@ public:
 
   /*! \name Checking functions */
  /*@{*/ 
-  void cv(vertex_handle e) const { REQUIRE(valid(e), "",1);}
-  bool valid(vertex_handle e) const { return (0 <= e && e < (int)NumOfVertices()); }
-  void cv(edge_handle e) const { REQUIRE(valid(e), "",1);}
-  bool valid(edge_handle e) const { return (0 <= e && e < (int)NumOfEdges()); }
-  void cv(cell_handle e) const { REQUIRE(valid(e), "",1);}
-  bool valid(cell_handle e) const { return (0 <= e && e < (int)NumOfCells()); }
+  void cv(vertex_handle e) const { REQUIRE(valid_handle(e), "",1);}
+  bool valid_handle(vertex_handle e) const { return (0 <= e && e < (int)NumOfVertices()); }
+  void cv(edge_handle e) const { REQUIRE(valid_handle(e), "",1);}
+  bool valid_handle(edge_handle e) const { return (0 <= e && e < (int)NumOfEdges()); }
+  void cv(cell_handle e) const { REQUIRE(valid_handle(e), "",1);}
+  bool valid_handle(cell_handle e) const { return (0 <= e && e < (int)NumOfCells()); }
   /*@}*/
 
 
@@ -588,7 +588,7 @@ public:
     friend bool operator!=(const self& lhs, const self& rhs) 
       { return !(lhs == rhs);}
 
-    bool valid() const { return bound() && TheGrid().valid(v);}
+    bool valid() const { return bound() && TheGrid().valid_handle(v);}
     void cv()    const { REQUIRE(valid(), "handle= " << v, 1);}
   private:
     vertex_handle v;
@@ -624,7 +624,7 @@ public:
     friend bool operator!=(const self& lhs, const self& rhs) 
       { return !(lhs == rhs);}
 
-    bool valid() const { return bound() && TheGrid().valid(e);}
+    bool valid() const { return bound() && TheGrid().valid_handle(e);}
     void cv()    const { REQUIRE(valid(), "handle= " << e, 1);}
   private:
     edge_handle e;
@@ -659,7 +659,7 @@ public:
     friend bool operator!=(const self& lhs, const self& rhs) 
       { return !(lhs == rhs);}
 
-    bool valid() const { return bound() && TheGrid().valid(c);}
+    bool valid() const { return bound() && TheGrid().valid_handle(c);}
     void cv()    const { REQUIRE(valid(), "handle= " << c, 1);}
   private:
     cell_handle c;
@@ -1107,6 +1107,7 @@ public:
   /*@{*/ 
   static archetype_iterator BeginArchetype() { return sd.the_archetype; }
   static archetype_iterator EndArchetype()   { return sd.the_archetype+1; }
+  static archetype_handle   handle(archetype_iterator it)  { return it - BeginArchetype();}
   static archetype_type const& Archetype(archetype_handle = 0) { return *BeginArchetype();} 
   static archetype_type const& ArchetypeOf (Cell const&)  
     { return *BeginArchetype();}
