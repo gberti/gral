@@ -160,6 +160,7 @@ namespace extrusion_view {
     // v[3], v[4], v[5] top  triangle
     // Invariant: v[0] < v[1] < v[2]
   public:
+    using base::TheGrid;
     prism_subdivision() {}
 
     prism_subdivision(ref_ptr<grid_type const> g, typename bgt::Cell const& tri) : base(g)
@@ -226,6 +227,10 @@ namespace extrusion_view {
     typename bgt::VertexIterator v;
     int                          lv;
   public:
+    using base::cb;
+    using base::bound;
+    using base::TheGrid;
+
     vertex_iterator_t() {}
     vertex_iterator_t(grid_type const&         gg)                   : base(gg), v(* TheGrid()->BaseGrid()), lv(0) {}
     vertex_iterator_t(grid_type const&         gg, vertex_handle vv) : base(gg), v(* TheGrid()->BaseGrid(), vv.first), lv(vv.second) {}    
@@ -257,10 +262,15 @@ namespace extrusion_view {
     typedef typename base::cell_handle cell_handle;
     typedef typename base::archgt      archgt;
 
+    typedef typename base::bgt bgt;
     typename bgt::CellIterator tri;
     int                        lc;
     prism_subdivision<GRID2D>  sub;
   public:
+    using base::cb;
+    using base::bound;
+    using base::TheGrid;
+
     cell_iterator_t() {}
     cell_iterator_t(grid_type const&         g) 
       : base(g), tri(* TheGrid()->BaseGrid()), lc(0), sub(TheGrid(), *tri) {}
@@ -309,6 +319,7 @@ namespace extrusion_view {
     typename gt::Cell c;
     int               lv;
   public:
+
     vertex_on_cell_iterator_t() {}
     vertex_on_cell_iterator_t(typename gt::Cell const& cc, int llv = 0) : c(cc), lv(llv) {}
 
@@ -472,6 +483,7 @@ namespace extrusion_view {
 	     mapping_type const& ff, extrusion_dir d = keep_original) 
       : g(gg), bgeom(geo), f(ff), dir(d) {}
 
+    ref_ptr<grid_type const> TheGrid() const { return g;}
     unsigned space_dimension() const { return pt::Dim(coord(* TheGrid()->FirstVertex()));}
     coord_type coord(typename gt::Vertex const& v) const 
     { 

@@ -291,6 +291,7 @@ private:
 /*! \brief specialization of grid_types for SubrangeReg2D
 
  */
+template<>
 struct grid_types<cartesian2d::SubrangeReg2D> {
   typedef  cartesian2d::SubrangeReg2D range_type;
   typedef  range_type::VertexIterator VertexIterator;

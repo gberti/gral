@@ -384,11 +384,13 @@ namespace cartesiannd {
     typedef grid<DIM> base_grid_type;
     typedef grid<DIM-1> facet_grid_type;
 
+    typedef typename base::index_type        index_type;
     typedef typename base::vertex_index_type vertex_index_type;
 
     typedef grid_types_base<grid_type, DIM> bgt;
     typedef typename bgt::Vertex  BaseVertex;
     typedef typename bgt::Cell    BaseCell;
+
   private:
     ref_ptr<grid_type const> g;
   public:

@@ -7,9 +7,9 @@
 #include <iostream>
 
 namespace cartesiannd {
-  template grid<1>;
-  template grid<2>;
-  template grid<3>;
+  template class grid<1>;
+  template class grid<2>;
+  template class grid<3>;
 }
 
 
@@ -31,7 +31,7 @@ struct local_vertex_access_tester<G,1>  {
   static void act(G const& g, std::ostream& out) 
   {
     typedef grid_types<G> gt;
-    typedef typename gt::sequence_iterator_d<1>::type ElementIterator;
+    typedef typename gt::template sequence_iterator_d<1>::type ElementIterator;
     out << "Dim=1:" << std::endl;
     for(ElementIterator e(g); ! e.IsDone(); ++e) {
       typedef typename ElementIterator::local_index_type lit;
@@ -50,7 +50,7 @@ struct local_vertex_access_tester<G,2>  {
   {
     local_vertex_access_tester<G,1>::act(g,out);
     typedef grid_types<G> gt;
-    typedef typename gt::sequence_iterator_d<2> s2;
+    typedef typename gt::template sequence_iterator_d<2> s2;
     typedef typename gt::template sequence_iterator_d<2>::type ElementIterator;
     out << "Dim=2:" << std::endl;
     for(ElementIterator e(g); ! e.IsDone(); ++e) {
@@ -70,7 +70,7 @@ struct local_vertex_access_tester<G,3>  {
   {
     local_vertex_access_tester<G,2>::act(g,out);
     typedef grid_types<G> gt;
-    typedef typename gt::sequence_iterator_d<3>::type ElementIterator;
+    typedef typename gt::template sequence_iterator_d<3>::type ElementIterator;
     out << "Dim=3:" << std::endl;
     for(ElementIterator e(g); ! e.IsDone(); ++e) {
       typedef typename ElementIterator::local_index_type lit;

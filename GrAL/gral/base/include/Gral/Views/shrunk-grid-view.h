@@ -124,6 +124,7 @@ namespace shrink_grid_view {
       typedef typename gt::base_grid_type     base_grid_type;
       typedef typename gt::Cell               Cell;
       typedef typename gt::cell_handle        cell_handle;
+      typedef typename gt::bgt                bgt;
     private:
       base_grid_type const* g; // ref
 
@@ -205,7 +206,8 @@ namespace shrink_grid_view {
       typedef typename base::grid_type     grid_type;
       typedef typename base::cell_handle   cell_handle;
       typedef typename base::vertex_handle vertex_handle;
-    private:
+      typedef typename base::Vertex        Vertex;
+   private:
       grid_type  const*          g;
       typename bgt::CellIterator c;
     public:
@@ -343,7 +345,7 @@ namespace shrink_grid_view {
     inline
     vertex_on_cell_iterator<GRID> 
     cell_iterator<GRID>::FirstVertex() const 
-    { return VertexOnCellIterator(*this);}
+    { return typename base::VertexOnCellIterator(*this);}
 
 
   /*
@@ -358,12 +360,12 @@ namespace shrink_grid_view {
   template<class GRID>
     inline
     vertex_iterator<GRID> 
-    grid_view<GRID>::FirstVertex() const { return VertexIterator(*this);}
+    grid_view<GRID>::FirstVertex() const { return typename gt::VertexIterator(*this);}
 
   template<class GRID>
     inline
     cell_iterator<GRID> 
-    grid_view<GRID>::FirstCell() const { return CellIterator(*this);}
+    grid_view<GRID>::FirstCell() const { return typename gt::CellIterator(*this);}
 
 
 
@@ -433,7 +435,7 @@ struct element_traits<shrink_grid_view::vertex_iterator<GRID> >
   typedef typename base::element_type   element_type;
   typedef typename base::handle_type    handle_type;
 
-  struct hasher_type : public hasher_type_elem_base {
+  struct hasher_type : public base::hasher_type_elem_base {
     unsigned operator()(handle_type const&  v) const 
       { return (8*v.c + v.v);}
     unsigned operator()(element_type const&  v) const 
@@ -455,7 +457,7 @@ struct element_traits<shrink_grid_view::cell_iterator<GRID> >
   typedef element_traits<typename bgt::Cell>       bet;
   typedef typename bet::hasher_type                base_hasher_type;
 
-  struct hasher_type : public hasher_type_elem_base {
+  struct hasher_type : public base::hasher_type_elem_base {
 
     unsigned operator()(handle_type const&  v) const 
       { base_hasher_type h; return h(v);}

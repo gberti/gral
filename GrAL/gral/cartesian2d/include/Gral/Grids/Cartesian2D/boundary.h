@@ -13,6 +13,7 @@
 /*! \brief Specialization of the BoundaryRange template for RegGrid2D
 
  */
+template<>
 class BoundaryRange<cartesian2d::RegGrid2D> {
 public:
 
@@ -54,6 +55,7 @@ public:
 
 };
 
+template<>
 struct grid_types<BoundaryRange<cartesian2d::RegGrid2D> > 
 {
   typedef grid_types<cartesian2d::RegGrid2D>     gt;

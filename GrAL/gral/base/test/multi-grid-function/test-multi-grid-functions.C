@@ -5,11 +5,11 @@
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/Grids/CartesianND/all.h"
 
-template multi_grid_function<cartesian2d::CartesianGrid2D,int>;
-template multi_grid_function<Complex2D,int>;
+template class multi_grid_function<cartesian2d::CartesianGrid2D,int>;
+template class multi_grid_function<Complex2D,int>;
 
-template partial_multi_grid_function<cartesian2d::CartesianGrid2D,int>;
-template partial_multi_grid_function<Complex2D,int>;
+template class partial_multi_grid_function<cartesian2d::CartesianGrid2D,int>;
+template class partial_multi_grid_function<Complex2D,int>;
 
 
 
@@ -20,7 +20,7 @@ struct mgf_tester {
   static void act(MGF & mgf) {
     typedef typename MGF::grid_type  grid_type;
     typedef grid_types<grid_type>    gt;
-    typedef typename gt::sequence_iterator_d<D>::type ElementIterator;
+    typedef typename gt::template sequence_iterator_d<D>::type ElementIterator;
 
     mgf_tester<MGF,D-1>::act(mgf);
     for(ElementIterator e(mgf.TheGrid()); ! e.IsDone(); ++e) {
