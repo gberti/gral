@@ -7,6 +7,7 @@
 
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
+#include "Gral/Grids/CartesianND/all.h"
 
 #include "Gral/Subranges/enumerated-subrange.h"
 #include "Gral/IO/complex2d-format-output.h"
@@ -16,9 +17,6 @@
 
 #include "Geometry/point-traits.h"
 
-template<class T, unsigned N>
-struct point_traits<tuple<T,N> > : public point_traits_fixed_size_array<tuple<T,N>, T, N> {};
-
 
 template<class OCTREE>
 void print_state(OCTREE const& oct, std::ostream& out) 
@@ -26,7 +24,14 @@ void print_state(OCTREE const& oct, std::ostream& out)
   out << "Octree state: Number of levels: " << oct.num_of_levels()  
       << " ( " << oct.coarsest_level() << " .. " << oct.finest_level() << " )" << "\n"
       << "              Number of cells:  " << oct.NumOfCells()     << "\n"
-      << "              Number of leafs:  " << oct.NumOfLeafCells() << "\n";
+      << "              Number of leafs:  " << oct.NumOfLeafCells() << "\n"
+      << "Active vertices:\n";
+  for(int lev = oct.coarsest_level(); lev <= oct.finest_level(); ++lev) {
+    out << "Level " << lev << ": " << oct.ActiveVertexRange(lev)->NumOfVertices() << " vertices:  ";
+    for(typename OCTREE::ActiveLevelVertexIterator v(oct.ActiveVertexRange(lev)->FirstVertex()); !v.IsDone(); ++v)
+      out << (*v).index() << ", ";
+    out << std::endl;
+  }
 }
 
 namespace octree {
@@ -63,8 +68,8 @@ int main() {
 	material.update(); // add missing level(s)
 	for(OctCellChildIterator ch(oc); ! ch.IsDone(); ++ch)
 	  material[*ch] = material(oc);
-	cout << "active range on level " << lev+1 << " is: ";
-	for(octgt::ActiveLevelCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
+	cout << "active cell range on level " << lev+1 << " is: ";
+	for(octgt::ActiveLevelCellIterator ac= oct.ActiveCellRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
 	  cout << (*ac).index() << ", ";
 	cout << "\n";
       }
@@ -78,9 +83,9 @@ int main() {
       if(oct.isBranch(oc)) {
 	cout << "Joining cell " << (*c).index() << " => ";
 	oct.join_cells(oc); 
-	cout << "active range on level " << lev+1 << " is: ";
+	cout << "active cell range on level " << lev+1 << " is: ";
 	if(oct.valid(lev+1)) {
-	  for(octgt::ActiveLevelCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
+	  for(octgt::ActiveLevelCellIterator ac= oct.ActiveCellRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
 	    cout << (*ac).index() << ", ";
 	}
 	cout << "\n";
@@ -89,7 +94,7 @@ int main() {
     print_state(oct, cout);
 
     enumerated_subrange<cart_grid_type> FL(*oct.LevelGrid(oct.finest_level()), 
-					   *oct.ActiveRange(oct.finest_level()));
+					   *oct.ActiveCellRange(oct.finest_level()));
     typedef tuple<double,2> coord_type;
     typedef stdext::identity<coord_type>        mapping_type;
     cartesian2d::mapped_geometry<mapping_type> GeomFL(*oct.LevelGrid(oct.finest_level()));
@@ -107,7 +112,7 @@ int main() {
 	oct.join_cells(oc); 
 	cout << "active range on level " << lev+1 << " is: ";
 	if(oct.valid(lev+1)) {
-	  for(octgt::ActiveLevelCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
+	  for(octgt::ActiveLevelCellIterator ac= oct.ActiveCellRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
 	    cout << (*ac).index() << ", ";
 	}
 	cout << "\n";
@@ -135,10 +140,11 @@ int main() {
   }
   
   {
-    typedef cartesian2d::CartesianGrid2D cart_grid_type;
+    // typedef cartesian2d::CartesianGrid2D cart_grid_type;
+    typedef cartesiannd::grid<2> cart_grid_type;
     typedef grid_types<cart_grid_type>   cgt;
-    typedef octree::Octree<cartesian2d::CartesianGrid2D> octree_type;
-    typedef octree::Octree<cartesian2d::CartesianGrid2D> octgt;
+    typedef octree::Octree<cart_grid_type> octree_type;
+    typedef octree::Octree<cart_grid_type> octgt;
     typedef octree_type::oct_cell_type                   oct_cell_type;
     typedef octree_type::hier_grid_type                  hgt;
 
@@ -161,13 +167,23 @@ int main() {
     for(octgt::level_handle lev = oct.coarsest_level(); lev <= oct.finest_level(); ++lev) {
       cout << "Level " << lev << ":\n";
       for(cgt::CellIterator c(oct.LevelGrid(lev)->FirstCell()); ! c.IsDone(); ++c)
-	cout << "Cell " << (*c).index() << (oct.isLeaf(hgt::hier_cell_type(oct.TheHierGrid(), *c, lev)) ? " (L)" : "" ) << "\n";
+	cout << "Cell " << (*c).index() << (oct.isLeaf(hgt::hier_cell_type(oct.TheHierGrid(), *c, lev)) ? " (L)" : "" )
+	     << endl;
+      for(cgt::FacetIterator f(oct.LevelGrid(lev)->FirstFacet()); ! f.IsDone(); ++f) {
+	hgt::hier_facet_type hf(oct.TheHierGrid(), *f, lev);
+	cout << "Facet " << "[" << (*f).low_vertex_index() << "," << (*f).high_vertex_index() << "]"
+	     << " " << (oct.isActive     (hf) ? "(A)" : "(NA)")  
+	     << " " << (oct.isLeaf       (hf) ? "(L)" : "(NL)")
+	     << " " << (oct.isRegularLeaf(hf) ? "(R)" : "(NR)")
+	     << " " << (oct.isBranch     (hf) ? "(B)" : "(NB)") << std::endl; 
+      }
     }
+
 
     oct.add_finer_level();
     oct.add_finer_level();
     fine = oct.finest_level();
-    c_finest = hgt::hier_cell_type(oct.TheHierGrid(), oct.TheHierGrid()->FlatGrid(fine)->cell(cgt::index_type(4,4)), fine);
+    c_finest = hgt::hier_cell_type(oct.TheHierGrid(), cgt::Cell(oct.TheHierGrid()->FlatGrid(fine),cgt::index_type(4,4)), fine);
     c_root   = oct.leaf_ancestor(c_finest);
     refine_towards(oct, c_root, c_finest, 2);								
 
@@ -178,6 +194,14 @@ int main() {
 	hgt::hier_cell_type hc(oct.TheHierGrid(), *c, lev);
 	if(oct.isActive(hc))
 	  cout << "Cell " << (*c).index() << (oct.isLeaf(hc) ? " (L)" : "" ) << "\n";
+      }
+      for(cgt::FacetIterator f(oct.LevelGrid(lev)->FirstFacet()); ! f.IsDone(); ++f) {
+	hgt::hier_facet_type hf(oct.TheHierGrid(), *f, lev);
+	cout << "Facet " << "[" << (*f).low_vertex_index() << "," << (*f).high_vertex_index() << "]"
+	     << " " << (oct.isActive     (hf) ? "(A)" : "(NA)")  
+	     << " " << (oct.isLeaf       (hf) ? "(L)" : "(NL)")
+	     << " " << (oct.isRegularLeaf(hf) ? "(R)" : "(NR)")
+	     << " " << (oct.isBranch     (hf) ? "(B)" : "(NB)") << std::endl; 
       }
     }
 
@@ -191,7 +215,15 @@ int main() {
 	if(oct.isActive(hc))
 	  cout << "Cell " << (*c).index() << (oct.isLeaf(hc) ? " (L)" : "" ) << "\n";
       }
-    }
+      for(cgt::FacetIterator f(oct.LevelGrid(lev)->FirstFacet()); ! f.IsDone(); ++f) {
+	hgt::hier_facet_type hf(oct.TheHierGrid(), *f, lev);
+	cout << "Facet " << "[" << (*f).low_vertex_index() << "," << (*f).high_vertex_index() << "]"
+	     << " " << (oct.isActive     (hf) ? "(A)" : "(NA)")  
+	     << " " << (oct.isLeaf       (hf) ? "(L)" : "(NL)")
+	     << " " << (oct.isRegularLeaf(hf) ? "(R)" : "(NR)")
+	     << " " << (oct.isBranch     (hf) ? "(B)" : "(NB)") << std::endl; 
+      }
+   }
 
   }
     
