@@ -4,43 +4,27 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Config/compiler-config.h"
 #include "Geometry/algebraic-primitives.h"
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Geometries/geometric-types-2d.h"
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
+#include "Gral/Grids/Cartesian2D/geometry-extensions2d.h"
 
 #include "Utility/pre-post-conditions.h"
 
-/*!  \brief  geometry for RegGrid2D with explicit mapping.
-
-      This class implements a straight-line geometry for the
-      grid class RegGrid2D. The coordinates of the vertices
-      are given by a mapping from the unit-square [0,1]x[0,1]
-      to R^2 (or R^3, in principle. There are some problems,
-      however. See below).
-
-      To this end, the given underlying grid G of type RegGrid2D
-      is thought to be mapped onto the unit square, by default
-      G.ll() -> (0.0,0.0)  and G.ur() -> (1.0,1.0).
-      A rectangle other than G.ll(),G.ur() may be specified that is mapped
-      to [0,1]^2. This is useful e.g. for grids with overlaps or that
-      are components of a larger grid, occupying only a part of the logical
-      entire grid.
-
-       \templateparams
-        + CoordMap:
-         - typedef coord_type ( type of result)
-         - typedef argument_type 
-         - coord_type operator()(argument_type, 2D)
-         - int dim_of_image()  (dim. of coord_type, 2D or 3D)
-*/
 
 namespace cartesian2d {
 
+
+
+
 template<class CoordMap>
-class mapped_geometry_reg2d_base 
+class mapped_geometry_base 
   : public grid_types<RegGrid2D>
 {
 public:
@@ -51,17 +35,28 @@ public:
   typedef typename RegGrid2D::index_type      index_type;
   typedef point_traits<coord_type>            pt;
 
-  mapped_geometry_reg2d_base() :  g(0) {} 
 
-  //@{ @name Constructor
-  mapped_geometry_reg2d_base(const CoordMap& ff, const RegGrid2D& gg) 
+  //@{
+  // @name Constructors
+  mapped_geometry_base() :  g(0) {} 
+  mapped_geometry_base(const CoordMap& ff, const RegGrid2D& gg) 
     : f(ff), g(&gg), ll(gg.ll()), ur(gg.ur())
   { init();}
-  mapped_geometry_reg2d_base(const CoordMap& ff, const RegGrid2D& gg,
+  mapped_geometry_base(const CoordMap& ff, const RegGrid2D& gg,
 			     const index_type& LL, const index_type& UR) 
     : f(ff), g(&gg), ll(LL), ur(UR) 
   { init();}
   //@}
+  
+  void init(RegGrid2D  const& gg, CoordMap const& ff,
+	    index_type const& LL, index_type const& UR) 
+  {
+    g = &gg;
+    f = ff;
+    ll = LL;
+    ur = UR;
+    init();
+  }
   void init() {
       dx = (ur.x() - ll.x() != 0 ? 1.0 / (ur.x() -ll.x()) 
 	    : 0.0);
@@ -106,30 +101,32 @@ private:
 
 template<class CM, class GEOM, unsigned DIM>
 class dd_mapped_geom_reg2d 
-  : public mapped_geometry_reg2d_base<CM> 
+  : public mapped_geometry_base<CM> 
 {
-  typedef mapped_geometry_reg2d_base<CM> base;
+  typedef mapped_geometry_base<CM> base;
 public:
   typedef typename base::index_type index_type;
 
   dd_mapped_geom_reg2d() {} 
 
   dd_mapped_geom_reg2d(const CM& ff, const RegGrid2D& gg) 
-    : mapped_geometry_reg2d_base<CM>(ff,gg) {}
+    : mapped_geometry_base<CM>(ff,gg) {}
 
   dd_mapped_geom_reg2d(const CM& ff, const RegGrid2D& gg,
 		       const index_type& LL, const index_type& UR) 
-    : mapped_geometry_reg2d_base<CM>(ff,gg,LL,UR) {}
+    : mapped_geometry_base<CM>(ff,gg,LL,UR) {}
 };
 
-
+/*! \brief Dimension specific functionality for 2D
+    \internal
+ */
 template<class CM, class GEOM>
 class dd_mapped_geom_reg2d<CM, GEOM, 2>
-  : public mapped_geometry_reg2d_base<CM> { 
+  : public mapped_geometry_base<CM> { 
   //   only useful if dim(coord_type) == 2 !
 
 public:
-  typedef  mapped_geometry_reg2d_base<CM> base;
+  typedef  mapped_geometry_base<CM> base;
   typedef typename base::Vertex Vertex;
   typedef typename base::Edge   Edge;
   typedef typename base::Facet  Facet;
@@ -159,63 +156,110 @@ public:
     : base(ff,gg,LL,UR) {}
 
 
+
   // coord_type from base
   typedef algebraic_primitives<coord_type>  ap;
 
+  /*! \brief Normed normal of facet \c nb
+       
+      \return
+        Normal \f$n\f$  to facet \c nb
+       -  \f$n\f$  is pointing away from \c nb.TheCell() 
+       - \f$\|n\| = 1\f$ 
+  */
   coord_type 
-  normal(CellIterator const& ,
-	 CellOnCellIterator const& nb) const  // |.| == 1
+  outer_normal(FacetOnCellIterator const& nb) const 
   {
-    Edge e(nb);
-    typename GEOM::segment_type S(e, basic_geom());
-    return ap::normed_normal(S.End()-S.Start());
+    return ap::normed_normal(coord(nb.V1()) - coord(nb.V2()));
   }
   
+  /*! \brief Normal of facet \c nb
+       
+      \return
+        Normal \f$n\f$  to facet \c nb
+       -  \f$n\f$  is pointing away from \c nb.TheCell() 
+       - The Euclidean norm  \f$\|n\|\f$ is equal to the volume (i.e. length) of the facet.
+   */
   coord_type 
-  area_normal(CellIterator const& ,
-	      CellOnCellIterator const& nb) const 
+  outer_area_normal(FacetOnCellIterator const& nb) const 
   {
-    Edge e(nb);
-    typename GEOM::segment_type S(e, basic_geom());
+    return ap::normal_with_same_length(coord(nb.V1()) - coord(nb.V2()));
+  }
+
+  
+  /*! \brief Normal of facet \c f
+       
+      \return
+        Normal \f$n\f$  to facet \c f.
+        The Euclidean norm  \f$\|n\|\f$ is equal to the volume (i.e. length) of the facet.
+   */
+  coord_type 
+  area_normal(Facet const& f) const 
+  {
+    typename GEOM::segment_type S(f,basic_geom());
     return ap::normal_with_same_length(S.End()-S.Start());
   }
   
-  coord_type 
-  area_normal(Edge const& e) const 
-  {
-    typename GEOM::segment_type S(e,basic_geom());
-    return ap::normal_with_same_length(S.End()-S.Start());
-  }
-  
+  /*! \brief Normed normal of facet \c f
+       
+      \return
+        Normal \f$n\f$  to facet \c f with \f$\|n\|=1\f$.
+   */
   coord_type 
   normal(Edge const& e) const 
   {
     typename GEOM::segment_type S(e, basic_geom());
     return ap::normed_normal(S.End()-S.Start());
   }
-  
-  
-  coord_type outer_area_normal(FacetOnCellIterator const& f) const 
-  {
-    return ap::normal_with_same_length(coord(f.V1()) - coord(f.V2()));
-  }
-
-  
 };
 
 //----------- general geometry : include dimension dependend parts ----------
 
+/*!  \brief  geometry for RegGrid2D with explicit mapping.
+     \ingroup cartesian2dgeom
+
+      This class implements a straight-line geometry for the
+      grid class RegGrid2D. The coordinates of the vertices
+      are given by a mapping from the unit-square [0,1]x[0,1]
+      to R^2 (or R^3, in principle. There are some problems,
+      however. See below).
+
+      To this end, the given underlying grid G of type \c RegGrid2D
+      is thought to be mapped onto the unit square, by default
+      <tt> G.ll() -> (0.0,0.0) </tt>  and <tt> G.ur() -> (1.0,1.0)</tt>.
+      A rectangle other than <tt>[G.ll(),G.ur()</tt> may be specified that is mapped
+      to \f$[0,1]^2\f$. This is useful e.g. for grids with overlaps or that
+      are components of a larger grid, occupying only a part of the logical
+      entire grid.
+
+       \templateparams
+        + CoordMap:
+         - typedef coord_type ( type of result)
+         - typedef argument_type 
+         - coord_type operator()(argument_type, 2D)
+         - int dim_of_image()  (dim. of coord_type, 2D or 3D)
+
+   \see \c dimension_dependend_extensions2d<BASE, GEOM, 2>  for additional functionality
+        if the space dimension is 2.
+   \see Test in \ref test-mapped-geometry.C
+*/
+
 template<class CM>
 class mapped_geometry
-  : 
-  public  dd_mapped_geom_reg2d<CM, mapped_geometry<CM>,
-                               point_traits<typename CM::result_type>::dimension>
+  :   public dimension_dependend_extensions2d<mapped_geometry_base<CM>, 
+					      mapped_geometry<CM>, 
+					      point_traits<typename CM::result_type>::dimension>
 {
   
 public:
+  /*
   typedef dd_mapped_geom_reg2d<CM, mapped_geometry<CM>,
                                point_traits<typename CM::result_type>::dimension>
+  */
+  typedef dimension_dependend_extensions2d<mapped_geometry_base<CM>, mapped_geometry<CM>, 
+					  point_traits<typename CM::result_type>::dimension>
   base;
+  typedef mapped_geometry_base<CM>  geom_base_type;
   using base::basic_geom;
 
   typedef typename base::Vertex Vertex;
@@ -234,31 +278,49 @@ public:
   typedef CM mapping_type;
 
   typedef point_traits<coord_type>                         pt;
-  typedef mapped_geometry_reg2d_base<CM>                   geom_base;
- 
+  typedef mapped_geometry_base<CM>                   geom_base;
+
+  //@{ 
+  // @name Constructors
+  //! Empty geometry
   mapped_geometry() {}
-
+  //! Standard geometry
   mapped_geometry(const RegGrid2D& gg, const CM& ff = CM())
-    : base(ff,gg) {}
-
+    { init(gg,ff, gg.ll(), gg.ur()); }
+  //! Map \c [LL, UR] to \c ff(\f$[0,1]^2\f$\c)
   mapped_geometry( const RegGrid2D& gg,  const CM& ff,
 		   const index_type& LL, const index_type& UR) 
-    : base(ff,gg,LL,UR) {}
+    { init(gg,ff,LL,UR); }
+  //@}
 
+  /*! \brief geometric representation of edges
+
+     \todo For non-linear mappings, this must be something more sophisticated.
+   */
   typedef Segment<Edge,geom_base>   segment_type;
+  /*! \brief geometric representation of faces (cells)
+
+     \todo For non-linear mappings, this must be something more sophisticated.
+   */
   typedef Polygon2d<Face,geom_base> polygon_type;
 
+  //! get geometric representation for an edge
   segment_type segment(const Edge& e) const { return segment_type(e,basic_geom());}
+  //! get geometric representation for a face (cell)
   polygon_type polygon(const Face& f) const { return polygon_type(f,basic_geom());}
 
+  //! 1-dimensional volume of an edge
   double volume(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
+  //! length of a (straight) edge
   double length(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
   // double volume(const EdgeIterator& e) const {return volume(*e);}
+  //! 2-dimensional volume of a cell
   double volume(const Cell& c) const { return (polygon_type(c,basic_geom()).area());}
   
+  //! Midpoint of an edge
   coord_type center(const Edge& e) const {return(segment_type(e,basic_geom()).center());}
   
-  // center of inertia 
+  //! Center of inertia of a cell 
   coord_type center(const Cell& c) const {return(polygon_type(c,basic_geom()).center());}
 
 };
