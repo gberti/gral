@@ -3,7 +3,7 @@
 
 // from Scott Meyers "More Effective C++"
 
-#include "Container/copy-traits.h"
+#include "Utility/copy-traits.h"
 
 /******************************************************************************
 *                       Class RCObject                                        *

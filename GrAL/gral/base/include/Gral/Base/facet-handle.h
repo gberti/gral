@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 
 #include <iostream.h>
 #include <stdlib.h>
