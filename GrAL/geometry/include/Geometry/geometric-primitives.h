@@ -6,10 +6,11 @@
 #include "Geometry/algebraic-primitives.h"
 #include "Utility/pre-post-conditions.h"
 
+// should use C++ <limits>
+#include <limits.h>
+
 template<class Geom>
 struct geom_traits {};
-
-
 
    
 template<class P>
@@ -44,7 +45,20 @@ public:
 };
 
 
-  
+template<class P> class ray {
+public:
+  typedef P coord_type;
+  P p_0, dir_;
+public:
+  ray(P const& pp0, P const& ddir) : p_0(pp0), dir_(ddir) {}
+  coord_type const& p0() const { return p_0;}  
+  coord_type const& dir() const { return dir_;}
+  coord_type operator()(double t) const { return p_0 + t*dir_;}
+};
+
+/*
+template<class P> class line {};
+*/
 
 template<class P>
 struct geom_traits<segment<P> > {
@@ -64,6 +78,16 @@ struct geom_traits<triangle<P> > {
   static coord_type const& p0(const_ref T) { return T.p0();}
   static coord_type const& p1(const_ref T) { return T.p1();}
   static coord_type const& p2(const_ref T) { return T.p2();}
+};
+
+template<class P>
+struct geom_traits<ray<P> > {
+  typedef typename ray<P>::coord_type coord_type;
+  // typedef triangle<P>    const_ref;
+  typedef ray<P>    const& const_ref;
+  static coord_type const& p0 (const_ref T) { return T.p0();}
+  static coord_type const& dir(const_ref T) { return T.dir();}
+
 };
   
 
@@ -142,7 +166,86 @@ public:
   }
 };
 
+
+
+
+/*! Class for intersecting a ray and a triangle in 3D
+      
+     \todo: optimize by introducing caches for calculated quantities.
+   */
+
+template<class Ray, class Triangle>
+class intersection_ray_triangle {
+  typedef geom_traits<Ray>      rt;
+  typedef geom_traits<Triangle> tt;
+  typedef typename rt::coord_type coord_type; 
+  typedef algebraic_primitives<coord_type> ap;
+  // assume tt::coord_type is the same
+  typedef point_traits<coord_type> pt;
+  typedef typename pt::component_type scalar;
+  typedef scalar                      real;// FIXME: should be scalar_traits::real
+
+  typename rt::const_ref R;
+  typename tt::const_ref T;
+  real t;
+  bool t_defined;
+
+public: 
+  intersection_ray_triangle(Ray const& R_, Triangle const& T_)
+    : R(R_), T(T_), t_defined(false) 
+    {}
+
+  real eps() const { /* return numeric_limits<real>::epsilon();*/
+    return FLT_EPSILON;}
+
+  bool line_intersects_plane() {
+    coord_type n = plane_normal(T);
+
+    // if direction of ray points away from plane, no intersection
+    if(ap::dot(n, rt::dir(R)) * ap::dot(n, rt::p0(R) -tt::p0(T)) > 0)
+      return false;
+    // not correct: ray migth lie in plane.
+
+    real       d = ap::dot(ap::normalization(n), ap::normalization(rt::dir(R)));
+    //  is eps the correct quantity?
+    return ( fabs(d) >= eps());
+  }
+
+  bool ray_intersects_triangle() {
+    // check whether ray is (to) parallel to triangle plane
+
+    // solve p0(T) + r*(p1(T)-p0(T)) + s*(p2(T)-p0(T)) 
+    //    =  p0(R) + t* dir(R)   for (r,s,t)
+    if(! line_intersects_plane())
+      return false;
+    coord_type rst; pt::ConstructWithDim(3,rst);
+    ap::solve(tt::p1(T) - tt::p0(T),
+	      tt::p2(T) - tt::p0(T), 
+	      - rt::dir(R),
+	      rst,
+	      rt::p0(R) - tt::p0(T));
+      t = pt::z(rst); t_defined = true;
+      real r = pt::x(rst), s = pt::y(rst);
+      return (t>= 0 && r >= 0 && s >= 0 && s+r <= 1);
+  }
+  //  bool lines_does_intersect_plane();
+  double ray_intersection() {
+    //REQUIRE(ray_intersects_plane(), "no intersection!\n",1);
+    if(! t_defined)
+      ray_intersects_triangle(); // calculates t      
+    return t;
+  }
+
+  coord_type intersection() { 
+    // REQUIRE(ray_intersects_plane(), "no intersection!\n",1);
+    if(! t_defined)
+      ray_intersects_triangle(); // calculates t      
+    return rt::p0(R) + t * rt::dir(R);
+  }
+};
+
 #endif
+
 
 
 
