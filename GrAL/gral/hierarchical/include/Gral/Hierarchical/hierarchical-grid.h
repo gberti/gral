@@ -353,7 +353,7 @@ namespace hierarchical {
     {
       unsigned level_diff = fine_level - v.level();
       index_type factor = power(the_pattern.cell_size(), level_diff);
-      return typename HVERTEX::vertex_handle(FlatGrid(fine_level)->get_vertex_handle(product(vFlat.index(),factor)), fine_level);
+      return typename HVERTEX::vertex_handle(FlatGrid(fine_level)->get_vertex_handle(product(v.Flat().index(),factor)), fine_level);
     }
  
     /*! \brief Descendant on level \c h of the cell \p 
@@ -522,7 +522,7 @@ namespace hierarchical {
     // ParentCellIterator   FirstParentCell() { return g->Parent(*this);}
 
     friend bool operator==(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h == rhs.h;}
-    friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h != rhs.h;}
+    friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return !(lhs.h == rhs.h);}
    
     // inline ChildIterator FirstChild() const;
     // inline ChildIterator EndChild  () const;
