@@ -33,7 +33,9 @@
  \todo
   \b Optimization:
   Could use  <tt> hash_table<element_handle,T> </tt>
-  instead of <tt> hash_table<Element,T> </tt>
+  instead of <tt> hash_table<Element,T></tt>.
+  However, in some cases it is not possible to implement equality testing
+  of the underlying elements without referring to the grid.
 
   \see  grid_function_vector
   \see  \ref gridfunctions
@@ -52,12 +54,14 @@ public:
 
   typedef STDHASH::hash_map<E,T, hasher_type>   table_type;
   typedef typename table_type::size_type        size_type;
-  typedef T                            value_type;
-  typedef T&                           reference;
-  typedef T const&                     const_reference;
+  typedef T                                     value_type;
+  //  typedef typename table_type::reference        reference;
+  //  typedef typename table_type::const_reference  const_reference;
+  typedef T      &  reference;
+  typedef T const&  const_reference;
 
-  typedef E const& argument_type;
-  typedef T const& result_type;
+  typedef E const&        argument_type;
+  typedef const_reference result_type;
 
 protected:
   //--- DATA ---------
@@ -163,8 +167,10 @@ class grid_function_hash
   using base_gf::table;
 public:
   typedef element_traits<E> et1;
-  typedef typename et1::ElementIterator ElementIterator;
-  typedef typename base_gf::grid_type grid_type;
+  typedef typename et1::ElementIterator     ElementIterator;
+  typedef typename base_gf::grid_type       grid_type;
+  typedef typename base_gf::reference       reference;
+  typedef typename base_gf::const_reference const_reference;
   using base_gf::TheGrid;
 
   //--------------------- construction ------------------------------   
@@ -199,7 +205,9 @@ public:
 
   //----------------- data access operators -------------------------   
 
-  const T&   operator()(const E& e) const {
+  /*! \brief Read-only access
+   */
+  const_reference operator()(const E& e) const {
     /*
     REQUIRE( (&(e.TheGrid()) == g),
 	     "gf(e): Grids don't match: e.TheGrid() = "
@@ -209,9 +217,11 @@ public:
     return (* (table.find(e))).second;
   }
   
-  // NOTE: if(!defined(e)) => a new entry is created!
-  // use operator() for read access.
-  T&  operator[](const E& e)       {
+  /*! \brief Write access.
+     \note: if <tt> !defined(e)</tt>, a new entry is created!
+      Use operator() for read-only access.
+  */
+  reference  operator[](const E& e)       {
     /*
     REQUIRE( (&(e.TheGrid()) == g),
 	     "gf(e): Grids don't match: e.TheGrid() = "
