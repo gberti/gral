@@ -41,11 +41,13 @@ namespace hierarchical {
     
     hier_grid_table<hier_grid_type, flat_gf_type> gfs;
     // this value may be used to fill automatically added layers
-    // value_type default_val;
+    bool       default_val_set;
+    value_type default_val;
   public:
     hier_grid_function_base() {}
-    hier_grid_function_base(hier_grid_type const& gg) : gfs(gg) { connect(&gg);}
-    hier_grid_function_base(hier_grid_type const& gg, value_type t) : gfs(gg) 
+    hier_grid_function_base(hier_grid_type const& gg) : gfs(gg), default_val_set(false) { connect(&gg);}
+    hier_grid_function_base(hier_grid_type const& gg, value_type t) 
+      : gfs(gg), default_val_set(true), default_val(t)
     { 
       set_value(t);
       connect(&gg);
@@ -68,6 +70,8 @@ namespace hierarchical {
     flat_gf_type      & operator[](level_handle lev)       { cv(lev); return gfs[lev];}
     flat_gf_type const& operator()(level_handle lev) const { cv(lev); return gfs(lev);}
 
+    bool empty() const { return gfs.empty();}
+
     // this could be private if automatic level management via observer/notifier would be implemented
     level_handle add_finer_level();
     level_handle add_finer_level(value_type const& t);
@@ -76,8 +80,9 @@ namespace hierarchical {
     void         remove_finest_level();
     void         remove_coarsest_level();
 
-    bool valid() const { return (gfs.coarsest_level() == TheGrid()->coarsest_level()) 
-			   &&   (gfs.finest_level() == TheGrid()->finest_level());}
+    bool valid() const { return  (empty() && TheGrid()->empty() )
+			   ||    (gfs.coarsest_level() == TheGrid()->coarsest_level()) 
+			      && (gfs.finest_level()   == TheGrid()->finest_level());}
     bool valid(level_handle lev) const { return (lev >= gfs.coarsest_level()) && (lev <= gfs.finest_level());}
     void cv(level_handle lev) const { REQUIRE(valid(lev), "lev=" << lev, 1); }
 

@@ -21,7 +21,12 @@ namespace hierarchical {
  void hier_grid_function_base<E,T,GF>::clear() { gfs.clear();}
 
  template<class E, class T, template<class EE, class TT> class GF>
- void hier_grid_function_base<E,T,GF>::update() { gfs.update();}
+ void hier_grid_function_base<E,T,GF>::update() { 
+   gfs.update();
+   // FIXME: only for updated levels.
+   if(default_val_set)
+     set_value(default_val); 
+ }
 
  template<class E, class T, template<class EE, class TT> class GF>
  void hier_grid_function_base<E,T,GF>::
@@ -29,12 +34,16 @@ namespace hierarchical {
  {
    clear();
    gfs.set_grid(gg);
+   if(default_val_set)
+     set_value(default_val);
  }
 
  template<class E, class T, template<class EE, class TT> class GF>
  void hier_grid_function_base<E,T,GF>::
  set_value(typename hier_grid_function_base<E,T,GF>::value_type t)
  {
+   default_val_set = true;
+   default_val     = t;
    for(level_handle lev = TheGrid()->coarsest_level(); lev <= TheGrid()->finest_level(); ++lev)
      gfs[lev].set_value(t);
  }
@@ -91,14 +100,21 @@ namespace hierarchical {
  template<class E, class T, template<class EE, class TT> class GF>
  void 
  hier_grid_function_base<E,T,GF>::notifier_assigned(hier_grid_function_base<E,T,GF>::notifier_base const* n)
- {}
+ {
+   // FIXME: only for updated levels...how to know about them?
+   if(default_val_set)
+     set_value(default_val); 
+ }
 
 
  template<class E, class T, template<class EE, class TT> class GF>
  void 
  hier_grid_function_base<E,T,GF>::hgrid_level_added  
  (hier_grid_function_base<E,T,GF>::notifier_type const* n, level_handle added) 
- {}
+ {
+   if(default_val_set)
+     gfs[added].set_value(default_val);
+ }
 
  template<class E, class T, template<class EE, class TT> class GF>
  void 
