@@ -1,33 +1,13 @@
 
 // $LICENSE
 
-/*
-  Hierarchie der Elemente
 
-
-  Basic Elements
-	segments
-        triangle 
-	quadrilateral 
-
-  Basic Figure
-        sphere
-
-  Complex Figures (and its Basics)
-        simplex (triangles)
-        ball (triangle)
-	cube (quadrilaterals)
-	cylinder
-	cone
-	torus (quadrilaterals or quads+bezier)
-     --------------------------------	
-        letter (segments)
-	word (letters)
-
- */ 
 #include <math.h>
+
+#include <iostream.h>
 #include <iomanip.h>
 #include <fstream.h>
+
 #include <string>
 //#include "Visualization/colormap.h"
 
