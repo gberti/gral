@@ -28,10 +28,10 @@ Mutator* MutableVars::getMutator(std::string const& nm)
 //MutableVars::~MutableVars() { delete(table); delete(unrecognized);}
 MutableVars::~MutableVars() {}
 
-void MutableVars::AddVariable(const std::string& name, Mutator* m)
+void MutableVars::AddVariable(std::string const& name, Mutator* m)
   { (*table)[name]=m; }
 
-void MutableVars::AddVariable(const char*  name, Mutator* m)
+void MutableVars::AddVariable(char const*  name, Mutator* m)
   { (*table)[std::string(name)]=m; }
 
 

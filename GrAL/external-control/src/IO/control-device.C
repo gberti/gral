@@ -21,18 +21,18 @@ void ControlDevice::print_unrecognized(std::ostream& out) const { impl->print_un
 
 void ControlDevice::attach_to(std::istream& in) { impl->attach_to(in);}
 
-void ControlDevice::add(const std::string& name,Mutator* value_ref) 
+void ControlDevice::add(std::string const& name,Mutator* value_ref) 
 { impl->add(name,value_ref);}
 
-void ControlDevice::add(const char*   nm,Mutator* value_ref)
+void ControlDevice::add(char const*   nm,Mutator* value_ref)
 { add(std::string(nm),value_ref);}
 
-void ControlDevice::register_at(ControlDevice& Ctrl, const std::string& prefix)
+void ControlDevice::register_at(ControlDevice& Ctrl, std::string const& prefix)
 { impl->register_at(Ctrl,prefix);}
 
 std::string ControlDevice::name() const { return impl->name();}
 
-ControlDevice ControlDevice::getSubDevice(const std::string& nm) 
+ControlDevice ControlDevice::getSubDevice(std::string const& nm) 
 { 
   ControlDevice sub(impl->get_sub_device(nm));
   // sub.register_at(*this,"");

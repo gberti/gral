@@ -34,7 +34,7 @@ void istream_control_device_impl::print_values(std::ostream& out, std::string co
 
 //istream_control_device_impl* 
 control_device_impl* 
-istream_control_device_impl::get_sub_device(const std::string& nm) 
+istream_control_device_impl::get_sub_device(std::string const& nm) 
 { 
   self* sub = new istream_control_device_impl(in,nm, indent_+" "); 
   add(nm,GetMutator(*sub));
