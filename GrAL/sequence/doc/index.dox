@@ -9,7 +9,8 @@
    needs of other packages in an admittedly rather ad hoc way.   
    Some problems addressed here are now solved much more generally
    by other, dedicated libraries, for example
-   <A HREF="http://www.zib.de/weiser/vtl/"> VTL </A> (View Template Library).
+   <A HREF="http://www.zib.de/weiser/vtl/"> VTL </A> (View Template Library),
+   or <A HREF="http://www.boost.org"> boost </A>.
 
   <EM> This documentation is still very incomplete. </EM>
 

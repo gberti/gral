@@ -4,11 +4,6 @@
 // $LICENSE_NEC
 
 
-namespace heterogeneous_list {
-
-  struct END {};
-  struct BEGIN {};
-
   /*! \brief A heterogeneous list 
 
       The class template implements a compile-time
@@ -22,7 +17,23 @@ namespace heterogeneous_list {
       \endcode
 
       This is still experimental!
+
+      It is used for creating GMV output with an arbitrary number of
+      grid functions of diverse types via the 
+      OstreamGMV2DFmt and OstreamGMV3DFmt I/O adapter.
+      An example is found in test-gmv-output2d.C and test-gmv-output.C
    */
+namespace heterogeneous_list {
+
+  struct END {};
+  /*! \brief Begin of list marker. See  \ref heterogeneous_list.
+   */
+  struct BEGIN {};
+
+  /*! \brief Compile-time list of heterogeneous types. See \ref heterogeneous_list 
+   
+  */
+
   template<class T, class TAIL>
     class List {
     public:
