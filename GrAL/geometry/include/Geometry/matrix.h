@@ -70,8 +70,8 @@ inline matrix<M,N,OFF> operator*( coord_N_component ls, const matrix<M,N,OFF>& r
 
 
 template<unsigned K, unsigned L, unsigned M, int OFF>
-inline void mul(matrix<K,M>& res,
-		const matrix<K,L>& ls, const matrix<L,M>& rs)
+inline void mul(matrix<K,M, OFF>& res,
+		const matrix<K,L, OFF>& ls, const matrix<L,M, OFF>& rs)
 {
   for(unsigned k = 1; k <= K; k++)
     for(unsigned m = 1; m <= M; m++) {
@@ -82,7 +82,7 @@ inline void mul(matrix<K,M>& res,
 }
 
 template<unsigned K, unsigned L, unsigned M, int OFF>
-inline matrix<K,M> operator*(const matrix<K,L>& ls, const matrix<L,M>& rs)
+inline matrix<K,M> operator*(const matrix<K,L, OFF>& ls, const matrix<L,M, OFF>& rs)
 { 
   matrix<K,M> res;
   mul(res,ls,rs);
