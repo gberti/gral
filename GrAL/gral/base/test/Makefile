@@ -21,12 +21,14 @@ SUBDIRS = boundary-grid  \
           flag \
           geometric-types \
           grid-as-volume \
+          grid-function-array-adapter \
           incidence-hulls \
           multi-grid-function \
           partial-grid-morphism \
           polygon1d \
           restricted-component-view \
           shrunk-grid-view \
+          simple-geometry \
           vertex-iterator-of-cell-set  \
           vertex-on-vertex-iterator \
           vertex-stars 
