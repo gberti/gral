@@ -100,6 +100,9 @@ struct grid_types_element_sides_range<E, 1> {
   typedef typename gt::incidence_iterator<vertex_type_tag, etag>::type VertexIterator;
   typedef typename gt::Vertex                                     Vertex;
   typedef typename gt::vertex_handle                              vertex_handle; 
+
+  typedef typename gt::VertexOnEdgeIterator                              VertexOnEdgeIterator;
+
 };
 
 
@@ -135,7 +138,7 @@ public:
   typedef typename gt::Edge                                              Edge;
   typedef typename gt::edge_handle                                       edge_handle;
 
-  typedef typename gt::VertexOnEdgeIterator                              VertexOnEdgeIterator;
+  typedef typename gt::VertexOnFaceIterator                              VertexOnFaceIterator;
  
 };
 
@@ -169,7 +172,6 @@ public:
   typedef typename gt::Face                                              Face;
   typedef typename gt::face_handle                                       face_handle;
 
-  typedef typename gt::VertexOnFaceIterator                              VertexOnFaceIterator;
  
 };
 
