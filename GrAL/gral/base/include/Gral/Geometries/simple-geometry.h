@@ -46,7 +46,7 @@ public:
   void init(GRID const& g, It begin_coord, It end_coord) 
   {
     coords.set_grid(g);
-    copy(begin_coords, end_coords);
+    copy(begin_coord, end_coord);
   }
 
   template<class It>
