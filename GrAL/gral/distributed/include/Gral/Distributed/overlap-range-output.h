@@ -72,9 +72,6 @@ public:
 
 
 public:
-  size_type size()  const { return (npriv + nexposed + nshared + copied);}
-  bool      empty() const { return (size() == 0);}
-
   template<class OVLPRANGE, class FILTER>
   void copy_from(OVLPRANGE const& ovlprange, 
                  FILTER    const& f);
