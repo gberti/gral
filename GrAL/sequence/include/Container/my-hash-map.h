@@ -4,6 +4,7 @@
 // $LICENSE
 
 #include "Config/compiler-config.h"
+#include <string>
 
 // define STDEXT  as the namespace where hash<> templates live.
 // define STDHASH as the namespace where hash_map<> templates live
@@ -36,13 +37,21 @@
 #define STDHASH __gnu_cxx
 
 namespace STDEXT {
-  /* sepcialization for pointers */
+  /* specialization for pointers */
   template<class T>
   struct hash<T*> {
     typedef T* key_type;
     typedef T* argument_type;
     typedef size_t result_type;
     size_t operator()(T* t) const { return reinterpret_cast<unsigned>(t);}
+  };
+ 
+  template<>
+  struct hash<std::string> {
+    typedef std::string key_type;
+    typedef std::string argument_type;
+    typedef size_t result_type;
+    size_t operator()(key_type const& k) const { hash<char const*> h; return h(k.c_str());}
   };
 }
 
@@ -60,7 +69,14 @@ namespace STDEXT {
     typedef size_t result_type;
     size_t operator()(T* t) const { return reinterpret_cast<unsigned>(t);}
   };
-}
+
+  template<>
+  struct hash<std::string> {
+    typedef std::string key_type;
+    typedef std::string argument_type;
+    typedef size_t result_type;
+    size_t operator()(key_type const& k) const { hash<char const*> h; return h(k.c_str());}
+  };}
 
 #endif
 
