@@ -140,6 +140,7 @@ struct element_traits_vertex_base
     hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstVertex();}
+  static ElementIterator EndElement  (grid_type    const& g)    { return g.EndVertex();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfVertices();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
@@ -176,6 +177,7 @@ struct element_traits_edge_base
     hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstEdge();}
+  static ElementIterator EndElement  (grid_type    const& g)    { return g.EndEdge();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfEdges();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
@@ -211,6 +213,7 @@ struct element_traits_face_base
     hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFace();}
+  static ElementIterator EndElement  (grid_type    const& g)    { return g.EndFace();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfFaces();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
@@ -247,6 +250,7 @@ struct element_traits_facet_base
     hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFacet();}
+  static ElementIterator EndElement  (grid_type    const& g)    { return g.EndFacet();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfFacets();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
@@ -283,6 +287,7 @@ struct element_traits_cell_base
     hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstCell();}
+  static ElementIterator EndElement  (grid_type    const& g)    { return g.EndCell();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfCells();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
