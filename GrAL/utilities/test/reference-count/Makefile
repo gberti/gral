@@ -16,10 +16,6 @@ include $(DEPS)
 
 
 
-LIBS = 
-
-
-
 new-check-clean: new check clean
 
 new : clean all
