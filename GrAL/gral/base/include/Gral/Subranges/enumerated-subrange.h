@@ -49,6 +49,9 @@
  Aliases 'Element' and 'ElementIterator' are provided to ease the
  definition of template functions that are independent of the
  concrete element category (i.e. Vertex, Edge etc.)
+
+  \todo the ranges do not allow \c ElementIterator(Range)
+        constructor.
 */
 //----------------------------------------------------------------
 
