@@ -96,6 +96,27 @@ inline void Complex2D::switch_cell(Complex2D::Edge const& e,
 				   Complex2D::Cell      & c) const
 { e.FlipCell(c);}
 
+inline Complex2D::Vertex 
+Complex2D::switched_vertex(Complex2D::Vertex const& v, 
+			   Complex2D::Edge const& e) const
+{ Vertex sv(v); switch_vertex(sv,e); return sv;}
+
+inline Complex2D::Edge 
+Complex2D::switched_edge(Complex2D::Vertex const& v, 
+			 Complex2D::Edge const& e, 
+			 Complex2D::Cell const& c) const
+{ Edge se(e); switch_edge(v,se,c); return se;}
+
+inline Complex2D::Facet 
+Complex2D::switched_facet(Complex2D::Vertex const& v, 
+			  Complex2D::Edge const& e,
+			  Complex2D::Cell const& c) const
+{ Edge se(e); switch_edge(v,se,c); return se;}
+
+inline Complex2D::Cell 
+Complex2D::switched_cell(Complex2D::Edge const& e, 
+			 Complex2D::Cell const& c) const
+{ Cell sc(c); switch_cell(e,sc); return sc;}
 
 
 inline Complex2D::BoundaryFacetIterator Complex2D::FirstBoundaryFacet() const
