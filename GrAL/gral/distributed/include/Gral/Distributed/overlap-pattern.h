@@ -25,10 +25,10 @@
 
 class overlap_pattern {
 private:
- queue<grid_element_tag,deque<grid_element_tag> > q;
+ std::queue<grid_element_tag,deque<grid_element_tag> > q;
 public:
   overlap_pattern();
-  overlap_pattern(string const& pat);
+  overlap_pattern(std::string const& pat);
 
   void push(grid_element_tag t)  { q.push(t);}
   void pop()                     { q.pop();}

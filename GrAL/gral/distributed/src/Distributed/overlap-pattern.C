@@ -7,12 +7,13 @@
 //   
 //----------------------------------------------------------------
 
+#include "Gral/Distributed/overlap-pattern.h"
+
 #include <string>
 
-#include "Gral/Distributed/overlap-pattern.h"
 #include "Utility/pre-post-conditions.h"
 
-overlap_pattern::overlap_pattern(string const& pat)
+overlap_pattern::overlap_pattern(std::string const& pat)
 {
   for(unsigned i = 0; i < pat.size(); ++i)
     if(pat[i] == 'C')
