@@ -1,0 +1,53 @@
+%% -*-latex-*-
+%%
+%% ``Emulate'' package for Hyperlatex
+%%
+%% Tries to emulate as many Latex concepts as possible in one way or
+%% another, to allow easy conversion of existing Latex files 
+%%
+%% Last $Modified: Tue Apr  8 17:55:00 1997 by otfried $
+%%
+
+
+\newcommand{\displaystyle}{}
+\newcommand{\textstyle}{}
+\newcommand{\scriptstyle}{}
+\newcommand{\scriptscriptstyle}{}
+
+\newcommand{\,}{}
+\newcommand{\:}{ }
+\newcommand{\;}{  }
+\newcommand{\!}{}
+
+\newcommand{\mathsf}[1]{#1}
+\newcommand{\mathcal}[1]{#1}
+\newcommand{\vec}[1]{#1}
+\newcommand{\cal}{}
+\newcommand{\sl}{\it}
+\newcommand{\textsl}{\textit}
+\newcommand{\Bbb}{\bf}
+
+%\newcommand{\cup}{ cup }
+\newcommand{\cup}{ \begin{rawhtml} <TT>U</TT> \end{rawhtml} }
+%\newcommand{\cap}{ cap }
+\newcommand{\cap}{\begin{rawhtml} <TT>n</TT> \end{rawhtml} }
+%\newcommand{\cap}{\begin{rawhtml}<MATH> &caps;</MATH>\end{rawhtml}}
+\newcommand{\in}{ in }
+\newcommand{\bigcup}{ \begin{rawhtml} <BIG><TT>U</TT></BIG> \end{rawhtml}}
+\newcommand{\bigcap}{INTER}
+\newcommand{\overline}{}
+\newcommand{\ell}{l}
+
+\newcommand{\emptyset}{\htmlsym{##216}}
+\newcommand{\prime}{`}
+\newcommand{\prec}{<}
+\newcommand{\marginpar}[2][]{}
+\newcommand{\reversemarginpar}{}
+\newcommand{\normalmarginpar}{}
+
+\newcommand{\vee}{\begin{rawhtml} \/ \end{rawhtml}}
+\newcommand{\wedge}{\begin{rawhtml} /\ \end{rawhtml}}
+\newcommand{\hashmark}{\#}
+\newcommand{\circumflex}{\begin{rawhtml}&\end{rawhtml}\hashmark\begin{rawhtml}094;\end{rawhtml}}
+\newcommand{\hat}[1]{\circumflex{}#1}
+\newcommand{\|}{|}
