@@ -52,7 +52,7 @@ int main() {
       cout << range(s.begin(), s.end()) << " -> " << flush;
       old_s = s;
       s = succ_ordered(s,1);
-    } while(s != old_s);
+    } while(!(s == old_s));
     cout << endl;
   }
   {
@@ -65,7 +65,7 @@ int main() {
       cout << range(s.begin(), s.end()) << " -> " << flush;
       old_s = s;
       s = succ_ordered(s,0);
-    } while(s != old_s);
+    } while(!(s == old_s));
     cout << endl;
   }
   {
@@ -78,7 +78,7 @@ int main() {
       cout << range(s.begin(), s.end()) << " -> " << flush;
       old_s = s;
       s = succ_ordered(s,1);
-    } while(s != old_s);
+    } while(!(s == old_s));
     cout << endl;
   }
 
@@ -94,7 +94,7 @@ int main() {
       cout << range(s.begin(), s.end()) << " -> " << flush;
       old_s = s;
       s = succ_ordered(s,3);
-    } while(s != old_s);
+    } while(!(s == old_s));
     cout << endl;
   }
 
@@ -106,7 +106,7 @@ int main() {
     do {
       cout << range(s.begin(), s.end()) << " -> " << flush;
       s = succ_nary_number(s,2);
-    } while (s != v );
+    } while (!(s == v) );
     cout << endl;
   }
 
@@ -117,7 +117,7 @@ int main() {
     do {
       cout << range(s.begin(), s.end()) << " -> " << flush;
       s = succ_nary_number(s,2);
-    } while (s != v );
+    } while (!(s == v) );
     cout << endl;
   }
   {
@@ -127,7 +127,7 @@ int main() {
     do {
       cout << range(s.begin(), s.end()) << " -> " << flush;
       s = succ_nary_number(s,2);
-    } while (s != v );
+    } while (! (s == v) );
     cout << endl;
   }
 
@@ -139,7 +139,7 @@ int main() {
       cout << range(s.begin(), s.end()) << " -> " << flush;
       s = succ_nary_number(s,3);
 
-    } while (s != v );
+    } while (!(s == v ));
     cout << endl;
   }
 
