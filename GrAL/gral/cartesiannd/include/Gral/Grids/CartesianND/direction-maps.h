@@ -294,7 +294,7 @@ namespace cartesiannd {
 
       // will have \choice{K,m} m-subdirections dir_km of dir_k,
       //  and for each 2^{K-m} parallel elements of dim m
-      unsigned p2 = (unsigned)pow(2,K-m);
+      unsigned p2 = (unsigned)pow(2.0,(int)(K-m));
       nb[d_k].resize(p2*binomial_coeff(K,m));
 
       // ddir_km traverses all ordered sequences of length m in [0, K-1],
@@ -319,7 +319,7 @@ namespace cartesiannd {
 
 	// loop over  all 2^{K-m} vectors 'eps'  \in {0,1}^{K-m} 
 	vector_system eps(K-m,0);
-	for(unsigned n = 0; n < pow(2,K-m); ++n, ++cnt) {
+	for(unsigned n = 0; n < pow(2.0,(int)(K-m)); ++n, ++cnt) {
 	  // get offset from dir_m_k and eps 
 	  index_type offset(0);
 	  for(unsigned i = 0; i < dir_km_complement.size(); ++i)
