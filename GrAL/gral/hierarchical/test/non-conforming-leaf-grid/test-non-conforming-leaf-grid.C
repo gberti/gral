@@ -18,11 +18,15 @@
 
 #include "Gral/Test/test-archetypes.h"
 
-#include "Container/functions.h" // identity
+#include "Geometry/matrix.h"
+#include "Geometry/affine-mapping.h"
+//#include "Container/functions.h" // identity
 
 //#include "IO/control-devices.h"
 
 #include <math.h>
+
+using namespace GrAL;
 
 template<class OCTREE>
 void print_state(OCTREE const& oct, std::ostream& out) 
@@ -36,6 +40,7 @@ void print_state(OCTREE const& oct, std::ostream& out)
 
 
 // explicit instantiations
+namespace GrAL {
 namespace octree {
   typedef Octree<cartesiannd::grid<2> > octree2d_type;
   typedef Octree<cartesiannd::grid<3> > octree3d_type;
@@ -50,48 +55,49 @@ namespace octree {
 
   typedef non_conforming_leafgrid<octree2d_type>::element_base_type elem_base2d_type;
   typedef non_conforming_leafgrid<octree3d_type>::element_base_type elem_base3d_type;
+}}
 
+
+namespace GrAL {
+  namespace hierarchical {
+    template class h_vertex_t<octree::elem_base2d_type>;
+    template class h_vertex_t<octree::elem_base3d_type>;
+    // cannot instantiate this, because CellChildIterator is not defined.
+    // template class h_cell_t  <octree::elem_base2d_type>;
+    template class h_incidence_iterator_t<octree::elem_base2d_type, vertex_type_tag, cell_type_tag>;
+    template class h_incidence_iterator_t<octree::elem_base3d_type, vertex_type_tag, cell_type_tag>;
+  }
   
-
-
-}
-
-namespace hierarchical {
-  template class h_vertex_t<octree::elem_base2d_type>;
-  template class h_vertex_t<octree::elem_base3d_type>;
-  // cannot instantiate this, because CellChildIterator is not defined.
-  // template class h_cell_t  <octree::elem_base2d_type>;
-  template class h_incidence_iterator_t<octree::elem_base2d_type, vertex_type_tag, cell_type_tag>;
-  template class h_incidence_iterator_t<octree::elem_base3d_type, vertex_type_tag, cell_type_tag>;
-
+  template class vertex_iterator_of_cell_set<octree::leafgrid2d::CellIterator, octree::leafgrid2d>;
+  template class vertex_iterator_of_cell_set<octree::leafgrid3d::CellIterator, octree::leafgrid3d>;
 }
 
 
-template class vertex_iterator_of_cell_set<octree::leafgrid2d::CellIterator, octree::leafgrid2d>;
-template class vertex_iterator_of_cell_set<octree::leafgrid3d::CellIterator, octree::leafgrid3d>;
-
-
-double f(tuple<double,2> X) {
- typedef  point_traits<tuple<double, 2> > pt;
- double x = pt::x(X), y = pt::y(X);
- return x*x+y*y -0.211;
+double f(GrAL::tuple<double,2> X) {
+  using namespace GrAL;
+  typedef point_traits<tuple<double, 2> > pt;
+  double x = pt::x(X), y = pt::y(X);
+  return x*x+y*y -0.211;
 }
 
-double f3d(tuple<double,3> X) {
+double f3d(GrAL::tuple<double,3> X) {
+  using namespace GrAL;
  typedef  point_traits<tuple<double, 3> > pt;
  double x = pt::x(X), y = pt::y(X), z = pt::z(X);
  return x*x+y*y+z*z -0.211;
 }
 
-double f1(tuple<double,2> X) {
- typedef  point_traits<tuple<double, 2> > pt;
- double x = pt::x(X)-0.5, y = pt::y(X)-0.5;
+double f1(GrAL::tuple<double,2> X) {
+  using namespace GrAL;
+  typedef  point_traits<tuple<double, 2> > pt;
+  double x = pt::x(X)-0.5, y = pt::y(X)-0.5;
  
  return x*x*x + y*y*y - 0.5*x*x - 0.5*y*y + 0.1333;
 }
 
-double f2(tuple<double,2> X) {
- typedef  point_traits<tuple<double, 2> > pt;
+double f2(GrAL::tuple<double,2> X) {
+  using namespace GrAL;
+  typedef  point_traits<tuple<double, 2> > pt;
  double x = 0.8*(pt::x(X)-0.5), y = 0.8*(pt::y(X)-0.5);
  
  return (1.0 + 0.3*sin(5.0*atan2(x,y)))*(x*x + y*y) - 0.1001;
@@ -100,6 +106,7 @@ double f2(tuple<double,2> X) {
 
 
 int main() {
+  using namespace GrAL;
    
   using namespace std; 
   {
@@ -114,7 +121,9 @@ int main() {
     typedef tuple<double,3>                     coord_type;
 
     typedef grid_types<cart_grid_type>          cgt;
-    typedef stdext::identity<coord_type>        mapping_type;
+    //    typedef stdext::identity<coord_type>        mapping_type;
+    typedef matrix<3,3,0> matrix_type;
+    typedef affine_mapping<matrix_type, coord_type> mapping_type;
     typedef cart::mapped_geometry<cart_grid_type, mapping_type> cart_geom_type;
    
 
@@ -138,16 +147,20 @@ int main() {
 
     cart_grid_type root(6,6,6);    // 1x1 cells
     cart_grid_type pattern(3,3,3); // 2x2 cells;
+    cart_geom_type root_geom(root, mapping_type::identity());
     
     octree_type    Oct  (root, pattern);
-    hier_geom_type Geom (Oct.TheHierGrid());
+    hier_geom_type Geom (*Oct.TheHierGrid(), root_geom);
 
     print_state(Oct, cout);
 
     int maxlevels = 2;
     hgt::level_handle coarse = Oct.TheHierGrid()->coarsest_level();
+    Oct.activate(Oct.coarsest_level());
+
 
     for(hgt::level_handle lev = coarse; lev <= coarse + maxlevels; ++lev) {
+      cout << "Level " << lev << endl;
       for(cgt::CellIterator c(* Oct.TheHierGrid()->FlatGrid(lev)); ! c.IsDone(); ++c) {
 	hgt::Cell hc(* Oct.TheHierGrid(), *c, lev);
 	unsigned cnt_plus = 0;
@@ -168,7 +181,6 @@ int main() {
       print_state(Oct, cout);
     }
 
-
     ref_ptr<octree_type> op(Oct);
     leafgrid_type L(op);
 
@@ -182,7 +194,7 @@ int main() {
     ConstructGrid(GMVOut,L,Geom);
     */
 
-    /*
+    /*    
     OstreamGMV3DFmt GMVOut("leaf3d.gmv");
     ConstructGrid(GMVOut,L,Geom);
     */
