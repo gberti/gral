@@ -69,7 +69,7 @@ GraphicsDevice OOGLDevice(const std::string& name) {
 oogl::oogl(ostream* out) : rendering_language(out) 
 {
   cerr << "output: OOGL\n";
-  //the_stream() << "(normalization world keep)\n"
+  the_stream() << "(normalization world keep)\n";
   //       << "(bbox-draw world no)\n";
 }
 
@@ -80,7 +80,7 @@ void oogl::pause(double seconds)
 { the_stream() << "\n(sleep-for " << seconds << ")\n";} 
 
 void oogl::read_from_file(const std::string& file)
-{ the_stream() << "< " << '"' << file << '"'  << " ";}
+{ the_stream() << " < " << '"' << file << '"'  << " ";}
 
 
 void oogl::begin_object(const RenderableGeom& Obj) 
@@ -93,7 +93,7 @@ void oogl::end_object()  { the_stream() << "}\n";}
 
 void oogl::begin_group(const std::string& name)
 {
-  the_stream() << "(geometry " << name << " {  LIST {\n";
+  the_stream() << "(geometry \"" << name << "\" {  LIST {\n";
   //the_stream() << "LIST {";
 }
 
@@ -151,9 +151,9 @@ void oogl::write_transformation(const Transformation& T)
  int i,k;
  the_stream() << "INST \n"
 	      << "  transform {\n";
-  for(i=0;i<4;i++) {
+  for(i=1;i<=4;i++) {
     the_stream() << "    ";
-    for(k=0;k<4;k++)
+    for(k=1;k<=4;k++)
       the_stream() << M(k,i) << " "; // transpose of M !!
     the_stream() << '\n';
   }

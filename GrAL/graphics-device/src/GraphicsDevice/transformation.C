@@ -55,14 +55,14 @@ Transformation::GetMat4() const
   matrix4_type m;
   coord_type t0(T(zero));
   coord_type a1(T(e1)-t0), a2(T(e2)-t0), a3(T(e3)-t0), a4(t0);
-  for(int row = 0; row <=2; row++){
-    m(row,0) = a1[row+1];
-    m(row,1) = a2[row+1];
-    m(row,2) = a3[row+1];
-    m(row,3) = a4[row+1];
+  for(int row = 1; row <=3; row++){
+    m(row,1) = a1[row];
+    m(row,2) = a2[row];
+    m(row,3) = a3[row];
+    m(row,4) = a4[row];
   }
-  m(3,0)=m(3,1)=m(3,2)=0.0;
-  m(3,3) = 1.0;
+  m(4,1)=m(4,2)=m(4,3)=0.0;
+  m(4,4) = 1.0;
  
  return m;
 }
