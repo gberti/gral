@@ -1,0 +1,19 @@
+# -*- makefile -*-
+
+## Adapt this to your needs
+
+# used only locally as shorthand in this file
+#MPIPATH=/usr/local/mpich
+MPIPATH=/you-must-set-mpistuff-in/configuration/defs/mpi/mpi.defs/ #
+
+# script to start mpi processes
+# if you do not use mpich, you will probably have
+# to adapt also the use of mpirun in
+# gral/distributed/test/mpi
+MPIRUN=$(MPIPATH)/bin/mpirun  
+
+# where to find mpi headers (only C binding is used)                    
+MPI_INCLUDES= -I$(MPIPATH)/include
+
+# where to find MPI libs (only C binding)
+MPI_LIBRARIES = -L$(MPIPATH)/lib  -lmpich 
