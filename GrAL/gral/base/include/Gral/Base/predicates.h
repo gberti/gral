@@ -58,6 +58,22 @@ struct incidence<edge_type_tag, facet_type_tag,E1,E2>
 };
 
 
+/*! \brief Compile-time switch to get VertexOn<E> incidence iterator
+
+ */
+template<class E>
+struct VertexOn {
+  typedef element_traits<E> et;
+  typedef grid_types<typename et::grid_type> gt;
+  typedef typename gt::Vertex Vertex;
+  // REQUIRE vt::element_type_tag = vertex_type_tag
+  typedef typename incidence<vertex_type_tag,
+                             typename et::element_type_tag,
+                             Vertex,E>::iterator 
+  Iterator;
+};
+
+
 
 /*! predicate to decide wether two elements are incident.
 
