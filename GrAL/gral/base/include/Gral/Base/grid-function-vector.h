@@ -39,8 +39,9 @@ template<class E, class T>
 class grid_function_vector {
 public:
   // container types
-  typedef std::vector<T>                 table_type;
+  typedef std::vector<T>                       table_type;
   typedef typename table_type::size_type       size_type;
+  typedef typename table_type::value_type      value_type;
   typedef typename table_type::reference       reference;
   typedef typename table_type::const_reference const_reference;
 
@@ -75,7 +76,11 @@ public:
   gfc2dv& operator=(const gfc2dv& rs) 
     { if (this != &rs) { g =rs.g; table = rs.table;} return *this;}
 
-  /*  void operator=(const T& t) { fill(table.begin(),table.end(),t); } */
+  /*! \brief set each value to \c t.
+      
+      \post <tt> gf(e)  == t </tt>  for all \c e
+  */
+  void set_value(value_type const& t) { std::fill(table.begin(),table.end(),t); } 
 
   void init(const grid_type& gg, const T& t) {
     REQUIRE((g == 0), "grid_function<>::init: grid must be 0!\n",1);
@@ -189,7 +194,6 @@ public:
   // if done earlier.
   typedef iter       iterator;
   typedef const_iter const_iterator;
-  typedef T          value_type;
 };
 
 #endif

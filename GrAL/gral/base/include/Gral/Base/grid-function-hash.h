@@ -51,6 +51,9 @@ public:
 
   typedef STDHASH::hash_map<E,T, hasher_type>   table_type;
   typedef typename table_type::size_type        size_type;
+  typedef T                            value_type;
+  typedef T&                           reference;
+  typedef T const&                     const_reference;
 
   typedef E const& argument_type;
   typedef T const& result_type;
@@ -137,7 +140,6 @@ public:
   // if done earlier.
   typedef iter       iterator;
   typedef const_iter const_iterator;
-  typedef T          value_type;
 };
 
 
@@ -169,10 +171,16 @@ public:
 	table[*e] = t;
     }
 
+  /*! Set all value to \c t.
+   */
+  void set_value(T const& t) {
+    for(ElementIterator e = et1::FirstElement(TheGrid()); ! e.IsDone(); ++e)
+      table[*e] = t;    
+  }
+
   void init(const grid_type& gg, const T& t) {
     set_grid(gg);
-    for(ElementIterator e = et1::FirstElement(TheGrid()); ! e.IsDone(); ++e)
-	table[*e] = t;
+    set_value(t);
   }
 
   //----------------- data access operators -------------------------   

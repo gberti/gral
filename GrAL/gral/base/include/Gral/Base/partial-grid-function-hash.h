@@ -119,6 +119,16 @@ public:
     //    return (table[e]);
   }
 
+  /*! \brief set each value to \c t.
+      
+      \post <tt> gf(e)  == t </tt>  for all \c e
+   */
+  void set_value(T const& t) 
+  {
+    set_default(t);
+    for(typename table_type::iterator i = table.begin(); i != table.end(); ++i)
+      (*i).second = t;
+  }
 
   const T& get_default() const { return default_value;}
   void set_default(const T& t) { default_value = t;}
