@@ -27,7 +27,9 @@ namespace cartesiannd {
     typedef MAP      mapping_type;
     typedef typename mapping_type::result_type coord_type;
     typedef grid_types<grid_type> gt;
+
     typedef typename gt::Vertex Vertex;
+    typedef typename gt::Cell   Cell;
     typedef typename gt::index_type index_type;
   private:
     ref_ptr<grid_type const> g;
@@ -35,19 +37,29 @@ namespace cartesiannd {
     index_type         low_;
     index_type         high_; // [low_, high_] will be first mapped to unit cube and
                               // then mapped by f.
+    coord_type         delta;
   public:
     mapped_geometry() {}
     mapped_geometry(grid_type const& gg, mapping_type ff = mapping_type()) 
-      : g(gg), f(ff), low_(gg.vertex_low()), high_(gg.vertex_high()) {}
+      : g(gg), f(ff), low_(gg.low_vertex_index()), high_(gg.high_vertex_index()) { init();}
     mapped_geometry(grid_type const& gg, index_type lw, index_type hgh, 
 		    mapping_type ff = mapping_type()) 
-      : g(gg), f(ff), low_(lw), high_(hgh) {}
+      : g(gg), f(ff), low_(lw), high_(hgh) { init();}
 
-    coord_type unit_coord(Vertex const& v) const { 
-      coord_type r(v.index() - low_);
+    void init() {
+      delta = coord_type(1.0);
+      delta = quotient(delta, high_ - low_);
+    }
+    coord_type unit_coord(index_type idx) const { 
+      coord_type r(idx - low_);
       return quotient(r, high_);
     }
-    coord_type coord(Vertex const& v) const { cb();  return f(unit_coord(v));}
+    coord_type coord (Vertex const& v) const { cb(); return f(unit_coord(v.index()));}
+    /*! \brief Result is the mapping of the center of c with respect to unit coordinates \f$ \in [0,1]^d \f$
+        
+        This is the center of inertia only if the mapping \c f is affine. 
+    */
+    coord_type center(Cell   const& c) const { cb(); return f(unit_coord(c.index()) + 0.5*delta);} 
 
     bool bound() const { return g != 0;}
     void cb()    const { REQUIRE(bound(), "", 1);}
