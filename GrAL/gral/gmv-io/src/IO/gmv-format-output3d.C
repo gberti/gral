@@ -76,13 +76,13 @@ OstreamGMV3DFmt::StaticData::StaticData()
 
   // construct pyramid
   int conn_pyramid[1*5+4*4] = {
+    4,  4, 3, 2, 1,
     3,  0, 1, 2,
     3,  0, 2, 3,
     3,  0, 3, 4,
-    3,  0, 4, 1,
-    4,  4, 3, 2, 1
+    3,  0, 4, 1
   };
-  stream_grid_mask<int *> pyramid(6,5,conn_pyramid); 
+  stream_grid_mask<int *> pyramid(5,5,conn_pyramid); 
   archetypes->push_back(archetype_type());
   ConstructGrid0(archetypes->back(), pyramid);
   (*names)[archetypes->size() -1] = "pyramid";
