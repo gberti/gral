@@ -35,8 +35,8 @@ test-enumerated-subrange: $(LOCALOBJECTS)
 run:	
 	$(EXEC) 
 
-check:
-	./runtest ./$(EXEC) 
+check: run-check
+
 
 clean: stdclean
 	rm -f $(EXEC)

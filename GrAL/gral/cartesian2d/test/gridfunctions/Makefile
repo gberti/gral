@@ -34,8 +34,8 @@ test-cartesian2d-gridfunctions: $(LOCALOBJECTS)
 run:
 	$(EXEC) 
 
-check:
-	./runtest ./$(EXEC)
+check: run-check
+
 
 clean: stdclean
 	rm -f $(EXEC)

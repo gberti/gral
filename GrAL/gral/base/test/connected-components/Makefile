@@ -37,8 +37,8 @@ test-connected-components: $(LOCALOBJECTS)
 run:
 	$(EXEC) 
 
-check:
-	./runtest ./$(EXEC) 
+check: run-check
+
 
 clean: stdclean
 	rm -f $(EXEC)

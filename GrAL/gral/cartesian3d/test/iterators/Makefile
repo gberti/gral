@@ -35,8 +35,39 @@ test-cartesian-iterators: $(LOCALOBJECTS)
 run:
 	$(EXEC) 
 
-check:
-	./runtest
+check: run-check
+
+
+
+standard-check-new:
+	@(out=$(EXEC).out; \
+          echo='echo -e'; \
+         if ! ./$(EXEC)  > $$out '2>&1' ; \
+         then \
+         $$echo "ERROR running $(EXEC) "; \
+         echo "Output was:"; \
+         cat $$out; \
+         $$echo " End output "; \
+         else \
+         $$echo "\n"; \
+         for i in  *.out; \
+         do \
+         if diff $$i $$i.exp; \
+         then  $$echo "\t\t\t" $$i OK; \
+         else  $$echo "\t\t\t" ERROR in $$i; \
+         fi ;\
+         done ;\
+         $$echo "\n"; \
+         fi)
+
+testit:
+	@(out=out; \
+         if ! ./$(EXEC)  > $$out '2>&1' ; \
+	 then \
+         echo " failed "; \
+         else \
+         echo " succeeded "; \
+         fi)
 
 clean: stdclean
 	rm -f $(EXEC)

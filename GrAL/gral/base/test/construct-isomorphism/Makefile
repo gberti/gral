@@ -8,7 +8,7 @@ include $(CONFIG)
 LOCALSOURCES =  $(shell ls *.C)
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-construct-isomorphisms
+TARGETS = test-construct-isomorphism
 EXEC =  $(TARGETS)
 
 include $(DEPS)
@@ -27,14 +27,14 @@ new : clean all
 all : $(TARGETS)
 
 
-test-construct-isomorphisms: $(LOCALOBJECTS)
+test-construct-isomorphism: $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
 	$(EXEC) 
 
-check:
-	./runtest
+check: run-check
+
 
 clean: stdclean
 	rm -f $(EXEC)

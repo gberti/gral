@@ -35,8 +35,8 @@ test-hier-construct: $(LOCALOBJECTS)
 run:
 	$(EXEC) 
 
-check:
-	./runtest
+check: run-check
+
 
 clean: stdclean
 	rm -f $(EXEC)

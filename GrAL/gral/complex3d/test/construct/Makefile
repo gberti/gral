@@ -34,8 +34,8 @@ test-construct-complex3d: $(OBJECTS)
 run:
 	$(EXEC) 
 
-check:
-	./runtest
+check: run-check
+
 
 clean: stdclean
 	rm -f $(EXEC)
