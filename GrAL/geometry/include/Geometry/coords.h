@@ -147,6 +147,8 @@ struct point_traits_for_coordN
   typedef typename Ptype::component      component_type;
   typedef component_type                 value_type;
 
+  static int LowerIndex()             { return 1;}
+  static int UpperIndex()             { return N;}
   static int LowerIndex(const Ptype&) { return 1;}
   static int UpperIndex(const Ptype&) { return N;}
   // static unsigned Dimension(const Ptype&)  { return N;}
@@ -180,6 +182,8 @@ struct point_traits_for_coordN_2
   typedef tag2D                     dimension_tag;
   enum { dimension = 2 };
 
+  static int LowerIndex()             { return 1;}
+  static int UpperIndex()             { return 2;}
   static int LowerIndex(const Ptype&) { return 1;}
   static int UpperIndex(const Ptype&) { return 2;}
   // static int Dimension(const Ptype&)  { return 2;}
