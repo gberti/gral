@@ -108,6 +108,28 @@ int main() {
     test_vertex_on_edge_iterator(R, cout);
 
     test_archetypes(R,cout);
+
+    cartesiannd::grid<2>::archetype_type A = R.TheArchetype();
+    typedef grid_types<cartesiannd::grid<2>::archetype_type> agt;
+    agt::Cell   c(*A.FirstCell());
+    agt::Vertex v(*A.FirstVertex());
+    agt::Vertex v_first = v;
+
+    cout << "Testing switch:\n";
+
+    cout << "c=[" << c.direction() << "," << c.index() << "] ";
+    cout << "v=[" << v.index() << "] ";
+
+    do {
+      A.switch_vertex(v,c);
+      cout  << " -> ";
+      cout << "c=[" << c.direction() << "," << c.index() << "] ";
+      cout << "v=[" << v.index() << "] ";
+      A.switch_cell(v,c);
+      cout  << " -> ";
+      cout << "c=[" << c.direction() << "," << c.index() << "] ";
+      cout << "v=[" << v.index() << "] ";
+    } while ( v != v_first);
   }
 
   {
@@ -179,7 +201,7 @@ int main() {
 
  {
     cartesiannd::grid<2> R(it2(2,2));
-    cartesiannd::subrange<2> RR(R, R.vertex_low(), R.vertex_beyond());
+    cartesiannd::subrange<2> RR(R, R.low_vertex_index(), R.beyond_vertex_index());
     cout << "Subrange 2x2 vertices:\n";
     RR.print(cout);
     print_grid(RR, cout);
