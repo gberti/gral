@@ -275,11 +275,11 @@ public:
       coord_type rst; pt::ConstructWithDim(3,rst);
       // solve p0(T) + r*(p1(T)-p0(T)) + s*(p2(T)-p0(T)) 
       //    =  p0(S) + t*(p1(S)-p0(S))  for (r,s,t)
-      ap::solve(tt::p1(T) - tt::p0(T),
-		tt::p2(T) - tt::p0(T), 
-		st::p0(S) - st::p1(S),
-		rst,
-		st::p0(S) - tt::p0(T));
+      ap::solve3(tt::p1(T) - tt::p0(T),
+		 tt::p2(T) - tt::p0(T), 
+		 st::p0(S) - st::p1(S),
+		 rst,
+		 st::p0(S) - tt::p0(T));
       t = pt::z(rst); t_defined = true;
       real r = pt::x(rst), s = pt::y(rst);
       return (r >= 0 && s >= 0 && s+r <= 1);
@@ -352,11 +352,11 @@ public:
     if(! ray_intersects_plane())
       return false;
     coord_type rst; pt::ConstructWithDim(3,rst);
-    ap::solve(tt::p1(T) - tt::p0(T),
-	      tt::p2(T) - tt::p0(T), 
-	      - rt::dir(R),
-	      rst,
-	      rt::p0(R) - tt::p0(T));
+    ap::solve3(tt::p1(T) - tt::p0(T),
+	       tt::p2(T) - tt::p0(T), 
+	       - rt::dir(R),
+	       rst,
+	       rt::p0(R) - tt::p0(T));
       t = pt::z(rst); t_defined = true;
       real r = pt::x(rst), s = pt::y(rst);
       return (t>= 0 && r >= 0 && s >= 0 && s+r <= 1);

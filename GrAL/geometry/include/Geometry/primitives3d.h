@@ -243,8 +243,8 @@ public:
 
       The implementation uses Cramer's rule. 
    */
-  static void solve(POINT const& A1, POINT const& A2, POINT const& A3,
-		    POINT      & x,  POINT const& b)
+  static void solve3(POINT const& A1, POINT const& A2, POINT const& A3,
+		     POINT      & x,  POINT const& b)
     {
       // solve by Cramer's rule
       scalar d = det3(A1,A2,A3);
@@ -260,7 +260,7 @@ public:
   */
   static void solve(matrix_type const& A, 
 		    POINT            & x,  POINT const& b)
-  { solve(A.a[0], A.a[1], A.a[2], x, b);}
+  { solve3(A.a[0], A.a[1], A.a[2], x, b);}
 
   /*! \brief Solve \f$ A x = b \f$ for \f$ x \f$
       The implementation uses Cramer's rule. 

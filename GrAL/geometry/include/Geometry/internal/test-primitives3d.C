@@ -86,9 +86,9 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
   }
 
   POINT x = pt::Origin(3);
-  ap::solve(e[0],e[1],e[2],x,b);
+  ap::solve3(e[0],e[1],e[2],x,b);
   out << x << '\n';
-  ap::solve(e[0],e[2],e[1],x,b);
+  ap::solve3(e[0],e[2],e[1],x,b);
   out << x << '\n';
 
   POINT inv[3];
