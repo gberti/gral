@@ -32,9 +32,10 @@ inline Complex2D::cell_handle   Complex2D::handle(const Complex2D::CellNeighbour
 { return (_cells[c._f.C.handle()]._neighbours[c._f.lf]); }
 
 inline Edge2D Complex2D::edge(const Complex2D::edge_handle& e) const 
-{ return Edge(EdgeOnCellIterator(e.le,Cell(e.c,*this)));}
+{ return Edge(EdgeOnCellIterator(e.le,Cell(*this,e.c)));}
+
 inline Edge2D Complex2D::facet(const Complex2D::edge_handle& e) const 
-{ return Edge(EdgeOnCellIterator(e.le,Cell(e.c,*this)));}
+{ return Edge(EdgeOnCellIterator(e.le,Cell(*this,e.c)));}
 
 inline Complex2D::edge_handle Complex2D::handle(const Edge2D& E) const
 {
@@ -80,6 +81,22 @@ inline Complex2D::EdgeIterator  Complex2D::FirstFacet() const
 { return FirstEdge();}
 inline Complex2D::EdgeIterator  Complex2D::EndFacet() const
 { return EndEdge();}
+
+inline void Complex2D::switch_vertex(Complex2D::Vertex    & v, 
+				     Complex2D::Edge const& e) const
+{ e.FlipVertex(v);}
+
+inline void Complex2D::switch_edge(Complex2D::Vertex const& v, 
+				   Complex2D::Edge        & e, 
+				   Complex2D::Cell   const& c) const
+{ c.FlipEdge(v,e);}
+
+ 
+inline void Complex2D::switch_cell(Complex2D::Edge const& e, 
+				   Complex2D::Cell      & c) const
+{ e.FlipCell(c);}
+
+
 
 inline Complex2D::BoundaryFacetIterator Complex2D::FirstBoundaryFacet() const
 { return BoundaryFacetIterator(_boundary.begin(),this);}
