@@ -1,3 +1,7 @@
+/*! \file
+    Tests for \c hierarchical::hgrid_cartesian<>
+
+*/
 
 #include "Gral/Hierarchical/hierarchical-grid.h"
 #include "Gral/Grids/Cartesian3D/all.h"
@@ -15,15 +19,18 @@ void test_hier_grid(GRID const& root,
   typedef hierarchical::hgrid_cartesian<cart_grid_type> hier_grid_type;
   typedef hier_grid_type                                hgt;
   typedef typename hgt::HierCell                        HierCell;
+  typedef typename hgt::HierVertex                      HierVertex;
+  typedef typename hier_grid_type::element_base_type    element_base_type;
+  typedef hierarchical::h_vertex_on_cell_iterator_t<element_base_type> HierVertexOnCellIterator;
 
   hier_grid_type H(root,pattern);
   H.add_finer_level();
   H.add_coarser_level();
     
   for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev))
-    out << "Level " << lev << ": " << H.FlatGrid(lev).cell_size() << " cells\n";
+    out << "Level " << lev << ": " << H.FlatGrid(lev)->cell_size() << " cells" << endl;
   
-  for(typename cgt::CellIterator c = H.FlatGrid(H.finest_level()).FirstCell(); !c.IsDone(); ++c) {
+  for(typename cgt::CellIterator c = H.FlatGrid(H.finest_level())->FirstCell(); !c.IsDone(); ++c) {
     HierCell h(H,*c,H.finest_level());
     HierCell p = H.Parent(h);
     HierCell pp = H.Parent(p);
@@ -35,8 +42,57 @@ void test_hier_grid(GRID const& root,
       out << ch.Flat().index() << ", ";
     }
     out << "\b\b) "
-	<< "grandp: " << pp.Flat().index() << "\n";
+	<< "grandp: " << pp.Flat().index() << endl;
+
+    for(HierVertexOnCellIterator vc(h); !vc.IsDone(); ++vc) {
+      HierVertex v = *vc;
+      HierCell   c = vc.TheCell();
+      REQUIRE_ALWAYS(c == h, "", 1);
+    }
   }
+  out << "\n"
+      << "Vertices & Coarsest Parents:" << endl;
+  for(typename cgt::VertexIterator v = H.FlatGrid(H.finest_level())->FirstVertex(); !v.IsDone(); ++v) {
+    HierVertex hv(H,*v, H.finest_level());
+    HierVertex cv = H.CoarsestParent(hv);
+    out << hv.Flat().index() << " -> " << cv.Flat().index() << ", level " << cv.level() << endl; 
+  }
+  
+  H.remove_coarsest_level();
+  out << "# levels: " << H.num_of_levels() << endl;
+  H.remove_coarsest_level();
+  out << "# levels: " << H.num_of_levels() << endl;
+  H.remove_coarsest_level();
+  out << "# levels: " << H.num_of_levels() << endl;
+  try{
+    H.remove_coarsest_level();
+  }
+  catch(...) {
+    out << " Continuing. " << std::endl; 
+  }
+  out << "# levels: " << H.num_of_levels() << endl;
+}
+
+// explicit instantiation to make sure all members are compilable
+namespace hierarchical { 
+  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
+  template class hgrid_cartesian<cartesian2d::CartesianGrid2D>; 
+
+  
+  typedef  hgrid_cartesian<cartesian2d::CartesianGrid2D> hier_grid_2d;
+  template h_element_base_t<hier_grid_2d>;
+  typedef  h_element_base_t<hier_grid_2d> element_base_type_2d;
+  template h_vertex_t<element_base_type_2d>;
+  template h_cell_t  <element_base_type_2d>;
+  template h_vertex_on_cell_iterator_t<element_base_type_2d>;
+  
+
+  typedef  hgrid_cartesian<cartesian3d::CartesianGrid3D> hier_grid_3d;
+  template h_element_base_t<hier_grid_3d>;
+  typedef  h_element_base_t<hier_grid_3d> element_base_type_3d;
+  template h_vertex_t<element_base_type_3d>;
+  template h_cell_t  <element_base_type_3d>;
+  template h_vertex_on_cell_iterator_t<element_base_type_3d>;
 }
 
 int main() {
@@ -52,7 +108,7 @@ int main() {
     test_hier_grid(root, ref_pattern, cout);     
   }
   
-  cout << "----------------------------\n";
+  cout << "----------------------------" << endl;
   {
     namespace cart = cartesian2d;
     typedef cart::CartesianGrid2D cart_grid_type;
@@ -61,6 +117,18 @@ int main() {
     // Then hierarchical_grid does not work any more!
     cart_grid_type root(4,4);
     cart_grid_type ref_pattern(4,4); // 3x3 cells!
+    test_hier_grid(root, ref_pattern, cout);   
+  }
+  
+  cout << "----------------------------" << endl;
+  {
+    namespace cart = cartesian2d;
+    typedef cart::CartesianGrid2D cart_grid_type;
+
+    // CartesianGrid2D can be have lower index != (0,0)!
+    // Then hierarchical_grid does not work any more!
+    cart_grid_type root(3,3);
+    cart_grid_type ref_pattern(3,3); // 2x2 cells!
     test_hier_grid(root, ref_pattern, cout);   
   }
   

@@ -5,13 +5,15 @@ CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 ALLDEPMODULES += gral/complex2d  gral/cartesian3d gral/cartesian2d
+ADDCCFLAGS += -DGRAL_NO_ABORT -DGRAL_NO_SHOW_DATE -DNMWR_DEBUG
 LOCALSOURCES =  test-hier-construct.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-hier-construct
-EXEC =  $(TARGETS)
+EXEC = $(LOCALSOURCES:%.C=%.exe)
+TARGET = $(EXEC)
 
 include $(DEPS)
+
 
 
 
@@ -26,10 +28,10 @@ new-check-clean: new check clean
 new : clean all
 
 
-all : $(TARGETS)
+all : $(TARGET)
 
 
-test-hier-construct: $(LOCALOBJECTS)
+$(TARGET): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
