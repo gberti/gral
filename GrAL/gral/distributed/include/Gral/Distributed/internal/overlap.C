@@ -7,8 +7,9 @@
 #include "Container/some-algorithms.h"
 #include "Gral/Distributed/overlap.h"
 
-template<class CoarseGrid, class FineGrid>
-void overlap<CoarseGrid, FineGrid>::set_neighbours()
+template<class CoarseGrid, class FineGrid,
+         template<class U> class OVLP_RANGES>
+void overlap<CoarseGrid, FineGrid, OVLP_RANGES>::set_neighbours()
 {
   neighbours.set_grid(TheCoarseGrid());
   for(VertexNbIterator VNb = FirstVertexNeighbour(); ! VNb.IsDone(); ++VNb)
@@ -62,42 +63,6 @@ void copy_overlap_ranges(                      const SrcRange& exp,
 }
 
 
-//template<class Ovlp1, class Ovlp2, class FineVCorr, class FineCCorr>
-template<class CG1, class FG1, class Ovlp2,
-         class CoarseCCorr, class FineVCorr, class FineCCorr>
-void CopyOverlap(overlap<CG1,FG1>       &  dest,            // out
-		 Ovlp2             const&  src,             // in
-		 CG1               const&  cg_dest,         // in
-		 CoarseCCorr       const&  crs_src2dest_c,  // in 
-		 FG1               const&  fg_dest,         // in
-		 FineVCorr         const&  src2dest_v,      // in 
-		 FineCCorr         const&  src2dest_c)      // in
-{
-  typedef overlap<CG1,FG1> Ovlp1;
-
-  dest.set_coarse_grid(cg_dest);
-  dest.set_fine_grid(fg_dest);
-  
-  copy_overlap_ranges(src.vertices(),dest.vertices(),src2dest_v);
-  copy_overlap_ranges(src.cells(),   dest.cells(),   src2dest_c);
-  
-  // NOTE: dest.neighbour-iteration does not yet work!
-  typedef typename Ovlp1::CoarseCell        destCoarseCell;
-  typedef typename Ovlp2::CellNbIterator    srcCellNbIterator;
-  typedef typename Ovlp2::VertexNbIterator  srcVertexNbIterator;
-
-  for(srcCellNbIterator sCNb = src.FirstCellNeighbour(); ! sCNb.IsDone(); ++sCNb) {
-    destCoarseCell dNb = cg_dest.cell(crs_src2dest_c(sCNb.handle()));
-    copy_overlap_ranges(src.cells   (*sCNb),dest.cells   (dNb),src2dest_c);
-    
-  }
-  for(srcVertexNbIterator sVNb = src.FirstVertexNeighbour(); ! sVNb.IsDone(); ++sVNb) {
-    destCoarseCell dNb = cg_dest.cell(crs_src2dest_c(sVNb.handle()));
-    copy_overlap_ranges(src.vertices(*sVNb),dest.vertices(dNb),src2dest_v);
-  }
-
-  dest.set_neighbours();
-}
 
 
 
