@@ -13,6 +13,11 @@
 
 #include <iostream>
 
+
+namespace GrAL {
+  template class enumerated_subrange<cartesian2d::CartesianGrid2D>;
+}
+
 int main() {
   using namespace GrAL;
   using namespace std;
@@ -37,15 +42,17 @@ int main() {
     // test construction of ranges
     cout << "Subrange S: " 
 	 << S.NumOfCells()    << " cells, "  << flush
+	 << S.NumOfEdges()    << " edges, "  << flush
+	 << S.NumOfFacets()   << " facets, " << flush
 	 << S.NumOfVertices() << " vertices" << endl;
     
     cout << "Cells: " << flush;
-    for(rgegt::CellIterator c(S.FirstCell()); ! c.IsDone(); ++c)
+    for(rgegt::CellIterator c(S); ! c.IsDone(); ++c)
       cout << "C " << c.handle() << " = [" << (*c).ll() << "]  " << flush;
     cout << endl;
     
     cout << "Vertices: " << flush;
-    for(rgegt::VertexIterator v(S.FirstVertex()); ! v.IsDone(); ++v)
+    for(rgegt::VertexIterator v(S); ! v.IsDone(); ++v)
       cout << "V" << v.handle() << " = [" << (*v).x() << " " << (*v).y() << "]  " << flush;
     cout << endl;
   }
