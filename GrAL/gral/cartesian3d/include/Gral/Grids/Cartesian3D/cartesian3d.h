@@ -50,6 +50,7 @@ struct grid_types_Cartesian3D {
     in particular Edge and Facet types.
     \todo CartesianGrid3D(1,1,1) gives an error in cell_map
           (division by 0). Check this in index_map_nd<>.
+    \todo Implement validity checks for iterators
  */
 class CartesianGrid3D : public grid_types_Cartesian3D {
 public:
@@ -266,13 +267,13 @@ class VertexOnCellIterator_Cartesian3D
 {
   typedef VertexOnCellIterator_Cartesian3D self;
 private:
-  Cell const* c;
-  int         lv; // archetype::vertex_handle?
+  Cell   c;
+  int    lv; // archetype::vertex_handle?
 public:
-  VertexOnCellIterator_Cartesian3D() : c(0) {}
+  VertexOnCellIterator_Cartesian3D()  {}
   explicit
   VertexOnCellIterator_Cartesian3D(Cell const& cc, int llv = 0) 
-    : c(&cc), lv(llv) {}  
+    : c(cc), lv(llv) {}  
 
 
   self& operator++() {
@@ -281,13 +282,13 @@ public:
   }
   Vertex operator*() const { 
     REQUIRE(valid(), "Invalid VertexOnCellIterator! lv = " << lv,1);
-    return Vertex(c->TheGrid(), index());
+    return Vertex(c.TheGrid(), index());
   }
   bool IsDone() const { return lv >= 8;}
 
   grid_type::index_type   index()  const { 
     REQUIRE(valid(), "Invalid VertexOnCellIterator! lv = " << lv,1);
-    return c->index() + grid_type::sd.corner_offset[lv];
+    return c.index() + grid_type::sd.corner_offset[lv];
   }
   vertex_handle handle() const {
     REQUIRE(valid(), "Invalid VertexOnCellIterator! lv = " << lv,1);
@@ -295,18 +296,18 @@ public:
   }
   int local_handle() const { return lv;}
 
-  Cell      const& TheCell() const { return *c;}
-  grid_type const& TheGrid() const { return c->TheGrid();}
+  Cell      const& TheCell() const { return c;}
+  grid_type const& TheGrid() const { return c.TheGrid();}
 
 
   friend bool operator==(self const& lhs, self const& rhs)
-  { return (*(lhs.c) == *(rhs.c)) && (lhs.lv == rhs.lv);}
+  { return (lhs.c == rhs.c) && (lhs.lv == rhs.lv);}
   friend bool operator!=(self const& lhs, self const& rhs)
   { return !(lhs == rhs);}
   friend bool operator< (self const& lhs, self const& rhs)
-  { return (*(lhs.c) < *(rhs.c)) || ((*(lhs.c) == *(rhs.c)) && (lhs.lv <  rhs.lv));}
+  { return (lhs.c < rhs.c) || ((lhs.c == rhs.c) && (lhs.lv <  rhs.lv));}
 
-  bool valid() const { return c->valid() && (0 <= lv) && (lv <= 7);}
+  bool valid() const { return c.valid() && (0 <= lv) && (lv <= 7);}
 };
 
 
@@ -340,6 +341,7 @@ struct grid_types<CartesianGrid3D>
   //typedef grid_type::archetype_handle  archetype_handle;
   typedef grid_type::archetype_iterator  ArchetypeIterator;
   typedef grid_type::archetype_geom_type archetype_geom_type;
+  typedef grid_types<archetype_type>     archgt;
 };
 
 
