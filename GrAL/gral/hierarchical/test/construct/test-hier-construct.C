@@ -4,6 +4,7 @@
 */
 
 #include "Gral/Hierarchical/hierarchical-grid.h"
+#include "Gral/Grids/CartesianND/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 
@@ -99,30 +100,29 @@ namespace hierarchical {
   template h_cell_t  <element_base_type_2d>;
   template h_vertex_on_cell_iterator_t<element_base_type_2d>;
   
-  /* Temporarily disabled
-  typedef  hgrid_cartesian<cartesian3d::CartesianGrid3D> hier_grid_3d;
+  typedef  hgrid_cartesian<cartesiannd::grid<3> > hier_grid_3d;
   template h_element_base_t<hier_grid_3d>;
   typedef  h_element_base_t<hier_grid_3d> element_base_type_3d;
   template h_vertex_t<element_base_type_3d>;
   template h_cell_t  <element_base_type_3d>;
   template h_vertex_on_cell_iterator_t<element_base_type_3d>;
-  */
+
 }
 
 int main() {
   using namespace std;
   namespace hier = hierarchical;
 
-  /* Temporarily disabled
   {
-    namespace cart = cartesian3d;
-    typedef cart::CartesianGrid3D cart_grid_type;
+    namespace cart = cartesiannd;
+    typedef cart::grid<3> cart_grid_type;
+    typedef grid_types<cart_grid_type> gt;
+    typedef gt::index_type it;
 
-    cart_grid_type root(3,3,3);
-    cart_grid_type ref_pattern(3,3,3); // 2x2x2 cells!
+    cart_grid_type root(it(3,3,3));
+    cart_grid_type ref_pattern(it(3,3,3)); // 2x2x2 cells!
     test_hier_grid(root, ref_pattern, cout);     
   }
-  */
 
   cout << "----------------------------" << std::endl;
   {

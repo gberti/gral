@@ -1,6 +1,8 @@
 
 #include "Gral/Hierarchical/hierarchical-grid-table.h"
 #include "Gral/Hierarchical/hierarchical-grid.h"
+
+#include "Gral/Grids/CartesianND/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 
@@ -9,10 +11,10 @@
 #include "Container/functions.h"
 #include <iostream>
 
-
+/*
 template<class T, unsigned N>
 struct point_traits<tuple<T,N> > : public point_traits_fixed_size_array<tuple<T,N>, T, N> {};
-
+*/
 
 template<class GEOM, class GRID>
 void test_level(GRID const& G, GEOM const& Geom, std::ostream& out)
@@ -106,7 +108,8 @@ void test_hier_grid_table(GRID const& root,
 
 // explicit instantiation to make sure all members are compilable
 namespace hierarchical { 
-  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
+  //  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
+  template class hgrid_cartesian<cartesiannd::grid<3> >;
   template class hgrid_cartesian<cartesian2d::CartesianGrid2D>; 
 }
 
@@ -114,20 +117,22 @@ namespace hierarchical {
 int main() {
   using namespace std;
   namespace hier = hierarchical;
-
+ 
   {
-    namespace cart = cartesian3d;
-    typedef cart::CartesianGrid3D               cart_grid_type;
+    namespace cart = cartesiannd;
+    typedef cart::grid<3>                       cart_grid_type;
     typedef tuple<double,3>                     coord_type;
     typedef stdext::identity<coord_type>        mapping_type;
-    typedef cart::mapped_geometry<mapping_type> cart_geom_type;
-
-    cart_grid_type root(3,3,3);
-    cart_grid_type ref_pattern(3,2,2); // 2x1x1 cells!
+    typedef cart::mapped_geometry<cart_grid_type, mapping_type> cart_geom_type;
+    typedef grid_types<cart_grid_type> gt;
+    typedef gt::index_type it;
+    cart_grid_type root(it(3,3,3));
+    cart_grid_type ref_pattern(it(3,2,2)); // 2x1x1 cells!
     test_hier_grid_table<cart_geom_type>(root, ref_pattern, cout);     
 
 
   }
+  
 
   {
     namespace cart = cartesian2d;
