@@ -22,7 +22,7 @@ void ConstructGridVC (Complex3D     & G_dest,
 		      GEOM_SRC const& Geom_src,
 		      VCORR         & v_corr,
 		      CCORR    const& c_corr)
-{ ConstructGridVC_generic(G_dest,Geom_dest, G_src, Geom_src, vcorr, ccorr); }
+{ ConstructGridVC_generic(G_dest,Geom_dest, G_src, Geom_src, v_corr, c_corr); }
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
