@@ -6,6 +6,7 @@
 // $LICENSE
 
 #include "Gral/IO/write-complex2d.h"
+#include "Container/dummy-mapping.h"
 
 //-------------------------------------------------------------------------
 //
@@ -16,7 +17,22 @@
 
 
 template<class GRID>
-void write_complex2d(GRID const& G,  ostream& out, int offset = 0)
+void write_complex2d(GRID const& G,  ostream& out, int offset)
+{ 
+  typedef grid_types<GRID>                  gt;
+  dummy_mapping<typename gt::vertex_handle, int> G2Out_v;
+  dummy_mapping<typename gt::cell_handle,   int> G2Out_c;
+  write_complex2d(G,out,offset, G2Out_v, G2Out_c);
+}
+
+template<class GRID, class VCORR, class CCORR>
+void write_complex2d(GRID const& G,  ostream& out, 
+                     VCORR & G2Out_v, CCORR & G2Out_c)
+{ write_complex2d(G,out,0,G2Out_v, G2Out_c); }
+
+template<class GRID, class VCORR, class CCORR>
+void write_complex2d(GRID const& G,  ostream& out, int offset, 
+                     VCORR & G2Out_v, CCORR & G2Out_c)
 {
   typedef grid_types<GRID>                  gt;
   typedef typename gt::Vertex               Vertex;
@@ -41,6 +57,7 @@ void write_complex2d(GRID const& G,  ostream& out, int offset = 0)
   for(VertexIterator v= G.FirstVertex(); ! v.IsDone(); ++v){
     //    out << Geo.coord(*v) << "\n"; 
     VNum[*v] = vnum;
+    G2Out_v[v.handle()] = vnum;
     vnum++;
   }
   out << "\n";
@@ -50,6 +67,7 @@ void write_complex2d(GRID const& G,  ostream& out, int offset = 0)
   CellIterator c;
   for(c = G.FirstCell(); !c.IsDone(); ++c){
    CNum[*c] = cnum;
+   G2Out_c[c.handle()] = cnum;
    cnum++;
   }
 

@@ -31,6 +31,31 @@ template<class GRID>
 void write_complex2d(GRID const& G,  ostream& out, int offset = 0);
 
 /*! \ingroup writecomplex2d
+    Does not write any vertex coordinates
+    Procuces a mapping from G to integer numbers, starting from 0 
+    (that is, essentially a enumeration of the vertices and cells of G).
+
+    \see Module \ref  writecomplex2d
+*/
+template<class GRID, class VCORR, class CCORR>
+void write_complex2d(GRID const& G,  ostream& out, int offset, 
+                     VCORR & G2Out_v, CCORR & G2Out_c);
+
+
+/*! \ingroup writecomplex2d
+    Sets offset to 0. <BR>
+    Does not write any vertex coordinates. <BR>
+    Procuces a mapping from G to integer numbers, starting from 0 
+    (that is, essentially a enumeration of the vertices and cells of G).
+
+    \see Module \ref  writecomplex2d
+*/
+template<class GRID, class VCORR, class CCORR>
+void write_complex2d(GRID const& G,  ostream& out, 
+                     VCORR & G2Out_v, CCORR & G2Out_c);
+
+
+/*! \ingroup writecomplex2d
     
   Sets offset to 0.
     \see Module \ref writecomplex2d
