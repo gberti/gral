@@ -37,8 +37,7 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid,
 
   typedef typename CellRange::grid_type grid_type;
 
-  enumerated_subrange<grid_type> owned;
-  ConstructSubrangeFromCells(owned,owned_c.FirstElement());
+  enumerated_subrange<grid_type> owned(owned_c.TheGrid(),owned_c);
 
   // Fixme!!
   Geometry dummy(ovlp_grid.TheGrid());
@@ -50,8 +49,8 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid,
 		  v_corr,   // global -> local
 		  c_corr);  // global -> local
  
-  enumerated_subrange<grid_type> copied;
-  ConstructSubrangeFromCells(copied, ovlp.cells().copied().FirstElement());
+  enumerated_subrange<grid_type> copied(ovlp.cells().copied().TheGrid(), ovlp.cells().copied());
+
 
   // construct vertex identification by shared vertices
   typedef grid_types<grid_type>                  gt;
