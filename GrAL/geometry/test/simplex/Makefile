@@ -9,7 +9,7 @@ OBJECTS =  $(SOURCES:%.C=%.o)
 DEPS = $(SOURCES:%.C=%.d)
 EXEC =  $(SOURCES:%.C=%.exe)
 
-EXTRA_DEPMODULES += 
+EXTRA_DEPMODULES += sequence
 
 include $(DEPS)
 
