@@ -5,20 +5,25 @@
 // $LICENSE
 
 
-//----------------------------------------------------------------
-//  mark_hull_on_cells
-//  mark_hull_on_vertices
-//
-//  calculate sequences of cells and vertices, given a seed-set 
-//  of cells or vertices, and a sequence of adjacencies ( == nested
-//  applications of adjacency iterators)
-//----------------------------------------------------------------
+/*! \defgroup incidence_hull Incidence Hull Calculation
+    \ingroup combinatoric_grid_algorithms
+   
+    Incidence hulls are subsets of a grid defined by a germ set
+    and a stencil (incidence sequence).
+    See the paper "A calculus for stencils on arbitrary grids"
+    or $DISS.
+
+   \todo Document the functions
+   \todo Implement test cases and demos
+   \todo Write more user-friendly wrappers to the mark_xxx routines.
+ */
 
 
 // after execution, vertex_seq contains all vertices
 // not marked as visited (visited[v] != 0) that are
 // adjacent to cells in range(seed), 
 // and visited(v) == level for these vertices.
+
 template<class CellIt, class VtxSeq, class EltMarker>
 void mark_vertices_on_cells(CellIt      seed,       // in
 			    VtxSeq    & vertex_seq, // out
@@ -46,8 +51,16 @@ void mark_cells_on_vertices(VertexIt   seed,       // in
 			    int        level,      // in
 			    CellPred   inside);
 
-
-template<class CellIt, class VSeq, class CSeq, class EltMarker, class AdjSeq,  class CellPred>
+/*! \brief Calculate incidence hull on cell germ set
+    \ingroup incidence_hull
+   
+ */
+template<class CellIt, 
+         class VSeq, 
+         class CSeq, 
+         class EltMarker, 
+         class AdjSeq, 
+         class CellPred>
 void mark_on_cells(CellIt      seed,         // in : cell seed set
 		   VSeq&       vertex_seq,   // out: visited vertices
 		   CSeq&       cell_seq,     // out: visited cells
@@ -57,7 +70,16 @@ void mark_on_cells(CellIt      seed,         // in : cell seed set
 		   CellPred    inside);
 
 
-template<class VertexIt, class VSeq, class CSeq, class EltMarker, class AdjSeq, class CellPred>
+/*! \brief Calculate incidence hull on vertex germ set
+    \ingroup incidence_hull
+   
+ */
+template<class VertexIt, 
+         class VSeq, 
+         class CSeq, 
+         class EltMarker, 
+         class AdjSeq, 
+         class CellPred>
 void mark_on_vertices(VertexIt    seed,         // in : vertex seed set
 		      VSeq&       vertex_seq,   // out: visited vertices
 		      CSeq&       cell_seq,     // out: visited cells

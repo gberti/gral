@@ -7,9 +7,9 @@
 //----------------------------------------------------------------
 /*! \defgroup complex2dformat Complex2D-Format I/O Adapter 
   \brief A grid interface for a file in complex2d-format.
-  \ingroup io
-
- \example
+  \ingroup gridio
+  \see  Module gridio
+  \example
  \code
  ifstream gridfile("my.complexd");
  IstreamComplex2DFmt Gfile(gridfile,1);  // 1 == offset, default: 0

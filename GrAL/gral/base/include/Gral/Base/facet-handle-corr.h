@@ -9,7 +9,8 @@
 //----------------------------------------------------------------
 /*!  \brief Mapping of facet handle of a source grid to that
      of a target grid.
-  \ingroup gridmappings
+ 
+    \ingroup gridmorphisms
 
   It is assumed a facet handle is a pair (c,lf) of cell_handle
   and local facet number, as is the case for the facet_handle<>

@@ -6,9 +6,9 @@
 #include "Geometry/algebraic-primitives.h"
 #include "Geometry/geometric-primitives.h"
 
-/*! Test whether an edge and a facet do intersect.
+/*! brief Test whether an edge and a facet do intersect.
 
-    \ingroup geometries
+    \ingroup geometricgridtools
   
     \templateparams
      - Geom: Model of $GrAL VertexGridGeometry
@@ -19,7 +19,8 @@
     In the 4-vertex case, the convex hull of the vertices
     (a tetrahedron) is checked for intersection with the edge. 
 
-    \see Module geometries
+    \see Module geometricgridtools
+  
  */
 template<class GEOM, class GT = grid_types<typename GEOM::grid_type> >
 class edge_facet_intersection

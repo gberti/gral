@@ -8,8 +8,10 @@
 
 //----------------------------------------------------------------
 /*! \defgroup streamgrid Adapter for serial grid representation
+    \ingroup gridio
+    \see Module gridio
 
-  \brief  Grid-like iterator from a flat integer data stream.
+   \brief  Grid-like iterator from a flat integer data stream.
 
   The format of the serial representation is as follows:
   - Cells / vertices are implicitely numerated 0 ... nc-1 / nv-1

@@ -3,7 +3,9 @@
 
 // $LICENSE_NEC
 
-/*! Get a germ flag for the star of each vertex of G
+/*! \brief Get a germ flag for the star of each vertex of G
+    \ingroup combinatoric_grid_algorithms
+
 
    The routine calculates a flag for each vertex, that is,
    a tuple containing the vertex, an edge, up to a cell,

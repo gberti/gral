@@ -6,11 +6,9 @@
 #include "Geometry/box.h"
 
 
-/*! \defgroup geometricgridtools Tool for geoemtric calculations on grids
-*/
+/*! \defgroup gridboundingbox  Bounding Boxes of Grids
 
-
-/*! \file routines for calculating bounding boxes of grids
+    \brief Routines for calculating bounding boxes of grids
 
     One might be tempted to think that bounding boxes of grids
     can be calculated just by taking the bounding boxes of
@@ -28,9 +26,15 @@
 
    \todo routines should check at compile time whether geometries are
    linear.
+   \see Module geometricgridtools
 */
 
 
+/*! Get the bounding box of the range of a grid vertex iterator
+ 
+    \ingroup gridboundingbox
+    \see Module gridboundingbox
+ */
 template<class VERTEXITER, class GEOM>
 inline
 box<typename GEOM::coord_type>
@@ -42,6 +46,15 @@ get_grid_iter_bounding_box(VERTEXITER V, GEOM const& Geom)
   return b;
 }
 
+/*! \brief convenience wrapper for get_grid_iter_bounding_box
+
+    \ingroup gridboundingbox
+
+    \todo Specialize to the case that there is a boundary representation
+    of the grid available. (The bounding box of a grid is that of the
+    grid's boundary.)
+    \see Module gridboundingbox
+ */
 template<class GRID, class GEOM>
 box<typename GEOM::coord_type>
 inline

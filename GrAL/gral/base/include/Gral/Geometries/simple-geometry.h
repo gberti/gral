@@ -8,6 +8,9 @@
 #include "Gral/Base/common-grid-basics.h"
 
 /*! \brief Simple geometry, just storing vertices
+
+    \ingroup  gridgeometries
+    \see \ref gridgeometries
  */
 template<class GRID, class COORD> 
 class simple_geometry : public grid_types<GRID> {

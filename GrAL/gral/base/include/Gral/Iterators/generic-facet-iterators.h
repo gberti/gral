@@ -10,6 +10,32 @@
 #include <algorithm> // sort
 #include <iostream> 
 
+/*! \defgroup generic_facet Generic facet components
+
+  \ingroup elements
+  \ingroup iterators
+  \see elements
+  \see iterators 
+  \see generic_edge 
+
+  \brief
+   The components offer generic support for $GrAL Facet, 
+   $GrAL FacetIterator
+   and $GrAL FacetOnCellIterator, 
+   on top of a $GrAL CellVertexInputGrid. 
+
+  They are used for implementing facet-related members of Complex3D.
+ */
+
+/*! \brief enclosing namespace for generic facet components
+ 
+   The classes defined in this namespace are to be used
+   as mixins, cf. the implementation of Complex3D
+   in complex3d.h.
+
+    \ingroup generic_facet
+    \see     generic_facet
+ */
 namespace generic_facet {
 
   template<class gt> class facet;

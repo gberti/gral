@@ -5,11 +5,6 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
-/*! \defgroup gridmorphisms Grid Morphisms
- 
-   Grid morphisms can be used for associative copies (copy operations
-   between grids keeping track of which element is copied where).
- */
 
 /*! grid vertex isomorphism 
    \ingroup gridmorphisms

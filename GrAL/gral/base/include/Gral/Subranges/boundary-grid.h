@@ -228,6 +228,7 @@ public:
 
 /*! Boundary grid of a grid element.
    \ingroup boundary
+    \see boundary
 
    The grid's and element's dimensions are deduced at compile-time,
    in order to use the correct specialization of boundary_grid_aux.

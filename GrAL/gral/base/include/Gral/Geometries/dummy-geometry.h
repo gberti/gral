@@ -8,6 +8,8 @@
 #include "Gral/Base/common-grid-basics.h"
 
 /*! \brief Dummy geometry for places where one is formally required.
+    \ingroup gridgeometries
+    \see     gridgeometries
  */
 template<class GRID> 
 class dummy_geometry : public grid_types<GRID> {
@@ -27,6 +29,7 @@ public:
 };
 
 /*! \brief Creator function for dummy_geometry.
+  \ingroup  gridgeometries
    \relates dummy_geometry<GRID>
  */
 template<class GRID> 

@@ -11,7 +11,7 @@
 //----------------------------------------------------------------
 //
 /*! \defgroup geometrictypes Geometric types
-    \ingroup geometries
+    \ingroup gridgeometries
 
     Generic geometric types for combinatorial grid elements.
 

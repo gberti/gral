@@ -24,7 +24,7 @@
 
 
   \see Module functors
-  \see $GrAL grid-geometries
+  \see $GrAL GridGeometry
 */
 //----------------------------------------------------------------
 

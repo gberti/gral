@@ -49,7 +49,7 @@
 //----------------------------------------------------------------
 
 
-/*!  \defgroup predicates
+/*!  \defgroup predicates Grid predicates
      \ingroup functors
 
   \b Contents:

@@ -7,7 +7,14 @@
 
 /*! Representation of a  flag (tuple of incident elements, one of each dimension)
 
-  Tests in test/flag/test-flag.C .
+  \ingroup elements
+  \see Module elements
+
+  Flags are useful for local %incidence iteration, 
+  using the switch operator. An example is found in 
+  Gral/Algorithms/calculate-vertex-stars.C.
+
+  Tests are in test/flag/test-flag.C .
  */
 
 template<class GRID, class DIM = typename grid_types<GRID>::dimension_tag> 

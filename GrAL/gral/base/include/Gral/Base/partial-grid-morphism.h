@@ -14,11 +14,15 @@ class partial_grid_morphism_aux;
 
 /*! \brief Partial morphism of grids
  
+    \ingroup gridmorphisms
+
    This class implements injective mappings between the elements of two grids.
    Defined are operators() (read access) and [] (write access)
    for each element type in the grid, and also for element handles 
    (this requires element handles to be distinct types, and not just
    typedef int, see e.g. vertex_handle_int in module \ref elements.)
+
+   \todo Implement inverse morphism for the 3D case (inherit from base::inverse_type
  */
 template<class GDEF, class GIMG>
 class partial_grid_morphism :
@@ -139,10 +143,10 @@ public:
 };
 */
 
-/*! \brief Specialization of partial grid morphism for 2D case.
 
+/*  Specialization of partial grid morphism for 2D case.
+*/
 
- */
 template<class GDEF, class GIMG>
 class partial_grid_morphism_aux<GDEF,GIMG,grid_dim_tag<2> >
 {
@@ -374,11 +378,11 @@ public:
 };
 
 
-/*! \brief Specialization of grid morphism for 3D case.
+/* \brief Specialization of grid morphism for 3D case.
 
    \todo Implement inverse morphism (inherit from base::inverse_type
 
- */
+*/
 
 template<class GDEF, class GIMG>
 class partial_grid_morphism_aux<GDEF,GIMG,grid_dim_tag<3> >

@@ -17,8 +17,11 @@ bool operator< (vtuple_2d<GRID> const& ls, vtuple_2d<GRID> const& rs);
 template<class GRID>
 bool operator== (vtuple_2d<GRID> const& ls, vtuple_2d<GRID> const& rs);
 
-/*! \brief Vertex set of a facet with comparision and hashing
+/*! \brief [OBSOLETE] Vertex set of a facet with comparision and hashing
   \ingroup elements  
+  
+  This is to be replacet by vertex_set (which has to be optimized
+  for the 2D case, especially the hash function)
 
   \see  \c hash<vtuple2d<GRID> >
  */
@@ -106,6 +109,7 @@ get_vertices(EdgeOnCellIterator const& f)
 template<class T> struct hash;
 
 /*! \brief Specialization of STL hash<> for vtuple2d<GRID>
+
     \relates vtuple_2d<GRID>
  */
 namespace std {

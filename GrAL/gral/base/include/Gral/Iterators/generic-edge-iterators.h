@@ -9,10 +9,30 @@
 
 /*! \defgroup generic_edge Generic edge components
 
-    The components offer gneric support for edge, edge iteration
-    and edge-on-cell iteration, on top of a $GrAL CellVertexInputGrid. 
+  \ingroup elements
+  \ingroup iterators
+  \see elements
+  \see iterators 
+  \see generic_facet
+
+  \brief
+   The components offer generic support for $GrAL Edge, 
+   $GrAL EdgeIterator,
+   and $GrAL EdgeOnCellIterator, 
+   on top of a $GrAL CellVertexInputGrid. 
+
+   They are used for implementing %edge-related members of Complex3D.
  */
 
+/*! \brief enclosing namespace for generic edge components
+ 
+   The classes defined in this namespace are to be used
+   as mixins, cf. the implementation of Complex3D
+   in complex3d.h.
+
+    \ingroup generic_edge
+    \see   generic_edge
+ */
 namespace generic_edge {
 
   template<class gt> class edge;

@@ -9,7 +9,7 @@
 //----------------------------------------------------------------
 // 
 /*! \brief Grid geometry transformed by a mapping.
-   \ingroup geometries
+   \ingroup gridgeometries
 
    The only function is currently transformation of vertices --
    every other geometric primitive depends on the nature of
@@ -24,7 +24,7 @@
    Extend approach to yield transformed (i.e., curved) segments,
    polygons etc.
 
-  \see Module geometries
+  \see Module gridgeometries
 */  
 //----------------------------------------------------------------
 

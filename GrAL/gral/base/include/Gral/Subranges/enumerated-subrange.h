@@ -81,10 +81,6 @@ template<class Grid> class enumerated_cell_range;
    See vertex_range_ref, facet_range_ref, cell_range_ref
    for specializations.
 
-   \todo:
-   Derive edge_range_ref. This needs specialization on the
-   grid dimension, to prevent a clash with facet_range_ref
-   in 2D.
  */
 //----------------------------------------------------------------
 
@@ -488,19 +484,6 @@ public:
   range_type_ref range() const 
     { return range_type_ref(0,size(),elements,*the_grid);}
 };
-
-
-//----------------------------------------------------------------
-//             inline functions of range-references
-//----------------------------------------------------------------
-
-
-/*
-template<class E, class R>
-inline  
-element_range_ref<E,R>:: element_range_ref(const enumerated_element_range<E>& er)
-  : ebeg(er.begin()), eend(er.end()), the_grid(& er.TheGrid()) {}
-*/
 
 
 //----------------------------------------------------------------

@@ -5,59 +5,127 @@
 
    See $GRALCONCEPTSTOP here for an introduction into the concepts of GrAL.
 
+   See \ref gralbasemodules for an overview of components. <BR>
+   <EM> Note: This categorization is no yet very complete. </EM>
+
+
    \todo Namespace \c gral 
 */
 
+/*! \defgroup gralbasemodules GrAL Base Component List
+   
+    \brief This module is a sort of super-module providing links
+     to all other modules / component groups in gral base.
+
+*/
+
+
 /*! \defgroup boundary Boundary 
-   \brief  Iterators, Algorithms and Subranges for working with grid boundaries
+
+    \ingroup gralbasemodules
+   
+    \brief  Iterators, Algorithms and Subranges for working with grid boundaries
 */
 
 /*! \defgroup subranges Components for Grid Subranges
+
+    \ingroup gralbasemodules
+   
      \brief Different stuff for representig grid subranges,
       for example by plain enumeration, by providing views to grid subranges,
       or views to the grid boundary
 
 */
 
-/*! \defgroup gridmappings Components for Grid Mappings
+/*! \defgroup gridmorphisms Grid Morphisms
 
-   Grid mappings (or Grid Morphisms) are necessary for 
-   performing so-called associative copies, building
-   a relationship between source and copied grid entities.
+    \ingroup gralbasemodules
+ 
+  \brief  
+   Grid morphisms can be used for associative copies (copy operations
+   between grids keeping track of which element is copied where).
+ 
+   Grid morphisms are used in \ref mutatingoperations.
 */
 
-/*! \defgroup gridfunctions Components for Gridfunctions
+
+/*! \defgroup gridfunctions Grid Functions
+
+    \ingroup gralbasemodules
+   
    \brief   Grid functions are a means of storing data on grid elements.
             The module contains some generic implementations for them.
+
+   \see $GrAL GridFunction and $GrAL ContainerGridFunction
 */
 
-/*! \defgroup iterators   Components for Grid Iterators
+/*! \defgroup iterators   Grid Iterators
 
+
+    \ingroup gralbasemodules
+   
 
 */
 
-/*! \defgroup geometries  Components for Grid Geometries
-  \brief These represent geometric embeddings of a combinatorial grid
+/*! \defgroup gridgeometries  Grid Geometries
+
+    \ingroup gralbasemodules
+   
+   \brief These represent geometric embeddings of a combinatorial grid
       into some space, and provide basic geometric operations.
 
    \see Module \ref geometricfunctors
+   \see Module \ref geometricgridtools
 */
 
-/*! \defgroup io         Components for Grid I/O
-   \brief File formats for grids may be seen as special grid representations.
-        Therefore, grid i/o is nothing than a generic grid copy operation on
-        these special representations.
+/*! \defgroup combinatoric_grid_algorithms Combinatoric Algorithms on Grids
+
+    \ingroup gralbasemodules
+
+    \brief Contains algorithms which do not use geometric functionality.
+
+*/
+
+/*! \defgroup geometricgridtools Geometric grid calculations
+    \ingroup gralbasemodules
+
+    \brief Collection of diverse routine acting on geometric grids
+    (as opposed to purely combinatorial routines). 
+
+    <EM> This is a very incomplete collection. </EM>
+    \see Module \ref grid-geometries
+*/
+
+
+/*! \defgroup gridio     Grid I/O
+
+    \ingroup gralbasemodules
+   
+    \brief Adapter for handling serial grid representations
+     in a transparent way
+
+     File formats for grids may be seen as special 
+     grid representations.
+     Therefore, grid I/O is nothing than a generic grid copy 
+     operation (see \ref mutatingoperations) 
+     on these special representations.
 
 */
 
 /*! \defgroup functors   Function Objects 
-    \brief These objects (models of Adaptable Unary Function)
+ 
+    \ingroup gralbasemodules
+   
+   \brief These objects (models of Adaptable Unary Function)
       are not very essential 
-     (i.e. do not add new  functionality), but come in handy for
+     (i.e. do not add new  functionality), but are handy for
       parameterizing generic algorithms. 
 */
 
-/*! \defgroup elements   Components for Grid Elements and Handles
+/*! \defgroup elements   Grid Elements and Handles
+
+    \ingroup gralbasemodules
+   
    
     \brief Some generic implementations of some element types and
          handles (not much at the moment)
@@ -65,6 +133,9 @@
 */
 
 /*! \defgroup traits    Traits classes for Grids
+
+    \ingroup gralbasemodules
+   
  
       \brief Some really basic traits classes (like \ref grid_types),
        which in general must be specialized
@@ -72,6 +143,19 @@
 
 /*! \defgroup mutatingoperations Mutating Grid Operations
 
+    \ingroup gralbasemodules
+   
+
     \brief This module contains coarse grained primitives for operations
    changing a grid, such as grid copy or grid enlargement.
+*/
+
+/*! \defgroup gridviews Views to Grids
+    \ingroup gralbasemodules
+
+     \brief  Grid Views are light-weight components, wrapping some
+     underlying data (which may be a grid itself) with a grid interface.
+
+     For example, disjoint_union_view lets two disjoint grids be regarded
+     as a single grid, without actually  performing a union.
 */

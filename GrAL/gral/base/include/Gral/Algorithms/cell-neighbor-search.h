@@ -4,17 +4,23 @@
 
 // $LICENSE
 
-/*! \file cell-neighbor-search.h
-
-   This file contains a collection of routines for finding
-   cell neighborhood relations.
- */
+/*! \defgroup  cell_neighbor_search
+   \ingroup combinatoric_grid_algorithms
+   \see combinatoric_grid_algorithms
+    
+   A collection of routines for finding
+   cell neighborhood relationsships and boundary facets.
+*/
 
 /*! \brief calculate the neighborhood relationship on a set of cells.
+   \ingroup cell_neighbor_search
 
+  
   The algorithm works by inserting new facets into the table
   and extracting the corresponding counterparts from the table,
   if they are found.
+
+  A sample use can be found in test-triang2d-construct.C.
 
   \param   nbf [OUT]: A mapping Cell x int -> cell_handle
   \param   cell_set [IN]:  set of cells on which to calculate neighbors
@@ -106,11 +112,19 @@ void CalculateNeighborCells(NBF             &  Nb,         // out
 			    FACETMAP        &  facet_map,  // inout
 			    CGT        const&);            // in (only type used) 
 
+/*! \brief convenience wrapper for CalculateNeighborCells
+     \ingroup combinatoric_grid_algorithms
+ 
+ */
 template<class NBF, class CELLSET, class FACETMAP>
 void CalculateNeighborCells(NBF             &  Nb,         // out
 			    CELLSET    const&  cell_set,   // in
 			    FACETMAP        &  facet_map); // inout
 
+/*! \brief convenience wrapper for CalculateNeighborCells
+   \ingroup cell_neighbor_search
+
+ */
 template<class NBF, class CELLSET>
 void CalculateNeighborCells(NBF             &  Nb,          // out
 			    CELLSET    const&  cell_set);   // in

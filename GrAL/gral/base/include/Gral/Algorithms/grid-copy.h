@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+// OBSOLETE. DO NOT USE.
 // this requires that G1 has been constructed from G2
 // and hence corresponding cells come at the same position
 // in the cell sequences

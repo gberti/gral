@@ -12,7 +12,7 @@
 
 /*! \defgroup disjoint_union_view View for handling formal unions of grids
    
-    \ingroup grid_views
+    \ingroup gridviews
     \see test-disjoint-union.C
 
     Components of interest to a user are:
@@ -22,8 +22,10 @@
     The templates grid_types and grid_function are specialized.
  */
 
+
 /*! \brief enlosing namespace for disjoint_union_view
     \ingroup disjoint_union_view
+    \see Module disjoint_union_view
  */
 namespace disjoint_union_view {
 

@@ -5,8 +5,9 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
-/*! construct an isomorphism between two grids.
-  \ingroup gridmorphisms
+/*! \brief Construct an isomorphism between two grids.
+    \ingroup gridmorphisms
+    \ingroup combinatoric_grid_algorithms
 
     Return value is true on successful construction,
     else false.
