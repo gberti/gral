@@ -69,10 +69,9 @@ private:
 public:
   //--------------------------- construction -------------------------------
   distributed_grid_function_adapter() : added_on_shared(false), sync_on_shared(false) {}
-  // FIXME: should be removed!
-  // distributed_grid_function_adapter(const distributed_grid_type& cg);
-  distributed_grid_function_adapter(ovrlp_grid_function const& ogf,
-				    const distributed_grid_type& cg);
+
+  distributed_grid_function_adapter(ovrlp_grid_function   const& ogf,
+				    distributed_grid_type const& cg);
 
   void set_grid(const distributed_grid_type& cg);
 
