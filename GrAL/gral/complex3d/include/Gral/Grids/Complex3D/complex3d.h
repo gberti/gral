@@ -69,7 +69,7 @@ class Complex3D : public grid_types_Complex3D {
   // (last entry  points to end of cells)
   std::vector<unsigned>       cell_archetype;
   std::vector<archetype_type> archetypes;
-  size_type              num_of_vertices;
+  size_type                   num_of_vertices;
 
  public:
   Complex3D();
@@ -82,18 +82,16 @@ class Complex3D : public grid_types_Complex3D {
   size_type NumOfCells()    const { return cell_archetype.size();}
 
   inline VertexIterator FirstVertex() const;
-  inline CellIterator   FirstCell()   const;
   inline EdgeIterator   FirstEdge()   const;
+  inline FacetIterator  FirstFace()   const;
   inline FacetIterator  FirstFacet()  const;
+  inline CellIterator   FirstCell()   const;
 
 
 private:
 
   friend class Vertex_Complex3D;
-  // friend class Edge_Complex3D;
-  // friend class Facet_Complex3D;  
   friend class Cell_Complex3D;
-
   friend class VertexOnCellIterator_Complex3D;
 
   template<class G_SRC, class VCORR, class CCORR>
@@ -160,10 +158,10 @@ public:
   archetype_handle      archetype_of(cell_handle c) const
     { return cell_archetype[c];}
 
-  typedef std::vector<archetype_type>::const_iterator ArchetypeIterator;
-  ArchetypeIterator BeginArchetype() const { return archetypes.begin();}
-  ArchetypeIterator   EndArchetype() const { return archetypes.end  ();}
-};
+  typedef std::vector<archetype_type>::const_iterator archetype_iterator;
+  archetype_iterator  BeginArchetype() const { return archetypes.begin();}
+  archetype_iterator  EndArchetype()   const { return archetypes.end  ();}
+}; // class Complex3D
 
 
 
@@ -372,6 +370,11 @@ Complex3D::FirstFacet() const
 { return FacetIterator(*this);}
 
 inline
+Complex3D::FacetIterator
+Complex3D::FirstFace() const
+{ return FacetIterator(*this);}
+
+inline
 Cell_Complex3D Complex3D::FirstCell() const
 { return Cell(*this);}
 
@@ -400,7 +403,14 @@ template<>
 struct grid_types<Complex3D> 
   : public grid_types_Complex3D
 {
-  typedef grid_type::ArchetypeIterator ArchetypeIterator;
+  typedef grid_type::archetype_iterator archetype_iterator;
+  typedef archetype_iterator            ArchetypeIterator;
+
+  typedef facet_handle          face_handle;
+  typedef Facet                 Face;
+  typedef FacetIterator         FaceIterator;
+  typedef FacetOnCellIterator   FaceOnCellIterator;
+  typedef VertexOnFacetIterator VertexOnFaceIterator;
 };
 
 

@@ -945,7 +945,8 @@ public:
 
   int NumOfVertices() const { return TheVertexMap().range_size();}
   int NumOfEdges()    const { return (NumOfXEdges() + NumOfYEdges());}
-  int NumOfFacets()   const { return (NumOfEdges());}
+  int NumOfFacets()   const { return NumOfEdges();}
+  int NumOfFaces()    const { return NumOfCells();}
   int NumOfCells()    const { return TheCellMap().range_size();}
 
   int NumOfXEdges() const { return TheXEdgeMap().range_size();}
@@ -957,6 +958,7 @@ public:
   int NumOfBoundaryVertices() const { return (2*(xpoints   + ypoints) -4);}
   int NumOfBoundaryEdges()    const { return (2*(xpoints-1 + ypoints-1));}
   int NumOfBoundaryFacets()   const { return NumOfBoundaryEdges();}
+  int NumOfBoundaryFaces()    const { return NumOfBoundaryCells();}
   int NumOfBoundaryCells()    const { return (2*(xpoints-1 + ypoints-1) -4);}
   //@}
 
@@ -973,11 +975,13 @@ public:
   VertexIterator FirstVertex() const { return VertexIterator(MinVertexNum(),this);}
   EdgeIterator   FirstEdge()   const { return EdgeIterator(MinEdgeNum(),this);}
   EdgeIterator   FirstFacet()  const { return EdgeIterator(MinEdgeNum(),this);}
+  CellIterator   FirstFace()   const { return FirstCell();}
   CellIterator   FirstCell()   const { return CellIterator(MinCellNum(),this);}
-  VertexIterator EndVertex() const { return VertexIterator(MaxVertexNum()+1,this);}
-  EdgeIterator   EndEdge()   const { return EdgeIterator(MaxEdgeNum()+1,this);}
-  EdgeIterator   EndFacet()  const { return EdgeIterator(MaxEdgeNum()+1,this);}
-  CellIterator   EndCell()   const { return CellIterator(MaxCellNum()+1,this);}
+  VertexIterator EndVertex()   const { return VertexIterator(MaxVertexNum()+1,this);}
+  EdgeIterator   EndEdge()     const { return EdgeIterator(MaxEdgeNum()+1,this);}
+  EdgeIterator   EndFacet()    const { return EdgeIterator(MaxEdgeNum()+1,this);}
+  CellIterator   EndFace()     const { return EndCell();}
+  CellIterator   EndCell()     const { return CellIterator(MaxCellNum()+1,this);}
   //@}
 
   /*! @name Element validity tests */
@@ -1391,6 +1395,15 @@ struct grid_types<cartesian2d::RegGrid2D> {
   typedef  Grid::CellOnCellIterator     CellOnCellIterator;
   typedef  Grid::CellOnCellIterator     NeighbourCellIterator;
   typedef  Grid::CellOnCellIterator     CellNeighbourIterator;
+
+  // 2D: Cell <-> Face
+  typedef cell_handle             face_handle;
+  typedef Cell                    Face;
+  typedef CellIterator            FaceIterator;
+  typedef VertexOnCellIterator    VertexOnFaceIterator;
+  typedef CellOnVertexIterator    FaceOnVertexIterator;
+  typedef EdgeOnCellIterator      EdgeOnFaceIterator;
+  //  typedef CellOnEdgeIterator      FaceOnEdgeIterator;
 
 
   typedef grid_dim_tag<2>   dimension_tag;
