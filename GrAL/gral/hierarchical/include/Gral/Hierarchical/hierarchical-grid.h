@@ -79,12 +79,14 @@ namespace hierarchical {
     typedef  typename flatgt::cell_handle   flat_cell_handle;
     typedef  typename flatgt::vertex_handle flat_vertex_handle;
     typedef  typename flatgt::index_type    index_type;
+    typedef  typename flatgt::index_type    cell_index_type; // TODO: make types different.
 
     typedef typename flatgt::archetype_type     archetype_type;
     typedef typename flatgt::archetype_handle   archetype_handle;
     typedef typename flatgt::archetype_iterator archetype_iterator;
     typedef grid_types<archetype_type>          archgt;               
 
+    typedef typename flatgt::cartesian_subrange_type cart_subrange_type;
 
     typedef h_element_base_t<self>                        element_base_type;
     typedef h_element_handle_t<self, flat_vertex_handle>  hier_vertex_handle;
@@ -140,29 +142,15 @@ namespace hierarchical {
     table_type             grids;
   public:
     hgrid_cartesian() {}
-    hgrid_cartesian(flat_grid_type    const& root, // ref_ptr<const grid_type> root,
-		    pattern_grid_type const& pat)
-    {
-      init(root,pat);
-    }
+    hgrid_cartesian(flat_grid_type    const& root,
+		    pattern_grid_type const& pat);
+    hgrid_cartesian(ref_ptr<flat_grid_type const> root,
+		    pattern_grid_type const& pat);
     void init(flat_grid_type    const& root, 
-	      pattern_grid_type const& pat)
-    {
-      grids.push_back(root);
-      the_pattern = pat;
-      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
-	dynamic_cast<observer_type*>(*ob)->notifier_assigned(this);
+	      pattern_grid_type const& pat);
 
-    }
-    self& operator=(self const& rhs) {
-      if(this != &rhs) {
-	before_assignment();
-	grids = rhs.grids;
-	after_assignment();
-      }
-      return *this;
-    }
-
+    self& operator=(self const& rhs);
+ 
     /*! \name Level navigation
      */
     //@{
@@ -188,8 +176,17 @@ namespace hierarchical {
     ref_ptr<flat_grid_type const> operator()(level_handle lev) const { return FlatGrid(lev);}
     ref_ptr<flat_grid_type const> FlatGrid(level_handle lev) const   
     { cv(lev); return  ref_ptr<flat_grid_type const>(grids(lev));}
+
  
+    //! Equivalent to <tt> num_of_levels() == 0 </tt>
     bool  empty() const { return num_of_levels()==0;}
+
+    /*! True iff for each grid dimension, the number of cells of the refinement pattern in this dimension
+        divides the corresponding number of cells of the coarse grid.
+        E.g. if the cell size of the pattern is 2x3x4 and the cell size of the coarsest grid is 8x6x10,
+        it does not work because 10 is not a multiple of 4.
+    */
+    bool coarsenable() const { return does_divide(the_pattern.cell_size(), grids.front().cell_size());}
     
     ref_ptr<const table_type> table() const { return ref_ptr<table_type const>(grids);}
 
@@ -202,13 +199,7 @@ namespace hierarchical {
     \post <tt> level_handle lev = add_finer_level(); lev == finest_level(); </tt>
     \post No cells are active in the newly created level level.
     */
-    level_handle add_finer_level  () {
-      REQUIRE_ALWAYS( (! empty()), "",1);
-      grids.push_back(flat_grid_type(index_type(1) + product(grids.back().cell_size(), the_pattern.cell_size())));
-      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
-	dynamic_cast<observer_type*>(*ob)->hgrid_level_added(this,finest_level());
-      return finest_level();
-    }
+    level_handle add_finer_level();
 
     /*! \brief add a coarser level
        
@@ -217,37 +208,17 @@ namespace hierarchical {
               the corresponding number of cells in pattern.
 
     */
-    level_handle add_coarser_level() { 
-      REQUIRE_ALWAYS( (! empty()), "",1);
-      REQUIRE_ALWAYS( does_divide(the_pattern.cell_size(), grids.front().cell_size()), "",1); 
-      grids.push_front(flat_grid_type(index_type(1) + quotient(grids.front().cell_size(), the_pattern.cell_size())));
-      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
-	dynamic_cast<observer_type*>(*ob)->hgrid_level_added(this,coarsest_level());
-      return coarsest_level();
-    }
+    level_handle add_coarser_level();
     
     /*! 
       \pre <tt> num_of_levels() > 0 </tt>
     */
-    void remove_finest_level()   { 
-      ce();
-      level_handle oldlev = finest_level();
-      grids.pop_back(); 
-      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
-	dynamic_cast<observer_type*>(*ob)->hgrid_level_removed(this,oldlev);
-    }
+    void remove_finest_level(); 
     
     /*! 
       \pre <tt> num_of_levels() > 0 </tt>
     */
-    void remove_coarsest_level() { 
-      ce(); 
-      level_handle oldlev = coarsest_level();
-      grids.pop_front();
-      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
-	dynamic_cast<observer_type*>(*ob)->hgrid_level_removed(this,oldlev);
-
-    }
+    void remove_coarsest_level();
     //@}
 
     template<class HG, class flat_handle_type>
@@ -285,22 +256,26 @@ namespace hierarchical {
     } 
 
     template<class HVERTEX>
-    //std::pair<flat_vertex_handle, level_handle> 
     typename HVERTEX::vertex_handle
-    coarsest_parent(HVERTEX const& v) const {
-      index_type pat0  = the_pattern.cell_size(); //vertex_size();
-      index_type pat   = pat0;
-      index_type vidx = v.Flat().index();
-      int level_diff = 0;
-      while(v.level() - level_diff > coarsest_level() && does_divide(pat, vidx)) {
-	++level_diff;
-	pat = product(pat, pat0);
-      }
-      pat = quotient(pat, pat0); // pat = pat0^level_diff
- 
-      level_handle  newlev = v.level() - level_diff;
-      return  typename HVERTEX::vertex_handle(FlatGrid(newlev)->get_vertex_handle(quotient(vidx,pat)), newlev); 
+    coarsest_parent(HVERTEX const& v) const;
+
+    template<class HVERTEX>
+    HVERTEX DescendantVertex(HVERTEX const& v, level_handle fine_level) const 
+    {
+      return HVERTEX(v.TheGrid(), descendant_vertex(v,fine_level));
     }
+
+    template<class HVERTEX>
+    typename HVERTEX::vertex_handle
+    descendant_vertex(HVERTEX const& v, level_handle fine_level) const 
+    {
+      unsigned level_diff = fine_level - v.level();
+      index_type factor = power(the_pattern.cell_size(), level_diff);
+      return typename HVERTEX::vertex_handle(FlatGrid(fine_level)->get_vertex_handle(product(vFlat.index(),factor)), fine_level);
+    }
+ 
+
+    temporary<cart_subrange_type>  descendants(hier_cell_type const& p, level_handle h) const;
 
     // hier_cell_handle parent(hier_cell_type const& c) const { return quotient(c.Flat().index(), the_pattern.size());}
     // hier_cell_handle child(HCell const& c, pattern_cell_handle h) const;
@@ -521,7 +496,7 @@ namespace hierarchical {
     Cell Parent    () { cv(); return Cell(TheHierGrid()->Parent(*this));}
     Cell ParentCell() { cv(); return Cell(TheHierGrid()->Parent(*this));}
 
-    friend bool operator==(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h == rhs.h;}
+    friend bool operator==(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h == rhs.h && lhs.level() == rhs.level();}
     friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h != rhs.h;}
 
     inline ChildIterator FirstChild() const;
@@ -634,5 +609,10 @@ namespace hierarchical {
   { return ChildIterator(*this, TheHierGrid()->ThePatternGrid()->EndCell());}
 
 } // namespace hierarchical
+
+
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Hierarchical/hierarchical-grid.C"
+#endif
 
 #endif
