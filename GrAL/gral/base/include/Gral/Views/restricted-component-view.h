@@ -83,15 +83,20 @@ namespace restricted_grid_component_view {
     baseCell           germ;
     
     mutable range_type range;
-    mutable bool       initialized;
+    mutable bool       cells_initialized;
+    mutable bool       vertices_initialized;
   public:
     grid_view() {}
     grid_view(grid_type const& gg,
 	      pred_type        ins,
 	      baseCell  const& grm)
-      : g(&gg), inside(ins), germ(grm), range(gg),  initialized(false)  {}
+      : g(&gg), inside(ins), germ(grm), range(gg),  
+	cells_initialized(false),
+	vertices_initialized(false) 
+    {}
 
-    void init() const;
+    void init_cells()    const;
+    void init_vertices() const;
 
     friend class restricted_grid_component_view::vertex_iterator<GRID,INSIDE_PRED, GT>;
     friend class restricted_grid_component_view::cell_iterator  <GRID,INSIDE_PRED, GT>;
@@ -102,9 +107,9 @@ namespace restricted_grid_component_view {
     typedef  cell_iterator<GRID,INSIDE_PRED, GT>    CellIterator;
 
     VertexIterator FirstVertex()   const { return VertexIterator(*this);}
-    unsigned       NumOfVertices() const { init(); return range.NumOfVertices();}
+    unsigned       NumOfVertices() const { init_vertices(); return range.NumOfVertices();}
     CellIterator   FirstCell()     const { return CellIterator(*this);}
-    unsigned       NumOfCells()    const { init(); return range.NumOfCells();}
+    unsigned       NumOfCells()    const { init_cells(); return range.NumOfCells();}
 
     grid_type const& BaseGrid() const { return *g;}
   };
@@ -124,13 +129,13 @@ namespace restricted_grid_component_view {
     vertex(grid_type const& gg) 
       : g(&gg)
       {
-	g->init();
+	g->init_vertices();
 	v = * g->range.FirstVertex();
       }
     vertex(grid_type const& gg, vertex_handle vv) 
       : g(&gg)
       {
-	g->init();
+	g->init_vertices();
 	v = baseVertex(g->BaseGrid(), vv);
       }
 
@@ -163,7 +168,7 @@ namespace restricted_grid_component_view {
     vertex_iterator(grid_type const& gg) 
       : g(&gg)
       {
-	g->init();
+	g->init_vertices();
 	v = g->range.FirstVertex();
       }
 
@@ -200,7 +205,7 @@ namespace restricted_grid_component_view {
     cell_iterator(grid_type const& gg) 
       : g(&gg)
       {
-	g->init();
+	g->init_cells();
 	c = g->range.FirstCell();
       }
 

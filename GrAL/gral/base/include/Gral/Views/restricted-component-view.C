@@ -9,8 +9,8 @@
 namespace restricted_grid_component_view {
 
   template<class GRID, class INSIDE_PRED, class GT>
-  void grid_view<GRID, INSIDE_PRED, GT>::init() const {
-    if(! initialized) {
+  void grid_view<GRID, INSIDE_PRED, GT>::init_cells() const {
+    if(! cells_initialized) {
       std::queue<baseCell>  front;
       partial_grid_function<baseCell, bool> found(*g,false);
       front.push(germ);
@@ -24,8 +24,20 @@ namespace restricted_grid_component_view {
 	    front.push(*cc);
 	  }
       }
-      range.construct(found.FirstCell()); 
-      initialized = true;
+      for(typename partial_grid_function<baseCell, bool>::CellIterator c = found.FirstCell(); !c.IsDone(); ++c)
+	range.append_cell(*c);
+      // range.construct(found.FirstCell()); 
+      cells_initialized = true;
+    }
+  }
+  
+  template<class GRID, class INSIDE_PRED, class GT>
+  void grid_view<GRID, INSIDE_PRED, GT>::init_vertices() const {
+    if(!vertices_initialized) {
+      if(! cells_initialized)
+	init_cells();
+      range.init();
+      vertices_initialized = true;
     }
   }
 
