@@ -53,8 +53,11 @@ struct element_traits_vertex_base {
   static unsigned        size        (grid_type    const& g)    { return g.NumOfVertices();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
-  { return g.vertex(h);}
+  { 
+    return element_type(g,h); // could be factored out.
+  }
 };
+
 
 /*! \brief basic definition to derive from for actual specializations
      of element_traits<>
@@ -62,20 +65,63 @@ struct element_traits_vertex_base {
   \relates element_traits
 */
 template<class GRID>
-struct element_traits_edge2d_base {
+struct element_traits_edge_base {
   typedef GRID grid_type;
   typedef grid_types<grid_type>          gt;
   typedef typename gt::Edge              element_type;
   typedef typename gt::EdgeIterator      ElementIterator;
   typedef typename gt::edge_handle       handle_type;
-  typedef edge2d_type_tag                element_type_tag;
+  typedef edge_type_tag                  element_type_tag;
 
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstEdge();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfEdges();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
-  { return g.edge(h);}};
+  {
+    return element_type(g,h); // could be factored out.
+  }
+};
+
+
+/*! \brief basic definition to derive from for actual specializations
+     of element_traits<>
+  \ingroup traits
+  \relates element_traits
+*/
+
+template<class GRID>
+struct element_traits_edge2d_base 
+  : public element_traits_edge_base<GRID> {
+  typedef edge2d_type_tag element_type_tag;
+};
+
+
+
+/*! \brief basic definition to derive from for actual specializations
+     of element_traits<>
+  \ingroup traits
+  \relates element_traits
+*/
+template<class GRID>
+struct element_traits_facet_base {
+  typedef GRID grid_type;
+  typedef grid_types<grid_type>          gt;
+  typedef typename gt::Facet              element_type;
+  typedef typename gt::FacetIterator      ElementIterator;
+  typedef typename gt::facet_handle       handle_type;
+  typedef facet_type_tag                  element_type_tag;
+
+
+  static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFacet();}
+  static unsigned        size        (grid_type    const& g)    { return g.NumOfFacets();}
+  static handle_type     handle      (element_type const& e)    { return e.handle();}
+  static element_type    handle2element(grid_type const& g, handle_type h)
+  { 
+    return element_type(g,h); // could be factored out.
+  }
+};
+
 
 /*! \brief basic definition to derive from for actual specializations
      of element_traits<>
@@ -96,7 +142,10 @@ struct element_traits_cell_base {
   static unsigned        size        (grid_type    const& g)    { return g.NumOfCells();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
-  { return g.cell(h);}};
+  { 
+    return element_type(g,h); // could be factored out.
+  }
+};
 
 
 /*! \brief basic definition to derive from for actual specializations
