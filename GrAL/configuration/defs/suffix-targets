@@ -148,6 +148,7 @@ DOXYPATH=doxygen/html
 DOXYCFG=$(CONFIGURATION)/doxycfg/
 DOXYHEADER=$(DOXYCFG)/header.html
 DOXYFOOTER=$(DOXYCFG)/footer.html
+DOXYCSS=$(DOXYCFG)/gral.css
 RELPATH=../../..#
 ADDRELPATH=.#
 RELROOT=$(RELPATH)/$(ADDRELPATH)#
@@ -172,10 +173,11 @@ local-doxy:
 	$(DOXYCFG)/generate-doxycfg.pl -root $(GRALROOT) doxy.deps.tmp   >> doxy.cfg.tmp
 	cp $(DOXYHEADER) .
 	cp $(DOXYFOOTER) .
+	cp $(DOXYCSS)    .
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(DOXYCFG):$(CONFIGURATION)/tex; export TEXINPUTS; \
          $(DOXYGEN) doxy.cfg.tmp;)
-	rm -f footer.html header.html
+	rm -f `basename $(DOXYHEADER)` `basename $(DOXYFOOTER)` `basename $(DOXYCSS)`
 	rm -f doxy.cfg.tmp 
 
 installdox: local-installdox additional-installdox
