@@ -8,19 +8,6 @@
 #include <iostream>
 
 
-template<class GT>
-void checkgt(std::ostream& out)
-{
-  typedef GT gt;
-
-#define PRINT_HAS_MEMBER(T)  out << "has" << ( has_##T<gt>::result ? "   " : " no") << " type " << #T << "\n";
-
-GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(PRINT_HAS_MEMBER);
-
-#undef PRINT_HAS_MEMBER
-
-}
-
 int main() {
   using namespace std; 
   typedef grid_types<cartesian2d::CartesianGrid2D> origgt;
