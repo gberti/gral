@@ -8,6 +8,16 @@ void ConstructGrid(OstreamGMV3DFmt& Out,
 		   GRID const& G,
 		   GEOM const& GEO)
 {
+  List<END,END> L;
+  ConstructGrid(Out,G,GEO,L);
+}
+
+template<class GRID,class GEOM, class GF, class MOREGFS>
+void ConstructGrid(OstreamGMV3DFmt& Out, 
+		   GRID const& G,
+		   GEOM const& GEO,
+		   List<GF,MOREGFS> GFS)
+{
   typedef OstreamGMV3DFmt GMV3D;
   ostream& out = Out.Out();
   typedef grid_types<GRID> gt;
@@ -51,17 +61,19 @@ void ConstructGrid(OstreamGMV3DFmt& Out,
   // map cells
   out << "cells " << G.NumOfCells() << "\n";
   for(typename gt::CellIterator c(G); ! c.IsDone(); ++c) {
+    //            phi_a.inv        c.V()        G2GMV   
+    // gmv-archetype -> G::archetype -> G::global -> GMV::global
     morphism_type const& phi_a = phi(&G.ArchetypeOf(*c)).first;
     int                  cnt_a = phi(&G.ArchetypeOf(*c)).second;
     GMV3D::archetype_type const& archetype_gmv(phi_a.ImgGrid());
     out << Out.name(cnt_a) << " "
 	<< archetype_gmv.NumOfVertices() << " ";
-    // gmv-archetype -> G::archetype -> G::global -> GMV::global
     for(gmv_agt::VertexIterator vc(archetype_gmv); !vc.IsDone(); ++vc)
       out << G2GMV( (*c).V(phi_a.inverse()(*vc)))  << " ";
     out << '\n';
   }
 
+  Out.copy_grid_functions(GFS);
   out << "endgmv\n";
 }
 

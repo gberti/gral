@@ -13,6 +13,9 @@
 #include "Gral/Base/partial-grid-morphism.h"
 #include "Gral/Algorithms/construct-isomorphism.h"
 
+#include "Container/inhomogeneous-list.h"
+#include "Utility/as-string.h"
+
 
 namespace std {
 
@@ -46,7 +49,7 @@ public:
 protected:
   std::ostream * out;
   bool           owned;
-
+  int num_vars;
 private:
   void copy(self const& rhs);
 
@@ -64,6 +67,48 @@ public:
 
   std::ostream& Out() { return *out;}
 
+  int element_tag(vertex_type_tag) const { return 1;}
+  int element_tag(cell_type_tag)   const { return 0;}
+  // extend to faces
+
+  template<class GF>
+  void copy_gf(GF const& gf) 
+    {
+      typedef element_traits<typename GF::element_type> et;
+      std::string varname = "testvar" + as_string(num_vars); // FIXME!
+
+      typedef typename et::element_type_tag element_type_tag;
+      *out << varname << " " 
+	   << element_tag(element_type_tag()) 
+	   << '\n';;
+      for(typename et::ElementIterator e(gf.TheGrid()); ! e.IsDone(); ++e) {
+	// we assume  numbering in gf.TheGrid() 
+	// is the same as numbering in GMV file.
+	*out << gf(*e) << ' ';
+      }
+    }
+
+  void copy_grid_functions_rec(List<END,END>) {}
+
+  template<class GF, class TAIL>
+  void copy_grid_functions_rec(List<GF,TAIL> gfs)
+    { 
+      num_vars++;
+      copy_gf(gfs.head());
+      copy_grid_functions(gfs.tail());
+    }
+
+ 
+  void copy_grid_functions(List<END,END>) {}
+
+  template<class GF, class TAIL>
+  void copy_grid_functions(List<GF,TAIL> gfs)
+    {
+      *out << "variable" << '\n';
+      copy_grid_functions_rec(gfs);
+      *out << "\n" << "endvars" << "\n";
+    }
+  
 private:
   class StaticData {
   public:
@@ -100,6 +145,12 @@ template<class GRID,class GEOM>
 void ConstructGrid(OstreamGMV3DFmt& Out, 
 		   GRID const& G,
 		   GEOM const& GEO);
+
+template<class GRID,class GEOM, class GF, class MOREGFS>
+void ConstructGrid(OstreamGMV3DFmt& Out, 
+		   GRID const& G,
+		   GEOM const& GEO,
+		   List<GF,MOREGFS> GFS);
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/IO/gmv-format-output.tt.C"
