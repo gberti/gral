@@ -65,7 +65,7 @@ protected:
   
 public:
   //--------------------- construction  ------------------
-  grid_function_vector() : g((grid_type*)0) , table() {}
+  grid_function_vector() : g() , table() {}
   grid_function_vector(const grid_type& gg) 
     : g(gg),  table(et::size(gg)) {}
   grid_function_vector(const grid_type& gg, const T& t) 
