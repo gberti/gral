@@ -22,6 +22,13 @@
 //
 //----------------------------------------------------------------
 
+template<class NBF, class CELLSET, class FACETMAP, class CGT>
+void CalculateNeighborCells(NBF           &  NB, 
+			    CELLSET  const&  cell_set,
+			    FACETMAP      &  facet_map,
+			    CGT      const&);
+
+
 template<class NBF, class CELLSET, class FACETMAP>
 void CalculateNeighborCells(NBF             &  Nb,         // out
 			    CELLSET    const&  cell_set,   // in
@@ -33,7 +40,7 @@ void CalculateNeighborCells(NBF             &  Nb,          // out
 			    CELLSET    const&  cell_set)    // in
 { 
   typedef grid_types<CELLSET> gt;
-  typedef vertex_set<typename gt::Edge> vertex_set_type;
+  typedef vertex_set<typename gt::Facet> vertex_set_type;
   typedef STDHASH::hash_map<vertex_set_type,
                             typename gt::FacetOnCellIterator> FACETMAP;
   FACETMAP facet_map;
