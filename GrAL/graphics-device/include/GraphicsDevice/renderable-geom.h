@@ -31,6 +31,7 @@ class RenderableGeom {
 private:
   copy_on_write_ptr<geom> g; 
   Transformation          T; 
+  bool                    has_trafo;
   Attribute               A;
 
   geom const*  geometry() const {return g.operator->();}
