@@ -21,6 +21,7 @@ mv gral/INSTALL .
 mv gral/Makefile.global ./Makefile
 
 rm -rf configuration/scripts
+rm -f  gral/TODO.html
 
 # assume docs will be installed under ./doc
 mv gral/index-global.html ./index.html 

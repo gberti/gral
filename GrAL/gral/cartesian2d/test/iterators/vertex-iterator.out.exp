@@ -1,0 +1,45 @@
+RegGrid2D(1,1)
+0 cells
+0 edges
+1 vertices
+
+RegGrid2D(1,2)
+0 cells
+1 edges
+2 vertices
+
+RegGrid2D(1,3)
+0 cells
+2 edges
+3 vertices
+
+RegGrid2D(2,1)
+0 cells
+1 edges
+2 vertices
+
+RegGrid2D(2,2)
+1 cells
+4 edges
+4 vertices
+
+RegGrid2D(2,3)
+2 cells
+7 edges
+6 vertices
+
+RegGrid2D(3,1)
+0 cells
+2 edges
+3 vertices
+
+RegGrid2D(3,2)
+2 cells
+7 edges
+6 vertices
+
+RegGrid2D(3,3)
+4 cells
+12 edges
+9 vertices
+
