@@ -32,4 +32,21 @@ int main() {
     tuple<float, 3> tf3c = product(ti3,tf3);
     tuple<float, 3> tf3d = product(tf3,ti3);
   }
+
+  {
+    tuple<int, 2> t1(1,1);
+    tuple<int, 2> t2(1,0);
+    tuple<int, 2> t3(1,1);
+    tuple<int, 2> t4(0,0);
+
+    REQUIRE_ALWAYS( (t1 == t3), "",1);
+    REQUIRE_ALWAYS( (t1 != t2), "",1);
+    REQUIRE_ALWAYS( (t1 != t4), "",1);   
+
+    REQUIRE_ALWAYS( (t1 >= t3), "",1);
+    REQUIRE_ALWAYS( (t1 <= t3), "",1);
+
+    REQUIRE_ALWAYS( (t1 >  t4), "",1);
+    REQUIRE_ALWAYS( (t4 <  t1), "",1);
+  }
 }
