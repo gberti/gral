@@ -83,8 +83,9 @@ public:
 
   //! return key with maximal number of entries 
   key_type max_entry() const {
+    REQUIRE_ALWAYS(! the_map.empty(), "max_entry() called with empty histogram!",1);
     size_type mx = 0;
-    key_type res;
+    key_type res = begin()->first;
     for(const_iterator e = begin(); e != end(); ++e)
       if((*e).second > mx)
 	res = (*e).first;
