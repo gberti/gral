@@ -44,7 +44,7 @@ standard-test-check-clean:
 standard-test-check-clean-force:
 	(cd test; $(MAKE) new-check-clean-force)
 
-CHECKER=$(HOME)/bin/valgrind --leak-check=yes
+CHECKER=$(HOME)/bin/valgrind --tool=memcheck --leak-check=yes
 FILTER=cat
 
 run-check:
