@@ -5,8 +5,6 @@
 
 #include "Config/compiler-config.h"
 
-//#include <math.h>
-#include <strstream.h>
 #include <string>
 
 #include "FunctionAlgebra/function-algebra-impl.h"

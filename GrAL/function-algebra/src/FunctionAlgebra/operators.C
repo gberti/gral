@@ -1,4 +1,8 @@
+#ifdef GRAL_HAS_SSTREAM
+#include <sstream>
+#else
 #include <strstream.h>
+#endif
 
 #include "FunctionAlgebra/function-algebra.h"
 #include "./write-code.h"
@@ -25,7 +29,11 @@ public:
     if (d_Im == 1)
       return( "0.0");
     else {
+#ifdef GRAL_HAS_SSTREAM
+      std::ostringstream s; 
+#else
       std::ostrstream s; 
+#endif
       s << "coord_type(" << d_Im << ",zero_init)";
       return s.str();
     }
@@ -38,7 +46,11 @@ public:
     if (d_Im == 1)
       return( "0.0");
     else {
+#ifdef GRAL_HAS_SSTREAM
+      std::ostringstream s; 
+#else
       std::ostrstream s; 
+#endif
       s << "coord_type(" << d_Im << ",zero_init)";
       return s.str();
     }

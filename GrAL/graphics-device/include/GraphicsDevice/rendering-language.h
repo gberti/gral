@@ -5,7 +5,7 @@
 
 
 #include <string>
-#include <strstream.h>
+// #include <strstream.h>
 
 #include "GraphicsDevice/transformation.h"
 #include "GraphicsDevice/attribute.h"

@@ -1,13 +1,22 @@
 #ifndef NMWR_GB_WRITE_CODE_H
 #define NMWR_GB_WRITE_CODE_H
 
+#ifdef GRAL_HAS_SSTREAM
+#include <sstream>
+#else
 #include <strstream.h>
+#endif
+
 #include <string>
 
 
 inline std::string makename(std::string const& base, int i)
 {
-  std::ostrstream s; 
+#ifdef GRAL_HAS_SSTREAM
+      std::ostringstream s; 
+#else
+      std::ostrstream s; 
+#endif
   s << base << i; 
   std::string r(s.str());
   return(r);
@@ -17,7 +26,11 @@ inline std::string makename(std::string const& base, int i)
 template<class P>
 inline P makepoint(int dim, std::string const& coords)
 {
- std::strstream in;
+#ifdef GRAL_HAS_SSTREAM
+      std::ostringstream s; 
+#else
+      std::ostrstream s; 
+#endif
  in  << coords;
  P p(dim, point::no_init);
  in >> p;

@@ -1,4 +1,8 @@
+#ifdef GRAL_HAS_SSTREAM
+#include <sstream>
+#else
 #include <strstream.h>
+#endif
 
 #include "FunctionAlgebra/function-algebra.h"
 
@@ -37,7 +41,11 @@ public:
 std::string  function_algebra_constant::write_code_eval(std::ostream&, int& /*vnum*/, 
                                                         std::string const& /*var*/) const
 { 
- strstream s;
+#ifdef GRAL_HAS_SSTREAM
+      std::ostringstream s; 
+#else
+      std::ostrstream s; 
+#endif
  if (dIm() == 1)
    s << c[1];
  else {
@@ -54,7 +62,11 @@ std::string function_algebra_constant::write_code_derive(std::ostream&, int& /*v
                                                          std::string const& /*varx*/, 
                                                          std::string const& /*varh*/) const
 {
- strstream s;
+#ifdef GRAL_HAS_SSTREAM
+      std::ostringstream s; 
+#else
+      std::ostrstream s; 
+#endif
  if (dIm() == 0)
    s << "0.0";
  else
@@ -89,7 +101,11 @@ public:
 std::string  function_algebra_coordinate::write_code_eval(std::ostream&, int& /*vnum*/, 
                                                           std::string const& var) const
 { 
-  std::ostrstream s;
+#ifdef GRAL_HAS_SSTREAM
+      std::ostringstream s; 
+#else
+      std::ostrstream s; 
+#endif
   if (d_Def == 1) {s << var;} else  {s << var << "[" << i <<"]";} 
   return(s.str());
 }
@@ -98,8 +114,12 @@ std::string function_algebra_coordinate::write_code_derive(std::ostream& , int& 
                                                            std::string const& /*varx*/, 
                                                            std::string const& varh) const
 { 
-  std::ostrstream s;
-  if (d_Def == 1) {s << varh;} else  {s << varh << "[" << i <<"]";} 
+#ifdef GRAL_HAS_SSTREAM
+      std::ostringstream s; 
+#else
+      std::ostrstream s; 
+#endif
+ if (d_Def == 1) {s << varh;} else  {s << varh << "[" << i <<"]";} 
   return(s.str());
 }
 
@@ -373,7 +393,12 @@ std::string function_algebra_distance::write_code_eval(std::ostream& out, int& v
 {
   std::string r(makename("dist2hyp",vnum++));
   std::string nrm(makename("n",vnum++));
-  std::ostrstream coords;coords << normal;
+#ifdef GRAL_HAS_SSTREAM
+  std::ostringstream coords; 
+#else
+  std::ostrstream coords; 
+#endif
+  coords << normal;
   int dim = normal.dim();
   out << "coord_type "  << nrm << "(makepoint(" << dim << "," << '"' << coords.str() << '"' << "));\n"
       << "double " << r << "( " << nrm << " * " << var << " - " << dist << ");\n"; 
@@ -387,7 +412,12 @@ std::string function_algebra_distance::write_code_derive(std::ostream& out, int&
 {
   std::string r(makename("d_dist2hyp",vnum++));
   std::string nrm(makename("n",vnum++));
-  std::ostrstream coords;coords << normal;
+#ifdef GRAL_HAS_SSTREAM
+  std::ostringstream coords; 
+#else
+  std::ostrstream coords; 
+#endif
+  coords << normal;
   int dim = normal.dim();
   out << "coord_type "  << nrm << "(makepoint(" << dim << "," << '"' << coords.str() << '"' << "));\n"
       << "double " << r << "( " << nrm << " * " << varh << " - " << dist << ");\n"; 

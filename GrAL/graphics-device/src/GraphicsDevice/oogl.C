@@ -351,7 +351,7 @@ void oogl::write_torus_bezier(const geom_torus& tor)
   int part = 8;           //number of patch-parts
   int patch = 5;
   int sides = 3 * patch;
-  strstream s; 
+  // strstream s; 
   the_stream() << "BEZ" << part << part << "3\n";
   int i,j;
   // outer vertices of patch

@@ -3,7 +3,12 @@
 
 #include <fstream>
 #include <string>
-#include <strstream.h> 
+
+#ifdef GRAL_HAS_SSTREAM
+#include <sstream>
+#else
+#include <strstream.h>
+#endif
 
 #include "Utility/safe-file.h"
 #include "IO/control-device.h"
@@ -87,7 +92,11 @@ ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
 {
   Commandline cmd(argc,argv);
   //  istringstream* in = new istringstream(cmd.get().str());
+#ifdef GRAL_HAS_SSTREAM
+   std::istringstream* in = new std::istringstream(cmd.c_str());
+#else
   std::istrstream* in = new std::istrstream(cmd.c_str());
+#endif
   return GetDuplexControlDevice(in,
 				filename.c_str(),
 				name);

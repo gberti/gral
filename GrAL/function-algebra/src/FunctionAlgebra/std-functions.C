@@ -1,5 +1,10 @@
 #include <math.h>
+
+#ifdef GRAL_HAS_SSTREAM
+#include <sstream>
+#else
 #include <strstream.h>
+#endif
 
 #include "FunctionAlgebra/function-algebra.h"
 #include "./write-code.h"
@@ -224,10 +229,23 @@ public:
   virtual std::string name() const {return "function_algebra_sqr";}
   virtual std::string write_code_eval(std::ostream& , int& /*vnum*/, 
                                       std::string const& var) const
-  { std::ostrstream s; s << "sqr(" << var <<")"; return (s.str());}
+  { 
+#ifdef GRAL_HAS_SSTREAM
+    std::ostringstream s; 
+#else
+    std::ostrstream s; 
+#endif
+    s << "sqr(" << var <<")"; return (s.str());
+  }
   virtual  std::string write_code_derive(std::ostream& /*out*/, int& /*vnum*/, 
                                          std::string const& varx, std::string const& varh) const
-  { std::ostrstream s; s << "2.0 * " << varx << " * " << varh; return (s.str());}
+  { 
+#ifdef GRAL_HAS_SSTREAM
+    std::ostringstream s; 
+#else
+    std::ostrstream s; 
+#endif  
+    s << "2.0 * " << varx << " * " << varh; return (s.str());}
 };
 
 

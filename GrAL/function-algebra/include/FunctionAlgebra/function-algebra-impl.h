@@ -3,7 +3,6 @@
 
 // $LICENSE
 
-#include <strstream.h>
 #include <string>
 
 #include "Geometry/algebraic-primitives.h"
