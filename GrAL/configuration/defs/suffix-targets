@@ -110,6 +110,18 @@ copy-doxy:
 	cp -r $(DOXYPATH)/* $(DOCDEST)/$(DOXYPATH)
 
 ###########################
+##      Checks           ##
+###########################
+
+check: module-check
+
+# hook for modules
+module-check:
+
+test-new-check-clean:
+	(cd test; $(MAKE) new-check-clean)
+
+###########################
 ##  Standard suffix rule ##
 ###########################
 

@@ -10,9 +10,11 @@ Building it:
      In principle, any fairly standard compliant C++ compiler
      should do.
 
-   - Makefiles require GNU make.
+   - Makefiles require GNU make. 
+     (Seems to be the only way to portable makefiles)
 
-   - Some scripts require Perl. (Not needed for the following steps)
+   - Some scripts require Perl. 
+     (Not needed for the following steps)
 
 1) Unpack the stuff:
 $ tar -xfv gral-all.tar
@@ -35,7 +37,7 @@ If you want to operate on individual modules, there are two choices:
 a)  Edit in mk.config the variable ALLROOT 
    to point to the top level directory in the tar file (i.e. GrAL/). 
    [This should hopefully be the only thing to edit in each module ...]
-b) Alternatively, add an argument ALLROOT=/path/to/GrAL
+b) Alternatively, add an argument ALLROOT=/path/to/GrAL to gmake calls.
 
 
 2) Then run from ALLROOT
@@ -46,13 +48,13 @@ These are written to <module>/lib/<ARCH>/<CCNAME>/<DEBUG>/.
 
 3) Install it:
 
-If you want to collect the headers and libraries (not every module
-produces a library) in one central place, edit the PREFIX variable
-in the mk.config's accordingly, or call gmake with an additional
-PREFIX=/your/prefix argument, e.g. PREFIX=~/gral/
+To install the headers and libraries (not every module
+produces a library) in one central place, 
+either edit the PREFIX variable in configuration/defs/make.defs,
+or call gmake with an additional PREFIX=/your/prefix argument, 
+e.g. PREFIX=~/lib/gral/ :
 
-Then type
-$ gmake install
+$ gmake install [PREFIX=/your/prefix]
 
 This will copy libraries and header files to PREFIX/lib/
 and PREFIX/include, resp.
@@ -60,9 +62,11 @@ and PREFIX/include, resp.
 
 4) Build tests:
 
-From ALLROOT call
-$ gmake test
+To only build tests, call
+$ gmake test [PREFIX=/your/prefix]
 
+To build & perform the checks, call
+$ gmake check [PREFIX=/your/prefix]
 
 
 
