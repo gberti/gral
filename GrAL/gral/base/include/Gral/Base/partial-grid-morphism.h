@@ -169,7 +169,7 @@ public:
   typedef typename gtimg::Cell   CellImg;
   typedef typename gtimg::cell_handle cell_handle_img;
 
-private:
+protected:
   GDEF const* g_def;
   GIMG const* g_img;
   partial_grid_function<VertexDef,vertex_handle_img> phi_v;
@@ -400,8 +400,8 @@ private:
 
 public:
   partial_grid_morphism_aux() {}
-  partial_grid_morphism_aux(GDEF const& gdef, GIMG const& g_img)
-    : base(g_def,g_img), phi_f(gdef) {}
+  partial_grid_morphism_aux(GDEF const& gdef, GIMG const& gimg)
+    : base(gdef,gimg), phi_f(gdef) {}
 
   void clear() { 
     base::clear();
@@ -409,6 +409,8 @@ public:
     // phi_f_inv.clear();
   }
 
+  using base::operator();
+  using base::operator[];
 
   FacetImg operator()(FacetDef const& f) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
