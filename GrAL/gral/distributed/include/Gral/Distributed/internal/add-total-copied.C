@@ -9,8 +9,6 @@
 
 #include <iterator>  // STL
 
-#include "Container/some-algorithms.h"
-
 #include "Gral/Base/grid-functors.h"
 #include "Gral/Distributed/mark-ranges.h"
 

@@ -3,7 +3,6 @@
 
 // $LICENSE
 
-#include "Container/some-algorithms.h"
 #include "Gral/Distributed/overlap.h"
 
 template<class CoarseGrid, class FineGrid,
