@@ -63,12 +63,23 @@ void MetisPartitioning::calculate_cell_partitioning
                         adjwgt, wgtflag, numflag, np, 
                         options->opt, edgecut, part);
 
-  int i=0;
-  for(CellIterator c(G); !c.IsDone(); ++c, ++i) {
-    P[*c] = part[i];
+
+  delete [] xadj;
+  delete [] vwgt;
+  delete [] adjncy;
+  delete [] adjwgt;
+
+  // add partitions 
+  for(int k=0; k<np; k++) {
+    P.add_partition();
   }
 
+  int i=0;
+  for(CellIterator c(G); !c.IsDone(); ++c, ++i) {
+    P.set_partition(*c, part[i]);
+  }
 
+  delete [] part;
 }
 
 
