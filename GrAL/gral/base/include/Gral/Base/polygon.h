@@ -102,6 +102,9 @@ namespace polygon1d  {
     inline Vertex switched_vertex(Vertex const& v, Cell const& c) const;
     inline Cell   switched_cell  (Vertex const& v, Cell const& c) const;
 
+
+    bool IsOnBoundary(FacetOnCellIterator const&) const { return false;}
+    bool IsOnBoundary(Facet               const&) const { return false;}
   };
 
 
