@@ -58,12 +58,47 @@ ap::matrixnorm_infinity(a[0],a[1],a[2]) = 3
 ap::condition(a[0],a[1],a[2],ap::Norm_frobenius()) = 4.36527
 ap::condition(a[0],a[1],a[2],ap::Norm_1()) = 3
 ap::condition(a[0],a[1],a[2],ap::Norm_infinity()) = 3
-S does intersect plane
-S does intersect triangle
-intersection: 0.25 0.25 0 
-S does not intersect plane
-S does not intersect triangle
+
+Segment:  [0.25 0.25 -1 ,0.25 0.25 1 ]
+Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
+Ray:      [0.25 0.25 -1 ,0 0 2 ]
+segment does intersect plane
+segment does intersect triangle
+plane intersection: 0.25 0.25 0 
+line does intersect plane
+ray does intersect triangle
+plane intersection: 0.25 0.25 0 
+
+Segment:  [0.25 0.25 0.5 ,0.25 0.25 1 ]
+Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
+Ray:      [0.25 0.25 0.5 ,0 0 0.5 ]
+segment does not intersect plane
+segment does not intersect triangle
+line does not intersect plane
+ray does not intersect triangle
+
 Segment:  [0.5 0.5 0 ,0.5 0.5 1 ]
 Triangle: [-0.5 -0.5 0 ,-0.5 0.5 1 ,-0.5 -0.5 1 ]
-S does not intersect plane
-S does not intersect triangle
+Ray:      [0.5 0.5 0 ,0 0 1 ]
+segment does not intersect plane
+segment does not intersect triangle
+line does not intersect plane
+ray does not intersect triangle
+
+Segment:  [1 1 2 ,1 0 2 ]
+Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
+Ray:      [1 1 2 ,0 -1 0 ]
+segment does not intersect plane
+segment does not intersect triangle
+line does not intersect plane
+ray does not intersect triangle
+
+Segment:  [0.5 0.5 -1 ,0.5 0.5 1 ]
+Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
+Ray:      [0.5 0.5 -1 ,0 0 2 ]
+segment does intersect plane
+segment does intersect triangle
+plane intersection: 0.5 0.5 0 
+line does intersect plane
+ray does intersect triangle
+plane intersection: 0.5 0.5 0 
