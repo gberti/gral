@@ -16,6 +16,7 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
+
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/IO
 	mkdir -p $(INSTALLLIBRARIES)

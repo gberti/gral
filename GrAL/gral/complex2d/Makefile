@@ -16,6 +16,8 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
+module-check: test-new-check-clean
+
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Complex2D
 	cp include/Gral/Grids/Complex2D/*.h  $(INSTALLHEADERS)/Gral/Grids/Complex2D

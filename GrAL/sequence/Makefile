@@ -14,6 +14,8 @@ compile:
 
 lib:
 
+module-check: test-new-check-clean
+
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Container

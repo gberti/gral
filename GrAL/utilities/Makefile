@@ -20,6 +20,7 @@ lib:
 test:
 	(cd test; $(MAKE) $(TARGET))
 
+module-check: test-new-check-clean
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Utility
