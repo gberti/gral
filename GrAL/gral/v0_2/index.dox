@@ -1,0 +1,51 @@
+/*!  \mainpage Index to <A HREF="http://www.math.tu-cottbus.de/~berti/gral"> GrAL </A>  Modules
+
+     As GrAL is supposed to grow quite a bit, 
+     it is partitioned from the beginning
+     into more manageable units. 
+     Thus, one does not have to ``buy everything''.
+
+    The recommended way of browsing the documentation 
+    is by (sub-) module hierarchy.
+
+    Here are the separate packages of GrAL:
+   <UL>
+     <H2> Basic, non-grid related modules </H2>
+     <LI>  $gral-configuration Configuration module:
+           collect comman make targets and
+           variable, compiler config header etc.
+     <LI>  $gral-utilities Utilities module: 
+           Very basic stuff used by most other modules.
+     <LI>  $gral-sequence  Sequence module: 
+           Contains some stuff for handling containers,
+           sequences and algorithms.
+     <LI>  $gral-external-control External Control module:
+      Controling runtime parameters in a uniform and hierarchical way.
+     <LI>  $gral-geometry         Geometry module:
+           some geometric primitives
+
+     <H2> Proper GrAL Modules </H2> 
+      <LI> $GRALCONCEPTSTOP 'Intro and concepts documentation'
+      <LI> $gral-gral/base GrAL-Base module:
+         Basis generic data structures and algorithms. This module is used by all
+        other GrAL modules.
+      <LI> $gral-gral/testing GrAL-Testing module.
+           Used to test concrete grid components.
+      <LI> $gral-gral/complex2d GrAL-Complex2D module:
+       A simple 2D grid component for arbitrary polygonal cells
+     <LI>  $gral-gral/cartesian2d GrAL-Cartesian2D module:
+         A Cartesian grid component 
+      <LI> $gral-gral/triang2d GrAL-Triang2D module:
+         A grid component for 2D triangulations
+      <LI> $gral-gral/complex3d GrAL-Complex3D module:
+         A grid component for 3D grids with arbitrary cells
+      <LI> $gral-gral/cartesian3d GrAL-Cartesian3D module:
+         A Cartesian grid component for 3D regular grids. 
+      <LI> $gral-gral/partitioning GrAL-Partitioning module:
+          Generic components for grid partitioning.
+      <LI> $gral-gral/distributed  GrAL-Distributed module:
+          Generic components for distributed grids.
+      <LI> $gral-gral/gmv-io GrAL-GMV-IO module:
+        Components for output to GMV file format (3D and 2D versions).
+  </UL>
+*/

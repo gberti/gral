@@ -1,0 +1,92 @@
+
+ALLROOT=$(shell pwd)
+SUBDIRS= configuration utilities external-control sequence geometry \
+         gral
+
+
+clean:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) clean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+realclean:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) realclean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+new:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+install:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) install ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+
+test:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) test ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+check:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) check ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+new-check-clean:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new-check-clean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+
+
+# predoc  = generate docs
+# postdoc = install docs (replace dummy links)
+
+doxy:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) doxy ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+installdox:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) installdox ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+doc: predoc postdoc
+
+predoc:	
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) predoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+postdoc:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) postdoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
