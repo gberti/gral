@@ -6,19 +6,19 @@ exec perl -w -x $0 ${1+"$@"} # -*- mode: perl; perl-indent-level: 2; -*-
 $license1 = "
 /* ------------------------------------------------------------
 
-    Copyright (C) 1997-2002 Guntram Berti,
-    NEC C&C Research Laboratories, NEC Europ Ltd.
+    Copyright (C) 1997-2003 Guntram Berti,
+    NEC C&C Research Laboratories, NEC Europe Ltd.,
     Rathausallee 10, D-53757 St. Augustin, Germany.
     Contact: berti\@ccrl-nece.de
 
     This file is part of the Grid Algorithms Library (GrAL),
-    which is available at 
+    which is available at
     http://www.math.tu-cottbus.de/~berti/gral
 
     You are free to use, copy and modify the sources under
     certain circumstances, provided this copyright notice
     remains intact. See the file LICENSE for details, which
-    is contained in this distribution, and available online at
+    is contained in this distribution, and is available online at
     http://www.math.tu-cottbus.de/~berti/gral/license.html .
 
 --------------------------------------------------------------- */
@@ -36,6 +36,7 @@ $license = $license1;
 
 #print "executing replace-license.pl\n";
 while(<>) {
+    s|//[ ]*\$LICENSE_NEC_2003|$license|;
     s|//[ ]*\$LICENSE_NEC|$license|;
     s|//[ ]*\$LICENSE|$license|;
     print;
