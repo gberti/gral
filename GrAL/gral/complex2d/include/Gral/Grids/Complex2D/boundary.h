@@ -82,10 +82,11 @@ private:
 
   typedef boundary_vertex_iterator_complex2d self;
 public:
-  typedef grid_types<Complex2D>     gt;
-  typedef  gt::Vertex       Vertex;
-  typedef Vertex                    value_type;
-  typedef Complex2D                 grid_type;
+  typedef grid_types<Complex2D>    gt;
+  typedef gt::Vertex               Vertex;
+  typedef gt::vertex_handle        vertex_handle;
+  typedef Vertex                   value_type;
+  typedef Complex2D                grid_type;
 
 
 public:
@@ -96,7 +97,7 @@ public:
   Vertex operator*() const { return base.curr_vertex();}
   bool   IsDone()    const { return base.IsDone();}
   self&  operator++() { ++base; return (*this);}
-
+  vertex_handle handle() const { return base.curr_vertex().handle();}
   grid_type const&  TheGrid() const { return base.TheGrid();}
 };
 
@@ -108,10 +109,11 @@ private:
 
   typedef boundary_edge_iterator_complex2d self;
 public:
-  typedef grid_types<Complex2D>     gt;
-  typedef  gt::Edge         Edge;
-  typedef Edge                      value_type;
-  typedef Complex2D                 grid_type;
+  typedef grid_types<Complex2D>  gt;
+  typedef gt::Edge               Edge;
+  typedef gt::edge_handle        edge_handle;
+  typedef Edge                   value_type;
+  typedef Complex2D              grid_type;
 public:
   boundary_edge_iterator_complex2d() {}
   boundary_edge_iterator_complex2d(const Complex2D& g) : base(g) {}
@@ -119,6 +121,7 @@ public:
   Edge operator*() const { return base.curr_edge();}
   bool   IsDone()  const { return base.IsDone();}
   self&  operator++() { ++base; return (*this);}
+  edge_handle handle() const { return base.curr_edge().handle();}
 };
 
 class BoundaryRange<Complex2D> {
