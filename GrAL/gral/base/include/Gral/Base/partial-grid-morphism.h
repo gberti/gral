@@ -12,6 +12,14 @@
 template<class GDEF, class GIMG, class DIM>
 class partial_grid_morphism_aux;
 
+/*! \brief Partial morphism of grids
+ 
+   This class implements injective mappings between the elements of two grids.
+   Defined are operators() (read access) and [] (write access)
+   for each element type in the grid, and also for element handles 
+   (this requires element handles to be distinct types, and not just
+   typedef int, see e.g. vertex_handle_int in module \ref elements.)
+ */
 template<class GDEF, class GIMG>
 class partial_grid_morphism :
   public partial_grid_morphism_aux
@@ -21,8 +29,10 @@ class partial_grid_morphism :
      <GDEF,GIMG, typename grid_types<GDEF>::dimension_tag>
   base;
 public:
+  partial_grid_morphism() {}
   partial_grid_morphism(GDEF const& gdef, GIMG const& gimg)
     : base(gdef,gimg) {}
+
 };
 
 
@@ -129,12 +139,17 @@ public:
 };
 */
 
+/*! \brief Specialization of partial grid morphism for 2D case.
 
+
+ */
 template<class GDEF, class GIMG>
 class partial_grid_morphism_aux<GDEF,GIMG,grid_dim_tag<2> >
 {
   typedef partial_grid_morphism_aux<GDEF,GIMG,grid_dim_tag<2> > self;
 public:
+  typedef GDEF grid_type_def;
+  typedef GIMG grid_type_img;
   typedef grid_types<GDEF> gtdef;
   typedef grid_types<GIMG> gtimg;
   typedef typename gtdef::Vertex VertexDef;
@@ -162,6 +177,8 @@ private:
   partial_grid_function<CellImg,  cell_handle_def>   phi_c_inv;
 
 public:
+  partial_grid_morphism_aux() : g_def(0), g_img(0) {}
+
   partial_grid_morphism_aux(GDEF const& gdef,
 			    GIMG const& gimg)
     : g_def(&gdef), g_img(&gimg),
@@ -191,17 +208,19 @@ public:
   bool defined(VertexDef const& v) const { return phi_v.defined(v);}
   bool defined(EdgeDef   const& e) const { return phi_e.defined(e);}
   bool defined(CellDef   const& c) const { return phi_c.defined(c);}
+
+
   // --- vertex --- 
+
   VertexImg operator()(VertexDef const& v) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
     return VertexImg(*g_img,phi_v(v));
   }
 
-  //Geht nicht!  
-  //vertex_handle_img operator()(vertex_handle_def v) const {
-  //  REQUIRE((g_img != 0), "No image grid!\n",1);
-  //  return phi_v(VertexDef(*g_def,v));
-  //}
+  vertex_handle_img operator()(vertex_handle_def v) const {
+    REQUIRE((g_img != 0), "No image grid!\n",1);
+    return phi_v(VertexDef(*g_def,v));
+  }
   
 
   template<class MORPHISM>
@@ -227,13 +246,11 @@ public:
     return VertexImg_proxy<self>(*this,v); 
   }
 
-
-
-  // Geht nicht!!
-  //vertex_handle_img & operator[](vertex_handle_def v)  {
-  //  REQUIRE((g_img != 0), "No image grid!\n",1);
-  //  return phi_v[VertexDef(*g_def,v)];
-  //}
+  // works if handle types are distinct!
+  vertex_handle_img & operator[](vertex_handle_def v)  {
+    REQUIRE((g_img != 0), "No image grid!\n",1);
+    return phi_v[VertexDef(*g_def,v)];
+  }
   
   // --- edge ---
 
@@ -276,16 +293,18 @@ public:
   }
 
 
+  //------ cells ---------
+
   CellImg operator()(CellDef const& c) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
     return CellImg(*g_img,phi_c(c));
   }
 
-  // Geht nicht!
-  //cell_handle_img operator()(cell_handle_def v) const {
-  //  REQUIRE((g_img != 0), "No image grid!\n",1);
-  //  return phi_v(CellDef(*g_def,v));
-  //}
+  // cell handles must be distinct types
+  cell_handle_img operator()(cell_handle_def v) const {
+    REQUIRE((g_img != 0), "No image grid!\n",1);
+    return phi_v(CellDef(*g_def,v));
+  }
   
 
 
@@ -313,11 +332,11 @@ public:
     return CellImg_proxy<self>(*this,c);
   }
 
-  // Geht nicht!
-  // cell_handle_img & operator[](cell_handle_def v)  {
-  //  REQUIRE((g_img != 0), "No image grid!\n",1);
-  //  return phi_v[CellDef(*g_def,v)];
-  //}
+  // cell handles must be distinct types.
+  cell_handle_img & operator[](cell_handle_def v)  {
+    REQUIRE((g_img != 0), "No image grid!\n",1);
+    return phi_v[CellDef(*g_def,v)];
+  }
 
 
   friend class inverse_type;
@@ -352,6 +371,11 @@ public:
 };
 
 
+/*! \brief Specialization of grid morphism for 3D case.
+
+   \todo Implement inverse morphism (inherit from base::inverse_type
+
+ */
 
 template<class GDEF, class GIMG>
 class partial_grid_morphism_aux<GDEF,GIMG,grid_dim_tag<3> >
@@ -368,6 +392,7 @@ private:
   //  partial_grid_function<FacetImg,  facet_handle_def>   phi_f_inv;
 
 public:
+  partial_grid_morphism_aux() {}
   partial_grid_morphism_aux(GDEF const& gdef, GIMG const& g_img)
     : base(g_def,g_img), phi_f(gdef) {}
 
