@@ -195,8 +195,8 @@ public:
   typedef typename vertex_range::range_type_ref    vertex_layer_type;
   typedef typename cell_range::range_type_ref      cell_layer_type;
 
-  typedef vertex_range::VertexIterator rgeVertexIterator;
-  typedef cell_range  ::CellIterator   rgeCellIterator;
+  typedef typename vertex_range::VertexIterator rgeVertexIterator;
+  typedef typename cell_range  ::CellIterator   rgeCellIterator;
 
   enum  periodic_flag { periodic, non_periodic};
 private: 
