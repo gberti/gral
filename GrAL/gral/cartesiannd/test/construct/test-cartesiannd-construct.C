@@ -159,6 +159,8 @@ int main() {
     test_vertex_on_cell_iterator(R,cout);
     test_edge_on_cell_iterator(R,cout);
     test_facet_on_cell_iterator(R,cout);
+
+    test_cell_on_cell_iterator(R,cout);
   }
 
   
