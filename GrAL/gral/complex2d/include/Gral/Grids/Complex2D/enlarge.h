@@ -33,6 +33,10 @@
 //----------------------------------------------------------------
 
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Grids/Complex2D/internal/complex2d-enlarge.C"
+#else
+
 template<class Conn, class Geom, class VertexIdent>
 void EnlargeGrid(Complex2D& G,                 // in/out
 		 const Conn& G_src,            // in
@@ -68,8 +72,6 @@ EnlargeGridVC(Complex2D        & destG,       // in/out
 	      CellMap          & CellCorr);   // out src -> dest
 
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Grids/Complex2D/internal/complex2d-enlarge.C"
 #endif
 
 

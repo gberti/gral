@@ -1,5 +1,6 @@
 #include "Gral/Grids/Complex3D/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
+#include "Gral/Base/grid-morphism.h"
 
 #include "Gral/Test/all.h"
 #include "Gral/Geometries/simple-geometry.h"
@@ -42,8 +43,8 @@ int main() {
   cartesian3d::lattice_geometry GeomR(R);
   typedef cartesian3d::lattice_geometry::coord_type coord_type;
   simple_geometry<Complex3D, coord_type> GeomG3(G3);
-  std::vector<gt::vertex_handle> v_corr;
-  std::vector<gt::cell_handle>   c_corr;
+  vertex_morphism<cartesian3d::CartesianGrid3D, Complex3D> v_corr(R, G3);
+  cell_morphism  <cartesian3d::CartesianGrid3D, Complex3D> c_corr(R, G3);
   ConstructGridVC(G3, GeomG3,
 		  R,  GeomR,
 		  v_corr, c_corr);

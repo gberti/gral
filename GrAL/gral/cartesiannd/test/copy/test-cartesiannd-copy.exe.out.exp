@@ -1,0 +1,45 @@
+Copy cartesiannd::grid<2>:
+Orig. grid:  # Vertices: 4  # Cells: 1
+Copied grid: # Vertices: 4  # Cells: 1
+Copy cartesiannd::grid<3>:
+Grid:
+maps   [0]: [1 1 1] 
+offsets[0]: 0 8 
+maps   [1]: [0 1 1] [1 0 1] [1 1 0] 
+offsets[1]: 0 4 8 12 
+maps   [2]: [0 0 1] [0 1 0] [1 0 0] 
+offsets[2]: 0 2 4 6 
+maps   [3]: [0 0 0] 
+offsets[3]: 0 1 
+Archetype:
+maps   [0]: [1 1 1] 
+offsets[0]: 0 8 
+maps   [1]: [0 1 1] [1 0 1] [1 1 0] 
+offsets[1]: 0 4 8 12 
+maps   [2]: [0 0 1] [0 1 0] [1 0 0] 
+offsets[2]: 0 2 4 6 
+maps   [3]: [0 0 0] 
+offsets[3]: 0 1 
+Orig. grid:  # Vertices: 8  # Cells: 1
+Copied grid: # Vertices: 8  # Cells: 1
+Copy cartesiannd::grid<3>:
+Grid:
+maps   [0]: [1 1 1] 
+offsets[0]: 0 8 
+maps   [1]: [0 1 1] [1 0 1] [1 1 0] 
+offsets[1]: 0 4 8 12 
+maps   [2]: [0 0 1] [0 1 0] [1 0 0] 
+offsets[2]: 0 2 4 6 
+maps   [3]: [0 0 0] 
+offsets[3]: 0 1 
+Archetype:
+maps   [0]: [1 1 1] 
+offsets[0]: 0 8 
+maps   [1]: [0 1 1] [1 0 1] [1 1 0] 
+offsets[1]: 0 4 8 12 
+maps   [2]: [0 0 1] [0 1 0] [1 0 0] 
+offsets[2]: 0 2 4 6 
+maps   [3]: [0 0 0] 
+offsets[3]: 0 1 
+Orig. grid:  # Vertices: 8  # Cells: 1
+Copied grid: # Vertices: 8  # Cells: 1

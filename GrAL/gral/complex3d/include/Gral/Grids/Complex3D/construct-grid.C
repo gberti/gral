@@ -13,6 +13,7 @@
 
 #include "Container/bijective-mapping.h"
 
+
 template<class G_SRC, class VCORR, class CCORR>
 void ConstructGrid0(Complex3D     & G_dest,
 		    G_SRC    const& G_src,
@@ -30,8 +31,10 @@ void ConstructGrid0(Complex3D     & G_dest,
   typedef typename sgt::archetype_handle dst_arch_handle;
 
   // (1) copy vertices
-  for(typename sgt::VertexIterator v_src(G_src); ! v_src.IsDone(); ++v_src)
+  for(typename sgt::VertexIterator v_src(G_src); ! v_src.IsDone(); ++v_src) {
     v_corr[v_src.handle()] = G_dest.add_vertex();
+  }
+
 
   // (2) copy archetypes
   typedef vertex_morphism<src_archetype, dst_archetype> arch_morphism;
@@ -64,7 +67,7 @@ void ConstructGrid0(Complex3D     & G_dest,
     Complex3D::cell_vertex_incidence_map cv_incidence(G_dest,c);
     for(typename sgt::VertexOnCellIterator vc_src(*c_src); 
 	!vc_src.IsDone(); ++lv, ++vc_src) {
-      cv_incidence[morphism[a_src](lv.handle())] = v_corr[vc_src.handle()];
+      cv_incidence[morphism[a_src](lv.handle())] = v_corr(vc_src.handle());
       
     }
   }
