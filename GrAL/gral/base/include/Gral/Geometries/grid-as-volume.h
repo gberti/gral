@@ -28,6 +28,7 @@ template<class GEOM, class GRID = typename GEOM::grid_type, class GT = grid_type
 class grid_as_volume : public geometric_shapes::geom_base {
 public:
   typedef GRID grid_type;
+  typedef GEOM geometry_type;
   typedef GEOM geom1_type;
   typedef GT   gt;
   typedef typename gt::Vertex Vertex;
@@ -42,7 +43,7 @@ public:
   grid_as_volume(ref_ptr<geom1_type const> geo) : geom(geo) {}
 
   ref_ptr<geom1_type const> TheGeometry() const { return geom;}
-  ref_ptr<grid_type const> TheGrid()     const { return ref_ptr<grid_type const>(geom->TheGrid());}
+  ref_ptr<grid_type const>  TheGrid()     const { return ref_ptr<grid_type const>(geom->TheGrid());}
 
   bool is_inside(coord_type const& X) const
   {
@@ -74,7 +75,9 @@ public:
     bool intersects = false;
     for(typename bgt::FacetIterator bf = Bd.FirstFacet(); ! bf.IsDone(); ++bf) {
       facet_polytope bdfacet(TheGeometry(), *bf);
-      intersects |= intersection_by_separating_axes<POLY, facet_polytope>::intersects(p,bdfacet);
+      intersects = intersects || intersection_by_separating_axes<POLY, facet_polytope>::intersects(p,bdfacet);
+      if(intersects) 
+	break;
     }
 
     intersection_result res;
