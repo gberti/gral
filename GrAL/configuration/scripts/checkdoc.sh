@@ -1,4 +1,4 @@
 #! /bin/sh
 
 
-checkbot --match localhost --timeout 10 $1
+checkbot --url file://localhost/home/berti/CVS-work/gral/doxygen/html/index.html --match localhost dimitri --exclude  --timeout 10 
