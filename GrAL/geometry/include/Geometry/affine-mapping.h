@@ -41,6 +41,8 @@ public:
 
   matrix_type const& TheMatrix()      const { return A;}
   coord_type  const& TheTranslation() const { return T;}
+  matrix_type      & TheMatrix()            { return A;}
+  coord_type       & TheTranslation()       { return T;}
 
   /*! Evaluation operator
    */
@@ -118,7 +120,7 @@ public:
     e[1][li+1] = 1;
     e[2][li+2] = 1;
     
-    // columnss are images of unit vectors
+    // columns are images of unit vectors
     coord_type rotaxis1 =  ca*axis1+sa*axis2;
     coord_type rotaxis2 = -sa*axis1+ca*axis2;
     cols[0] = ap::dot(axis0, e[0])*axis0 + ap::dot(axis1, e[0])*rotaxis1 + ap::dot(axis2, e[0])*rotaxis2;
@@ -157,6 +159,25 @@ std::ostream& operator<<(::std::ostream& out, affine_mapping<MATRIX,ARGTYPE,REST
   }
   return out;
 }
+
+template<class MATRIX, class ARGTYPE, class RESTYPE>
+std::istream& operator>>(std::istream& in, affine_mapping<MATRIX,ARGTYPE,RESTYPE> & M)
+{
+  typedef matrix_traits<MATRIX> mt;
+  typedef point_traits<RESTYPE> pt;
+  int lr = mt::LowerRowIndex(M.TheMatrix());
+  int lc = mt::LowerColIndex(M.TheMatrix());
+  int li = pt::LowerIndex(M.TheTranslation());
+
+  for(int i = 0; i < (int)mt::NumOfRows(M.TheMatrix()); ++i) {
+    for(int j = 0; j < (int)mt::NumOfCols(M.TheMatrix()); ++j)
+      in >> M.TheMatrix()(i+lr, j+lc);
+    in >> M.TheTranslation()[i+li];
+  }
+  return in;
+}
+
+
 
 } // namespace GrAL 
 
