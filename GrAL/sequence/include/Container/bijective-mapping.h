@@ -154,8 +154,8 @@ public:
 
 private:
   // hash_map not yet in std::
-  typedef hash_map<T1,T2>  map_table_type;
-  typedef hash_map<T2,T1>  inv_table_type; 
+  typedef STDHASH::hash_map<T1,T2>  map_table_type;
+  typedef STDHASH::hash_map<T2,T1>  inv_table_type; 
   //--------------- DATA -------------------------
 
   map_table_type         the_map;

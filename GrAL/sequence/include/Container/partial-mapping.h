@@ -58,33 +58,7 @@ public:
   typedef T2                         result_type;
 
 private:
-  /*
-  template<class T>
-  struct hasher_type {
-    typedef T      key_type;
-    typedef T      argument_type;
-    typedef size_t result_type;
-    size_t operator()(T const& t) const { 
-      std::hash<T> h;
-      return h(t);
-    }
-  };
-
-  template<class T>
-  struct hasher_type<T*> {  
-    typedef T*     key_type;
-    typedef T*     argument_type;
-    typedef size_t result_type;
-    size_t operator()(T const* t) const { 
-      std::hash<unsigned> h;
-      return h(reinterpret_cast<unsigned>(t));
-    }
-  };
-  */
-
-  //typedef hash_map<T1,T2,hash<T1>,equal_to<T1> >  map_table_type;
-  //  typedef hash_map<T1,T2, hasher_type<T1> >  map_table_type;
-  typedef hash_map<T1,T2 >  map_table_type;
+  typedef STDHASH::hash_map<T1,T2 >  map_table_type;
 
   //   typedef write_only_proxy<T2>                    proxy_type;
 

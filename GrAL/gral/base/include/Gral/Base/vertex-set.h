@@ -71,6 +71,10 @@ namespace STDEXT {
     class hash<vertex_set<E> >
     {
     public:
+      typedef vertex_set<E> key_type;
+      typedef vertex_set<E> argument_type;
+      typedef size_t        result_type;
+
       size_t operator()(vertex_set<E> const& v) const 
 	{
 	  size_t n = v.size();

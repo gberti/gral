@@ -49,8 +49,8 @@ public:
   typedef typename et::grid_type            grid_type;
 
 
-  typedef hash_map<E,T, hasher_type>   table_type;
-  typedef typename table_type::size_type           size_type;
+  typedef STDHASH::hash_map<E,T, hasher_type>   table_type;
+  typedef typename table_type::size_type        size_type;
 
   typedef E const& argument_type;
   typedef T const& result_type;

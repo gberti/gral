@@ -5,10 +5,10 @@
 
 #include "Config/compiler-config.h"
 
-// define STDEXT as the namespace where hash<> templates live.
-// put hash_map into global namespace
-// (intel defines hash<> in std::, but our substitute for their hash_map
-// cannot be in std::)
+// define STDEXT  as the namespace where hash<> templates live.
+// define STDHASH as the namespace where hash_map<> templates live
+// (These may be different, e.g. intel defines hash<> in std::, 
+//  but our substitute for their hash_map cannot be in std::)
 
 // KCC currently not supported
 #if defined __KCC
@@ -17,19 +17,19 @@
 
 #elif defined INTEL_CC
 // Intel compiler uses Dinkumware STL
-// make a SGI-STL like wrapper
+// We provide an SGI-STL like wrapper
 #include "Container/intel-hash.h"
-using my_hash_intel::hash_map;
-//namespace ext = std;
-#define STDEXT std
+#define STDEXT  std
+#define STDHASH my_hash_intel
 
 #elif defined __GNUC__ && __GNUC__ >= 3 && __GNUC_MINOR__>= 1
 // use SGI-like hash_map
 #include <ext/hash_map>
-using __gnu_cxx::hash_map;
-#define STDEXT __gnu_cxx
-namespace STDEXT {
+#define STDEXT  __gnu_cxx
+#define STDHASH __gnu_cxx
 
+namespace STDEXT {
+  /* sepcialization for pointers */
   template<class T>
   struct hash<T*> {
     typedef T* key_type;
@@ -41,8 +41,8 @@ namespace STDEXT {
 
 #else 
 #include <hash_map>
-using std::hash_map;
-#define STDEXT std 
+#define STDEXT  std 
+#define STDHASH std
 
 namespace STDEXT {
 
