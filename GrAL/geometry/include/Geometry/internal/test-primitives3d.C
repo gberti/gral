@@ -12,7 +12,7 @@
 template<class P>
 void check_intersections(P const& s0, P const& s1,
 			 P const& t0, P const& t1, P const& t2,
-			 ostream& out)
+			 std::ostream& out)
 {
 
   typedef segment<P>   segment3;
