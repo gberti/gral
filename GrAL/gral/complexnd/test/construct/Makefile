@@ -5,31 +5,22 @@ CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/testing gral/cartesian2d gral/cartesian3d gral/complex2d
+LIBS = -lgral-cartesian2d -lgral-cartesian3d
 LOCALSOURCES =  test-complexnd-construct.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGET = exec
-EXEC =  $(LOCALSOURCES:%.C=%.exe)
+EXEC = $(LOCALSOURCES:%.C=%.exe)
+TARGETS = $(EXEC)
 
 include $(DEPS)
-
-
-
-LIBS = -lgral-cartesian2d -lgral-cartesian3d
-
-
-
-
 
 new-check-clean: new check clean
 
 new : clean all
 
+all : $(TARGETS)
 
-all : $(TARGET)
-
-
-$(TARGET): $(LOCALOBJECTS)
+$(TARGETS): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
@@ -37,10 +28,7 @@ run:
 
 check: run-check
 
-
 clean: stdclean
 	rm -f $(EXEC)
-	rm -f *.o *~ *.flc core
-	rm -f .depend *.oogl *.out 
 	rm -f oct.complex2d
 

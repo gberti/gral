@@ -4,13 +4,14 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-EXTRA_DEPMODULES += 
 LOCALSOURCES =  test-polygon1d.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGET = exec
 EXEC =  $(LOCALSOURCES:%.C=%.exe)
+
+TARGETS = $(EXEC)
 EXTRA_DEPMODULES += gral/testing
+
 include $(DEPS)
 
 
@@ -23,10 +24,10 @@ new-check-clean: new check clean
 new : clean all
 
 
-all : $(TARGET)
+all : $(TARGETS)
 
 
-$(TARGET): $(LOCALOBJECTS)
+$(TARGETS): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:

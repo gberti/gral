@@ -8,8 +8,8 @@ EXTRA_DEPMODULES += gral/cartesian2d gral/testing
 LOCALSOURCES =  test-facet-iterator-of-cell-set.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGET = exec
 EXEC =  $(LOCALSOURCES:%.C=%.exe)
+TARGETS = $(EXEC)
 
 include $(DEPS)
 
@@ -23,10 +23,10 @@ new-check-clean: new check clean
 new : clean all
 
 
-all : $(TARGET)
+all : $(TARGETS)
 
 
-$(TARGET): $(LOCALOBJECTS)
+$(TARGETS): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:

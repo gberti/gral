@@ -8,14 +8,14 @@ EXTRA_DEPMODULES += gral/complex2d  gral/cartesian3d gral/cartesian2d
 LOCALSOURCES =  test-octree.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGET = exec
-EXEC =  $(LOCALSOURCES:%.C=%.exe)
+EXEC = $(LOCALSOURCES:%.C=%.exe)
+TARGETS = $(EXEC)
 
 include $(DEPS)
 
 
 
-LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base
+LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base -lutilities
 
 
 
@@ -26,10 +26,10 @@ new-check-clean: new check clean
 new : clean all
 
 
-all : $(TARGET)
+all : $(TARGETS)
 
 
-$(TARGET): $(LOCALOBJECTS)
+$(TARGETS): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:

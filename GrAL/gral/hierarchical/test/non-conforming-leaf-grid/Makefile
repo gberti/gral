@@ -8,8 +8,9 @@ EXTRA_DEPMODULES += gral/complex2d  gral/cartesian3d gral/cartesian2d gral/geomv
 LOCALSOURCES =  test-non-conforming-leaf-grid.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGET =$(EXEC)
-EXEC =  $(LOCALSOURCES:%.C=%.exe)
+EXEC = $(LOCALSOURCES:%.C=%.exe)
+
+TARGETS =$(EXEC)
 
 
 include $(DEPS)
@@ -27,10 +28,10 @@ new-check-clean: new check clean
 new : clean all
 
 
-all : $(TARGET)
+all : $(TARGETS)
 
 
-$(TARGET): $(LOCALOBJECTS)
+$(TARGETS): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:

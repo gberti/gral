@@ -8,7 +8,7 @@ EXTRA_DEPMODULES += gral/cartesian2d gral/complex2d gral/cartesian3d gral/comple
 LOCALSOURCES =  test-extend-grid-types.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGET = exec
+TARGETS = $(EXEC)
 EXEC =  $(LOCALSOURCES:%.C=%.exe)
 
 include $(DEPS)
@@ -23,10 +23,10 @@ new-check-clean: new check clean
 new : clean all
 
 
-all : $(TARGET)
+all : $(TARGETS)
 
 
-$(TARGET): $(LOCALOBJECTS)
+$(TARGETS): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
