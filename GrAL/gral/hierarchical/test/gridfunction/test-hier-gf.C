@@ -2,6 +2,7 @@
 #include "Gral/Hierarchical/hierarchical-grid-function-base.h"
 #include "Gral/Hierarchical/hierarchical-grid-function.h"
 #include "Gral/Hierarchical/hierarchical-partial-grid-function.h"
+#include "Gral/Grids/CartesianND/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 
@@ -11,6 +12,8 @@
 template<class GRID>
 void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out) 
 {
+  using std::flush;
+
   typedef GRID flat_grid_type;
   typedef grid_types<flat_grid_type> cgt;
   typedef hierarchical::hgrid_cartesian<flat_grid_type> hier_grid_type;
@@ -42,17 +45,17 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
 
 
   for(level_handle lev = H.coarsest_level(); lev <= H.finest_level(); ++lev) {
-    out << "Level " << lev << ":\n";
+    out << "Level " << lev << ":\n" << flush;
     for(typename cgt::CellIterator c(* H.FlatGrid(lev)); !c.IsDone(); ++c) {
-      out << (*c).index() << ": " << Hgf(lev)(*c) << " = ";
+      out << (*c).index() << ": " << Hgf(lev)(*c) << " = " << flush;
       hier_cell_type hc(H,*c,lev);
-      out << Hgf  (hc) << " = "
-	  << Hpgf (hc) << " = "
-	  << Hgf2 (hc) << " = "
-	  << Hpgf2(hc) << " = "
-	  << Hgf3 (hc) << " = "
-	  << Hpgf3(hc) 
-	  << "\n";
+      out << Hgf  (hc) << " = " << flush;
+      out << Hpgf (hc) << " = " << flush;
+      out << Hgf2 (hc) << " = " << flush;
+      out << Hpgf2(hc) << " = " << flush;
+      out << Hgf3 (hc) << " = " << flush;
+      out << Hpgf3(hc) << flush;
+      out << "\n"  << flush;
       Hpgf[hc] = Hgf[hc];
       REQUIRE_ALWAYS( Hpgf.defined(hc), "",1);
       Hpgf.undefine(hc);
@@ -76,8 +79,9 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
 
 // explicit instantiation to make sure all members are compilable
 namespace hierarchical { 
-  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
-  typedef hgrid_cartesian<cartesian3d::CartesianGrid3D>::hier_cell_type hier_cell_type;
+  typedef cartesiannd::grid<3>  cart_grid_type;
+  template class hgrid_cartesian<cart_grid_type>;
+  typedef hgrid_cartesian<cart_grid_type>::hier_cell_type hier_cell_type;
   template class hier_grid_function<hier_cell_type, int>;
 
   template class hier_grid_function_base<hier_cell_type, int, grid_function>;
@@ -97,10 +101,11 @@ int main() {
   }
   cout << "\n------------- 3D --------------\n";
   {
-    namespace cart = cartesian3d;
-    typedef cart::CartesianGrid3D               cart_grid_type;
-    cart_grid_type root(3,3,3);
-    cart_grid_type ref_pattern(3,2,2); // 2x1x1 cells!
+    typedef cartesiannd::grid<3>  cart_grid_type;
+    typedef grid_types<cart_grid_type> gt;
+    typedef gt::index_type             it;
+    cart_grid_type root(it(3,3,3));
+    cart_grid_type ref_pattern(it(3,2,2)); // 2x1x1 cells!
     test_hier_gf(root,ref_pattern, cout);
   }
 }
