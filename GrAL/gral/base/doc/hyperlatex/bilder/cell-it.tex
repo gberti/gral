@@ -1,0 +1,81 @@
+\documentclass{article}
+
+
+
+\usepackage{pstricks}
+\usepackage{pst-all}
+\usepackage[dvips]{graphicx}
+\usepackage{bilder-pdf}
+
+\pagestyle{empty}
+\begin{document}
+
+% cell-iterator
+
+\TeXtoEPS
+
+\psset{unit=1cm}
+\psset{dotsize=0.2cm 2}
+
+
+\begin{pspicture}(7,7)
+% gitterknoten 
+
+\dotnode(1,1){l0.0}     \pnode(1,0.5){l0.0.bot} \pnode(0.5,1.1){l0.0.left}
+\dotnode(1.1,3.1){l0.1} \pnode(0.5,3){l0.1.left}
+\dotnode(0.8,4){l0.2}   \pnode(0.4,4.1){l0.2.left}
+\dotnode(1,4.9){l0.3}   \pnode(0.5,5){l0.3.left} \pnode(1.1,5.5){l0.3.top}
+ 
+\psset{linecolor=white}
+\dotnode[dotstyle=x](2,0.5){c0.0}                                
+\dotnode[dotstyle=x](2.1,2){c0.1}                                
+\dotnode[dotstyle=x](1.9,3.5){c0.2}                                
+\dotnode[dotstyle=x](2,4.5){c0.3}                                
+\dotnode[dotstyle=x](2.2,5.5){c0.4} 
+\psset{linecolor=black,linewidth=0.05}
+
+\ncarc[nodesep=0.1,arcangle=45]{->}{c0.0}{c0.1}                             
+\ncarc[nodesep=0.1,arcangle=45]{->}{c0.1}{c0.2} 
+\ncarc[nodesep=0.1,arcangle=45]{->}{c0.2}{c0.3}                             
+\ncarc[nodesep=0.1,arcangle=45]{->}{c0.3}{c0.4}
+\psset{linewidth=.8pt}                             
+%
+\dotnode(3,1.2){l1.0}  \pnode(3.1,0.7){l1.0.bot}
+\dotnode(3.2,3.0){l1.1}
+\dotnode(2.7,4.3){l1.2}
+\dotnode(3.1,5.1){l1.3} \pnode(3,5.5){l1.3.top}
+%
+\dotnode(4.5,0.9){l2.0} \pnode(4.4,0.4){l2.0.bot}
+\dotnode(4.3,2.5){l2.1}
+\dotnode(4.8,3.8){l2.2}
+\dotnode(4.5,4.8){l2.3} \pnode(4.4,5.3){l2.3.top}
+%
+\pnode(5,  1.1){l3.0}  \pnode(6.1,0.7){l3.0.bot}
+\pnode(5.1,3.0){l3.1}
+\pnode(5.4,4.0){l3.2} 
+\pnode(5.1,5.2){l3.3}  \pnode(6,5.7){l3.3.top}
+%
+% Kanten
+% \ncline{-}{l3.0}{l3.1}\ncline{-}{l3.1}{l3.2}\ncline{-}{l3.2}{l3.3}
+% \ncline{-}{l3.0}{l3.0.bot} \ncline{-}{l3.3}{l3.3.top}
+ \ncline{-}{l3.0}{l2.0}\ncline{-}{l3.1}{l2.1}\ncline{-}{l3.2}{l2.2}\ncline{-}{l3.3}{l2.3}
+%
+ \ncline{-}{l2.0}{l2.1}\ncline{-}{l2.1}{l2.2}\ncline{-}{l2.2}{l2.3}
+ \ncline{-}{l2.0}{l2.0.bot} \ncline{-}{l2.3}{l2.3.top}
+%
+ \ncline{-}{l1.0}{l1.1}\ncline{-}{l1.1}{l1.2}\ncline{-}{l1.2}{l1.3}
+ \ncline{-}{l2.0}{l1.0}\ncline{-}{l2.1}{l1.1}\ncline{-}{l2.2}{l1.2}\ncline{-}{l2.3}{l1.3}
+  \ncline{-}{l1.0}{l1.0.bot} \ncline{-}{l1.3}{l1.3.top}
+%
+ \ncline{-}{l0.0}{l0.1}\ncline{-}{l0.1}{l0.2}\ncline{-}{l0.2}{l0.3}
+ \ncline{-}{l1.0}{l0.0}\ncline{-}{l1.1}{l0.1}\ncline{-}{l1.2}{l0.2}\ncline{-}{l1.3}{l0.3}
+  \ncline{-}{l0.0}{l0.0.left}  \ncline{-}{l0.0}{l0.0.bot} 
+  \ncline{-}{l0.1}{l0.1.left}
+  \ncline{-}{l0.2}{l0.2.left}
+  \ncline{-}{l0.3}{l0.3.left}  \ncline{-}{l0.3}{l0.3.top}
+\end{pspicture}
+ 
+
+
+\endTeXtoEPS
+\end{document}

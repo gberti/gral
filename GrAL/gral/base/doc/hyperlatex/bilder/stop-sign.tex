@@ -1,0 +1,23 @@
+\documentclass{article}
+
+% switch PS/TeX fonts: contains either nothing or
+% \usepackage{times,mathptm}
+
+
+\usepackage{pstricks}
+\usepackage{pst-all}
+\pagestyle{empty}
+\begin{document}
+
+\TeXtoEPS
+\psset{unit=0.3cm}
+
+\begin{pspicture}(6,6)
+
+\font\bighelv=phvb at 0.3cm
+\pspolygon[linewidth=0.5,dimen=outer,fillstyle=solid,fillcolor=gray](2,0)(4,0)(6,2)(6,4)(4,6)(2,6)(0,4)(0,2)
+\rput[c](3,3){\scalebox{2.0 2.0}{\pscharpath[linestyle=none,fillstyle=solid,fillcolor=white]{\bighelv Stop}}}
+\end{pspicture}
+\endTeXtoEPS
+
+\end{document}

@@ -1,0 +1,35 @@
+\documentclass{article}
+
+\usepackage{pstricks}
+\usepackage{pst-all}
+
+\pagestyle{empty}
+\begin{document}
+
+\TeXtoEPS
+\huge\bf
+\newcommand{\mbf}{\mathbf}
+\psset{unit=0.7cm}
+\begin{pspicture}(13,9)
+
+% white background, else gray background with latex2html. Why????
+\rput[lb](0,0){\psframe[fillcolor=white,fillstyle=solid,linestyle=none](13,9)}
+
+\rput(6,1){\rnode{v1}{\pscirclebox{$\mbf v_1$}}}
+\rput(12,4){\rnode{v2}{\pscirclebox{$\mbf v_2$}}}
+\rput(7,8){\rnode{v3}{\pscirclebox{$\mbf v_3$}}}
+\rput(1,4){\rnode{v4}{\pscirclebox{$\mbf v_4$}}}
+
+\rput(8.5,4){\rnode{c1}{$\mbf C_1$}}
+\rput(4,4){\rnode{c2}{$\mbf C_2$}}
+
+\ncline{-}{v1}{v2}\mput{\pscirclebox[fillcolor=white,fillstyle=solid,linestyle=none]{$\mbf e_1$}}
+\ncline{-}{v2}{v3}\mput{\pscirclebox[fillcolor=white,fillstyle=solid,linestyle=none]{$\mbf e_2$}}
+\ncline{-}{v3}{v1}\mput{\pscirclebox[fillcolor=white,fillstyle=solid,linestyle=none]{$\mbf e_3$}}
+\ncline{-}{v3}{v4}\mput{\pscirclebox[fillcolor=white,fillstyle=solid,linestyle=none]{$\mbf e_4$}}
+\ncline{-}{v4}{v1}\mput{\pscirclebox[fillcolor=white,fillstyle=solid,linestyle=none]{$\mbf e_5$}}
+
+\end{pspicture}
+\endTeXtoEPS
+
+\end{document}

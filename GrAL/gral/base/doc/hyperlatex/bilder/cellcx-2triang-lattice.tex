@@ -1,0 +1,56 @@
+\documentclass{article}
+
+\usepackage{pstricks}
+\usepackage{pst-all}
+
+\pagestyle{empty}
+\begin{document}
+
+\TeXtoEPS
+\psset{unit=0.7cm}
+\newcommand{\mbf}{\mathbf}
+\huge\bf
+
+\begin{pspicture}(15,8)
+
+\rput(3.5,1){\rnode{v2}{\pscirclebox{$\mbf v_2$}}}
+\rput(6.5,1){\rnode{v1}{\pscirclebox{$\mbf v_1$}}}
+\rput(9.5,1){\rnode{v3}{\pscirclebox{$\mbf v_3$}}}
+\rput(12.5,1){\rnode{v4}{\pscirclebox{$\mbf v_4$}}}
+
+\rput(2,4){\rnode{e1}{\pscirclebox{$\mbf e_1$}}}
+\rput(5,4){\rnode{e2}{\pscirclebox{$\mbf e_2$}}}
+\rput(8,4){\rnode{e3}{\pscirclebox{$\mbf e_3$}}}
+\rput(11,4){\rnode{e4}{\pscirclebox{$\mbf e_4$}}}
+\rput(14,4){\rnode{e5}{\pscirclebox{$\mbf e_5$}}}
+
+\rput(6,7){\rnode{c1}{\pscirclebox{$\mbf C_1$}}}
+\rput(10,7){\rnode{c2}{\pscirclebox{$\mbf C_2$}}}
+
+\ncline{-}{c1}{e1}
+\ncline{-}{c1}{e2}
+\ncline{-}{c1}{e3}
+
+\ncline{-}{c2}{e3}
+\ncline{-}{c2}{e4}
+\ncline{-}{c2}{e5}
+
+\ncline{e1}{v1}
+\ncline{e1}{v2}
+
+\ncline{e2}{v2}
+\ncline{e2}{v3}
+
+\ncline{e3}{v3}
+\ncline{e3}{v1}
+
+\ncline{e4}{v3}
+\ncline{e4}{v4}
+
+\ncline{e5}{v4}
+\ncline{e5}{v1}
+
+\end{pspicture}
+\endTeXtoEPS
+
+\end{document}
