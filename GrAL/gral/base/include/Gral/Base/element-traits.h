@@ -82,7 +82,7 @@ struct element_traits_base
 };
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<>
+     of element_traits<> for vertex types
   \ingroup traits
   \relates element_traits
 */
@@ -113,7 +113,7 @@ struct element_traits_vertex_base
 
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<>
+     of element_traits<> for edge types
   \ingroup traits
   \relates element_traits
 */
@@ -145,21 +145,7 @@ struct element_traits_edge_base
 
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<>
-  \ingroup traits
-  \relates element_traits
-*/
-
-template<class GRID>
-struct element_traits_edge2d_base 
-  : public element_traits_edge_base<GRID> {
-  typedef edge2d_type_tag element_type_tag;
-};
-
-
-
-/*! \brief basic definition to derive from for actual specializations
-     of element_traits<>
+     of element_traits<> for facet types
   \ingroup traits
   \relates element_traits
 */
@@ -191,7 +177,7 @@ struct element_traits_facet_base
 
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<>
+     of element_traits<> for cell types
   \ingroup traits
   \relates element_traits
 */
@@ -219,19 +205,6 @@ struct element_traits_cell_base
   { 
     return element_type(g,h); // could be factored out.
   }
-};
-
-
-/*! \brief basic definition to derive from for actual specializations
-     of element_traits<>
-  \ingroup traits
-  \relates element_traits
-*/
-template<class GRID>
-struct element_traits_cell2d_base
-  : public element_traits_cell_base<GRID>
-{
-   typedef cell2d_type_tag                element_type_tag;
 };
 
 
