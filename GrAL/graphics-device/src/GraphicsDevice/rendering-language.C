@@ -21,11 +21,11 @@ void  copy_traits<rlang_internals>::destroy(rlang_internals      * t)
 { delete t;}
 
 
-rendering_language::rendering_language(ostream* out) : state(new rlang_internals(out)) {}
+rendering_language::rendering_language(std::ostream* out) : state(new rlang_internals(out)) {}
 rendering_language::~rendering_language() {}
 
-void rendering_language::set_stream(ostream* out) { state->out = out;}
-ostream& rendering_language::the_stream()
+void rendering_language::set_stream(std::ostream* out) { state->out = out;}
+std::ostream& rendering_language::the_stream()
 {  return (*(state->out)); }
 
 Transformation rendering_language::ToDoTrafo() const

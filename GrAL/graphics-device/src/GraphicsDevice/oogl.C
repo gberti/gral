@@ -2,11 +2,11 @@
 // $LICENSE
 
 
-#include <math.h>
+#include <cmath>
 
-#include <iostream.h>
-#include <iomanip.h>
-#include <fstream.h>
+#include <iostream>
+#include <iomanip>
+#include <fstream>
 
 #include <string>
 //#include "Visualization/colormap.h"
@@ -33,7 +33,7 @@
 #include "GraphicsDevice/graphics-device.h"
 
 GraphicsDevice OOGLDevice(std::ostream& out) {
-  out << setprecision(9);
+  out << std::setprecision(9);
   return GraphicsDevice(new oogl(&out));
 }
  
@@ -42,13 +42,13 @@ GraphicsDevice OOGLDevice(const std::string& name) {
   std::string name1 = name + ".oogl";
   // should be replaced by FileDevice or so.
   std::ofstream* out = new std::ofstream(name1.c_str());
-  (*out) << setprecision(9);
+  (*out) << std::setprecision(9);
   return GraphicsDevice(new oogl(out));
 }
 
-oogl::oogl(ostream* out) : rendering_language(out) 
+oogl::oogl(std::ostream* out) : rendering_language(out) 
 {
-  cerr << "output: OOGL\n";
+  std::cerr << "output: OOGL\n";
   the_stream() << "(normalization world keep)\n";
   //       << "(bbox-draw world no)\n";
 }

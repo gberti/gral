@@ -51,10 +51,10 @@ void geom_word::write_geom_to(rendering_language& L) const
   double x_shrink=x_length*1.0/(1.05*max);      // skale in x-direction
   double y_shrink=y_length*1.0/(1.15*ycount);   // skale in y-direction
   if (x_shrink==0) {
-    cerr << "No X-LENGTH <using standards> \n";
+    std::cerr << "No X-LENGTH <using standards> \n";
   }
   if (y_shrink==0) {
-    cerr << "No Y-LENGTH <using standards> \n";
+    std::cerr << "No Y-LENGTH <using standards> \n";
   }
   // correture of shrink-factors
   // if ((x_shrink*1.0/y_shrink < 1.2) || (x_shrink*1.0/y_shrink > 2.8)){

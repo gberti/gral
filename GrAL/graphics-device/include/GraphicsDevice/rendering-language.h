@@ -80,7 +80,7 @@ private:
   copy_on_write_ptr<rlang_internals>  state;
   //  virtual void empty_buffer();
 protected:
-  ostream& the_stream();
+  std::ostream& the_stream();
 
   //! return accumulated Trafos that couldn't be handled directly
   Transformation ToDoTrafo() const; 
@@ -92,7 +92,7 @@ protected:
   bool IsToDoTrafo() const; 
 public:
   rendering_language(): state(0) {}
-  rendering_language(ostream* out);
+  rendering_language(std::ostream* out);
   virtual ~rendering_language();
   virtual rendering_language* clone() const = 0;
 

@@ -14,7 +14,7 @@
 class rgb_color;
 class GraphicsDevice;
 
-extern GraphicsDevice OOGLDevice(ostream&);
+extern GraphicsDevice OOGLDevice(std::ostream&);
 extern GraphicsDevice OOGLDevice(const std::string& name);
 
 
