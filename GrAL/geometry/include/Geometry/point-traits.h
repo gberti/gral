@@ -10,7 +10,9 @@
 
 // must be specialized
 template<class P>
-struct point_traits;
+struct point_traits {};
+
+// TODO: tags system is a mess!
 
 struct fixed_dimension_tag    {};
 struct variable_dimension_tag {};
@@ -24,9 +26,8 @@ struct tag4D : public fixed_dimension_tag {};
 
 template<unsigned N>
 struct dim_tag {
-  // not quite true, but who cares. 
-  // Important cases are specialized below.
-  typedef tag_unknown_dim dimension_tag;
+  enum { dim = N};
+  typedef fixed_dimension_tag dimension_tag;
 };
 
 template<> struct dim_tag<1> { typedef tag1D dimension_tag;};
@@ -38,7 +39,20 @@ template<> struct dim_tag<4> { typedef tag4D dimension_tag;};
 template<class POINT>
 struct point_traits_base 
 {
- typedef tag_unknown_dim dimension_tag;
+  typedef tag_unknown_dim dimension_tag;
+  typedef POINT Ptype;
+};
+
+// TODO: let all point_traits for fixed dimension types inherit this.
+template<class POINT, unsigned DIM>
+struct point_traits_fixed_dim 
+  : public point_traits_base<POINT>
+{
+  typedef dim_tag<N>                dimension_tag; 
+  static unsigned Dim()             { return DIM;}
+  static unsigned Dim(Ptype const&) { return DIM;}
+  static void     ConstructWithDim(unsigned d, Ptype&)
+    { REQUIRE(d == DIM, "Cannot construct: d = " << d << "; DIM = " << DIM,1);}
 };
 
 template<class REAL>
@@ -68,6 +82,42 @@ struct point_traits<double>
   : public real_point_traits<double> {};
 
 
+
+template<class ARRAY, class COMPONENT, unsigned DIM>
+struct point_traits_fixed_size_array :
+  public point_traits_base<ARRAY>
+{
+  typedef ARRAY          Ptype;
+  typedef COMPONENT      component_type;
+  typedef component_type value_type;
+  typedef dim_tag<DIM>::dimension_tag dimension_tag;
+
+  static unsigned Dim(const Ptype&) { return DIM;}
+  static unsigned Dim() { return DIM;}
+  
+  static int LowerIndex()             { return 0;}
+  static int LowerIndex(Ptype const&) { return 0;}
+  static int UpperIndex()             { return DIM-1;}
+  static int UpperIndex(Ptype const&) { return DIM-1;}
+
+
+  static Ptype Origin() {
+    Ptype P; 
+    for(int i = 0; i < DIM; ++i) p[i] = component_type(0.0);
+  }
+  static Ptype Origin(unsigned) { return Origin();}
+
+  // should branch on DIM here.
+  static component_type  x(const Ptype& p) {return p[0];}
+  static component_type& x(      Ptype& p) {return p[0];}
+  static component_type  y(const Ptype& p) {return p[1];}
+  static component_type& y(      Ptype& p) {return p[1];}
+  static component_type  z(const Ptype& p) {return p[2];}
+  static component_type& z(      Ptype& p) {return p[2];}
+
+};
+
+
 //----------------------------------------------------------------
 //
 // void assign_point(P & p, Q const& q);
@@ -85,9 +135,16 @@ inline void assign_point(P & p, Q const& q)
 {
  typedef point_traits<P> ptP;
  typedef point_traits<Q> ptQ;
+
  // if variable dimension: adapt dim of p, else this is a no-op.
  ptP::ConstructWithDim(ptQ::Dim(q), p); 
 
+ 
+ REQUIRE( (ptP::Dim(p) == ptQ::Dim(q)), 
+	  "Cannot assign points of different dimension!" 
+	  << "(dim(p) = " << ptP::Dim(p)  << ", "
+	  << "(dim(q) = " << ptQ::Dim(q), 1);
+ 
  int iq = ptQ::LowerIndex(q); 
  int ip = ptP::LowerIndex(p);  
  for(; iq <= ptQ::UpperIndex(q); ++ip, ++iq)
@@ -103,7 +160,12 @@ inline void assign_point(P & p, T const* b, T const* e)
 
   // if variable dimension: adapt dim of p, else this is a no-op.
   ptP::ConstructWithDim(e-b,p);
-  
+
+  REQUIRE( ptP::Dim(p) == e-b, 
+	   "Cannot assign points of different dimension!" 
+	  << "(dim(p) = " << ptP::Dim(p)  << ", "
+	  << "e-p = " <<  e-p, 1);
+
   int ip = ptP::LowerIndex(p);  
   for(; b < e; ++ip, ++b)
     p[ip] = *b; 
