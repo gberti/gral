@@ -26,6 +26,25 @@ namespace hierarchical {
   }
 
   template<class HGRID, class GE>
+  template<class T>
+  hier_grid_table<HGRID,GE>::hier_grid_table(typename hier_grid_table<HGRID,GE>::hier_grid_type const& gg,
+					     T const& t)
+    : base(&gg),  g(&gg)
+  {
+    init(*g, t);
+  }
+
+  template<class HGRID, class GE>
+  template<class T>
+  hier_grid_table<HGRID,GE>::hier_grid_table(ref_ptr<typename hier_grid_table<HGRID,GE>::hier_grid_type const> gg,
+					     T const& t)
+    : base(gg),  g(gg)
+  {
+    init(*g, t);
+  }
+
+
+  template<class HGRID, class GE>
   void hier_grid_table<HGRID,GE>::set_grid(typename hier_grid_table<HGRID,GE>::hier_grid_type const& gg) 
   {
     if(g != 0)
@@ -89,6 +108,17 @@ namespace hierarchical {
       // FIXME: do not copy large grid entities!
       entities.push_back(grid_entity_type(* g->FlatGrid(lev)));
   }
+
+
+  template<class HGRID, class GE>
+  template<class T>
+  void hier_grid_table<HGRID,GE>::init(typename hier_grid_table<HGRID,GE>::hier_grid_type const& gg, T const& t)
+  {
+    entities.init_begin_index(g->table()->begin_index()); 
+    for(level_handle lev = g->coarsest_level(); lev <= g->finest_level(); ++lev)
+      // FIXME: do not copy large grid entities!
+      entities.push_back(grid_entity_type(* g->FlatGrid(lev), t));
+  } 
 
   template<class HGRID, class GE>
   typename  hier_grid_table<HGRID,GE>::level_handle

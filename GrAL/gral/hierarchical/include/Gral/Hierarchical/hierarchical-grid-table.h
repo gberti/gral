@@ -68,9 +68,12 @@ namespace hierarchical {
     hier_grid_table();
     hier_grid_table(hier_grid_type const& gg);
     hier_grid_table(ref_ptr<hier_grid_type const> gg);
+ 
     // pass additional initializer as constructor arg. to grid entity levels
-    //template<class T>
-    //hier_grid_table(hier_grid_type const& gg, T const& initializer);
+    template<class T>
+    hier_grid_table(hier_grid_type const& gg, T const& initializer);
+    template<class T>
+    hier_grid_table(ref_ptr<hier_grid_type const> gg, T const& initializer);
 
     void set_grid  (hier_grid_type const&         gg);
     void set_grid  (ref_ptr<hier_grid_type const> gg);
@@ -79,8 +82,13 @@ namespace hierarchical {
     //! get in sync with grid: add/remove missing/superfluous level
     void update();
 
+    //! write access to grid entity
     reference       operator[](level_handle lev)       { return entities[lev];}
+    //! read access to grid entity
     const_reference operator()(level_handle lev) const { return entities(lev);}
+
+    //! True if number of levels is zero.
+    bool empty() const { return entities.empty();}
 
     //! get the coarsest (root) level
     level_handle  coarsest_level() const { return level_handle(entities.begin_index());}
@@ -95,6 +103,8 @@ namespace hierarchical {
  
   private:
     void init(hier_grid_type const& gg);
+    template<class T>
+    void init(hier_grid_type const& gg, T const& t);
   public:
     level_handle add_coarser_level();
     level_handle add_finer_level();
