@@ -31,14 +31,18 @@ public:
   geometric_field(geom_type const& geo,
 		  function_type const& ff) : the_geom(geo), f(ff)
   {
-    loc = ref_ptr<point_locator_type>(new point_locator_type(TheGrid(), TheGeometry()));
+    loc.make_own(new point_locator_type(TheGrid(), TheGeometry()));
     loc->init();
   }
 
   result_type operator()(coord_type X) const 
   { 
+    typedef typename point_locator_type::location_result_type loc_result_type;
+    loc_result_type res = loc->locate(X);
+    if(res.tag() == loc_result_type::outside_tag)
+      std::cout << " field(" << X << "): No cell found!" << std::endl; 
     Cell c = loc->locate(X).TheCell();
-    // std::cout << "X=" << X << " in cell " << c.handle() << std::endl;
+    REQUIRE_ALWAYS(c.valid(), " X=" << X << " t=" << res.tag() << " c=" << c.handle() << "," << & (c.TheGrid()),1);
     return (*interpolator(c))(X);
   }
   result_type operator()(Vertex v) const { return (*f)(v);}
@@ -55,6 +59,7 @@ public:
 
   ref_ptr<geom_type const> TheGeometry() const { return the_geom;}
   ref_ptr<grid_type const> TheGrid()     const { return ref_ptr<grid_type const>(the_geom->TheGrid());}
+  ref_ptr<point_locator_type const> TheLocator() const { return loc;}
 };
 
 
