@@ -2,8 +2,8 @@
 // $LICENSE
 
 
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>
+#include <fstream>
 #include <string>
 
 #include "Utility/pre-post-conditions.h"
@@ -14,6 +14,7 @@
 */
 
 int main(int argc, char* argv[]) {
+  using namespace std;
 
   typedef  bijective_mapping<int,int>::domain_type domain_type;
   typedef  bijective_mapping<int,int>::range_type  range_type;
@@ -44,22 +45,22 @@ int main(int argc, char* argv[]) {
   bijective_mapping<int,int> m2 = m1;
   bijective_mapping<int,int> i2 = m2.inverse();
 
-  cerr << "mf1:\n"; write_bm(mf1,cerr); cerr << '\n'; 
-  cerr << "mf2:\n"; write_bm(mf2,cerr); cerr << '\n'; 
+  cout << "mf1:\n"; write_bm(mf1,cout); cout << '\n'; 
+  cout << "mf2:\n"; write_bm(mf2,cout); cout << '\n'; 
 
-  cerr << "m1:\n"; write_bm(m1,cerr); cerr << '\n'; 
-  cerr << "i1:\n"; write_bm(i1,cerr); cerr << '\n'; 
-  cerr << "m2:\n"; write_bm(m2,cerr); cerr << '\n'; 
-  cerr << "i2:\n"; write_bm(i2,cerr); cerr << '\n'; 
+  cout << "m1:\n"; write_bm(m1,cout); cout << '\n'; 
+  cout << "i1:\n"; write_bm(i1,cout); cout << '\n'; 
+  cout << "m2:\n"; write_bm(m2,cout); cout << '\n'; 
+  cout << "i2:\n"; write_bm(i2,cout); cout << '\n'; 
 
-  cerr << "domain(m1): ";
+  cout << "domain(m1): ";
   for(domain_iter d1 = m1.domain().begin(); ! (d1 == m1.domain().end()); ++d1)
-    cerr << *d1 << ' ';
-  cerr << '\n';
-  cerr << "range(m1): ";
+    cout << *d1 << ' ';
+  cout << '\n';
+  cout << "range(m1): ";
   for(range_iter r1 = m1.range().begin();  !(r1 == m1.range().end()); ++r1)
-    cerr << *r1 << ' ';
-  cerr << '\n';
+    cout << *r1 << ' ';
+  cout << '\n';
 
   REQUIRE_ALWAYS( (m1.domain().size() == m1.range().size()), "|domain| != |range|\n",1);
   REQUIRE_ALWAYS( (i1.domain().size() == i1.range().size()), "|domain| != |range|\n",1);
