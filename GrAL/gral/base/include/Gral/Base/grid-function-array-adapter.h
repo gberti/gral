@@ -28,18 +28,105 @@
     - the number of values of type T associated to each element
  */
 
+namespace gf_array_adapter {
 
+  template<class T, unsigned N>
+  class value_type;
+
+  template<class T, unsigned N>
+  class value_proxy {
+    T* f; // start address of xyz values of a vertex
+    friend class value_type<T,N>;
+  public:
+    value_proxy(T* ff) : f(ff) {}
+    inline void operator=(value_type<T,N> const& frc);
+    
+    T const& operator()(int i) const { check_range(i);  return f[i]; }
+    T const& operator[](int i) const { check_range(i);  return f[i]; }
+    T      & operator[](int i)       { check_range(i);  return f[i]; }
+
+    void check_range(int i) const {
+      REQUIRE( 0 <= i && i < N, "i = " << i << " out of range!\n",1);
+    }
+  };
+
+  template<class T, unsigned N>
+  class value_type : public array_operators<value_type<T,N>, N> {
+    T f[N];
+  public:
+    value_type() {}
+    value_type(value_proxy<T,N> p)            { init(p.f);}
+    value_type(T const* f)               { init(f);}
+    value_type& operator=(value_proxy<T,N> p) { init(p.f); return *this;}
+
+
+    T const& operator()(int i) const { check_range(i); return f[i];}
+    T const& operator[](int i) const { check_range(i); return f[i];}
+    T      & operator[](int i)       { check_range(i); return f[i];}
+
+    void check_range(int i) const {
+      REQUIRE( 0 <= i && i < (int)N, "i = " << i << " out of range!\n",1);
+    }
+
+  private:
+    void init(T const* p)
+      { for(int i = 0; i < (int)N; ++i) f[i] = p[i];}
+  };
+
+  template<class T, unsigned N>
+  inline void value_proxy<T,N>::operator=(value_type<T,N> const& p)
+  { for(int i = 0; i < N; ++i) f[i] = p[i]; }
+
+  template<class T, unsigned N>
+  inline
+  std::ostream& operator<<(std::ostream& out, value_type<T,N> const&v)
+  {
+    for(unsigned i = 0; i < N; ++i)
+      out << v(i) << ' ';
+    return out;
+  }
+
+} // namespace gf_array_adapter
+
+//! specialization of point_traits<>
+template<class T, unsigned N>
+struct point_traits<gf_array_adapter::value_type<T,N> > 
+  : public point_traits_fixed_size_array<gf_array_adapter::value_type<T,N>, T, N>
+{};
+        
+
+/*! \brief Adapter for plain arrays to grid function interface
+   
+    The array is assumed to have the following layout:
+    \f$ t_{0,1}, t_{0,2}, \ldots t_{0,N}, \ldots t_{M-1,1}, \ldots t_{M-1,N} \f$
+    where \f$ M \f$ is the number of elements of the underlying grid of type \ELEMENT,
+    and  \f$ t_{i-1,1}, t_{i-1,2}, \ldots t_{i-1,N} \f$ is the vector of \f$ N \f$ items
+    of type \c T associated to element \f$ i \f$.
+
+    Example:
+    \code
+    Grid g; // adapter to user grid DS
+    double * x   = new double[  num_of_vertices]; // user grid function on vertices
+    double * geo = new double[2*num_of_vertices]; // 2D user geometry
+    grid_function_array_adapter Gf1<Grid,double,1>(g,x);
+    grid_function_array_adapter Geo<Grid,double,2>(g,geo);
+    \endcode
+
+    \todo types \c iterator, \c const_iterator 
+*/
 template<class ELEMENT, class T, unsigned N = 1>
 class grid_function_array_adapter 
 {
   typedef grid_function_array_adapter<ELEMENT,T,N> self;
 public:
-  typedef ELEMENT element_type;
+  typedef ELEMENT                      element_type;
   typedef element_traits<element_type> et;
   typedef typename et::grid_type       grid_type;
   typedef typename et::ElementIterator ElementIterator;
 
-  typedef size_t size_type;
+  typedef gf_array_adapter::value_type<T,N>  value_type;
+  typedef gf_array_adapter::value_proxy<T,N> value_proxy;
+  typedef size_t                             size_type;
 private: 
   grid_type const* g;
 
@@ -66,45 +153,6 @@ public:
   size_type size() const { return et::size(*g);}
 
 
-  class value_type;
-  class value_proxy {
-    T* f; // start address of xyz values of a vertex
-    friend class value_type;
-  public:
-    value_proxy(T* ff) : f(ff) {}
-    inline void operator=(value_type const& frc);
-    
-    T const& operator()(int i) const { check_range(i);  return f[i]; }
-    T const& operator[](int i) const { check_range(i);  return f[i]; }
-    T      & operator[](int i)       { check_range(i);  return f[i]; }
-
-    void check_range(int i) const {
-      REQUIRE( 0 <= i && i < N, "i = " << i << " out of range!\n",1);
-    }
-  };
-
-  class value_type : public array_operators<value_type, N> {
-    T f[N];
-  public:
-    value_type() {}
-    value_type(value_proxy p)            { init(p.f);}
-    value_type(T const* f)               { init(f);}
-    value_type& operator=(value_proxy p) { init(p.f); return *this;}
-
-
-    T const& operator()(int i) const { check_range(i); return f[i];}
-    T const& operator[](int i) const { check_range(i); return f[i];}
-    T      & operator[](int i)       { check_range(i); return f[i];}
-
-    void check_range(int i) const {
-      REQUIRE( 0 <= i && i < (int)N, "i = " << i << " out of range!\n",1);
-    }
-
-  private:
-    void init(T const* p)
-      { for(int i = 0; i < (int)N; ++i) f[i] = p[i];}
-  };
-  typedef value_type value_t;
 
   value_proxy operator[](element_type const& v) 
     { return value_proxy(f + N*v.handle());}
@@ -112,31 +160,5 @@ public:
     { return value_type(f + N*v.handle());}
 
 };
-
-
-template<class ELEMENT, class T, unsigned N>
-inline void
-grid_function_array_adapter<ELEMENT,T,N>
-::value_proxy::operator=
-(typename grid_function_array_adapter<ELEMENT,T,N>::value_type const& p)
-{ for(int i = 0; i < N; ++i) f[i] = p[i]; }
-
-template<class ELEMENT, class T, unsigned N>
-struct point_traits<typename grid_function_array_adapter<ELEMENT,T,N>::value_type> 
-  : public point_traits_fixed_size_array
-        <typename grid_function_array_adapter<ELEMENT,T,N>::value_type,T,N> {};
-
-
-template<class ELEMENT, class T, unsigned N>
-inline
-std::ostream& operator<<
-(std::ostream& out,
- typename grid_function_array_adapter<ELEMENT,T,N>::
- value_type<ELEMENT,T,N>  const &v)
-{
- for(unsigned i = 0; i < N; ++i)
-   out << v(i) << ' ';
- return out;
-}
 
 #endif
