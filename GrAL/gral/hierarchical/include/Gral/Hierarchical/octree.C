@@ -27,6 +27,13 @@ namespace octree {
    active_range.init(levels,false);
    active_range.set_default(false);
   }
+  template<class Grid, class GT>
+  Octree<Grid, GT>::Octree(ref_ptr<typename Octree<Grid, GT>::hier_grid_type const> H)
+    : levels(*H)
+  {
+   active_range.init(levels,false);
+   active_range.set_default(false);
+  }
 
  template<class Grid, class GT>
  void Octree<Grid, GT>::init(typename Octree<Grid, GT>::flat_grid_type const& C0,
