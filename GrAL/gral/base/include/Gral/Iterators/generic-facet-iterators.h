@@ -202,6 +202,7 @@ namespace generic_facet {
       typedef typename base::EdgeOnFacetIterator   EdgeOnFacetIterator;
       typedef typename base::grid_type        grid_type;
       typedef typename base::vtuple_type      vtuple_type;
+      typedef typename base::archCell         archCell;
     private:
       facet_on_cell_iterator<gt> fc;
     public:
@@ -217,6 +218,7 @@ namespace generic_facet {
       unsigned NumOfEdges() const { c_(); return (*fc.lf).NumOfEdges();}
 
 
+      archCell          ArchetypeCell() const { c_(); return fc.ArchetypeCell();} 	
       grid_type  const& TheGrid() const { c_(); return fc.TheGrid();}
       facet_handle handle() const { c_(); return fc.handle();}
 
