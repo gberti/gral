@@ -52,7 +52,7 @@ public:
   coord_type Start()  const { return g.coord(_e.V1());}
   coord_type End()    const { return g.coord(_e.V2());}
   coord_type center() const { return (0.5*(Start()+End()));}
-  double     length() const { return( algebra::norm(Start()-End()));} 
+  double     length() const { return( algebra::norm_2(Start()-End()));} 
 
   coord_type operator()(double t) const { return ((1-t)*Start() + t*End());}
 private:
