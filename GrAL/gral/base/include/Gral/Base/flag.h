@@ -27,6 +27,7 @@ class flag {};
 // 2D case
 template<class GRID>
 class flag<GRID, grid_dim_tag<2> > { 
+public:
   typedef GRID             grid_type;
   typedef grid_types<GRID> gt;
   typedef typename gt::Vertex Vertex;  
@@ -67,6 +68,7 @@ public:
 // 3D case
 template<class GRID>
 class flag<GRID, grid_dim_tag<3> > { 
+public:
   typedef GRID             grid_type;
   typedef grid_types<GRID> gt;
   typedef typename gt::Vertex Vertex;  
