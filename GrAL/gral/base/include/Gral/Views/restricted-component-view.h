@@ -4,7 +4,7 @@
 // $LICENSE_NEC
 
 #include "Gral/Base/common-grid-basics.h"
-#include "Gral/Base/archetypes.h"
+#include "Gral/Base/archetypes-from-base.h"
 #include "Gral/Subranges/enumerated-subrange.h"
 #include "Gral/Base/grid-function-hash.h"
 
@@ -37,7 +37,7 @@ namespace restricted_grid_component_view {
   class vertex_on_cell_iterator;
 
   template<class GRID, class INSIDE_PRED, class GT>
-  struct grid_types_grid_view : public archetype_grid_types<GT> {
+  struct grid_types_grid_view : public archetypes_from_base_grid_types<GT> {
     typedef GRID        grid_type;
 
     typedef typename  GT::vertex_handle vertex_handle;
@@ -64,7 +64,7 @@ namespace restricted_grid_component_view {
 
   */
   template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
-  class grid_view : public archetypes<grid_view<GRID, INSIDE_PRED, GT>, GRID, GT>  {
+  class grid_view : public archetypes_from_base<grid_view<GRID, INSIDE_PRED, GT>, GRID, GT>  {
    
     public:
       typedef GRID        grid_type;

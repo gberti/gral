@@ -9,7 +9,7 @@
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 
-#include "Gral/Base/archetypes.h"
+#include "Gral/Base/archetypes-from-base.h"
 #include "Gral/Base/mapped-iterators.h"
 #include "Gral/Base/map-element-iter-names.h"
 #include "Gral/Base/grid-functors.h"
@@ -557,10 +557,10 @@ public:
 //----------------------------------------------------------------
 
 template<class Grid>
-class enumerated_subrange : public archetypes<enumerated_subrange<Grid>, Grid>  {
+class enumerated_subrange : public archetypes_from_base<enumerated_subrange<Grid>, Grid>  {
   typedef enumerated_subrange<Grid> self;
 public:
-  using archetypes<enumerated_subrange<Grid>, Grid>::handle;
+  using archetypes_from_base<enumerated_subrange<Grid>, Grid>::handle;
 
   //------- referenced types ------------------
   typedef Grid grid_type;
@@ -708,10 +708,10 @@ public:
   \todo Cannot be used to copy 3D grids from it (missing archetype stuff)
 */
 template<class Grid>
-class enumerated_subrange_ref : public archetypes<enumerated_subrange_ref<Grid>, Grid>  {
+class enumerated_subrange_ref : public archetypes_from_base<enumerated_subrange_ref<Grid>, Grid>  {
   typedef enumerated_subrange_ref<Grid> self;
 public:
-  using archetypes<enumerated_subrange_ref<Grid>, Grid>::handle;
+  using archetypes_from_base<enumerated_subrange_ref<Grid>, Grid>::handle;
   //------- referenced types ------------------
   typedef Grid grid_type;
   typedef grid_types<Grid> gt;
