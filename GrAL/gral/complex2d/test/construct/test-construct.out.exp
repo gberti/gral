@@ -78,7 +78,7 @@ e1  = Flip(v1,e):             3 -> 4;  e2  = Flip(v2,e):             1 -> 0
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 1;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 1
       outward normal = 0 1
 
-  Edges:   No. 1 : (0 0,0.5 0),  No. 2 : (0.5 0,0.5 0.5),  No. 3 : (0.5 0.5,0 0.5),  No. 4 : (0 0.5,0 0), 
+  Edges:   No. 0 : (0 0,0.5 0),  No. 1 : (0.5 0,0.5 0.5),  No. 2 : (0.5 0.5,0 0.5),  No. 3 : (0 0.5,0 0), 
 Cell 2 has volume 0.25; 4  Vertices:  1 4 5 2  and 2 Nbs': 
     1 :[ Edge(*c,*nb) : 1 -> 4;  Edge(*nb,*c) : 4 -> 1;  Edge(nb) : 1 -> 4]
 CyclicPred(nb) : 4 CyclicSucc(nb) : 4 v1: 1 v2: 4 
@@ -93,7 +93,7 @@ e1  = Flip(v1,e):             1 -> 4;  e2  = Flip(v2,e):             5 -> 2
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 5;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 5
       outward normal = 1 -0
 
-  Edges:   No. 1 : (0 0.5,0.5 0.5),  No. 2 : (0.5 0.5,0.5 1),  No. 3 : (0.5 1,0 1),  No. 4 : (0 1,0 0.5), 
+  Edges:   No. 0 : (0 0.5,0.5 0.5),  No. 1 : (0.5 0.5,0.5 1),  No. 2 : (0.5 1,0 1),  No. 3 : (0 1,0 0.5), 
 Cell 3 has volume 0.25; 4  Vertices:  3 6 7 4  and 2 Nbs': 
     4 :[ Edge(*c,*nb) : 7 -> 4;  Edge(*nb,*c) : 4 -> 7;  Edge(nb) : 7 -> 4]
 CyclicPred(nb) : 1 CyclicSucc(nb) : 1 v1: 7 v2: 4 
@@ -108,7 +108,7 @@ e1  = Flip(v1,e):             7 -> 4;  e2  = Flip(v2,e):             3 -> 6
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 3;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 3
       outward normal = -1 -0
 
-  Edges:   No. 1 : (0.5 0,1 0),  No. 2 : (1 0,1 0.5),  No. 3 : (1 0.5,0.5 0.5),  No. 4 : (0.5 0.5,0.5 0), 
+  Edges:   No. 0 : (0.5 0,1 0),  No. 1 : (1 0,1 0.5),  No. 2 : (1 0.5,0.5 0.5),  No. 3 : (0.5 0.5,0.5 0), 
 Cell 4 has volume 0.25; 4  Vertices:  4 7 8 5  and 2 Nbs': 
     3 :[ Edge(*c,*nb) : 4 -> 7;  Edge(*nb,*c) : 7 -> 4;  Edge(nb) : 4 -> 7]
 CyclicPred(nb) : 2 CyclicSucc(nb) : 2 v1: 4 v2: 7 
@@ -123,7 +123,7 @@ e1  = Flip(v1,e):             8 -> 5;  e2  = Flip(v2,e):             4 -> 7
 e12 = Flip(e1.V2(),e1) ( == e)5 -> 4;  e21 = Flip(e2.V1(),e2) ( == e)5 -> 4
       outward normal = -1 -0
 
-  Edges:   No. 1 : (0.5 0.5,1 0.5),  No. 2 : (1 0.5,1 1),  No. 3 : (1 1,0.5 1),  No. 4 : (0.5 1,0.5 0.5), 
+  Edges:   No. 0 : (0.5 0.5,1 0.5),  No. 1 : (1 0.5,1 1),  No. 2 : (1 1,0.5 1),  No. 3 : (0.5 1,0.5 0.5), 
 Edge [0 <-> 3]    [0 0 <-> 0.5 0]  adj. cells: 1,-1   volume = 0.5 normal = -0 1
 Edge [1 <-> 0]    [0 0.5 <-> 0 0]  adj. cells: 1,-1   volume = 0.5 normal = 1 0
 Edge [1 <-> 4]    [0 0.5 <-> 0.5 0.5]  adj. cells: 2,1   volume = 0.5 normal = -0 1
@@ -200,7 +200,7 @@ e1  = Flip(v1,e):             3 -> 4;  e2  = Flip(v2,e):             1 -> 0
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 1;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 1
       outward normal = 0 1
 
-  Edges:   No. 1 : (0 0,0.5 0),  No. 2 : (0.5 0,0.5 0.5),  No. 3 : (0.5 0.5,0 0.5),  No. 4 : (0 0.5,0 0), 
+  Edges:   No. 0 : (0 0,0.5 0),  No. 1 : (0.5 0,0.5 0.5),  No. 2 : (0.5 0.5,0 0.5),  No. 3 : (0 0.5,0 0), 
 Cell 2 has volume 0.25; 4  Vertices:  1 4 5 2  and 2 Nbs': 
     1 :[ Edge(*c,*nb) : 1 -> 4;  Edge(*nb,*c) : 4 -> 1;  Edge(nb) : 1 -> 4]
 CyclicPred(nb) : 4 CyclicSucc(nb) : 4 v1: 1 v2: 4 
@@ -215,7 +215,7 @@ e1  = Flip(v1,e):             1 -> 4;  e2  = Flip(v2,e):             5 -> 2
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 5;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 5
       outward normal = 1 -0
 
-  Edges:   No. 1 : (0 0.5,0.5 0.5),  No. 2 : (0.5 0.5,0.5 1),  No. 3 : (0.5 1,0 1),  No. 4 : (0 1,0 0.5), 
+  Edges:   No. 0 : (0 0.5,0.5 0.5),  No. 1 : (0.5 0.5,0.5 1),  No. 2 : (0.5 1,0 1),  No. 3 : (0 1,0 0.5), 
 Cell 3 has volume 0.25; 4  Vertices:  3 6 7 4  and 2 Nbs': 
     4 :[ Edge(*c,*nb) : 7 -> 4;  Edge(*nb,*c) : 4 -> 7;  Edge(nb) : 7 -> 4]
 CyclicPred(nb) : 1 CyclicSucc(nb) : 1 v1: 7 v2: 4 
@@ -230,7 +230,7 @@ e1  = Flip(v1,e):             7 -> 4;  e2  = Flip(v2,e):             3 -> 6
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 3;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 3
       outward normal = -1 -0
 
-  Edges:   No. 1 : (0.5 0,1 0),  No. 2 : (1 0,1 0.5),  No. 3 : (1 0.5,0.5 0.5),  No. 4 : (0.5 0.5,0.5 0), 
+  Edges:   No. 0 : (0.5 0,1 0),  No. 1 : (1 0,1 0.5),  No. 2 : (1 0.5,0.5 0.5),  No. 3 : (0.5 0.5,0.5 0), 
 Cell 4 has volume 0.25; 4  Vertices:  4 7 8 5  and 2 Nbs': 
     3 :[ Edge(*c,*nb) : 4 -> 7;  Edge(*nb,*c) : 7 -> 4;  Edge(nb) : 4 -> 7]
 CyclicPred(nb) : 2 CyclicSucc(nb) : 2 v1: 4 v2: 7 
@@ -245,7 +245,7 @@ e1  = Flip(v1,e):             8 -> 5;  e2  = Flip(v2,e):             4 -> 7
 e12 = Flip(e1.V2(),e1) ( == e)5 -> 4;  e21 = Flip(e2.V1(),e2) ( == e)5 -> 4
       outward normal = -1 -0
 
-  Edges:   No. 1 : (0.5 0.5,1 0.5),  No. 2 : (1 0.5,1 1),  No. 3 : (1 1,0.5 1),  No. 4 : (0.5 1,0.5 0.5), 
+  Edges:   No. 0 : (0.5 0.5,1 0.5),  No. 1 : (1 0.5,1 1),  No. 2 : (1 1,0.5 1),  No. 3 : (0.5 1,0.5 0.5), 
 Edge [0 <-> 3]    [0 0 <-> 0.5 0]  adj. cells: 1,-1   volume = 0.5 normal = -0 1
 Edge [1 <-> 0]    [0 0.5 <-> 0 0]  adj. cells: 1,-1   volume = 0.5 normal = 1 0
 Edge [1 <-> 4]    [0 0.5 <-> 0.5 0.5]  adj. cells: 2,1   volume = 0.5 normal = -0 1
@@ -322,7 +322,7 @@ e1  = Flip(v1,e):             3 -> 4;  e2  = Flip(v2,e):             1 -> 0
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 1;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 1
       outward normal = 0 1
 
-  Edges:   No. 1 : (0 0,0.5 0),  No. 2 : (0.5 0,0.5 0.5),  No. 3 : (0.5 0.5,0 0.5),  No. 4 : (0 0.5,0 0), 
+  Edges:   No. 0 : (0 0,0.5 0),  No. 1 : (0.5 0,0.5 0.5),  No. 2 : (0.5 0.5,0 0.5),  No. 3 : (0 0.5,0 0), 
 Cell 2 has volume 0.25; 4  Vertices:  1 4 5 2  and 2 Nbs': 
     1 :[ Edge(*c,*nb) : 1 -> 4;  Edge(*nb,*c) : 4 -> 1;  Edge(nb) : 1 -> 4]
 CyclicPred(nb) : 4 CyclicSucc(nb) : 4 v1: 1 v2: 4 
@@ -337,7 +337,7 @@ e1  = Flip(v1,e):             1 -> 4;  e2  = Flip(v2,e):             5 -> 2
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 5;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 5
       outward normal = 1 -0
 
-  Edges:   No. 1 : (0 0.5,0.5 0.5),  No. 2 : (0.5 0.5,0.5 1),  No. 3 : (0.5 1,0 1),  No. 4 : (0 1,0 0.5), 
+  Edges:   No. 0 : (0 0.5,0.5 0.5),  No. 1 : (0.5 0.5,0.5 1),  No. 2 : (0.5 1,0 1),  No. 3 : (0 1,0 0.5), 
 Cell 3 has volume 0.25; 4  Vertices:  3 6 7 4  and 2 Nbs': 
     4 :[ Edge(*c,*nb) : 7 -> 4;  Edge(*nb,*c) : 4 -> 7;  Edge(nb) : 7 -> 4]
 CyclicPred(nb) : 1 CyclicSucc(nb) : 1 v1: 7 v2: 4 
@@ -352,7 +352,7 @@ e1  = Flip(v1,e):             7 -> 4;  e2  = Flip(v2,e):             3 -> 6
 e12 = Flip(e1.V2(),e1) ( == e)4 -> 3;  e21 = Flip(e2.V1(),e2) ( == e)4 -> 3
       outward normal = -1 -0
 
-  Edges:   No. 1 : (0.5 0,1 0),  No. 2 : (1 0,1 0.5),  No. 3 : (1 0.5,0.5 0.5),  No. 4 : (0.5 0.5,0.5 0), 
+  Edges:   No. 0 : (0.5 0,1 0),  No. 1 : (1 0,1 0.5),  No. 2 : (1 0.5,0.5 0.5),  No. 3 : (0.5 0.5,0.5 0), 
 Cell 4 has volume 0.25; 4  Vertices:  4 7 8 5  and 2 Nbs': 
     3 :[ Edge(*c,*nb) : 4 -> 7;  Edge(*nb,*c) : 7 -> 4;  Edge(nb) : 4 -> 7]
 CyclicPred(nb) : 2 CyclicSucc(nb) : 2 v1: 4 v2: 7 
@@ -367,7 +367,7 @@ e1  = Flip(v1,e):             8 -> 5;  e2  = Flip(v2,e):             4 -> 7
 e12 = Flip(e1.V2(),e1) ( == e)5 -> 4;  e21 = Flip(e2.V1(),e2) ( == e)5 -> 4
       outward normal = -1 -0
 
-  Edges:   No. 1 : (0.5 0.5,1 0.5),  No. 2 : (1 0.5,1 1),  No. 3 : (1 1,0.5 1),  No. 4 : (0.5 1,0.5 0.5), 
+  Edges:   No. 0 : (0.5 0.5,1 0.5),  No. 1 : (1 0.5,1 1),  No. 2 : (1 1,0.5 1),  No. 3 : (0.5 1,0.5 0.5), 
 Edge [0 <-> 3]    [0 0 <-> 0.5 0]  adj. cells: 1,-1   volume = 0.5 normal = -0 1
 Edge [1 <-> 0]    [0 0.5 <-> 0 0]  adj. cells: 1,-1   volume = 0.5 normal = 1 0
 Edge [1 <-> 4]    [0 0.5 <-> 0.5 0.5]  adj. cells: 2,1   volume = 0.5 normal = -0 1
