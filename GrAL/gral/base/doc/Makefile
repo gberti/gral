@@ -45,10 +45,10 @@ make-links:
 
 clean: stdclean
 	rm -f *.dvi *.log *.aux *~ 
-	(cd hyperlatex; gmake clean)
+	(cd hyperlatex; $(MAKE) clean)
 
 realclean: clean
 	rm -rf hyperlatex/html
-	(cd hyperlatex; gmake realclean)
+	(cd hyperlatex; $(MAKE) realclean)
 
 

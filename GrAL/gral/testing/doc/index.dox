@@ -1,0 +1,10 @@
+/*! \mainpage Index of the GrAL Testing Module
+
+    This module contains components for testing
+    grid implementations for syntactical and semantical correctness.
+
+    All tests are accessible by including Test/all.h.
+
+    Examples are found in the tests of $gral-gral/complex3d
+    and $gral-gral/cartesian2d.
+*/
