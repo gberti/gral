@@ -424,7 +424,7 @@ namespace generic_facet {
       CellIterator               c;
       facet_on_cell_iterator<gt> e;
       // hash_map not in  ::std::
-      ::STDHASH::hash_map<facet<gt>, bool, hasher_facet<gt> > visited;
+      STDHASH::hash_map<facet<gt>, bool, hasher_facet<gt> > visited;
     public:
       facet_iterator() {}
       explicit 

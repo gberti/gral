@@ -5,7 +5,7 @@
 
 #include <hash_map>
 
-namespace GrAL {
+// namespace GrAL {
 
 namespace my_hash_sx {
 
@@ -71,7 +71,7 @@ namespace my_hash_sx {
 }
 
 
-} // namespace GrAL 
+// } // namespace GrAL 
 
 
 #endif

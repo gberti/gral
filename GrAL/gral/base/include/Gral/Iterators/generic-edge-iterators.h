@@ -265,7 +265,7 @@ namespace generic_edge {
       CellIterator                      c;
       edge_on_cell_iterator<gt>         e;
       // partial_grid_function<Edge,bool>  visited;
-      ::STDHASH::hash_map<edge<gt>, bool, hasher_edge<gt> > visited;
+      STDHASH::hash_map<edge<gt>, bool, hasher_edge<gt> > visited;
     public:
       edge_iterator() {}
       explicit
