@@ -180,6 +180,31 @@ int main(int argc, char* argv[]) {
     grid_function<CoarseCell, bijective_mapping<fch_comp,fch_mpi> > fine_corr_c(compG.TheCoarseGrid());
   
     CopyComposite2Distributed(MpiG2,compIn,  coarse_corr_c, fine_corr_v, fine_corr_c);
+
+
+
+    typedef OstreamComplex2DFmt coarse_grid_output_t;
+    typedef OstreamComplex2DFmt fine_grid_output_t;
+    typedef  overlap_output<
+      coarse_grid_output_t, 
+      fine_grid_output_t, 
+      overlap_range_output> overlap_output_t;
+    typedef overlapping_grid_output<
+      coarse_grid_output_t, 
+      fine_grid_output_t,
+      overlap_output_t> overlapping_grid_output_t;
+    
+
+    coarse_grid_output_t CoarseOut("distributed-output/dg." + as_string(MpiG2.MyRank()) + ".coarse");
+    cell_morphism  <coarse_grid_type, coarse_grid_output_t> cell_corr(MpiG2.TheCoarseGrid(),
+								      CoarseOut);
+    vertex_morphism<coarse_grid_type, coarse_grid_output_t> vtx_corr (MpiG2.TheCoarseGrid(),
+								      CoarseOut);
+    ConstructGrid0(CoarseOut,MpiG2.TheCoarseGrid(), vtx_corr, cell_corr);
+
+    overlapping_grid_output_t OvlpOut(CoarseOut,
+				      "distributed-output/dg." + as_string(MpiG2.MyRank()));
+    CopyOverlappingGrid(OvlpOut,  MpiG2.TheOvrlpGrid(), cell_corr);
   }
 
 
