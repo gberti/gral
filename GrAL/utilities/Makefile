@@ -43,7 +43,7 @@ clean:
 
 
 realclean: clean
-	rm -f lib/*.a lib/*/*.a lib/*/*/*.a lib/*/*/*/*.a
+	rm -rf lib/*/
 
 
 docs:
