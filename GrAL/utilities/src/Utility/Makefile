@@ -21,7 +21,7 @@ compile: makefile
 
 lib: makefile
 	(cd $(OBJDIR); \
-         $(MAKE) lib SRC="$(LOCALSOURCES)" IBDIR="$(LIBDIR)" LIB="lib$(LIBNAME).a")
+         $(MAKE) lib SRC="$(LOCALSOURCES)" LIBDIR="$(LIBDIR)" LIB="lib$(LIBNAME).a")
 
 partial-clean: makefile
 	(cd $(OBJDIR); $(MAKE) clean DEPS="")
