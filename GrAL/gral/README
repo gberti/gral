@@ -1,0 +1,22 @@
+
+GrAL - Grid Algorithms Library
+==============================
+
+Copyright (c) 1997-2001  Guntram Berti
+See the file LICENSE for details.
+
+The homepage of GrAL is  
+http://www.math.tu-cottbus/~berti/gral
+
+See the file INSTALL for installation procedure.
+
+GrAL has been split into several modules, some of 
+which have nothing to do with grids per se.
+See the file MODULES for a short description of 
+the individual modules.
+
+--------------------------------
+
+
+
+
