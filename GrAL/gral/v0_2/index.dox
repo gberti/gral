@@ -1,9 +1,9 @@
 /*!  \mainpage Index to <A HREF="http://www.math.tu-cottbus.de/~berti/gral"> GrAL </A>  Modules
 
-     As GrAL is supposed to grow quite a bit, 
-     it is partitioned from the beginning
-     into more manageable units. 
-     Thus, one does not have to ``buy everything''.
+
+     GrAL is partitioned from the beginning
+     into manageable with units
+     with (hopefully) minimized dependencies. 
 
     The recommended way of browsing the documentation 
     is by (sub-) module hierarchy.
