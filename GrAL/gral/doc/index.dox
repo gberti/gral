@@ -35,12 +35,20 @@
       <LI> $gral-gral/testing GrAL-Testing module.
            Used to test concrete grid components.
       <LI> $gral-gral/complex2d GrAL-Complex2D module:
-       A simple 2D grid components for arbitrary polygonal cells
+       A simple 2D grid component for arbitrary polygonal cells
      <LI>  $gral-gral/cartesian2d GrAL-Cartesian2D module:
          A Cartesian grid component 
+      <LI> $gral-gral/triang2d GrAL-Triang2D module:
+         A grid component for 2D triangulations
+      <LI> $gral-gral/complex3d GrAL-Complex3D module:
+         A grid component for 3D grids with arbitrary cells
+      <LI> $gral-gral/cartesian3d GrAL-Cartesian3D module:
+         A Cartesian grid component for 3D regular grids. 
       <LI> $gral-gral/partitioning GrAL-Partitioning module:
           Generic components for grid partitioning.
       <LI> $gral-gral/distributed  GrAL-Distributed module:
           Generic components for distributed grids.
+      <LI> $gral-gral/gmv-io GrAL-GMV-IO module:
+        Components for output to GMV file format (3D and 2D versions).
   </UL>
 */
