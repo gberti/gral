@@ -20,6 +20,9 @@ int main() {
   range_type S(R, R);
   cout << " done." << endl;
 
+  checkgt<rgegt>(cout);
+  cout << endl;
+
   test_archetypes(S, cout);
   {
     // test construction of ranges
