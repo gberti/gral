@@ -5,6 +5,8 @@
 // $LICENSE
 
 #include <vector>
+#include <iostream>
+
 #include <mpi.h>
 
 #include "Gral/Base/grid-functions.h"
@@ -24,7 +26,7 @@ struct mpi_proc {
  int      the_rank;
   mpi_proc(MPI_Comm c, int r) : the_communicator(c), the_rank(r) {}
   mpi_proc() : the_rank(-1)
-    { cerr << "mpi_proc::mpi_proc() called!\n"; }
+    { std::cerr << "mpi_proc::mpi_proc() called!\n"; }
 };
 
 
