@@ -1,0 +1,193 @@
+2D
+Segment/segment
+0 0
+0 2
+0 0
+0 4
+1 1
+0 2
+2 2
+0 4
+0 0
+3 4
+0 0
+6 8
+-1 1
+1 1
+-2 2
+2 2
+-1 1
+3 3
+-2 2
+6 6
+0 1
+0 2
+0 2
+0 4
+Segments [0 0,0 2]  [0 0,0 2]   do intersect.
+Segments [0 0,0 2]  [1 0,1 2]   do not intersect.
+Segments [0 0,0 2]  [0 3,0 4]   do not intersect.
+Segments [0 0,0 2]  [-1 1,1 1]   do intersect.
+Segments [0 0,0 2]  [-1 3,1 3]   do not intersect.
+Segments [0 0,0 2]  [0 0,1 2]   do intersect.
+Segments [1 0,1 2]  [1 0,1 2]   do intersect.
+Segments [1 0,1 2]  [0 3,0 4]   do not intersect.
+Segments [1 0,1 2]  [-1 1,1 1]   do intersect.
+Segments [1 0,1 2]  [-1 3,1 3]   do not intersect.
+Segments [1 0,1 2]  [0 0,1 2]   do intersect.
+Segments [0 3,0 4]  [0 3,0 4]   do intersect.
+Segments [0 3,0 4]  [-1 1,1 1]   do not intersect.
+Segments [0 3,0 4]  [-1 3,1 3]   do intersect.
+Segments [0 3,0 4]  [0 0,1 2]   do not intersect.
+Segments [-1 1,1 1]  [-1 1,1 1]   do intersect.
+Segments [-1 1,1 1]  [-1 3,1 3]   do not intersect.
+Segments [-1 1,1 1]  [0 0,1 2]   do intersect.
+Segments [-1 3,1 3]  [-1 3,1 3]   do intersect.
+Segments [-1 3,1 3]  [0 0,1 2]   do not intersect.
+Segments [0 0,1 2]  [0 0,1 2]   do intersect.
+Triangle/triangle
+0 1
+0 1
+0 2
+0 2
+0 1
+0 1
+0 2
+0 2
+0.6 0.7
+0.6 0.7
+1.2 1.4
+1.2 1.4
+-2 0.5
+-2 0.5
+-4 1
+-4 1
+Triangles [0 0,1 0,0 1]  [0 0,1 0,0 1]   do intersect.
+Triangles [0 0,1 0,0 1]  [1 1,1 0,0 1]   do intersect.
+Triangles [0 0,1 0,0 1]  [0.6 0.6,0.6 0.7,0.7 0.6]   do not intersect.
+Triangles [0 0,1 0,0 1]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+Triangles [1 1,1 0,0 1]  [1 1,1 0,0 1]   do intersect.
+Triangles [1 1,1 0,0 1]  [0.6 0.6,0.6 0.7,0.7 0.6]   do intersect.
+Triangles [1 1,1 0,0 1]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+Triangles [0.6 0.6,0.6 0.7,0.7 0.6]  [0.6 0.6,0.6 0.7,0.7 0.6]   do intersect.
+Triangles [0.6 0.6,0.6 0.7,0.7 0.6]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+Triangles [-2 -2,-2 0.5,0.5 -2]  [-2 -2,-2 0.5,0.5 -2]   do intersect.
+Segment/Triangle [0 0,0 2]  [0 0,1 0,0 1]   do intersect.
+Segment/Triangle [0 0,0 2]  [1 1,1 0,0 1]   do intersect.
+Segment/Triangle [0 0,0 2]  [0.6 0.6,0.6 0.7,0.7 0.6]   do not intersect.
+Segment/Triangle [0 0,0 2]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+Segment/Triangle [1 0,1 2]  [0 0,1 0,0 1]   do intersect.
+Segment/Triangle [1 0,1 2]  [1 1,1 0,0 1]   do intersect.
+Segment/Triangle [1 0,1 2]  [0.6 0.6,0.6 0.7,0.7 0.6]   do not intersect.
+Segment/Triangle [1 0,1 2]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+Segment/Triangle [0 3,0 4]  [0 0,1 0,0 1]   do not intersect.
+Segment/Triangle [0 3,0 4]  [1 1,1 0,0 1]   do not intersect.
+Segment/Triangle [0 3,0 4]  [0.6 0.6,0.6 0.7,0.7 0.6]   do not intersect.
+Segment/Triangle [0 3,0 4]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+Segment/Triangle [-1 1,1 1]  [0 0,1 0,0 1]   do intersect.
+Segment/Triangle [-1 1,1 1]  [1 1,1 0,0 1]   do intersect.
+Segment/Triangle [-1 1,1 1]  [0.6 0.6,0.6 0.7,0.7 0.6]   do not intersect.
+Segment/Triangle [-1 1,1 1]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+Segment/Triangle [-1 3,1 3]  [0 0,1 0,0 1]   do not intersect.
+Segment/Triangle [-1 3,1 3]  [1 1,1 0,0 1]   do not intersect.
+Segment/Triangle [-1 3,1 3]  [0.6 0.6,0.6 0.7,0.7 0.6]   do not intersect.
+Segment/Triangle [-1 3,1 3]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+Segment/Triangle [0 0,1 2]  [0 0,1 0,0 1]   do intersect.
+Segment/Triangle [0 0,1 2]  [1 1,1 0,0 1]   do intersect.
+Segment/Triangle [0 0,1 2]  [0.6 0.6,0.6 0.7,0.7 0.6]   do not intersect.
+Segment/Triangle [0 0,1 2]  [-2 -2,-2 0.5,0.5 -2]   do not intersect.
+3D
+Segment projections
+Segment 0 0 0,0 2 0
+dir 1 0 0: 0 0
+dir 0 1 0: 0 2
+dir 0 0 1: 0 0
+dir 1 1 1: 0 2
+Segment 0 0 0,2 0 0
+dir 1 0 0: 0 2
+dir 0 1 0: 0 0
+dir 0 0 1: 0 0
+dir 1 1 1: 0 2
+Segment 0.1 0.1 0.1,1 1 1
+dir 1 0 0: 0.1 1
+dir 0 1 0: 0.1 1
+dir 0 0 1: 0.1 1
+dir 1 1 1: 0.3 3
+Segment -0.1 -0.1 -0.1,1 1 1
+dir 1 0 0: -0.1 1
+dir 0 1 0: -0.1 1
+dir 0 0 1: -0.1 1
+dir 1 1 1: -0.3 3
+Segment -1 -1 -1,1 1 1
+dir 1 0 0: -1 1
+dir 0 1 0: -1 1
+dir 0 0 1: -1 1
+dir 1 1 1: -3 3
+Segment/segment
+Segments [0 0 0,0 2 0]  [0 0 0,0 2 0]   do intersect.
+Segments [0 0 0,0 2 0]  [0 0 0,2 0 0]   do intersect.
+Segments [0 0 0,0 2 0]  [0.1 0.1 0.1,1 1 1]   do not intersect.
+Segments [0 0 0,0 2 0]  [-0.1 -0.1 -0.1,1 1 1]   do intersect.
+Segments [0 0 0,0 2 0]  [-1 -1 -1,1 1 1]   do intersect.
+Segments [0 0 0,2 0 0]  [0 0 0,2 0 0]   do intersect.
+Segments [0 0 0,2 0 0]  [0.1 0.1 0.1,1 1 1]   do not intersect.
+Segments [0 0 0,2 0 0]  [-0.1 -0.1 -0.1,1 1 1]   do intersect.
+Segments [0 0 0,2 0 0]  [-1 -1 -1,1 1 1]   do intersect.
+Segments [0.1 0.1 0.1,1 1 1]  [0.1 0.1 0.1,1 1 1]   do intersect.
+Segments [0.1 0.1 0.1,1 1 1]  [-0.1 -0.1 -0.1,1 1 1]   do intersect.
+Segments [0.1 0.1 0.1,1 1 1]  [-1 -1 -1,1 1 1]   do intersect.
+Segments [-0.1 -0.1 -0.1,1 1 1]  [-0.1 -0.1 -0.1,1 1 1]   do intersect.
+Segments [-0.1 -0.1 -0.1,1 1 1]  [-1 -1 -1,1 1 1]   do intersect.
+Segments [-1 -1 -1,1 1 1]  [-1 -1 -1,1 1 1]   do intersect.
+Triangle projections
+Triangle 0 0 0,1 0 0,0 1 0
+dir 1 0 0: 0 1
+dir 0 1 0: 0 1
+dir 0 0 1: 0 0
+dir 1 1 1: 0 1
+Triangle 0 0 0,1 0 0,0 0 1
+dir 1 0 0: 0 1
+dir 0 1 0: 0 0
+dir 0 0 1: 0 1
+dir 1 1 1: 0 1
+Triangle 0 0 0,0 1 0,0 0 1
+dir 1 0 0: 0 0
+dir 0 1 0: 0 1
+dir 0 0 1: 0 1
+dir 1 1 1: 0 1
+Triangle 1 0 0,0 1 0,0 0 1
+dir 1 0 0: 0 1
+dir 0 1 0: 0 1
+dir 0 0 1: 0 1
+dir 1 1 1: 1 1
+Triangle/triangle
+Triangles [0 0 0,1 0 0,0 1 0]  [0 0 0,1 0 0,0 1 0]   do intersect.
+Triangles [0 0 0,1 0 0,0 1 0]  [0 0 0,1 0 0,0 0 1]   do intersect.
+Triangles [0 0 0,1 0 0,0 1 0]  [0 0 0,0 1 0,0 0 1]   do intersect.
+Triangles [0 0 0,1 0 0,0 1 0]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Triangles [0 0 0,1 0 0,0 0 1]  [0 0 0,1 0 0,0 0 1]   do intersect.
+Triangles [0 0 0,1 0 0,0 0 1]  [0 0 0,0 1 0,0 0 1]   do intersect.
+Triangles [0 0 0,1 0 0,0 0 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Triangles [0 0 0,0 1 0,0 0 1]  [0 0 0,0 1 0,0 0 1]   do intersect.
+Triangles [0 0 0,0 1 0,0 0 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Triangles [1 0 0,0 1 0,0 0 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [0 0 0,0 2 0]  [0 0 0,1 0 0,0 1 0]   do intersect.
+Segment/Triangle [0 0 0,0 2 0]  [0 0 0,1 0 0,0 0 1]   do intersect.
+Segment/Triangle [0 0 0,0 2 0]  [0 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [0 0 0,0 2 0]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [0 0 0,2 0 0]  [0 0 0,1 0 0,0 1 0]   do intersect.
+Segment/Triangle [0 0 0,2 0 0]  [0 0 0,1 0 0,0 0 1]   do intersect.
+Segment/Triangle [0 0 0,2 0 0]  [0 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [0 0 0,2 0 0]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [0.1 0.1 0.1,1 1 1]  [0 0 0,1 0 0,0 1 0]   do not intersect.
+Segment/Triangle [0.1 0.1 0.1,1 1 1]  [0 0 0,1 0 0,0 0 1]   do not intersect.
+Segment/Triangle [0.1 0.1 0.1,1 1 1]  [0 0 0,0 1 0,0 0 1]   do not intersect.
+Segment/Triangle [0.1 0.1 0.1,1 1 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [-0.1 -0.1 -0.1,1 1 1]  [0 0 0,1 0 0,0 1 0]   do intersect.
+Segment/Triangle [-0.1 -0.1 -0.1,1 1 1]  [0 0 0,1 0 0,0 0 1]   do intersect.
+Segment/Triangle [-0.1 -0.1 -0.1,1 1 1]  [0 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [-0.1 -0.1 -0.1,1 1 1]  [1 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [-1 -1 -1,1 1 1]  [0 0 0,1 0 0,0 1 0]   do intersect.
+Segment/Triangle [-1 -1 -1,1 1 1]  [0 0 0,1 0 0,0 0 1]   do intersect.
+Segment/Triangle [-1 -1 -1,1 1 1]  [0 0 0,0 1 0,0 0 1]   do intersect.
+Segment/Triangle [-1 -1 -1,1 1 1]  [1 0 0,0 1 0,0 0 1]   do intersect.

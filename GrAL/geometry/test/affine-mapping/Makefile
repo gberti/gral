@@ -1,23 +1,24 @@
-# gral/complex2d/test/construct
+# geometry/test/affine-mapping
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-
-LOCALSOURCES =  test-primitives.C
+LOCALSOURCES =  test-affine-mapping.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-primitives
-EXEC =  $(TARGETS)
+EXEC =  $(LOCALSOURCES:%.C=%.exe)
 
-EXTRA_DEPMODULES += sequence
+#BOOST=$(HOME)/sources/boost/boost/
+#IFLAGS += -I$(BOOST)
+
+TARGETS = $(EXEC)
+EXTRA_DEPMODULES +=  sequence
+
 include $(DEPS)
 
 
-
-LIBS = -lutilities -lgeometry
-
+LIBS = -lgeometry 
 
 
 new-check-clean: new check clean
@@ -28,7 +29,7 @@ new : clean all
 all : $(TARGETS)
 
 
-test-primitives: $(LOCALOBJECTS)
+$(TARGETS): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
