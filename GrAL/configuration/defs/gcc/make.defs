@@ -4,10 +4,15 @@
 CCC      =  g++
 CCFLAGS += -Wall 
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
-CCFLAGS += 
+# 2.96 includes relops.h which define generic comparison operators,
+# and gets confused sometimes when other implementations are provided.
+# In this case, we bracket the definition of dependent operators (like !=) into
+# #ifndef GRAL_INCLUDES_RELOPS  ... define op!= ... #endif 
+CCFLAGS += -DGRAL_INCLUDES_RELOPS 
+
 CCFLAGS += -ftemplate-depth-35
 
-DEPEND    =$(CCC)
+DEPEND    = $(CCC)
 DEPFLAGS += -MM $(CCFLAGS)
 
 
