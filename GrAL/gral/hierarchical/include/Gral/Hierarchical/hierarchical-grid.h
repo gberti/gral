@@ -552,8 +552,10 @@ namespace hierarchical {
     // hier_cell_type   ParentCell() { return g->Parent(*this);}
     // ParentCellIterator   FirstParentCell() { return g->Parent(*this);}
 
-    friend bool operator==(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h == rhs.h;}
-    friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return !(lhs.h == rhs.h);}
+    // should "equivalent" vertices on different levels compare equal? No, only in leaf_grid!
+    friend bool operator==(self const& lhs, self const& rhs) { 
+      lhs.cv(); rhs.cv(); return lhs.h == rhs.h && lhs.level() == rhs.level();}
+    friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return !(lhs == rhs);}
    
     // inline ChildIterator FirstChild() const;
     // inline ChildIterator EndChild  () const;
@@ -668,7 +670,7 @@ namespace hierarchical {
     Cell ParentCell() { cv(); return Cell(base::TheHierGrid()->Parent(*this));}
 
     friend bool operator==(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h == rhs.h && lhs.level() == rhs.level();}
-    friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h != rhs.h;}
+    friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return !(lhs == rhs);}
 
     inline ChildIterator FirstChild() const;
     inline ChildIterator EndChild  () const;
