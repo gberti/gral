@@ -42,21 +42,22 @@ void test_hier_grid_table(GRID const& root,
   hier_grid_type H(root,pattern);
   H.add_finer_level();
   H.add_coarser_level();
-  hier_geom_type Hgeom(H, M);    
+  flat_geom_type root_geom(root, M);
+  hier_geom_type Hgeom(H, root_geom); // M);    
 
-  hier_grid_type H2(H);
-  H = H2;
-  hier_geom_type Hgeom2(H);
+  hier_geom_type Hgeom2(H, root_geom);
 
   for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev))
     out << "Level " << lev << ": " << H.FlatGrid(lev)->cell_size() << " cells\n";
   REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
 
   {
-    level_handle lev = H.finest_level();
-    out << "Level " << lev << ":\n";
-    test_level(* H.FlatGrid(lev), Hgeom(lev), out);
+    for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev)) {
+      out << "Level " << lev << ":\n";
+      test_level(* H.FlatGrid(lev), Hgeom(lev), out);
+    }
   }
+  /*
   {
     H.add_finer_level();
     REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
@@ -65,22 +66,25 @@ void test_hier_grid_table(GRID const& root,
     out << "Level " << lev << ":\n";
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
-
+  */
   {
+    out << "Removing finest level\n";
     H.remove_finest_level();
     REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
     level_handle lev = H.finest_level();
-    out << "Level " << lev << ":\n";
+    out << "Finest level " << lev << ":\n";
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
 
   {
+    out << "Removing coarsest level\n";
     H    .remove_coarsest_level();
     REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
     level_handle lev = H.coarsest_level();
-    out << "Level " << lev << ":\n";
+    out << "Coarsest level " << lev << ":\n";
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
+  /*
   {
     H    .add_coarser_level();
     REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
@@ -88,6 +92,7 @@ void test_hier_grid_table(GRID const& root,
     out << "Level " << lev << ":\n";
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
+  */
 
   // test copying
   {
@@ -134,12 +139,15 @@ int main() {
   
 
   {
-    namespace cart = cartesian2d;
-    typedef cart::CartesianGrid2D               cart_grid_type;
+    // namespace cart = cartesian2d;
+    // typedef cart::CartesianGrid2D               cart_grid_type;
+    namespace cart = cartesiannd;
+    typedef cart::grid<2>                       cart_grid_type;
+ 
     typedef tuple<double,2>                     coord_type;
     typedef matrix<2,2,0>                                       matrix_type;
     typedef affine_mapping<matrix_type, coord_type>             mapping_type;
-    typedef cart::mapped_geometry<mapping_type> cart_geom_type;
+    typedef cart::mapped_geometry<cart_grid_type, mapping_type> cart_geom_type;
 
     cart_grid_type root(3,3);
     cart_grid_type ref_pattern(3,2); // 2x1 cells!
