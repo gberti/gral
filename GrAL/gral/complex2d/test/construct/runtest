@@ -1,0 +1,19 @@
+#!/bin/csh
+./test-cnstruct |& sed -e '/nan/s//NaN/g' >& out.out
+/bin/echo "\n"
+foreach i ( out.out case*.grid.out )
+diff $i `basename $i .out`.exp
+if ($status) then 
+/bin/echo "\t\t\t" ERROR in $i
+else
+/bin/echo "\t\t\t" $i OK
+endif
+end
+diff mesh.oogl mesh.oogl.exp
+if ($status) then
+/bin/echo "\t\t\t" ERROR in mesh.oogl
+else
+/bin/echo "\t\t\t" mesh.oogl OK
+endif
+/bin/echo "\n"
+

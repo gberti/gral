@@ -1,0 +1,29 @@
+
+# size of basic grid ( nx x ny vertices, not cells!
+ngrid_x  3
+ngrid_y  3
+
+# lower left corner of hole (may be outside grid)
+llx 10
+lly 10
+
+# upper right corner of hole (may be outside grid)
+urx 20
+ury 20
+
+
+# flags for test-output
+
+test_vertices 1
+test_cells    1
+test_edges    1 
+test_boundary_facets 1
+
+test_cell_vertices 1
+test_cell_edges    1
+test_cell_neighbours    1
+
+test_cell_nb_iter 1
+test_cell_edge_flip 1
+
+
