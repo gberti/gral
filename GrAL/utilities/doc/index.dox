@@ -1,4 +1,4 @@
-/*! \mainpage Index of the Utilities PackageKMy Personal Index Page
+/*! \mainpage Index of the Utilities Package
        
 
      \section intro Introduction
@@ -20,5 +20,9 @@
      \subsection secasstring  Conversion of arbitrary types in strings
         see \ref file as-string.h
 
+     \subsection secrefcnt   Reference counting smart pointer
+      Borrowed from Scott Meyers book "More Effective C++".
+
+       see \ref file reference-count.h
     
 */
