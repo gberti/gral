@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     cube.C		init a new cube
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/cube.h"
+#include "GraphicsDevice/cube.h"
 
 void geom_cube::init(double aa) {
   c[5]=point(aa/2,aa/2,aa/2);c[4]=point(aa/2,aa/2,-aa/2);

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     cylinder.C		init a new cylinder
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/cylinder.h"
+#include "GraphicsDevice/cylinder.h"
 
 RenderableGeom RCylinder(double r, double h)
 { return RenderableGeom(new geom_cylinder(r,h));}

@@ -1,12 +1,12 @@
-#ifndef NMWR_GB_GRAPHICSDEVICE_TRANSLATORS_H
-#define NMWR_GB_GRAPHICSDEVICE_TRANSLATORS_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_RENDERING_LANGUAGE_H
+#define NMWR_GB_GRAPHICSDEVICE_RENDERING_LANGUAGE_H
 
 // $LICENSE
 
 
-#include <string.h>
-
+#include <string>
 #include <strstream.h>
+
 #include "GraphicsDevice/transformation.h"
 #include "GraphicsDevice/attribute.h"
 #include "GraphicsDevice/renderable-geom.h"
@@ -27,31 +27,66 @@ class geom_color_bar;
 class geom_segment;
 class geom_letter;
 class geom_word;
-class geom_movie;
 class geom_circle;
 class geom_polygon;
 
+/*! \defgroup renderers Interfaces to rendering engines
 
-// dies sollte weiter verfeinert werden:
-// text-umwandlung -> language-text (oogl, RenderMan,...)
-// prozedur-aufrufe -> language-proc (GRAPE,...)
+ */
 
 class rlang_internals;
 
+
+/*! \brief Abstract base class for renderers
+  \ingroup renderers
+   
+
+  Used as 'letter' by GraphicsDevice.
+
+  These class has to solve a classical 'double dispatch'
+  problem: There is an indefinite number of rendering engines,
+  and a (possibly unlimited) number of  geometric shapes.
+  The solution chosen here is to restrict admissible shapes
+  to just a few, including groups of geometric shapes.
+  If a request to render an abstract geometric g object is made,
+  g is in turn requested to issue the necessary calls to the 
+  primitive rendering operations (corresponding to primitive shapes).
+
+  A useful set of primitive shapes is given by the primitives 
+  understood by the union of 'standard' rendering engines.
+  If a primitive is not understood by a concrete renderer,
+  the corresponding subclass of rendering_language has to
+  decompose this primitive in yet more primitive parts.
+
+
+  \todo Should be refined: textual renderers like oogl, Renderman,
+    and APIs like OpenGL. 
+    Currently contains some functions 
+    which are only appropriate to textual case;
+    these should be factored out.
+   
+ */
+
 class rendering_language {
 private:
-  rlang_internals* state;
+  copy_on_write_ptr<rlang_internals>  state;
   //  virtual void empty_buffer();
 protected:
   ostream& the_stream();
-  Transformation ToDoTrafo() const; // return accumulated Trafos that couldn't be handled directly
-  void PushToDoTrafo(const Transformation& T); // compose ToDoTrafo() with T
-  void PopToDoTrafo(); // remove last composed trafo
-  bool IsToDoTrafo() const; // are there some Trafos accumulated that can't be handled?
+
+  //! return accumulated Trafos that couldn't be handled directly
+  Transformation ToDoTrafo() const; 
+  //! compose ToDoTrafo() with T
+  void PushToDoTrafo(const Transformation& T); 
+  //! remove last composed trafo
+  void PopToDoTrafo(); 
+  //! Are there some Trafos accumulated that can't be handled?
+  bool IsToDoTrafo() const; 
 public:
   rendering_language(): state(0) {}
   rendering_language(ostream* out);
   virtual ~rendering_language();
+
   virtual void set_stream(ostream* out); 
   virtual void begin_transformation(const Transformation&) = 0;
   virtual void end_transformation()  = 0;
@@ -59,7 +94,7 @@ public:
   virtual void end_attribute()  = 0;
   virtual void begin_object(const RenderableGeom& obj)  = 0;
   virtual void end_object()  = 0;
-//  virtual void begin_group() = 0;
+  //  virtual void begin_group() = 0;
   virtual void begin_group(const string& name) = 0;
   virtual void end_group()   = 0;
   virtual void begin_block()  = 0;
@@ -86,30 +121,4 @@ public:
 };
 
 
-#include "GraphicsDevice/manips.h"
-#include "GraphicsDevice/graphics-device.h"
-/*
-class GraphicsDevice {
-private:
- ostream& out;
- rendering_language& L;
-public:
- GraphicsDevice(ostream& oo, rendering_language& LL) : out(oo), L(LL) {L.set_stream(&out);}
- rendering_language& Lang() { return L;}
- friend GraphicsDevice& operator<<(GraphicsDevice& G, const RenderableGeom& Obj)
-   { G.L.filter(Obj); return(G);}
- friend GraphicsDevice& operator<<(GraphicsDevice& G, const DevManip0& M)
-   { M(G.L); return G;}
-};
-
-
-
-template<class arg>
-GraphicsDevice& operator<<(GraphicsDevice& G, const DevManip1<arg>& M)
-
-{
-  M.apply(G.Lang());
-  return G;
-}
-*/
 #endif

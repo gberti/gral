@@ -1,5 +1,8 @@
+
+// $LICENSE
+
 #include "mystring.h"
-#include "Graphics/rgb-color.h"
+#include "GraphicsDevice/rgb-color.h"
 
 void rgb_color::print(ostream& out) const {
   out << _r << ' ' << _g << ' ' << _b;

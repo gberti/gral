@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     word.C		write a word with list of letters
 
@@ -9,9 +12,9 @@
 
 #include <math.h>
 
-#include "Graphics/word.h"
-#include "Graphics/letter.h"
-#include "Graphics/transform.h"
+#include "GraphicsDevice/word.h"
+#include "GraphicsDevice/letter.h"
+#include "GraphicsDevice/transform.h"
 
 #include "Geometry/algebraic-primitives.h"
 

@@ -1,22 +1,39 @@
-#ifndef NMWR_GB_GRAPHICSDEVICE_RENDERABLE_OBJECT_H
-#define NMWR_GB_GRAPHICSDEVICE_RENDERABLE_OBJECT_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_RENDERABLE_GEOM_H
+#define NMWR_GB_GRAPHICSDEVICE_RENDERABLE_GEOM_H
 
 // $LICENSE
 
 
 class rendering_language;
-class geom;
+
+#include "GraphicsDevice/geom.h"
 #include "GraphicsDevice/transformation.h"
 #include "GraphicsDevice/attribute.h"
 
+#include "Utility/reference-count.h"
+
+
+/*! \brief Envelope class for geom
+     \ingroup geometricshape
+   
+    This class is intended to be used in application programs.
+    An object  of type RenderableGeom can be output to 
+    a GraphicsDevice:
+
+    \code    
+    GraphicsDevice Dev; // ...
+    RenderableGeom S = RSphere(1.0, point(0,0,0));
+    Dev << S;
+    \endcode
+*/
 
 class RenderableGeom {
 private:
-  geom *g; 
-  Transformation T; 
-  Attribute A;
+  copy_on_write_ptr<geom> g; 
+  Transformation          T; 
+  Attribute               A;
 
-  geom* geometry() const {return g;}
+  geometry*  geometry() const {return g.operator->();}
 protected:
   virtual void init();
 public:

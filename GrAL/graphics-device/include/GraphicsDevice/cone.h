@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_GEOM_CONE_H
-#define NMWR_GB_GEOM_CONE_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_CONE_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_CONE_H
+
+// $LICENSE
+
 
 /*----------------------------------------------------------------------------
     cone.h		class to create a cone
@@ -9,10 +12,10 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/geom.h"
+#include "GraphicsDevice/geom.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 
 class geom_cone : public geom {

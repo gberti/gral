@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     letter.C		routines to print letters as list of segments
 
@@ -6,8 +9,8 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/letter.h"
-#include "Graphics/segment.h"
+#include "GraphicsDevice/letter.h"
+#include "GraphicsDevice/segment.h"
 #include "ctype.h"
 
 typedef list<geom_segment> segment_list;

@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_GEOM_CIRCLE_H
-#define NMWR_GB_GEOM_CIRCLE_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_CIRCLE_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_CIRCLE_H
+
+// $LICENSE
+
 
 /*----------------------------------------------------------------------------
     circle.h		class to create a circle
@@ -9,10 +12,10 @@
 
     last change:        August 6, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/geom.h"
+#include "GraphicsDevice/geom.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 
 class geom_circle : public geom {

@@ -1,5 +1,8 @@
-#include "Graphics/graphics-device.h"
-#include "Graphics/translator.h"
+
+// $LICENSE
+
+#include "GraphicsDevice/graphics-device.h"
+#include "GraphicsDevice/translator.h"
 
 // class for renderers expecting data from a stream,
 // e.g. a file or a pipe (like geomview)

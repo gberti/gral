@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     quadrilateral.C     init new quadrilateral
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/quadrilateral.h"
+#include "GraphicsDevice/quadrilateral.h"
 
 RenderableGeom RQuadrilateral(const point& c1, const point& c2,
 			      const point& c3, const point& c4)

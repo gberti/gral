@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     cone.C		init a new cone
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/cone.h"
+#include "GraphicsDevice/cone.h"
 
 RenderableGeom RCone(double r1, double r2, double h)
 { return RenderableGeom(new geom_cone(r1,r2,h));}

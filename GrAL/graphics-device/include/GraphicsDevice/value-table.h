@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_VALUE_TABLE_H
-#define NMWR_GB_VALUE_TABLE_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_VALUE_TABLE_H
+#define NMWR_GB_GRAPHICSDEVICE_VALUE_TABLE_H
+
+// $LICENSE
+
 
 #include "map.h"
 #include "forward/iostream.h"

@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_RGB_COLOR_H
-#define NMWR_GB_RGB_COLOR_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_RGB_GRAPHICSDEVICE_COLOR_H
+#define NMWR_GB_GRAPHICSDEVICE_RGB_GRAPHICSDEVICE_COLOR_H
 
 #include "Geometry/point3d.h"
 #include "forward/string.h"

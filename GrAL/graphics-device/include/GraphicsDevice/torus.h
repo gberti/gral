@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_GEOM_TORUS_H
-#define NMWR_GB_GEOM_TORUS_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_TORUS_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_TORUS_H
+
+// $LICENSE
+
 
 /*----------------------------------------------------------------------------
     torus.h		class to create a torus
@@ -9,10 +12,10 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/geom.h"
+#include "GraphicsDevice/geom.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 
 class geom_torus : public geom {

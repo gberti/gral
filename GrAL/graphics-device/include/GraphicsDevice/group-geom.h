@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_GEOM_GROUP_H
-#define NMWR_GB_GEOM_GROUP_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_GROUP_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_GROUP_H
+
+// $LICENSE
+
 
 /*----------------------------------------------------------------------------
     
@@ -10,10 +13,10 @@
 
 #include "list.h"
 
-#include "Graphics/geom.h"
+#include "GraphicsDevice/geom.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 class geom_group : public geom {
   typedef geom_group self;

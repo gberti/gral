@@ -1,9 +1,12 @@
-#ifndef NMWR_GB_EMPTY_GEOM_H
-#define NMWR_GB_EMPTY_GEOM_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_EMPTY_GEOM_H
+#define NMWR_GB_GRAPHICSDEVICE_EMPTY_GEOM_H
 
-#include "Graphics/geom.h"
-#include "Graphics/translators.h"
-#include "Graphics/renderable_object.h"
+// $LICENSE
+
+
+#include "GraphicsDevice/geom.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable_object.h"
 
 
 class empty_geom : public geom {

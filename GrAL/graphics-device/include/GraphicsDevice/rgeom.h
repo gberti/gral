@@ -1,11 +1,14 @@
-#ifndef NMWR_GB_RGEOM_H
-#define NMWR_GB_RGEOM_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_RGEOM_H
+#define NMWR_GB_GRAPHICSDEVICE_RGEOM_H
+
+// $LICENSE
+
 
 #include "Geometry/point-traits.h"
 #include "forward/string.h"
 
 #include "LinAlg/point.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 class rgb_color;
 class GraphicsDevice;

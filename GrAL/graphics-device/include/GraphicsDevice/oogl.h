@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_OOGL_H
-#define NMWR_GB_OOGL_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_OOGL_H
+#define NMWR_GB_GRAPHICSDEVICE_OOGL_H
+
+// $LICENSE
+
 
 /*----------------------------------------------------------------------------
     oogl.h		
@@ -9,7 +12,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/translators.h"
+#include "GraphicsDevice/rendering-language.h"
 /* #include "shapes.h" */
 
 

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     oogl.C		write routines for different geometric figures
 
@@ -36,23 +39,23 @@
 #include "mystring.h"
 #include "Visualization/colormap.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/oogl.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/oogl.h"
 //#include "Geometry/algebra.h"
-#include "Graphics/sphere.h"
-#include "Graphics/ball.h"
-#include "Graphics/triangle.h"
-#include "Graphics/torus.h"
-#include "Graphics/cube.h"
-#include "Graphics/cylinder.h"
-#include "Graphics/cone.h"
-#include "Graphics/circle.h"
-#include "Graphics/rgb-color.h"
-#include "Graphics/simplex.h"
-#include "Graphics/quadrilateral.h"
-#include "Graphics/segment.h"
-#include "Graphics/letter.h"
-//#include "Graphics/word.h"
+#include "GraphicsDevice/sphere.h"
+#include "GraphicsDevice/ball.h"
+#include "GraphicsDevice/triangle.h"
+#include "GraphicsDevice/torus.h"
+#include "GraphicsDevice/cube.h"
+#include "GraphicsDevice/cylinder.h"
+#include "GraphicsDevice/cone.h"
+#include "GraphicsDevice/circle.h"
+#include "GraphicsDevice/rgb-color.h"
+#include "GraphicsDevice/simplex.h"
+#include "GraphicsDevice/quadrilateral.h"
+#include "GraphicsDevice/segment.h"
+#include "GraphicsDevice/letter.h"
+//#include "GraphicsDevice/word.h"
 
 #include "RFunction/RFunction.h"
 
@@ -148,7 +151,7 @@ void oogl::begin_transformation(const Transformation& T)
 
 void oogl::write_transformation(const Transformation& T) 
 {
- mat4 M(GetMat4(T));
+ mat4 M(T.GetMat4());
  int i,k;
  the_stream() << "INST \n"
 	      << "  transform {\n";

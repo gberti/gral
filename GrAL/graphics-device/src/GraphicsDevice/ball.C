@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     ball.C		init a new ball (sphere with triangles)
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/ball.h"
+#include "GraphicsDevice/ball.h"
 
 RenderableGeom RBall(double r, const point& m)
 { return RenderableGeom(new geom_ball(r,m));}

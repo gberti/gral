@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     sphere.C		init a new sphere
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/sphere.h"
+#include "GraphicsDevice/sphere.h"
 
 RenderableGeom RSphere(double r, const point& m)
 { return RenderableGeom(new geom_sphere(r,m));}

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     xfig.C		write routines for different geometric figures
 
@@ -9,12 +12,12 @@
 #include <math.h>
 #include "Geometry/algebra.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/xfig.h"
-#include "Graphics/circle.h"
-#include "Graphics/segment.h"
-#include "Graphics/quadrilateral.h"
-#include "Graphics/triangle.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/xfig.h"
+#include "GraphicsDevice/circle.h"
+#include "GraphicsDevice/segment.h"
+#include "GraphicsDevice/quadrilateral.h"
+#include "GraphicsDevice/triangle.h"
 
 // this matrix is nessessary to transform points
 mat4 M(vec4(1,0,0,0),vec4(0,1,0,0),vec4(0,0,1,0),vec4(0,0,0,1));

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     torus.C		init a new torus
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/torus.h"
+#include "GraphicsDevice/torus.h"
 
 RenderableGeom RTorus(double r1, double r2, char style)
 { return RenderableGeom(new geom_torus(r1,r2,style));}

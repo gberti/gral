@@ -1,13 +1,25 @@
-#ifndef NMWR_GB_GRAPHICS_DEVICE_1_H
-#define NMWR_GB_GRAPHICS_DEVICE_1_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GRAPHICS_DEVICE_H
+#define NMWR_GB_GRAPHICSDEVICE_GRAPHICS_DEVICE_H
+
+// $LICENSE
+
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/manips.h"
+
+/*! \brief Envelope class for rendering_language
+
+  \ingroup renderers
+ */
 
 class GraphicsDevice {
-public:
-  GraphicsDevice(rendering_language* r) : renderer(r) {}
-  void draw(const RenderableGeom& Obj) { TheRenderer().filter(Obj);}
-  rendering_language& TheRenderer() { return *renderer;}
 private:
-  rendering_language* renderer;
+  copy_on_write_ptr<rendering_language> renderer;
+public:
+  GraphicsDevice(rendering_language * r) : renderer(r) {}
+  void draw(const RenderableGeom& Obj) { TheRenderer().filter(Obj);}
+
+  //! \todo Should be private, ops << should be friends
+  rendering_language& TheRenderer() { return *renderer;}
 };
 
 inline GraphicsDevice& operator<<(GraphicsDevice& G, const RenderableGeom& Obj)

@@ -1,7 +1,10 @@
-#include "Graphics/translators.h"
-#include "Graphics/transformation.h"
-#include "Graphics/renderable-object.h"
-#include "Graphics/geom.h"
+
+// $LICENSE
+
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/transformation.h"
+#include "GraphicsDevice/renderable-geom.h"
+#include "GraphicsDevice/geom.h"
 
 
 

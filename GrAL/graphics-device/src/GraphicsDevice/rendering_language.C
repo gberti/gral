@@ -1,9 +1,12 @@
+
+// $LICENSE
+
 #include "stack.h"
 #include "vector.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/triangle.h"
-#include "Graphics/segment.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/triangle.h"
+#include "GraphicsDevice/segment.h"
 
 class rlang_internals {
 public:

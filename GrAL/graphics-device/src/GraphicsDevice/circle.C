@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     circle.C		init new circle
 
@@ -6,7 +9,7 @@
 
     last change:        August 6, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/circle.h"
+#include "GraphicsDevice/circle.h"
 
 RenderableGeom RCircle(const point& c1, double r)
 { return RenderableGeom(new geom_circle(c1,r));}

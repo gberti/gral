@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_GEOM_SEGMENT_H
-#define NMWR_GB_GEOM_SEGMENT_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_SEGMENT_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_SEGMENT_H
+
+// $LICENSE
+
 
 /*----------------------------------------------------------------------------
     segment.h		class to create a segment
@@ -10,9 +13,9 @@
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
 #include "Utility/pre-post-conditions.h"
-#include "Graphics/geom.h"
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/geom.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 #include <list.h>
 

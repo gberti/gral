@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_GEOM_TRIANGLE_H
-#define NMWR_GB_GEOM_TRIANGLE_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_TRIANGLE_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_TRIANGLE_H
+
+// $LICENSE
+
 
 /*----------------------------------------------------------------------------
     triangle.h		class to create a triangle
@@ -11,10 +14,10 @@
 -----------------------------------------------------------------------------*/
 
 #include "Utility/pre-post-conditions.h"
-#include "Graphics/geom.h"
+#include "GraphicsDevice/geom.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 
 class geom_triangle : public geom {

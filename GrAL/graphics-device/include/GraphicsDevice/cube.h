@@ -1,5 +1,8 @@
-#ifndef NMWR_GB_GEOM_CUBE_H
-#define NMWR_GB_GEOM_CUBE_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_CUBE_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_CUBE_H
+
+// $LICENSE
+
 
 /*----------------------------------------------------------------------------
     cube.h		class to create a cube
@@ -11,10 +14,10 @@
 -----------------------------------------------------------------------------*/
 
 #include "Utility/pre-post-conditions.h"
-#include "Graphics/geom.h"
+#include "GraphicsDevice/geom.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 
 class geom_cube : public geom {

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     simplex.C		init a new simplex
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/simplex.h"
+#include "GraphicsDevice/simplex.h"
 
 void geom_simplex::init(double aa) {
   c[0]=point(0,aa/3*sqrt(3),0);c[1]=point(aa/2,-aa/2*sqrt(3)/3,0);

@@ -1,7 +1,7 @@
 
 // $LICENSE
 
-#include "GraphicsDevice/translators.h"
+#include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/triangle.h"
 #include "GraphicsDevice/segment.h"
 

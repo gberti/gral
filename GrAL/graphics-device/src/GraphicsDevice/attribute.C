@@ -1,5 +1,8 @@
-#include "Graphics/attribute.h"
-#include "Graphics/rgb-color.h"
+
+// $LICENSE
+
+#include "GraphicsDevice/attribute.h"
+#include "GraphicsDevice/rgb-color.h"
 
 static Attribute MakeAttr(const rgb_color& c) 
 { 

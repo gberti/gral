@@ -1,7 +1,10 @@
-#ifndef NMWR_GB_TRANSFORMATION_H
-#define NMWR_GB_TRANSFORMATION_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_TRANSFORMATION_H
+#define NMWR_GB_GRAPHICSDEVICE_TRANSFORMATION_H
 
-#include "RFunction/RFunction.h"
+// $LICENSE
+
+
+#include "FunctionAlgebra/function-algebra.h"
 
 class RenderableGeom;
 
@@ -13,15 +16,13 @@ public:
   Transformation& operator= (const RFunction& F);
   Transformation& operator= (const Transformation& T);
   RenderableGeom  operator()(const RenderableGeom& G) const;
-  point           operator()(const point&) const;
+  coord_type      operator()(const coord_type&) const;
   Transformation  operator()(const Transformation& T) const;
+
+  class mat4;
+  mat4 GetMat4();
 };
 
-class mat4;
-extern mat4 GetMat4(const Transformation& T);
 
-#include "Work-around/default-operators.h"
-MAKE_DEFAULT_OPS(Transformation,"Transformation");
-#undef MAKE_DEFAULT_OPS
 
 #endif

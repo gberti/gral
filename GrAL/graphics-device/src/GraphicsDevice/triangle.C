@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     triangle.C		init new triangle
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/triangle.h"
+#include "GraphicsDevice/triangle.h"
 
 RenderableGeom RTriangle(const point& c1, const point& c2, const point& c3)
 { return RenderableGeom(new geom_triangle(c1,c2,c3));}

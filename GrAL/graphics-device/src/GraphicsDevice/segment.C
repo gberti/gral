@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 /*----------------------------------------------------------------------------
     segment.C		init a new segment
 
@@ -6,7 +9,7 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/segment.h"
+#include "GraphicsDevice/segment.h"
 
 RenderableGeom RSegment(const point& c1, const point& c2)
 { return RenderableGeom(new geom_segment(c1,c2));}

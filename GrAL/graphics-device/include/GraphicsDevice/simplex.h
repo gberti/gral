@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GEOM_SIMPLEX_H
-#define NMWR_GB_GEOM_SIMPLEX_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_SIMPLEX_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_SIMPLEX_H
 
 /*----------------------------------------------------------------------------
     simplex.h		class to create a simplex
@@ -10,10 +10,10 @@
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
 #include "Utility/pre-post-conditions.h"
-#include "Graphics/geom.h"
+#include "GraphicsDevice/geom.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 
 class geom_simplex : public geom {

@@ -1,5 +1,7 @@
-#ifndef NMWR_GB_GEOM_BALL_H
-#define NMWR_GB_GEOM_BALL_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_GEOM_BALL_H
+#define NMWR_GB_GRAPHICSDEVICE_GEOM_BALL_H
+
+// $LICENSE
 
 /*----------------------------------------------------------------------------
     ball.h		class to create a ball (sphere with triangles)
@@ -9,10 +11,11 @@
 
     last change:        July 4, 1997
 -----------------------------------------------------------------------------*/
-#include "Graphics/geom.h"
 
-#include "Graphics/translators.h"
-#include "Graphics/renderable-object.h"
+#include "GraphicsDevice/geom.h"
+
+#include "GraphicsDevice/rendering-language.h"
+#include "GraphicsDevice/renderable-geom.h"
 
 
 class geom_ball : public geom {
