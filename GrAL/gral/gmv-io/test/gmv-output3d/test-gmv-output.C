@@ -8,6 +8,9 @@
 #include "Gral/Grids/Cartesian3D/all.h"
 
 #include "Geometry/coords.h"
+#include "Utility/as-string.h"
+#include "Container/bijective-mapping.h"
+
 #include <functional>
 
 
@@ -58,11 +61,15 @@ int main() {
     c3d::CartesianGrid3D R(3,3,3);
     c3d::mapped_geometry<mapping_type> GeomR(R, mapping_type());
     grid_function<gt::Cell, int> mat(R,0);
-    for(gt::CellIterator c(R); !c.IsDone(); ++c)
+    bijective_mapping<int, std::string> names;
+    for(gt::CellIterator c(R); !c.IsDone(); ++c) {
       mat[*c] = c.index()[0];
+      names[c.index()[0]] = "Material-" + as_string(c.index()[0]);
+    }
     grid_function<gt::Vertex, float> gf2(R,2.4);
     OstreamGMV3DFmt Out("3x3x3-mat.out");
-    Out.output_materials();
+    Out.output_materials(const_ref_to_ref_ptr(names));
+
     namespace hl = heterogeneous_list;
     hl::BEGIN B;
     ConstructGrid_GF(Out,R,GeomR,
