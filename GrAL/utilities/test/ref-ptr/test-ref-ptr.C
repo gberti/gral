@@ -6,8 +6,9 @@
 
 using namespace GrAL;
 
-
-template class ref_ptr<int>;
+// cannot fully instantiate ref_ptr<int> because of 
+// constructor using constref2ref<T>::type
+// template class ref_ptr<const int>;
 
 class Base {
 public:
@@ -80,6 +81,8 @@ public:
   ref_ptr<Y const> TheY1() const { return y1;}
   ref_ptr<Y const> TheYOwned() const { return ref_ptr<Y const>(y_owned);}
   ref_ptr<Y const> TheYExclOwned() const { return  y_excl_owned;}
+
+  Y TheYOwnedByValue() const { return y_owned;}
 
   temporary<X const>   AnX() const { return temporary<X const>(X(66));}
   temporary<Y>         AnY() const { return temporary<Y>(Y(77));}
@@ -160,6 +163,19 @@ int main() {
   Y y2(* g1.TheYOwned());
   //  Y y3(g1.AnY());
   Y y4(* g1.TheYExclOwned());
+
+
+  X x;
+  const X xc;
+  G g9(copy_to_const_ref_ptr(x));
+  // G g10(copy_to_ref_ptr(x)); // will not convert to ref_ptr<const X>
+
+  G g11(const_ref_to_ref_ptr(x));
+  //G g12(      ref_to_ref_ptr(x)); // will not convert to ref_ptr<const X>
+
+  ref_ptr<const X> r1(ref_to_ref_ptr(x));
+  ref_ptr<const X> r2(const_ref_to_ref_ptr(xc));
+  ref_ptr<const Y> ry(const_ref_to_ref_ptr(g1.TheYOwnedByValue()));
 
   {
     int i;
