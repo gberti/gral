@@ -116,7 +116,7 @@ private:
   void copy_material(GF const& gf)
   { 
     typedef typename GF::value_type vt;
-    copy_material(gf, decide<boost::is_integral<vt>::value>::type()); 
+    copy_material(gf, typename decide<boost::is_integral<vt>::value>::type()); 
   }
 
   template<class GF>
