@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 rm -f out
 ./test-functions >  out 2>&1
 /bin/echo "\n"
