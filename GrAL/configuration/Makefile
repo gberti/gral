@@ -3,6 +3,7 @@ unexport PWD
 include $(CONFIG)
 
 
+all:
 
 install-headers: std-install-headers
 
@@ -14,7 +15,6 @@ install: install-headers install-config
 
 new: libclean
 
-all:
 
 test:
 
