@@ -7,7 +7,7 @@
 #include "Gral/Grids/Complex2D/grid-functions.h"
 
 // Gral Base
-#include "Gral/IO/istream-grid-complex2d-fmt.h"
+#include "Gral/IO/complex2d-format-input.h"
 
 // Utility
 #include "Utility/as-string.h"

@@ -24,21 +24,33 @@ int main(int argc, char* argv[]) {
 
   ControlDevice Ctrl = 
     GetCommandlineAndFileControlDevice(argc,argv,"gridinfo.in","main");
+  string help =
+    "gridinfo: Get information on a grid (in complex2d format)\n";
+  (help 
+    += "Usage: gridinfo <options>\n")
+    += "where <options> are\n";
 
   string grid_in;
-  RegisterAt(Ctrl, "-g", grid_in);
+  RegisterAt(Ctrl, "-g", grid_in); help += " -g <grid>\n";
   string grid_out = "grid.out";
-  RegisterAt(Ctrl, "-o", grid_out);
+  RegisterAt(Ctrl, "-o", grid_out); help += " -o <output grid>\n";
 
   string vertex_in;
-  RegisterAt(Ctrl, "-v", vertex_in);
+  RegisterAt(Ctrl, "-v", vertex_in); help += " -v <vertexfile> (vertices to process)\n";
   unsigned sdim = 2;
-  RegisterAt(Ctrl, "-d", sdim);
+  RegisterAt(Ctrl, "-d", sdim);      
+  help += " -d <space dim>  (dimension of geometry, 2 (default) or 3)\n";
   unsigned offset = 0;
-  RegisterAt(Ctrl, "-off", offset);
+  RegisterAt(Ctrl, "-off", offset); 
+  help += " -off <offset> (offset of vertex number, 0 (default) or 1)\n";
 
   bool do_bbox = false;
-  Ctrl.add("-bbox", GetTrueOnReadMutator(do_bbox));
+  Ctrl.add("-bbox", GetTrueOnReadMutator(do_bbox)); help += " -bbox (print bounding box)\n";
+ 
+  Mutator* helpmsg = new MessageOnReadMutator(cerr,help);
+  Ctrl.add("-h",     helpmsg);
+  Ctrl.add("--help", helpmsg);
+  Ctrl.add("-?",     helpmsg);
 
   Ctrl.update();
 

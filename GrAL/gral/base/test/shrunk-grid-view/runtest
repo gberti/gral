@@ -1,0 +1,26 @@
+#!/bin/sh
+
+out=out
+exec=./test-shrunk-grid
+if ! $exec > $out 2>&1
+then
+    echo "ERROR running $exec
+Output was:
+"
+cat $out
+echo "
+End output
+"
+else
+/bin/echo "\n"
+for i in  *.out
+do
+if diff $i $i.exp
+then 
+/bin/echo "\t\t\t" $i OK
+else
+/bin/echo "\t\t\t" ERROR in $i
+fi
+done
+/bin/echo "\n"
+fi

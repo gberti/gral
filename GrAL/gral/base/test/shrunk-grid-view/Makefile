@@ -1,21 +1,23 @@
-# gral/partitioning/test/metis
+# gral/base/test/disjoint-union
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 
-LOCALSOURCES =  test-metis-main.C
+LOCALSOURCES =  $(shell ls *.C)
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-metis
+TARGETS = test-shrunk-grid
 EXEC =  $(TARGETS)
 
 include $(DEPS)
 
+DEPMODULES+= gral/cartesian3d gral/complex2d gral/complex3d \
+             gral/testing gral/gmv-io geometry
 
-LDFLAGS += -L$(METIS_LIB)
-LIBS = -lgral-complex2d -lgral-partitioning -lgral-base -lgeometry -lmetis
+LIBS = -lgral-cartesian3d -lgral-complex3d -lgral-complex2d \
+       -lgral-gmv-io -lgral-base -lgeometry
 
 
 
@@ -27,7 +29,7 @@ new : clean all
 all : $(TARGETS)
 
 
-test-metis: $(LOCALOBJECTS)
+test-shrunk-grid: $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
