@@ -9,7 +9,7 @@
 //----------------------------------------------------------------
 
 #include <iostream.h>
-#include "mystring.h"
+#include <string>
 
 #include "IO/mutator.h"  // only needed for "special" mutators.
 #include "IO/control-device.h"

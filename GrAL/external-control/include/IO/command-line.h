@@ -11,8 +11,7 @@
 //----------------------------------------------------------------
 
 
-/* #include "Iso-std/sstream" */
-#include "mystring.h"
+#include <string>
 #include <strstream.h>
 
 class  Commandline {
@@ -22,7 +21,7 @@ public:
   //strstream get() const;
   const char* c_str() const;
 private:
-  string commands;
+  std::string commands;
 };
 
 
