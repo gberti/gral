@@ -72,10 +72,13 @@ struct point_traits_fixed_dim
 
 template<class SCALAR>
 struct scalar_point_traits : public point_traits_base<SCALAR> { 
-  typedef SCALAR Ptype;
-  typedef tag1D dimension_tag;
-  typedef SCALAR component_type;
+  typedef SCALAR         Ptype;
+  typedef tag1D          dimension_tag;
+  typedef SCALAR         component_type;
   typedef component_type value_type;
+  typedef SCALAR         scalar_type;
+  // typedef scalar_traits<scalar_type> st;
+  // typedef typename st::real_type     real_type;
 
   enum { dimension = 1};
   static unsigned Dim(const Ptype&) { return 1;}
@@ -310,7 +313,7 @@ inline void assign_point(float& p, float q) { p = q;}
 
 
 template<class P, class Q>
-P convert_point(Q const& q)
+inline P convert_point(Q const& q)
 {
   P p;
   assign_point(p,q);
@@ -318,7 +321,7 @@ P convert_point(Q const& q)
 }
 
 template<class P>
-P convert_point(P const& p) { return p;}
+inline P convert_point(P const& p) { return p;}
 
 } // namespace GrAL 
 
