@@ -40,7 +40,10 @@ class grid_function_vector {
 public:
   // container types
   typedef std::vector<T>                 table_type;
-  typedef typename table_type::size_type size_type;
+  typedef typename table_type::size_type       size_type;
+  typedef typename table_type::reference       reference;
+  typedef typename table_type::const_reference const_reference;
+
 
   // grid types
   typedef element_traits<E>            et;
@@ -51,7 +54,8 @@ public:
 
   // unary function interface types
   typedef E const& argument_type;
-  typedef T const& result_type;
+  //typedef T const& result_type;
+  typedef const_reference result_type;
 protected:
   //--  DATA  -------
   grid_type  const* g;
@@ -73,6 +77,11 @@ public:
 
   /*  void operator=(const T& t) { fill(table.begin(),table.end(),t); } */
 
+  void init(const grid_type& gg, const T& t) {
+    REQUIRE((g == 0), "grid_function<>::init: grid must be 0!\n",1);
+    g = &gg;
+    table.resize(et::size(*g),t);
+  }
   void set_grid(const grid_type& gg) {
     REQUIRE((g == 0), "set grid: grid must be 0!\n",1);
     g = &gg;
@@ -110,13 +119,13 @@ public:
 
   //--------------  data access operators -----------------------
 
-  const T&   operator()(const E& e) const {
+  const_reference  operator()(const E& e) const {
     REQUIRE((0 <= et::handle(e) && et::handle(e) < (int)table.size()), 
 	    "grid_function: invalid access: pos = " << et::handle(e),1);
     return table[et::handle(e)];
   }
   
-  T&  operator[](const E& e)  {
+  reference  operator[](const E& e)  {
     REQUIRE( (&(e.TheGrid()) == g),
 	     "gf(e): Grids don't match: e.TheGrid() = "
 	     << &(e.TheGrid()) << ", this->TheGrid() : " << g << "!\n",1); 
