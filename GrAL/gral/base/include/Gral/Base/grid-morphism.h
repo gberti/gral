@@ -7,6 +7,8 @@
 
 /*! \defgroup gridmorphisms Grid Morphisms
  
+   Grid morphisms can be used for associative copies (copy operations
+   between grids keeping track of which element is copied where).
  */
 
 /*! grid vertex isomorphism 
@@ -20,6 +22,8 @@
 template<class G_DEF, class G_IMG>
 class vertex_morphism
 {
+  typedef vertex_morphism<G_DEF,G_IMG>  self;
+
   typedef G_DEF                         grid_type_def;
   typedef G_IMG                         grid_type_img;
   typedef grid_types<G_IMG>             gtimg;
@@ -29,16 +33,41 @@ class vertex_morphism
   typedef typename gtimg::vertex_handle vertex_handle_img;
   typedef typename gtdef::vertex_handle vertex_handle_def;
 
+  typedef vertex_morphism<grid_type_img, grid_type_def> inverse_type;
+
   grid_function<VertexDef,vertex_handle_img> f; // contains ref to g_def
   grid_type_img const*                       g_img;
-  
+  mutable  inverse_type   const*  inv;
+  mutable  bool           inverse_owned;     
+
+  void copy(self const& rhs) {
+    f = rhs.f;
+    g_img = rhs.img;
+    inv = 0;
+    inverse_owned = false;
+  }
+
 public:
   typedef VertexImg result_type;
   typedef VertexDef argument_type;
 
-  vertex_morphism() : g_img(0) {}
+  vertex_morphism() : g_img(0), inv(0), inverse_owned(false) {}
   vertex_morphism(G_DEF const& g_def, G_IMG const& gg_img)
-    : f(g_def), g_img(&gg_img) {}
+    : f(g_def), g_img(&gg_img), inv(0), inverse_owned(false) {}
+  vertex_morphism(G_DEF const& g_def, G_IMG const& gg_img, 
+                inverse_type const& i)
+    : f(g_def), g_img(&gg_img), inv(&i), inverse_owned(false) {}
+
+  vertex_morphism   (self const& rhs) { copy(rhs);}
+  self & operator=  (self const& rhs) { if(this != &rhs) copy(rhs); return *this;}
+
+  ~vertex_morphism() { clear();}
+
+  inverse_type const& inverse()  const {
+    if(inv == 0) init_inverse();
+    return *inv;
+  }
+
 
   VertexImg operator()(VertexDef const& v) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
@@ -60,7 +89,20 @@ public:
     REQUIRE((g_img != 0), "No image grid!\n",1);
     return *g_img;
   }
+
+private:
+  void clear() { if (inverse_owned) delete inv;}
+
+  void init_inverse() const {
+    inverse_type * pinv = new inverse_type(ImgGrid(),DefGrid(), *this);
+    inverse_owned = true;
+    for(typename gtdef::VertexIterator v(DefGrid()); ! v.IsDone(); ++v)
+      (*pinv)[(*this)(*v).handle()] = v.handle();
+    inv = pinv;
+  }
 };
+
+
 
 
 /*! grid cell isomorphism 
@@ -76,6 +118,8 @@ public:
 template<class G_DEF, class G_IMG>
 class cell_morphism
 {
+  typedef cell_morphism<G_DEF,G_IMG> self;
+
   typedef G_DEF grid_type_def;
   typedef G_IMG grid_type_img;
   typedef grid_types<G_IMG> gtimg;
@@ -84,17 +128,43 @@ class cell_morphism
   typedef typename gtdef::Cell CellDef;
   typedef typename gtimg::cell_handle cell_handle_img;
   typedef typename gtdef::cell_handle cell_handle_def;
+  typedef cell_morphism<grid_type_img, grid_type_def> inverse_type;
 
   grid_function<CellDef,cell_handle_img> f;
-  grid_type_img const* g_img;
-  
+  grid_type_img         const*    g_img;
+  mutable  inverse_type const*  inv;
+  mutable  bool           inverse_owned;     
+
+  void copy(self const& rhs) {
+    f = rhs.f;
+    g_img = rhs.img;
+    inv = 0;
+    inverse_owned = false;
+  }
+
 public:
   typedef CellImg result_type;
   typedef CellDef argument_type;
 
-  cell_morphism() : g_img(0) {}
+
+  cell_morphism() : g_img(0), inv(0), inverse_owned(false) {}
   cell_morphism(G_DEF const& g_def, G_IMG const& gg_img)
-    : f(g_def), g_img(&gg_img) {}
+    : f(g_def), g_img(&gg_img), inv(0), inverse_owned(false) {}
+
+  cell_morphism(G_DEF const& g_def, G_IMG const& gg_img, 
+                inverse_type const& i)
+    : f(g_def), g_img(&gg_img), inv(&i), inverse_owned(false) {}
+
+  cell_morphism   (self const& rhs) { copy(rhs);}
+  self & operator=(self const& rhs) { if(this != &rhs) copy(rhs); return *this;}
+
+  ~cell_morphism() { clear();}
+
+
+  inverse_type const& inverse()  const {
+    if(inv == 0) init_inverse();
+    return *inv;
+  }
 
   CellImg operator()(CellDef const& v) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
@@ -111,11 +181,12 @@ public:
     return f[f.TheGrid().cell(v)];
   }
 
-  /*
+  /* This would allow for operator[](Cell) also.
   struct cell_handle_img_proxy {
     cell_handle_img & h;
     cell_handle_img_proxy(cell_handle_img& hh) : h(hh) {}
     void operator=(CellImg const& c) { h = c.handle();}
+    void operator=(cell_handle_img const& c) { h = c;}
   };
 
   cell_handle_img_proxy operator[](CellDef const& c) {
@@ -128,6 +199,17 @@ public:
   grid_type_img const& ImgGrid() const {
     REQUIRE((g_img != 0), "No image grid!\n",1);
     return *g_img;
+  }
+
+private:
+  void clear() { if (inverse_owned) delete inv;}
+
+  void init_inverse() const {
+    inverse_type * pinv = new inverse_type(ImgGrid(),DefGrid(), *this);
+    inverse_owned = true;
+    for(typename gtdef::CellIterator c(DefGrid()); ! c.IsDone(); ++c)
+      (*pinv)[(*this)(*c).handle()] = c.handle();
+    inv = pinv;
   }
 };
 
