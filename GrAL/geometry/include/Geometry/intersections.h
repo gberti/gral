@@ -290,7 +290,7 @@ public:
       for(dir_seq_it_1 d1 = dirs1.begin(k); d1 != dirs1.end(k); ++d1)
 	for(dir_seq_it_2 d2 = dirs2.begin(d_1_k); d2 != dirs2.end(d_1_k); ++d2) {
 	  std::vector<coord_type> dirs(sdim-1);
-	  std::vector<coord_type>::iterator dir_it = dirs.begin();
+	  typename std::vector<coord_type>::iterator dir_it = dirs.begin();
 	  for(dir_it_1 dd1 = d1->begin(); dd1 != d1->end(); ++dd1, ++dir_it)
 	    *dir_it = *dd1;
 	  for(dir_it_2 dd2 = d2->begin(); dd2 != d2->end(); ++dd2, ++dir_it)
