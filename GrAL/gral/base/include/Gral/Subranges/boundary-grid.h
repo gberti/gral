@@ -34,6 +34,7 @@ template<class E>
 class boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<2> > 
   : public boundary_grid_types_base<E, cell_type_tag, grid_dim_tag<2> >
 {
+public:
   typedef grid_dim_tag<1> dimension_tag;
 
   typedef typename bgt::VertexOnCellIterator VertexIterator;
