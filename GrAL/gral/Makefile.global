@@ -65,6 +65,14 @@ test-check-clean:
         $(MAKE) test-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
+test-check-clean-force:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) test-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config \
+        || echo ">>>>>>>>>>> FAILED for " $$i " (continuing)";\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
 
 
 # predoc  = generate docs
