@@ -9,7 +9,7 @@
 namespace GrAL {
 
 template<class G, class NBTABLE, class GT>
-::std::map<G const*, NBTABLE const*>
+std::map<G const*, NBTABLE const*>
 cell_on_cell_iterator<G,NBTABLE,GT>::ctxt;
 
 template<class G, class NBTABLE, class GT>
