@@ -130,7 +130,8 @@ void Construct_complex2d(Complex2D     & CC,
 
  // copy geometry
 
- destGeom.set_grid(CC);
+ // destGeom.set_grid(CC);
+ destGeom.rebind(CC);
  typedef typename grid_types<G2>::VertexIterator src_vertex_it;
  for(src_vertex_it src_v = srcG.FirstVertex(); ! src_v.IsDone(); ++src_v) {
    //   assign_point(cc.coord(CC.vertex(VertexCorr(src_v.handle()))) , geom.coord(*src_v));
