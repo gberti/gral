@@ -15,7 +15,8 @@
 
     \todo The implementation contains some overhead in terms of storage:
     The grid function on archetype cells (i.e. cell facets) does not
-    need a grid pointer.
+    need a grid pointer. It could be optimized for grids with archetypes which have
+    contiguous cell handles, and in particular for grids with a single archetype.
     \todo Similar classes could be designed for cell-vertex and cell-edge
     incidences.
  */
@@ -31,6 +32,7 @@ class facet_on_cell_function
  grid_function<Cell, grid_function<ArchCell,T> > gf;
 
 public:
+  facet_on_cell_function() {}
   facet_on_cell_function(grid_type const& g) :  gf(g) 
     {
       for(typename gt::CellIterator c(gf.TheGrid()); ! c.IsDone(); ++c)
