@@ -38,6 +38,8 @@ public:
   void rebind  (grid_type const& gg) { g = (grid_type*) (&gg);}
   bool bound() const { return (g != 0);}
 
+  unsigned space_dimension() const { return pt::Dim(coord(* TheGrid().FirstVertex()));}
+
   const Complex2D& TheGrid() const 
     { REQUIRE((g != 0), "geometry: Grid = 0!\n",1);  return *g;}
   Complex2D&       TheGrid()       

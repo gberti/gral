@@ -49,6 +49,7 @@ public:
   typedef typename mapping_type::result_type  coord_type;
   typedef RegGrid2D                           grid_type;
   typedef typename RegGrid2D::index_type      index_type;
+  typedef point_traits<coord_type>            pt;
 
   mapped_geometry_reg2d_base() :  g(0) {} 
 
@@ -78,7 +79,8 @@ public:
   const mapping_type&  TheMapping() const { return f;}
   
   // is this always possible?
-  unsigned space_dimension() const { return f.dim_of_image();}
+  // unsigned space_dimension() const { return f.dim_of_image();}
+  unsigned space_dimension() const { return pt::Dim(coord(* (TheGrid().FirstVertex())));}
 
   coord_type coord(const Vertex& v) const  { 
  

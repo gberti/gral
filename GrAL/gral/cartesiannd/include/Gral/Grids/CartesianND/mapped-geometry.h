@@ -15,7 +15,7 @@ namespace cartesiannd {
   template<class CARTGRID>
   struct default_coord {
     // could use CARTGRID::index_type::rebind<double>
-    enum { dimension = CARTGRID::dimension };
+    enum { dimension = CARTGRID::dim };
     typedef tuple<double, dimension> type;
   };
 
@@ -26,7 +26,8 @@ namespace cartesiannd {
     typedef CARTGRID grid_type;
     typedef MAP      mapping_type;
     typedef typename mapping_type::result_type coord_type;
-    typedef grid_types<grid_type> gt;
+    typedef grid_types<grid_type>    gt;
+    typedef point_traits<coord_type> pt;
 
     typedef typename gt::Vertex Vertex;
     typedef typename gt::Cell   Cell;
@@ -46,6 +47,7 @@ namespace cartesiannd {
 		    mapping_type ff = mapping_type()) 
       : g(gg), f(ff), low_(lw), high_(hgh) { init();}
 
+
     void init() {
       delta = coord_type(1.0);
       delta = quotient(delta, high_ - low_);
@@ -60,6 +62,9 @@ namespace cartesiannd {
       f = ff;
       rebind(g);
     }
+
+    ref_ptr<grid_type const> TheGrid() const { return g;}
+    unsigned space_dimension() const { return pt::Dim(delta);}
 
     coord_type unit_coord(index_type idx) const { 
       coord_type r(idx - low_);

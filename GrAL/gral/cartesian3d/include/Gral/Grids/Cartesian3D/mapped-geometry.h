@@ -25,7 +25,7 @@ public:
   typedef gt::index_type        index_type;
   typedef gt::Cell              Cell;
   typedef gt::Vertex            Vertex;
-
+  typedef point_traits<coord_type> pt;
 private:
   grid_type const* g;
   mapping_type f;
@@ -53,7 +53,8 @@ public:
   void rebind(grid_type    const& gg,
 	      mapping_type const& ff) { init(gg,ff);}
  
- 
+  unsigned space_dimension() const { return pt::Dim(coord(* (TheGrid().FirstVertex())));}
+
   //  coord_type coord(Vertex const& v) const { return f(x(v),y(v),z(v));}
   coord_type coord(Vertex const& v) const { 
     index_type i(v.index()); 
