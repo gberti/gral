@@ -291,9 +291,10 @@ public:
     vertex_handle GlobalNumber() const {return TheGrid().vertex_num(_v);}
     vertex_handle handle      () const {return TheGrid().vertex_num(_v);}
 
-    const vertex_base& base() const {return _v;}
+    const index_type&  index() const { return _v;}
+    //    const vertex_base& base() const {return _v;}
   protected:
-    vertex_base _v;
+    index_type _v;
   };
 
   //-------------------- EDGE ---------------------
@@ -658,10 +659,10 @@ public:
     inc_iterator_base(const grid_type* g) : _g(g) {}
     inc_iterator_base(const grid_type& g) : _g(&g) {}
 
-    grid_type const& TheGrid() const {
-      REQUIRE((_g != 0),"No Grid!\n",1);
-      return (*_g);
-    }
+    grid_type const& TheGrid() const { cb(); return *_g; }
+
+    bool bound() const { return _g != 0;}
+    void cb()    const { REQUIRE(bound(), "", 1);} 
   protected:
     const grid_type* _g;
   };
@@ -681,27 +682,29 @@ public:
     VertexOnVertexIterator(Vertex const& vv) { *this = vv.FirstVertex(); }
     VertexOnVertexIterator(int v, const Vertex& vv, const Grid* g) 
       : base(g), _v(v), _vv(vv)  {}
-    self& operator++() {_v = _vv.next_neighbour(_v); return (*this);}
-    self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
-    Vertex  operator*() const { return (_vv.vertex(_v));}
+    self& operator++() { cv(); _v = _vv.next_neighbour(_v); return (*this);}
+    self  operator++(int)    { cv(); self tmp(*this); ++(*this); return tmp;}
+    Vertex  operator*() const { cv(); return (_vv.vertex(_v));}
     // operator Vertex()   const { return this->operator*();}
-    bool    IsDone()    const { return (_v > 4);}
+    bool    IsDone()    const { cb(); return (_v > 4);}
     // operator bool() const { return !IsDone();} 
 
-    Vertex const& TheVertex()  const { return _vv;}
-    Vertex const& TheAnchor()  const { return _vv;}
+    Vertex const& TheVertex()  const { cv(); return _vv;}
+    Vertex const& TheAnchor()  const { cv(); return _vv;}
 
-    int LocalNumber()   const { return _v;}
+    int LocalNumber()   const { cv(); return _v;}
 
     friend bool operator==(self const& lhs, self const& rhs)
     {
+      lhs.cb(); rhs.cb();
       REQUIRE((lhs.TheVertex() == rhs.TheVertex()), 
               "Comparing VertexOnVertexIterator with different vertex anchors!\n",1);
       return (lhs._v == rhs._v);
     }
-    friend bool operator!=(const self& lhs, const self& rhs) 
-      { return !(lhs == rhs);}
+    friend bool operator!=(const self& lhs, const self& rhs) { return !(lhs == rhs);}
 
+    bool valid() const { return bound() && ! IsDone();}
+    void cv()    const { REQUIRE(valid(), "vv=" << _vv.index() << " v=" << _v, 1);}
   private:
     int _v; // [1 , _c.NumOfVertices()]
     Vertex _vv;
@@ -721,24 +724,27 @@ public:
     CellOnVertexIterator(Vertex const& vv) { *this = vv.FirstCell();}
     CellOnVertexIterator(int c, const Vertex& vv, const Grid* g) 
       :  base(g), _c(c), _vv(vv) {}
-    self& operator++() {_c = _vv.next_cell(_c); return (*this);}
-    self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
-    Cell operator*() const { return (_vv.cell(_c));}
-    bool    IsDone()    const { return (_c > 4);}
+    self& operator++() {cv(); _c = _vv.next_cell(_c); return (*this);}
+    self  operator++(int)    { cv(); self tmp(*this); ++(*this); return tmp;}
+    Cell operator*() const { cv(); return (_vv.cell(_c));}
+    bool    IsDone()    const { cb(); return (_c > 4);}
     // operator bool() const { return !IsDone();} 
-    int LocalNumber()   const { return _c;}
+    int LocalNumber()   const { cv(); return _c;}
 
-    Vertex const& TheVertex()  const { return _vv;}
-    Vertex const& TheAnchor()  const { return _vv;}
+    Vertex const& TheVertex()  const { cv(); return _vv;}
+    Vertex const& TheAnchor()  const { cv(); return _vv;}
 
     friend bool operator==(self const& lhs, self const& rhs)
     {
+      lhs.cb(); rhs.cb();
       REQUIRE((lhs.TheVertex() == rhs.TheVertex()), 
               "Comparing CellOnVertexIterator with different vertex anchors!\n",1);
       return (lhs._c == rhs._c);
     }
-    friend bool operator!=(const self& lhs, const self& rhs) 
-      { return !(lhs == rhs);}
+    friend bool operator!=(const self& lhs, const self& rhs)  { return !(lhs == rhs);}
+
+    bool valid() const { return bound() && ! IsDone();}
+    void cv()    const { REQUIRE(valid(), "vv=" << _vv.index() << " c=" << _c, 1);}
   private:
     int _c; // [1 , _c.NumOfVertices()]
     Vertex _vv;
@@ -760,31 +766,33 @@ public:
       : base(& cc.TheGrid()), v(Cell::SW), c(cc)  {}
     VertexOnCellIterator( Cell::corner vv, const Cell& cc, const Grid* g) 
       : base(g), v(vv), c(cc)  {}
-    self& operator++() { ++((int&)v); return (*this);}
-    self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
-    Vertex  operator*() const { return (c.vertex(v));}
+    self& operator++() { cv(); ++((int&)v); return (*this);}
+    self  operator++(int)    { cv(); self tmp(*this); ++(*this); return tmp;}
+    Vertex  operator*() const { cv(); return (c.vertex(v));}
     // operator Vertex()   const { return this->operator*();}
-    bool    IsDone()    const { return (v > c.NumOfVertices());}
+    bool    IsDone()    const { cb(); return (v > c.NumOfVertices());}
     // operator bool() const { return !IsDone();} 
-    int LocalNumber()   const { return v;}
+    int LocalNumber()   const { cv(); return v;}
 
-    vertex_handle   handle() const { return c.vertex(v).handle();}
+    vertex_handle   handle() const { cv(); return c.vertex(v).handle();}
 
-    self CyclicSucc() const { self tmp(*this); tmp.v = Cell::corner(tmp.v == 4 ? 1 : tmp.v+1); return tmp;}
-    self CyclicPred() const { self tmp(*this); tmp.v = Cell::corner(tmp.v == 1 ? 4 : tmp.v-1); return tmp;}
+    self CyclicSucc() const { cv(); self tmp(*this); tmp.v = Cell::corner(tmp.v == 4 ? 1 : tmp.v+1); return tmp;}
+    self CyclicPred() const { cv(); self tmp(*this); tmp.v = Cell::corner(tmp.v == 1 ? 4 : tmp.v-1); return tmp;}
 
-    Cell const& TheCell()     const { return c;}
-    Cell const& TheAnchor()   const { return c;}
+    Cell const& TheCell()     const { cv(); return c;}
+    Cell const& TheAnchor()   const { cv(); return c;}
 
     friend
     bool operator==(self const& lhs, self const& rhs)
     { 
+      lhs.cb(); rhs.cb();
       REQUIRE( (lhs.c == rhs.c), "Comparing VertexOnCellIterators with different anchor cells!\n",1);
       return ((int) lhs.v == (int) rhs.v);
     }
-    friend bool operator!=(const self& lhs, const self& rhs) 
-      { return !(lhs == rhs);}
+    friend bool operator!=(const self& lhs, const self& rhs) { return !(lhs == rhs);}
 
+    bool valid() const { return bound() && ! IsDone();}
+    void cv()    const { REQUIRE(valid(), "c=" << c.index() << " v=" << v, 1);}
   private:
     Cell::corner v; 
     Cell c;
@@ -831,12 +839,15 @@ public:
 
     friend
     bool operator==(self const& lhs, self const& rhs)
-    { 
+    {     
+      lhs.cb(); rhs.cb();
       REQUIRE( (lhs.c == rhs.c), "Comparing EdgeOnCellIterators with different anchor cells!\n",1);
       return ((int) lhs.e == (int) rhs.e);
     }
-    friend bool operator!=(const self& lhs, const self& rhs) 
-      { return !(lhs == rhs);}
+    friend bool operator!=(const self& lhs, const self& rhs)  { return !(lhs == rhs);}
+   
+    bool valid() const { return bound() && ! IsDone();}
+    void cv()    const { REQUIRE(valid(), "c=" << c.index() << " e=" << e, 1);}
 
   private:
     Cell::side e;  
@@ -889,12 +900,14 @@ public:
     Cell const&  TheAnchor() const { return c;}
 
     friend bool operator==(self const& lhs, self const& rhs)  { 
+      lhs.cb(); rhs.cb();
       REQUIRE( (lhs.c == rhs.c), "Comparing CellOnCellIterators with different anchor cells!\n",1);
       return ((int) lhs.nb == (int) rhs.nb);
     }
-    friend bool operator!=(const self& lhs, const self& rhs) 
-      { return !(lhs == rhs);}
-
+    friend bool operator!=(const self& lhs, const self& rhs)    { return !(lhs == rhs);}
+    
+    bool valid() const { return bound() && ! IsDone();}
+    void cv()    const { REQUIRE(valid(), "c=" << c.index() << " nb=" << nb, 1);}
   private:
     Cell::side nb;  // [1 , c.NumOfNeighbours()]
     Cell c;
@@ -957,7 +970,7 @@ public:
 
   /*! @name Boundary tests */
   //@{ 
-  bool IsOnBoundary(const Vertex& V) const { return IsOnBoundary(V.base());}
+  bool IsOnBoundary(const Vertex& V) const { return IsOnBoundary(V.index());}
   inline bool IsOnBoundary(const vertex_base&) const;
   inline bool IsOnBoundary(const Edge&   E) const;
   inline bool IsOnBoundary(const EdgeOnCellIterator& Nb) const;
@@ -1289,6 +1302,8 @@ inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 {
   return ((C._g == this) && IsInside(C));
 }
+
+
 
 
 } // namespace cartesian2d 
