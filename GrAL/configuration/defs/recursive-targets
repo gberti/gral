@@ -13,7 +13,7 @@
 
 # Some special cases
 
-# ifndef SUBDIRS
+ifndef SUBDIRS
 generic:
 new-check-clean:
 new:
@@ -22,7 +22,7 @@ compile:
 lib:
 clean:
 
-#else
+else
 
 TARGET=dummy # must be called with "gmake generic TARGET=<target>"
 
@@ -77,6 +77,6 @@ clean:
 	echo "LEAVING  directory" $$i;cd ..; done
 	rm -f *.o *~ *.flc core;
 
-#endif
+endif
 
 
