@@ -29,9 +29,13 @@ void ConstructSubrangeFromCells
   typedef typename gt::Vertex               Vertex;
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
 
+  //FIXME:  not 100% ok, R should contain valid ref. to Grid ... 
+  if(Cit.IsDone())
+    return;
   grid_type const& G(Cit.TheGrid());
 
   R = Range(G); //enumerated_subrange<Grid>(G); // empty subrange
+
   ENSURE( (R.FirstCell().IsDone()), "range not empty on construction!\n",1);
 
   partial_grid_function<Vertex,bool> visited(G,false);
