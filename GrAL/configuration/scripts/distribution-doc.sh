@@ -1,12 +1,10 @@
 #! /bin/bash
 
-
-#CVSREPO=/home/nmwr/CVS;
-CVSREPO=`cat CVS/Root`;
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules.sh`;
 TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
-#MODULES="configuration configuration utilities"
+CVSREPO=`cat $cvswork/configuration/CVS/Root`;
+
 
 TMP=${HOME}/tmp;
 ALLROOT=${TMP}/modules;

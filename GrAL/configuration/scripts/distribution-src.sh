@@ -1,9 +1,9 @@
 #! /bin/bash
 
 
-CVSREPO=/home/nmwr/CVS;
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
+CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
 ALLROOT=GrAL
 cd ${HOME}/tmp;
@@ -28,8 +28,8 @@ perl -p -i -e 's|\$GRALDOC|doc|g' ./index.html
 
 
 # insert license text in all sources
-find . -name "*.h" -exec ${cvsroot}/configuration/scripts/replace-license.pl {} \;
-find . -name "*.C" -exec ${cvsroot}/configuration/scripts/replace-license.pl {} \;
+find . -name "*.h" -exec ${cvswork}/configuration/scripts/replace-license.pl {} \;
+find . -name "*.C" -exec ${cvswork}/configuration/scripts/replace-license.pl {} \;
 
 
 cd ..;
