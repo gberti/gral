@@ -8,7 +8,7 @@ include $(CONFIG)
 LOCALSOURCES =  $(shell ls *.C)
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-boundary-grids
+TARGETS = test-boundary-grid
 EXEC =  $(TARGETS)
 
 include $(DEPS)
@@ -27,7 +27,7 @@ new : clean all
 all : $(TARGETS)
 
 
-test-boundary-grids: $(LOCALOBJECTS)
+test-boundary-grid: $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:

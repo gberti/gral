@@ -5,6 +5,7 @@ include $(CONFIG)
 TARGET=all
 
 all:
+	(cd src; $(MAKE) new)
 
 new: libclean
 	(cd src; $(MAKE) new)

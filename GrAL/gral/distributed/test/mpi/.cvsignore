@@ -5,3 +5,4 @@ grid.master-local.complex2d  mpigrid?complex2d
 test-distri-io  test-distributed
 mpihosts 
 grid.part grid.complex2d 
+mpigrid*.complex2d

@@ -9,10 +9,10 @@ OstreamGMV3DFmt::OstreamGMV3DFmt()
   : out(0), owned(false) {}
 
 OstreamGMV3DFmt::OstreamGMV3DFmt(std::ostream& ot)
-  : out(&ot), owned(false) {}
+  : out(&ot), owned(false), num_vars(0) {}
 
 OstreamGMV3DFmt::OstreamGMV3DFmt(std::string const& nm)
-  : out(new std::ofstream(nm.c_str())), owned(true) {}
+  : out(new std::ofstream(nm.c_str())), owned(true), num_vars(0) {}
 
 OstreamGMV3DFmt::~OstreamGMV3DFmt() 
 { if(owned) delete out;}
@@ -21,6 +21,7 @@ void OstreamGMV3DFmt::copy(OstreamGMV3DFmt const& rhs)
 {
   REQUIRE( !rhs.owned , "cannot copy ostream!",1);
   out = rhs.out;
+  num_vars = rhs.num_vars;
   owned = false;
   // offset = rhs.offset;
   //  nv = rhs.nv;
