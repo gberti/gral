@@ -42,7 +42,7 @@ class vertex_morphism
 
   void copy(self const& rhs) {
     f = rhs.f;
-    g_img = rhs.img;
+    g_img = rhs.g_img;
     inv = 0;
     inverse_owned = false;
   }
@@ -71,17 +71,17 @@ public:
 
   VertexImg operator()(VertexDef const& v) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return g_img->vertex(f(v));
+    return VertexImg(*g_img,f(v));
   }
 
   vertex_handle_img operator()(vertex_handle_def v) const {
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return f(f.TheGrid().vertex(v));
+    return f(VertexDef(f.TheGrid(),v));
   }
 
   vertex_handle_img & operator[](vertex_handle_def v)  {
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return f[f.TheGrid().vertex(v)];
+    return f[VertexDef(f.TheGrid(),v)];
   }
 
   grid_type_def const& DefGrid() const { return f.TheGrid();}
@@ -166,19 +166,19 @@ public:
     return *inv;
   }
 
-  CellImg operator()(CellDef const& v) const { 
+  CellImg operator()(CellDef const& c) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return g_img->cell(f(v));
+    return CellImg(*g_img,c);
   }
 
-  cell_handle_img operator()(cell_handle_def v) const {
+  cell_handle_img operator()(cell_handle_def c) const {
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return f(f.TheGrid().cell(v));
+    return f(CellDef(f.TheGrid(),c));
   }
 
-  cell_handle_img & operator[](cell_handle_def v)  {
+  cell_handle_img & operator[](cell_handle_def c)  {
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return f[f.TheGrid().cell(v)];
+    return f[CellDef(f.TheGrid(),c)];
   }
 
   /* This would allow for operator[](Cell) also.
