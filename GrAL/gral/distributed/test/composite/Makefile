@@ -40,5 +40,5 @@ clean: stdclean
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
 	rm -f .depend *.oogl *.out 
-
+	rm -r out?x?p?
 

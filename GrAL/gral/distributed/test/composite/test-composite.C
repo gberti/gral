@@ -24,10 +24,14 @@
 /*! \file 
 
   Tests:
-    - 2x2p1: OK
-    - 2x2  : OK
-    - 4x1  : Wrong (First grid to small, nodes 2 <-> 3)
-    - 4x1p1: Wrong (nodes 2 <-> 3)
+    - 2x2, 1 part  : OK
+    - 2x2, 2 parts : OK
+    - 4x1, 1 part  : OK
+    - 4x1, 2 parts : OK
+    - 4x2, 2 parts : OK
+
+    \Todo Test different stencils
+    \Todo Test 'bad' partitionings
  */
 
 
