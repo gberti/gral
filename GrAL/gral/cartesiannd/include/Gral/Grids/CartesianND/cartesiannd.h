@@ -568,12 +568,16 @@ namespace cartesiannd {
     typedef grid_types_base<CARTGRID, CARTGRID::dim> base;
     typedef sequence_iterator_t<CARTGRID, K>         self;
   public:
-    enum { griddim = CARTGRID::dim};
+    enum { dim = K, codim = CARTGRID::dim -K, griddim = CARTGRID::dim};
+    unsigned dimension()   const { return dim;}
+    unsigned codimension() const { return codim;}
+
     typedef typename grid_type::base_grid_type  base_grid_type;
     typedef element_handle_t<base_grid_type,K>  element_handle;
     typedef element_handle_t<CARTGRID, K>       local_element_handle;
 
     typedef typename base::index_type        index_type;
+    typedef tuple<int, K>                    local_index_type;
 
     //    typedef self                             value_type;
     typedef typename element_type<grid_type, K, griddim - K>::type value_type;
@@ -620,7 +624,7 @@ namespace cartesiannd {
     sequence_iterator_t(        CARTSUBRANGE const& rge, element_handle hh) : g(rge. BaseGrid()), h(hh) { init_m();}
 
 
-    self&       operator++()       { cv(); ++h; if(! valid_map()) ++m; return *this; }
+    self&       operator++()       { cv(); ++h; advance_m(); return *this; }
     bool        IsDone()     const { cb(); return m >= g->maps[K].num_of_maps();}
 
     // this will use the implicit copy-constructor if value_type == self,
@@ -635,8 +639,8 @@ namespace cartesiannd {
 
     //! for \f$ K \neq 0, D \f$, \c index() is not unique!
     index_type index()  const { cb(); return g->handle2index(h,m);} //  g->maps[K][m](h - g->offsets[K][m]);}
-    index_type vertex_index_low () const { return index();}
-    index_type vertex_index_high() const { 
+    index_type low_vertex_index() const { return index();}
+    index_type high_vertex_index() const { 
       index_type res(index()); 
       res += delta_map<griddim>::template num2index<index_type>(K,m);
       /*
@@ -653,8 +657,25 @@ namespace cartesiannd {
     Vertex        V(typename archetype_type::Vertex const& av) const { return Vertex(TheGrid(), index() + av.index());}
     vertex_handle v(typename archetype_type::Vertex const& av) const { return TheGrid().get_vertex_handle(index()+av.index());}
 
-    Vertex        V(index_type local) const { return Vertex(TheGrid(), index() + local);}
-    vertex_handle v(index_type local) const { TheGrid().get_vertex_handle(index() + local);}
+    // relative is the relative coordinates (offset) in the grid coordinates
+    Vertex        V(index_type relative) const { return Vertex(TheGrid(), index() + relative);}
+    vertex_handle v(index_type relative) const { return TheGrid().get_vertex_handle(index() + relative);}
+
+    // local is offset on local coordinates of the element, i.e. has as many dimensions as  this->dimension()
+    Vertex        Vl(local_index_type local) const { return V(full_index(local));}
+    vertex_handle vl(local_index_type local) const { return v(full_index(local));}
+
+    index_type full_index(local_index_type local) const {
+      //if(dimension() == griddim)
+      //	return local;
+      //     else {
+	index_type full(0);
+	typename delta_map<griddim>::vector_system dir = delta_map<griddim>::num2vec(K,direction());
+	for(unsigned i = 0; i < local.size(); ++i)
+	  full[dir[i]] = local[i];
+	return full;
+	// }
+    }
 
     ref_ptr<grid_type const> TheAnchor() const { return g;}
     // ref_ptr<grid_type const> TheGrid() const { return g;}
@@ -703,7 +724,8 @@ namespace cartesiannd {
     void cv()    const { REQUIRE(valid(), "", 1);}
 
     // find appropriate m by looking up the correct interval of h in offsets[K];
-    void init_m() { m = 0; while(!valid_map() && m < g->NumOfDirections(K)) ++m;}
+    void init_m() { m = 0; advance_m(); }
+    void advance_m() { while(!valid_map() && m < g->NumOfDirections(K)) ++m;}
     // is h a handle for the current map m?
     bool valid_map() const { return (unsigned)h.h() < g->offsets[K][m+1];}
 
@@ -855,10 +877,132 @@ namespace cartesiannd {
  { return !(lhs==rhs);}
 #endif
 
+} // namespace cartesiannd
 
 
-  //-----------------------  inline functions  ----------------------------
- 
+
+
+template<unsigned DIM>
+struct grid_types<cartesiannd::grid<DIM> > 
+  : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::grid<DIM>, DIM> >
+{
+  typedef cartesiannd::grid<DIM>          grid_type;
+  typedef cartesiannd::subrange<DIM>      cartesian_subrange_type;
+};
+
+template<unsigned DIM>
+struct grid_types<cartesiannd::archetype_t<cartesiannd::grid<DIM> > >
+  : public grid_types_base<cartesiannd::archetype_base_t<cartesiannd::grid<DIM> > >
+{
+  typedef cartesiannd::archetype_t<cartesiannd::grid<DIM> > grid_type;
+  typedef cartesiannd::archetype_t<cartesiannd::grid<DIM> > at;
+  typedef typename at::archetype_iterator archetype_iterator;
+  typedef typename at::archetype_handle   archetype_handle;
+  typedef typename at::archetype_type     archetype_type;
+
+  typedef grid_dim_tag<DIM-1> dimension_tag;
+};
+
+template<unsigned DIM>
+struct grid_types<cartesiannd::subrange<DIM> > 
+  : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::subrange<DIM>, DIM> >
+{
+  typedef cartesiannd::subrange<DIM> grid_type;
+};
+
+
+// vertex
+template<unsigned DIM>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM> ,0> >
+  : public element_traits_vertex_base<cartesiannd::grid<DIM> > 
+{
+  typedef element_traits_vertex_base<cartesiannd::grid<DIM> >       base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef typename base::hasher_type_elem_base       hasher_type;
+
+};
+
+// edge
+template<unsigned DIM>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, 1> >
+  : public element_traits_edge_base<cartesiannd::grid<DIM> > 
+{
+  typedef element_traits_edge_base<cartesiannd::grid<DIM> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef typename base::hasher_type_elem_base       hasher_type;
+};
+
+
+
+// cell
+template<unsigned DIM>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, DIM> >
+  : public element_traits_cell_base<cartesiannd::grid<DIM> > 
+{
+  typedef element_traits_cell_base<cartesiannd::grid<DIM> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef typename base::hasher_type_elem_base       hasher_type;
+};
+
+// facet
+template<unsigned DIM>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, DIM-1> >
+  : public element_traits_facet_base<cartesiannd::grid<DIM> > 
+{
+  typedef element_traits_facet_base<cartesiannd::grid<DIM> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef typename base::hasher_type_elem_base       hasher_type;
+};
+
+
+
+// avoid conflict vertex<->cell in 0D
+template<>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<0> ,0> >
+  : public element_traits_vertex_base<cartesiannd::grid<0> > 
+{
+  typedef element_traits_vertex_base<cartesiannd::grid<0> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef base::hasher_type_elem_base                hasher_type;
+};
+
+
+// avoid conflict edge<->cell in 1D
+template<>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<1> ,1> >
+  : public element_traits_edge_base<cartesiannd::grid<1> > 
+{
+  typedef element_traits_edge_base<cartesiannd::grid<1> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef base::hasher_type_elem_base                hasher_type;
+};
+
+// avoid conflict vertex <->facet in 1D
+template<>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<1>, 0> >
+  : public element_traits_vertex_base<cartesiannd::grid<1> > 
+{
+  typedef element_traits_vertex_base<cartesiannd::grid<1> >  base;
+  typedef consecutive_integer_tag<0>                       consecutive_tag;
+  typedef base::hasher_type_elem_base                      hasher_type;
+};
+
+// avoid conflict edge <->facet in 2D
+template<>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<2>, 1> >
+  : public element_traits_edge_base<cartesiannd::grid<2> > 
+{
+  typedef element_traits_edge_base<cartesiannd::grid<2> >  base;
+  typedef consecutive_integer_tag<0>                       consecutive_tag;
+  typedef base::hasher_type_elem_base                      hasher_type;
+};
+
+
+
+
+//-----------------------  inline functions  ----------------------------
+
+namespace cartesiannd {
 
   template<class CARTGRID, unsigned K>
   template<unsigned M>
@@ -937,126 +1081,7 @@ namespace cartesiannd {
   template<>
   grid<3>::grid(int b1, int b2, int b3) { init(vertex_index_type(0), vertex_index_type(b1,b2,b3)); }
 
-}; // namespace cartesiannd
-
-
-template<unsigned DIM>
-struct grid_types<cartesiannd::grid<DIM> > 
-  : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::grid<DIM>, DIM> >
-{
-  typedef cartesiannd::grid<DIM>          grid_type;
-  typedef cartesiannd::subrange<DIM>      cartesian_subrange_type;
-};
-
-template<unsigned DIM>
-struct grid_types<cartesiannd::archetype_t<cartesiannd::grid<DIM> > >
-  : public grid_types_base<cartesiannd::archetype_base_t<cartesiannd::grid<DIM> > >
-{
-  typedef cartesiannd::archetype_t<cartesiannd::grid<DIM> > grid_type;
-  typedef cartesiannd::archetype_t<cartesiannd::grid<DIM> > at;
-  typedef typename at::archetype_iterator archetype_iterator;
-  typedef typename at::archetype_handle   archetype_handle;
-  typedef typename at::archetype_type     archetype_type;
-
-  typedef grid_dim_tag<DIM-1> dimension_tag;
-};
-
-template<unsigned DIM>
-struct grid_types<cartesiannd::subrange<DIM> > 
-  : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::subrange<DIM>, DIM> >
-{
-  typedef cartesiannd::subrange<DIM> grid_type;
-};
-
-
-// vertex
-template<unsigned DIM>
-struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM> ,0> >
-  : public element_traits_vertex_base<cartesiannd::grid<DIM> > 
-{
-  typedef element_traits_vertex_base<cartesiannd::grid<DIM> >       base;
-  typedef consecutive_integer_tag<0>                 consecutive_tag;
-  typedef typename base::hasher_type_elem_base       hasher_type;
-
-};
-
-// edge
-template<unsigned DIM>
-struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, 1> >
-  : public element_traits_edge_base<cartesiannd::grid<DIM> > 
-{
-  typedef element_traits_edge_base<cartesiannd::grid<DIM> >  base;
-  typedef consecutive_integer_tag<0>                 consecutive_tag;
-  typedef typename base::hasher_type_elem_base       hasher_type;
-};
-
-
-
-// cell
-template<unsigned DIM>
-struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, DIM> >
-  : public element_traits_cell_base<cartesiannd::grid<DIM> > 
-{
-  typedef element_traits_cell_base<cartesiannd::grid<DIM> >  base;
-  typedef consecutive_integer_tag<0>                 consecutive_tag;
-  typedef typename base::hasher_type_elem_base       hasher_type;
-};
-
-// facet
-template<unsigned DIM>
-struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, DIM-1> >
-  : public element_traits_facet_base<cartesiannd::grid<DIM> > 
-{
-  typedef element_traits_cell_base<cartesiannd::grid<DIM> >  base;
-  typedef consecutive_integer_tag<0>                 consecutive_tag;
-  typedef typename base::hasher_type_elem_base       hasher_type;
-};
-
-
-
-// avoid conflict vertex<->cell in 0D
-template<>
-struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<0> ,0> >
-  : public element_traits_vertex_base<cartesiannd::grid<0> > 
-{
-  typedef element_traits_vertex_base<cartesiannd::grid<0> >  base;
-  typedef consecutive_integer_tag<0>                 consecutive_tag;
-  typedef base::hasher_type_elem_base                hasher_type;
-};
-
-
-// avoid conflict edge<->cell in 1D
-template<>
-struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<1> ,1> >
-  : public element_traits_edge_base<cartesiannd::grid<1> > 
-{
-  typedef element_traits_edge_base<cartesiannd::grid<1> >  base;
-  typedef consecutive_integer_tag<0>                 consecutive_tag;
-  typedef base::hasher_type_elem_base                hasher_type;
-};
-
-// avoid conflict vertex <->facet in 1D
-template<>
-struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<1>, 0> >
-  : public element_traits_vertex_base<cartesiannd::grid<1> > 
-{
-  typedef element_traits_vertex_base<cartesiannd::grid<1> >  base;
-  typedef consecutive_integer_tag<0>                       consecutive_tag;
-  typedef base::hasher_type_elem_base                      hasher_type;
-};
-
-// avoid conflict edge <->facet in 2D
-template<>
-struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<2>, 1> >
-  : public element_traits_edge_base<cartesiannd::grid<2> > 
-{
-  typedef element_traits_edge_base<cartesiannd::grid<2> >  base;
-  typedef consecutive_integer_tag<0>                       consecutive_tag;
-  typedef base::hasher_type_elem_base                      hasher_type;
-};
-
-
-
+} // namespace cartesiannd
 
 
 
