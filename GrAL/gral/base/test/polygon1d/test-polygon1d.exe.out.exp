@@ -1,0 +1,35 @@
+has    type vertex_handle
+has    type edge_handle
+has no type face_handle
+has    type facet_handle
+has    type cell_handle
+has    type Vertex
+has    type Edge
+has no type Face
+has    type Facet
+has    type Cell
+has    type VertexIterator
+has    type EdgeIterator
+has no type FaceIterator
+has    type FacetIterator
+has    type CellIterator
+has no type VertexOnVertexIterator
+has no type EdgeOnVertexIterator
+has no type FaceOnVertexIterator
+has no type FacetOnVertexIterator
+has no type CellOnVertexIterator
+has    type VertexOnEdgeIterator
+has no type FaceOnEdgeIterator
+has no type FacetOnEdgeIterator
+has no type CellOnEdgeIterator
+has no type VertexOnFaceIterator
+has no type EdgeOnFaceIterator
+has no type CellOnFaceIterator
+has no type VertexOnFacetIterator
+has no type EdgeOnFacetIterator
+has no type CellOnFacetIterator
+has    type VertexOnCellIterator
+has no type EdgeOnCellIterator
+has no type FaceOnCellIterator
+has    type FacetOnCellIterator
+has no type CellOnCellIterator
