@@ -8,27 +8,24 @@
 #include "Geometry/matrix.h"
 #include "Geometry/coords.h"
 
+#include "Container/tuple.h"
+#include "Container/tuple-point-traits.h"
+
 #include <iostream>
 
-int main() {
+
+template<class matrix_t, class coord_t>
+void test_mapping2d(std::ostream& out)
+{
+  using namespace GrAL;
   using namespace std;
-
-  typedef matrix<2,2,1> matrix_t;
-  typedef coordN<2>     coord_t;
   typedef affine_mapping<matrix_t, coord_t> mapping_t;
-  matrix_t A1(0.0); 
-  A1(1,1) = 1;
-  A1(2,2) = 1;
-  mapping_t M0(A1);
-
-  matrix_t A2(0.0); 
-  A2(1,1) = 1;
-  A2(2,2) = 2;
-  mapping_t M1(A2);
+  mapping_t M0(mapping_t::identity());
+  mapping_t M1(mapping_t::scaling(coord_t(1.0,2.0)));
   mapping_t M2(mapping_t::scaling        (coord_t(3.0,4.0)));
   mapping_t M3(mapping_t::inverse_scaling(coord_t(3.0,4.0)));
   mapping_t M4 = M2(M3);
-
+  
   mapping_t T1 = mapping_t::translation(coord_t( 1, 3));
   mapping_t T2 = mapping_t::translation(coord_t(-1,-3));
   mapping_t S1 = mapping_t::scaling        (coord_t(3.0,4.0));
@@ -37,47 +34,79 @@ int main() {
   mapping_t M6 = S2(T2);
   mapping_t M7 = M6(M5);
   mapping_t M8 = M5(M6);
-
-
+  
+  
   coord_t x[] = { coord_t(0,0), coord_t(1,2)};
   mapping_t M[] = { M0, M1, M2, M3, M4, M5, M6, M7, M8};
+  
+  for(int i = 0; i < (int)(sizeof(x)/sizeof(coord_t)); ++i)
+    for(int m = 0; m < (int)(sizeof(M)/sizeof(mapping_t)); ++m)
+      cout << "M" << m << "(x" << i << ")=" << M[m](x[i]) << endl; 
+}
 
-  for(int i = 0; i < sizeof(x)/sizeof(coord_t); ++i)
-    for(int m = 0; m < sizeof(M)/sizeof(mapping_t); ++m)
-      cout << "M" << m << "(x" << i << ")=" << M[m](x[i]) << endl;
 
-  /*
-  coord_t M1x1 = M1(x1);
-  coord_t M2x1 = M2(x1);
-  coord_t M3x1 = M3(x1);
-  coord_t M4x1 = M4(x1);
-  coord_t M4M3x1 = M4(M3x1);
-  coord_t M5x1 = M5(x1);
+template<class matrix_t, class coord_t>
+void test_mapping3d(std::ostream& out)
+{
+  using namespace GrAL;
+  using namespace std;
+  typedef affine_mapping<matrix_t, coord_t> mapping_t;
 
-  coord_t M1x2 = M1(x2);
-  coord_t M2x2 = M2(x2);
-  coord_t M3x2 = M3(x2);
-  coord_t M4x2 = M4(x2);
-  coord_t M4M3x2 = M4(M3x2);
-  coord_t M5x2 = M5(x2);
+  mapping_t I(mapping_t::identity());
+  cout << "I=\n" << I << "\n";
+  
+  coord_t e1(1.0,0.0,0.0);
+  coord_t e2(0.0,1.0,0.0);
+  coord_t e3(0.0,0.0,1.0);
+  mapping_t R1(mapping_t::rotation3d(e1, 0.0));
+  mapping_t R2(mapping_t::rotation3d(e3, 0.0));
+  mapping_t R3(mapping_t::rotation3d(e3, 0.0));
+  
+  cout << "R1=\n" << R1;
+  cout << "R1(e1)=" << R1(e1) << "\n"
+       << "R1(e2)=" << R1(e2) << "\n"
+       << "R1(e3)=" << R1(e3) << "\n";
+  cout << "R2=\n" << R2 << '\n'
+       << "R2=\n" << R2 << '\n';
+  
+  
+  mapping_t R4(mapping_t::rotation3d(e1, M_PI/2.0));
+  mapping_t R5(mapping_t::rotation3d(e3, M_PI/2.0));
+  mapping_t R6(mapping_t::rotation3d(e3, M_PI/2.0));
+  cout << "R4=\n" << R4 << '\n'  
+       << "R5=\n" << R5 << '\n'  
+       << "R6=\n" << R6 << '\n';
+}
 
-  cout << "x1=" << x1 
-       << " M1*x1=" << M1x1
-       << " M2*x1=" << M2x1
-       << " M3*x1=" << M3x1
-       << " M4*x1=" << M4x1
-       << " M4*M3*x1=" << M4M3x1
-       << " M5*x1=" << M5x1
-       << endl;
 
-  cout << "x2=" << x2 
-       << " M1*x2=" << M1x2
-       << " M2*x2=" << M2x2
-       << " M3*x2=" << M3x2
-       << " M4*x2=" << M4x2
-       << " M4*M3*x2=" << M4M3x2
-       << " M5*x1=" << M5x1
-       << endl;
-  */
-	       
+int main() {
+  using namespace GrAL;
+  using namespace std;
+  {
+    typedef matrix<2,2,1> matrix_t;
+    typedef coordN<2>     coord_t;
+    test_mapping2d<matrix_t, coord_t>(cout);
+    cout << "-------------" << endl;
+  }
+  {
+    typedef matrix<2,2,0> matrix_t;
+    typedef coordN<2>     coord_t;
+    test_mapping2d<matrix_t, coord_t>(cout);
+    cout << "-------------" << endl;
+  }
+
+
+  {
+    typedef matrix<3,3,1> matrix_t;
+    typedef coordN<3>     coord_t;
+    test_mapping3d<matrix_t, coord_t>(cout);
+    cout << "-------------" << endl;
+  }
+
+  {
+    typedef matrix<3,3,1>     matrix_t;
+    typedef tuple<double,3>   coord_t;
+    test_mapping3d<matrix_t, coord_t>(cout);
+    cout << "-------------" << endl;
+  }
 }
