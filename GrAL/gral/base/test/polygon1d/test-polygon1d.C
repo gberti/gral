@@ -55,6 +55,9 @@ int main() {
   test_vertex_on_cell_iterator(p, *out);
   test_facet_on_cell_iterator (p, *out);
 
+  test_vertex_on_vertex_iterator(p, *out);
+  test_cell_on_vertex_iterator  (p, *out);
+
   test_grid_functions<gt::Vertex>(p, *out);
   test_grid_functions<gt::Cell>  (p, *out);
 

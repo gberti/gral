@@ -13,10 +13,10 @@ has    type EdgeIterator
 has no type FaceIterator
 has    type FacetIterator
 has    type CellIterator
-has no type VertexOnVertexIterator
+has    type VertexOnVertexIterator
 has    type EdgeOnVertexIterator
 has no type FaceOnVertexIterator
-has no type FacetOnVertexIterator
+has    type FacetOnVertexIterator
 has    type CellOnVertexIterator
 has    type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
