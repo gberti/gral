@@ -72,10 +72,23 @@ public:
   // extend to faces
 
   template<class GF>
-  void copy_gf(GF const& gf) 
+  struct gf_name_pair {
+    string        name;
+    GF const*     gf;
+    gf_name_pair(std::string const& nm, GF const& ggf)
+      : name(nm), gf(&ggf) {}
+  };
+
+  template<class GF>
+  static gf_name_pair<GF> pair(std::string const& nm, GF const& gf)
+    { return gf_name_pair<GF>(nm,gf);}
+
+private:
+  template<class GF>
+  void copy_gf(GF const& gf, std::string const& varname) 
     {
       typedef element_traits<typename GF::element_type> et;
-      std::string varname = "testvar" + as_string(num_vars); // FIXME!
+      // std::string varname = "testvar" + as_string(num_vars); // FIXME!
 
       typedef typename et::element_type_tag element_type_tag;
       *out << varname << " " 
@@ -86,24 +99,27 @@ public:
 	// is the same as numbering in GMV file.
 	*out << gf(*e) << ' ';
       }
+      *out << '\n';
     }
-  namespace hl = heterogeneous_list;
 
-  void copy_grid_functions_rec(hl::List<END,END>) {}
+  typedef heterogeneous_list::END END;
+  void copy_grid_functions_rec(heterogeneous_list::List<END,END>) {}
+
 
   template<class GF, class TAIL>
-  void copy_grid_functions_rec(hl::List<GF,TAIL> gfs)
+  void copy_grid_functions_rec(heterogeneous_list::List<GF,TAIL> gfs)
     { 
       num_vars++;
-      copy_gf(gfs.head());
-      copy_grid_functions(gfs.tail());
+      copy_gf(*(gfs.head().gf), gfs.head().name);
+      copy_grid_functions_rec(gfs.tail());
     }
 
  
-  void copy_grid_functions(hl::List<END,END>) {}
+public:
+  void copy_grid_functions(heterogeneous_list::List<END,END>) {}
 
   template<class GF, class TAIL>
-  void copy_grid_functions(hl::List<GF,TAIL> gfs)
+  void copy_grid_functions(heterogeneous_list::List<GF,TAIL> gfs)
     {
       *out << "variable" << '\n';
       copy_grid_functions_rec(gfs);
@@ -151,7 +167,7 @@ template<class GRID,class GEOM, class GF, class MOREGFS>
 void ConstructGrid(OstreamGMV3DFmt& Out, 
 		   GRID const& G,
 		   GEOM const& GEO,
-		   List<GF,MOREGFS> GFS);
+		   heterogeneous_list::List<GF,MOREGFS> GFS);
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/IO/gmv-format-output.tt.C"
