@@ -34,7 +34,7 @@ tarclean: clean
 
 realclean: tarclean
 	rm -rf doxygen/
-	(cd doc; gmake realclean)
+	(cd doc; $(MAKE) realclean)
 
 test:
 
@@ -50,7 +50,7 @@ ADDRELPATH=..#
 
 CONCEPTSPATH=doc/hyperlatex/html
 additional-predoc:
-	(cd doc; gmake concepts)
+	(cd doc; $(MAKE) concepts)
 
 additional-postdoc: 
 	(../bin/install-doc.pl -root $(RELROOT) \
@@ -58,7 +58,7 @@ additional-postdoc:
                                -stl $(STLURL) \
                                -gral $(RELROOT)/gral/base/$(CONCEPTSPATH) \
          doxygen/html/*.html)
-	(cd doc; gmake install-doc)
+	(cd doc; $(MAKE) install-doc)
 
 additional-copydoc:
 	mkdir -p $(DOCDEST)/$(CONCEPTSPATH)

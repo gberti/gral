@@ -16,7 +16,7 @@ concepts: gen-paths latex make-links
 latex:
 	(cd hyperlatex;\
            rm -f html/*; \
-          (cd bilder; gmake all; gmake clean);\
+          (cd bilder; $(MAKE) all; $(MAKE) clean);\
           hyperlatex-2.3.1 top;)
 
 make-links:

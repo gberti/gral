@@ -7,7 +7,7 @@ TARGET=all
 all:
 
 new: libclean
-	(cd src; gmake new)
+	(cd src; $(MAKE) new)
 
 compile:
 
@@ -29,6 +29,9 @@ realclean: clean
 	rm -rf doxygen/
 
 test:
+	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
+
+module-check: test-new-check-clean
 
 # depth + 1
 ADDRELPATH :=..
