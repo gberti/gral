@@ -52,10 +52,16 @@ stdclean: moduleclean
 	@rm -rf *.tmp
 	@rm -f doxy.log 
 
-clean: stdclean
+texclean:
+	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" \
+         -o -name "*.log" -exec rm {} \;
+
+clean: stdclean texclean
 
 libclean:
 	rm -rf lib/$(LIBPATH)/*.a
+
+realclean: clean
 
 ############################
 ##  Installation targets ###
