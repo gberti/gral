@@ -11,13 +11,20 @@ bool test_vertex_iterator(G const& g, std::ostream & out)
 {
   typedef grid_types<G> gt;
   typedef typename gt::VertexIterator VertexIterator;
+  typedef typename gt::vertex_handle  vertex_handle;
+  typedef typename gt::Vertex         Vertex;
+  typedef element_traits<Vertex>      et;
 
-  int v_cnt = 0;
-  for(VertexIterator v(g); ! v.IsDone(); ++v, ++v_cnt) {
-    ;
+  int cnt = 0;
+  for(VertexIterator v(g); ! v.IsDone(); ++v, ++cnt) {
+    typename gt::vertex_handle h = v.handle();
+    typename gt::Vertex vv(v.TheGrid(), h);
+    REQUIRE_ALWAYS(vv == *v, "Vertex constructed from handle differs!\n",1);
   }
-  REQUIRE_ALWAYS(v_cnt == (int)g.NumOfVertices(), 
-                 "v_cnt = " << v_cnt << " != g.NumOfVertices() = " << g.NumOfVertices() << '\n',1);
+
+  REQUIRE_ALWAYS(cnt == (int)g.NumOfVertices(), 
+                 "cnt = " << cnt << " != g.NumOfVertices() = " << g.NumOfVertices() << '\n',1);
+
 
   VertexIterator v;
   v = g.FirstVertex();

@@ -12,13 +12,16 @@ bool test_cell_iterator(G const& g, std::ostream & out)
   typedef grid_types<G> gt;
   typedef typename gt::CellIterator CellIterator;
 
-  int v_cnt = 0;
-  for(CellIterator v(g); ! v.IsDone(); ++v, ++v_cnt) {
-    ;
+  int cnt = 0;
+  for(CellIterator v(g); ! v.IsDone(); ++v, ++cnt) {
+    typename gt::cell_handle h = v.handle();
+    typename gt::Cell vv(v.TheGrid(), h);
+    REQUIRE_ALWAYS(vv == *v, "Cell constructed from handle differs!\n",1);
+
   }
  
-  REQUIRE_ALWAYS(v_cnt == (int)g.NumOfCells(), 
-                 "v_cnt = " << v_cnt << " != g.NumOfCells() = " << g.NumOfCells() << '\n',1);
+  REQUIRE_ALWAYS(cnt == (int)g.NumOfCells(), 
+                 "cnt = " << cnt << " != g.NumOfCells() = " << g.NumOfCells() << '\n',1);
  
   CellIterator v;
   v = g.FirstCell();
