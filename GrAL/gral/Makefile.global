@@ -3,6 +3,7 @@ ALLROOT=$(shell pwd)
 SUBDIRS= configuration utilities external-control sequence geometry \
          graphics-device function-algebra gral
 
+
 clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
@@ -47,6 +48,14 @@ check:
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) check ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
+
+new-check-clean:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new-check-clean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
 
 
 # predoc  = generate docs
