@@ -73,7 +73,8 @@ namespace cartesiannd {
     //! \name Constructors
     //! \brief Empty geometry
     mapped_geometry() {}
-    /*! \brief Initialize with mapping \c ff
+ 
+   /*! \brief Initialize with mapping \c ff
          
         If \c mapped_geometry(gg) is called, the initialization 
 	is complete only if \c MAP has a sensible default constructor.
@@ -87,6 +88,22 @@ namespace cartesiannd {
       init();
       prepend_scaling_mapping();
     }
+
+    /*! \brief Initialize with mapping \c ff
+         
+        If \c mapped_geometry(gg) is called, the initialization 
+	is complete only if \c MAP has a sensible default constructor.
+     */
+    mapped_geometry(ref_ptr<grid_type const> gg, ref_ptr<mapping_type> ff)
+      : g(gg), 
+	low_(gg->low_vertex_index()), 
+	high_(gg->high_vertex_index()) 
+    { 
+      f = ff;
+      init();
+      prepend_scaling_mapping();
+    }
+
 
     /*! \brief Initialize with mapping \c ff, mapping the range \c [lw,hgh] into \f$[0,1]^d\f$
          
@@ -104,6 +121,25 @@ namespace cartesiannd {
       f.make_shared(new mapping_type(ff));
       init();
     }
+    /*! \brief Initialize with mapping \c ff, mapping the range \c [lw,hgh] into \f$[0,1]^d\f$
+         
+        The mapping of \c [lw,hgh] into \f$[0,1]^d\f$ is isotropic, that is, images of
+	cells are isotropic cubes.
+
+        If \c mapped_geometry(gg, lw, hgh) is called, the initialization 
+	is complete only if \c MAP has a sensible default constructor.
+     */
+    mapped_geometry(ref_ptr<grid_type const> gg, 
+		    index_type lw, index_type hgh, 
+		    ref_ptr<mapping_type> ff)
+      : g(gg),
+	low_(lw), high_(hgh) 
+    { 
+      f = ff;
+      init();
+    }
+
+
     /*! \brief Initialize using the unit coordinates of a master geometry
 
         This is useful e.g. for hierarchical grids (esp. with anisotropic refinement).
@@ -119,6 +155,25 @@ namespace cartesiannd {
 	f_inverse.make_shared(new mapping_type(* master.f_inverse));
       init();
     }
+    /*! \brief Initialize using the unit coordinates of a master geometry
+
+        This is useful e.g. for hierarchical grids (esp. with anisotropic refinement).
+        Using standard unit coordinates would result in different extents of the hierarchies.
+     */
+    mapped_geometry(ref_ptr<grid_type const> gg, 
+		    ref_ptr<self const>      master)
+      : g(gg),
+	low_ (gg->low_vertex_index()), 
+	high_(gg->high_vertex_index()) 
+    {
+      f = master->f; f.make_copy();
+      if(master->has_inverse()) {
+	f_inverse = master->f_inverse;
+        f_inverse.make_copy();
+      }
+      init();
+    }
+
     //@}
   private:
     void init() {
