@@ -76,6 +76,7 @@ public:
   typedef typename hgt::level_handle               level_handle;
   typedef typename hgt::hier_cell_type                   hier_cell_type;
   typedef typename hgt::CellChildIterator          HierCellChildIterator;
+  typedef typename hgt::cart_subrange_type         flat_subrange_type;
   typedef typename flatgt::CellIterator            flat_cell_iterator;
   typedef typename flatgt::Cell                    flat_cell_type;
 
@@ -165,6 +166,9 @@ public:
       \pre the current coarsest level can be coarsened with the refinement pattern
    */
   void add_coarser_level(); 
+  /*! \brief add a new finer level
+   */
+  void add_finer_level(); 
 
   //@}
 
@@ -198,6 +202,7 @@ public:
 
   //! return the level of \c c
   level_handle  level(hier_cell_type c)   const { return c.level();}
+
   //! return the youngest ancestor of \c subLeaf which is in the octree (i.e. is a leaf).
   oct_cell_type leaf_ancestor(hier_cell_type subLeaf) const;
   //@}
@@ -244,9 +249,26 @@ public:
   { REQUIRE(valid(lev), "lev=" << lev, 1); }
   //private:
 public:
+  
+  /*! \brief mark the level as active
+   */
+  void activate (level_handle lev) { 
+    for(typename flatgt::CellIterator c = LevelGrid(lev)->FirstCell(); ! c.IsDone(); ++c)
+      active_range[lev][*c] = true;
+  }
+  /*! \brief mark the level as non-active
+   */
+  void deactivate (level_handle lev) { 
+    active_range.set_default(false);
+    for(typename flatgt::CellIterator c = LevelGrid(lev)->FirstCell(); ! c.IsDone(); ++c)
+      active_range[lev].undefine(*c);
+  }
+
+
   /*! \brief mark the cell as active
    */
   void activate (oct_cell_type c) { active_range[c.level()][c] = true;}
+
   /*! \brief unmark the cell as active
       \todo This works only if the default value is false!
    */
