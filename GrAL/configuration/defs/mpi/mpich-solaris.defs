@@ -1,4 +1,4 @@
 # mpich-solaris.defs
-MPI_INCLUDES = -I/opt/local/lib/mpich/include
+MPI_INCLUDES = -I/opt/local/mpich/include -I/opt/local/mpich/build/solaris/ch_p4/include/
 MPI_LIBRARY  = -R/opt/local/lib -L/opt/local/lib/mpich/lib/solaris/ch_p4  -lmpi -lsocket -lnsl -lm
 MPIRUN       = /opt/local/mpich/bin/mpirun
