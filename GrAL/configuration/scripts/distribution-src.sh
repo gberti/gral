@@ -33,7 +33,7 @@ find . -name "*.C" -exec ${cvswork}/configuration/scripts/replace-license.pl {} 
 
 
 cd ..;
-tar cf gral-all.tar ${ALLROOT};
-gzip -f gral-all.tar;
+tar cf gral-src.tar ${ALLROOT};
+gzip -f gral-src.tar;
 rm -rf ${ALLROOT};
 

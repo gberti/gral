@@ -5,7 +5,7 @@ TMP=$1
 cd ${TMP}
 rm -rf GrAL
 rm -rf gral
-gzip -cd ${TMP}/gral-all.tar.gz | tar -xvf -
+gzip -cd ${TMP}/gral-src.tar.gz | tar -xvf -
 cd GrAL
 gzip -cd ${TMP}/gral-doc.tar.gz | tar -xvf - 
 gmake new

@@ -104,9 +104,12 @@ installdox:
 	chmod ugo+x ./installdox.sh.tmp;
 	./installdox.sh.tmp
 	rm -f installdox.sh.tmp
-	$(DOXYCFG)/install-doc.pl -root $(RELROOT) -path $(DOXYPATH) -stl $(STLURL) \
-        -gralconcepts $(RELROOT)/gral/base/doc/hyperlatex/html \
-        $(DOXYPATH)/*.html
+	$(DOXYCFG)/install-doc.pl\
+            -root $(RELROOT) \
+            -path $(DOXYPATH) \
+            -stl $(STLURL) \
+            -gralconcepts $(RELROOT)/gral/base/doc/hyperlatex/html \
+          $(DOXYPATH)/*.html
 
 DOCDEST=/dev/null
 copy-doxy: 
