@@ -7,9 +7,7 @@
 
 #include "Gral/IO/complex2d-format-input-base.h"
 
-#include "Geometry/coords.h"
-
-
+#include "Geometry/point.h"
 
 
 /*! \brief Input adapter for Complex2D Format
@@ -26,15 +24,20 @@ class IstreamComplex2DFmt : public IstreamComplex2DFmt_base
   typedef IstreamComplex2DFmt      self;
   typedef IstreamComplex2DFmt_base base;
 public:
-  typedef coordN<2>       coord_type;
+  // typedef coordN<2>       coord_type;
+  typedef point           coord_type;
 private:
-  std::vector<coord_type> coords;
+  unsigned                        spacedim;
+  mutable std::vector<coord_type> coords;
+  mutable bool                    coords_read;
 public:
   IstreamComplex2DFmt() {}
-  IstreamComplex2DFmt(std::istream      & in, int off = 0) : base(in,off) 
-  { read_coords();}
-  IstreamComplex2DFmt(std::string  const& fn, int off = 0) : base(fn,off)
-  { read_coords();}
+  IstreamComplex2DFmt(std::istream      & in, int off = 0) 
+    : base(in,off), spacedim(2), coords_read(false) 
+  { }
+  IstreamComplex2DFmt(std::string  const& fn, int off = 0) 
+    : base(fn,off), spacedim(2), coords_read(false)
+  { }
 
   IstreamComplex2DFmt(self const& rhs) { copy(rhs);}
   self& operator=    (self const& rhs) { 
@@ -42,25 +45,35 @@ public:
       copy(rhs); 
     return *this;
   }
+
+  void set_spacedim(unsigned sd) 
+    { 
+      REQUIRE(! coords_read, "coords already read!\n",1);
+      spacedim = sd;
+    }
 protected:
   void copy(self const& rhs) 
   {
     base::copy(rhs);
     copy_coords(rhs);
   }
-  virtual void read_coords() 
-  {
-    coords = std::vector<coord_type>(NumOfVertices());
-    for(unsigned v = 0; v < NumOfVertices(); ++v)
-      In() >> coords[v];
-  }
+  virtual void init()        const;
+  virtual bool initialized() const;
+  virtual void read_coords() const;
   virtual void copy_coords(self const& rhs)
   {
     coords = rhs.coords;
   }
 
 public:
-  coord_type const& coord(Vertex const& v) const { return coords[v.handle()];}
+  coord_type const& coord(Vertex const& v) const {
+    if(! coords_read){
+      // should not occur, init() should have been called before.
+      IstreamComplex2DFmt * slf = const_cast<IstreamComplex2DFmt *>(this);
+      slf->read_coords();
+      slf->coords_read = true;
+    }
+    return coords[v.handle()];}
 };
 
 
