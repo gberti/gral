@@ -43,7 +43,7 @@ libclean:
 
 install-libs:
 	mkdir -p $(PREFIX)/lib/$(LIBPATH)
-	cp $(ROOT)/lib/$(LIBPATH)/lib*  $(PREFIX)/lib/$(LIBPATH)
+	cp $(ROOT)/lib/$(LIBPATH)/lib*  $(PREFIX)/lib/$(LIBPATH)  || echo "No libs found."
 
 install: install-headers 
 
