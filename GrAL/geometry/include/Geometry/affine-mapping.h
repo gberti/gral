@@ -5,16 +5,6 @@
 
 #include "Geometry/point-traits.h"
 
-/*
-template<class MATRIX>
-inline identity(unsigned N) { 
-  typedef matrix_traits<MATRIX> mt;
-  MATRIX Id;
-  mt::ConstructZeroMatrix(Id,N,N);
-  for(int i = mt::LowerRowIndex(Id); i < mt::UpperRowIndex(Id); ++i)
-    mt::at(Id,i,i) = 0;
-}
-*/
 
 /*! \brief Affine coordinate mapping
 
@@ -40,6 +30,8 @@ public:
   affine_mapping(matrix_type const& AA) : A(AA), T(rpt::Origin()) {}
   affine_mapping(matrix_type const& AA, coord_type const& TT) : A(AA), T(TT) {}
 
+  /*! Evaluation operator
+   */
   result_type operator()(argument_type const& x) const 
   { 
     result_type res = T;
@@ -48,6 +40,10 @@ public:
 	res[i] += x[j]*A(i,j);
     return res;
   }
+  /*! \brief Composition operator
+   */
+  self operator()(self const& B) { return self(A*B.A, T + A*B.T);}
+
 
   static self identity() 
   {
@@ -56,6 +52,15 @@ public:
       sc(i,i) = 1;
     return self(sc);
   }
+
+  static self translation(coord_type t)
+  {
+     matrix_type sc(0.0);
+    for(int i = apt::LowerIndex(t); i <= apt::UpperIndex(t); ++i)
+      sc(i,i) = 1;
+    return self(sc, t);
+  } 
+
   static self scaling(coord_type s) 
   {
     matrix_type sc(0.0);
