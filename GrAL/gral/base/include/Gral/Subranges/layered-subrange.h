@@ -45,6 +45,8 @@ private:
   //---   DATA  ----
   std::vector<int> layers;
 
+  using base::TheContainer;
+  using base::TheGrid;
 public:
   layered_vertex_range() {}
   layered_vertex_range(const grid_type& g) : base(g) {}
@@ -74,7 +76,7 @@ public:
       return (range_type_ref(begin_l(l1),end_l(l2),TheContainer(), TheGrid()));
     }
 
-  range_type_ref AllLayers() const { return range();}
+  range_type_ref AllLayers() const { return base::range();}
   range_type_ref LastLayer() const { return Layer(NumOfLayers());}
   
   
@@ -110,6 +112,8 @@ private:
   //---   DATA  ----
   std::vector<int> layers;
 
+  using base::TheContainer;
+  using base::TheGrid;
 public:
   layered_cell_range() {}
   layered_cell_range(const grid_type& g) : base(g) {}
@@ -138,7 +142,7 @@ public:
    
        return (range_type_ref(begin_l(l1),end_l(l2),TheContainer(), TheGrid()));
     }
-  range_type_ref AllLayers() const { return range();}
+  range_type_ref AllLayers() const { return base::range();}
   range_type_ref LastLayer() const { return Layer(NumOfLayers());}
 
 private:
