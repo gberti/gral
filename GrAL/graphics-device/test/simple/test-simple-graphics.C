@@ -1,3 +1,7 @@
+/*! \file test-simple-graphics.C
+    Some tests and examples for using the GraphicsDevice framework.
+
+ */
 
 #include "GraphicsDevice/oogl.h"
 #include "GraphicsDevice/graphics-device.h"

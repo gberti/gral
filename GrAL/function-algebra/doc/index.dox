@@ -1,0 +1,17 @@
+/*! \mainpage Index of the Function Algebra Package.
+
+    
+     \section intro Introduction
+     This package contains classes for a function algebra,
+     that is, mathematical functions can be combined by algebraic
+     operations and composition.
+
+
+     The design is not state-of-the-art and does not pay 
+     attention to efficiency. 
+     Nevertheless, the functionality offered is quite useful.
+
+     Documentation is largely missing; for a (tiny) example
+     see test-functions.C .
+    
+*/

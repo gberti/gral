@@ -56,6 +56,7 @@ do
  gmake postdoc GRALROOT=${GRALROOT} DOCROOT=../ 
 done;
 
+cd ${GRALROOT};
 find ./gral/base/doc -name "*.html" -exec $scripts/reduce-underscores.pl {} \; 
 
 mkdir ${GRALROOT}/${DOC};

@@ -1,3 +1,10 @@
+/*! \file test-functions.C
+
+    Test the function algebra operations
+
+    \todo Test composition
+
+ */
 #include "FunctionAlgebra/function-algebra.h"
 
 #include "Utility/pre-post-conditions.h"

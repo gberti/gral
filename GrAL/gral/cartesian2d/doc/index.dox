@@ -33,5 +33,6 @@
    - Possible extensions are:
       - Parameterize a Cartesian grid by the index mapping
         used ( \f$ I: [0, n-1] \times [0, m-1] \mapsto [0, nm-1] \f$).
-      - Add a 3D version
+
+   \see $gral-gral/cartesian3d GrAL-Cartesian3D module
 */
