@@ -20,13 +20,14 @@ namespace connected_components {
 
 
   template<class GT>
-  void component_list<GT>::init() const 
+  template<class PRED>
+  void component_list<GT>::init(PRED inside) const 
   {
     if(! initialized) {
       comps.init(*g,-1);
       int current_component = 0;
       for(CellIterator c(TheGrid()); !c.IsDone(); ++c) {   
-	if(comps(*c)  == -1 ) { // new component: BFS-visit all cells reachable from c
+	if(inside(*c) && comps(*c)  == -1 ) { // new component: BFS-visit all cells reachable from c
 	  /*
 	  //component<GT, comp_table_type> Comp(*c, comps, -1);
 	  germs       .push_back(*c); // <=> germs[current_component] = *c;
@@ -38,7 +39,7 @@ namespace connected_components {
 	  }
 	  */
 
-	   ::std::queue<cell_handle> Q;
+	  std::queue<cell_handle> Q;
 	  Q.push(c.handle());
 	  comps[*c] = current_component;
 	  germs       .push_back(*c); // <=> germs[current_component] = *c;
@@ -47,7 +48,7 @@ namespace connected_components {
 	    Cell d(TheGrid(), Q.front());
 	    Q.pop();
 	    for(CellOnCellIterator cd(d); ! cd.IsDone(); ++cd) {
-	      if(comps(*cd) == -1) { // not yet visited
+	      if(inside(*cd) && comps(*cd) == -1) { // not yet visited
 		comps[*cd] = current_component;
 		num_of_cells[current_component]++;
 		Q.push(cd.handle());

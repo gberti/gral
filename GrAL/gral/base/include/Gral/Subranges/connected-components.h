@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/pre-post-conditions.h"
+#include "Container/function-adapter.h"
 
 #include <queue>
 
@@ -180,18 +181,31 @@ namespace connected_components {
     typedef typename GT::CellOnCellIterator  CellOnCellIterator;
 
   private:
-    range_type   const*         g;
+    grid_type    const*              g;
     mutable grid_function<Cell, int> comps; // map cells to component number
-    mutable  ::std::vector<Cell>        germs; // map component number to a cell
-    mutable  ::std::vector<unsigned>    num_of_cells; // number of cell of comp. #i
+    mutable std::vector<Cell>        germs; // map component number to a cell
+    mutable std::vector<unsigned>    num_of_cells; // number of cell of comp. #i
     mutable int num_of_components;
     mutable bool initialized;
   public:
-    component_list(range_type const& g_) 
+    // use lazy initialization
+    component_list(grid_type const& g_) 
       : g(&g_), num_of_components(0), initialized(false) {}
-    void init() const; // does not change the *logical* state
+
+    template<class PRED>
+    component_list(grid_type const& g_, PRED inside) 
+      : g(&g_), num_of_components(0), initialized(false) 
+    { init(inside); }
+
+
+    template<class PRED>
+    void init(PRED inside) const;
+
+    void init() const { // does not change the *logical* state
+      init(constant<Cell, bool>(true));
+    }
     
-    
+
     struct component_handle {
       int c;
       operator int() const { return c;}
@@ -216,7 +230,7 @@ namespace connected_components {
     //! STL-compliant alias for EndComponent()
     const_iterator end()   const;
     
-    component_handle ComponentOf(Cell const& c) const { c_(); return comps(*c);}
+    component_handle ComponentOf(Cell const& c) const { c_(); return component_handle(comps(*c));}
     component_type_cref   Component(component_handle c) const 
     { REQUIRE(valid(c), "",1); return component_type_cref(germs[c],num_of_cells[c]);}
 
