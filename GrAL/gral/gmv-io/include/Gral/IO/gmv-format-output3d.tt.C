@@ -42,6 +42,7 @@ void ConstructGrid_GF(OstreamGMV3DFmt& Out,
 
   for(typename gt::VertexIterator v(G); ! v.IsDone(); ++v)
     out << GEO.coord(*v) << '\n';
+  out << std::flush;
 
   // map G's vertices to GMV numbers, starting from 1.
   element_numbering<typename gt::Vertex> G2GMV(G,1);
@@ -86,9 +87,10 @@ void ConstructGrid_GF(OstreamGMV3DFmt& Out,
       out << G2GMV( (*c).V(phi_a.inverse()(*vc)))  << " ";
     out << '\n';
   }
-
+  out << std::flush;
   Out.copy_grid_functions(GFS);
   out << "endgmv\n";
+  out << std::flush;
 }
 
 } // namespace GrAL 
