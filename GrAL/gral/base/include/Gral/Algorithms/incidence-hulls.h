@@ -238,6 +238,12 @@ public:
   vertex_range const& vertices() const { return v_layers;}
   cell_range   const& cells   () const { return c_layers;}
 
+  rgeVertexIterator FirstVertex() const { return v_layers.FirstVertex();}
+  rgeVertexIterator EndVertex()   const { return v_layers.EndVertex();}
+  rgeCellIterator   FirstCell()   const { return c_layers.FirstCell();}
+  rgeCellIterator   EndCell()     const { return c_layers.EndCell();}
+
+
   /*! \name Element levels
       \brief Level the element is in.
       This is the level number in the \e total set of layers for \e all elements,
@@ -292,7 +298,7 @@ void incidence_hull<RANGE, STENCIL, GT>::init
   v_layers.set_grid(seed.TheGrid());
   c_layers.set_grid(seed.TheGrid());
   visited .set_grid(seed.TheGrid(), 0);
-  compute(seed, stencil, p_flag, constant<bool, typename GT::Cell>(true) );
+  compute(seed, stencil, p_flag, constant<typename GT::Cell, bool>(true) );
 }
 
 
@@ -368,9 +374,9 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
   }
   // remove possible empty layers
   if(p_flag == periodic) {
-    if(v_layers.LastLayer().NumOfVertices() == 0)
+    if(v_layers.NumOfLayers() > 0 && v_layers.LastLayer().NumOfVertices() == 0)
       v_layers.remove_layer();
-    if(c_layers.LastLayer().NumOfCells() == 0)
+    if(c_layers.NumOfLayers() > 0 &&c_layers.LastLayer().NumOfCells() == 0)
       c_layers.remove_layer();
   }
 }
