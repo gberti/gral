@@ -18,7 +18,7 @@
     - VertexIterator, ....
     - vertex_handle, ...
 
-   See grid_types_base for advice and an example of specialization.
+   See \c grid_types_base<> for advice and an example of specialization.
 
    \b Example for code using grid types:
    \code
@@ -33,7 +33,7 @@
    typedef gt::sequence_iterator<vertex_type_tag>::type VIterator;
 
    // same as gt::VertexOnCellIterator
-   typedef gt::incidence_iterator<vertex_type_tag, cell_type_tag> VoCIterator;
+   typedef gt::incidence_iterator<vertex_type_tag, cell_type_tag>::type VoCIterator;
    \endcode
 
   This is useful in context which are generic over the element category, that is,
@@ -211,6 +211,9 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_TESTFOR);
  
     \ingroup gridtypesreflection
 
+   Analogous classes exist for other element types and iterators, 
+   e.g. \c has_edge_handle, \c has_Cell<>, \c has_EdgeOnCellIterator<>, \c has_FacetIterator
+
  */
 template<class X> struct has_Vertex;
 // dummy declaration to anchor docu.
@@ -224,6 +227,28 @@ template<class X> struct has_Vertex;
 GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_HAS_MEMBER);
 
 #undef HAS_MEMBER
+
+/*! Print out which types are supported by a \c grid_types<> specialization 
+
+    \ingroup gridtypesreflection
+
+    \templateparams
+     - \c GT is a specialization of \c grid_types<>
+     - OSTREAM supports <tt> operator<<(std::string) </tt>, e.g. \c std::ostream
+*/
+template<class GT, class OSTREAM>
+inline void checkgt(OSTREAM& out)
+{
+  typedef GT gt;
+
+#define PRINT_HAS_MEMBER(T)  out << "has" << ( has_##T<gt>::result ? "   " : " no") << " type " << #T << "\n";
+
+GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(PRINT_HAS_MEMBER);
+
+#undef PRINT_HAS_MEMBER
+
+}
+
 
 
 /*! \brief Plugin-in base class for grid_types<> specializations
