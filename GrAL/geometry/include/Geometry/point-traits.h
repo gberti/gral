@@ -54,6 +54,7 @@ struct point_traits_fixed_dim
 {
   typedef POINT Ptype;
   typedef dim_tag<N>                dimension_tag; 
+  enum    { dimension = N};
   static unsigned Dim()             { return DIM;}
   static unsigned Dim(Ptype const&) { return DIM;}
   static void     ConstructWithDim(unsigned d, Ptype&)
@@ -71,6 +72,7 @@ struct real_point_traits : public point_traits_base<REAL> {
   typedef REAL component_type;
   typedef component_type value_type;
 
+  enum { dimension = 1};
   static unsigned Dim(const Ptype&) { return 1;}
   static unsigned Dim() { return 1;}
   
@@ -101,6 +103,7 @@ struct point_traits_fixed_size_array :
   typedef COMPONENT      component_type;
   typedef component_type value_type;
   typedef typename dim_tag<DIM>::dimension_tag dimension_tag;
+  enum { dimension = DIM };
 
   static void ConstructWithDim(unsigned d, Ptype&)
     { REQUIRE(d == DIM, "Cannot construct! d = " << d 
