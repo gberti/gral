@@ -3,7 +3,10 @@
 
 // LICENSE_NEC_2003
 
-
+/*! \brief View an integral type as iterator
+   
+   \todo support full random-access iterator interface
+*/
 template<class INT, class C=INT>
 class integer_iterator {
   typedef integer_iterator<INT, C> self;
