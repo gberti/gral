@@ -14,9 +14,15 @@ template<class MAP>
 void test_map(MAP const& map, std::ostream& out)
 {
   typedef typename MAP::index_type index_type;
-  out << "map.min_flat_index()=" << map.min_flat_index()
-      << " map.max_flat_index()=" << map.max_flat_index()
-      << " map.max_tuple()= "     << map.max_tuple() <<  std::endl;
+  out << "  min_flat_index()=" << map.min_flat_index()
+      << "  max_flat_index()=" << map.max_flat_index()
+      << "  min_tuple()="      << map.min_tuple() 
+      << "  max_tuple()="      << map.max_tuple() 
+      << "  beyond_tuple()="   << map.beyond_tuple() 
+      << "  size() ="          << map.size()
+      <<  std::endl;
+  REQUIRE_ALWAYS( map.size() == map.beyond_tuple() - map.min_tuple(), "", 1);
+  REQUIRE_ALWAYS( map.beyond_tuple() ==  map.max_tuple() + index_type(1), "",1);
   for(int i = map.min_flat_index(); i <= map.max_flat_index(); ++i) {
     index_type it = map(i);
     int        j  = map(it);
@@ -34,13 +40,14 @@ int main() {
  
 
   typedef index_map_nd<1>::index_type it1;
+  it1 zero1D(0);
   out << '\n'
       << "Testing 1D maps\n"
       << "===============" << endl;
   {
     int p[1] = {-1};
     it1 it(p);
-    index_map_nd<1> map(it);
+    index_map_nd<1> map(zero1D,it);
     out << "Testing map: n = " << it << endl;
     test_map(map, out);
     out << endl;
@@ -50,7 +57,7 @@ int main() {
   {
     int p[1] = {0};
     it1 it(p);
-    index_map_nd<1> map(it);
+    index_map_nd<1> map(zero1D, it);
     out << "Testing map: n = " << it << endl;
     test_map(map, out);
     out << endl;
@@ -60,7 +67,7 @@ int main() {
   {
     int p[1] = {1};
     it1 it(p);
-    index_map_nd<1> map(it);
+    index_map_nd<1> map(zero1D, it);
     out << "Testing map: n = " << it << endl;
     test_map(map, out);
     out << endl;
@@ -70,7 +77,7 @@ int main() {
   {
     int p[1] = {5};
     it1 it(p);
-    index_map_nd<1> map(it);
+    index_map_nd<1> map(zero1D, it);
     out << "Testing map: n = " << it << endl;
     test_map(map, out);
     out << endl;
@@ -80,13 +87,14 @@ int main() {
   
 
   typedef index_map_nd<2>::index_type it2;
+  it2 zero2D(0);
   out << '\n'
       << "Testing 2D maps\n"
       << "===============" << endl;
   {
     int p[2] = {-1,-1};
     it2 it(p);
-    index_map_nd<2> map(it);
+    index_map_nd<2> map(zero2D, it);
     out << "Testing map: n = " << it << endl;
     test_map(map, out);
     out << endl;
@@ -96,7 +104,7 @@ int main() {
   {
     int p[2] = {0,0};
     it2 it(p);
-    index_map_nd<2> map(it);
+    index_map_nd<2> map(zero2D,it);
     out << "Testing map: n = " << it << endl;
     test_map(map, out);
     out << endl;
@@ -105,7 +113,7 @@ int main() {
     int p[2] = {1,0};
     it2 it(p);
     out << "Testing map: n = " << it << endl;
-    index_map_nd<2> map(it);
+    index_map_nd<2> map(zero2D,it);
     test_map(map, out);
     out << endl;
   }
@@ -113,7 +121,7 @@ int main() {
     int p[2] = {1,1};
     it2 it(p);
     out << "Testing map: n = " << it << endl;
-    index_map_nd<2> map(it);
+    index_map_nd<2> map(zero2D,it);
     test_map(map, out);
     out << endl;
   }
@@ -121,7 +129,7 @@ int main() {
     int p[2] = {2,1};
     it2 it(p);
     out << "Testing map: n = " << it << endl;
-    index_map_nd<2> map(it);
+    index_map_nd<2> map(zero2D, it);
     test_map(map, out);
     out << endl;
   }
@@ -168,6 +176,28 @@ int main() {
     it3 it(p);
     out << "Testing map: n = " << it << endl;
     index_map_nd<3> map(it);
+    test_map(map, out);
+    out << endl;
+  }
+
+  {
+    int p[3]  = {2,2,2};
+    int p0[3] = {1,1,1};
+    it3 it(p);
+    it3 it0(p0);
+    out << "Testing map: low = " << it0 << " beyond = " << it << endl;
+    index_map_nd<3> map(it0,it);
+    test_map(map, out);
+    out << endl;
+  }
+
+  {
+    int p[3]  = {3,3,3};
+    int p0[3] = {1,1,1};
+    it3 it(p);
+    it3 it0(p0);
+    out << "Testing map: low = " << it0 << " beyond = " << it << endl;
+    index_map_nd<3> map(it0,it);
     test_map(map, out);
     out << endl;
   }
