@@ -41,14 +41,20 @@ public:
   typedef E element_type;
   typedef element_traits<E> et;
   typedef typename et::handle_type element_handle;
+  typedef typename et::grid_type   grid_type;
 
   ElementIterator_generic_pgf() {}
   ElementIterator_generic_pgf(const base_citer& i, const base_citer& e) 
     : base_citer(i), end(e)
     {}
-  element_type operator*() const { return (base_citer::operator*()).first;}
-  bool IsDone() const { return (end == ((const base_citer&) (*this)));}
-  element_handle handle() const { return (base_citer::operator*()).first.handle();}
+  element_type operator*() const   { return element();}
+  bool IsDone()  const { return (end == ((const base_citer&) (*this)));}
+  element_handle       handle()  const { return element().handle();}
+
+  // this does work only if element() is valid, i.e. !IsDone().
+  grid_type     const& TheGrid() const { return element().TheGrid();}
+private:
+  element_type const& element() const { return (base_citer::operator*()).first;}
 };
 
 
