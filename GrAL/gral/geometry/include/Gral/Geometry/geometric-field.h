@@ -27,13 +27,27 @@ private:
   // could be shared by many instances ...
   ref_ptr<point_locator_type>  loc;
 public:
-  geometric_field() {}
+  geometric_field() 
+  {
+    loc.make_own(new point_locator_type());
+  }
   geometric_field(geom_type const& geo,
 		  function_type const& ff) : the_geom(geo), f(ff)
   {
     loc.make_own(new point_locator_type(TheGrid(), TheGeometry()));
     loc->init();
   }
+  void init(ref_ptr<geom_type     const> geo, 
+	    ref_ptr<function_type const> ff)
+  {
+    the_geom = geo;
+    f        = ff;
+    loc->init(TheGrid(), TheGeometry());
+  }
+
+  void init(geom_type     const& geo,
+	    function_type const& ff) { init(ref_ptr<geom_type const>(geo), ref_ptr<function_type const> (ff));}
+
 
   result_type operator()(coord_type X) const 
   { 
@@ -60,6 +74,7 @@ public:
   ref_ptr<geom_type const> TheGeometry() const { return the_geom;}
   ref_ptr<grid_type const> TheGrid()     const { return ref_ptr<grid_type const>(the_geom->TheGrid());}
   ref_ptr<point_locator_type const> TheLocator() const { return loc;}
+  ref_ptr<point_locator_type >      TheLocator()       { return loc;}
 };
 
 
