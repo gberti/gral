@@ -1,0 +1,26 @@
+/*! \mainpage Index of the GrAL Cartesian3D Grid Module
+
+   This module contains the concrete grid component CartesianGrid3D.
+   An object of type CartesianGrid3D represents a finite Cartesian grid.
+   Hence, there is no explicit incidence information stored, all
+   iterator functionality is implemented via index calculations.
+
+  <EM> This class is still incomplete, and does not include all
+       planned functionality 
+  </EM>	
+
+   
+   The main classes one might use are:
+   (headers under the path Gral/Grids/Cartesian3D)
+   -  CartesianGrid3D (cartesian-grid3d.h): The combinatorial grid
+   -  mapped_geometry_cartesian3d (mapped-geometry.h): 
+        A grid geometry using a mapping from a default embedding in \f$ [0,1]^2 \f$
+   - total grid function (see $GrAL TotalGridFunction concept, grid-functions.h)
+   - partial grid functions 
+     (see $GrAL PartialGridFunction concept, partial-grid-functions.h )
+   - all.h for all of the above.
+
+   \status 
+   - there are no edges and facets defined, just vertices and cells.
+
+*/
