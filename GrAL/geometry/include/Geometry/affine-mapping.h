@@ -22,6 +22,7 @@ inline identity(unsigned N) {
  */
 template<class MATRIX, class ARGTYPE, class RESTYPE = ARGTYPE>
 class affine_mapping {
+  typedef affine_mapping<MATRIX, ARGTYPE, RESTYPE> self;
 public:
   typedef MATRIX matrix_type;
 
@@ -48,6 +49,21 @@ public:
     return res;
   }
 
+  static self scaling(coord_type s) 
+  {
+    matrix_type sc(0.0);
+    for(int i = apt::LowerIndex(s); i <= apt::UpperIndex(s); ++i)
+      sc(i,i) = s[i];
+    return self(sc);
+  }
+  static self inverse_scaling(coord_type s) 
+  {
+    matrix_type sc(0.0);
+    for(int i = apt::LowerIndex(s); i <= apt::UpperIndex(s); ++i)
+      sc(i,i) = 1/s[i];
+    return self(sc);
+  }
+  // static self inverse();
 };
 
 #endif
