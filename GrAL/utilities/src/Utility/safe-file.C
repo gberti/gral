@@ -4,9 +4,11 @@
 
 #include "Utility/safe-file.h"
 
-#include <fstream.h>
-#include <stdlib.h>
+#include <iostream>
+#include <fstream>
 #include <string> 
+#include <stdlib.h>
+
  
 int file_interactive::open(ifstream& in, std::string const& filename)
   {
@@ -19,10 +21,10 @@ int file_interactive::open(ifstream& in, std::string const& filename)
 
    std::string my_filename(filename);
      while (! in.is_open()) {
-     cerr << "could not open input file \"" << my_filename << "\" !\n"
-	  << "please enter new filename: ";
+     std::cerr << "could not open input file \"" << my_filename << "\" !\n"
+	       << "please enter new filename: ";
 
-     cin >> my_filename;
+     std::cin >> my_filename;
 
      const char* my_name = my_filename.c_str();
      in.open(my_name);
@@ -30,7 +32,7 @@ int file_interactive::open(ifstream& in, std::string const& filename)
    return is_open;
   }
 
-int file_interactive::open_gz(ifstream& in, std::string const& filename, int strictness)
+int file_interactive::open_gz(std::ifstream& in, std::string const& filename, int strictness)
 {
   
   if(in.is_open())
@@ -53,11 +55,11 @@ int file_interactive::open_gz(ifstream& in, std::string const& filename, int str
       }
       // ERROR: file could not be opened: prompt user
       else {
-	cerr << "could not open neither \"" << my_name << "\" nor \""
+	std::cerr << "could not open neither \"" << my_name << "\" nor \""
 	     << my_name + ".gz" << "\" !\n";
 	if ((strictness == (int)insist)) {
-	  cerr <<  "please enter new filename: ";
-	  cin >> my_name;
+	  std::cerr <<  "please enter new filename: ";
+	  std::cin >> my_name;
 	  name = my_name.c_str();
 	}
       }
@@ -67,7 +69,7 @@ int file_interactive::open_gz(ifstream& in, std::string const& filename, int str
   return res;
 }
 
-void file_interactive::close(ifstream& in, std::string const& nm, int gz)
+void file_interactive::close(std::ifstream& in, std::string const& nm, int gz)
 {
   if(in.is_open())
     in.close();
@@ -75,7 +77,7 @@ void file_interactive::close(ifstream& in, std::string const& nm, int gz)
     system(("gzip " + nm).c_str());
 }
 
-void file_interactive::close(ofstream& out, std::string const& nm, int gz)
+void file_interactive::close(std::ofstream& out, std::string const& nm, int gz)
 {
   if(out.is_open())
     out.close();
@@ -83,20 +85,22 @@ void file_interactive::close(ofstream& out, std::string const& nm, int gz)
     system(("gzip " + nm).c_str());
 }
 
-int file_interactive::open(ofstream& out, std::string const& filename, ios::open_mode ios_mode)
+int file_interactive::open(std::ofstream& out, std::string const& filename) 
+  //std::ios_base::openmode ios_mode)
 {
   int res = (int)failed;
   if(out.is_open())
     out.close();
   
   const char* name = filename.c_str();
-  out.open(name, ios_mode);
+  //  out.open(name, ios_mode);
+  out.open(name);
   
   std::string my_name = filename;
   while (!out.is_open()) {
-    cerr << "could not open output file \"" << my_name << "\" !\n"
-	 << "please enter new filename: ";
-    cin >> my_name;
+    std::cerr << "could not open output file \"" << my_name << "\" !\n"
+	      << "please enter new filename: ";
+    std::cin  >> my_name;
     
      const char* new_name = my_name.c_str();
      out.open(new_name);

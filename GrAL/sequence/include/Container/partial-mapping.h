@@ -58,10 +58,25 @@ public:
   typedef T2                         result_type;
 
 private:
-  typedef hash_map<T1,T2,hash<T1>,equal_to<T1> >  map_table_type;
-  typedef typename map_table_type::iterator       iterator;
-  typedef typename map_table_type::const_iterator const_iterator;
-  typedef write_only_proxy<T2>                    proxy_type;
+  template<class T>
+  struct hasher_type {
+    size_t operator()(T const& t) const { 
+      hash<T> h;
+      return h(t);
+    }
+  };
+  template<class T>
+  struct hasher_type<T*> {  
+    size_t operator()(T const* t) const { 
+      hash<unsigned> h;
+      return h(reinterpret_cast<unsigned>(t));
+    }
+  };
+
+  //typedef hash_map<T1,T2,hash<T1>,equal_to<T1> >  map_table_type;
+  typedef hash_map<T1,T2,hasher_type<T1>,equal_to<T1> >  map_table_type;
+
+  //   typedef write_only_proxy<T2>                    proxy_type;
 
   //------ DATA --------
   map_table_type mapping;
@@ -83,8 +98,22 @@ public:
 
   //---------------------- data access ---------------------------
 
-  proxy_type operator[](const T1& t1) { return proxy_type(mapping[t1]);}
-  const T2& operator()(const T1& t1) const {
+  typedef typename map_table_type::iterator       iterator;
+  typedef typename map_table_type::const_iterator const_iterator;
+
+  // should use domain/image types
+  const_iterator begin() const { return mapping.begin();}
+  const_iterator end()   const { return mapping.end();}
+  // no non-const versions of begin/end: writing should occur
+  // only via mapping interface: op[]/() below.
+
+  //   proxy_type operator[](const T1& t1) { return proxy_type(mapping[t1]);}
+  T2      & operator[](T1 const& t1) {
+    if(undefined(t1))
+      mapping[t1] = default_val;
+    return mapping[t1];
+  }
+  T2 const& operator()(T1 const& t1) const {
     const_iterator i = mapping.find(t1);
     return ( i != mapping.end() ? (*i).second : default_val);
   }

@@ -11,15 +11,15 @@
 #include <string>
 
 template<class T>
-inline string as_string(const T& t)
+inline std::string as_string(const T& t)
 {
-  strstream s;
-  s << t << ends;
+  std::strstream s;
+  s << t << std::ends;
   int n = strlen(s.str());
   char* copy = new char[n+1];
   strcpy(copy,s.str());
  
-  return string(copy);
+  return std::string(copy);
 }
 
 #endif

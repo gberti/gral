@@ -11,7 +11,7 @@ void write_bm(bijective_mapping<T1,T2> const& m, ostream& out)
 {
   typedef typename bijective_mapping<T1,T2>::domain_type dt;
   typedef typename dt::const_iterator                    d_iter;
-  for(d_iter x = m.domain().begin(); x != m.domain().end(); ++x)
+  for(d_iter x = m.domain().begin(); ! (x == m.domain().end()); ++x)
     out  << *x << ' ' << m(*x) << '\n';
 }
 
@@ -28,7 +28,7 @@ void read_bm(bijective_mapping<T1,T2> & m, istream& in)
 template<class T1, class T2>
 void bijective_mapping<T1,T2>::calculate_inverse() const
 {
-  for(map_iterator it = the_map.begin(); it != the_map.end(); ++it)
+  for(map_iterator it = the_map.begin(); !(it == the_map.end()); ++it)
     ((inv_table_type &)the_inverse_map)[(*it).second] = (*it).first;
 }
 

@@ -5,7 +5,7 @@
 // $LICENSE
 
 // namespace sgistl {
-#include <hash_map.h> // STL
+#include "Container/my-hash-map.h" // STL
 //}
 //using namespace std;
 // using sgistl::hash;
@@ -159,8 +159,8 @@ public:
   typedef T2                         result_type;
 
 private:
-  typedef hash_map<T1,T2, hash<T1>,equal_to<T1> >  map_table_type;
-  typedef hash_map<T2,T1, hash<T2>,equal_to<T2> >  inv_table_type; 
+  typedef std::hash_map<T1,T2, std::hash<T1>,std::equal_to<T1> >  map_table_type;
+  typedef std::hash_map<T2,T1, std::hash<T2>,std::equal_to<T2> >  inv_table_type; 
   //--------------- DATA -------------------------
 
   map_table_type         the_map;

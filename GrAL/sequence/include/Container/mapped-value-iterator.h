@@ -86,6 +86,8 @@ public:
   //  friend
   bool operator==(const self& rs) const
     { return (it == rs.it);}
+  bool operator!=(const self& rs) const
+    { return !(it == rs.it);}
 };
 
 
@@ -134,6 +136,8 @@ public:
   //friend 
   bool operator==(const self& rs) const
     { return (it == rs.it);}
+  bool operator!=(const self& rs) const
+    { return !(it == rs.it);}
 };
 
 
@@ -162,31 +166,34 @@ get2nd(It i) {
 
 // requires partial specialization
 
-template<typename It> struct iterator_traits;
+namespace std {
+  template<typename It> struct iterator_traits;
+  
+  template<class It, class F>
+    struct iterator_traits<mapped_value_const_iterator<It,F> >
+    {
+      typedef iterator_traits<It> bt;
+      typedef typename bt::iterator_category iterator_category;
+      typedef typename bt::difference_type   difference_type;
+      
+      typedef typename F::result_type        value_type;
+      typedef const value_type&              reference;
+      typedef const value_type*              pointer;
+    };
 
-template<class It, class F>
-struct iterator_traits<mapped_value_const_iterator<It,F> >
-{
-  typedef iterator_traits<It> bt;
-  typedef typename bt::iterator_category iterator_category;
-  typedef typename bt::difference_type   difference_type;
 
-  typedef typename F::result_type        value_type;
-  typedef const value_type&              reference;
-  typedef const value_type*              pointer;
-};
-
-template<class It, class F>
-struct iterator_traits<mapped_value_iterator<It,F> >
-{
-  typedef iterator_traits<It> bt;
-  typedef typename bt::iterator_category iterator_category;
-  typedef typename bt::difference_type   difference_type;
-
-  typedef typename F::result_type        value_type;
-  typedef value_type&                    reference;
-  typedef value_type*                    pointer;
-};
-
+  template<class It, class F>
+    struct iterator_traits<mapped_value_iterator<It,F> >
+    {
+      typedef iterator_traits<It> bt;
+      typedef typename bt::iterator_category iterator_category;
+      typedef typename bt::difference_type   difference_type;
+      
+      typedef typename F::result_type        value_type;
+      typedef value_type&                    reference;
+      typedef value_type*                    pointer;
+    };
+  
+} // namespace std
 
 #endif
