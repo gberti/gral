@@ -9,6 +9,6 @@
     - OstreamGMV3DFmt for 3D output
     - OstreamGMV2DFmt for 2D output
 
-    See test/gmv-output3d/test-gmv-output.C
-    and test/gmv-output2d/test-gmv-output2d.C for examples.
+    See test-gmv-output.C
+    and test-gmv-output2d.C for examples.
 */
