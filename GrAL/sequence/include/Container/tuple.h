@@ -50,7 +50,12 @@ private:
 template<class T, unsigned N>
 class tuple : public tuple_base<T,N> {
   typedef tuple_base<T,N> base;
+
  public:
+  // should not be necessary ... but problems with gcc 2.96
+  typedef typename base::iterator       iterator;
+  typedef typename base::const_iterator const_iterator;
+
   tuple() {}
   tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
@@ -99,6 +104,7 @@ class tuple<T,3> : public tuple_base<T,3> {
 
 
 template<class T, unsigned N>
+inline
 tuple<T,N> operator+(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 { 
   tuple<T,N> tmp(lhs);
@@ -108,6 +114,7 @@ tuple<T,N> operator+(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 }
 
 template<class T, unsigned N>
+inline
 tuple<T,N> operator-(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 { 
   tuple<T,N> tmp(lhs);
