@@ -78,4 +78,9 @@ void Triang2D::Steal(int* c, int nc, int nv)
   owned = true;
 }
 
+Triang2D::SD::SD() 
+{
+  the_archetype[0] = archetype_type(3);
+}
 
+Triang2D::SD Triang2D::sd;
