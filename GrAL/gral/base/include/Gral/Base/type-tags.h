@@ -61,6 +61,7 @@ class facet_type_tag  {};
 //! \ingroup elementtags
 class cell_type_tag   {};
 
+
 //! \ingroup elementtags
 class edge2d_type_tag  : public edge_type_tag {};
 //! \ingroup elementtags
@@ -71,6 +72,23 @@ class facet2d_type_tag : public facet_type_tag {};
 class cell2d_type_tag  : public cell_type_tag {};
 //! \ingroup elementtags
 class cell3d_type_tag  : public cell_type_tag {};
+
+
+template<unsigned N>
+struct grid_dim_tag 
+{   enum {dim = N}; };
+
+
+template<unsigned N>
+struct element_dim_tag 
+{   enum {dim = N}; };
+
+template<unsigned N>
+struct element_codim_tag 
+{   enum {dim = N}; };
+
+
+
 
 
 #endif
