@@ -22,7 +22,7 @@ public:
   typedef unsigned index;
   typedef coordN<3> self;
 
-  coordN() {}
+  coordN() { X[0] = X[1] = X[2] = 0;}
   coordN(const component& x) { X[0] = X[1] = X[2] = x;}
   coordN(const component x1, const component x2, const component x3) 
   { X[0] = x1; X[1] = x2; X[2] = x3;}

@@ -23,7 +23,7 @@ public:
   typedef coordN<2> self;
   typedef double   component;
 
-  coordN() {}
+  coordN() { X[0] = X[1] = 0;}
   coordN(const component& x) { X[0] = X[1] = x;}
   coordN(const component x1, const component x2) { X[0] = x1; X[1] = x2;}
   coordN(const self& rhs)    { X[0] = rhs.X[0]; X[1] = rhs.X[1];}
