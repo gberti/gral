@@ -22,7 +22,7 @@ latex:
 
 make-links:
 	(cd hyperlatex;\
-          cp $(HOME)/WWW/icons/*.xbm html/;\
+          cp *.xbm html/;\
           (cd html; rm -f bilder; ln -s ../bilder ./; \
           ln -s top.html index.html;\
           ln -s GridVertex.html  Vertex.html;\
