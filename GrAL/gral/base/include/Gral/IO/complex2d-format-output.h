@@ -56,10 +56,10 @@ public:
 
   typedef int                       vertex_handle;
   typedef int                       cell_handle;
-  typedef vertex_iterator_int<self> Vertex;
-  typedef vertex_iterator_int<self> VertexIterator;
-  typedef cell_iterator_int<self>   Cell;
-  typedef cell_iterator_int<self>   CellIterator;
+  typedef vertex_iterator_int<grid_types<self> > Vertex;
+  typedef vertex_iterator_int<grid_types<self> > VertexIterator;
+  typedef cell_iterator_int<grid_types<self> >   Cell;
+  typedef cell_iterator_int<grid_types<self> >   CellIterator;
 
   void set_nv(int n) { nv = n;}
   void set_nc(int n) { nc = n;}
@@ -139,10 +139,10 @@ void ConstructGrid(OstreamComplex2DFmt& Out,
 }
 
 template<class T>
-class grid_function<cell_iterator_int<OstreamComplex2DFmt>,T> 
-  : public grid_function_vector<cell_iterator_int<OstreamComplex2DFmt>,T>
+class grid_function<cell_iterator_int<grid_types<OstreamComplex2DFmt> >,T> 
+  : public grid_function_vector<cell_iterator_int<grid_types<OstreamComplex2DFmt> >,T>
 {
-  typedef grid_function_vector<cell_iterator_int<OstreamComplex2DFmt>,T> base;
+  typedef grid_function_vector<cell_iterator_int<grid_types<OstreamComplex2DFmt> >,T> base;
 public: 
   typedef typename base::grid_type grid_type;
 
@@ -178,21 +178,21 @@ struct grid_types<OstreamComplex2DFmt>
 
 
 template<>
-struct element_traits<vertex_iterator_int<OstreamComplex2DFmt> >
+struct element_traits<vertex_iterator_int<grid_types<OstreamComplex2DFmt> > >
   : public element_traits_vertex_base<OstreamComplex2DFmt> 
 {
   struct hasher_type : public hasher_type_elem_base {
-    unsigned operator()(vertex_iterator_int<OstreamComplex2DFmt> const& v) const
+    unsigned operator()(vertex_iterator_int<grid_types<OstreamComplex2DFmt> > const& v) const
     { return unsigned(v.handle());}
   };
 };
 
 template<>
-struct element_traits<cell_iterator_int<OstreamComplex2DFmt> >
+struct element_traits<cell_iterator_int<grid_types<OstreamComplex2DFmt> > >
   : public element_traits_cell_base<OstreamComplex2DFmt> 
 {
   struct hasher_type  : public hasher_type_elem_base {
-    unsigned operator()(cell_iterator_int<OstreamComplex2DFmt> const& c) const
+    unsigned operator()(cell_iterator_int<grid_types<OstreamComplex2DFmt> > const& c) const
     { return unsigned(c.handle());}
   };
 };
