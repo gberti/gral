@@ -1,0 +1,26 @@
+v0 @ 0 0
+v1 @ 1 0
+v2 @ 2 1
+v3 @ 1 1
+v4 @ 1.5 2
+e [0,1]  length:  1
+e [1,2]  length:  1.41421
+e [3,0]  length:  1.41421
+e [3,2]  length:  1
+e [2,4]  length:  1.11803
+e [4,3]  length:  1.11803
+f0 area: 1
+f1 area: 0.5
+v0 @ 0 0 0
+v1 @ 1 0 0
+v2 @ 2 1 0
+v3 @ 1 1 0
+v4 @ 1 2 1
+e [0,1]  length:  1
+e [1,2]  length:  1.41421
+e [3,0]  length:  1.41421
+e [3,2]  length:  1
+e [2,4]  length:  1.73205
+e [4,3]  length:  1.41421
+f0 area: 1
+f1 area: 0.707107
