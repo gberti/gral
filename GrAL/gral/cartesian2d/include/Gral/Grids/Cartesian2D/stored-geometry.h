@@ -28,6 +28,8 @@ public:
     : g(&gg), coords_(gg) {}
 
   void set_grid(const RegGrid2D& gg) { g = &gg; coords_.set_grid(gg);}
+  void rebind  (const RegGrid2D& gg) { g = &gg; coords_.rebind  (gg);}
+  void bound() const { return (g != 0);}
 
   const grid_type& TheGrid() const { return *g;}
 

@@ -47,8 +47,13 @@ public:
       init();
     }
 
-
-  
+  bool bound() const { return g != 0;}
+  void cb()    const { REQUIRE(bound(), "",1);}
+  void rebind(grid_type    const& gg) { g = &gg; init();}
+  void rebind(grid_type    const& gg,
+	      mapping_type const& ff) { init(gg,ff);}
+ 
+ 
   //  coord_type coord(Vertex const& v) const { return f(x(v),y(v),z(v));}
   coord_type coord(Vertex const& v) const { 
     index_type i(v.index()); 

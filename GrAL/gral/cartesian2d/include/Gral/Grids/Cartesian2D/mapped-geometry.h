@@ -11,6 +11,8 @@
 #include "Gral/Geometries/geometric-types.h"
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
+#include "Utility/pre-post-conditions.h"
+
 /*!  \brief  geometry for RegGrid2D with explicit mapping.
 
       This class implements a straight-line geometry for the
@@ -43,36 +45,37 @@ class mapped_geometry_reg2d_base
 {
 public:
   //  typedef typename CoordMap::coord_type  coord_type;
-  typedef typename CoordMap::result_type  coord_type;
-  typedef RegGrid2D                      grid_type;
-  typedef typename RegGrid2D::index_type index_type;
+  typedef CoordMap                            mapping_type;
+  typedef typename mapping_type::result_type  coord_type;
+  typedef RegGrid2D                           grid_type;
+  typedef typename RegGrid2D::index_type      index_type;
 
   mapped_geometry_reg2d_base() :  g(0) {} 
 
   //@{ @name Constructor
   mapped_geometry_reg2d_base(const CoordMap& ff, const RegGrid2D& gg) 
     : f(ff), g(&gg), ll(gg.ll()), ur(gg.ur())
-    { 
-      dx = (ur.x() - ll.x() != 0 ? 1.0 / (ur.x() -ll.x()) 
-	    : 0.0);
-      dy = (ur.y() - ll.y() != 0 ? 1.0 / (ur.y() -ll.y()) 
-	    : 0.0);
-    }
+  { init();}
   mapped_geometry_reg2d_base(const CoordMap& ff, const RegGrid2D& gg,
-				 const index_type& LL, const index_type& UR) 
-    : f(ff), g(&gg), ll(LL), ur(UR) {
+			     const index_type& LL, const index_type& UR) 
+    : f(ff), g(&gg), ll(LL), ur(UR) 
+  { init();}
+  //@}
+  void init() {
       dx = (ur.x() - ll.x() != 0 ? 1.0 / (ur.x() -ll.x()) 
 	    : 0.0);
       dy = (ur.y() - ll.y() != 0 ? 1.0 / (ur.y() -ll.y()) 
 	    : 0.0);
   }
-  //@}
 
-  const grid_type& TheGrid()    const { 
-    REQUIRE((g != 0) , "no grid!\n",1);
-    return *g;
-  }
-  const CoordMap&  TheMapping() const { return f;}
+  const grid_type& TheGrid()    const { cb(); return *g;}
+  bool bound() const { return (g != 0); }
+  void cb()    const { REQUIRE(bound(), "",1);}
+  void rebind(grid_type    const& gg) { g = &gg; ll = g->ll(); ur = g->ur(); init();}
+  void rebind(grid_type    const& gg,
+	      mapping_type const& ff) { f = ff; rebing(gg);}
+
+  const mapping_type&  TheMapping() const { return f;}
   
   // is this always possible?
   unsigned space_dimension() const { return f.dim_of_image();}
