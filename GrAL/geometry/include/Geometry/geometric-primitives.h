@@ -15,8 +15,10 @@ struct geom_traits {};
 template<class P>
 class segment {
   typedef P coord_type;
-  coord_type const& p_0, p_1;
-
+  typedef coord_type const& const_ref;
+  //   coord_type const& p_0, p_1;
+  // coord_type  p_0, p_1;
+  const_ref  p_0, p_1;
 public:
   segment(coord_type const& P0, coord_type const& P1)
     : p_0(P0), p_1(P1) {}
@@ -27,8 +29,10 @@ public:
 template<class P>
 class triangle {
   typedef P coord_type;
-  coord_type const& p_0, p_1, p_2;
-
+  typedef coord_type const& const_ref;
+  // coord_type const& p_0, p_1, p_2;
+  // coord_type  p_0, p_1, p_2;
+ const_ref  p_0, p_1, p_2;
 public:
   triangle(coord_type const& P0, 
 	   coord_type const& P1,
@@ -46,7 +50,8 @@ template<class P>
 struct geom_traits<segment<P> > {
   typedef segment<P> segment_t;
   typedef typename segment_t::coord_type coord_type;
-  typedef segment_t const_ref;
+  // typedef segment_t const_ref;
+  typedef segment_t const& const_ref;
   static coord_type const& p0(const_ref S) { return S.p0();}
   static coord_type const& p1(const_ref S) { return S.p1();}
 };
@@ -54,7 +59,8 @@ struct geom_traits<segment<P> > {
 template<class P>
 struct geom_traits<triangle<P> > {
   typedef typename triangle<P>::coord_type coord_type;
-  typedef triangle<P>   const_ref;
+  // typedef triangle<P>    const_ref;
+  typedef triangle<P>   const & const_ref;
   static coord_type const& p0(const_ref T) { return T.p0();}
   static coord_type const& p1(const_ref T) { return T.p1();}
   static coord_type const& p2(const_ref T) { return T.p2();}
@@ -99,19 +105,21 @@ class intersection_segment_triangle {
 
 public: 
   intersection_segment_triangle(Segment const& S_, Triangle const& T_)
-    : S(S_), T(T_), t_defined(false) {}
+    : S(S_), T(T_), t_defined(false) 
+    {}
 
-  bool segment_does_intersect_plane() {
+  bool segment_intersects_plane() {
     coord_type n = plane_normal(T);
     real       d = ap::dot(n, tt::p0(T));
     return ( (ap::dot(st::p0(S), n)-d) 
 	     *(ap::dot(st::p1(S), n)-d)  < 0);
   }
 
-  bool segment_does_intersect_triangle() {
-    if(segment_does_intersect_plane()) {
+  bool segment_intersects_triangle() {
+    if(segment_intersects_plane()) {
       coord_type rst; pt::ConstructWithDim(3,rst);
-      // p0(T) + r*(p1(T)-p0(T)) + s*(p2(T)-p0(T)) =  p0(S) + t*(p1(S)-p0(S))
+      // solve p0(T) + r*(p1(T)-p0(T)) + s*(p2(T)-p0(T)) 
+      //    =  p0(S) + t*(p1(S)-p0(S))  for (r,s,t)
       ap::solve(tt::p1(T) - tt::p0(T),
 		tt::p2(T) - tt::p0(T), 
 		st::p0(S) - st::p1(S),
@@ -127,9 +135,9 @@ public:
   //  bool lines_does_intersect_plane();
 
   coord_type intersection() { 
-    REQUIRE(segment_does_intersect_plane(), "no intersection!\n",1);
+    REQUIRE(segment_intersects_plane(), "no intersection!\n",1);
     if(! t_defined)
-      segment_does_intersect_triangle(); // calculates t      
+      segment_intersects_triangle(); // calculates t      
     return st::p0(S) + t * (st::p1(S) - st::p0(S));
   }
 };
