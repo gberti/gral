@@ -26,6 +26,7 @@ class grid_function<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM> ,K>,
   : public grid_function_vector<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>,K>, T >
 {
   typedef grid_function_vector<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>,K>, T > base;
+public:
   typedef cartesiannd::grid<DIM>                                                               grid_type;
 public:  
   grid_function() {}
