@@ -6,7 +6,9 @@ exec perl -w -x $0 ${1+"$@"} # -*- mode: perl; perl-indent-level: 2; -*-
 $license1 = "
 /* ------------------------------------------------------------
 
-    Copyright (C) 1997-2001 Guntram Berti.
+    Copyright (C) 1997-2001 Guntram Berti,
+    NEC C&C Research Labs, St. Augustin, Germany.
+    Contact: berti\@ccrl-nece.de
 
     This file is part of the Grid Algorithms Library (GrAL),
     which is available at 
@@ -19,12 +21,13 @@ $license1 = "
 --------------------------------------------------------------- */
 ";
 
-$license2 = "
-// \$LICENSE
-";
-$license_nec ="
-// \$LICENSE_NEC
-";
+
+#$license2 = "
+#// \$LICENSE
+#";
+#$license_nec ="
+#// \$LICENSE_NEC
+#";
 
 $license = $license1;
 
