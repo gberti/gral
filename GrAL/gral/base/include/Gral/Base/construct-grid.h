@@ -134,7 +134,7 @@ void ConstructGridVC_generic (G_DEST        & G_dest,
 { 
   // provided by the implementation of G_DEST
   ConstructGrid0(G_dest, G_src, v_corr, c_corr); 
-  Geom_dest.set_grid(G_dest);
+  Geom_dest.rebind(G_dest);
   typedef grid_types<G_SRC>  srcgt;
   typedef grid_types<G_DEST> destgt;
   for(typename srcgt::VertexIterator vs=G_src.FirstVertex(); ! vs.IsDone(); ++vs) {

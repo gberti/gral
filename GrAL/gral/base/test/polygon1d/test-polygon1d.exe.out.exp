@@ -36,3 +36,4 @@ has no type CellOnCellIterator
 has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
+  ->  (v=0 c=0)   ->  (v=1 c=0)   ->  (v=1 c=1)   ->  (v=2 c=1)   ->  (v=2 c=2)   ->  (v=0 c=2) 

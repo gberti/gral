@@ -24,7 +24,8 @@ int main() {
   using namespace cartesian2d;
   
   CartesianGrid2D R(3,3);
-  Complex2D       G; ConstructGrid0(G,R);
+  Complex2D       G; 
+  ConstructGrid0(G,R);
 
   typedef STDHASH::hash_map<cgt::FacetOnCellIterator, cgt::cell_handle,
                             hasher_facet_on_cell>   nb_table_type;
