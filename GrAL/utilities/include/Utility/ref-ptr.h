@@ -112,13 +112,17 @@ public:
   // which could inhibit some misuse.
   explicit ref_ptr(T  &     t) : owned_(false) 
   { ptr = &t; } // std::cout << "ref_ptr(T const&     t)" << std::endl;}
+  // FIXME: This might result in memory leak if called with newly allocated ptr.
+  // Perhaps add shared_ptr<T> to data and allow only ref_ptr(shared_ptr<T>) ?
   explicit ref_ptr(T *   tptr) : owned_(false)
   { ptr = tptr; }
-  explicit ref_ptr(temporary<T> t) : owned_(true)  
+  // explicit 
+  ref_ptr(temporary<T> t) : owned_(true)  
   { ptr = new T(t.value()); } // std::cout << "ref_ptr(temporary<T> t)" << std::endl;} 
 
   template<class U>
-  explicit ref_ptr(temporary<U> t) : owned_(true)  
+  explicit
+  ref_ptr(temporary<U> t) : owned_(true)  
   { ptr = new T(t.value()); } // std::cout << "ref_ptr(temporary<T> t)" << std::endl;} 
 
   // copy constructors and assigment
@@ -174,5 +178,8 @@ public:
   T & operator* () const { return *ptr;}
 };
 
+
+template<class T>
+inline ref_ptr<T> make_ref_ptr(temporary<T> t) { return ref_ptr<T>(t);}
 
 #endif
