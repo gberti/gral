@@ -362,7 +362,7 @@ public:
       \brief  Consecutive layers of elements
   */   
 
-  */
+
   //@{
   /*! \brief Consecutive layer of vertex v
 
