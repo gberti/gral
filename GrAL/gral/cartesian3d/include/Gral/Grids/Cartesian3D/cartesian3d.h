@@ -32,8 +32,8 @@ class VertexOnFacetIterator_Cartesian3D;
 class EdgeOnFacetIterator_Cartesian3D;
   //class CellOnFacetIterator_Cartesian3D;
 
-  /*
   class VertexOnEdgeIterator_Cartesian3D;
+  /*
   class  FacetOnEdgeIterator_Cartesian3D;
   class   CellOnEdgeIterator_Cartesian3D;
 
@@ -55,30 +55,36 @@ struct grid_types_Cartesian3D {
   typedef vertex_handle_int<grid_type> vertex_handle;
   typedef edge_handle_int<grid_type>   edge_handle;
   typedef facet_handle_int<grid_type>  facet_handle;
+  typedef facet_handle                 face_handle;
   typedef cell_handle_int<grid_type>   cell_handle;
   typedef int                          archetype_handle;
 
   typedef Vertex_Cartesian3D  Vertex;
   typedef Edge_Cartesian3D    Edge;
   typedef Facet_Cartesian3D   Facet;
+  typedef Facet_Cartesian3D   Face;
   typedef Cell_Cartesian3D    Cell;
 
   typedef Vertex_Cartesian3D  VertexIterator;
   typedef Edge_Cartesian3D    EdgeIterator;
   typedef Facet_Cartesian3D   FacetIterator;
+  typedef Facet_Cartesian3D   FaceIterator;
   typedef Cell_Cartesian3D    CellIterator;
 
   typedef VertexOnCellIterator_Cartesian3D VertexOnCellIterator;
   typedef EdgeOnCellIterator_Cartesian3D   EdgeOnCellIterator;
   typedef FacetOnCellIterator_Cartesian3D  FacetOnCellIterator;
+  typedef FacetOnCellIterator_Cartesian3D  FaceOnCellIterator;
   // typedef CellOnCellIterator_Cartesian3D CellOnCellIterator;
 
   typedef VertexOnFacetIterator_Cartesian3D VertexOnFacetIterator;
   typedef EdgeOnFacetIterator_Cartesian3D   EdgeOnFacetIterator;
+  typedef VertexOnFacetIterator_Cartesian3D VertexOnFaceIterator;
+  typedef EdgeOnFacetIterator_Cartesian3D   EdgeOnFaceIterator;
   // typedef CellOnFacetIterator_Cartesian3D   CellOnFacetIterator;
 
-  /*
   typedef VertexOnEdgeIterator_Cartesian3D VertexOnEdgeIterator;
+  /*
   typedef  FacetOnEdgeIterator_Cartesian3D  FacetOnEdgeIterator;
   typedef   CellOnEdgeIterator_Cartesian3D   CellOnEdgeIterator;
   */
@@ -194,6 +200,8 @@ public:
   CartesianGrid3D();
   //! Grid with \f$ vx \times vy \times vz \f$ vertices.
   CartesianGrid3D(int vx, int vy, int vz);
+  //! Grid with \f$ v[0] \times v[1] \times v[2] \f$ vertices.
+  CartesianGrid3D(index_type v);
   /*@}*/
 private:
   void init(int vx, int vy, int vz);
@@ -201,12 +209,14 @@ public:
 
   bool empty() const { return (NumOfVertices() == 0);}
 
+  index_type cell_size() const { return cell_map.max_tuple() + index_type(1);}
   /*! \name Element size functions */
   /*@{*/ 
   unsigned NumOfVertices() const { return vertex_map.max_flat_index()+1;}
   unsigned NumOfCells   () const { return cell_map  .max_flat_index()+1;}
   unsigned NumOfEdges   () const { return NumOfXDirEdges()+NumOfYDirEdges()+NumOfZDirEdges(); }
   unsigned NumOfFacets  () const { return NumOfXYDirFacets()+NumOfXZDirFacets()+NumOfYZDirFacets();}
+  unsigned NumOfFaces   () const { return NumOfFacets();}
   /*@}*/
 
   /*! \name Sequence iteration */
@@ -214,6 +224,7 @@ public:
   inline VertexIterator FirstVertex() const;
   inline EdgeIterator   FirstEdge()   const;
   inline FacetIterator  FirstFacet()  const;
+  inline FaceIterator   FirstFace()   const;
   inline CellIterator   FirstCell()   const;
   /*@}*/
 
@@ -293,6 +304,11 @@ public:
 		: f < (int) (NumOfXYDirFacets() + NumOfXZDirFacets()) ? facet_direction::xz
 		    : facet_direction::yz);
   }
+
+  face_handle get_face_handle(facet_direction::dir d, index_type const& I) const
+  { return get_facet_handle(d,I);}
+
+
   /*@}*/
 
   /*! \name Checking functions */
@@ -397,6 +413,7 @@ public:
 
 
  /*! \brief Edge class for CartesianGrid3D */
+
   class Edge_Cartesian3D : public elem_base_Cartesian3D {
     typedef Edge_Cartesian3D       self;
     typedef elem_base_Cartesian3D  base;
@@ -420,8 +437,17 @@ public:
     direction_type        dir   () const { cv(); return TheGrid().get_direction(h);}
 
     unsigned NumOfVertices() const { return 2;}
-    // inline VertexOnEdgeIterator FirstVertex() const;
+    inline VertexOnEdgeIterator FirstVertex() const;
+    /*!\brief  Vertex of edge with logical coordinate \c i
+       \c V(0) is the start vertex, \c V(1) is the end vertex, 
+        for other values of \c i  a vertex outside the edge is obtained.
+     */
+    Vertex V(int i) const { cv(); return Vertex(TheGrid(), index() + i*index_offset());}
+    Vertex V0() const { return V(0);}
+    Vertex V1() const { return V(1);}
 
+    index_type const& index_offset() const { return grid_type::sd.edge_index_offset[dir()];}
+    
     friend bool operator==(self const& lhs, self const& rhs)
     { lhs.cb(); rhs.cb(); return (lhs.h == rhs.h);}
     friend bool operator!=(self const& lhs, self const& rhs)
@@ -701,6 +727,7 @@ public:
   int local_handle() const { cv(); return lv;}
 
   Facet     const& TheFacet() const { cb(); return f;}
+  Face      const& TheFace () const { cb(); return f;}
   grid_type const& TheGrid()  const { cb(); return f.TheGrid();}
 
   friend bool operator==(self const& lhs, self const& rhs)
@@ -741,6 +768,7 @@ public:
   int local_handle() const { cv(); return le;}
 
   Facet     const& TheFacet() const { cb(); return f;}
+  Face      const& TheFace () const { cb(); return f;}
   grid_type const& TheGrid()  const { cb(); return f.TheGrid();}
 
   friend bool operator==(self const& lhs, self const& rhs)
@@ -760,55 +788,87 @@ public:
 
 
 
+class VertexOnEdgeIterator_Cartesian3D : public grid_types_Cartesian3D
+{
+  typedef VertexOnEdgeIterator_Cartesian3D self;
+private:
+  Edge  e;
+  int   lv;
+public:
+  VertexOnEdgeIterator_Cartesian3D() {}
+  explicit
+  VertexOnEdgeIterator_Cartesian3D(Edge const& ee, int llv = 0) : e(ee), lv(llv) {} 
+
+  self&  operator++()       { cv(); ++lv; return *this; }
+  Vertex operator* () const { cv(); return Vertex(e.TheGrid(), handle());}
+  bool   IsDone    () const { cb(); return lv >= 2;}
+
+  vertex_handle         handle() const { cv(); return TheGrid().VertexMap()(index());}
+  grid_type::index_type index () const { cv(); return (e.index() + lv * e.index_offset());}
+  int             local_handle() const { cv(); return lv;}
+
+  Edge      const& TheEdge() const { cb(); return e;}
+  grid_type const& TheGrid() const { cb(); return e.TheGrid();}
+
+  friend bool operator==(self const& lhs, self const& rhs)
+  { lhs.cb(); rhs.cb(); return (lhs.e == rhs.e) && (lhs.lv == rhs.lv);}
+  friend bool operator!=(self const& lhs, self const& rhs)
+  { return !(lhs == rhs);}
+  friend bool operator< (self const& lhs, self const& rhs)
+  { lhs.cb(); rhs.cb(); return (lhs.e < rhs.e) || ((lhs.e == rhs.e) && (lhs.lv <  rhs.lv));}
+
+
+  bool bound() const { return e.valid();}
+  void cb()    const { REQUIRE(bound(), "Unbound VertexOnEdgeIterator!",1);}
+  bool valid() const { return e.valid() && (0 <= lv) && (lv < 2);}
+  void cv()    const { REQUIRE(valid(), "Invalid VertexOnEdgeIterator! lv = " << lv,1);}
+};
+
 
 // inline member functions of Cartesian3D
 
 inline Vertex_Cartesian3D
-CartesianGrid3D::FirstVertex() const
-{ return Vertex(*this);}
+CartesianGrid3D::FirstVertex() const { return Vertex(*this);}
 
 inline Edge_Cartesian3D
-CartesianGrid3D::FirstEdge() const
-{ return Edge(*this);}
+CartesianGrid3D::FirstEdge() const { return Edge(*this);}
+
+
+inline CartesianGrid3D::Face
+CartesianGrid3D::FirstFace() const { return Face(*this);}
 
 inline Facet_Cartesian3D
-CartesianGrid3D::FirstFacet() const
-{ return Facet(*this);}
+CartesianGrid3D::FirstFacet() const { return Facet(*this);}
 
 inline Cell_Cartesian3D
-CartesianGrid3D::FirstCell() const
-{ return Cell(*this);}
+CartesianGrid3D::FirstCell() const { return Cell(*this);}
 
 
-// inline member functions of Cell_Cartesian3D
+// inline functions of Cell_Cartesian3D
 
-inline
-VertexOnCellIterator_Cartesian3D
-Cell_Cartesian3D::FirstVertex() const
-{ return VertexOnCellIterator(*this);}
+inline VertexOnCellIterator_Cartesian3D
+Cell_Cartesian3D::FirstVertex() const { return VertexOnCellIterator(*this);}
 
-inline
-EdgeOnCellIterator_Cartesian3D
-Cell_Cartesian3D::FirstEdge() const
-{ return EdgeOnCellIterator(*this);}
+inline EdgeOnCellIterator_Cartesian3D
+Cell_Cartesian3D::FirstEdge() const { return EdgeOnCellIterator(*this);}
 
 
-inline
-FacetOnCellIterator_Cartesian3D
-Cell_Cartesian3D::FirstFacet() const
-{ return FacetOnCellIterator(*this);}
+inline FacetOnCellIterator_Cartesian3D
+Cell_Cartesian3D::FirstFacet() const { return FacetOnCellIterator(*this);}
 
 // inline functions of Facet_Cartesian3D
 
-inline
-VertexOnFacetIterator_Cartesian3D
-Facet_Cartesian3D::FirstVertex() const
-{ return VertexOnFacetIterator(*this);}
+inline VertexOnFacetIterator_Cartesian3D
+Facet_Cartesian3D::FirstVertex() const { return VertexOnFacetIterator(*this);}
 
-inline
-EdgeOnFacetIterator_Cartesian3D
-Facet_Cartesian3D::FirstEdge() const
-{ return EdgeOnFacetIterator(*this);}
+inline EdgeOnFacetIterator_Cartesian3D
+Facet_Cartesian3D::FirstEdge() const { return EdgeOnFacetIterator(*this);}
+
+
+// inline functions of Edge_Cartesian3D
+
+inline VertexOnEdgeIterator_Cartesian3D
+Edge_Cartesian3D::FirstVertex() const  { return VertexOnEdgeIterator(*this);}
 
 }; // namespace cartesian3d
 
