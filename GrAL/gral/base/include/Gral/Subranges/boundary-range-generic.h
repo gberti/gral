@@ -25,7 +25,7 @@
    This works only for 2D, as it uses the 2D-component iterators.
 
    \see Module boundarycompiter
-   \see Moduel boundaryalgorithms
+   \see Module boundaryalgorithms
 */
 //----------------------------------------------------------------
 

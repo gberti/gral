@@ -139,15 +139,15 @@ has no type EdgeOnVertexIterator
 has no type FaceOnVertexIterator
 has no type FacetOnVertexIterator
 has no type CellOnVertexIterator
-has no type VertexOnEdgeIterator
+has    type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
 has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has    type VertexOnFaceIterator
-has no type EdgeOnFaceIterator
+has    type EdgeOnFaceIterator
 has no type CellOnFaceIterator
 has    type VertexOnFacetIterator
-has no type EdgeOnFacetIterator
+has    type EdgeOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
