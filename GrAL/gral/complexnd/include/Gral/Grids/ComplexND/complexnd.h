@@ -492,7 +492,7 @@ namespace complexnd {
     unsigned NumOfFacets()   const { return NumOfElements(dimension()-1);}
     unsigned NumOfCells()    const { return NumOfElements(dimension());}
 
-    // must make them public because friend definition 
+    // must make them public because friend definition does not work
     // private:
 
     // modifying functions
