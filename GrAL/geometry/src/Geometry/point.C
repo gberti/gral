@@ -16,9 +16,13 @@ point::point(const double x1, const double y1, const double z1) : n(3)
 
 point::point(const point& v) : n(v.n)
 {
-  x=new double[n]; 
-  for(int i=0;i<=n-1;i++) 
-    x[i]=v.x[i]; 
+  if(n > 0) {
+    x=new double[n]; 
+    for(int i=0;i<=n-1;i++) 
+      x[i]=v.x[i]; 
+  }
+  else
+    x = 0;
 }
 
 
@@ -36,10 +40,17 @@ point::point(const double  a[], int nn) : n(nn)
 point& point::operator = (const point& v)
 {
   n = v.n;
-  delete[] x; 
-  x=new double[n]; 
-  for(int i=0;i<=n-1;i++) 
-    x[i]=v.x[i];
+  if(x != 0) {
+    delete[] x; 
+  }
+  if(n > 0) {
+    x=new double[n]; 
+    for(int i=0;i<=n-1;i++) 
+      x[i]=v.x[i];
+  }
+  else
+    x = 0;
+
   return *this; 
 }
  

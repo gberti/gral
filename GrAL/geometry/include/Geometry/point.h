@@ -39,8 +39,19 @@ public:
   point() : n(0) { x = 0;}
   
   point(int n1, int init)  // generate point of dim. n1, if init == zero_init : initialize with zero
-    : n(n1) {x= new double[n]; if(init == zero_init) for(int i=0;i<=n-1;i++) x[i]=0.0;}
-  explicit point(int n1) : n(n1), x(new double[n]) {}
+    : n(n1) 
+  {
+    if(n > 0) {
+      x= new double[n]; 
+      if(init == zero_init) 
+	for(int i=0;i<=n-1;i++) 
+	  x[i]=0.0;
+    }
+    else
+      x = 0;
+  }
+  explicit point(int n1) : n(n1) { if(n > 0)  x = new double[n]; else x = 0;}
+
   explicit point(const double x1);
   point(const double x, const double y);
   point(const double x, const double y, const double z);
