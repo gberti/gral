@@ -3,8 +3,8 @@
 
 CVSREPO=/home/nmwr/CVS;
 cvswork=${CVSWORK-${HOME}/CVS-work}
-#MODULES=`$cvswork/maintenance/scripts/modules.sh`;
-MODULES="maintenance configuration utilities"
+#MODULES=`$cvswork/configuration/scripts/modules.sh`;
+MODULES="configuration configuration utilities"
 
 TMP=${HOME}/tmp;
 ALLROOT=${TMP}/modules;

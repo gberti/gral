@@ -13,7 +13,7 @@ do
  echo ">>> Module $i"; 
  echo "Executing $1";
  echo "#! /bin/bash" > tmp.sh;
- echo "PATH=${PATH}:${cvswork}/maintenance/scripts/;" >> tmp.sh;
+ echo "PATH=${PATH}:${cvswork}/configuration/scripts/;" >> tmp.sh;
  echo "$1" >> tmp.sh;
  # cat tmp.sh;
  chmod ugo+x tmp.sh;

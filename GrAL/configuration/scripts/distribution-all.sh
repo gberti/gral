@@ -3,7 +3,7 @@
 
 CVSREPO=/home/nmwr/CVS;
 cvswork=${CVSWORK-${HOME}/CVS-work}
-MODULES=`$cvswork/maintenance/scripts/modules.sh`;
+MODULES=`$cvswork/configuration/scripts/modules.sh`;
 
 cd ${HOME}/tmp;
 rm -rf modules;
@@ -13,7 +13,7 @@ for i in ${MODULES}
 do
  cvs -d ${CVSREPO} export -r HEAD $i;
 done;
-cp ${HOME}/CVS-work/maintenance/README .
+cp ${HOME}/CVS-work/configuration/README .
 cd ..;
 tar cf gral-all.tar modules;
 gzip -f gral-all.tar;

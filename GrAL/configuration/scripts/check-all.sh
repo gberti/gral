@@ -3,7 +3,7 @@
 
 CVSREPO=/home/nmwr/CVS;
 cvswork=${CVSWORK-${HOME}/CVS-work}
-MODULES=`$cvswork/maintenance/scripts/modules.sh`;
+MODULES=`$cvswork/configuration/scripts/modules.sh`;
 CHECKDIR=check-modules;
 
 cd ${HOME}/tmp;

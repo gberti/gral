@@ -2,7 +2,7 @@
 
 
 cvswork=${CVSWORK-${HOME}/CVS-work}
-MODULES=`$cvswork/maintenance/scripts/modules.sh`;
+MODULES=`$cvswork/configuration/scripts/modules.sh`;
 dopt=opt;
 dbg=${1-$dopt};
 

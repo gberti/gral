@@ -2,7 +2,7 @@
 
 
 cvswork=${CVSWORK-${HOME}/CVS-work}
-MODULES=`$cvswork/maintenance/scripts/modules.sh`;
+MODULES=`$cvswork/configuration/scripts/modules.sh`;
 #MODULES=sequence
 cd $cvswork
 for i in ${MODULES}
