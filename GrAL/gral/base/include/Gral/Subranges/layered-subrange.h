@@ -9,7 +9,6 @@
 
 namespace GrAL {
 
-//----------------------------------------------------------------
 /*! \defgroup layeredsubrange Layered Grid Subrange
     \ingroup subranges
 
@@ -23,11 +22,10 @@ namespace GrAL {
   \see \ref subranges module
   \todo Test
 */
-//----------------------------------------------------------------
 
 
 
-//----------------------------------------------------------------
+
 /*! \brief  Layered vertex range 
    \ingroup layeredsubrange
 
@@ -47,7 +45,7 @@ public:
   typedef typename base::grid_type             grid_type;
 private:
   //---   DATA  ----
-   ::std::vector<int> layers;
+  std::vector<int> layers;
 
   using base::TheContainer;
   using base::TheGrid;
@@ -58,19 +56,24 @@ public:
   void append_layer() { layers.push_back(TheContainer().size());}
   //FIXME: should either make sure that last layer is empty or remove cells!
   void remove_layer() { layers.pop_back();} 
+  void clear() { base::clear(); layers.clear();}
 
   //---------------------- iteration  -------------------------------
 
   // layered range functionality
+
   unsigned NumOfLayers() const { return layers.size();}
 
+  /*! \brief Get single layer \c ly, \f$ 1 \leq ly \leq \f$ \c NumOfLayers()
+   */
   range_type_ref  Layer(unsigned ly) const 
     { 
       REQUIRE(((0 < ly) && (ly <= layers.size())),
 	      "Layer " << ly << "out of range [1," << layers.size() << "] !\n",1);
       return range_type_ref(begin_l(ly),end_l(ly),TheContainer(),TheGrid());
     }
-
+  /*! \brief Get layer range \c [l1,l2)
+   */
   range_type_ref Layers(unsigned l1, unsigned l2)
     {
       REQUIRE(((0 < l1) && (l2 <= layers.size())),
@@ -79,9 +82,12 @@ public:
    
       return (range_type_ref(begin_l(l1),end_l(l2),TheContainer(), TheGrid()));
     }
-
-  range_type_ref AllLayers() const { return base::range();}
-  range_type_ref LastLayer() const { return Layer(NumOfLayers());}
+  //! \brief Short for <tt> Layers(1,NumOfLayers)</tt>
+  range_type_ref AllLayers()  const { return base::range();}
+  //! \brief Short for <tt> Layer(1) </tt>
+  range_type_ref FirstLayer() const { return Layer(1);}
+  //!  \brief Short for <tt> Layer(NumOfLayers()) </tt>
+  range_type_ref LastLayer()  const { return Layer(NumOfLayers());}
   
   
 private:
@@ -114,7 +120,7 @@ public:
   typedef typename base::grid_type             grid_type;
 private:
   //---   DATA  ----
-   ::std::vector<int> layers;
+  std::vector<int> layers;
 
   using base::TheContainer;
   using base::TheGrid;
@@ -125,29 +131,37 @@ public:
   void append_layer() { layers.push_back(TheContainer().size());}
   //FIXME: should either make sure that last layer is empty or remove cells!
   void remove_layer() { layers.pop_back();} 
+  void clear() { base::clear(); layers.clear();}
 
   //---------------------- iteration  -------------------------------
 
   // layered range functionality
   unsigned NumOfLayers() const { return layers.size();}
- 
+
+  /*! \brief Get single layer \c ly, \f$ 1 \leq ly \leq \f$ \c NumOfLayers()
+   */
   range_type_ref  Layer(unsigned ly) const 
     { 
       REQUIRE(((0 < ly) && (ly <= layers.size())),
-	      "Layer " << ly << "out of range [1," << layers.size() << "] !\n",1);
+	      "Layer " << ly << " out of range [1," << layers.size() << "] !\n",1);
       return range_type_ref(begin_l(ly),end_l(ly),TheContainer(),TheGrid());
     }
-
+  /*! \brief Get layer range \c [l1,l2)
+   */
   range_type_ref Layers(unsigned l1, unsigned l2)
     {
       REQUIRE(((0 < l1) && (l2 <= layers.size())),
-	      "Layers " << l1 << "," << l2 << "out of range [1," << layers.size() << "] !\n",1);
+	      "Layers " << l1 << "," << l2 << " out of range [1," << layers.size() << "] !\n",1);
       REQUIRE(( l1 <= l2), "layers " << l1 << "," << l2 << " not ordered!\n",1);
    
-       return (range_type_ref(begin_l(l1),end_l(l2),TheContainer(), TheGrid()));
+      return (range_type_ref(begin_l(l1),end_l(l2),TheContainer(), TheGrid()));
     }
-  range_type_ref AllLayers() const { return base::range();}
-  range_type_ref LastLayer() const { return Layer(NumOfLayers());}
+  //! \brief Short for <tt> Layers(1,NumOfLayers)</tt>
+  range_type_ref AllLayers()  const { return base::range();}
+  //! \brief Short for <tt> Layer(1) </tt>
+  range_type_ref FirstLayer() const { return Layer(1);}
+  //!  \brief Short for <tt> Layer(NumOfLayers()) </tt>
+  range_type_ref LastLayer()  const { return Layer(NumOfLayers());}
 
 private:
   int begin_l(unsigned i) const { return layers[i-1];}
