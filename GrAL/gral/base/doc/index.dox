@@ -9,7 +9,6 @@
    <EM> Note: This categorization is no yet very complete. </EM>
 
 
-   \todo Namespace \c gral 
 */
 
 /*! \defgroup gralbasemodules GrAL Base Component List
@@ -47,7 +46,18 @@
 
 /*! \defgroup grids Grid datastructures
 
-    There are more data structures in other GrAL packages.   
+    \ingroup gralbasemodules
+
+    \note There are more data structures in other GrAL packages:
+	for instance $gral-gral/complex2d Complex2D,
+	$gral-gral/complex3d Complex3D,
+	$gral-gral/complexnd ComplexND,
+        $gral-gral/cartesian2d Cartesian2D,
+        $gral-gral/cartesian3d Cartesian3D,
+        $gral-gral/cartesiannd CartesianND,
+        $gral-gral/triang2d Triang2D
+        and $gral-gral/triang3d Triang3D.
+        
 */
 
 /*! \defgroup subranges Components for Grid Subranges

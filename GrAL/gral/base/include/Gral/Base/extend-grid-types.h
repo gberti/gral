@@ -54,7 +54,7 @@ DEFINE_OVERRIDE(CellOnCellIterator);
 #undef DEFINE_OVERRIDE
 
 
-/*! \brief factory for type-wise changes to a grid_types<> specialization.
+/*! \brief factory for type-wise changes to a \c grid_types specialization.
     
    \ingroup gridtypesreflection
 
