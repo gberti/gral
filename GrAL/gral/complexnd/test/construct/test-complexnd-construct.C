@@ -50,6 +50,7 @@ namespace complexnd {
   typedef ComplexND<0>              Complex0D;
   typedef ComplexND<1>              Complex1D;
   typedef ComplexND<2>              Complex2D;
+  typedef ComplexND<3>              Complex3D;
 
   template class element_t<ComplexAnyD, complexnd::ANY,complexnd::ANY>;
 
@@ -77,6 +78,8 @@ namespace complexnd {
   template class element_iterator_t<Complex1D,   0,  1>;
   template class element_iterator_t<Complex1D,   1,  0>;
   typedef element_t<Complex1D,   0,  1> Vertex1D;
+  typedef element_t<Complex1D,   1,  0> Edge1D;
+  typedef element_t<Complex1D,   1,  0> Cell1D;
 
   // Fixed dim: Elements for 2D grid
   template class element_t<Complex2D,   0,  2>; // Vertex
@@ -86,6 +89,24 @@ namespace complexnd {
   template class element_iterator_t<Complex2D,   1,  1>; // Edge = Facet
   template class element_iterator_t<Complex2D,   2,  0>; // Face = Cell
   typedef element_t<Complex2D,   0,  2>  Vertex2D;
+  typedef element_t<Complex2D,   1,  1>  Edge2D;
+  typedef element_t<Complex2D,   2,  0>  Cell2D;
+
+  // Fixed dim: Elements for 3D grid
+  template class element_t<Complex3D,   0,  3>; // Vertex
+  template class element_t<Complex3D,   1,  2>; // Edge 
+  template class element_t<Complex3D,   2,  1>; // Face = Facet
+  template class element_t<Complex3D,   3,  0>; // Cell
+  template class element_iterator_t<Complex3D,   0,  3>; // Vertex
+  template class element_iterator_t<Complex3D,   1,  2>; // Edge
+  template class element_iterator_t<Complex3D,   2,  1>; // Face = Facet
+  template class element_iterator_t<Complex3D,   3,  0>; // Cell
+  typedef element_t<Complex2D,   0,  3>  Vertex3D;
+  typedef element_t<Complex2D,   1,  2>  Edge3D;
+  typedef element_t<Complex2D,   2,  1>  Face3D;
+  typedef element_t<Complex2D,   3,  0>  Cell3D;
+
+
 
   // Fixed dim: incidence iterators for 1D grid
   template class incidence_iterator_t<Complex1D, 0, 0, 1, 1>; // VertexOnVertex
@@ -108,8 +129,21 @@ namespace complexnd {
 }
 
 template class grid_function<complexnd::Vertex0D, int>;
+
 template class grid_function<complexnd::Vertex1D, int>;
+template class grid_function<complexnd::Edge1D, int>;
+
 template class grid_function<complexnd::Vertex2D, int>;
+template class grid_function<complexnd::Edge2D, int>;
+template class grid_function<complexnd::Cell2D, int>;
+
+template class grid_function<complexnd::Vertex3D, int>;
+template class grid_function<complexnd::Edge3D, int>;
+template class grid_function<complexnd::Face3D, int>;
+template class grid_function<complexnd::Cell3D, int>;
+
+
+
 
 int main() {
   using namespace complexnd;
