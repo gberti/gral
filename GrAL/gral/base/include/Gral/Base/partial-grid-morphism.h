@@ -214,6 +214,9 @@ public:
 
   VertexImg operator()(VertexDef const& v) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
+    REQUIRE(( &(v.TheGrid()) == g_def), 
+	    "Grids don't match! g_def = " << g_def 
+	    << "; v.TheGrid() = " <<  &(v.TheGrid()), 1);
     return VertexImg(*g_img,phi_v(v));
   }
 

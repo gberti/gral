@@ -49,6 +49,7 @@ public:
 	    (v    .begin(),    v.end(),
 	     rhs.v.begin(),rhs.v.end()));
   }
+  bool operator!=(self const& rhs) const { return !((*this) == rhs);}
   bool operator< (self const& rhs) const { 
     return (0  >  std::lexicographical_compare_3way
 	    (v    .begin(),    v.end(),

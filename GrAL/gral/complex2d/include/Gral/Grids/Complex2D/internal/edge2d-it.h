@@ -26,7 +26,7 @@ public:
   Edge2D_Iterator() {}
   Edge2D_Iterator(GridCellIterator    const& c, 
 		  FacetOnCellIterator const& nb);
-  Edge2D_Iterator(Complex2D const&);
+  explicit Edge2D_Iterator(Complex2D const&);
   Edge2D_Iterator(Complex2D const& g, edge_handle const& h);
 
   Edge2D_Iterator(const self& e) : _c(e._c), _fc(e._fc) {}
@@ -57,6 +57,8 @@ public:
     return (    (ls.IsDone() && rs.IsDone()) 
 	     || ((ls._c == rs._c) && (ls._fc == rs._fc)));
   }
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
   bool bound() const { return _c.bound();}
   bool valid() const { return _c.valid() && _fc.valid();}

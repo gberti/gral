@@ -12,6 +12,7 @@
 #include "Utility/pre-post-conditions.h"
 
 #include "Gral/Base/common-grid-basics.h" 
+#include "Gral/Base/element-handle.h"
 #include "Gral/Iterators/vertex-on-edge-iterator.h"
 
 #include "Gral/Grids/Cartesian2D/index-map.h"
@@ -148,9 +149,9 @@ public:
 public:
   typedef RegGrid2D Grid;
   
-  typedef int vertex_handle;
-  typedef int edge_handle;
-  typedef int cell_handle;
+  typedef vertex_handle_int<RegGrid2D> vertex_handle;
+  typedef edge_handle_int<RegGrid2D>   edge_handle;
+  typedef cell_handle_int<RegGrid2D>   cell_handle;
 
   cell_handle invalid_cell()      const {return TheCellMap().n0() -1;}
   cell_handle outer_cell_handle() const {return TheCellMap().n0() -1;}
@@ -261,6 +262,8 @@ public:
 
     friend bool operator==(const self& lhs, const self& rhs) 
     {return (lhs.GlobalNumber() == rhs.GlobalNumber());}
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return ! (lhs == rhs);}
     friend bool operator<(const self& lhs, const self& rhs) 
     {return (lhs.GlobalNumber() < rhs.GlobalNumber());}
 
@@ -311,7 +314,7 @@ public:
 
     Edge(const CellIterator&, const CellOnCellIterator& nb); // somewhat obsolete.
     Edge(const Cell&,         const CellOnCellIterator& nb);
-    Edge(const CellOnCellIterator& nb);
+    explicit Edge(const CellOnCellIterator& nb);
 
     Vertex V1() const { return Vertex(v1_,_g);}
     Vertex V2() const { 
@@ -342,6 +345,8 @@ public:
 
     friend bool operator==(const self& lhs, const self& rhs) 
     {return (lhs.GlobalNumber() == rhs.GlobalNumber());}
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
     friend bool operator<(const self& lhs, const self& rhs) 
     {return (lhs.GlobalNumber() < rhs.GlobalNumber());}
 
@@ -396,6 +401,8 @@ public:
  
     friend bool operator==(const self& lhs, const self& rhs) 
       {return (lhs.llv == rhs.llv);} // GlobalNumber() == rhs.GlobalNumber());}
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
     friend bool operator<(const self& lhs, const self& rhs) 
     {return (lhs.GlobalNumber() < rhs.GlobalNumber());}
 
@@ -498,6 +505,7 @@ public:
   public:
     VertexIterator() : base(0) {} 
     VertexIterator(const Grid* g) : base(g), v(g->MinVertexNum()) {}
+    explicit 
     VertexIterator(const Grid& g) : base(g), v(g .MinVertexNum()) {}
     VertexIterator(const Grid& g, vertex_handle vv) : base(&g), v(vv) {}
     VertexIterator(vertex_handle vv, const Grid* g) : base(g), v(vv) {}
@@ -527,6 +535,9 @@ public:
       REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing vertices with different grids!\n",1);
       return (lhs.v == rhs.v);
     }
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
+
   private:
     vertex_handle v;
   };
@@ -538,11 +549,12 @@ public:
     typedef EdgeIterator self;
   public:
     EdgeIterator() {}
+    explicit
     EdgeIterator(Grid const& g) : base(g), e(g.MinEdgeNum()) {}
     EdgeIterator(int ee,const Grid* g) 
       : base(g), e(ee)  {}
 
-    self& operator++() { e++; return(*this);}
+    self& operator++() { ++e; return(*this);}
     self operator++(int) { self tmp(*this); ++(*this); return tmp;}
     Edge operator*() const { return TheGrid().get_edge(e);}
     bool IsDone()    const { return ( e >= TheGrid().NumOfEdges());}
@@ -557,6 +569,8 @@ public:
       REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing edges with different grids!\n",1);
       return (lhs.e == rhs.e);
     }
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
   private:
     edge_handle e;
   };
@@ -568,11 +582,12 @@ public:
     typedef CellIterator self;
   public:  
     CellIterator() : base(0), c(-1) {}
+    explicit
     CellIterator(const Grid& g) : base(&g), c(g.MinCellNum()) {}
     CellIterator(int cc, const Grid* g) : base(g), c(cc) {} 
     CellIterator(const Grid& g, int cc) : base(&g), c(cc) {} 
  
-    self& operator++() { c++; return (*this);}
+    self& operator++() { ++c; return (*this);}
     self  operator++(int)  { self tmp(*this); ++(*this); return tmp;}
     Cell  operator*() const { return TheGrid().cell(c);}
     // operator Cell()   const { return TheGrid().cell(c);}
@@ -586,6 +601,8 @@ public:
       REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing cells with different grids!\n",1);
       return (lhs.c == rhs.c);
     }
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
 
   private:
     cell_handle c;
@@ -629,6 +646,7 @@ public:
     typedef Vertex element_type;
 
     VertexOnVertexIterator() {}
+    explicit
     VertexOnVertexIterator(Vertex const& vv) { *this = vv.FirstVertex(); }
     VertexOnVertexIterator(int v, const Vertex& vv, const Grid* g) 
       : base(g), _v(v), _vv(vv)  {}
@@ -650,6 +668,8 @@ public:
               "Comparing VertexOnVertexIterator with different vertex anchors!\n",1);
       return (lhs._v == rhs._v);
     }
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
 
   private:
     int _v; // [1 , _c.NumOfVertices()]
@@ -666,6 +686,7 @@ public:
     typedef Cell   element_type;
 
     CellOnVertexIterator() {}
+    explicit
     CellOnVertexIterator(Vertex const& vv) { *this = vv.FirstCell();}
     CellOnVertexIterator(int c, const Vertex& vv, const Grid* g) 
       :  base(g), _c(c), _vv(vv) {}
@@ -685,6 +706,8 @@ public:
               "Comparing CellOnVertexIterator with different vertex anchors!\n",1);
       return (lhs._c == rhs._c);
     }
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
   private:
     int _c; // [1 , _c.NumOfVertices()]
     Vertex _vv;
@@ -701,6 +724,7 @@ public:
     typedef Vertex element_type;
 
     VertexOnCellIterator() {}
+    explicit
     VertexOnCellIterator(const Cell& cc)
       : base(& cc.TheGrid()), v(Cell::SW), c(cc)  {}
     VertexOnCellIterator( Cell::corner vv, const Cell& cc, const Grid* g) 
@@ -727,6 +751,8 @@ public:
       REQUIRE( (lhs.c == rhs.c), "Comparing VertexOnCellIterators with different anchor cells!\n",1);
       return ((int) lhs.v == (int) rhs.v);
     }
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
 
   private:
     Cell::corner v; 
@@ -746,6 +772,7 @@ public:
     typedef Cell anchor_type;
 
     EdgeOnCellIterator() {}
+    explicit
     EdgeOnCellIterator(Cell const& cc) { *this = cc.FirstEdge();}
     EdgeOnCellIterator( Cell::side ee, const Cell& cc, const Grid* g)
       :  base(g), e(ee), c(cc) {}
@@ -777,6 +804,8 @@ public:
       REQUIRE( (lhs.c == rhs.c), "Comparing EdgeOnCellIterators with different anchor cells!\n",1);
       return ((int) lhs.e == (int) rhs.e);
     }
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
 
   private:
     Cell::side e;  
@@ -796,6 +825,7 @@ public:
     typedef Cell value_type;
     
     CellOnCellIterator() {}
+    explicit
     CellOnCellIterator(Cell const& cc) { *this = cc.FirstCell();}
     CellOnCellIterator(const EdgeOnCellIterator& F) : base(F), nb(F.e), c(F.c) 
       {
@@ -830,6 +860,9 @@ public:
       REQUIRE( (lhs.c == rhs.c), "Comparing CellOnCellIterators with different anchor cells!\n",1);
       return ((int) lhs.nb == (int) rhs.nb);
     }
+    friend bool operator!=(const self& lhs, const self& rhs) 
+      { return !(lhs == rhs);}
+
   private:
     Cell::side nb;  // [1 , c.NumOfNeighbours()]
     Cell c;

@@ -60,10 +60,10 @@ inline  bool Complex2D::IsOnBoundary(const Edge2D& e) const
 //---------------------- iteration functionality ------------------------
 
 inline Complex2D::VertexIterator  Complex2D::FirstVertex() const
-{ return VertexIterator(0,*this);}
+{ return VertexIterator(*this,0);}
 
 inline Complex2D::VertexIterator  Complex2D::EndVertex() const
-{ return VertexIterator(NumOfVertices(),*this);}
+{ return VertexIterator(*this, NumOfVertices());}
 
 
 inline Complex2D::EdgeIterator  Complex2D::FirstEdge() const

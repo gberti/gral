@@ -30,7 +30,8 @@ public:
 
   EdgeOnCell2D_Iterator() 
     : C(),   lf(0)  {}
-  explicit EdgeOnCell2D_Iterator(const Cell& CC)
+  explicit 
+  EdgeOnCell2D_Iterator(const Cell& CC)
     : C(CC), lf(0)   {}
   EdgeOnCell2D_Iterator(int cnt, const Cell& CC)
     : C(CC), lf(cnt) 
@@ -90,6 +91,8 @@ public:
   friend bool operator==(const self& ls, const self& rs) {
     return ((ls.C == rs.C) && (ls.lf == rs.lf));
   }
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
   void print(ostream& out)  const;
   friend ostream& operator<<(ostream& out, const EdgeOnCell2D_Iterator& it)

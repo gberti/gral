@@ -60,6 +60,8 @@ public:
 
   friend bool operator==(const self& ls, const self& rs) 
   { return (ls._f == rs._f); }
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
 private:
   inline void make_valid();

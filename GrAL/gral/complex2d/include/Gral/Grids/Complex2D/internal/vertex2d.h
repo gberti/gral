@@ -20,7 +20,7 @@ public:
   //----------  construction -------------------
 
   Vertex2D() : _pos(-1), _cc(0) {}
-  Vertex2D(Complex2D const& cc);
+  explicit Vertex2D(Complex2D const& cc);
   Vertex2D(Complex2D const& cc, vertex_handle  pos)
     : _pos(pos), _cc(&cc) {}
 
@@ -51,7 +51,8 @@ public:
   { return (lhs._pos < rhs._pos);}
   friend bool operator==(const self& lhs, const self& rhs)
   { return (lhs._pos == rhs._pos);}
-
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
   friend ostream& operator <<(ostream& out, self const& rs)
     { return (out << rs._pos << ' ' << rs._cc); }
 

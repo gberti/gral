@@ -23,6 +23,7 @@ public:
   //----------------- construction -----------------
 
   VertexOnEdge2D_Iterator() : e(), ve(0) {}
+  explicit
   VertexOnEdge2D_Iterator(const Edge& ee) : e(ee), ve(1) {}
   VertexOnEdge2D_Iterator(const Edge& ee, int vv) : e(ee), ve(vv) {}
 
@@ -41,8 +42,10 @@ public:
 
   //--------------- comparisom ----------------------
 
-  friend bool operator == (const self& ls, const self& rs) 
-   { return ((ls.ve == rs.ve) && (ls.e == rs.e)); }
+  friend bool operator == (const self& lhs, const self& rhs) 
+   { return ((lhs.ve == rhs.ve) && (lhs.e == rhs.e)); }
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
 };
 

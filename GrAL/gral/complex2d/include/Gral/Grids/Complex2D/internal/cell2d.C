@@ -81,6 +81,9 @@ inline Cell2D::vertex_handle
 Cell2D::vertex(int lv)  const    
 { 
   REQUIRE((is_valid()),"Cell2D: action with invalid cell!",1);
+  REQUIRE( ((0 <= lv) && (lv < NumOfVertices())), 
+	    "local vertex lv = " << lv  
+	   << " out of range [0, " << NumOfVertices() << "]\n",1);
   return (base()._vertices[lv]);
 } 
 
@@ -129,7 +132,7 @@ inline void Cell2D::FlipEdge(const Vertex2D& v, Edge2D& e) const
   REQUIRE(((v == e.V1()) || (v == e.V2())),
 	  "FlipEdge(v,e): v not in {e.V1,e.V2} !\n",1);
   EdgeOnCell2D_Iterator f = FirstEdge();
-  while( (*f != e)  && ( ! f.IsDone())) {
+  while( (! (*f == e))  && ( ! f.IsDone())) {
     ++f;
   }
   

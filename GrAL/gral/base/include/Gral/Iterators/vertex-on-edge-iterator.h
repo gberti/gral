@@ -19,6 +19,7 @@ private:
   int  lv;
 public:
   vertex_on_edge_iterator() {}
+  explicit
   vertex_on_edge_iterator(Edge const& ee, int llv = 0) : e(ee), lv(llv) {} 
 
   self& operator++() { ++lv; return *this;}

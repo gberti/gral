@@ -29,7 +29,7 @@ public:
   VertexOnCell2D_Iterator() {} 
   VertexOnCell2D_Iterator(int vv, const Cell& CC)
     : C(CC),  lv(vv) {}
-  VertexOnCell2D_Iterator(Cell const& CC) 
+  explicit VertexOnCell2D_Iterator(Cell const& CC) 
     : C(CC),  lv(0) {}
   
   ~VertexOnCell2D_Iterator() {}
@@ -64,6 +64,8 @@ public:
 
   friend bool operator==(const self& lhs, const self& rhs) 
   { return ((lhs.lv == rhs.lv) && (lhs.C == rhs.C));}
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
   bool valid()    const { return bound() && in_range();}
   bool bound()    const { return C.valid();}

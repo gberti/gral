@@ -19,6 +19,7 @@ protected:
   int c;
 public:
   int_cell_iterator() : g(0), c(-1) {}
+  explicit
   int_cell_iterator(grid_type const& gg, int cc = 0) : g(&gg), c(cc) {}
 
   self      & operator++() { ++c; return *this;}
@@ -28,6 +29,7 @@ public:
   int  handle()  const { return c;}
 
   bool operator==(self const& rhs) const { return (rhs.c == c) && (rhs.g == g);}
+  bool operator!=(self const& rhs) const { return !((*this) == rhs);}
 };
 
 #endif

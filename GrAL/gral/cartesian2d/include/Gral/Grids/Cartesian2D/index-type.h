@@ -39,6 +39,8 @@ struct int_index_type {
   // comparision operators
   friend bool operator==(const self& ls, const self& rs)
     { return ((ls.x == rs.x) && (ls.y == rs.y));}
+  friend bool operator!=(const self& lhs, const self& rhs) 
+    { return !(lhs == rhs);}
   friend bool operator< (const self& ls, const self& rs)
     { return ((ls.x <  rs.x) || ((ls.x == rs.x) && ( ls.y < rs.y)));}
   

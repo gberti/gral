@@ -52,6 +52,13 @@ bool operator== (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& r
  */
 template<class CHandle>
 inline
+bool operator!= (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& rs)
+   { return ! (ls == rs) }
+
+/*! \relates facet_handle
+ */
+template<class CHandle>
+inline
 bool operator<  (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& rs)
   { return ((ls.c < rs.c)  || ((ls.c == rs.c) &&  (ls.lf < rs.lf))); }
 

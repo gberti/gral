@@ -44,6 +44,8 @@ public:
 
   friend bool operator == (const self& ls, const self& rs) 
    { return ((ls.ce == rs.ce) && (ls.e == rs.e)); }
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 private:
   Cell cell() const { return ( ce == 1 ? e.C1() : ( ce == 2 ? e.C2() : Cell()));}
 

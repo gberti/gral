@@ -4,7 +4,7 @@
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
-#include <hash_map>
+#include "Container/my-hash-map.h"
 #include <vector>
 #include <algorithm> // sort
 
@@ -72,7 +72,10 @@ namespace generic_facet {
 	  : c(cc), lh(llh) {}
 
         bool operator==(self const& rhs) const { return (c == rhs.c && lh == rhs.lh);}
+	bool operator!=(self const& rhs) const 
+	  { return !((*this) == rhs);}
       };
+
 
 
   /*! \brief A generic iterator over the facets of cell.
@@ -94,6 +97,7 @@ namespace generic_facet {
 	archCellIterator  lf;
       public:
 	facet_on_cell_iterator() {}
+	explicit 
 	facet_on_cell_iterator(Cell const& cc) 
 	  : c(cc), lf(c.TheArchetype().FirstCell()) {}
 	facet_on_cell_iterator(Cell const& cc, archCellIterator const& llf) 
@@ -120,6 +124,8 @@ namespace generic_facet {
 	  cb_(); rhs.cb_();
 	  return lf == rhs.lf;
 	}
+	bool operator!=(self const& rhs) const 
+	  { return !((*this) == rhs);}
 
 	bool bound() const { return (c.valid());}
 	bool valid() const { return (bound() && lf.valid());}
@@ -150,6 +156,8 @@ namespace generic_facet {
 	c_(); rhs.c_();
 	return vtuple_type(*this) == vtuple_type(rhs);
       }
+      bool operator!=(self const& rhs) const 
+	{ return !((*this) == rhs);}
 
       bool bound() const { return fc.bound();}
       bool valid() const { return fc.valid();}
@@ -186,6 +194,9 @@ namespace generic_facet {
 		             (v    .begin(),    v.end(),
 			      rhs.v.begin(),rhs.v.end()));
 	}
+	bool operator!=(self const& rhs) const 
+	  { return !((*this) == rhs);}
+
         bool operator< (self const& rhs) const { 
 	  return (0  >  std::lexicographical_compare_3way
 		              (v    .begin(),    v.end(),
@@ -222,6 +233,7 @@ namespace generic_facet {
 	 archVertexOnCellIterator  vf;
       public:
 	vertex_on_facet_iterator() {}
+	explicit
 	vertex_on_facet_iterator(facet<gt> const& ff) 
 	  : f(ff.fc), vf((*f.lf).FirstVertex()) {}
 	vertex_on_facet_iterator(facet<gt> const& ff, 
@@ -240,6 +252,8 @@ namespace generic_facet {
 	  cb_(); rhs.cb_();
 	  return vf == rhs.vf;
 	}
+	bool operator!=(self const& rhs) const 
+	  { return !((*this) == rhs);}
 
 
 	bool bound() const { return (f.valid());}
@@ -265,7 +279,9 @@ namespace generic_facet {
                     hasher_facet<gt>, equal_to<facet<gt> > > visited;
     public:
       facet_iterator() {}
-      facet_iterator(grid_type const& g) : c(g), e(c), visited(TheGrid().NumOfCells()*8)
+      explicit 
+      facet_iterator(grid_type const& g) 
+	: c(g), e(c), visited(TheGrid().NumOfCells()*8)
 	{
 	  if (! IsDone()) visited[*e] = true;
 	}
@@ -279,6 +295,8 @@ namespace generic_facet {
 
       bool operator==(self const& rhs) const 
 	{ cb_(); return ((c == rhs.c) && (e == rhs.e)); }
+      bool operator!=(self const& rhs) const 
+	{ return !((*this) == rhs);}
 
       bool valid() const { return c.valid() && e.valid();}
       bool bound() const { return c.bound() && e.bound();}

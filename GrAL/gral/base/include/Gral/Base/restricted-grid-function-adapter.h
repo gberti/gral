@@ -50,6 +50,7 @@ public:
   //------------------ comparision ---------------------
 
   friend bool operator== <> (const self& ls, const self& rs);
+  friend bool operator!= <> (const self& ls, const self& rs);
   friend bool operator<  <> (const self& ls, const self& rs);
 private:
   //------- DATA ---------
@@ -62,6 +63,11 @@ template<class GF, class E_iter>
 inline bool operator==(restr_gf_iterator_adapter<GF,E_iter> const& ls,
 		       restr_gf_iterator_adapter<GF,E_iter> const& rs)
  { return (ls.it == rs.it);}
+
+template<class GF, class E_iter>
+inline bool operator!=(restr_gf_iterator_adapter<GF,E_iter> const& ls,
+		       restr_gf_iterator_adapter<GF,E_iter> const& rs)
+ { return (ls.it != rs.it);}
 
 template<class GF, class E_iter>
 inline bool operator< (restr_gf_iterator_adapter<GF,E_iter> const& ls,

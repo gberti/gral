@@ -86,12 +86,13 @@ public:
     //}
     Vertex   operator*() const { return TheRange().vertex(v);} 
     // random access
-    //    Vertex operator()(int i, int j) const { 
+    //    Vertex operator()(int     friend bool operator!=(const self& ls, const self& rs) { return !(ls == rs);}i, int j) const { 
     //  return TheGrid().vertex(v + TheMap().offset(i,j));
     //}
     
     bool     IsDone()    const { return  (v > TheRange().MaxVertexNum());}
     friend bool operator==(const self& ls, const self& rs) { return (ls.v == rs.v);}
+    friend bool operator!=(const self& ls, const self& rs) { return !(ls == rs);}
     friend bool operator< (const self& ls, const self& rs) { return (ls.v <  rs.v);}
 
     //    vertex_handle GlobalNumber() const {return v;}
@@ -131,6 +132,7 @@ public:
     
     bool     IsDone()    const { return  (c > TheRange().MaxCellNum());}
     friend bool operator==(const self& ls, const self& rs) { return (ls.c == rs.c);}
+    friend bool operator!=(const self& ls, const self& rs) { return !(ls == rs);}
     friend bool operator< (const self& ls, const self& rs) { return (ls.c <  rs.c);}
     //    cell_handle GlobalNumber() const {
   private:
@@ -169,6 +171,7 @@ public:
     
     bool     IsDone()    const { return  (e > TheRange().MaxEdgeNum());}
     friend bool operator==(const self& ls, const self& rs) { return (ls.e == rs.e);}
+    friend bool operator!=(const self& ls, const self& rs) { return !(ls == rs);}
     friend bool operator< (const self& ls, const self& rs) { return (ls.e <  rs.e);}
   private:
     //    const indexmap_type& TheMap() const { return TheRange().TheEdgeMap();}

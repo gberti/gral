@@ -4,7 +4,7 @@
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
-#include <hash_map>
+#include "Container/my-hash-map.h"
 
 /*! \defgroup generic_edge Generic edge components
 
@@ -72,6 +72,7 @@ namespace generic_edge {
 	  : c(cc), eh(eeh) {}
        
         bool operator==(self const& rhs) const { return (c == rhs.c && eh == rhs.eh);}
+        bool operator!=(self const& rhs) const { return !((*this) == rhs);}
       };
 
 
@@ -92,6 +93,7 @@ namespace generic_edge {
 	archEdgeIterator  e;
       public:
 	edge_on_cell_iterator() {}
+	explicit 
 	edge_on_cell_iterator(Cell const& cc) 
 	  : c(cc), e(c.TheArchetype().FirstEdge()) {}
 	edge_on_cell_iterator(Cell const& cc, archEdgeIterator ee) 
@@ -121,6 +123,8 @@ namespace generic_edge {
 	
 	bool operator==(self const& rhs) const 
 	  { cb_(), rhs.cb_(); return e == rhs.e;}
+	bool operator!=(self const& rhs) const 
+	  { return !((*this) == rhs);} 
 
 	bool bound() const { return (c.valid());}
 	bool valid() const { return (bound() && e.valid());}
@@ -154,6 +158,8 @@ namespace generic_edge {
 		  ||
 		  (v1() == rhs.v2() && v2() == rhs.v1()));
       }
+      bool operator!=(self const& rhs) const 
+	{ return !((*this) == rhs);}
 
       bool bound() const { return e.bound();}
       bool valid() const { return e.valid();}
@@ -185,9 +191,10 @@ namespace generic_edge {
       CellIterator                      c;
       edge_on_cell_iterator<gt>         e;
       // partial_grid_function<Edge,bool>  visited;
-      std::hash_map<edge<gt>, bool, hasher_edge<gt>, equal_to<edge<gt> > > visited;
+      std::hash_map<edge<gt>, bool, hasher_edge<gt>, std::equal_to<edge<gt> > > visited;
     public:
       edge_iterator() {}
+      explicit
       edge_iterator(grid_type const& g) : c(g), e(c)
 	{
 	  if (! IsDone()) visited[*e] = true;
@@ -201,6 +208,8 @@ namespace generic_edge {
 
       bool operator==(self const& rhs) const 
 	{ cb_(); rhs.cb_(); return (c == rhs.c && e == rhs.e);}
+      bool operator!=(self const& rhs) const 
+	{ return !((*this) == rhs);}
 
       bool valid() const { return c.valid() && e.valid();}
       bool bound() const { return c.bound() && e.bound();}

@@ -23,15 +23,10 @@ public:
   //------  constructors ---------------
 
   Vertex2D_Iterator() : _pos(-1), _endpos(-1),  _cc(0)  {}
-  Vertex2D_Iterator(const vertex_handle& v, Complex const& CC) 
-    : _pos(v) , _cc(&CC) {  _endpos = CC.NumOfVertices(); }
-  Vertex2D_Iterator(Complex2D const& CC)
+  explicit Vertex2D_Iterator(Complex2D const& CC)
     : _pos(0), _cc(&CC) { _endpos = CC.NumOfVertices(); }
-
-  Vertex2D_Iterator(const self& s)
-     { _pos=s._pos; _endpos = s._endpos; _cc = s._cc;}
-  self& operator=(const self& s)
-     { if (this != &s) { _pos=s._pos; _endpos = s._endpos; _cc = s._cc;} return (*this);}
+  Vertex2D_Iterator(Complex const& CC, const vertex_handle& v)
+    : _pos(v) , _cc(&CC) {  _endpos = CC.NumOfVertices(); }
 
   ~Vertex2D_Iterator() {}
 
@@ -50,6 +45,8 @@ public:
     REQUIRE((v._cc == w._cc), "Grids don't match!\n",1);
     return (v._pos == w._pos);
   }
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
   friend bool operator<(const self& v, const self& w){
     REQUIRE((v._cc == w._cc), "Grids don't match!\n",1);

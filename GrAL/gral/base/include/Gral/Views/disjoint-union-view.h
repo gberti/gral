@@ -129,7 +129,9 @@ namespace disjoint_union_view {
 	{ return (which() == rhs.which()) 
 	  && (which() == 1 ? v1_ == rhs.v1_ : v2_ == rhs.v2_);
 	}
-      
+      bool operator!=(self const& rhs) const 
+	{ return !((*this) == rhs);}
+
     };
 
 
@@ -167,6 +169,9 @@ namespace disjoint_union_view {
 	return (which() == rhs.which()) 
 	&& (which() == 1 ? c1_ == rhs.c1_ : c2_ == rhs.c2_);
       }
+      bool operator!=(self const& rhs) const 
+	{ return !((*this) == rhs);}
+
     };
 
 
@@ -280,6 +285,9 @@ public:
        return (which() == rhs.which()) 
            && (which() == 1 ? v1_ == rhs.v1_ : v2_ == rhs.v2_);
      }
+     bool operator!=(self const& rhs) const 
+       { return !((*this) == rhs);}
+
    };
 
 
@@ -340,6 +348,8 @@ public:
      bool operator==(self const& rhs) const 
        { return (which() == rhs.which()) 
 	     && (which() == 1 ? c1_ == rhs.c1_ : c2_ == rhs.c2_);}
+     bool operator!=(self const& rhs) const 
+       { return !((*this) == rhs);}
   };
 
 
@@ -376,7 +386,8 @@ public:
     
     bool operator==(self const& rhs) const 
       { return (which() == 1 ? vc1 == rhs.vc1 : vc2 == rhs.vc2);}
-
+    bool operator!=(self const& rhs) const 
+       { return !((*this) == rhs);}
   };
 
 

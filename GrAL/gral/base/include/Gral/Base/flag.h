@@ -20,7 +20,9 @@ class flag<GRID, grid_dim_tag<2> > {
   typedef grid_types<GRID> gt;
   typedef typename gt::Vertex Vertex;  
   typedef typename gt::Edge   Edge;
+  typedef typename gt::Facet  Facet;
   typedef typename gt::Cell   Face;
+  typedef typename gt::Cell   Cell;
 private:
   Vertex v_;
   Edge   e_;
@@ -34,15 +36,21 @@ public:
 
   Vertex const& vertex() const { return v_;}
   Edge   const& edge()   const { return e_;}
-  Edge   const& facet()  const { return e_;}
+  Facet  const& facet()  const { return e_;}
   Face   const& face()   const { return f_;}
-  Face   const& cell()   const { return f_;}
+  Cell   const& cell()   const { return f_;}
 
   void switch_vertex() { TheGrid().switch_vertex(v_,e_);   }
   void switch_edge()   { TheGrid().switch_edge  (v_,e_,f_);}
   void switch_facet()  { TheGrid().switch_edge  (v_,e_,f_);}
   void switch_face()   { TheGrid().switch_cell  (   e_,f_);}
   void switch_cell()   { TheGrid().switch_cell  (   e_,f_);}
+
+  Vertex switched_vertex() const { return TheGrid().switched_vertex(v_,e_   );}
+  Edge   switched_edge()     const { return TheGrid().switched_edge  (v_,e_,f_);}
+  Facet  switched_facet()    const { return TheGrid().switched_edge  (v_,e_,f_);}
+  Face   switched_face()     const { return TheGrid().switched_cell  (   e_,f_);}
+  Cell   switched_cell()     const { return TheGrid().switched_cell  (   e_,f_);}
 };
 
 // 3D case
@@ -52,6 +60,7 @@ class flag<GRID, grid_dim_tag<3> > {
   typedef grid_types<GRID> gt;
   typedef typename gt::Vertex Vertex;  
   typedef typename gt::Edge   Edge;
+  typedef typename gt::Facet  Face;
   typedef typename gt::Facet  Facet;
   typedef typename gt::Cell   Cell;
 
@@ -68,7 +77,7 @@ public:
 
   Vertex const& vertex() const { return v_;}
   Edge   const& edge()   const { return e_;}
-  Facet  const& face()   const { return f_;}
+  Face   const& face()   const { return f_;}
   Facet  const& facet()  const { return f_;}
   Cell   const& cell()   const { return c_;}
 
@@ -79,6 +88,12 @@ public:
   void switch_face()   { TheGrid().switch_facet (   e_,f_,c_);}
   void switch_facet()  { TheGrid().switch_facet (   e_,f_,c_);}
   void switch_cell()   { TheGrid().switch_cell  (      f_,c_);}
+
+  Vertex switched_vertex() const { return TheGrid().switched_vertex(v_,e_);      }
+  Edge   switched_edge()   const { return TheGrid().switched_edge  (v_,e_,f_);   }
+  Face   switched_face()   const { return TheGrid().switched_facet (   e_,f_,c_);}
+  Facet  switched_facet()  const { return TheGrid().switched_facet (   e_,f_,c_);}
+  Cell   switched_cell()   const { return TheGrid().switched_cell  (      f_,c_);}
 
 };
 

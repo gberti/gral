@@ -25,7 +25,7 @@ public:
 
   //------------ construction ------------------------  
   Cell2D() : _pos(-1), _cc(0) {}
-  Cell2D(Complex2D const&  cc);
+  explicit Cell2D(Complex2D const&  cc);
   Cell2D(Complex2D const&  cc, cell_handle pos)
     : _pos(pos), _cc(&cc) {}
 
@@ -71,6 +71,8 @@ public:
   { return (s1._pos < s2._pos);}
   friend bool operator==(const self& s1, const self& s2)
   { return (s1._pos == s2._pos);}
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
   inline bool is_valid() const;
   inline bool valid() const { return is_valid();}

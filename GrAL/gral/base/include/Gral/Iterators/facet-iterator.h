@@ -82,6 +82,7 @@ public:
     return (    (ls.IsDone() && rs.IsDone()) 
 	     || ((ls.c == rs.c) && (ls.fc == rs.fc)));
   }
+  friend bool operator!=(const self& ls, const self& rs) { return !(ls == rs);}
   friend bool operator<(const self& ls, const self& rs) {
     return ((ls.c < rs.c) || ((ls.c == rs.c) && (ls.fc < rs.fc )));
   }

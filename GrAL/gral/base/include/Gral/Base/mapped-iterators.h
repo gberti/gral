@@ -53,6 +53,7 @@ public:
  
   //friend 
   bool operator==(const self& rs) const { return (b == rs.b);}
+  bool operator!=(const self& rs) const { return (b != rs.b);}
 };
 
 
@@ -93,6 +94,7 @@ public:
 
   //friend 
   bool operator==(const self& rs) { return (b == rs.b);}
+  bool operator!=(const self& rs) { return (b != rs.b);}
 };
 
 
@@ -127,6 +129,7 @@ public:
   
   // friend 
   bool operator==(const self& rs) { return (it == rs.it);}
+  bool operator!=(const self& rs) { return (it != rs.it);}
 };
 
 

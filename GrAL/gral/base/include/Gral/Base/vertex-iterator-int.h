@@ -19,6 +19,7 @@ protected:
   int v;
 public:
   int_vertex_iterator() : g(0), v(-1) {}
+  explicit 
   int_vertex_iterator(grid_type const& gg, int vv = 0) : g(&gg), v(vv) {}
 
   self      & operator++() { ++v; return *this;}
@@ -28,6 +29,7 @@ public:
 
   int handle() const { return v;}
   bool operator==(self const& rhs) const { return (rhs.v == v) && (rhs.g == g);}
+  bool operator!=(self const& rhs) const { return !((*this) == rhs);}
 };
 
 

@@ -28,7 +28,7 @@ public:
 
   Cell2D_Iterator() : _pos(-1),  _cc(0), _endpos(-1) {}
 
-  Cell2D_Iterator(Complex2D const& CC) 
+  explicit Cell2D_Iterator(Complex2D const& CC) 
     : _pos(0), _cc(&CC), _endpos(CC.NumOfCells())
   {}
 
@@ -68,6 +68,8 @@ public:
       REQUIRE((ls._cc == rs._cc), "comparsion between iterators from different grids!\n",1);
       return ( ls._pos == rs._pos);
     }
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
   friend bool operator<(const self& ls, const self& rs)
     { 
       REQUIRE((ls._cc == rs._cc), "comparsion between iterators from different grids!\n",1);

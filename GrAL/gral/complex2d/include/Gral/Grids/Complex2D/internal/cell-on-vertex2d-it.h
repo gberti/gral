@@ -57,6 +57,8 @@ public:
 
   friend bool operator==(const self& lhs, const self& rhs) 
   {return ((lhs.lc == rhs.lc) && (lhs.V == rhs.V));}
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
 };
 

@@ -23,7 +23,7 @@ private:
 public:
   //------------- constructors -------------------------
   Edge2D() : _e() {}
-  Edge2D(Complex2D const& cc);
+  explicit Edge2D(Complex2D const& cc);
   Edge2D(Complex2D const& cc, edge_handle eh);
 
   Edge2D(const Cell& C1, const Cell& C2)
@@ -83,6 +83,8 @@ public:
 
   friend bool operator< (const self& lhs, const self& rhs);
   friend bool operator==(const self& lhs, const self& rhs);
+  friend bool operator!=(const self& lhs, const self& rhs)
+    { return !(lhs == rhs);}
 
   friend class Cell2D;
   friend class Complex2D;
