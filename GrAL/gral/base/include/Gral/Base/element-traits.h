@@ -77,7 +77,7 @@ struct element_traits_base
   // default: elements not numbered consecutively
   typedef non_consecutive_tag            consecutive_tag; 
 
-  template<class G, class E>
+  template<class G, class E, class H>
   struct hasher_type_base {
     typedef E      key_type;
     typedef E      argument_type;
@@ -85,6 +85,7 @@ struct element_traits_base
 
     // default implementation
     result_type operator()(key_type const& k) const { return k.handle();}
+    result_type operator()(H               h) const { return h;}
   };
 };
 
@@ -111,7 +112,7 @@ struct element_traits_vertex_base
   static unsigned dimension  (element_type const&)   { return 0;}
   static unsigned codimension(element_type const& e) { return e.TheGrid().dimension();}
   typedef typename element_traits_base<GRID>::  template 
-    hasher_type_base<GRID, element_type> hasher_type_elem_base;
+    hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstVertex();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfVertices();}
@@ -147,7 +148,7 @@ struct element_traits_edge_base
   static unsigned codimension(element_type const& e) { return e.TheGrid().dimension()-1;}
 
   typedef typename element_traits_base<GRID>::template 
-    hasher_type_base<GRID, element_type> hasher_type_elem_base;
+    hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstEdge();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfEdges();}
@@ -182,7 +183,7 @@ struct element_traits_face_base
   static unsigned codimension(element_type const& e) { return e.TheGrid().dimension()-2;}
 
   typedef typename element_traits_base<GRID>::template 
-    hasher_type_base<GRID, element_type> hasher_type_elem_base;
+    hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFace();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfFaces();}
@@ -218,7 +219,7 @@ struct element_traits_facet_base
   static unsigned codimension(element_type const&)   { return 1;}
 
   typedef typename element_traits_base<GRID>::template  
-    hasher_type_base<GRID, element_type> hasher_type_elem_base;
+    hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFacet();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfFacets();}
@@ -254,7 +255,7 @@ struct element_traits_cell_base
 
 
   typedef typename element_traits_base<GRID>::template 
-    hasher_type_base<GRID, element_type> hasher_type_elem_base;
+    hasher_type_base<GRID, element_type, handle_type> hasher_type_elem_base;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstCell();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfCells();}
