@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_BIJECTIVE_MAPPING_C
 #define NMWR_GB_BIJECTIVE_MAPPING_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Container/bijective-mapping.h"
 

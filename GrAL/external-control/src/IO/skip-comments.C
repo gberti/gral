@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #include "IO/skip-comments.h"
 
 template<>

@@ -2,13 +2,8 @@
 #define NMWR_GB_ALGEBRAIC_PRIMITIVES
 
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include <math.h>
 #include "Utility/pre-post-conditions.h"

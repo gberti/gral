@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_COMPILER_CONFIG_H
 #define NMWR_GB_COMPILER_CONFIG_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 //----------------------------------------------------------------
 //

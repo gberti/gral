@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #include "IO/command-line.h"
 
 Commandline::Commandline(int argc, char* argv[]) : commands("") {

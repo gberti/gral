@@ -1,4 +1,7 @@
 
+// $LICENSE
+
+
 #include "Utility/reference-count.h"
 
 #include <iostream.h>

@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_MULTI_ISTREAM_CONTROL_DEVICE_H
 #define NMWR_GB_MULTI_ISTREAM_CONTROL_DEVICE_H
 
+// $LICENSE
+
+
 #include "IO/istream-control-device.h"
 
 class multi_istream_control_device 

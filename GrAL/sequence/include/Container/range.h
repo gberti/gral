@@ -1,14 +1,8 @@
 #ifndef NMWR_GB_PRINT_RANGE_H
 #define NMWR_GB_PRINT_RANGE_H
 
-//----------------------------------------------------------------
-//
-//   (c) Guntram Berti, 2000
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include <iostream.h>
 

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #include "IO/istream-control-device.h"
 #include "IO/skip-comments.h"
 

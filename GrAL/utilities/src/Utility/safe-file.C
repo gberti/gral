@@ -1,4 +1,7 @@
 
+// $LICENSE
+
+
 #include "Utility/safe-file.h"
 
 #include <fstream.h>

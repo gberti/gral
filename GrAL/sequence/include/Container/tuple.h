@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_TUPLE_T_N_H
 #define NMWR_GB_TUPLE_T_N_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 
 /*! \brief simple fixed-size container  with STL-style  begin() / end()

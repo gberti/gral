@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_MY_HASH_MAP_H
 #define NMWR_GB_MY_HASH_MAP_H
 
+// $LICENSE
+
+
 #include "Config/compiler-config.h"
 
 #ifdef __KCC

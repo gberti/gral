@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_COPY_ON_WRITE_PTR_H
 #define NMWR_GB_COPY_ON_WRITE_PTR_H
 
+// $LICENSE
+
+
 
 
 /*! \class copy_on_write_ptr 

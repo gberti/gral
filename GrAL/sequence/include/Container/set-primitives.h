@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_SET_PRIMITIVES_H
 #define NMWR_GB_SET_PRIMITIVES_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Container/set-traits.h"
 

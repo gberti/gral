@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #ifndef IS_SPECIALIZED_H
 #define IS_SPECIALIZED_H
 

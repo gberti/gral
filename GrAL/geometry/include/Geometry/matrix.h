@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_MATRIX_NM_H
 #define NMWR_GB_MATRIX_NM_H
 
+// $LICENSE
+
+
 #include <iostream.h>
 #include "Utility/pre-post-conditions.h"
 #include "Geometry/coords.h"

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #include <list> // STL
 #include <iostream.h>
 

@@ -2,13 +2,8 @@
 #define NMWR_GB_POINT_TRAITS_H
 
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"

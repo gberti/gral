@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_CONTAINER_FUNCTIONS_H
 #define NMWR_GB_CONTAINER_FUNCTIONS_H
 
+// $LICENSE
+
+
 #include "Config/compiler-config.h"
 
 #include <functional>
