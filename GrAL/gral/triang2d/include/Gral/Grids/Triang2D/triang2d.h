@@ -91,6 +91,12 @@ public:
   inline FacetIterator  FirstFacet()  const;
   inline CellIterator   FirstCell()   const;
 
+
+  inline void switch_vertex(Vertex      & v, Edge const& e) const;
+  inline void switch_edge  (Vertex const& v, Edge      & e, Cell const& c) const;
+  inline Vertex switched_vertex(Vertex const& v, Edge const& e) const;
+  inline Edge   switched_edge  (Vertex const& v, Edge const& e, Cell const& c) const;
+
 };
 
 
@@ -120,6 +126,7 @@ public:
   cell_handle   handle() const { return c;}
 
   FacetOnCellIterator  FirstFacet () const;
+  EdgeOnCellIterator   FirstEdge  () const;
   VertexOnCellIterator FirstVertex() const;
 
   unsigned NumOfVertices() const { return 3;}
@@ -128,7 +135,7 @@ public:
 
   // checking functions
   bool bound() const { return g != 0;}
-  bool valid() const { return (bound() &&  (0 <= c) && (c < 3));}
+  bool valid() const { return (bound() &&  (0 <= c) && (c < g->ncells));}
   void cb()    const { REQUIRE (bound(), "",1);}
   void cv()    const { REQUIRE (valid(), "",1);}
 };
@@ -164,6 +171,15 @@ public:
   void cb()    const { REQUIRE (bound(), "",1);}
   void cv()    const { REQUIRE (valid(), "",1);}
 };
+
+inline bool
+operator==(Triang2D_Vertex const& lhs, Triang2D_Vertex const& rhs)
+{ return lhs.handle() == rhs.handle();}
+
+inline bool
+operator!=(Triang2D_Vertex const& lhs, Triang2D_Vertex const& rhs)
+{ return !(lhs==rhs);}
+
 
 
 //----------------- VertexOnCellIterator ---------------------
@@ -210,8 +226,13 @@ struct edge_handle_Triang2D : public grid_types_Triang2D {
 };
 
 
+inline
+std::ostream& operator<<(std::ostream& out, edge_handle_Triang2D e)
+{ return (out << e.c << ' ' << e.lf);} 
+
 class Triang2D_FacetOnCellIterator : public grid_types_Triang2D {
   typedef  Triang2D_FacetOnCellIterator self;
+  friend class Triang2D;
 private:
   Cell c;
   int  fc;
@@ -249,6 +270,7 @@ public:
 
 class Triang2D_Edge : public grid_types_Triang2D {
   typedef Triang2D_Edge  self;
+  friend class Triang2D;
 private:
   Triang2D_FacetOnCellIterator fc;
 public:
@@ -300,7 +322,7 @@ public:
 
 
 
-struct grid_types<Triang2D> : public grid_types_Triang2D 
+struct grid_types<Triang2D> : public grid_types_base<grid_types_Triang2D>
 {
 
   static vertex_handle handle(Vertex const& V) { return V.handle();}
@@ -340,6 +362,31 @@ Triang2D::FacetIterator
 Triang2D::FirstFacet() const { return FacetIterator(*this);}
 
 
+inline 
+void Triang2D::switch_vertex(Triang2D::Vertex & v, Triang2D::Edge const& e) const
+{ v = (v == e.V1() ? e.V2() : e.V1());}
+
+
+inline 
+void Triang2D::switch_edge(Triang2D::Vertex const& v, Triang2D::Edge & e, Triang2D::Cell const& c) const
+{
+  if(v == e.V1())
+    e = Edge(FacetOnCellIterator(c, (e.fc.fc  == 0 ? 2 : e.fc.fc-1)));
+  else
+    e = Edge(FacetOnCellIterator(c, (e.fc.fc  == 2 ? 0 : e.fc.fc+1)));
+}
+
+
+inline 
+Triang2D::Vertex
+Triang2D::switched_vertex(Triang2D::Vertex const& v, Triang2D::Edge const& e) const
+{ Vertex v1(v); switch_vertex(v1, e); return v1;}
+
+inline 
+Triang2D::Edge
+Triang2D::switched_edge(Triang2D::Vertex const& v, Triang2D::Edge const& e, Triang2D::Cell const& c) const
+{ Edge e1(e); switch_edge(v,e1,c); return e1; }
+
 
 inline
 Triang2D::CellIterator
@@ -353,6 +400,10 @@ Triang2D_Cell::FirstVertex() const { return VertexOnCellIterator(*this);}
 inline
 Triang2D_FacetOnCellIterator
 Triang2D_Cell::FirstFacet() const { return FacetOnCellIterator(*this);}
+
+inline
+Triang2D_FacetOnCellIterator
+Triang2D_Cell::FirstEdge() const { return FacetOnCellIterator(*this);}
 
 inline
 Triang2D_Edge 
