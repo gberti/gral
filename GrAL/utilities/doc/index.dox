@@ -4,22 +4,24 @@
      \section intro Introduction
 
       This  package contains various little utilities used in other 
-      packages. Some of these are now obsolete, as either the standard or 
-      <a TARGET=_paterent HREF="http://www.boost.org">boost</a> offer better alternatives.
+      packages. Some of these are now obsolete, as 
+      <a TARGET=_parent HREF="http://www.boost.org">boost</a> offers better alternatives.
 
-      \subsection secsafefile Safe file I/O
-      see  <tt>\ref file_interactive</tt>
+      \subsection secio I/O utilities
+        See module \ref io
+
       
       \subsection secprepost  Macros for Pre- and Postconditions
-      see  \ref pre-post-conditions.h
+      Improve \c assert(). See  \ref pre-post-conditions.h
 
      \subsection sectraits Some general traits classes
-          <tt>\ref copy_traits</tt> : Make pointers copyable even 
+          <tt>GrAL::copy_traits</tt> : Make pointers copyable even 
           when its a pointer to a base class. This is needed
           to use a copy-on-write smart pointer with polymorphic types.
 
-         <tt>\ref type_name_traits</tt> : Get the name of a type as string. Specialized
+         <tt>GrAL::type_name_traits</tt> : Get the name of a type as string. Specialized
           for the built-in types.
+
      \subsection secoperators Function objects for algebraic and relational operators
       
 	See module \ref operators
@@ -28,13 +30,16 @@
 
         See module \ref notifyobserve
 
-     \subsection secasstring  Conversion of arbitrary types to strings
-        See <tt> \ref as_string</tt> : Uses <tt> std::sstream </tt> to achieve that.
 
-     \subsection secrefcnt   Reference counting smart pointer
-      Borrowed from Scott Meyers book "More Effective C++". <br>
-      See \ref reference-count.h
+     \subsection secmemory Memory management
+    
+       See module \ref memory
+   
 
-    \subsection secrefptr  Uniform handling of owned and referenced pointees
-       see <tt>\ref ref_ptr<> </tt>
+*/
+
+/*!   \defgroup io   Support for IO
+*/
+
+/*!  \defgroup memory   Memory management and smart pointers 
 */
