@@ -78,12 +78,12 @@ namespace cartesiannd {
         If \c mapped_geometry(gg) is called, the initialization 
 	is complete only if \c MAP has a sensible default constructor.
      */
-    mapped_geometry(grid_type const& gg, mapping_type ff = mapping_type()) 
+    mapped_geometry(grid_type const& gg, mapping_type ff = mapping_type::identity())
       : g(gg), 
 	low_(gg.low_vertex_index()), 
 	high_(gg.high_vertex_index()) 
     { 
-      f.make_own(new mapping_type(ff));
+      f.make_shared(new mapping_type(ff));
       init();
       prepend_scaling_mapping();
     }
@@ -97,11 +97,11 @@ namespace cartesiannd {
 	is complete only if \c MAP has a sensible default constructor.
      */
     mapped_geometry(grid_type const& gg, index_type lw, index_type hgh, 
-		    mapping_type ff = mapping_type()) 
+		    mapping_type ff = mapping_type::identity()) 
       : g(gg),
 	low_(lw), high_(hgh) 
     { 
-      f.make_own(new mapping_type(ff));
+      f.make_shared(new mapping_type(ff));
       init();
     }
     /*! \brief Initialize using the unit coordinates of a master geometry
@@ -114,9 +114,9 @@ namespace cartesiannd {
 	low_ (gg.low_vertex_index()), 
 	high_(gg.high_vertex_index()) 
     {
-      f.make_own(new mapping_type(* master.f));
+      f.make_shared(new mapping_type(* master.f));
       if(master.has_inverse())
-	f_inverse.make_own(new mapping_type(* master.f_inverse));
+	f_inverse.make_shared(new mapping_type(* master.f_inverse));
       init();
     }
     //@}
@@ -128,12 +128,12 @@ namespace cartesiannd {
   public:
     //! \brief Set the mapping 
     void set_mapping(mapping_type const& ff) {
-      f.make_own(new mapping_type(ff));
+      f.make_shared(new mapping_type(ff));
       prepend_scaling_mapping();
     }
     //! \brief Set the inverse mapping (for point location) 
     void set_inverse_mapping(mapping_type const& inv) { 
-      f_inverse.make_own(new mapping_type(inv));
+      f_inverse.make_shared(new mapping_type(inv));
       prepend_scaling_inverse();
     }
     //! \brief Query inverse mapping
@@ -148,7 +148,7 @@ namespace cartesiannd {
     }
     //! \brief Re-initialize
     void rebind(grid_type const& gg, mapping_type const& ff) {
-      f.make_own(new mapping_type(ff));
+      f.make_shared(new mapping_type(ff));
       rebind(gg);
       prepend_scaling_mapping();
     }
@@ -220,18 +220,19 @@ namespace cartesiannd {
     void prepend_scaling_mapping()
     {
       if(f != 0) {
-	scalar_type mx = *  ::std::min_element(delta.begin(), delta.end());
+	scalar_type mx = *  std::min_element(delta.begin(), delta.end());
 	// map isotropic unit coords \f$ \subset [0,1]^d \f$ to anisotropic unit coords \f$ [0,1]^d \f$ 
 	mapping_type S = mapping_type::inverse_scaling(delta / mx);
-	f.make_own(new mapping_type ((*f)(S)));
+	mapping_type * new_f = new mapping_type((*f)(S));
+	f.make_shared(new_f); // new mapping_type ((*f)(S)));
       }
     }
     void prepend_scaling_inverse()
     {
       if(f_inverse != 0) {
-	scalar_type mx = *  ::std::min_element(delta.begin(), delta.end());
+	scalar_type mx = *  std::min_element(delta.begin(), delta.end());
 	mapping_type S_inv = mapping_type::scaling(delta / mx);
-	f_inverse.make_own(new mapping_type(S_inv(*f_inverse)));
+	f_inverse.make_shared(new mapping_type(S_inv(*f_inverse)));
       }
     }   
   }; // mapped_geometry<CARTGRID,MAP>
