@@ -1,0 +1,195 @@
+#ifndef NMWR_GB_STORED_FOR_CARTESIAN2D_H
+#define NMWR_GB_STORED_FOR_CARTESIAN2D_H
+
+//----------------------------------------------------------------
+//   (c) Guntram Berti, 1997
+//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
+//   TU Cottbus - Germany
+//   http://math-s.math.tu-cottbus.de/NMWR
+//   
+//----------------------------------------------------------------
+
+#include "Geometry/point-traits.h"
+#include "Geometry/algebraic-primitives.h"
+#include "Grids/common-grid-basics.h"
+#include "Grids/geometric-types.h"
+#include "Grids/Reg2D/cartesian-grid2d.h"
+#include "Grids/Reg2D/grid-functions.h"
+
+/**
+  @author Guntram Berti
+  @memo   "Classical" geometry for RegGrid2D with stored coordinate values.
+
+  This is a straight-line geometric embedding for the grid class
+  RegGrid2D that simply stores the vertex coordinates. The type
+  Coord2D of the coordinates is a template parameter.
+  This uses a grid_function<Vertex,Coord2D> to store the coordinates,
+  so you (yet) have to provide a specialization to these parameters.
+  There is a problem with the provided functionality:
+  If we have a 2D-embedding (which is assumed the normal case)
+  we may provide normal directions to Edges, in the 3D-case 
+  this does not make sense. So there are 2 possibilities:
+  \begin{enumerate}
+   \item specialize to 2D case
+   \item provide compile-time branching over static dimension of
+    Coord2D parameter.
+  \end{enumerate}
+*/
+
+
+template<class Coord2D>
+class stored_geometry_for_reg2d_base : public grid_types<RegGrid2D>,
+				       public algebraic_primitives<Coord2D>
+{
+public:
+  typedef Coord2D   coord_type;
+  typedef RegGrid2D grid_type;
+
+  stored_geometry_for_reg2d_base() :  g(0) {} 
+
+  stored_geometry_for_reg2d_base(const RegGrid2D& gg) 
+    : g(&gg), coords_(gg) {}
+
+  void set_grid(const RegGrid2D& gg) { g = &gg; coords_.set_grid(gg);}
+
+  const grid_type& TheGrid() const { return *g;}
+
+  // is this always possible?
+  unsigned space_dimension() const { return Dim(coord(*(TheGrid().FirstVertex())));}
+
+  const coord_type& coord(const Vertex& v) const { return coords_(v); }
+        coord_type& coord(const Vertex& v)       { return coords_[v]; }
+
+  void read(istream& in) {
+    for(typename grid_function<Vertex,coord_type>::iterator ii = coords_.begin(); ii != coords_.end(); ++ii)
+      in >> *ii;
+  }
+
+private:
+  const grid_type* g; // reference
+  grid_function<Vertex,coord_type> coords_;
+};
+
+
+
+template<class Coord2D>
+class general_stored_geometry_for_reg2d 
+  : public  stored_geometry_for_reg2d_base<Coord2D>
+{
+  
+public:
+  typedef stored_geometry_for_reg2d_base<Coord2D>    geom_base;
+  typedef general_stored_geometry_for_reg2d<Coord2D> self;
+
+  typedef point_traits<Coord2D> pt;
+  typedef algebraic_primitives<Coord2D> ap;
+
+  general_stored_geometry_for_reg2d() {}
+  general_stored_geometry_for_reg2d(const RegGrid2D& gg) 
+    : geom_base(gg) {}
+
+  friend istream& operator>>(istream& in, self& rs) { rs.read(in); return in;}
+
+
+  typedef Segment<Edge,geom_base>   segment_type;
+  typedef Polygon2d<Face,geom_base> polygon_type;
+
+  segment_type segment(const Edge& e) const { return segment_type(e,basic_geom());}
+  polygon_type polygon(const Face& f) const { return polygon_type(f,basic_geom());}
+
+  double volume(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
+  double length(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
+  double volume(const EdgeIterator& e) const {return volume(*e);}
+  double volume(const Cell& c) const { return (polygon_type(c,basic_geom()).area());}
+  
+  coord_type center(const Edge& e) const {return(segment_type(e,basic_geom()).center());}
+  
+  // center of inertia
+  coord_type center(const Cell& c) const {return(polygon_type(c,basic_geom()).center());}
+
+  coord_type outer_area_normal(/*const CellIterator& c,*/
+			       const NeighbourCellIterator& nb)
+    { // this could be done more efficiently.
+      //coord_type ctr(center(*c));
+      coord_type ctr(center(nb.TheCell()));
+      Edge e(nb);
+      segment_type S(e,basic_geom());
+      coord_type n(ap::normal_with_same_length(S.End() - S.Start()));
+      return ( ap::dot(n,(ctr - S.Start())) < 0 ? n : coord_type(-n));
+    }
+  coord_type outer_area_normal(/*const CellIterator& c,*/
+			       const FacetOnCellIterator& f)
+    { // this could be done more efficiently.
+      //coord_type ctr(center(*c));
+      coord_type ctr(center(f.TheCell()));
+      Edge e(*f);
+      segment_type S(e,basic_geom());
+      coord_type n(ap::normal_with_same_length(S.End() - S.Start()));
+      return ( ap::dot(n,(ctr - S.Start())) < 0 ? n : coord_type(-n));
+    }
+ 
+  /*
+  coord_type outer_area_normal(const Cell& c,
+			       const NeighbourCellIterator& nb)
+    { // this could be done more efficiently.
+      coord_type ctr(center(c));
+      Edge e(c,nb);
+      segment_type S(e,basic_geom());
+      coord_type n(ap::normal_with_same_length(S.End() - S.Start()));
+      return ( ap::dot(n,(ctr - S.Start())) < 0 ? n : coord_type(-n));
+    }
+  */
+
+  coord_type normal_dir(const Edge& e) const {
+    coord_type v1 = coord(e.V1());
+    coord_type v2 = coord(e.V2());
+    return coord_type(pt::y(v2)-pt::y(v1),pt::x(v1)-pt::x(v2));
+  }
+
+  coord_type normed_outer_normal(const Edge& e, const Cell& c) const {
+    coord_type v1 = coord(e.V1());
+    coord_type v2 = coord(e.V2());
+    coord_type dir(ap::normed_normal(v2-v1));
+    coord_type ctr = center(c);
+    return (ap::dot(dir,v1-ctr) > 0 ? dir : coord_type(-dir));
+  }
+
+  /*  only useful if dim(coord_type) == 2 !
+      hint: use normed_normal(segment(facet(nb)));
+
+  coord_type normal(const CellIterator& , 
+		   const NeighbourCellIterator& nb) const // |.| == 1
+    {
+      Edge e(nb);
+      segment_type S(e,basic_geom());
+      return normed_normal(S.End()-S.Start());
+    }
+  
+  coord_type area_normal(const CellIterator& ,
+			const NeighbourCellIterator& nb) const 
+    {
+      Edge e(nb);
+      segment_type S(e,basic_geom());
+      return normal_with_same_length(S.End()-S.Start());
+    }
+  
+  coord_type area_normal(const Edge& e) const 
+  {
+    segment_type S(e,basic_geom());
+    return normal_with_same_length(S.End()-S.Start());
+  }
+  
+  coord_type normal(const Edge& e) const 
+  {
+    segment_type S(e,basic_geom());
+    return normed_normal(S.End()-S.Start());
+  }
+  */
+private:
+  const geom_base& basic_geom() const { return *this;}  
+};
+
+
+
+
+#endif
