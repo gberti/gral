@@ -3,6 +3,9 @@
 
 // $LICENSE_NEC
 
+#include "Gral/Base/common-grid-basics.h"
+
+
 template<class E, class consecutive_tag>
 class element_numbering_aux {};
 
