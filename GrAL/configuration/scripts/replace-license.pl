@@ -22,11 +22,15 @@ $license1 = "
 $license2 = "
 // \$LICENSE
 ";
+$license_nec ="
+// \$LICENSE_NEC
+";
 
 $license = $license1;
 
 print "executing replace-license.pl\n";
 while(<>) {
-  s|//[ ]*\$LICENSE|$license|;
-  print;
+    s|//[ ]*\$LICENSE_NEC|$license|;
+    s|//[ ]*\$LICENSE|$license|;
+    print;
 }
