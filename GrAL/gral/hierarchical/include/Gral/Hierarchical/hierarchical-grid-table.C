@@ -15,7 +15,14 @@ namespace hierarchical {
   hier_grid_table<HGRID,GE>::hier_grid_table(typename hier_grid_table<HGRID,GE>::hier_grid_type const& gg) 
     : g(&gg)
   {
-    init(gg);
+    init(*g);
+  }
+
+  template<class HGRID, class GE>
+  hier_grid_table<HGRID,GE>::hier_grid_table(ref_ptr<typename hier_grid_table<HGRID,GE>::hier_grid_type const> gg) 
+    : g(gg)
+  {
+    init(*g);
   }
 
   template<class HGRID, class GE>
@@ -25,6 +32,15 @@ namespace hierarchical {
       clear();
     g = &gg;
     init(gg);
+  }
+
+  template<class HGRID, class GE>
+  void hier_grid_table<HGRID,GE>::set_grid(ref_ptr<typename hier_grid_table<HGRID,GE>::hier_grid_type const> gg) 
+  {
+    if(g != 0)
+      clear();
+    g = gg;
+    init(*g);
   }
 
   template<class HGRID, class GE>
@@ -92,13 +108,13 @@ namespace hierarchical {
   template<class HGRID, class GE>
   void hier_grid_table<HGRID,GE>::remove_finest_level()
   {
-    REQUIRE_ALWAYS( (finest_level() > g->finest_level()), "",1);
+    REQUIRE_ALWAYS( (g->empty() || (finest_level() > g->finest_level())), "",1);
     entities.pop_back();
   }
   template<class HGRID, class GE>
   void hier_grid_table<HGRID,GE>::remove_coarsest_level()
   {
-    REQUIRE_ALWAYS( (coarsest_level() < g->coarsest_level()), "",1);
+    REQUIRE_ALWAYS( (g->empty() || (coarsest_level() < g->coarsest_level())), "",1);
     entities.pop_front();
   }
 

@@ -64,11 +64,13 @@ namespace hierarchical {
   public:
     hier_grid_table();
     hier_grid_table(hier_grid_type const& gg);
+    hier_grid_table(ref_ptr<hier_grid_type const> gg);
     // pass additional initializer as constructor arg. to grid entity levels
     //template<class T>
     //hier_grid_table(hier_grid_type const& gg, T const& initializer);
 
-    void set_grid  (hier_grid_type const& gg);
+    void set_grid  (hier_grid_type const&         gg);
+    void set_grid  (ref_ptr<hier_grid_type const> gg);
     void clear();
 
     //! get in sync with grid: add/remove missing/superfluous level
