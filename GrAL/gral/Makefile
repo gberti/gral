@@ -63,12 +63,24 @@ module-check:
 	rm -f *.o *~ *.flc core;
 
 doc: doc-recursive
+predoc: predoc-recursive
+postdoc: postdoc-recursive
 
-doc-recursive:
+doc-recursive: predoc-recursive postdoc-recursive
+
+predoc-recursive:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) doc CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) predoc CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+postdoc-recursive:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) postdoc CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
