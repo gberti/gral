@@ -1,8 +1,10 @@
 #include <strstream.h>
 
-#include "RFunction/RFunction.h"
-#include "RFunction/misc.h"
-#include "RFunction/write_code.h"
+#include "FunctionAlgebra/function-algebra.h"
+
+#include "./misc.h"
+#include "./write-code.h"
+
 #include "Geometry/algebraic-primitives.h"
 
 
@@ -10,128 +12,161 @@
 // geometric transformations and projections. See end of file
 // for list of defined RFunctions
 
-class fct_constant: public fct {
+class function_algebra_constant: public function_algebra_impl {
 private:
-  point  derive(const point& /*x*/, const point& /*h*/) const { return (0.0);}
+  typedef function_algebra_constant self;
+  coord_type  derive(const coord_type& /*x*/, const coord_type& /*h*/) const { return (0.0);}
 protected:
-  point c;
+  coord_type c;
 public:
-  fct_constant(const point& cc, int ddef) : fct(), c(cc)
+  function_algebra_constant(const coord_type& cc, int ddef) : c(cc)
   {d_Def = ddef; d_Im = c.dim(), is_affine = true;}
-  ~fct_constant() {}
-  string name() const { return "fct_constant";}
-  point  eval(const point& /*x*/) const {return c;}
-  string  write_code_eval(ostream& out, int& vnum, const string& var) const;
-  virtual string write_code_derive(ostream& out, int& vnum, 
-				   const string& varx, const string& varh) const;
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type  eval(const coord_type& /*x*/) const {return c;}
+
+  virtual std::string name() const { return "function_algebra_constant";}
+  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
+                                      std::string const& var) const;
+  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
+                                        std::string const& varx, 
+                                        std::string const& varh) const;
 };
 
 
-string  fct_constant::write_code_eval(ostream&, int& /*vnum*/, const string& /*var*/) const
+std::string  function_algebra_constant::write_code_eval(std::ostream&, int& /*vnum*/, 
+                                                        std::string const& /*var*/) const
 { 
  strstream s;
  if (dIm() == 1)
    s << c[1];
  else {
-   s << "point((const double[]){";
-   for(int i =1; i<=dIm(); i++)
+   s << "coord_type((const double[]){";
+   for(unsigned i =1; i<=dIm(); i++)
      s << c[i] << ",";
    s << "}, "  << dIm() << ")";
  }
  return s.str();
 }
  
-string fct_constant::write_code_derive(ostream&, int& /*vnum*/, 
-				   const string& /*varx*/, const string& /*varh*/) const
+
+std::string function_algebra_constant::write_code_derive(std::ostream&, int& /*vnum*/, 
+                                                         std::string const& /*varx*/, 
+                                                         std::string const& /*varh*/) const
 {
  strstream s;
  if (dIm() == 0)
    s << "0.0";
  else
-   s << "point(" << dIm() << ", zero_init)";
+   s << "coord_type(" << dIm() << ", zero_init)";
  return s.str();
 }
 
-class fct_coordinate : public fct {
+
+
+
+class function_algebra_coordinate : public function_algebra_impl {
 private: 
-  point derive(const point& /*x*/, const point& h) const { return h[i];}
+  typedef function_algebra_coordinate  self;
+  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return h[i];}
 protected:
   int i;
 public:
-  fct_coordinate(int ii) : i(ii) {is_affine=true;d_Im=1;d_Def=ANYDIM;} 
-  ~fct_coordinate() {}
-  virtual string name() const {return "fct_coordinate";}
-  point eval(const point& x) const {return x[i];}
-  string  write_code_eval(ostream& out, int& vnum, const string& var) const;
-  virtual string write_code_derive(ostream& out, int& vnum, 
-				 const string& varx, const string& varh) const;
+  function_algebra_coordinate(int ii) : i(ii) {is_affine=true;d_Im=1; d_Def=ANYDIM;} 
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type eval(const coord_type& x) const {return x[i];}
+
+  virtual std::string name() const {return "function_algebra_coordinate";}
+  virtual std::string  write_code_eval(std::ostream& out, int& vnum, 
+                                       std::string const& var) const;
+  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
+                                        std::string const& varx, 
+                                        std::string const& varh) const;
 };
 
-string  fct_coordinate::write_code_eval(ostream&, int& /*vnum*/, 
-						const string& var) const
+
+std::string  function_algebra_coordinate::write_code_eval(std::ostream&, int& /*vnum*/, 
+                                                          std::string const& var) const
 { 
-  ostrstream s;
+  std::ostrstream s;
   if (d_Def == 1) {s << var;} else  {s << var << "[" << i <<"]";} 
   return(s.str());
 }
 
-string fct_coordinate::write_code_derive(ostream& , int& /*vnum*/, 
-					       const string& /*varx*/, const string& varh) const
+std::string function_algebra_coordinate::write_code_derive(std::ostream& , int& /*vnum*/, 
+                                                           std::string const& /*varx*/, 
+                                                           std::string const& varh) const
 { 
-  ostrstream s;
+  std::ostrstream s;
   if (d_Def == 1) {s << varh;} else  {s << varh << "[" << i <<"]";} 
   return(s.str());
 }
 
-class fct_coordinate_with_dim : public fct_coordinate {
+
+
+
+class function_algebra_coordinate_with_dim : public function_algebra_coordinate {
 private: 
+  typedef function_algebra_coordinate_with_dim  self;
 public:
-  fct_coordinate_with_dim(int ii, int dim) : fct_coordinate(ii) {d_Im=1;d_Def=dim;} 
-  ~fct_coordinate_with_dim() {}
-  virtual string name() const {return "fct_coordinate_with_dim";}
+  function_algebra_coordinate_with_dim(int ii, int dim) : function_algebra_coordinate(ii) {d_Im=1;d_Def=dim;} 
+  virtual self* clone() const { return new self(*this);}
+
+  virtual std::string name() const {return "function_algebra_coordinate_with_dim";}
 };
 
 
 
 
-// an S-shaped function: f(x) = 0 on ]-infty,min(a,b)], f(x) = 1 on [max(a,b),infty[
-// f cubic between a and b with f' = 0 at a and b
 
-class fct_hermite: public fct { 
+/*! \brief An S-shaped function
+   
+   f(x) = 0 on ]-\infty,min(a,b)], f(x) = 1 on [max(a,b),\infty[
+   f cubic between a and b with f' = 0 at a and b
+*/
+
+class function_algebra_hermite: public function_algebra_impl { 
+  typedef function_algebra_hermite self;
 private:
   double a,b;
-  point derive(const point& x, const point& h) const;
+  coord_type derive(const coord_type& x, const coord_type& h) const;
 public:
-  fct_hermite(const double& aa, const double& bb) : a(aa), b(bb) {d_Im=d_Def=1;}
-  ~fct_hermite() {}
-  virtual string name() const {return "fct_hermite";}
-  point eval(const point& x) const;
-  string write_code_eval(ostream& out, int& vnum, const string& var) const;
-  virtual string write_code_derive(ostream& out, int& vnum, 
-				 const string& varx, const string& varh) const;
+  function_algebra_hermite(const double& aa, const double& bb) : a(aa), b(bb) {d_Im=d_Def=1;}
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type eval(const coord_type& x) const
+  { return hermite(a,b,x[1]);}
+
+  virtual std::string name() const {return "function_algebra_hermite";}
+  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
+                                      std::string const& var) const;
+  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
+                                        std::string const& varx, 
+                                        std::string const& varh) const;
 };
 
 
-point fct_hermite::eval(const point& x) const
-{ return hermite(a,b,x[1]);}
-
-string fct_hermite::write_code_eval(ostream& out, int& vnum, const string& var) const
+std::string function_algebra_hermite::write_code_eval(std::ostream& out, int& vnum, 
+                                                      std::string const& var) const
 { 
-  string r(makename("herm",vnum++));
+  std::string r(makename("herm",vnum++));
   out << "double " << r << "( hermite(" << a << "," << b << "," << var << "));\n";
   return r;
 }
 
 
-string fct_hermite::write_code_derive(ostream& out, int& vnum, 
-				     const string& varx, const string& varh) const
+std::string function_algebra_hermite::write_code_derive(std::ostream& out, int& vnum, 
+                                                        std::string const& varx, 
+                                                        std::string const& varh) const
 {
-  string r(makename("d_herm",vnum++));
+  std::string r(makename("d_herm",vnum++));
   out << "double " << r << "( d_hermite(" << a << "," << b << "," << varx << ") * " << varh << ");\n";
   return r;
 }
 
-point fct_hermite::derive(const point& x,const point& h) const
+
+coord_type function_algebra_hermite::derive(const coord_type& x,const coord_type& h) const
 {
   double t = (x[1]-a)/(b-a);
   if (t <= 0.0) return 0.0;
@@ -145,26 +180,33 @@ point fct_hermite::derive(const point& x,const point& h) const
 // a 1-dimensional polynome, initialized with a coefficient vector c,
 // polynome = c[n] x^{n-1} + ... + c[2] x + c[1]
 
-class fct_polynome1D : public fct {
+class function_algebra_polynomial1D : public function_algebra_impl {
+  typedef function_algebra_polynomial1D self;
 private:
-  point coeffs;
-  point derive(const point& x, const point& h) const; // may also be defined for doubles
+  coord_type coeffs;
+  coord_type derive(const coord_type& x, const coord_type& h) const; // may also be defined for doubles
 public:
-  fct_polynome1D(const point& c) : coeffs(c) {d_Def=1;d_Im=1;}
-  ~fct_polynome1D() {}
-  virtual string name() const {return "fct_polynome1D";}
+  function_algebra_polynomial1D(const coord_type& c) : coeffs(c) {d_Def=1;d_Im=1;}
+  ~function_algebra_polynomial1D() {}
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type eval(const coord_type& x) const; 
+
   int degree() const { return (coeffs.dim() -1);}
-  point eval(const point& x) const; 
-  string write_code_eval(ostream& out, int& vnum, const string& var) const;
-  virtual string write_code_deriv(ostream& out, int& vnum, 
-				 const string& varx, const string& varh) const;
+  virtual std::string name() const {return "function_algebra_polynomial1D";}
+  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
+                                      std::string const& var) const;
+  virtual std::string write_code_deriv(std::ostream& out, int& vnum, 
+                                       std::string const& varx, 
+                                       std::string const& varh) const;
 };
 
-string fct_polynome1D::write_code_eval(ostream& out, int& vnum, const string& var) const
+std::string function_algebra_polynomial1D::write_code_eval(std::ostream& out, int& vnum, 
+                                                           std::string const& var) const
 {
-  string bk(makename("bk",vnum++));
-  string x1(makename("xtmp",vnum));
-  string r(makename("poly",vnum));
+  std::string bk(makename("bk",vnum++));
+  std::string x1(makename("xtmp",vnum));
+  std::string r(makename("poly",vnum));
 
   int n = degree();
   out << "double " << bk << "(" << coeffs[n+1] << ");\n"
@@ -177,7 +219,8 @@ string fct_polynome1D::write_code_eval(ostream& out, int& vnum, const string& va
   return r;
 }
 
-point fct_polynome1D::eval(const point& x) const
+function_algebra_impl::coord_type 
+function_algebra_polynomial1D::eval(const coord_type& x) const
 {
   int n= degree();
   double bk=coeffs[n+1],x1=x[1];
@@ -187,7 +230,8 @@ point fct_polynome1D::eval(const point& x) const
   return bk;
 }
 
-point fct_polynome1D::derive(const point& x, const point& h) const
+function_algebra_impl::coord_type 
+function_algebra_polynomial1D::derive(const coord_type& x, const coord_type& h) const
 {
   int n= degree();
   double bk=n*coeffs[n+1],x1=x[1];
@@ -197,12 +241,13 @@ point fct_polynome1D::derive(const point& x, const point& h) const
   return bk*h[1];
 }
 
-string fct_polynome1D::write_code_deriv(ostream& out, int& vnum, 
-					const string& varx, const string& varh) const
+std::string function_algebra_polynomial1D::write_code_deriv(std::ostream& out, int& vnum, 
+                                                            std::string const& varx, 
+                                                            std::string const& varh) const
 {
-  string bk(makename("bk",vnum++));
-  string x1(makename("xtmp",vnum));
-  string r(makename("poly",vnum));
+  std::string bk(makename("bk",vnum++));
+  std::string x1(makename("xtmp",vnum));
+  std::string r(makename("poly",vnum));
 
   int n = degree();
   out << "double " << bk << "(" << n*coeffs[n+1] << ");\n"
@@ -217,13 +262,18 @@ string fct_polynome1D::write_code_deriv(ostream& out, int& vnum,
 
 
 
-class fct_norm2: public fct { // works for every dimension!
+class function_algebra_norm2: public function_algebra_impl { // works for every dimension!
+  typedef function_algebra_norm2 self;
 private:
-  point derive(const point& x,const point& h) const {return 2*(x*h);}
+  coord_type derive(const coord_type& x,const coord_type& h) const {return 2*(x*h);}
 public:
-  fct_norm2(int n) {d_Def = n; d_Im = 1;}
-  virtual string name() const {return "fct_norm2";}
-  point eval(const point& x) const { return (x.length2());}
+  function_algebra_norm2(int n) {d_Def = n; d_Im = 1;}
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type eval(const coord_type& x) const 
+   { return ap::norm2(x); }
+
+  virtual std::string name() const {return "function_algebra_norm2";}
 };
 
 
@@ -234,120 +284,147 @@ public:
 ////////////////////////////////////////////////////////////////////////
 
 
-class fct_scale: public fct {  // works for every dimension!
+class function_algebra_scale: public function_algebra_impl {  // works for every dimension!
+  typedef function_algebra_scale self;
 private:
- point diag;
-  point derive(const point& /*x*/, const point& h) const { return eval(h);}
+  coord_type diag;
+  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return eval(h);}
 public:
-  fct_scale(const point& d) : diag(d) {is_affine=true;d_Def = d_Im = diag.dim();}
-  virtual string name() const {return "fct_scale";}
-  inline point eval(const point& x) const;
+  function_algebra_scale(const coord_type& d) : diag(d) 
+  { is_affine=true; d_Def = d_Im = diag.dim();}
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type eval(const coord_type& x) const;
+
+  virtual std::string name() const {return "function_algebra_scale";}
 };
 
-inline  point fct_scale::eval(const point& x) const
+function_algebra_impl::coord_type 
+function_algebra_scale::eval(const coord_type& x) const
 {
-  point p(x); 
+  coord_type p(x); 
   for(int i=1;i<=p.dim();i++)
     p[i]*=diag[i];
   return p;
 }
 
-class fct_translate : public fct {
+
+
+
+class function_algebra_translate : public function_algebra_impl {
+  typedef function_algebra_translate self;
 private:
- point t;
-  point derive(const point& /*x*/, const point& h) const { return h;}
+ coord_type t;
+  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return h;}
 public:
-  fct_translate(const point& tt) : t(tt)  {is_affine=true; d_Def = d_Im = t.dim();}
-  virtual string name() const {return "fct_translate";}
-  point eval(const point& x) const {return (x+t);}
+  function_algebra_translate(const coord_type& tt) : t(tt)  {is_affine=true; d_Def = d_Im = t.dim();}
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type eval(const coord_type& x) const {return (x+t);}
+
+  virtual std::string name() const {return "function_algebra_translate";}
 };
 
 
 
 // project to hyperplane {x | <x,normal> = d}
 // !! the derivative has rank x.dim() - 1 everywhere !!
-class fct_project: public fct {  // works for every dimension!
+class function_algebra_project: public function_algebra_impl {  // works for every dimension!
+  typedef function_algebra_project self;
 private:
-  point normal;
+  coord_type normal;
   double dist;
-  point derive(const point& /*x*/, const point& h) const { return(h-(h*normal)*normal);}
+  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return(h-(h*normal)*normal);}
 public:
-  fct_project(const point& n, double d) : normal(n), dist(d)
+  function_algebra_project(const coord_type& n, double d) : normal(n), dist(d)
   { is_affine=true;d_Def = d_Im = normal.dim();}
-  virtual string name() const {return "fct_project";}
-  point eval(const point& x) const { return (x - (x*normal-dist)*normal);}
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type eval(const coord_type& x) const { return (x - (x*normal-dist)*normal);}
+
+  virtual std::string name() const {return "function_algebra_project";}
 };
 
 // distance to hyperplane {x | <x,normal> = dist}
-class fct_distance: public fct {  // works for every dimension!
+class function_algebra_distance: public function_algebra_impl {  // works for every dimension!
+  typedef function_algebra_distance self;
 private:
- point normal;
+ coord_type normal;
  double dist;
-  point derive(const point& /*x*/, const point& h) const { return(h*normal);}
+  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return(h*normal);}
 public:
-  fct_distance(const point& n, double d) : normal(n), dist(d)
+  function_algebra_distance(const coord_type& n, double d) : normal(n), dist(d)
   {is_affine=true;d_Def = normal.dim();d_Im = 1;}
-  virtual string name() const {return "fct_distance";}
-  point eval(const point& x) const { return (x*normal-dist);}
-  string write_code_eval(ostream& out, int& vnum, const string& var) const;
-  string write_code_derive(ostream& out, int& vnum, 
-			   const string& varx, const string& varh) const;
+  virtual self* clone() const { return new self(*this);}
+  virtual coord_type eval(const coord_type& x) const { return (x*normal-dist);}
+
+  virtual std::string name() const {return "function_algebra_distance";}
+  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
+                                      std::string const& var) const;
+  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
+                                        std::string const& varx,
+                                        std::string const& varh) const;
 };
 
-string fct_distance::write_code_eval(ostream& out, int& vnum, const string& var) const
+std::string function_algebra_distance::write_code_eval(std::ostream& out, int& vnum, 
+                                                       std::string const& var) const
 {
-  string r(makename("dist2hyp",vnum++));
-  string nrm(makename("n",vnum++));
-  ostrstream coords;coords << normal;
+  std::string r(makename("dist2hyp",vnum++));
+  std::string nrm(makename("n",vnum++));
+  std::ostrstream coords;coords << normal;
   int dim = normal.dim();
-  out << "point "  << nrm << "(makepoint(" << dim << "," << '"' << coords.str() << '"' << "));\n"
+  out << "coord_type "  << nrm << "(makepoint(" << dim << "," << '"' << coords.str() << '"' << "));\n"
       << "double " << r << "( " << nrm << " * " << var << " - " << dist << ");\n"; 
   return r;
 }
 
 
-string fct_distance::write_code_derive(ostream& out, int& vnum, 
-				       const string& /*varx*/,const string& varh) const
+std::string function_algebra_distance::write_code_derive(std::ostream& out, int& vnum, 
+                                                         std::string const& /*varx*/,
+                                                         std::string const& varh) const
 {
-  string r(makename("d_dist2hyp",vnum++));
-  string nrm(makename("n",vnum++));
-  ostrstream coords;coords << normal;
+  std::string r(makename("d_dist2hyp",vnum++));
+  std::string nrm(makename("n",vnum++));
+  std::ostrstream coords;coords << normal;
   int dim = normal.dim();
-  out << "point "  << nrm << "(makepoint(" << dim << "," << '"' << coords.str() << '"' << "));\n"
+  out << "coord_type "  << nrm << "(makepoint(" << dim << "," << '"' << coords.str() << '"' << "));\n"
       << "double " << r << "( " << nrm << " * " << varh << " - " << dist << ");\n"; 
   return r;
 }
 
 template<class T>
-static inline  T min(T i, T k) { return (i<k?i:k);}
+inline  T mymin(T i, T k) { return (i<k?i:k);}
 
-static int min_index(const point& p) // index with |p[i]| = min p.dim() = 3
+static int min_index(const coord_type& p) // index with |p[i]| = min p.dim() = 3
 {
   double p1 =fabs(p[1]), p2 = fabs(p[2]), p3 = fabs(p[3]);
-  if(p1 <= min(p2,p3))
+  if(p1 <= mymin(p2,p3))
     return 1;
-  else if (p2 <= min(p1,p3))
+  else if (p2 <= mymin(p1,p3))
     return 2;
   else 
     return 3;
 }
 
-class fct_rotation3D : public fct {
+
+
+class function_algebra_rotation3D : public function_algebra_impl {
+  typedef function_algebra_rotation3D self;
 private:
-  point axis; 
-  point e1;
-  point e2;
+  coord_type axis; 
+  coord_type e1;
+  coord_type e2;
   double alpha;
   double cosa;
   double sina;
   
-  point derive(const point& /*x*/, const point& h) const { return eval(h);}
-  //  typedef algebraic_primitives<point> algebra;
-  typedef dimension_dependent_primitives_3d<point> algebra;
+  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return eval(h);}
+  //  typedef algebraic_primitives<coord_type> algebra;
+  typedef dimension_dependent_primitives_3d<coord_type> ap3d;
 public:
-  fct_rotation3D(const point& ax, double a) 
-    : axis(algebra::normalization(ax)), 
-      e1(3,no_init), e2(3,no_init), 
+  function_algebra_rotation3D(const coord_type& ax, double a) 
+    : axis(ap3d::normalization(ax)), 
+      e1(3, coord_type::no_init), e2(3, coord_type::no_init), 
       alpha(a), cosa(cos(a)), sina(sin(a)) 
   {
     d_Def = 3;d_Im = 3;
@@ -357,52 +434,61 @@ public:
     e2[i] = 0;
     e2[j] = -axis[6-i-j];
     e2[6-i-j] = axis[j]; // now e2*axis = 0
-    e1 = algebra::vectorproduct(e2,axis);
-    if(algebra::det3(e1,e2,axis) < 0)
+    e1 = ap3d::vectorproduct(e2,axis);
+    if(ap3d::det3(e1,e2,axis) < 0)
       e1 *= -1;
-}
+  }
+  virtual self* clone() const { return new self(*this);}
 
-  virtual string name() const {return "fct_rotation3D";}
-  point eval(const point& x) const 
+  virtual coord_type eval(const coord_type& x) const 
   {
     double x1 = x*e1;
     double x2 = x*e2;
     double xa = x*axis;
     return (xa* axis + (sina*x1+cosa*x2)*e2 + (cosa*x1 - sina*x2)*e1);
   }
+
+  virtual std::string name() const {return "function_algebra_rotation3D";}
 };
 
 
 
 
 
-class fct_circle : public fct {
+class function_algebra_circle : public function_algebra_impl {
+  typedef function_algebra_circle self;
 private:
-  point m;
+  coord_type m;
   double r;
-  point derive(const point& x, const point& h) const { return ((x-m)*h)/(x-m).length();}
+  coord_type derive(const coord_type& x, const coord_type& h) const { return ((x-m)*h)/(x-m).length();}
 public:
-  fct_circle(const point& mm, double rr) : m(mm), r(rr) {d_Def = m.dim();d_Im = 1;}
-  virtual string name() const {return "fct_circle";}
-  point eval(const point& x) const {return ((x-m).length() - r);}
+  function_algebra_circle(const coord_type& mm, double rr) : m(mm), r(rr) {d_Def = m.dim();d_Im = 1;}
+  virtual self* clone() const { return new self(*this);}
+
+  virtual coord_type eval(const coord_type& x) const {return ((x-m).length() - r);}
+
+  virtual std::string name() const {return "function_algebra_circle";}
 };
 
 
 
+typedef function_algebra_impl::coord_type coord_type;
 
-RFunction Constant(const point& p, int dDef) { return RFunction(new fct_constant(p,dDef));}
-RFunction X(int i) {return RFunction(new fct_coordinate(i));}
-RFunction X(int i,int dim) {return RFunction(new fct_coordinate_with_dim(i,dim));}
-RFunction Norm2(int n) { return RFunction(new fct_norm2(n));}
-RFunction Scale(const point& diag) { return RFunction(new fct_scale(diag));}
-RFunction Translate(const point& t) { return RFunction(new fct_translate(t));}
-RFunction Circle(const point& m, double r) {return RFunction(new fct_circle(m,r));}
-RFunction ProjectToHyperplane(const point& normal, double dist) 
-{return RFunction(new fct_project(normal,dist));}
-RFunction DistanceToHyperplane(const point& normal, double dist) 
-{return RFunction(new fct_distance(normal,dist));}
-RFunction Rotation3D(const point& axis, double angle)
-{ return RFunction(new fct_rotation3D(axis,angle));}
+RFunction Constant(const coord_type& p, int dDef) { return RFunction(new function_algebra_constant(p,dDef));}
+RFunction X(int i)         { return RFunction(new function_algebra_coordinate(i));}
+RFunction X(int i,int dim) { return RFunction(new function_algebra_coordinate_with_dim(i,dim));}
+RFunction Norm2(int n)     { return RFunction(new function_algebra_norm2(n));}
+
+RFunction Scale    (const coord_type& diag)        { return RFunction(new function_algebra_scale(diag));}
+RFunction Translate(const coord_type& t)           { return RFunction(new function_algebra_translate(t));}
+RFunction Circle   (const coord_type& m, double r) {return RFunction(new function_algebra_circle(m,r));}
+
+RFunction ProjectToHyperplane (const coord_type& normal, double dist) 
+  { return RFunction(new function_algebra_project(normal,dist));}
+RFunction DistanceToHyperplane(const coord_type& normal, double dist) 
+  { return RFunction(new function_algebra_distance(normal,dist));}
+RFunction Rotation3D          (const coord_type& axis, double angle)
+  { return RFunction(new function_algebra_rotation3D(axis,angle));}
 
 // this could be implemented more effectively
 RFunction Rotation2D(double a) 
@@ -414,6 +500,6 @@ RFunction Rotation2D(double a)
  return ((X1*c-X2*s,X1*s+X2*c));
 }
 
-RFunction S3(const double& a, const double& b) { return RFunction(new fct_hermite(a,b));}
-RFunction Polynome1D(const point& c) { return RFunction(new fct_polynome1D(c));}
+RFunction S3(const double& a, const double& b) { return RFunction(new function_algebra_hermite(a,b));}
+RFunction Polynomial1D(const coord_type& c)    { return RFunction(new function_algebra_polynomial1D(c));}
 

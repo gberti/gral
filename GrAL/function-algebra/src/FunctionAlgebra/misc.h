@@ -1,6 +1,7 @@
 #ifndef NMWR_GB_RFUNCTION_MISC_H
 #define NMWR_GB_RFUNCTION_MISC_H
 
+
 inline double hermite(double a, double b, double x)
 {
   double t = (x-a)/(b-a);
@@ -17,14 +18,5 @@ inline double d_hermite(double a, double b, double x)
   else return 0.0;
 }
 
-
-inline point makepoint(int dim,const string& coords)
-{
- strstream in;
- in  << coords;
- point p(dim,no_init);
- in >> p;
- return p;
-}
 
 #endif
