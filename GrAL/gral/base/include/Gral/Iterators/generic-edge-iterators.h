@@ -31,7 +31,7 @@
    in complex3d.h.
 
     \ingroup generic_edge
-    \see   generic_edge
+    \see   generic_facet
  */
 namespace generic_edge {
 
@@ -138,6 +138,8 @@ namespace generic_edge {
 	  : c(cc), e(c.TheArchetype().FirstEdge()) {}
 	edge_on_cell_iterator(Cell const& cc, archEdgeIterator ee) 
 	  : c(cc), e(ee) {}
+	edge_on_cell_iterator(Cell const& cc, arch_edge_handle ee)
+	  : c(cc), e(c.TheArchetype(), ee) {}
 	edge_on_cell_iterator(grid_type const& g, edge_handle const& h)
 	  : c(g,h.c), e(c.TheArchetype(),h.eh) {}
 	
