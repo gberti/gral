@@ -231,7 +231,6 @@ class boundary_grid_types_aux<E, edge_type_tag, DIM>
 public:
   typedef grid_dim_tag<0> dimension_tag;
 
-  typedef typename boundary_grid_types_base<E, edge_type_tag, DIM>::bgt bgt;
   typedef typename bgt::VertexOnEdgeIterator VertexIterator;
   typedef typename bgt::Vertex               Cell;
   typedef typename bgt::vertex_handle        cell_handle;
