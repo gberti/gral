@@ -8,6 +8,9 @@ TARGET=all
 all:
 
 new: libclean
+	(cd src; $(MAKE) new)
+
+
 
 
 compile:
