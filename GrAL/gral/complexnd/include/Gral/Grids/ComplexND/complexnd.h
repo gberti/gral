@@ -3,12 +3,17 @@
 
 // $LICENSE_NEC
 
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/grid-function-vector.h"
+
 #include "Utility/pre-post-conditions.h"
 #include "Utility/ref-ptr.h"
 #include <vector>
 
 
 namespace complexnd {
+
+  //----------------------- forward declarations -------------------------
 
   // value indicating runtime variable dimension
   enum { ANY = -1};
@@ -28,19 +33,22 @@ namespace complexnd {
   template<int D>
   class ComplexND;
 
-  template<int D>
-  struct codim     { enum { codim0 = D,   codim1 = D-1}; };
-  template<>
-  struct codim<ANY> { enum {codim0 = ANY, codim1 = ANY}; };
+
+  //----------------------- grid_types_ComplexND ---------------------------
 
 
+  // TODO: spec. for D=1 (no Face type) and D=0 (no Edge, Face, Facet types, no archetype type)
+  // But we need them for defining e.g. FirstEdge() in ComplexND<> -> see solution in element_t<>
+
   template<int D>
-  struct grid_types_complexnd  {
+  struct grid_types_ComplexND_base  {
     typedef ComplexND<D>                        grid_type;
+    typedef grid_dim_tag<D>                     dimension_tag;
+
     typedef element_handle_t<grid_type, ANY, ANY> any_element_handle;
     typedef element_handle_t<grid_type, 0, D>   vertex_handle;
     typedef element_handle_t<grid_type, 1, D-1> edge_handle;
-    typedef element_handle_t<grid_type, 2, D-2> face_handle;
+    //typedef element_handle_t<grid_type, 2, D-2> face_handle;
 
     typedef element_handle_t<grid_type, D-1, 1> facet_handle;
     typedef element_handle_t<grid_type, D,   0> cell_handle;
@@ -48,24 +56,144 @@ namespace complexnd {
     typedef element_t<grid_type, ANY, ANY> AnyElement;
     typedef element_t<grid_type, 0, D>   Vertex;
     typedef element_t<grid_type, 1, D-1> Edge;
-    typedef element_t<grid_type, 2, D-2> Face;
+    // typedef element_t<grid_type, 2, D-2> Face;
 
     typedef element_t<grid_type, D-1, 1> Facet;
     typedef element_t<grid_type, D,   0> Cell;
 
     typedef element_iterator_t<grid_type, ANY, ANY> AnyElementIterator;
+
     typedef element_iterator_t<grid_type, 0, D>   VertexIterator;
     typedef element_iterator_t<grid_type, 1, D-1> EdgeIterator;
-    typedef element_iterator_t<grid_type, 2, D-2> FaceIterator;
-
+    // typedef element_iterator_t<grid_type, 2, D-2> FaceIterator;
     typedef element_iterator_t<grid_type, D-1, 1> FacetIterator;
     typedef element_iterator_t<grid_type, D,   0> CellIterator;
+
+
+    typedef incidence_iterator_t<grid_type, ANY,ANY,ANY, ANY>   AnyIncidenceIterator; 
+
+    typedef incidence_iterator_t<grid_type, 0, 0,   D, D>     VertexOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 0, 1,   D, D-1>   EdgeOnVertexIterator;
+    // typedef incidence_iterator_t<grid_type, 0, 2,   D, D-2>   FaceOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 0, D-1, D, 1>     FacetOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 0, D,   D, 0>     CellOnVertexIterator;
+
+    typedef incidence_iterator_t<grid_type, 1, 0,   D-1,D>     VertexOnEdgeIterator;
+    // typedef incidence_iterator_t<grid_type, 1, 1, D-1,D-1>   EdgeOnEdgeIterator;
+    // typedef incidence_iterator_t<grid_type, 1, 2,   D-1,D-2>   FaceOnEdgeIterator;
+    typedef incidence_iterator_t<grid_type, 1, D-1, D-1,1>     FacetOnEdgeIterator;
+    typedef incidence_iterator_t<grid_type, 1, D,   D-1,0>     CellOnEdgeIterator;
+    /*
+    typedef incidence_iterator_t<grid_type, 2, 0, D-2, D>      VertexOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, 1, D-2, D-1>    EdgeOnFaceIterator;
+    //typedef incidence_iterator_t<grid_type, 2, 2, D-2, D-2>   FaceOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, D-1, D-2, 1>    FacetOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, D,   D-2, 0>    CellOnFaceIterator;
+    */
+    typedef incidence_iterator_t<grid_type, D-1, 0, 1,  D>     VertexOnFacetIterator;
+    typedef incidence_iterator_t<grid_type, D-1, 1, 1,  D-1>   EdgeOnFacetIterator;
+    // typedef incidence_iterator_t<grid_type, D-1, 2, 1,  D-2>   FaceOnFacetIterator;
+    // typedef incidence_iterator_t<grid_type, D-1, D-1, 1,1> FacetOnFacetIterator;
+    typedef incidence_iterator_t<grid_type, D-1, D, 1,  0>     CellOnFacetIterator;
+
+    typedef incidence_iterator_t<grid_type, D, 0,   0, D>     VertexOnCellIterator;
+    typedef incidence_iterator_t<grid_type, D, 1,   0, D-1>   EdgeOnCellIterator;
+    // typedef incidence_iterator_t<grid_type, D, 2,   0, D-2>   FaceOnCellIterator;
+    typedef incidence_iterator_t<grid_type, D, D-1, 0, 1>     FacetOnCellIterator;
+    typedef incidence_iterator_t<grid_type, D, D,   0, 0>     CellOnCellIterator;
+
+    // Face types
+    typedef element_handle_t  <grid_type, 2, D-2> face_handle;
+    typedef element_t         <grid_type, 2, D-2> Face;
+    typedef element_iterator_t<grid_type, 2, D-2> FaceIterator;
+
+    typedef incidence_iterator_t<grid_type, 0, 2,   D, D-2>    FaceOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 1, 2,   D-1,D-2>   FaceOnEdgeIterator;
+
+    typedef incidence_iterator_t<grid_type, 2, 0, D-2, D>      VertexOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, 1, D-2, D-1>    EdgeOnFaceIterator;
+    //typedef incidence_iterator_t<grid_type, 2, 2, D-2, D-2>   FaceOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, D-1, D-2, 1>    FacetOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, D,   D-2, 0>    CellOnFaceIterator;
+
+    typedef incidence_iterator_t<grid_type, D-1, 2, 1,  D-2>   FaceOnFacetIterator;
+    typedef incidence_iterator_t<grid_type, D, 2,   0, D-2>    FaceOnCellIterator;
+
+
+    typedef unsigned                   archetype_handle;
+    // not ok for dim = 0!
+    typedef ComplexND<D-1>             archetype_type;
+    typedef grid_types<archetype_type> archgt;
+    typedef typename std::vector<archetype_type>::const_iterator  archetype_iterator;
+    typedef archetype_iterator ArchetypeIterator; // deprecate
   }; 
 
+  // primary template
+  template<int D>
+  struct grid_types_ComplexND : public grid_types_ComplexND_base<D> 
+  {
+    /*
+    typedef typename grid_types_ComplexND_base<D>::grid_type grid_type;
+
+    // add face related types
+    typedef element_handle_t  <grid_type, 2, D-2> face_handle;
+    typedef element_t         <grid_type, 2, D-2> Face;
+    typedef element_iterator_t<grid_type, 2, D-2> FaceIterator;
+
+    typedef incidence_iterator_t<grid_type, 0, 2,   D, D-2>    FaceOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 1, 2,   D-1,D-2>   FaceOnEdgeIterator;
+
+    typedef incidence_iterator_t<grid_type, 2, 0, D-2, D>      VertexOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, 1, D-2, D-1>    EdgeOnFaceIterator;
+    //typedef incidence_iterator_t<grid_type, 2, 2, D-2, D-2>   FaceOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, D-1, D-2, 1>    FacetOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, D,   D-2, 0>    CellOnFaceIterator;
+
+    typedef incidence_iterator_t<grid_type, D-1, 2, 1,  D-2>   FaceOnFacetIterator;
+    typedef incidence_iterator_t<grid_type, D, 2,   0, D-2>    FaceOnCellIterator;
+    */
+  };
+
+  // D = 1: No face type
   template<>
-  struct grid_types_complexnd<ANY>  {
+  struct grid_types_ComplexND<1> : public grid_types_ComplexND_base<1> {};
+
+  // D = 0: no edge, face, facet
+  template<>
+  struct grid_types_ComplexND<0> : public grid_types_ComplexND_base<0> {
+    /*
+    typedef ComplexND<0>                          grid_type;
+    typedef grid_dim_tag<0>                       dimension_tag;
+    typedef element_handle_t<grid_type, ANY, ANY> any_element_handle;
+    typedef element_handle_t<grid_type, 0, 0>     vertex_handle;
+    typedef element_handle_t<grid_type, 0, 0>     cell_handle;
+
+    typedef element_t<grid_type, ANY, ANY> AnyElement;
+    typedef element_t<grid_type, 0, 0>     Vertex;
+    typedef element_t<grid_type, 0, 0>     Cell;
+
+    typedef element_iterator_t<grid_type, ANY, ANY> AnyElementIterator;
+    typedef element_iterator_t<grid_type, 0, 0>     VertexIterator;
+    typedef element_iterator_t<grid_type, 0, 0>     CellIterator;
+
+    // no incidence iterators
+    */
+
+    // is this OK?
+    typedef ComplexND<0>               archetype_type;
+    typedef grid_types<archetype_type> archgt;
+    typedef std::vector<archetype_type>::const_iterator  archetype_iterator;
+    typedef archetype_iterator ArchetypeIterator; // deprecate
+  }; // grid_types_ComplexND<0>
+
+
+
+
+  // specialization for ANY: runtime grid dimension
+  template<>
+  struct grid_types_ComplexND<ANY>  {
     typedef ComplexND<ANY>                        grid_type;
- 
+    typedef grid_dim_tag<ANY>                     dimension_tag; 
     typedef element_handle_t<grid_type, ANY, ANY> any_element_handle;
 
     typedef element_handle_t<grid_type, 0, ANY>   vertex_handle;
@@ -91,27 +219,67 @@ namespace complexnd {
 
     typedef element_iterator_t<grid_type, ANY, 1> FacetIterator;
     typedef element_iterator_t<grid_type, ANY, 0> CellIterator;
-  }; 
+
+    typedef incidence_iterator_t<grid_type, ANY,ANY,ANY, ANY>   AnyIncidenceIterator; 
+    typedef incidence_iterator_t<grid_type, 0, 0,   ANY, ANY>   VertexOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 0, 1,   ANY, ANY>   EdgeOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 0, 2,   ANY, ANY>   FaceOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 0, ANY, ANY, 1>     FacetOnVertexIterator;
+    typedef incidence_iterator_t<grid_type, 0, ANY, ANY, 0>     CellOnVertexIterator;
+
+    typedef incidence_iterator_t<grid_type, 1, 0,   ANY,ANY>   VertexOnEdgeIterator;
+    // typedef incidence_iterator_t<grid_type, 1, 1, ANY,ANY>   EdgeOnEdgeIterator;
+    typedef incidence_iterator_t<grid_type, 1, 2,   ANY,ANY>   FaceOnEdgeIterator;
+    typedef incidence_iterator_t<grid_type, 1, ANY, ANY,1>     FacetOnEdgeIterator;
+    typedef incidence_iterator_t<grid_type, 1, ANY, ANY,0>     CellOnEdgeIterator;
+
+    typedef incidence_iterator_t<grid_type, 2, 0,   ANY,ANY>   VertexOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, 1,   ANY,ANY>   EdgeOnFaceIterator;
+    //typedef incidence_iterator_t<grid_type, 2, 2, ANY, ANY>   FaceOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, ANY, ANY, 1>    FacetOnFaceIterator;
+    typedef incidence_iterator_t<grid_type, 2, ANY, ANY, 0>    CellOnFaceIterator;
+
+    typedef incidence_iterator_t<grid_type, ANY, 0,   1,  ANY>   VertexOnFacetIterator;
+    typedef incidence_iterator_t<grid_type, ANY, 1,   1,  ANY>   EdgeOnFacetIterator;
+    typedef incidence_iterator_t<grid_type, ANY, 2,   1,  ANY>   FaceOnFacetIterator;
+    // typedef incidence_iterator_t<grid_type, ANY, ANY, 1,1> FacetOnFacetIterator;
+    typedef incidence_iterator_t<grid_type, ANY, ANY, 1,  0>     CellOnFacetIterator;
+
+    typedef incidence_iterator_t<grid_type, ANY, 0,   0, ANY>   VertexOnCellIterator;
+    typedef incidence_iterator_t<grid_type, ANY, 1,   0, ANY>   EdgeOnCellIterator;
+    typedef incidence_iterator_t<grid_type, ANY, 2,   0, ANY>   FaceOnCellIterator;
+    typedef incidence_iterator_t<grid_type, ANY, ANY, 0, 1>     FacetOnCellIterator;
+    typedef incidence_iterator_t<grid_type, ANY, ANY, 0, 0>     CellOnCellIterator;
+
+    typedef unsigned                   archetype_handle;
+    typedef ComplexND<ANY>             archetype_type;
+    typedef grid_types<archetype_type> archgt;
+    typedef std::vector<archetype_type>::const_iterator  archetype_iterator;
+    typedef archetype_iterator ArchetypeIterator; // deprecate
+  };  // grid_types_ComplexND<ANY>
+
 
 
 
   //--------------------- element handles ----------------------
 
-  template<class GRID, int D, int CD = GRID::dim - D>
+  template<class GRID, int D, int CD>
   struct element_handle_base {
     typedef GRID grid_type;
     typedef element_handle_base<GRID, D, CD> self;
-    int h_;
+    unsigned h_;
   public:
     element_handle_base() {}
-    element_handle_base(int hh) : h_(hh) {}
+    element_handle_base(unsigned hh) : h_(hh) {}
     
-    int  h() const { return h_;}
-    int& h()       { return h_;}
-
+    unsigned  h() const { return h_;}
+    unsigned& h()       { return h_;}
+    
+    operator unsigned() const { return h_;} 
     self& operator++() { ++h_; return *this;}
   };
 
+  // primary template
   template<class GRID, int D, int CD>
   struct element_handle_t : public element_handle_base<GRID, D, CD> 
   {
@@ -139,6 +307,9 @@ namespace complexnd {
     template<int D, int CD>
     self & operator=(element_handle_t<GRID,D,CD> const& rhs) { base::operator=(rhs.h());}
   };
+
+
+
 
   template<class GRID, int D, int CD>
   inline std::ostream& operator<<(std::ostream& out, element_handle_t<GRID,D,CD>  e) { return (out << e.h());}
@@ -173,51 +344,6 @@ namespace complexnd {
   //--------------------------------------------------------------------------------------
 
 
-  //--------------- mixin for handling element dimension ------------------------
-
-  // primary template: dimension and codimension part of the type
-  template<class ELEMENT, class GRID, int D, int CD>
-  struct dimension_mixin {
-    int dimension()   const { return D;}
-    int codimension() const { return CD;}
-  };
- 
-  // partial specialization: only dimension given (Vertex, Edge, Face)
-  template<class ELEMENT, class GRID, int D>
-  struct dimension_mixin<ELEMENT, GRID, D, ANY> {
-  private:
-    typedef GRID grid_t;
-    grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
-  public:
-    int dimension()   const { return D;}
-    int codimension() const { return the_grid().dimension() - dimension();}
-  };
-
-  // partial specialization: only codimension given (Facet, Cell)
-  template<class ELEMENT, class GRID, int CD>
-  struct dimension_mixin<ELEMENT, GRID, ANY, CD> {
-  private:
-    typedef GRID grid_t;
-    grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
-  public:
-    int dimension()   const { return the_grid().dimension() - codimension();}
-    int codimension() const { return CD;}
-  };
-
-  // partial specialization: neither dim nor codim given
-  template<class ELEMENT, class GRID>
-  struct dimension_mixin<ELEMENT, GRID, ANY, ANY> {
-  private:
-    typedef GRID grid_t;
-    grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
-    int d;
-  public:
-    dimension_mixin()       : d(-1) {}
-    dimension_mixin(int dd) : d(dd) {}
-
-    int dimension()   const { return d;}
-    int codimension() const { return the_grid().dimension() - dimension();}
-  };
 
 
 
@@ -227,22 +353,55 @@ namespace complexnd {
   template<int D>
   struct dimension_mixin_grid {
     enum { dim = D };
-    int dimension() const { return D;} 
+    unsigned dimension() const { return D;} 
+    template<unsigned K>
+    struct dim_to_codim { enum { value = D-K }; };
+    template<unsigned K>
+    struct codim_to_dim { enum { value = D-K }; };
   };
 
   // ... but for ANY, dimension is determined at runtime (object construction time)
   template<>
   struct dimension_mixin_grid<ANY> {
   private:
-    int d;
+    unsigned d;
   public:
-    dimension_mixin_grid()       : d(-1) {}
-    dimension_mixin_grid(int dd) : d(dd) {}
-    int dimension() const { return d;}
+    enum { dim = ANY };
+    template<unsigned K>
+    struct dim_to_codim { enum { value = ANY }; };
+    template<unsigned K>
+    struct codim_to_dim { enum { value = ANY }; };
+
+    dimension_mixin_grid()            : d(0) {}
+    dimension_mixin_grid(unsigned dd) : d(dd) {}
+    unsigned dimension() const { return d;}
   };
   
+  class pointcloud {
+    unsigned nnodes;
+  public:
+    explicit pointcloud(unsigned n = 0) : nnodes(n) {}
 
+    unsigned NumOfVertices() const { return nnodes;}
+  };
+
+  class polygon {
+    unsigned nnodes;
+  public:
+    explicit polygon(unsigned n = 0) : nnodes(n) {}
+
+    unsigned NumOfVertices() const { return nnodes;}
+    unsigned NumOfEdges()    const { return nnodes;}
+  };
+
+
+
+
+
+  //-----------------------------------------------------------------
   //---------------------- the grid type ----------------------------
+  //-----------------------------------------------------------------
+
 
   /*! \brief General d-dimensional grid with full incidence information
       
@@ -253,43 +412,78 @@ namespace complexnd {
 
    */
   template<int D>
-  class ComplexND : public grid_types_complexnd<D>, public dimension_mixin_grid<D> {
+  class ComplexND : public grid_types_ComplexND<D>, public dimension_mixin_grid<D> {
     typedef ComplexND               self;
     typedef dimension_mixin_grid<D> mixin;
-    typedef grid_types_complexnd<D> gt;
+    typedef grid_types_ComplexND<D> gt;
+  public:
+    typedef typename gt::AnyElementIterator AnyElementIterator;
+    typedef typename gt::VertexIterator     VertexIterator;
+    typedef typename gt::EdgeIterator       EdgeIterator;
+    typedef typename gt::FaceIterator       FaceIterator;
+    typedef typename gt::FacetIterator      FacetIterator;
+    typedef typename gt::CellIterator       CellIterator;
 
+    typedef typename gt::cell_handle        cell_handle;
+    typedef typename gt::Cell               Cell;
+
+    typedef typename gt::archetype_handle   archetype_handle;
+    typedef typename gt::archetype_type     archetype_type;
+    typedef typename gt::archetype_iterator archetype_iterator;
+
+  private:
     // data structure to hold all possible incidences
-    typedef std::vector<int>                      incidence_sequence;       // [0, |I_{k,j}(e)| )
+    typedef std::vector<unsigned>                 incidence_sequence;       // [0, |I_{k,j}(e)| )
     typedef std::vector<incidence_sequence>       element_incidences;       // index j \in [0,d]
     typedef std::vector<element_incidences>       element_incidences_table; // index e \in [0, n(k)-1]
     typedef std::vector<element_incidences_table> incidence_table;          // index k \in [0,d]
-    
+   
     // incidences[k][e][j][i] gives the i-th incident element of dim j to the e-th element of dim k
     // if k==j, we have entries only for k==0 and k==dimension()
+  public:
     incidence_table incidences;  
 
+  private:
+    std::vector<unsigned>       cell_archetype;
+    std::vector<archetype_type> archetypes;
+
+    /*
+    template<class G_SRC, class PHI> 
+    friend void ConstructGrid0(ComplexND<D>& g, G_SRC const& g_src, PHI& phi);
+    */
   public:
     // for D!=ANY => init incidences
     ComplexND() : incidences(dimension()+1) {}
     // allowed only for D==ANY, else compile-time error
     // made compilable here to allow for explicit instantiation for testing
-    ComplexND(int dim) : incidences(dim+1) { REQUIRE_ALWAYS(dim==dimension(), "",1);}
+    explicit ComplexND(unsigned dim) : incidences(dim+1) { REQUIRE_ALWAYS(dim==dimension(), "",1);}
+   
+   
+    // only for 0D
+    explicit ComplexND(pointcloud p);
 
+    // only for 1D
+    explicit ComplexND(polygon pn);
     
     element_incidences const& Incidences(typename gt::AnyElement e) const { return incidences[e.dimension()][e.handle().h()];}
     template<int K, int CK>
     element_incidences const& Incidences(element_t<self,K,CK>    e) const { return incidences[e.dimension()][e.handle().h()];}
-
+    element_incidences const& Incidences(unsigned d, unsigned h) const { return incidences[d][h];}
 
     template<int K, int CK> // = dim-K>
     element_iterator_t<self,K,CK> FirstElement() const;
     template<int K, int CK> // = dim-K>
     element_iterator_t<self,K,CK> EndElement() const;
 
-    typedef typename gt::AnyElementIterator AnyElementIterator;
     AnyElementIterator FirstElement(unsigned dd) const;
     typename gt::AnyElementIterator EndElement  (unsigned dd) const;
-   
+
+
+    VertexIterator FirstVertex() const;
+    EdgeIterator   FirstEdge()   const;
+    FaceIterator   FirstFace()   const;
+    FacetIterator  FirstFacet()  const;
+    CellIterator   FirstCell()   const;
 
     unsigned NumOfElements(unsigned k) const { return incidences[k].size();}
 
@@ -298,19 +492,105 @@ namespace complexnd {
     unsigned NumOfFaces()    const { return NumOfElements(2);}
     unsigned NumOfFacets()   const { return NumOfElements(dimension()-1);}
     unsigned NumOfCells()    const { return NumOfElements(dimension());}
+
+    // must make them public because friend definition 
+    // private:
+
+    // modifying functions
+    void calculate_incidences() {}
+
+    cell_handle      add_cell(archetype_handle a) 
+    { ca(a); cell_archetype.push_back(a); return cell_handle(cell_archetype.size() -1);}
+    archetype_handle add_archetype() { return add_archetype(archetype_type());}
+    archetype_handle add_archetype(archetype_type const& A)
+    { archetypes.push_back(A); return (archetypes.size() -1); }
+ 
+  public:
+    archetype_type      & Archetype(archetype_handle a)       { ca(a); return archetypes[a]; }
+    archetype_type const& Archetype(archetype_handle a) const { ca(a); return archetypes[a]; }
+
+    bool valid_archetype(archetype_handle a) const  { return ((0 <= a) && (a < archetypes.size())); }
+    void ca(archetype_handle a) const { REQUIRE(valid_archetype(a), "a = " << a,1); }
+  public:
+    inline
+    archetype_type const& ArchetypeOf(Cell const&  c) const;
+    archetype_type const& ArchetypeOf(cell_handle  c) const { return archetypes[cell_archetype[c]];}
+    archetype_handle      archetype_of(cell_handle c) const { return cell_archetype[c];}
+    
+    archetype_iterator BeginArchetype() const { return archetypes.begin();}
+    archetype_iterator   EndArchetype() const { return archetypes.end  ();}
+
+    
   }; // class ComplexND<D>
 
 
 
 
-  //------------------------------- elements and sequence iterators ---------------------------
 
-  // base for elements and sequence iterators 
+
+
+  //-------------------------------------------------------------------------------------------
+  //------------------------------- elements and sequence iterators ---------------------------
+  //-------------------------------------------------------------------------------------------
+
+
+  //--------------- mixin for handling element dimension ------------------------
+
+  // primary template: dimension and codimension part of the type
+  template<class ELEMENT, class GRID, int D, int CD>
+  struct dimension_mixin {
+    unsigned dimension()   const { return D;}
+    unsigned codimension() const { return CD;}
+  };
+ 
+  // partial specialization: only dimension given (Vertex, Edge, Face)
+  template<class ELEMENT, class GRID, int D>
+  struct dimension_mixin<ELEMENT, GRID, D, ANY> {
+  private:
+    typedef GRID grid_t;
+    grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
+  public:
+    unsigned dimension()   const { return D;}
+    unsigned codimension() const { return the_grid().dimension() - dimension();}
+  };
+
+  // partial specialization: only codimension given (Facet, Cell)
+  template<class ELEMENT, class GRID, int CD>
+  struct dimension_mixin<ELEMENT, GRID, ANY, CD> {
+  private:
+    typedef GRID grid_t;
+    grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
+  public:
+    unsigned dimension()   const { return the_grid().dimension() - codimension();}
+    unsigned codimension() const { return CD;}
+  };
+
+  // partial specialization: neither dim nor codim given
+  template<class ELEMENT, class GRID>
+  struct dimension_mixin<ELEMENT, GRID, ANY, ANY> {
+  private:
+    typedef GRID grid_t;
+    grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
+    unsigned d;
+  public:
+    dimension_mixin()            : d( 0) {}
+    dimension_mixin(unsigned dd) : d(dd) {}
+
+    unsigned dimension()   const { return d;}
+    unsigned codimension() const { return the_grid().dimension() - dimension();}
+  };
+
+
+
+
+  //--------------------  base for elements and sequence iterators -----------------------
+
+
   template<class GRID, int D, int CD = GRID::dim - D>
-  class element_base : public grid_types_complexnd<D>, public dimension_mixin<element_base<GRID,D,CD>, GRID, D, CD> 
+  class element_base_t : public grid_types_ComplexND<D>, public dimension_mixin<element_base_t<GRID,D,CD>, GRID, D, CD> 
   {
-    typedef element_base<GRID,D,CD> self;
-    typedef dimension_mixin<element_base<GRID,D,CD>, GRID, D, CD> mixin;
+    typedef element_base_t<GRID,D,CD> self;
+    typedef dimension_mixin<element_base_t<GRID,D,CD>, GRID, D, CD> mixin;
   public:
     typedef GRID                        grid_type;
     typedef element_handle_t<GRID,D,CD> element_handle_type;
@@ -318,33 +598,51 @@ namespace complexnd {
     ref_ptr<grid_type const> g;
     element_handle_type      h;
   public:
-    element_base() : g(0) {}
+    element_base_t() : g(0) {}
     // use these 2 only with D or CD != ANY
-    element_base(grid_type const&         gg, element_handle_type hh = 0) : g(&gg), h(hh) {}
-    element_base(ref_ptr<grid_type const> gg, element_handle_type hh = 0) : g(gg),  h(hh) {}
+    element_base_t(grid_type const&         gg, element_handle_type hh = 0) : g(&gg), h(hh) {}
+    element_base_t(ref_ptr<grid_type const> gg, element_handle_type hh = 0) : g(gg),  h(hh) {}
     // use only for D==CD==ANY
-    element_base(grid_type const&         gg, unsigned dim, element_handle_type hh = 0) : mixin(dim), g(&gg), h(hh) {}
-    element_base(ref_ptr<grid_type const> gg, unsigned dim, element_handle_type hh = 0) : mixin(dim), g(gg),  h(hh) {}
+    element_base_t(grid_type const&         gg, unsigned dim, element_handle_type hh = 0) : mixin(dim), g(&gg), h(hh) { checkdim();}
+    element_base_t(ref_ptr<grid_type const> gg, unsigned dim, element_handle_type hh = 0) : mixin(dim), g(gg),  h(hh) { checkdim();}
+
+    void checkdim() const    
+    { 
+      REQUIRE(dimension() <= TheGrid().dimension(), 
+	      "dim=" << dimension() << "griddim="  << TheGrid().dimension(), 1); 
+    }
 
     grid_type const& TheGrid()   const { cb(); return *g;}
     grid_type const& TheAnchor() const { cb(); return *g;}
 
     element_handle_type handle() const { return h;}
 
+
+
+    template<int K, int CK> 
+    unsigned NumOfElements()           const { return NumOfElements(K);}
+    unsigned NumOfElements(unsigned K) const { cv(); return g->Incidences(dimension(), handle())[K].size();}
+
+    unsigned NumOfVertices() const { return NumOfElements(0);}
+    unsigned NumOfEdges()    const { return NumOfElements(1);}
+    unsigned NumOfFaces()    const { return NumOfElements(2);}
+    unsigned NumOfFacets()   const { return NumOfElements(dimension()-1);}
+    unsigned NumOfCells()    const { return NumOfElements(dimension());}
+
     bool bound() const { return g != 0;}
     void cb()    const { REQUIRE(bound(), "", 1);}
     bool valid() const { return bound() && 0 <= h && h < g->NumOfElements(dimension());}
     void cv()    const { REQUIRE(valid(), "", 1);}
   protected:
-    void inc() { ++h;}
-  }; // class element_base<GRID,D,CD>
+    void incr() { ++h;}
+  }; // class element_base_t<GRID,D,CD>
 
 
   // primary template. At least one of D and CD are fixed (!= ANY)
   template<class GRID, int D, int CD> // = GRID::dim - D>
-  class element_t : public element_base<GRID,D,CD> {
-    typedef element_t   <GRID,D,CD> self;
-    typedef element_base<GRID,D,CD> base;
+  class element_t : public element_base_t<GRID,D,CD> {
+    typedef element_t     <GRID,D,CD> self;
+    typedef element_base_t<GRID,D,CD> base;
     typedef typename base::grid_type grid_type;
     typedef typename base::element_handle_type element_handle_type;
   public:
@@ -353,14 +651,30 @@ namespace complexnd {
     element_t(ref_ptr<grid_type const> gg, element_handle_type hh = 0) : base(gg,hh) {}
     element_t       (element_t<GRID,ANY,ANY> const& rhs);
     self & operator=(element_t<GRID,ANY,ANY> const& rhs);
+
+    template<int K, int CK>
+    incidence_iterator_t<grid_type, D, K,   CD, CK>  FirstElement() const;
+    incidence_iterator_t<grid_type, D, ANY, CD, ANY> FirstElement(unsigned k) const;
+
+    template<unsigned K> struct dim_to_codim : public grid_type::template dim_to_codim<K> {};
+    template<unsigned K> struct codim_to_dim : public grid_type::template codim_to_dim<K> {};
+
+    // incidence_iterator_t<grid_type, D, 0, CD, cd0::value>  FirstVertex() const; 
+    incidence_iterator_t<grid_type, D, 0,   CD, dim_to_codim<0>  ::value>  FirstVertex() const; 
+    incidence_iterator_t<grid_type, D, 1,   CD, dim_to_codim<1>  ::value>  FirstEdge() const; 
+    incidence_iterator_t<grid_type, D, 2,   CD, dim_to_codim<2>  ::value>  FirstFace() const; 
+
+    incidence_iterator_t<grid_type, D, codim_to_dim<1>::value, CD, 1>  FirstFacet() const; 
+    incidence_iterator_t<grid_type, D, codim_to_dim<0>::value, CD, 0>  FirstCell() const; 
+
   }; // class element_t<GRID,D,CD>
 
 
   // specialization: neither dimension nor codimension are known
   template<class GRID>
-  class element_t<GRID,ANY,ANY> : public element_base<GRID,ANY,ANY> {
-    typedef element_t   <GRID,ANY,ANY> self;
-    typedef element_base<GRID,ANY,ANY> base;
+  class element_t<GRID,ANY,ANY> : public element_base_t<GRID,ANY,ANY> {
+    typedef element_t     <GRID,ANY,ANY> self;
+    typedef element_base_t<GRID,ANY,ANY> base;
     typedef typename base::grid_type grid_type;
     typedef typename base::element_handle_type element_handle_type;
   public:
@@ -375,46 +689,45 @@ namespace complexnd {
       base::operator=(base(rhs.TheGrid(), rhs.dimension(), rhs.handle()));
       return *this;
     }
+
+    template<int K, int CK>
+    incidence_iterator_t<grid_type, ANY, K,   ANY, CK>  FirstElement() const;
+    incidence_iterator_t<grid_type, ANY, ANY, ANY, ANY> FirstElement(unsigned k) const;
+
+    template<unsigned K> struct dim_to_codim : public grid_type::template dim_to_codim<K> {};
+    template<unsigned K> struct codim_to_dim : public grid_type::template codim_to_dim<K> {};
+
+    // incidence_iterator_t<grid_type, D, 0, CD, cd0::value>  FirstVertex() const; 
+    incidence_iterator_t<grid_type, ANY, 0,   ANY, dim_to_codim<0>  ::value>  FirstVertex() const; 
+    incidence_iterator_t<grid_type, ANY, 1,   ANY, dim_to_codim<1>  ::value>  FirstEdge() const; 
+    incidence_iterator_t<grid_type, ANY, 2,   ANY, dim_to_codim<2>  ::value>  FirstFace() const; 
+
+    incidence_iterator_t<grid_type, ANY, codim_to_dim<1>::value, ANY, 1>  FirstFacet() const; 
+    incidence_iterator_t<grid_type, ANY, codim_to_dim<0>::value, ANY, 0>  FirstCell() const; 
+
   }; // class element_t<GRID,ANY,ANY>
 
 
 
-  //------------ constructors of element_t<> ----------------------
+  //----------------- constructors of element_t<> ------------------------------
   
   template<class GRID, int D, int CD>
   inline
   element_t<GRID,D,CD>::element_t(element_t<GRID,ANY,ANY> const& rhs) 
     : base(rhs.TheGrid(), typename base::element_handle_type(rhs.handle().h()))
-  { REQUIRE(rhs.dimension() == D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); }
+  { REQUIRE(rhs.dimension() == (unsigned)D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); }
 
 
   template<class GRID, int D, int CD>
   inline
   element_t<GRID,D,CD>&  element_t<GRID,D,CD>::operator=(element_t<GRID,ANY,ANY> const& rhs) 
   {
-    REQUIRE(rhs.dimension() == D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); 
+    REQUIRE(rhs.dimension() == (unsigned)D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); 
     base::operator=(base(rhs.TheGrid(), typename base::element_handle_type(rhs.handle().h())));
     return *this;
   }
 
-  
-  /*
-  template<class GRID>
-  template<int D, int CD>
-  inline
-  element_t<GRID,ANY,ANY>::element_t(element_t<GRID,D,CD> const& rhs) : base(rhs.TheGrid(), rhs.dimension(), rhs.handle()) {}
-
-  template<class GRID>
-  template<int D, int CD>
-  inline
-  element_t<GRID,ANY,ANY>& element_t<GRID,ANY,ANY>::operator=(element_t<GRID,D,CD> const& rhs) 
-  {
-    base::operator=(base(rhs.TheGrid(), rhs.dimension(), rhs.handle()));
-    return *this;
-  }
-  */
-
-  //------------------ comparison operators ------------------------
+  //------------------ comparison operators of element_t<> ------------------------
 
   // comparison
   template<class GRID, int D, int CD>
@@ -445,9 +758,9 @@ namespace complexnd {
   //------------------ sequence iterators ---------------------
 
   template<class GRID, int D, int CD> // = GRID::dim - D>
-  class element_iterator_t : public element_base<GRID,D,CD> {
+  class element_iterator_t : public element_base_t<GRID,D,CD> {
     typedef element_iterator_t<GRID,D,CD> self;
-    typedef element_base      <GRID,D,CD> base;
+    typedef element_base_t    <GRID,D,CD> base;
     typedef typename base::grid_type grid_type;
     typedef typename base::element_handle_type element_handle_type;
   public:
@@ -455,22 +768,22 @@ namespace complexnd {
     typedef element_type         value_type;
 
     element_iterator_t() {}
-    element_iterator_t(grid_type const&         gg, element_handle_type hh = 0) : base(gg,hh) {}
-    element_iterator_t(ref_ptr<grid_type const> gg, element_handle_type hh = 0) : base(gg,hh) {}
+    element_iterator_t(grid_type const&         gg, element_handle_type hh =  element_handle_type(0)) : base(gg,hh) {}
+    element_iterator_t(ref_ptr<grid_type const> gg, element_handle_type hh =  element_handle_type(0)) : base(gg,hh) {}
     element_iterator_t(element_iterator_t<GRID,ANY,ANY> const& rhs);
     self & operator=  (element_iterator_t<GRID,ANY,ANY> const& rhs);
 
-    bool IsDone() const { cb(); return valid();}
-    self& operator++()  { cv(); inc(); return *this;}
+    bool IsDone() const { cb(); return !valid();}
+    self& operator++()  { cv(); incr(); return *this;}
     value_type operator*() const { cv(); return value_type(TheGrid(), handle());}
   }; // class element_iterator_t<GRID,D,CD>
 
 
   // specialization: neither dimension nor codimension are known
   template<class GRID>
-  class element_iterator_t<GRID,ANY,ANY> : public element_base<GRID,ANY,ANY> {
+  class element_iterator_t<GRID,ANY,ANY> : public element_base_t<GRID,ANY,ANY> {
     typedef element_iterator_t<GRID,ANY,ANY> self;
-    typedef element_base      <GRID,ANY,ANY> base;
+    typedef element_base_t    <GRID,ANY,ANY> base;
     typedef typename base::grid_type grid_type;
     typedef typename base::element_handle_type element_handle_type;
   public:
@@ -490,7 +803,7 @@ namespace complexnd {
     }
 
     bool IsDone() const { cb(); return valid();}
-    self& operator++()  { cv(); inc(); return *this;}
+    self& operator++()  { cv(); incr(); return *this;}
     value_type operator*() const { cv(); return value_type(TheGrid(), dimension(), handle());}
  }; // class element_iterator_t<GRID,ANY,ANY>
 
@@ -500,36 +813,20 @@ namespace complexnd {
   inline
   element_iterator_t<GRID,D,CD>::element_iterator_t(element_iterator_t<GRID,ANY,ANY> const& rhs) 
     : base(rhs.TheGrid(), typename base::element_handle_type(rhs.handle().h()))
-  { REQUIRE(rhs.dimension() == D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); }
+  { REQUIRE(rhs.dimension() == (unsigned)D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); }
 
 
   template<class GRID, int D, int CD>
   inline
   element_iterator_t<GRID,D,CD>&  element_iterator_t<GRID,D,CD>::operator=(element_iterator_t<GRID,ANY,ANY> const& rhs) 
   {
-    REQUIRE(rhs.dimension() == D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); 
+    REQUIRE(rhs.dimension() == (unsigned)D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); 
     base::operator=(base(rhs.TheGrid(), typename base::element_handle_type(rhs.handle().h())));
     return *this;
   }
 
-  /*
-  template<class GRID>
-  template<int D, int CD>
-  inline
-  element_iterator_t<GRID,ANY,ANY>::element_iterator_t(element_iterator_t<GRID,D,CD> const& rhs) 
-    : base(rhs.TheGrid(), rhs.dimension(), rhs.handle()) {}
 
-  template<class GRID>
-  template<int D, int CD>
-  inline
-  element_iterator_t<GRID,ANY,ANY>& element_iterator_t<GRID,ANY,ANY>::operator=(element_iterator_t<GRID,D,CD> const& rhs) 
-  {
-    base::operator=(base(rhs.TheGrid(), rhs.dimension(), rhs.handle()));
-    return *this;
-  }
-  */
-
-  //------------------ comparison operators ------------------------
+  //------------------ comparison operators for element_iterator_t<>  ------------------------
 
   // comparison
   template<class GRID, int D, int CD>
@@ -565,13 +862,22 @@ namespace complexnd {
 
 
 
-  //------------------ incidence iterators ---------------------
+
+
+
+  //---------------------------------------------------------------------------------------
+  //--------------------------------- incidence iterators ---------------------------------
+  //---------------------------------------------------------------------------------------
+
 
   // Element<K>OnElement<D>Iterator 
   // CD = codim(D, GRID), CK = codim(K, GRID) 
   template<class GRID, int D, int K, int CD, int CK>
-  class incidence_iterator_t : public grid_types_complexnd<D> {
-    typedef incidence_iterator_t<GRID, D, K, CD, CK> self;
+  class incidence_iterator_base_t : 
+    public grid_types_ComplexND<D>, 
+    public dimension_mixin<incidence_iterator_base_t<GRID, D, K, CD, CK>, GRID, K, CK> 
+  {
+    typedef incidence_iterator_base_t<GRID, D, K, CD, CK> self;
   public:
     typedef GRID                          grid_type;
     typedef element_t<GRID, K, CK>        value_type;
@@ -579,50 +885,228 @@ namespace complexnd {
     typedef element_t<GRID, D, CD>        anchor_type;
     typedef element_handle_t<GRID, D, CD> anchor_handle_type;
     typedef typename grid_type::incidence_sequence incidence_sequence;
+    typedef dimension_mixin<incidence_iterator_base_t<GRID, D, K, CD, CK>, GRID, K, CK>  mixin;
   private:
-    ref_ptr<grid_type const> g;
-    int                      lh;
-    anchor_handle_type       a;
+    anchor_type  a;
+    unsigned     lh;
     
   public:
-    incidence_iterator_t() : g(0) {}
-    incidence_iterator_t(anchor_type const& A) : g(A.TheGrid()), a(A.handle()), lh(0) {}
+    incidence_iterator_base_t()  {}
+    // for K or CK != ANY
+    incidence_iterator_base_t(anchor_type const& A) : a(A), lh(0) {}
+    // for K and CK == ANY
+    incidence_iterator_base_t(anchor_type const& A, unsigned kk) : mixin(kk), a(A), lh(0) 
+    { 
+      REQUIRE(dimension() <= TheGrid().dimension(), 
+	      "dim=" << dimension() << "griddim="  << TheGrid().dimension(), 1); 
+    }
+  
+    //self& operator++() { cv();  ++lh; return *this;}
+    bool IsDone() const { cb(); return lh >= incidences().size();}
+    //    value_type        operator*() const { cv(); return value_type(TheGrid(), handle());}
+    value_handle_type handle()    const { cv(); return value_handle_type(incidences()[lh]);}
 
-    self& operator++() { cv();  ++lh; return *this;}
-    bool IsDone() const { cb(); return lh >= inc().size();}
-    value_type        operator*() const { cv(); return value_type(TheGrid(), handle());}
-    value_handle_type handle()    const { cv(); return value_handle_type(inc(lv));}
-    unsigned value_dimension() const { return K;}
+    // unsigned dimension()       const { return D;}
+    // unsigned value_dimension() const { return K;}
 
-    anchor_handle_type anchor_handle() const { cb(); return a;}
-    anchor_type        TheAnchor()     const { cb(); return anchor_type(TheGrid(), anchor_handle());}
-
-    bool bound() const { return g != 0;}
+    //  anchor_handle_type anchor_handle() const { cb(); return a.handle();}
+    anchor_type const&   TheAnchor()     const { cb(); return a;}
+    grid_type   const&   TheGrid()       const { cb(); return a.TheGrid();}
+ 
+    bool bound() const { return a.bound();}
     bool valid() const { return bound() && !IsDone();}
     void cb()    const { REQUIRE(bound(), "", 1);}
     void cv()    const { REQUIRE(valid(), "", 1);}
 
+    friend bool operator==(self const& lhs, self const& rhs) {  lhs.cb(); rhs.cb();  return lhs.lh == rhs.lh;}
+    friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs==rhs);}
+  protected:
+    void incr()  { cv(); ++lh;}
   private:
-    incidence_sequence const& inc() const 
-	{ cb(); return TheGrid().Incidence(dimension(), TheAnchor().handle())[value_dimension()];}
-    };
+    incidence_sequence const& incidences() const 
+	{ cb(); return TheGrid().Incidences(TheAnchor())[dimension()];}
+  }; // class incidence_iterator_base_t<GRID, D, K, CD, CK>
 
 
+  // primary template
   template<class GRID, int D, int K, int CD, int CK>
-  inline bool operator==(incidence_iterator_t<GRID,D,K,CD,CK> const& lhs, incidence_iterator_t<GRID,D,K,CD,CK> const& rhs)
-  { lhs.cb(); rhs.cb(); return lhs.handle() == rhs.handle();}
+  class incidence_iterator_t : public  incidence_iterator_base_t<GRID, D, K, CD, CK>
+  {
+    typedef  incidence_iterator_base_t<GRID, D, K, CD, CK> base;
+    typedef  incidence_iterator_t     <GRID, D, K, CD, CK> self;
+  public:
+    incidence_iterator_t() {}
+    incidence_iterator_t(typename base::anchor_type const& a) : base(a) {}
+    
+    self& operator++() { incr(); return *this;}
+    typename base::value_type  operator*() const { cv(); return typename base::value_type(TheGrid(), handle());}
+    
 
-  template<class GRID, int D, int K, int CD, int CK>
-  inline bool operator!=(incidence_iterator_t<GRID,D,K,CD,CK> const& lhs, incidence_iterator_t<GRID,D,K,CD,CK> const& rhs)
-  { return !(lhs==rhs);}
- 
+  };
+
+  // partial specialization for ANY
+  template<class GRID, int D, int CD>
+  class incidence_iterator_t<GRID, D, ANY, CD, ANY> : public  incidence_iterator_base_t<GRID, D, ANY, CD, ANY>
+  {
+    typedef  incidence_iterator_base_t<GRID, D, ANY, CD, ANY> base;
+    typedef  incidence_iterator_t     <GRID, D, ANY, CD, ANY> self;
+
+    int k;
+  public:
+    incidence_iterator_t() {}
+    incidence_iterator_t(typename base::anchor_type const& a, int kk) : base(a,kk) {}
+    // TODO: Add templated constructor for K, CK
+    
+    self& operator++() { incr(); return *this;}
+    typename base::value_type  operator*() const { cv(); return typename base::value_type(TheGrid(), dimension(), handle());}
+  };
+
+
+
+
+
+
+
+
+
+  //---------------------------------------------------------------------------------------------
+  //---------------------------------      inline members        --------------------------------
+  //---------------------------------------------------------------------------------------------
+
+
+
+
+  //------------------------------ inline members of element_base_t<> ---------------------------
+
+
+  template<class GRID, int D, int CD>
+  template<int K, int CK>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, K, CD, CK> element_t<GRID,D,CD>::FirstElement() const
+  { return incidence_iterator_t<GRID, D, K, CD, CK>(*this);}
+
+  template<class GRID, int D, int CD>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, ANY, CD, ANY> element_t<GRID,D,CD>::FirstElement(unsigned k) const
+  { return incidence_iterator_t<GRID, D, ANY, CD, ANY>(*this, k);}
+
+    // { return FirstElement<0, GRID::dim>();}  
+
+  template<class GRID, int D, int CD>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, 0, CD, element_t<GRID,D,CD>::template dim_to_codim<0>::value >
+  element_t<GRID,D,CD>::FirstVertex() const
+  { return incidence_iterator_t<GRID, D, 0, CD, dim_to_codim<0>::value >(*this);}
+
+  template<class GRID, int D, int CD>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, 1, CD, element_t<GRID,D,CD>::template dim_to_codim<1>::value >
+  element_t<GRID,D,CD>::FirstEdge() const
+  { return incidence_iterator_t<GRID, D, 1, CD, dim_to_codim<1>::value >(*this);}
+
+  template<class GRID, int D, int CD>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, 2, CD, element_t<GRID,D,CD>::template dim_to_codim<2>::value >
+  element_t<GRID,D,CD>::FirstFace() const
+  { return incidence_iterator_t<GRID, D, 2, CD, dim_to_codim<2>::value >(*this);}
+
+
+  template<class GRID, int D, int CD>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, element_t<GRID,D,CD>::template codim_to_dim<1>::value, CD, 1>
+  element_t<GRID,D,CD>::FirstFacet() const
+  { return incidence_iterator_t<GRID, D, codim_to_dim<1>::value, CD, 1>(*this);}
+
+  template<class GRID, int D, int CD>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, element_t<GRID,D,CD>::template codim_to_dim<0>::value, CD, 0>
+  element_t<GRID,D,CD>::FirstCell() const
+  { return incidence_iterator_t<GRID, D, codim_to_dim<0>::value, CD, 0>(*this);}
+
+
+
+  //-------------------------- partial specializations for ANY ----------------
+
+  template<class GRID>
+  template<int K, int CK>
+  incidence_iterator_t<typename element_t<GRID,ANY,ANY>::grid_type, ANY, K, ANY, CK> element_t<GRID,ANY,ANY>::FirstElement() const
+  { return incidence_iterator_t<GRID, ANY, K, ANY, CK>(*this);}
+
+  template<class GRID>
+  incidence_iterator_t<typename element_t<GRID,ANY,ANY>::grid_type, ANY, ANY, ANY, ANY> element_t<GRID,ANY,ANY>::FirstElement(unsigned k) const
+  { return incidence_iterator_t<GRID, ANY, ANY, ANY, ANY>(*this, k);}
+
+  template<class GRID>
+  incidence_iterator_t<typename element_t<GRID,ANY,ANY>::grid_type, ANY, 0, ANY, element_t<GRID,ANY,ANY>::template dim_to_codim<0>::value >
+  element_t<GRID,ANY,ANY>::FirstVertex() const
+  { return incidence_iterator_t<GRID, ANY, 0, ANY, dim_to_codim<0>::value >(*this);}
+
+  template<class GRID>
+  incidence_iterator_t<typename element_t<GRID,ANY,ANY>::grid_type, ANY, 1, ANY, element_t<GRID,ANY,ANY>::template dim_to_codim<1>::value >
+  element_t<GRID,ANY,ANY>::FirstEdge() const
+  { return incidence_iterator_t<GRID, ANY, 1, ANY, dim_to_codim<1>::value >(*this);}
+
+  template<class GRID>
+  incidence_iterator_t<typename element_t<GRID,ANY,ANY>::grid_type, ANY, 2, ANY, element_t<GRID,ANY,ANY>::template dim_to_codim<2>::value >
+  element_t<GRID,ANY,ANY>::FirstFace() const
+  { return incidence_iterator_t<GRID, ANY, 2, ANY, dim_to_codim<2>::value >(*this);}
+
+
+  template<class GRID>
+  incidence_iterator_t<typename element_t<GRID,ANY,ANY>::grid_type, ANY, element_t<GRID,ANY,ANY>::template codim_to_dim<1>::value, ANY, 1>
+  element_t<GRID,ANY,ANY>::FirstFacet() const
+  { return incidence_iterator_t<GRID, ANY, codim_to_dim<1>::value, ANY, 1>(*this);}
+
+  template<class GRID>
+  incidence_iterator_t<typename element_t<GRID,ANY,ANY>::grid_type, ANY, element_t<GRID,ANY,ANY>::template codim_to_dim<0>::value, ANY, 0>
+  element_t<GRID,ANY,ANY>::FirstCell() const
+  { return incidence_iterator_t<GRID, ANY, codim_to_dim<0>::value, ANY, 0>(*this);}
+
+
+
 
 
   //------------------------------ inline members of ComplexND<D> ---------------------------------
-
+ 
+  //---- specializations for ANY --------------
   // no initialization possible for run-time determined dimension
-  ComplexND<ANY>::ComplexND() {}
-  ComplexND<ANY>::ComplexND(int dim) : mixin(dim),  incidences(dim+1) {}
+  inline ComplexND<ANY>::ComplexND()  {}
+  inline ComplexND<ANY>::ComplexND(unsigned dim) : mixin(dim),  incidences(dim+1) {}
+
+  inline ComplexND<ANY>::archetype_handle 
+  ComplexND<ANY>::add_archetype(ComplexND<ANY>::archetype_type const& A)
+  { archetypes.push_back(A);  return archetypes.size() -1;}
+  inline ComplexND<ANY>::archetype_handle ComplexND<ANY>::add_archetype() { return add_archetype(archetype_type(dimension()-1));}
+
+  //---- specializations for D=0 --------------
+  inline ComplexND<0>::ComplexND(pointcloud p) : incidences(dimension() +1)
+  { incidences[0].resize(p.NumOfVertices());}
+
+  //---- specializations for D=1 --------------
+  // cyclic polygon - could go into source file
+  inline ComplexND<1>::ComplexND(polygon p) : incidences(dimension() +1) 
+  {
+    incidences[0].resize(p.NumOfVertices());
+    incidences[1].resize(p.NumOfEdges());
+    //unsigned v = 0, e = 0;
+    unsigned n = p.NumOfVertices() -1 ;
+    for( unsigned v = 0, e = 0; v < p.NumOfVertices(); ++v, ++e) {
+      incidences[0][v].resize(dimension()+1);
+      incidences[1][e].resize(dimension()+1);
+
+      unsigned succ_v = ( v < n   ? v+1 : 0);
+      unsigned prec_v = ( v > 0   ? v-1 : n);
+      unsigned succ_e = succ_v; unsigned prec_e = prec_v;
+      // v_{n-1} e_{e-1}   v0    e0   v1   e1 ...
+      //    *--------------*----------*-------  
+      incidences[0][v][1].push_back(e);
+      incidences[0][v][1].push_back(prec_e);
+      incidences[0][v][0].push_back(prec_v);
+      incidences[0][v][0].push_back(succ_v);
+      incidences[1][e][0].push_back(v);
+      incidences[1][e][0].push_back(succ_v);
+      incidences[1][e][1].push_back(prec_e);
+      incidences[1][e][1].push_back(succ_e);
+    }
+    
+    archetype_handle a = add_archetype(archetype_type(pointcloud(2)));
+    cell_archetype.resize(NumOfCells());
+    for(unsigned c = 0; c < NumOfCells(); ++c)
+      cell_archetype[c] = a;
+  }
 
   template<int D>
   template<int K, int CK>
@@ -638,6 +1122,17 @@ namespace complexnd {
   }
 
   template<int D>
+  inline typename ComplexND<D>::VertexIterator ComplexND<D>::FirstVertex() const { return VertexIterator(*this);}
+  template<int D>
+  inline typename ComplexND<D>::EdgeIterator   ComplexND<D>::FirstEdge()   const { return EdgeIterator(*this);}
+  template<int D>
+  inline typename ComplexND<D>::FaceIterator   ComplexND<D>::FirstFace()   const { return FaceIterator(*this);}
+  template<int D>
+  inline typename ComplexND<D>::FacetIterator  ComplexND<D>::FirstFacet()  const { return FacetIterator(*this);}
+  template<int D>
+  inline typename ComplexND<D>::CellIterator   ComplexND<D>::FirstCell()   const { return CellIterator(*this);}
+
+  template<int D>
   inline 
   typename ComplexND<D>::AnyElementIterator
   ComplexND<D>::FirstElement(unsigned d) const { return AnyElementIterator(*this, d);}
@@ -646,7 +1141,69 @@ namespace complexnd {
   inline 
   typename ComplexND<D>::AnyElementIterator
   ComplexND<D>::EndElement(unsigned d) const { return AnyElementIterator(*this, d, typename gt::any_element_handle(NumOfElements(d)));}
+
+
+  template<int D>
+  typename ComplexND<D>::archetype_type const& ComplexND<D>::ArchetypeOf(typename ComplexND<D>::Cell const& c) const 
+  { return archetypes[cell_archetype[c.handle()]]; }
   
 } // namespace complexnd
+
+
+
+
+
+//--------------------------------------------------------------------------------------------
+//----------------------------- global namespace specializations -----------------------------
+//--------------------------------------------------------------------------------------------
+
+
+//-----------------------------  grid types  -----------------------------  
+
+template<int D>
+struct grid_types<complexnd::ComplexND<D> > 
+  : public grid_types_base<complexnd::grid_types_ComplexND<D> > 
+{};
+
+//-----------------------------  element traits  -----------------------------  
+
+// vertex
+template<int D>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<D>, 0, D> > 
+  : public element_traits_vertex_base<complexnd::ComplexND<D> >
+{
+  typedef element_traits_vertex_base<complexnd::ComplexND<D> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef typename base::hasher_type_elem_base       hasher_type;
+};
+
+// spec. vertex for ANY
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>, 0, complexnd::ANY> > 
+  : public element_traits_vertex_base<complexnd::ComplexND<complexnd::ANY> >
+{
+  typedef element_traits_vertex_base<complexnd::ComplexND<complexnd::ANY> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef base::hasher_type_elem_base                hasher_type;
+};
+
+
+
+//------------------------------- total grid functions --------------------------------
+
+// vertex
+template<int D, int K, class T>
+class grid_function<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T>
+  : public grid_function_vector<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T> 
+{
+  typedef grid_function_vector<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T> base;
+  typedef complexnd::ComplexND<D>                                                        grid_type;
+public:
+  grid_function() {}
+  grid_function(grid_type const& g) : base(g) {}
+  grid_function(grid_type const& g, T const& t) : base(g,t) {}
+};
+
+
 
 #endif

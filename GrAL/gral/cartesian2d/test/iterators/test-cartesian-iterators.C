@@ -11,6 +11,8 @@ int main() {
   using namespace std;
   using namespace cartesian2d;
 
+  REQUIRE_ALWAYS( RegGrid2D::BeginArchetype()->NumOfVertices() == 4, "", 1);
+
   ofstream* out = new ofstream("vertex-iterator.out");
   int NX = 4, NY = 4;
   for(int nx = 1; nx < NX; ++nx) {

@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-ALLDEPMODULES += 
+ALLDEPMODULES += gral/testing gral/cartesian2d
 LOCALSOURCES =  test-complexnd-construct.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
@@ -15,7 +15,7 @@ include $(DEPS)
 
 
 
-LIBS = 
+LIBS = -lgral-cartesian2d
 
 
 

@@ -1,0 +1,111 @@
+ComplexND<2> incidences:
+Anchor dimension: 0
+  Value dimension: 0
+  --------------------------
+  Value dimension: 1
+  --------------------------
+  Value dimension: 2
+  --------------------------
+=================================
+Anchor dimension: 1
+  Value dimension: 0
+  --------------------------
+  Value dimension: 1
+  --------------------------
+  Value dimension: 2
+  --------------------------
+=================================
+Anchor dimension: 2
+  Value dimension: 0
+    0: 4 incidences of dim 0: 0 3 4 1 
+    1: 4 incidences of dim 0: 1 4 5 2 
+    2: 4 incidences of dim 0: 3 6 7 4 
+    3: 4 incidences of dim 0: 4 7 8 5 
+  --------------------------
+  Value dimension: 1
+  --------------------------
+  Value dimension: 2
+  --------------------------
+=================================
+ComplexND<ANY> incidences:
+Anchor dimension: 0
+  Value dimension: 0
+  --------------------------
+  Value dimension: 1
+  --------------------------
+  Value dimension: 2
+  --------------------------
+=================================
+Anchor dimension: 1
+  Value dimension: 0
+  --------------------------
+  Value dimension: 1
+  --------------------------
+  Value dimension: 2
+  --------------------------
+=================================
+Anchor dimension: 2
+  Value dimension: 0
+    0: 4 incidences of dim 0: 0 3 4 1 
+    1: 4 incidences of dim 0: 1 4 5 2 
+    2: 4 incidences of dim 0: 3 6 7 4 
+    3: 4 incidences of dim 0: 4 7 8 5 
+  --------------------------
+  Value dimension: 1
+  --------------------------
+  Value dimension: 2
+  --------------------------
+=================================
+pts1.NumOfVertices(): 2
+pts2.NumOfVertices(): 2
+polygon1.NumOfVertices(): 5
+polygon2.NumOfVertices(): 5
+Anchor dimension: 0
+  Value dimension: 0
+    0: 2 incidences of dim 0: 4 1 
+    1: 2 incidences of dim 0: 0 2 
+    2: 2 incidences of dim 0: 1 3 
+    3: 2 incidences of dim 0: 2 4 
+    4: 2 incidences of dim 0: 3 0 
+  --------------------------
+  Value dimension: 1
+    0: 2 incidences of dim 1: 0 4 
+    1: 2 incidences of dim 1: 1 0 
+    2: 2 incidences of dim 1: 2 1 
+    3: 2 incidences of dim 1: 3 2 
+    4: 2 incidences of dim 1: 4 3 
+  --------------------------
+=================================
+Anchor dimension: 1
+  Value dimension: 0
+    0: 2 incidences of dim 0: 0 1 
+    1: 2 incidences of dim 0: 1 2 
+    2: 2 incidences of dim 0: 2 3 
+    3: 2 incidences of dim 0: 3 4 
+    4: 2 incidences of dim 0: 4 0 
+  --------------------------
+  Value dimension: 1
+    0: 2 incidences of dim 1: 4 1 
+    1: 2 incidences of dim 1: 0 2 
+    2: 2 incidences of dim 1: 1 3 
+    3: 2 incidences of dim 1: 2 4 
+    4: 2 incidences of dim 1: 3 0 
+  --------------------------
+=================================
+Anchor dimension: 0
+  Value dimension: 0
+  --------------------------
+  Value dimension: 1
+  --------------------------
+=================================
+Anchor dimension: 1
+  Value dimension: 0
+    0: 2 incidences of dim 0: 0 1 
+    1: 2 incidences of dim 0: 1 2 
+    2: 2 incidences of dim 0: 2 3 
+    3: 2 incidences of dim 0: 3 4 
+    4: 2 incidences of dim 0: 4 0 
+  --------------------------
+  Value dimension: 1
+  --------------------------
+=================================
