@@ -134,7 +134,11 @@ public:
 
     return self(R);
   }
-  // static self inverse();
+  static self inverse(self const& A) {
+    typedef matrix_traits<matrix_type> mt;
+    matrix_type I = mt::inverse(A.TheMatrix());
+    return self(I, - (I*A.TheTranslation()));
+  }
 };
 
 template<class MATRIX, class ARGTYPE, class RESTYPE>
