@@ -14,10 +14,12 @@
 /*! grid vertex isomorphism 
    \ingroup gridmorphisms
 
-   \todo Specialize if grids have consecutive handles
-   \todo Add support for inverse mapping
+   \todo Specialize if both grids have consecutive handles
    \todo Make it independent of element being a vertex type
    (using map_element_iter_name<> like in partial_grid_function)
+   \todo Can temporary vertex objects be avoided?
+   \todo make \code morphism[Vertex] = Vertex \endcode possible 
+         (currently assignment possible only for vertex_handle)
  */
 template<class G_DEF, class G_IMG>
 class vertex_morphism
