@@ -22,6 +22,8 @@ public:
   typedef Triang3D              grid_type; 
   typedef grid_types<grid_type> gt;
   typedef gt::Vertex            Vertex;
+  typedef gt::Edge              Edge;
+  typedef gt::Facet             Facet;
   typedef gt::Cell              Cell;
   typedef gt::VertexOnCellIterator VertexOnCellIterator;
 private:
@@ -107,14 +109,20 @@ public:
     void init(double const* p)
       { xyz[0] = p[0]; xyz[1] = p[1]; xyz[2] = p[2]; }
   };
-
-
+  typedef double scalar_type;
 
 
   coord_proxy coord(Vertex const& v) 
     { return coord_proxy(xyz + 3*v.handle());}
   coord_type  coord(Vertex const& v) const 
     { return coord_type (xyz + 3*v.handle());}
+
+  //! Length of an edge
+  inline scalar_type length(Edge const& e) const;
+
+  //! area of a facet
+  inline scalar_type area(Facet const& f)  const;
+
 
   //! Center of intertia of \c c
   coord_type center(Cell const& c) const 
@@ -124,13 +132,13 @@ public:
   coord_type barycenter(Cell const& c) const { return center(c);}
 
   //! solid angle of the wedge of vertex \c vc, in steradians (3D)   
-  double solid_angle(VertexOnCellIterator const& vc) const;
+  scalar_type solid_angle(VertexOnCellIterator const& vc) const;
 
   /*! ratio of solid angle of wedge \c vc to complete solid angle
 
       The ratios of the wedges of an internal regular vertex sum up to 1.
    */
-  double solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(4*M_PI);}
+  scalar_type solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(4*M_PI);}
 
 };
 
@@ -194,9 +202,25 @@ inline void assign_point(stored_geometry_triang3d::coord_proxy p,
 }  
 
 
+inline stored_geometry_triang3d::scalar_type 
+stored_geometry_triang3d::length(stored_geometry_triang3d::Edge const& e) const 
+{ 
+  typedef algebraic_primitives<coord_type> ap;
+  return ap::distance(coord(e.V1()), coord(e.V2()));
+}
 
+inline stored_geometry_triang3d::scalar_type 
+stored_geometry_triang3d::area(stored_geometry_triang3d::Facet const& f) const
+{
+  typedef algebraic_primitives<coord_type> ap;
+  gt::VertexOnFacetIterator vf(f);
+  coord_type p0 = coord(*vf); ++vf;
+  coord_type p1 = coord(*vf); ++vf;
+  coord_type p2 = coord(*vf);
+  return ap::triangle_area(p0,p1,p2);
+}
 
-inline double 
+inline stored_geometry_triang3d::scalar_type 
 stored_geometry_triang3d::solid_angle
 (stored_geometry_triang3d::VertexOnCellIterator const& vc) const
 {
