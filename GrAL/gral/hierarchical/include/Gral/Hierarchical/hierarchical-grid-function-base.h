@@ -21,23 +21,21 @@ namespace hierarchical {
       We could also use a non-template wrappers using template members to access the
       flat grid functions.
   */
-  template<class E, class T, template<class EE, class TT> class GF>
-  class hier_grid_function_base : public E::hier_grid_type::observer_type {
-    typedef hier_grid_function_base<E,T, GF>              self;
-    typedef typename E::hier_grid_type::observer_type base;
+  template<class HGRID, class GF> 
+  class hier_grid_function_base : public HGRID::observer_type { // E::hier_grid_type::observer_type {
+    typedef hier_grid_function_base<HGRID, GF>              self;
+  public:
+    typedef HGRID                                     hier_grid_type;
+    typedef typename hier_grid_type::observer_type    base;
     typedef typename base::notifier_base              notifier_base;
     typedef typename base::notifier_type              notifier_type;
 
   public:
-    typedef E                                             element_type;
-    typedef T                                             value_type;
-    typedef typename E::hier_grid_type                    hier_grid_type;
-    typedef typename E::flat_element_type                 flat_element_type;
-    typedef typename hier_grid_type::level_handle         level_handle;
-    typedef GF<flat_element_type,T>                       flat_gf_type; 
-    //    typedef typename flat_gf_type::value_type             value_type;
+    typedef GF                                            flat_gf_type; 
+    typedef typename flat_gf_type::value_type             value_type;
     typedef typename flat_gf_type::reference              reference;
     typedef typename flat_gf_type::const_reference        const_reference;
+    typedef typename hier_grid_type::level_handle         level_handle;
     
     hier_grid_table<hier_grid_type, flat_gf_type> gfs;
     // this value may be used to fill automatically added layers
@@ -52,6 +50,13 @@ namespace hierarchical {
       set_value(t);
       connect(&gg);
     }
+    hier_grid_function_base(ref_ptr<hier_grid_type const> gg) : gfs(gg), default_val_set(false) { connect(& (*gg));}
+    hier_grid_function_base(ref_ptr<hier_grid_type const> gg, value_type t) 
+      : gfs(gg), default_val_set(true), default_val(t)
+    { 
+      set_value(t);
+      connect(&(*gg));
+    }
 
     void init(hier_grid_type const& gg, value_type const& t); 
     void set_grid(hier_grid_type const& gg);
@@ -64,8 +69,11 @@ namespace hierarchical {
     ref_ptr<const hier_grid_type> TheGrid () const { return gfs.TheGrid();}
     ref_ptr<const hier_grid_type> TheHGrid() const { return gfs.TheGrid();}
 
-    reference       operator[](element_type const& e)       { return gfs[e.level()][e.Flat()];}
-    const_reference operator()(element_type const& e) const { return gfs(e.level())(e.Flat());}
+
+    template<class ELEM>
+    reference       operator[](ELEM const& e)       { return gfs[e.level()][e.Flat()];}
+    template<class ELEM>
+    const_reference operator()(ELEM const& e) const { return gfs(e.level())(e.Flat());}
 
     flat_gf_type      & operator[](level_handle lev)       { cv(lev); return gfs[lev];}
     flat_gf_type const& operator()(level_handle lev) const { cv(lev); return gfs(lev);}
