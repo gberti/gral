@@ -7,7 +7,7 @@
 #include "Gral/Distributed/grid-to-mpi-graph.h"
 
 #include <vector>
-#include "Container/operators.h"
+#include "Utility/assigment-operators.h"
 
 // #include "IO/iomgr.h"
 
@@ -215,8 +215,8 @@ template<class ReceiverIt>
 Connector GetRecvConnector(ReceiverIt rb, ReceiverIt re, unsigned sz, const mpi_proc& Sender)
 { 
   typedef typename ReceiverIt::value_type T;
-  return Connector(new mpi_receive_connector<ReceiverIt,assign<T> >
-		   (rb,re,sz,Sender, assign<T>())); 
+  return Connector(new mpi_receive_connector<ReceiverIt,assignment_operators::assign>
+		   (rb,re,sz,Sender, assignment_operators::assign())); 
 }
 
 template<class ReceiverIt, class AssignOp>

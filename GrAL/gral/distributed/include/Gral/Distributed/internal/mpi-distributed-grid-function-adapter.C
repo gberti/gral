@@ -8,7 +8,7 @@
 
 #include <algorithm>  // STL
 
-#include "Container/operators.h"
+#include "Utility/assignment-operators.h"
 #include "Gral/Base/restricted-grid-function-adapter.h"
 
 
@@ -195,7 +195,7 @@ void distributed_grid_function_adapter<GF,DistributedG>::do_shared_ranges()
 					TheOverlap().elements(tpE(),*Nb).shared()),
 			    TheOverlap().elements(tpE(),*Nb).shared().size(),
 			    TheDistributedGrid().Proc(*Nb),
-			    add_assign<T>()));
+			    assigment_operators::add_assign()));
       }
     }
   }
