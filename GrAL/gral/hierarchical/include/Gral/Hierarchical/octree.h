@@ -121,8 +121,8 @@ private:
   
 
   // Forbidden for the moment
-  //  Octree(Octree const&);
-  //  Octree& operator=(Octree const&);
+  Octree(Octree const&);
+  Octree& operator=(Octree const&);
 public:
   /*! \name Constructors
    */
@@ -146,8 +146,8 @@ public:
 	    pattern_grid_type   const& refpat);
   //@}
 
-  ref_ptr<const self>               TheOctree() const { return ref_ptr<const self>(this);}
-  ref_ptr<const hier_grid_type>     TheHierGrid() const { return ref_ptr<const hier_grid_type>(&levels);}
+  ref_ptr<const self>               TheOctree()       const { return ref_ptr<const self>(*this);}
+  ref_ptr<const hier_grid_type>     TheHierGrid()     const { return ref_ptr<const hier_grid_type>(levels);}
   ref_ptr<const pattern_grid_type>  ThePatternGrid()  const { return TheHierGrid()->ThePatternGrid();}
   ref_ptr<const flat_grid_type>     LevelGrid(level_handle lev) const 
   { return ref_ptr<const flat_grid_type>(levels(lev));}
@@ -366,9 +366,9 @@ public:
   public:
     octree_element_base_t() {}
     explicit
-    octree_element_base_t(octree_type const* o)
+    octree_element_base_t(octree_type const& o)
       : oct(o), lev(o->coarsest_level()) {}
-    octree_element_base_t(octree_type const* o,         level_handle lv)
+    octree_element_base_t(octree_type const& o,         level_handle lv)
       : oct(o), lev(lv) {}
     explicit
     octree_element_base_t(ref_ptr<const octree_type> o)
@@ -426,7 +426,7 @@ public:
 
     leaf_cell_iterator_t() {}
     leaf_cell_iterator_t(grid_type const& o)
-      : base(&o, o.TheOctree()->coarsest_level()),
+      : base(o, o.TheOctree()->coarsest_level()),
       c(o.TheOctree()->ActiveRange(o.TheOctree()->coarsest_level())->FirstCell())
     { make_valid();}
     leaf_cell_iterator_t(ref_ptr<const grid_type> o)
