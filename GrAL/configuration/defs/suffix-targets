@@ -11,13 +11,23 @@
 distclean: realclean
 clobber:   realclean
 
+
+
+###########################
+##      Checks           ##
+###########################
+
 # build test programs
 test:
 
-# perform checks with test programs
-check:
+check: module-check
+	(cd test; $(MAKE) check DEPS='')
 
-# new: libclean
+# hook for modules
+module-check:
+
+test-new-check-clean:
+	(cd test; $(MAKE) new-check-clean)
 
 #####################################################################
 # This is the central place of specifying which files to clean
@@ -131,17 +141,6 @@ copy-doxy:
 	mkdir -p $(DOCDEST)/$(DOXYPATH)
 	cp -r $(DOXYPATH)/* $(DOCDEST)/$(DOXYPATH)
 
-###########################
-##      Checks           ##
-###########################
-
-check: module-check
-
-# hook for modules
-module-check:
-
-test-new-check-clean:
-	(cd test; $(MAKE) new-check-clean)
 
 ###########################
 ##  Standard suffix rule ##
