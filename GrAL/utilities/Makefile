@@ -1,16 +1,6 @@
 export CONFIG:=$(PWD)/mk.config
-
 include $(CONFIG)
-unexport PWD
 
-export PACKAGE:=utilities#
-
-export DEBUG
-export CCC
-#export CCFLAGS
-export LIBNAME:=$(PACKAGE)#
-export LIBDIR
-#export IFLAGS
 
 TARGET=all
 

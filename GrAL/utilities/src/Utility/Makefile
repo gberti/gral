@@ -17,21 +17,21 @@ all: compile lib
 
 compile: makefile
 	(cd $(OBJDIR);\
-         gmake compile SRC="$(LOCALSOURCES)")
+         $(MAKE) compile SRC="$(LOCALSOURCES)")
 
 lib: makefile
 	(cd $(OBJDIR); \
-         gmake lib SRC="$(LOCALSOURCES)" IBDIR="$(LIBDIR)" LIB="lib$(LIBNAME).a")
+         $(MAKE) lib SRC="$(LOCALSOURCES)" IBDIR="$(LIBDIR)" LIB="lib$(LIBNAME).a")
 
 partial-clean: makefile
-	(cd $(OBJDIR); gmake clean DEPS="")
+	(cd $(OBJDIR); $(MAKE) clean DEPS="")
 
 
 clean: stdclean makefile
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
 	rm -f .depend *.oogl *.out 
-	(cd $(OBJDIR); gmake clean DEPS="")
+	(cd $(OBJDIR); $(MAKE) clean DEPS="")
 	rm -f $(OBJDIR)/Makefile
 	rm -rf tempinc/*.o
 

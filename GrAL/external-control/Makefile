@@ -1,16 +1,6 @@
 export CONFIG:=$(PWD)/mk.config
 include $(CONFIG)
 
-# exporting PDW could give trouble in subdir Makefiles
-# which try to give default values to other  variables such as CONFIG
-# in order to enable direct make invocation in the subdirectory
-unexport PWD 
-
-export LIBDIR
-
-# The name of the library to be generated
-export IOLIB:=control-device#
-
 TARGET=all
 
 all:

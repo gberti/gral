@@ -19,21 +19,21 @@ all: compile lib
 
 compile: makefile
 	(cd $(OBJDIR);\
-         gmake compile SRC="$(LOCALSOURCES)")
+         $(MAKE) compile SRC="$(LOCALSOURCES)")
 
 lib: makefile
 	mkdir -p $(LIBDIR)
 	(cd $(OBJDIR); \
-         gmake lib SRC="$(LOCALSOURCES)" LIBDIR="$(LIBDIR)" LIB="lib$(IOLIB).a")
+         $(MAKE) lib SRC="$(LOCALSOURCES)" LIBDIR="$(LIBDIR)" LIB="lib$(IOLIB).a")
 
 partial-clean: makefile
-	(cd $(OBJDIR); gmake clean DEPS="")
+	(cd $(OBJDIR); $(MAKE) clean DEPS="")
 
 
 clean: stdclean makefile
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
 	rm -f .depend *.oogl *.out 
-	(cd $(OBJDIR); gmake clean DEPS="")
+	(cd $(OBJDIR); $(MAKE) clean DEPS="")
 	rm -rf tempinc/*.o
 
