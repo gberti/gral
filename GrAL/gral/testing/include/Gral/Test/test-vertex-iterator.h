@@ -18,6 +18,8 @@
 #include "Gral/Test/test-vertex-iterator.C"
 #else
 
+namespace GrAL {
+
 /*! \brief Test of vertex iterators
 
     Models of $GrAL VertexIterator are tested.
@@ -25,7 +27,7 @@
     \ingroup sequenceiteratortest
 */
 template<class G> 
-bool test_vertex_iterator(G const& g, std::ostream & out);
+bool test_vertex_iterator(G const& g, ::std::ostream & out);
 
 /*! \brief Test of vertex iterators
 
@@ -34,7 +36,9 @@ bool test_vertex_iterator(G const& g, std::ostream & out);
     \ingroup sequenceiteratortest
 */
 template<class G, class GT = grid_types<G> >
-bool test_vertex_iterator(G const& g, std::ostream & out, GT);
+bool test_vertex_iterator(G const& g, ::std::ostream & out, GT);
+
+} // namespace GrAL 
 
 #endif
 

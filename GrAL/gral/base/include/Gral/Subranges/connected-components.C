@@ -6,6 +6,7 @@
 #include "Gral/Subranges/connected-components.h"
 #include <queue>
 
+namespace GrAL {
 namespace connected_components {
 
   template<class GT>
@@ -37,7 +38,7 @@ namespace connected_components {
 	  }
 	  */
 
-	  std::queue<cell_handle> Q;
+	   ::std::queue<cell_handle> Q;
 	  Q.push(c.handle());
 	  comps[*c] = current_component;
 	  germs       .push_back(*c); // <=> germs[current_component] = *c;
@@ -62,4 +63,6 @@ namespace connected_components {
   }
 
 } // namespace connected_components
+} // namespace GrAL 
+
 #endif

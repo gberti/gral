@@ -6,12 +6,14 @@
 
 #include "Gral/Grids/Complex2D/all.h"
 
-#include <map> // STL
-#include <algorithm> // STL
+#include <map>
+#include <algorithm> 
 
 #include "Gral/Base/vtuple2d.h"
 #include "Gral/Grids/Complex2D/stored-geometry.h"
 
+
+namespace GrAL {
 
 //---------------  construction & destruction  ----------------------
 
@@ -97,7 +99,7 @@ void Complex2D::calculate_vertex_cells()
 void Complex2D::calculate_neighbour_cells()
 {
   typedef vtuple_2d<Complex2D> vtuple;
-  typedef std::map<vtuple, FacetOnCellIterator, std::less<vtuple> > FacetTable;
+  typedef ::std::map<vtuple, FacetOnCellIterator, ::std::less<vtuple> > FacetTable;
   FacetTable Facets;
   CalculateNeighbourCells(*this,*this,Facets);
 
@@ -158,3 +160,5 @@ Complex2D::add_archetype(Complex2D::archetype_type const& A, int nv)
 
   return  arch_for_n_vertices[nv];
 }
+
+} // namespace GrAL 

@@ -5,6 +5,8 @@
 
 #include "Gral/Grids/Cartesian3D/cartesian3d.h"
 
+namespace GrAL {
+
 namespace cartesian3d {
 
   /*! A mapped geometry for CartesianGrid3D
@@ -105,6 +107,8 @@ private:
     } 
 };
 
-}; // namespace cartesian3d
+} // namespace cartesian3d
+
+} // namespace GrAL 
 
 #endif

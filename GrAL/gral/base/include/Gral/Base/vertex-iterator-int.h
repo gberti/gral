@@ -7,6 +7,8 @@
 #include "Utility/ref-ptr.h"
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 template<class GT>
 class vertex_iterator_int;
 
@@ -62,7 +64,7 @@ template<class GT>
 inline bool operator< (vertex_iterator_int<GT> const& lhs, 
 		       vertex_iterator_int<GT> const& rhs) { return (rhs.v < lhs.v);}
 
-#ifndef GRAL_INCLUDES_RELOPS
+  // #ifndef GRAL_INCLUDES_RELOPS
 template<class GT>
 inline bool operator!=(vertex_iterator_int<GT> const& lhs, 
 		       vertex_iterator_int<GT> const& rhs) { return !(lhs == rhs);}
@@ -79,6 +81,8 @@ template<class GT>
 inline bool operator>=(vertex_iterator_int<GT> const& lhs, 
 		       vertex_iterator_int<GT> const& rhs) { return !(lhs < rhs);}
 
-#endif
+  //#endif
+
+} // namespace GrAL 
 
 #endif

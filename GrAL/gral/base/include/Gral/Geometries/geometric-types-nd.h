@@ -8,6 +8,8 @@
 
 #include <vector>
 
+namespace GrAL {
+
 /*! \defgroup geometrictypes   Geometric types 
 
     Generic geometric types for combinatorial grid elements.
@@ -68,8 +70,8 @@ public:
     return TheGeom()->coord(*v1)  - TheGeom()->coord(*v2);
     //return TheGeom()->coord(ed.V1()) - TheGeom()->coord(ed.V2());
   }
-  std::vector<typename base::coord_type> directions(typename base::Edge ed) const 
-  { return std::vector<typename base::coord_type>(1,direction(ed));}
+   ::std::vector<typename base::coord_type> directions(typename base::Edge ed) const 
+  { return  ::std::vector<typename base::coord_type>(1,direction(ed));}
 };
 
 
@@ -83,8 +85,8 @@ public:
 
   using base::directions;
 
-  std::vector<typename base::coord_type> directions(typename base::Face f)  const { 
-    std::vector<typename base::coord_type> res(2);
+   ::std::vector<typename base::coord_type> directions(typename base::Face f)  const { 
+     ::std::vector<typename base::coord_type> res(2);
     // typename base::EdgeIterator e = f.FirstEdge();
     res[0] = direction(*f.FirstEdge());
     //FIXME: Not OK: could be parallel, e.g. cartesiannd::grid<N>!
@@ -289,5 +291,6 @@ public:
     }
 };
 
+} // namespace GrAL 
 
 #endif

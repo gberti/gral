@@ -10,6 +10,8 @@
 #include "Gral/Partitioning/grid-to-metis.h"
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 template<class GRID>
 void write_metis_cell_graph(GRID const& G, 
                             std::ostream& out)
@@ -189,5 +191,7 @@ extern void metis_cell_graph_format(GRID const& G,
     };
   };
 };
+
+} // namespace GrAL 
 
 #endif

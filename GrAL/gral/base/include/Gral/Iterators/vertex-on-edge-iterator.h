@@ -3,7 +3,10 @@
 
 // $LICENSE
 
+
 #include "Gral/Base/common-grid-basics.h"
+
+namespace GrAL {
 
 template<class GRID, class GT = grid_types<GRID> >
 class vertex_on_edge_iterator
@@ -37,5 +40,7 @@ public:
   bool bound() const { return e.valid();}
   bool valid() const { return bound() && 0 <= lv && lv <= 1;}
 };
+
+} // namespace GrAL 
 
 #endif

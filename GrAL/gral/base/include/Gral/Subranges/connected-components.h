@@ -8,6 +8,8 @@
 
 #include <queue>
 
+namespace GrAL {
+
 /*!  \brief Tools for handling connected components of grids
 
     Two cells are considered connected, if they share a facet.
@@ -105,7 +107,7 @@ namespace connected_components {
     typedef partial_grid_function<Cell,bool>        visited_table_type;
   private:
     component_type const* comp;
-    std::queue<cell_handle> Q;
+     ::std::queue<cell_handle> Q;
     visited_table_type      visited;
   public:
     cell_iterator() : comp(0) {}
@@ -180,8 +182,8 @@ namespace connected_components {
   private:
     range_type   const*         g;
     mutable grid_function<Cell, int> comps; // map cells to component number
-    mutable std::vector<Cell>        germs; // map component number to a cell
-    mutable std::vector<unsigned>    num_of_cells; // number of cell of comp. #i
+    mutable  ::std::vector<Cell>        germs; // map component number to a cell
+    mutable  ::std::vector<unsigned>    num_of_cells; // number of cell of comp. #i
     mutable int num_of_components;
     mutable bool initialized;
   public:
@@ -283,6 +285,8 @@ namespace connected_components {
 
 
 } // namespace connected_components
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Subranges/connected-components.C"

@@ -5,6 +5,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 // OBSOLETE. DO NOT USE.
 // this requires that G1 has been constructed from G2
 // and hence corresponding cells come at the same position
@@ -57,5 +59,7 @@ void copy_grid_function(GFsrc    const& src,       // in
     ++e_src; 
   }
 }
+
+} // namespace GrAL 
 
 #endif

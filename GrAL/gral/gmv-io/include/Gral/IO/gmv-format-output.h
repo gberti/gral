@@ -11,7 +11,7 @@
 #include "Container/heterogeneous-list.h"
 #include "Utility/as-string.h"
 
-
+namespace GrAL {
 
 /*! \brief Output adapter for the GMV format base class.
    
@@ -110,7 +110,7 @@ public:
   
 };
 
-
+} // namespace GrAL 
 
 
 #endif

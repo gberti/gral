@@ -11,6 +11,8 @@
 
 #include "Container/my-hash-map.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 // Outline of algorithm:
@@ -41,8 +43,8 @@ void CalculateNeighborCells(NBF             &  Nb,          // out
 { 
   typedef grid_types<CELLSET> gt;
   typedef vertex_set<typename gt::Facet> vertex_set_type;
-  typedef STDHASH::hash_map<vertex_set_type,
-                            typename gt::FacetOnCellIterator> FACETMAP;
+  typedef ::STDHASH::hash_map<vertex_set_type,
+                              typename gt::FacetOnCellIterator> FACETMAP;
   FACETMAP facet_map;
   CalculateNeighborCells(Nb,cell_set,facet_map, gt()); 
 
@@ -99,5 +101,7 @@ void CalculateNeighborCells(NBF           &  NB,
   // because they have been encountered exactly once.
 
 }
+
+} // namespace GrAL 
 
 #endif

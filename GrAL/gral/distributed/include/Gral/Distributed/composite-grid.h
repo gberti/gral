@@ -8,6 +8,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Distributed/overlapping-grid.h"
 
+namespace GrAL {
+
 /*! \defgroup compositegrids Composite Grids
     \ingroup distributedgrids
     
@@ -101,6 +103,8 @@ public:
 
 template<class CoarseG, class FineG>
 void check_composite_grid(const CompositeGrid<CoarseG,FineG>& CG);
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/composite-grid.C"

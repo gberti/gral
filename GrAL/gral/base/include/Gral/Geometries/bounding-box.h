@@ -5,6 +5,7 @@
 
 #include "Geometry/box.h"
 
+namespace GrAL {
 
 /*! \defgroup gridboundingbox  Bounding Boxes of Grids
 
@@ -63,5 +64,6 @@ get_grid_bounding_box(GRID const& G, GEOM const& Geom)
   return get_grid_iter_bounding_box(G.FirstVertex(), Geom);
 } 
 
+} // namespace GrAL 
 
 #endif

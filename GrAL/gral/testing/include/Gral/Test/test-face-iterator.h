@@ -18,6 +18,8 @@
 
 #else
 
+namespace GrAL {
+
 /*! \brief Test of face iterators
 
     Models of $GrAL FaceIterator are tested.
@@ -25,7 +27,7 @@
     \ingroup sequenceiteratortest
 */
 template<class G>
-bool test_face_iterator(G const& g, std::ostream & out);
+bool test_face_iterator(G const& g, ::std::ostream & out);
 
 /*! \brief Test of face iterators
 
@@ -34,7 +36,9 @@ bool test_face_iterator(G const& g, std::ostream & out);
     \ingroup sequenceiteratortest
 */
 template<class G, class GT>
-bool test_face_iterator(G const& g, std::ostream & out, GT);
+bool test_face_iterator(G const& g, ::std::ostream & out, GT);
+
+} // namespace GrAL 
 
 #endif
 

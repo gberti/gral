@@ -18,7 +18,7 @@
 #include "Utility/pre-post-conditions.h"
 #include "Utility/checked-istream.h"
 
-
+namespace GrAL {
 
 
 class VertexIterator_istream_complex2d;
@@ -47,7 +47,7 @@ public:
 private:
   //------------- DATA -------------
   int               offset; // start of vertex numbering 
-  mutable std::istream    * in;
+  mutable  ::std::istream    * in;
   mutable checked_istream   checked_in;       
   bool              is_in_owned;
 
@@ -59,8 +59,8 @@ private:
 
 public:
   IstreamComplex2DFmt_base();
-  IstreamComplex2DFmt_base(std::string const& file, int off = 0);
-  IstreamComplex2DFmt_base(std::istream     & is,   int off = 0);
+  IstreamComplex2DFmt_base( ::std::string const& file, int off = 0);
+  IstreamComplex2DFmt_base( ::std::istream     & is,   int off = 0);
 
   IstreamComplex2DFmt_base(self const& rhs) {                  copy(rhs); }
   self & operator=        (self const& rhs) { if(this != &rhs) copy(rhs); return *this;}
@@ -68,7 +68,7 @@ public:
   virtual ~IstreamComplex2DFmt_base();
 
 
-  virtual void init(std::string const& file); 
+  virtual void init( ::std::string const& file); 
 protected:
   void copy(self const& rhs);
   virtual void init()        const;
@@ -348,6 +348,6 @@ public:
   grid_function(typename base::grid_type const& gg, T const& tt) : base(gg,tt) {}
 };
 
-
+} // namespace GrAL 
 
 #endif

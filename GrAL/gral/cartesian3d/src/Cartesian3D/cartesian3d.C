@@ -6,7 +6,9 @@
 
 #include "Gral/Grids/Complex2D/construct.h"
 
+namespace GrAL {
 namespace cartesian3d {
+
   CartesianGrid3D::CartesianGrid3D()
     {
       init(0,0,0);
@@ -209,5 +211,6 @@ CartesianGrid3D::SD::SD()
 }
 
 
+} // namespace cartesian3d
+} // namespace GrAL 
 
-};

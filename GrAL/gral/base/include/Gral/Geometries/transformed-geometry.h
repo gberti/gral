@@ -7,6 +7,8 @@
 #include "Geometry/algebraic-primitives.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 /*! \brief Grid geometry transformed by a mapping.
 
    \ingroup gridgeometries
@@ -69,5 +71,7 @@ transformed_geom<Geom, Trafo>
 inline
 TransformGeom(Geom const& geom, Trafo const& f)
 { return transformed_geom<Geom, Trafo>(geom,f);}
+
+} // namespace GrAL 
 
 #endif

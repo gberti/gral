@@ -8,6 +8,8 @@
 
 #include <vector>
 
+namespace GrAL {
+
 namespace cartesiannd {
 
   //------------------------ maps of direction tuples etc. ------------------
@@ -17,11 +19,11 @@ namespace cartesiannd {
   template<unsigned DIM> 
   struct delta_map {
     typedef tuple<int, DIM>       index_type;
-    typedef std::vector<unsigned> vector_system;
+    typedef  ::std::vector<unsigned> vector_system;
 
    
     struct direction_table {
-      std::vector<vector_system> num2vec;
+       ::std::vector<vector_system> num2vec;
 
       direction_table() {}
       direction_table(unsigned k) { init(k); }
@@ -36,7 +38,7 @@ namespace cartesiannd {
       bool valid(unsigned m) const { return m < num2vec.size();}
       void cv   (unsigned m) const { REQUIRE(valid(m), "m=" << m << " num2vec.size()= " << num2vec.size(), 1);}
 
-      void print(std::ostream& out) const {
+      void print( ::std::ostream& out) const {
 	for(unsigned m = 0; m < num2vec.size(); ++m)
 	  out << "[" << range(num2vec[m].begin(), num2vec[m].end()) << "] ";
       }
@@ -51,19 +53,19 @@ namespace cartesiannd {
       inc_descriptor() {}
       inc_descriptor(index_type const& idx, unsigned d) : offset(idx), dir(d) {}
 
-      void  print(std::ostream& out) const { out << "d=" << dir << " o=" << offset; }
+      void  print( ::std::ostream& out) const { out << "d=" << dir << " o=" << offset; }
     };
 
 
 
     struct incidences {
-      std::vector<std::vector<inc_descriptor> > nb;
+       ::std::vector< ::std::vector<inc_descriptor> > nb;
       unsigned K_;
       unsigned m_;
 
-      std::vector<inc_descriptor> const& operator()(unsigned dir_k) const { cv(dir_k);  return nb[dir_k];}
-      std::vector<inc_descriptor> const& operator[](unsigned dir_k) const { cv(dir_k);  return nb[dir_k];}
-      std::vector<inc_descriptor>      & operator[](unsigned dir_k)       { cv(dir_k);  return nb[dir_k];}
+       ::std::vector<inc_descriptor> const& operator()(unsigned dir_k) const { cv(dir_k);  return nb[dir_k];}
+       ::std::vector<inc_descriptor> const& operator[](unsigned dir_k) const { cv(dir_k);  return nb[dir_k];}
+       ::std::vector<inc_descriptor>      & operator[](unsigned dir_k)       { cv(dir_k);  return nb[dir_k];}
 
       void cv(unsigned dir_k) const { REQUIRE( (0<= dir_k && dir_k < nb.size()), 
 					       "nb.size()=" << nb.size() << " dir_k=" << dir_k, 1);}
@@ -74,27 +76,27 @@ namespace cartesiannd {
       void init_upward  (unsigned K, unsigned m) { } // not yet implemented
       void init_downward(unsigned K, unsigned m);
 
-      void print(std::ostream& out) const; 
+      void print( ::std::ostream& out) const; 
     };
 
 
 
     struct incidence_table {
-      std::vector<incidences> inc;
+       ::std::vector<incidences> inc;
       int k;
       incidence_table() : k(-1) {}
       // K = dimension of anchor
       void init(unsigned K);
       incidences      & operator[](int m)        { cv(m); return inc[m];}
       incidences const& operator[](int m)  const { cv(m); return inc[m];}
-      void print(std::ostream& out) const;
+      void print( ::std::ostream& out) const;
 
       void cv(int m) const { REQUIRE(0 <= m && m < (int) inc.size(), " m=" << m,1);}
     };
     
     struct initializer {
       initializer() { 
-	// std::cout << "initializer delta_map<" << DIM << ">" << std::endl;  
+	//  ::std::cout << "initializer delta_map<" << DIM << ">" <<  ::std::endl;  
 	delta_map<DIM>::init_();
       }
     };
@@ -148,9 +150,9 @@ namespace cartesiannd {
     }
 
 
-    static void print     (std::ostream& out);
-    static void print_maps(std::ostream& out);
-    static void print_incs(std::ostream& out);
+    static void print     ( ::std::ostream& out);
+    static void print_maps( ::std::ostream& out);
+    static void print_incs( ::std::ostream& out);
     static void selfcheck();
 
     static direction_table dirs[DIM+1];
@@ -189,7 +191,7 @@ namespace cartesiannd {
       }
     }
 
-    std::vector<index_map_type>  maps;
+     ::std::vector<index_map_type>  maps;
     unsigned num_of_maps()       const { return maps.size();}
     unsigned num_of_directions() const { return maps.size();}
     
@@ -198,7 +200,7 @@ namespace cartesiannd {
     index_map_type const& operator[](int m) const { return maps[m];}
     index_map_type const& operator()(int m) const { return maps[m];}
     
-    void print(std::ostream& out) const { 
+    void print( ::std::ostream& out) const { 
       for(unsigned m = 0; m < maps.size(); ++m)
 	out << "[" << maps[m].max_tuple() << "] ";
     }
@@ -212,14 +214,14 @@ namespace cartesiannd {
     void init(unsigned k) { 
       offsets.resize(binomial_coeff(DIM,k) +1);
     }
-    std::vector<unsigned>  offsets;
+     ::std::vector<unsigned>  offsets;
     unsigned& operator[](unsigned m)       { cv(m); return offsets[m];}
     unsigned  operator[](unsigned m) const { cv(m); return offsets[m];}
     unsigned  operator()(unsigned m) const { cv(m); return offsets[m];}
     unsigned  size()   const { return offsets.size();}
     unsigned  beyond() const { return offsets.back();}
     
-    void print(std::ostream& out) const { 
+    void print( ::std::ostream& out) const { 
       for(unsigned m = 0; m < offsets.size(); ++m)
 	out << offsets[m] << ' ';
     }
@@ -237,10 +239,10 @@ namespace cartesiannd {
   template<unsigned DIM>
   void delta_map<DIM>::direction_table::init(unsigned k) 
   {
-    //std::cout << "direction_table::init(" << k << ") ";
+    // ::std::cout << "direction_table::init(" << k << ") ";
     REQUIRE_ALWAYS( (k <= DIM), "k=" << k << " DIM=" << DIM, 1);
     num2vec.resize(binomial_coeff(DIM,k));
-    //std::cout << ": " << num2vec.size() << "direction" << std::endl;
+    // ::std::cout << ": " << num2vec.size() << "direction" <<  ::std::endl;
     vector_system v(k,0);
     for(unsigned j = 1; j < k; ++j)
       v[j] = j;
@@ -250,7 +252,7 @@ namespace cartesiannd {
   }
   
   template<unsigned DIM>
-  void delta_map<DIM>::incidences::print(std::ostream& out) const
+  void delta_map<DIM>::incidences::print( ::std::ostream& out) const
   {
     out << "m=" << m_ << ": ["; 
     for(unsigned dir_k = 0; dir_k != nb.size(); ++dir_k) {
@@ -355,7 +357,7 @@ namespace cartesiannd {
   }
 
   template<unsigned DIM>
-  void delta_map<DIM>::incidence_table::print(std::ostream& out) const
+  void delta_map<DIM>::incidence_table::print( ::std::ostream& out) const
   {
     out << "dim(anchor) = " << k << ":\n";
     for(unsigned m = 0; m <= DIM; ++m) {
@@ -385,14 +387,14 @@ namespace cartesiannd {
 
 
   template<unsigned DIM>
-  void delta_map<DIM>::print(std::ostream& out) 
+  void delta_map<DIM>::print( ::std::ostream& out) 
   {
     print_maps(out);
     print_incs(out);
   }
 
   template<unsigned DIM>
-  void delta_map<DIM>::print_maps(std::ostream& out) {
+  void delta_map<DIM>::print_maps( ::std::ostream& out) {
       for(unsigned k = 0; k <= DIM; ++k) {
 	out << "dirs[" << k << "]: ";
 	dirs[k].print(out);
@@ -401,7 +403,7 @@ namespace cartesiannd {
     }
 
   template<unsigned DIM>
-  void delta_map<DIM>::print_incs(std::ostream& out) 
+  void delta_map<DIM>::print_incs( ::std::ostream& out) 
   {
     for(unsigned k = 0; k <= DIM; ++k) {
       out << "incs[" << k << "]: ";
@@ -422,5 +424,7 @@ namespace cartesiannd {
 
 
 } // namespace cartesiannd 
+
+} // namespace GrAL 
 
 #endif

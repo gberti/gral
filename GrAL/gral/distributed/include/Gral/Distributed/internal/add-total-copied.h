@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 // Construct the local total overlap ranges from shared_{v,f} and pattern
@@ -29,6 +31,7 @@ void AddTotalRanges(Overlap          &  ovrlp,   // out
 		    VertexRange const&  shared_v,
 		    FacetRange  const&  shared_f);
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/add-total-copied.C"

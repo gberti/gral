@@ -4,6 +4,7 @@
 #include "IO/control-device.h"
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using namespace std;
 
   cout << "------ Starting complex2d2gmv -------\n" << endl;

@@ -6,6 +6,7 @@
 
 #include "Gral/Grids/Complex2D/complex2d.h"
 
+
 //----------------------------------------------------------------
 //
 // This template function calculates the neighborhood relations
@@ -61,14 +62,20 @@
 //     + CellOnCell2D_Iterator& operator[](vtuple_2d);
 //
 //----------------------------------------------------------------
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Grids/Complex2D/internal/adjacency.C"
+#else
+
+namespace GrAL {
 
 template<class CellSet, class FacetMap>
 void CalculateNeighbourCells(Complex2D      &  G,          // inout
 			     const CellSet  &  cell_set,   // out
 			     FacetMap       &  facet_map); // inout
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Grids/Complex2D/internal/adjacency.C"
+} // namespace GrAL
+
+
 #endif
 
 #endif

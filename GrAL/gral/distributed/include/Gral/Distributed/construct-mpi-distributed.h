@@ -14,6 +14,7 @@
 #include "Gral/Distributed/overlap-pattern.h"
 #include "Gral/Distributed/mpi-distributed-grid.h"
 
+namespace GrAL {
 //----------------------------------------------------------------
 /*! \brief Builds a mpi-distributed grid via an intermediary 
     composite grid.
@@ -82,6 +83,8 @@ ConstructMPIDistributedFromMaster
 				    master2distr_v, master2distr_c);				    
 }
 
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/construct-mpi-distributed.C"

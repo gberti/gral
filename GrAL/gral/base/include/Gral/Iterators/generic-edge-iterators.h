@@ -7,6 +7,8 @@
 #include "Container/my-hash-map.h"
 #include <iostream>
 
+namespace GrAL {
+
 /*! \defgroup generic_edge Generic edge components
 
   \ingroup elements
@@ -103,7 +105,7 @@ namespace generic_edge {
         bool operator!=(self const& rhs) const { return !((*this) == rhs);}
       };
     template<class gt>
-      std::ostream& operator<<(std::ostream& out, edge_handle_t<gt> const& h)
+       ::std::ostream& operator<<( ::std::ostream& out, edge_handle_t<gt> const& h)
       { return (out << h.c << ' ' << h.eh);}
 
 
@@ -213,10 +215,10 @@ namespace generic_edge {
       bool operator!=(self const& rhs) const 
 	{ return !((*this) == rhs);}
       bool operator<(self const& rhs) const {
-	vertex_handle v_max = std::max(v1(), v2()), 
-	              v_min = std::min(v1(), v2());
-	vertex_handle w_max = std::max(rhs.v1(), rhs.v2()),
-	              w_min = std::min(rhs.v1(), rhs.v2());
+	vertex_handle v_max =  ::std::max(v1(), v2()), 
+	              v_min =  ::std::min(v1(), v2());
+	vertex_handle w_max =  ::std::max(rhs.v1(), rhs.v2()),
+	              w_min =  ::std::min(rhs.v1(), rhs.v2());
 	return ( (v_max < w_max) ||  (v_max == w_max && v_min < w_min));
       }
 
@@ -236,15 +238,15 @@ namespace generic_edge {
 	
 	size_t operator()(edge<gt> const& e) const 
 	  { 
-	    typename gt::vertex_handle vmax = std::max(e.v1(),e.v2());
-	    typename gt::vertex_handle vmin = std::min(e.v1(),e.v2());
+	    typename gt::vertex_handle vmax =  ::std::max(e.v1(),e.v2());
+	    typename gt::vertex_handle vmin =  ::std::min(e.v1(),e.v2());
 	    return 8*vmax + vmin;
 	  }
       };
 
 
 
-    /*! Edge iterator based on marking visited edges.
+    /*! \brief Edge iterator based on marking visited edges.
 
      */
     template<class gt>
@@ -263,7 +265,7 @@ namespace generic_edge {
       CellIterator                      c;
       edge_on_cell_iterator<gt>         e;
       // partial_grid_function<Edge,bool>  visited;
-      STDHASH::hash_map<edge<gt>, bool, hasher_edge<gt> > visited;
+      ::STDHASH::hash_map<edge<gt>, bool, hasher_edge<gt> > visited;
     public:
       edge_iterator() {}
       explicit
@@ -332,7 +334,7 @@ namespace generic_edge {
 	edge_handle_t<gt> e(archEdge const& ae) const { c_(); return e(ae.handle());}
 
 	edge<gt> E(arch_edge_handle const& h) const 
-	  { c_(); return Edge(TheGrid(),e(h));}
+	  { c_(); return Edge(base::TheGrid(),e(h));}
 	 edge<gt> E(archEdge const& ae) const { c_(); return E(ae.handle());}
 
         unsigned NumOfEdges() const { c_(); return base::TheArchetype().NumOfEdges();}
@@ -345,5 +347,6 @@ namespace generic_edge {
       };
 } // namespace
 
+} // namespace GrAL 
 
 #endif

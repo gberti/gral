@@ -9,6 +9,8 @@
 /*! \file
  */
 
+namespace GrAL {
+
 class Triang3D;
 class Triang3D_Vertex;
 //class Triang3D_Edge;
@@ -62,6 +64,9 @@ struct grid_types_base_Triang3D {
   typedef int                   archetype_handle;
   typedef grid_types<archetype_type>  archgt;  
 };
+
+
+} // namespace GrAL 
 
 #endif
 

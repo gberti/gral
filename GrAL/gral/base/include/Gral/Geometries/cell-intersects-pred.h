@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 /*! Predicate to decide whether a cell intersects a geometric
     body (volume) or not.
@@ -95,5 +96,6 @@ public:
     }
 };
 
+} // namespace GrAL 
 
 #endif

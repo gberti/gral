@@ -13,6 +13,8 @@
 #include "Gral/Partitioning/internal/metis-wrap.h"
 #include "Gral/Partitioning/internal/metis-options.h"
 
+namespace GrAL {
+
 template<class GRID, class PARTITIONING>
 void MetisPartitioning::calculate_cell_partitioning
 (GRID         const& G, //<! IN
@@ -68,5 +70,8 @@ void MetisPartitioning::calculate_cell_partitioning
 
 
 }
+
+
+} // namespace GrAL 
 
 #endif

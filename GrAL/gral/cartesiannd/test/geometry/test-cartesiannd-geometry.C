@@ -9,8 +9,9 @@
 
 #include <iostream>
 
+using namespace GrAL;
 
-namespace cartesiannd {
+namespace GrAL { namespace cartesiannd {
   
   typedef default_coord<grid<1> >::type coord1d;
   typedef default_coord<grid<2> >::type coord2d;
@@ -27,7 +28,7 @@ namespace cartesiannd {
   template class mapped_geometry<grid<1>, mapping1d>;
   template class mapped_geometry<grid<2>, mapping2d>;
   template class mapped_geometry<grid<3>, mapping3d>;
-}
+}}
 
 template<class GEOM>
 void test_geometry(GEOM const& Geom, std::ostream& out) 
@@ -52,6 +53,7 @@ void test_geometry(GEOM const& Geom, std::ostream& out)
 
 int main() 
 {
+  using namespace GrAL;
   using namespace std;
 
 

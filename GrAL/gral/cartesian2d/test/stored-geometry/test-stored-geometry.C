@@ -13,16 +13,19 @@
 #include "Container/tuple-point-traits.h"
 
 
-namespace cartesian2d {
+// using namespace GrAL;
+
+namespace GrAL { namespace cartesian2d {
   typedef tuple<double,2>              coord_type;
   typedef stdext::identity<coord_type> mapping_type;
   
   template class stored_geometry<coord_type>;
-}
+} }
 
 int main() {
   using namespace std;
-  using namespace cartesian2d;
+  using namespace GrAL;
+  using namespace GrAL::cartesian2d;
   typedef grid_types<CartesianGrid2D> gt;
 
   {

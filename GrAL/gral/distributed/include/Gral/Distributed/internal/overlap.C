@@ -5,6 +5,8 @@
 
 #include "Gral/Distributed/overlap.h"
 
+namespace GrAL {
+
 template<class CoarseGrid, class FineGrid,
          template<class U> class OVLP_RANGES>
 void overlap<CoarseGrid, FineGrid, OVLP_RANGES>::set_neighbours()
@@ -67,5 +69,6 @@ void write_ovlp(Overlap const& ovlp, std::ostream & out)
 
 }
 
+} // namespace GrAL 
 
 #endif

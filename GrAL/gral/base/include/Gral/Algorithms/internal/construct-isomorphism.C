@@ -10,6 +10,7 @@
 
 #include <queue>
 
+namespace GrAL {
 
 template<unsigned N>
 struct grid_isomorphism_construction;
@@ -260,5 +261,7 @@ bool construct_isomorphism(GRID1 const& G1,
 	construct(G1,G2,GT1(), GT2(),phi);
     }
 
+
+} // namespace GrAL 
 
 #endif

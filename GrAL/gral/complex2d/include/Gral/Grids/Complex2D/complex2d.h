@@ -22,6 +22,7 @@
 
 // many, many forward declarations ...
 
+namespace GrAL {
 
 class Complex2D;
 class Vertex2D;
@@ -55,7 +56,7 @@ class vertex_base {
 public:
   typedef point2 CoordType;
 
-  typedef std::vector<int> cell_list;
+  typedef ::std::vector<int> cell_list;
 private:
 
   //--- DATA ------
@@ -91,8 +92,8 @@ private:
 
 class cell2d_connectivity {
 public:
-  typedef std::vector<int> vertex_list;
-  typedef std::vector<int> cell_list;
+  typedef ::std::vector<int> vertex_list;
+  typedef ::std::vector<int> cell_list;
 
   //private:
   //-------------- DATA -----------
@@ -138,8 +139,8 @@ private:
 
 
 
-typedef std::vector<cell2d_connectivity>   cell_list_complex2d;
-typedef std::vector<vertex_base>           vertex_list_complex2d;
+typedef ::std::vector<cell2d_connectivity>   cell_list_complex2d;
+typedef ::std::vector<vertex_base>           vertex_list_complex2d;
 
 struct edge_handle_complex2d {
   int c;  // cell
@@ -157,28 +158,31 @@ struct edge_handle_complex2d {
   friend bool operator< (const self& ls, const self& rs)
     { return ((ls.c <rs.c)  || ((ls.c == rs.c) &&  (ls.le < rs.le))); }
 
-  friend std::ostream& operator<< (std::ostream& out, const self& e)
+  friend ::std::ostream& operator<< (::std::ostream& out, const self& e)
     { return (out << e.c << ' ' << e.le);}
-  friend std::istream& operator>>(std::istream& in,         self& e)
+  friend ::std::istream& operator>>(::std::istream& in,         self& e)
     { return (in >> e.c >> e.le);}
 };
 
+} // namespace GrAL
 
 namespace STDEXT  {
   template<class T> class hash;
 
   template<>
-  struct hash<edge_handle_complex2d> {
+  struct hash<GrAL::edge_handle_complex2d> {
   public:
-    typedef edge_handle_complex2d key_type;
-    typedef edge_handle_complex2d argument_type;
+    typedef GrAL::edge_handle_complex2d key_type;
+    typedef GrAL::edge_handle_complex2d argument_type;
     typedef size_t                result_type;
     
-    size_t operator()(const edge_handle_complex2d& e) const
+    size_t operator()(const GrAL::edge_handle_complex2d& e) const
       { return (6*e.c + e.le);}
   };
   
 } // namespace STDEXT
+
+namespace GrAL {
 
 struct complex2d_types { 
   typedef Complex2D Complex;
@@ -222,7 +226,7 @@ struct complex2d_types {
   typedef CellOnVertex2D_Iterator CellOnVertexIterator;
 
   typedef polygon1d::polygon                 archetype_type;
-  typedef std::vector<archetype_type>        archetype_sequence;
+  typedef ::std::vector<archetype_type>        archetype_sequence;
   typedef archetype_sequence::const_iterator archetype_iterator;
   typedef int                                archetype_handle;
   typedef grid_types<archetype_type>         archgt;
@@ -274,7 +278,7 @@ struct complex2d_types {
     Its $GrAL Facet type is a typedef to its $GrAL Edge type.
  */
 class Complex2D : public complex2d_types  {
-  typedef std::list<EdgeOnCell2D_Iterator>  boundary_facet_list;
+  typedef ::std::list<EdgeOnCell2D_Iterator>  boundary_facet_list;
   typedef vertex_list_complex2d        v_list;
   typedef cell_list_complex2d          c_list;
 
@@ -287,7 +291,7 @@ public: // for benchmark only
 
   mutable int                    num_of_edges_cache;
   archetype_sequence             archetypes;
-  std::vector<archetype_handle>  arch_for_n_vertices;
+  ::std::vector<archetype_handle>  arch_for_n_vertices;
 public:
   //--------- types --------------------
 
@@ -678,19 +682,21 @@ struct hash_cell2d {
   void operator=(hash_cell2d const&) {} // suppress warnings about statement w/o effect
 };
 
+} // namespace GrAL 
+
 namespace STDEXT {
   template<class T>
     struct hash;
 
   template<>  
-  struct hash<Vertex2D> 
-    : public hash_vertex2d {};
+  struct hash<GrAL::Vertex2D> 
+    : public GrAL::hash_vertex2d {};
   template<>  
-  struct hash<Edge2D> 
-    : public hash_edge2d {};
+  struct hash<GrAL::Edge2D> 
+    : public GrAL::hash_edge2d {};
   template<>  
-  struct hash<Cell2D> 
-    : public hash_cell2d {};
+  struct hash<GrAL::Cell2D> 
+    : public GrAL::hash_cell2d {};
 }
 
 #include "Gral/Grids/Complex2D/element-traits.h"

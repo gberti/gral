@@ -13,6 +13,7 @@
 #include "Utility/ref-ptr.h"
 
 
+namespace GrAL {
 
 /*! \brief View to a grid as spatial volume
     \ingroup geometricgridtools
@@ -103,5 +104,7 @@ public:
   }
     
 };
+
+} // namespace GrAL 
 
 #endif

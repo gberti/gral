@@ -10,6 +10,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Partitioning/collect-element-partitions.h"
 
+namespace GrAL {
 
 template<class Partition, class Vtx2PartMap>
 void collect_vertex_partitions(const Partition& P,      // in
@@ -78,5 +79,6 @@ void collect_facet_partitions(const Partition& P,                   // in
 }
 
 
+} // namespace GrAL 
 
 #endif

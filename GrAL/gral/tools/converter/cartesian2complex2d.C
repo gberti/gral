@@ -11,6 +11,7 @@
 
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
 
 
   //  typedef grid_types<cartesiannd::grid<2> > gt;

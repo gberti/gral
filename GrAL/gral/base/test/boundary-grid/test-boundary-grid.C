@@ -9,6 +9,8 @@
 #include <iostream>
 
 int main() {
+  using namespace std;
+  using namespace GrAL;
 
   using namespace cartesian2d;
 
@@ -22,10 +24,10 @@ int main() {
   
 
   for(bdcgt::CellIterator c(bd); ! c.IsDone(); ++c) {
-    std::cout << c.handle() << " [facets: ";
+    cout << c.handle() << " [facets: ";
     for(bdcgt::FacetOnCellIterator fc(*c); ! fc.IsDone(); ++fc) {
-      std::cout << fc.handle() << " ";
+      cout << fc.handle() << " ";
     }
-    std::cout << "]\n"; 
+    cout << "]\n"; 
   }
 }

@@ -5,6 +5,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*!  \brief workaround for missing explicit
@@ -202,9 +203,7 @@ struct grid_dim_tag<-1>
 };
 
 
-
-
-
+} // namespace GrAL 
 
 
 #endif

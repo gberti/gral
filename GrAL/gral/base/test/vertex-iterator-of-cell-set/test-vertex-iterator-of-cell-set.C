@@ -16,10 +16,16 @@
 #include "Gral/Base/extend-grid-types.h"
 
 // make sure all members are instantiated
-typedef grid_types<cartesian2d::CartesianGrid2D> gt;
-template class vertex_iterator_of_cell_set<gt::CellIterator>;
+
+using namespace GrAL;
+
+//namespace GrAL {
+  typedef grid_types<cartesian2d::CartesianGrid2D> gt;
+  template class vertex_iterator_of_cell_set<gt::CellIterator>;
+//}
 
 int main() {
+  // using namespace GrAL;
 
   gt::grid_type R(2,2);
   typedef vertex_iterator_of_cell_set<gt::CellIterator> markedVertexIterator;

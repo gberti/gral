@@ -11,9 +11,10 @@
 #include <iostream>
 
 int main() {
+  using namespace GrAL;
   using namespace std;  
 
-  using cartesian3d::CartesianGrid3D;
+  using GrAL::cartesian3d::CartesianGrid3D;
   typedef grid_types<Complex3D> gt;
 
   {

@@ -18,6 +18,8 @@
 
 #include <iostream>
 
+using namespace GrAL;
+
 typedef coordN<2> coord_type;
 typedef stdext::identity<coord_type>              mapping_type;
 typedef cartesian2d::CartesianGrid2D               grid_type;

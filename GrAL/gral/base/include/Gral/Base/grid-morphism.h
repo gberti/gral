@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 /*! \brief Grid vertex isomorphism 
 
@@ -220,5 +221,7 @@ private:
     inv = pinv;
   }
 };
+
+} // namespace GrAL 
 
 #endif

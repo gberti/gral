@@ -18,6 +18,8 @@
 #include <utility> // pair
 #include <vector>
 
+namespace GrAL {
+
 /*! \brief Extrusion of a 2D triangular grid
     \ingroup gridviews
 
@@ -59,8 +61,8 @@ namespace extrusion_view {
     // OK only if base grid has (0-base) consecutive integer vertex handle
     // typedef vertex_handle_int<grid_type> vertex_handle;
     // we should really branch on consecutive_tag of base element handles
-    typedef std::pair<typename bgt::vertex_handle, int> vertex_handle;
-    typedef std::pair<typename bgt::cell_handle,   int> cell_handle;
+    typedef  ::std::pair<typename bgt::vertex_handle, int> vertex_handle;
+    typedef  ::std::pair<typename bgt::cell_handle,   int> cell_handle;
 
     typedef cell_iterator_t<GRID2D>   CellIterator;
     typedef CellIterator              Cell;
@@ -70,7 +72,7 @@ namespace extrusion_view {
     typedef  vertex_on_cell_iterator_t<GRID2D> VertexOnCellIterator;
 
     typedef Complex2D                         archetype_type;
-    typedef std::vector<archetype_type>::const_iterator archetype_iterator;
+    typedef  ::std::vector<archetype_type>::const_iterator archetype_iterator;
     typedef int                               archetype_handle;
     typedef grid_types<archetype_type>        archgt;
   };
@@ -86,7 +88,7 @@ namespace extrusion_view {
     typedef typename gt::archetype_handle   archetype_handle;
 
     ref_ptr<GRID2D const>  bg;
-    std::vector<archetype_type> the_archetypes;
+     ::std::vector<archetype_type> the_archetypes;
   public:
     grid() { init(); }
     grid(GRID2D const&         gg) : bg(gg) { init(); }
@@ -210,9 +212,9 @@ namespace extrusion_view {
 
   private:
     void sort_vertices() {
-      if(v[0] > v[1]) { std::swap(v[0],v[1]); std::swap(v[3],v[4]);}
-      if(v[1] > v[2]) { std::swap(v[1],v[2]); std::swap(v[4],v[5]);}
-      if(v[0] > v[1]) { std::swap(v[0],v[1]); std::swap(v[3],v[4]);}
+      if(v[1] < v[0]) {  ::std::swap(v[0],v[1]);  ::std::swap(v[3],v[4]);}
+      if(v[2] < v[1]) {  ::std::swap(v[1],v[2]);  ::std::swap(v[4],v[5]);}
+      if(v[1] < v[0]) {  ::std::swap(v[0],v[1]);  ::std::swap(v[3],v[4]);}
       ENSURE((v[0] < v[1] && v[1] < v[2]), "", 1); // "v[0]="<<v[0] << " v[1]=" << v[1] << " v[2]=" << v[2], 1);
     }
   };
@@ -506,5 +508,7 @@ namespace extrusion_view {
   };
 
 } // namespace extrusion_view
+
+} // namespace GrAL 
 
 #endif

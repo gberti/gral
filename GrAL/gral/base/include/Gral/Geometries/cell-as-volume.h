@@ -8,6 +8,8 @@
 #include "Geometry/geometric-shapes.h"
 
 
+namespace GrAL {
+
 /*! \brief View a cell as spatial volume
    \ingroup  geometricgridtools
 
@@ -86,5 +88,6 @@ cell_as_volume<GEOM,CELL,GT>::intersection_check(POLY const& p) const
   return res;   
 }
 
+} // namespace GrAL 
 
 #endif

@@ -11,6 +11,7 @@
 #include "Gral/Base/grid-function-hash.h"
 #include "Gral/Base/map-element-iter-names.h"
 
+namespace GrAL {
 
 /*!  \class partial_grid_function
    \brief Implements a partial grid function using hash tables.
@@ -151,5 +152,7 @@ public:
 
 
 };
+
+} // namespace GrAL 
 
 #endif

@@ -6,6 +6,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 /*! \file
     \brief mapped iterators and sequences 
@@ -175,6 +176,6 @@ template<class G, class F>
 inline mapped_cell_sequence<G,F> map_cell_sequence(const G& g, const F& f)
 { return mapped_cell_sequence<G,F>(g,f); }
 
-
+} // namespace GrAL 
 
 #endif

@@ -6,6 +6,7 @@
 
 #include "Gral/Distributed/overlap.h"
 
+namespace GrAL {
 
 /*! \defgroup overlappinggrids Overlapping Grids
 
@@ -89,6 +90,6 @@ public:
   range_type_ref   LocalRange() const { return the_overlap.local_range();}  
 };
 
-
+} // namespace GrAL 
 
 #endif

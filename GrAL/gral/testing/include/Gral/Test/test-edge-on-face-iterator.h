@@ -16,6 +16,8 @@
 #include "Gral/Test/test-edge-on-face-iterator.C"
 #else
 
+namespace GrAL {
+
 /*! \brief Test a edge-on-face iterator
  
     Test a model of $GrAL EdgeOnFaceIterator
@@ -23,7 +25,7 @@
     \ingroup incidenceiteratortests
  */
 template<class G>
-bool test_edge_on_face_iterator(G const& g, std::ostream & out);
+bool test_edge_on_face_iterator(G const& g, ::std::ostream & out);
 
 /*! \brief Test a edge-on-face iterator
  
@@ -32,7 +34,9 @@ bool test_edge_on_face_iterator(G const& g, std::ostream & out);
     \ingroup incidenceiteratortests
  */
 template<class G, class GT>
-bool test_edge_on_face_iterator(G const& g, std::ostream & out, GT);
+bool test_edge_on_face_iterator(G const& g, ::std::ostream & out, GT);
+
+} // namespace GrAL 
 
 #endif
 

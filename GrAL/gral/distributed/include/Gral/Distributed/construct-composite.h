@@ -4,6 +4,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*! \brief Construct a composite grid from a partition of a master grid.
@@ -29,6 +30,7 @@ ConstructComposite(CompositeG& CG,          // out
 		   VCorr& v_corr,           // out
 		   CCorr& c_corr);          // out
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/construct-composite.C"

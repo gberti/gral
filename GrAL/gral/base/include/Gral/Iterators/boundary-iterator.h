@@ -7,6 +7,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/grid-functors.h"
 
+namespace GrAL {
 
 /*! \defgroup boundarycompiter Boundary Component Iterators
 
@@ -229,6 +230,6 @@ public:
 
 };
 
-
+} // namespace GrAL 
 
 #endif

@@ -12,6 +12,7 @@
 #include <iostream>
 
 int main() {
+  using namespace GrAL;
   using std::cout;
   using namespace cartesian2d;
 

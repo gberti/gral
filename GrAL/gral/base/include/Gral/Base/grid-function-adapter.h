@@ -3,6 +3,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 template<class CellMap>
 class facet_on_cell_grid_function
 {
@@ -28,5 +30,7 @@ inline
 facet_on_cell_grid_function<CellMap>
   MakeFacetOnCellGridFunction(CellMap & cm)
   { return facet_on_cell_grid_function<CellMap>(cm) ;}
+
+} // namespace GrAL 
 
 #endif

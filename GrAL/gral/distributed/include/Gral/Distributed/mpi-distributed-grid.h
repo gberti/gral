@@ -13,6 +13,8 @@
 #include "Gral/Distributed/overlapping-grid.h"
 #include "Gral/Distributed/connector.h"
 
+namespace GrAL {
+
 /*! \defgroup mpidistributedgrids Distributed Grids using MPI 
     \ingroup  distributedgrids
   
@@ -182,6 +184,7 @@ inline Connector GetRecvConnector(const Range& R, unsigned sz,
 // typically  op is assigment: r = s.
 // possible also addition: r += s
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/mpi-distributed-grid.C"

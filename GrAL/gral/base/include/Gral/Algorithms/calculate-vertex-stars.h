@@ -3,6 +3,8 @@
 
 // $LICENSE_NEC
 
+namespace GrAL {
+
 /*! \defgroup calc_vertex_stars Vertex star determination
     \ingroup combinatoric_grid_algorithms
 
@@ -58,6 +60,8 @@ void calculate_positive_vertex_stars
 (GRID const& G,      // 2D, e.g. archetype of 3D cell
  GERMS     & germs,  // e.g gf: Vertex -> flag<GRID>
  DET  const& det);    // corner jac. of archetype
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Algorithms/calculate-vertex-stars.C"

@@ -16,7 +16,7 @@
 //
 ///////////////////////////////////////////
 
-
+namespace GrAL {
 
 template<class T, class CTXT> 
 T global_max(const T& t, const CTXT& Ctxt)
@@ -31,5 +31,6 @@ T global_max(const T& t, const CTXT& Ctxt)
   return the_max;
 }
 
+} // namespace GrAL 
 
 #endif

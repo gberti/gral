@@ -19,6 +19,8 @@
 #include "Gral/Distributed/construct-local-overlapping-grids.h"
 #include "Gral/Distributed/internal/grid-self-map.h"
 
+namespace GrAL {
+
 // ad-hoc mapping for partition numbers
 struct map_unique {
   typedef int argument_type;
@@ -210,5 +212,6 @@ void ConstructComposite_per(CompositeG     & CG,
 
 }
 
+} // namespace GrAL 
 
 #endif

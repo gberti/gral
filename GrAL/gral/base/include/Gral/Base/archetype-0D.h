@@ -6,6 +6,8 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/element-handle.h"
 
+namespace GrAL {
+
 /*! \brief  Support for 0-dimensional archetypes
 
     \ingroup gridarchetypes
@@ -161,6 +163,6 @@ void ConstructGrid0(archetype_0D      & dst,
 }
 */
 
-
+} // namespace GrAL
 
 #endif

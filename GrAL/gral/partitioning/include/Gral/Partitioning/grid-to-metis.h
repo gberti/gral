@@ -8,6 +8,7 @@
 /*! \file
  */ 
 
+namespace GrAL {
 
 /*! \brief Write a grid in Metis graph format, 
     where cells correspond to graph nodes and  facets to graph edges
@@ -101,6 +102,7 @@ extern void metis_cell_graph_format(GRID const& G,
                                     int * xadj,   int * vwgt,
                                     int * adjncy, int * adjwgt);
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Partitioning/internal/grid-to-metis.C"

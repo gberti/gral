@@ -21,6 +21,7 @@ struct Id {
 };
 
 int main() {
+  using namespace GrAL;
   namespace c3d = cartesian3d;
 
   typedef grid_types<c3d::CartesianGrid3D> gt;

@@ -6,6 +6,7 @@
 
 #include "Gral/Distributed/overlap-range-output.h"
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*! \brief Output adapter for overlap ranges 
@@ -163,7 +164,7 @@ public:
   range_type_ref  local_range()  const { return range_type_ref(vertices().local(),cells().owned());}
 };
 
-
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/overlap-output.C"

@@ -10,6 +10,7 @@
 
 #include "Container/bijective-mapping.h"
 
+namespace GrAL {
 
 /*! \brief Mapping between the archetypes of two grids
      
@@ -87,5 +88,7 @@ public:
     { return mapping_found[g1->archetype_of(c)];}
 
 };
+
+} // namespace GrAL 
 
 #endif

@@ -11,6 +11,8 @@
 #include "Gral/Distributed/overlap-output.h"
 #include "Gral/Distributed/overlap-range-output.h"
 
+namespace GrAL {
+
 template<class COARSEG, class FINEG, 
          class OVLP = overlap_output<COARSEG,FINEG, overlap_range_output> >
 class overlapping_grid_output 
@@ -77,5 +79,7 @@ public:
   overlap_type      & TheOverlap()       { return the_overlap;}
 
 };
+
+} // namespace GrAL 
 
 #endif

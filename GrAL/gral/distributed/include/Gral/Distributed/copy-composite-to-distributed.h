@@ -4,6 +4,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 /*! \brief Construct a distributed grid from a composite one.
     \ingroup compositeio
@@ -28,6 +29,9 @@ void CopyComposite2Distributed
  VCORR            & src2dest_fine_v,   // OUT: C(Coarse_src) -> (V(FG_src) -> V(FG))
  CCORR            & src2dest_fine_c    // OUT: C(Coarse_src) -> (C(FG_src) -> C(FG))
  );
+
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/copy-composite-to-distributed.C"

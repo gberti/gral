@@ -95,7 +95,7 @@ public:
   inline int find_local_facet(const Cell& Nb) const;
   inline vertex_handle vertex(unsigned side, const EdgeOnCellIterator& nb) const; // side in {1,2}
 
-  friend std::ostream& operator <<(std::ostream& out, self const& rs)
+  friend ::std::ostream& operator <<(::std::ostream& out, self const& rs)
     { return (out << rs._pos << ' ' << rs._cc); }
 
 };

@@ -8,6 +8,8 @@
 
 #include "Container/range.h"
 
+namespace GrAL {
+
 template<class OVRange>
 void write_ovrge(OVRange const& rnge, std::ostream& out)
 {
@@ -20,5 +22,7 @@ void write_ovrge(OVRange const& rnge, std::ostream& out)
       << "copied\n"
       << range(rnge.copied().begin(),  rnge.copied().end()) << '\n'; 
 }
+
+} // namespace GrAL 
 
 #endif

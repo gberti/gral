@@ -8,6 +8,8 @@
 /*! \file
  */
 
+namespace GrAL {
+
 /*! \defgroup enlargeoperations Generic grid enlargement operations
 
     \brief  Attach (glue) a copy of \c srcG to \c G, identifying a given set of vertices.
@@ -99,4 +101,7 @@ EnlargeGridVC(G1               & destG,       // in/out
 	      CellMap          & CellCorr);   // out src -> dest
 
 */
+
+} // namespace GrAL 
+
 #endif

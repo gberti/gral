@@ -6,9 +6,10 @@
 #include "Gral/Iterators/cell-on-cell-iterator.h"
 #include "Gral/Algorithms/cell-neighbor-search.h"
 
+namespace GrAL {
 
 template<class G, class NBTABLE, class GT>
-std::map<G const*, NBTABLE const*>
+::std::map<G const*, NBTABLE const*>
 cell_on_cell_iterator<G,NBTABLE,GT>::ctxt;
 
 template<class G, class NBTABLE, class GT>
@@ -28,5 +29,7 @@ void cell_on_cell_iterator<G,NBTABLE,GT>::remove(G const& g_)
       ctxt.erase(it);
     }
 }
+
+} // namespace GrAL 
 
 #endif

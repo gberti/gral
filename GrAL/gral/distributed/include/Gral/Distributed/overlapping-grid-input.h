@@ -10,6 +10,8 @@
  */
 #include "Gral/Distributed/overlap-input.h"
 
+namespace GrAL {
+
 template<class COARSEG, class FINEG, 
          class OVLP = overlap_input<COARSEG,FINEG, overlap_range_input> >
 class overlapping_grid_input 
@@ -63,6 +65,8 @@ public:
   overlap_type      & TheOverlap()       { return the_overlap;}
 
 };
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/overlapping-grid-input.C"

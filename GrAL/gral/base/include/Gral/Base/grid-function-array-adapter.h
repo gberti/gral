@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+namespace GrAL {
+
 /*!\internal
     \brief Adapter for viewing arrays as grid function
 
@@ -114,7 +116,7 @@ namespace gf_array_adapter {
 
   template<class T, unsigned N>
   inline
-  std::ostream& operator<<(std::ostream& out, value_type<T,N> const&v)
+   ::std::ostream& operator<<( ::std::ostream& out, value_type<T,N> const&v)
   {
     for(unsigned i = 0; i < N; ++i)
       out << v(i) << ' ';
@@ -197,5 +199,7 @@ public:
     { return value_type(f + N*v.handle());}
 
 };
+
+} // namespace GrAL 
 
 #endif

@@ -18,6 +18,7 @@
 
 #else
 
+namespace GrAL {
 
 /*! \brief Test a edge-on-facet iterator
  
@@ -26,7 +27,7 @@
     \ingroup incidenceiteratortests
  */
 template<class G>
-extern bool test_edge_on_facet_iterator(G const& g, std::ostream & out);
+extern bool test_edge_on_facet_iterator(G const& g, ::std::ostream & out);
 
 
 /*! \brief Test a edge-on-facet iterator
@@ -36,7 +37,9 @@ extern bool test_edge_on_facet_iterator(G const& g, std::ostream & out);
     \ingroup incidenceiteratortests
  */
 template<class G, class GT>
-extern bool test_edge_on_facet_iterator(G const& g, std::ostream & out, GT);
+extern bool test_edge_on_facet_iterator(G const& g, ::std::ostream & out, GT);
+
+} // namespace GrAL 
 
 #endif
 

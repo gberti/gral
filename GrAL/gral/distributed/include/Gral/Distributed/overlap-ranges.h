@@ -10,6 +10,8 @@
 #include "Config/compiler-config.h"
 #include "Gral/Subranges/enumerated-subrange.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 // 
 /*! \brief economic storage of layered overlap ranges
@@ -193,6 +195,7 @@ public:
 template<class OVRange>
 void write_ovrge(OVRange const& rnge, std::ostream& out);
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/overlap-ranges.C"

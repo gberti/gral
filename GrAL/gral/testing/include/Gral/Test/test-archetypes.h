@@ -8,12 +8,15 @@
     Test grid archetype functionality.
 */
 
+
 #include <iostream>
 #include "Gral/Base/common-grid-basics.h"
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Test/test-archetypes.C"
 #else
+
+namespace GrAL { 
 
 /*! \brief Test grid archetype functionality
 
@@ -24,7 +27,7 @@
  */
 
 template<class G>
-bool test_archetypes(G const& g, std::ostream & out);
+bool test_archetypes(G const& g, ::std::ostream & out);
 
 /*! \brief Test grid archetype functionality
  
@@ -36,7 +39,9 @@ bool test_archetypes(G const& g, std::ostream & out);
     \ingroup  archetypestests
  */
 template<class G, class GT>
-bool test_archetypes(G const& g, std::ostream & out, GT);
+bool test_archetypes(G const& g, ::std::ostream & out, GT);
+
+} // namespace GrAL 
 
 
 #endif

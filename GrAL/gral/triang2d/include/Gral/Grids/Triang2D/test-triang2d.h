@@ -13,6 +13,7 @@
 #include "Gral/Grids/Triang2D/triang2d.h"
 #include "Gral/Grids/Triang2D/grid-functions.h"
 
+namespace GrAL {
 
 class TestTriang2D  : public controlable {
 private:
@@ -37,5 +38,8 @@ public:
   void test_iterators(Triang2D const& CC,
 		      std::ostream&   out);
 };
+
+
+} // namespace GrAL 
 
 #endif

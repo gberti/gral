@@ -8,6 +8,8 @@
 
 #include "Gral/IO/gmv-format-output3d.h"
 
+namespace GrAL {
+
 template<class GRID,class GEOM, class GF, class MOREGFS>
 void ConstructGrid_GF(OstreamGMV3DFmt& Out, 
 		      GRID const& G,
@@ -88,5 +90,7 @@ void ConstructGrid_GF(OstreamGMV3DFmt& Out,
   Out.copy_grid_functions(GFS);
   out << "endgmv\n";
 }
+
+} // namespace GrAL 
 
 #endif

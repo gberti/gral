@@ -20,9 +20,10 @@
 // #include "Gral/Grids/Cartesian2D/all.h"
 
 using namespace std;
+using namespace GrAL;
 
 template<int D>
-void print_incidences(complexnd::ComplexND<D> const& g, std::ostream& out)
+void print_incidences(GrAL::complexnd::ComplexND<D> const& g, std::ostream& out)
 {
   for(unsigned d1 = 0; d1 <= g.dimension(); ++d1) {
     out << "Anchor dimension: " << d1 << endl;
@@ -44,7 +45,7 @@ void print_incidences(complexnd::ComplexND<D> const& g, std::ostream& out)
   }
 }
 
-namespace complexnd {
+namespace GrAL { namespace complexnd {
   template class ComplexND<complexnd::ANY>;
   template class ComplexND<0>;
   template class ComplexND<1>;
@@ -130,8 +131,9 @@ namespace complexnd {
   template class incidence_iterator_t<Complex2D, 2, 2, 0, 0>; // CellOnCell
 
 
-}
+}}
 
+namespace GrAL {
 template class grid_function<complexnd::Vertex0D, int>;
 
 template class grid_function<complexnd::Vertex1D, int>;
@@ -146,10 +148,11 @@ template class grid_function<complexnd::Edge3D, int>;
 template class grid_function<complexnd::Face3D, int>;
 template class grid_function<complexnd::Cell3D, int>;
 
-
+}
 
 
 int main() {
+  using namespace GrAL;
   using namespace complexnd;
   using namespace std;
 

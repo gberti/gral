@@ -6,12 +6,14 @@
 #include "Gral/Views/restricted-component-view.h"
 #include <queue>
 
+namespace GrAL {
+
 namespace restricted_grid_component_view {
 
   template<class GRID, class INSIDE_PRED, class GT>
   void grid_view<GRID, INSIDE_PRED, GT>::init_cells() const {
     if(! cells_initialized) {
-      std::queue<baseCell>  front;
+       ::std::queue<baseCell>  front;
       partial_grid_function<baseCell, bool> found(*g,false);
       front.push(germ);
       found[germ] = true;
@@ -42,5 +44,6 @@ namespace restricted_grid_component_view {
   }
 
 } // namespace restricted_grid_component_view
+} // namespace GrAL 
 
 #endif

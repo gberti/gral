@@ -15,6 +15,7 @@
 #include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"
 
+namespace GrAL {
 
 /*! \file
 
@@ -191,5 +192,7 @@ void Construct_complex2d0(Complex2D     & CC,
   if(CC.NumOfArchetypes() == 0)
     cc.calculate_archetypes();     
 }
+
+} // namespace GrAL 
 
 #endif

@@ -3,6 +3,8 @@
 
 #include "Gral/IO/gmv-format-output2d.h"
 #include <fstream>
+
+namespace GrAL {
   
 OstreamGMV2DFmt::OstreamGMV2DFmt() {}
 
@@ -22,6 +24,6 @@ void OstreamGMV2DFmt::copy(OstreamGMV2DFmt const& rhs)
 }
 
 
-
+} // namespace GrAL 
 
 

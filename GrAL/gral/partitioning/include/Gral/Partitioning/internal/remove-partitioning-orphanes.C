@@ -10,6 +10,10 @@
 #include "Grids/Partitioning/remove-partitioning-orphanes.h"
 #include "Grids/Partitioning/partitioning.h"
 
+#include <iostream>
+
+namespace GrAL {
+
 
 template<class GRID>
 void
@@ -30,7 +34,7 @@ remove_orphanes(partitioning<GRID>& P)
           break;
         }
       if(orphane) {
-	cerr << "orphane removed : " << P.TheGrid().handle(*C) << '\n'; 
+	std::cerr << "orphane removed : " << P.TheGrid().handle(*C) << '\n'; 
        int pnb = P.partition(*(*C).FirstCell());
        P.set_partition(*C,pnb);
       }
@@ -38,6 +42,8 @@ remove_orphanes(partitioning<GRID>& P)
   }
 }
 
+
+} // namespace GrAL 
 
 
 #endif

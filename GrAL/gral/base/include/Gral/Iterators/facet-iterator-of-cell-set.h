@@ -7,6 +7,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 // 
 /*! \brief  Iterator over the facets of a set of cells.
@@ -99,5 +101,7 @@ private:
     } 
   }
 };
+
+} // namespace GrAL 
 
 #endif

@@ -16,6 +16,7 @@
 
 int main()
 {
+  using namespace GrAL;
   using namespace cartesian2d;
 
   typedef CartesianGrid2D grid_type;

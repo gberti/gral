@@ -14,6 +14,7 @@
 #include <vector>
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using std::string;
 
   typedef Complex2D grid_type;

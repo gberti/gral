@@ -17,6 +17,7 @@
 
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
 
 namespace cartesian2d {
 
@@ -327,5 +328,6 @@ public:
 
 } // namespace cartesian2d
 
+} // namespace GrAL 
 
 #endif

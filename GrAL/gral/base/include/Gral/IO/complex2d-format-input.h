@@ -12,6 +12,7 @@
 
 #include "Geometry/point.h"
 
+namespace GrAL {
 
 /*! \brief Input adapter for Complex2D Format
     \ingroup complex2dformat
@@ -32,14 +33,14 @@ public:
   typedef point           coord_type;
 private:
   unsigned                        spacedim;
-  mutable std::vector<coord_type> coords;
+  mutable  ::std::vector<coord_type> coords;
   mutable bool                    coords_read;
 public:
   IstreamComplex2DFmt() {}
-  IstreamComplex2DFmt(std::istream      & in, int off = 0) 
+  IstreamComplex2DFmt( ::std::istream      & in, int off = 0) 
     : base(in,off), spacedim(2), coords_read(false) 
   { }
-  IstreamComplex2DFmt(std::string  const& fn, int off = 0) 
+  IstreamComplex2DFmt( ::std::string  const& fn, int off = 0) 
     : base(fn,off), spacedim(2), coords_read(false)
   { }
 
@@ -62,7 +63,7 @@ protected:
     copy_coords(rhs);
   }
   virtual void init()        const;
-  virtual void init(std::string const& file) { base::init(file);}
+  virtual void init( ::std::string const& file) { base::init(file);}
   virtual bool initialized() const;
   virtual void read_coords() const;
   virtual void copy_coords(self const& rhs)
@@ -106,9 +107,9 @@ class IstreamComplex2DCombFmt : public IstreamComplex2DFmt_base
   typedef IstreamComplex2DFmt_base base;
 public:
   IstreamComplex2DCombFmt() {}
-  IstreamComplex2DCombFmt(std::istream      & in, int off = 0) : base(in,off) 
+  IstreamComplex2DCombFmt( ::std::istream      & in, int off = 0) : base(in,off) 
   { }
-  IstreamComplex2DCombFmt(std::string  const& fn, int off = 0) : base(fn,off)
+  IstreamComplex2DCombFmt( ::std::string  const& fn, int off = 0) : base(fn,off)
   { }
 
   IstreamComplex2DCombFmt(self const& rhs) { copy(rhs);}
@@ -126,5 +127,7 @@ struct grid_types<IstreamComplex2DCombFmt>
 {
   typedef IstreamComplex2DCombFmt grid_type;
 };
+
+} // namespace GrAL 
 
 #endif

@@ -3,6 +3,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 template<class E>
 template<class OVLPRANGE, class FILTER>
 void overlap_range_input<E>::copy_to(OVLPRANGE      & dest,
@@ -36,5 +38,7 @@ void overlap_range_input<E>::copy_to(OVLPRANGE      & dest,
     dest.push_back(f(v));
   }
 }
+
+} // namespace GrAL 
 
 #endif

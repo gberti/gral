@@ -3,6 +3,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 template<class COARSEG, class FINEG, 
          class OVLP>
 void overlapping_grid_input<COARSEG,FINEG,OVLP>::init(COARSEG     const& cg,
@@ -13,5 +15,7 @@ void overlapping_grid_input<COARSEG,FINEG,OVLP>::init(COARSEG     const& cg,
   the_fine_grid.init(basenm + ".grid");
   init_overlap();
 }
+
+} // namespace GrAL 
 
 #endif

@@ -8,6 +8,8 @@
 #include "Grids/common-grid-basics.h"
 #include "Grids/Iterators/ex-cell-on-cell-it.h"
 
+namespace GrAL {
+
 template<class Grid>
 void test_extended_cell_on_cell_iterator(const Grid& g)
 {
@@ -32,5 +34,7 @@ void test_extended_cell_on_cell_iterator(const Grid& g)
     cerr << '\n';
   }
 }
+
+} // namespace GrAL 
 
 #endif

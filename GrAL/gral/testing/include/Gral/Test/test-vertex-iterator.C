@@ -6,17 +6,19 @@
 #include "Gral/Test/test-vertex-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 template<class G, class GT>
-bool test_vertex_iterator(G const& g, std::ostream & out, GT);
+bool test_vertex_iterator(G const& g, ::std::ostream & out, GT);
 
 template<class G>
-bool test_vertex_iterator(G const& g, std::ostream & out)
+bool test_vertex_iterator(G const& g, ::std::ostream & out)
 {
   return test_vertex_iterator(g,out, grid_types<G>());
 } 
 
 template<class G, class GT>
-bool test_vertex_iterator(G const& g, std::ostream & out, GT)
+bool test_vertex_iterator(G const& g, ::std::ostream & out, GT)
 {
   //  typedef grid_types<G> gt;
   typedef GT                          gt;
@@ -55,5 +57,7 @@ bool test_vertex_iterator(G const& g, std::ostream & out, GT)
   }
   return true;
 }
+
+} // namespace GrAL 
 
 #endif

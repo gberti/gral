@@ -12,6 +12,8 @@
 #include "Gral/Iterators/generic-facet-iterators.h"
 #include "Gral/Iterators/vertex-on-edge-iterator.h"
 
+namespace GrAL {
+
 class Complex3D;
 
 class Vertex_Complex3D;
@@ -77,11 +79,11 @@ class Complex3D : public grid_types_Complex3D {
   typedef size_t size_type;
 
  private:
-  std::vector<vertex_handle>  cells; // cell-vertex incidences
-  std::vector<unsigned>       offset; // pointer into cells, nc+1 entries
+  ::std::vector<vertex_handle>  cells; // cell-vertex incidences
+  ::std::vector<unsigned>       offset; // pointer into cells, nc+1 entries
   // (last entry  points to end of cells)
-  std::vector<unsigned>       cell_archetype;
-  std::vector<archetype_type> archetypes;
+  ::std::vector<unsigned>       cell_archetype;
+  ::std::vector<archetype_type> archetypes;
   size_type                   num_of_vertices;
 
  public:
@@ -140,7 +142,7 @@ private:
 
   struct cell_vertex_incidence_map {
   private:
-    std::vector<vertex_handle>::iterator pc;
+    ::std::vector<vertex_handle>::iterator pc;
   public:
     cell_vertex_incidence_map(Complex3D & G, cell_handle c)
       : pc(G.cells.begin() + G.offset[c]) {}
@@ -178,7 +180,7 @@ public:
   archetype_handle      archetype_of(cell_handle c) const
     { return cell_archetype[c];}
 
-  typedef std::vector<archetype_type>::const_iterator archetype_iterator;
+  typedef ::std::vector<archetype_type>::const_iterator archetype_iterator;
   archetype_iterator  BeginArchetype() const { return archetypes.begin();}
   archetype_iterator  EndArchetype()   const { return archetypes.end  ();}
   archetype_handle    handle(archetype_iterator it) const { return it - BeginArchetype();}
@@ -504,6 +506,8 @@ struct element_traits<Cell_Complex3D>
   struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0> consecutive_tag;
 };
+
+} // namespace GrAL 
 
 #endif
 

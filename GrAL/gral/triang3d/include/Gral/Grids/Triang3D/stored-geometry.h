@@ -14,6 +14,8 @@
 /*! \file
  */
 
+namespace GrAL {
+
 /*! \brief Geometry wrapper class for Triang3D
    
     \ingroup triang3dmodule
@@ -265,5 +267,7 @@ stored_geometry_triang3d::solid_angle
   // Engineering, Studentlitteratur
   return 2*atan( fabs(ap::det3(d1,d2,d3)) / (1 + ap::dot(d1,d2) + ap::dot(d2,d3) + ap::dot(d1,d3)));
 }
+
+} // namespace GrAL 
 
 #endif

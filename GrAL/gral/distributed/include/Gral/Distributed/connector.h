@@ -12,6 +12,7 @@
 #include "Utility/copy-traits.h"
 #include "Utility/reference-count.h"
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 //  
@@ -382,6 +383,7 @@ AddingConnector(SenderRge s, ReceiverRge r)
 						     r.begin(),r.end()));
 }
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/range-connector.C"

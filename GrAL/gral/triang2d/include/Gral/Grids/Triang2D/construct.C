@@ -11,6 +11,8 @@
 #include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 //  Copy-construct a Triang2D grid from a right-hand side (Connect)
@@ -144,5 +146,7 @@ void ConstructGrid0(Triang2D       &  G,
  
 
 }
+
+} // namespace GrAL 
 
 #endif

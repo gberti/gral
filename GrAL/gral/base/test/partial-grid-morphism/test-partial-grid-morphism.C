@@ -12,6 +12,7 @@
 #include "Utility/pre-post-conditions.h"
 
 int main() {
+  using namespace GrAL;
   using namespace cartesian2d;
 
   typedef RegGrid2D grid_type;

@@ -13,6 +13,8 @@
 #include "Gral/Grids/Complex2D/complex2d.h"
 #include "Gral/Grids/Complex2D/partial-grid-functions.h"
 
+namespace GrAL {
+
 /*! \defgroup complex2dboundary Boundary range for Complex2D
     \ingroup complex2dmodule
 
@@ -187,5 +189,7 @@ struct grid_types<BoundaryRange<Complex2D> >
   typedef  gt::CellOnCellIterator   CellOnCellIterator;
 };
 
+
+} // namespace GrAL
 
 #endif

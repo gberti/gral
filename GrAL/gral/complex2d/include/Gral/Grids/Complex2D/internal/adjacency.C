@@ -7,6 +7,8 @@
 #include "Gral/Grids/Complex2D/internal/adjacency.h"
 #include "Gral/Base/vtuple2d.h"
 
+namespace GrAL {
+
 template<class CellSet, class FacetMap>
 void CalculateNeighbourCells(        Complex2D&  G, 
 			       const CellSet  &  cell_set,
@@ -51,5 +53,7 @@ void CalculateNeighbourCells(        Complex2D&  G,
   // because they have been encountered exactly once.
 
 }
+
+} // namespace GrAL 
 
 #endif

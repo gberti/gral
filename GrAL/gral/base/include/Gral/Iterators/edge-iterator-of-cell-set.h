@@ -7,6 +7,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 // 
 /*! \brief  Iterator over the edges incident to a set of cells.
@@ -96,5 +98,7 @@ private:
     } 
   }
 };
+
+} // namespace GrAL 
 
 #endif

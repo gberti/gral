@@ -9,6 +9,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Algorithms/calculate-vertex-stars.h"
 
+namespace GrAL {
+
 // GERMS e.g. grid_function<Vertex, flag>
 template<class GRID, class GERMS>
 void calculate_vertex_stars(GRID const& G, // 2D, e.g. archetype of 3D cell
@@ -49,5 +51,7 @@ void calculate_positive_vertex_stars(GRID const& G, // 2D, e.g. archetype of 3D 
   }
   
 }
+
+} // namespace GrAL 
 
 #endif

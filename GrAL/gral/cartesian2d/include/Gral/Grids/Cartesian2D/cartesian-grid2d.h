@@ -19,6 +19,7 @@
 #include "Gral/Grids/Cartesian2D/index-map.h"
 #include "Gral/Base/polygon.h"
 
+namespace GrAL {
 
 namespace cartesian2d {
 
@@ -165,8 +166,8 @@ private:
   static index_type side_vertex_2_[4];
 
   // names for I/O
-  static std::string  side_name_  [4];
-  static std::string  corner_name_[4];
+  static ::std::string  side_name_  [4];
+  static ::std::string  corner_name_[4];
 
 public:
   typedef polygon1d::polygon      archetype_type;
@@ -187,10 +188,10 @@ public:
 
   // map strings to side-/corner-enum and vice versa
   // this recognises different spellings, e.g. "S", "s", "South", "south".
-  static int get_side(const std::string& nm);
-  static int get_corner(const std::string& nm);
-  static std::string side_name(int side) { return side_name_[side-1];} // returns "S", "N" etc.
-  static std::string corner_name(int corner) { return corner_name_[corner-1];} // returns "SW", "NW" etc.
+  static int get_side(const ::std::string& nm);
+  static int get_corner(const ::std::string& nm);
+  static ::std::string side_name(int side) { return side_name_[side-1];} // returns "S", "N" etc.
+  static ::std::string corner_name(int corner) { return corner_name_[corner-1];} // returns "SW", "NW" etc.
 
   static int invalid_side();
   static int invalid_corner();
@@ -1299,9 +1300,11 @@ template<>
 struct grid_types<cartesian2d::RegGrid2D> : public grid_types_base<cartesian2d::grid_types_cart2d> 
 { };
 
-
+} // namespace GrAL
 
 #include "Gral/Grids/Cartesian2D/element-traits.h"
+
+namespace GrAL {
 
 namespace cartesian2d {
 
@@ -1553,6 +1556,6 @@ inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 
 } // namespace cartesian2d 
 
-
+} // namespace GrAL 
 
 #endif

@@ -12,6 +12,8 @@
      \ingroup partitioningmodule
  */
 
+namespace GrAL {
+
 /*! \brief Collect partitions for each vertex.
     \ingroup partitiontools
 
@@ -69,6 +71,9 @@ inline void
 collect_facet_partitions(const Partition& P,                    // in
 			 Fac2PartMap    & partitions_of_facet)  // out 
 { collect_facet_partitions(P,partitions_of_facet, true);}
+
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Partitioning/internal/collect-element-partitions.C"

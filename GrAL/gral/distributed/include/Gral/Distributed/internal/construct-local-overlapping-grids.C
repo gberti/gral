@@ -16,6 +16,7 @@
 #include "Gral/Base/construct-grid.h"
 
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 //
@@ -97,5 +98,7 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid,
 	      c_corr);                  // (   global     -->  local  )
 }                                   
 
+
+} // namespace GrAL 
 
 #endif

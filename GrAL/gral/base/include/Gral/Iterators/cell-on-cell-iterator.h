@@ -7,6 +7,8 @@
 #include "Gral/Base/facet-on-cell-function.h"
 #include <map>
 
+namespace GrAL {
+
 /*! \brief A generic CellOnCellIterator 
 
    This class is a model of $GrAL CellOnCellIterator.
@@ -70,7 +72,7 @@ private:
   //  XGT::Cell c; XGT::CellOnCellIterator(c);
   //  where XGT is GT + cell_on_cell_iterator.
   //  Otherwise, we would have to wrap G+NBTABLE and each type in GT.
-  typedef std::map<grid_type const*, NBTABLE const*> context_table;
+  typedef  ::std::map<grid_type const*, NBTABLE const*> context_table;
   static  context_table  ctxt;
 public:
   cell_on_cell_iterator() : nbs(0) {}
@@ -105,6 +107,8 @@ private:
       ++fc;
   } 
 };
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Iterators/cell-on-cell-iterator.C"

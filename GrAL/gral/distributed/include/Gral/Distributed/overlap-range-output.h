@@ -6,6 +6,8 @@
 
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 /*! \brief Output adapter for an overlap range
    \ingroup overlapds
 
@@ -92,6 +94,8 @@ void CopyOverlapRanges(overlap_range_output<E>      & dest,
                        SrcRange                const& src,
                        Filter                  const& f)
 { dest.copy_from(src,f);}
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/overlap-range-output.C"

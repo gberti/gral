@@ -7,6 +7,8 @@
 #include <vector>
 #include "Gral/Subranges/enumerated-subrange.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \defgroup dynoverlap Dynamic (extensible) overlap ranges
     \ingroup overlapds
@@ -274,6 +276,6 @@ public:
 
 };
 
-
+} // namespace GrAL 
 
 #endif

@@ -14,8 +14,9 @@
 #include <fstream>
 
 int main() {
+  using namespace GrAL;
   using namespace std;
-  using namespace cartesian3d;
+  using namespace GrAL::cartesian3d;
 
   typedef CartesianGrid3D grid_type;
   typedef grid_types<grid_type> gt;

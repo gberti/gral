@@ -10,6 +10,7 @@ extern "C" {
 #include <metis.h>
 }
 
+namespace GrAL {
 
 void metis_partGraphRecursive(int n, 
                               int* xadj,    int* adjncy,
@@ -45,7 +46,7 @@ METIS_PartGraphKway(&n,
 };
 
 
-
+} // namespace GrAL 
 
 
 

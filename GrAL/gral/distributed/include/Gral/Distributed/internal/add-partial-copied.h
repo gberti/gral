@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 // construct partial (= pairwise) synchronized overlap ranges
@@ -12,6 +14,7 @@
 // This operates locally, i.e. must be called for each p.
 // 
 //----------------------------------------------------------------
+
 
 template<class Overlap,     class Partition, 
          class Part2Cell,
@@ -26,6 +29,8 @@ void AddPartialRanges(Overlap          &    ovrlp,     // out
 		      VtxCorr     const&    vtx_corr,
 		      CellCorr    const&    cell_corr);
 
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/add-partial-copied.C"

@@ -16,6 +16,8 @@
 #include "Gral/Test/test-cell-on-cell-iterator.C"
 #else
 
+namespace GrAL {
+
 /*! \brief Test a cell-on-cell iterator
  
     Test a model of $GrAL CellOnCellIterator
@@ -23,7 +25,7 @@
     \ingroup incidenceiteratortests
  */
 template<class G>
-bool test_cell_on_cell_iterator(G const& g, std::ostream & out);
+bool test_cell_on_cell_iterator(G const& g, ::std::ostream & out);
 
 /*! \brief Test a cell-on-cell iterator
  
@@ -32,7 +34,9 @@ bool test_cell_on_cell_iterator(G const& g, std::ostream & out);
     \ingroup incidenceiteratortests
  */
 template<class G, class GT>
-bool test_cell_on_cell_iterator(G const& g, std::ostream & out, class GT);
+bool test_cell_on_cell_iterator(G const& g, ::std::ostream & out, class GT);
+
+} // namespace GrAL 
 
 #endif
 

@@ -25,6 +25,7 @@
 
 
 int main() {
+  using namespace GrAL;
 
   typedef Complex2D grid_type;
   typedef grid_types<grid_type> gt;

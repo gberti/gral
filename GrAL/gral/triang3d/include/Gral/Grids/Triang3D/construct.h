@@ -12,6 +12,8 @@
 /*! \file 
  */
 
+namespace GrAL {
+
 /*! \defgroup triang3dcopy Generic copy operations for Triang3D
    
     \ingroup triang3dmodule
@@ -82,6 +84,9 @@ template<class G2, class VertexMap, class CellMap>
 extern void 
 ConstructGrid0(Triang3D      & destG, 
 	       G2       const& srcG);
+
+
+} // namespace GrAL 
 
 // for inclusion model
 

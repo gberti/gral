@@ -11,6 +11,8 @@
 
 #include "Gral/Distributed/overlapping-grid-function-adapter.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \brief A grid function that knows which parts are owned by other parts.
     \ingroup overlappinggrids
@@ -53,5 +55,6 @@ public:
 
 };
 
+} // namespace GrAL 
 
 #endif

@@ -3,6 +3,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 template
 < class Ovlp1, 
   class Ovlp2,
@@ -19,6 +21,8 @@ void CopyOverlap(Ovlp1                  &  dest,            // out
 		 FG1               const&  fg_dest,         // in
 		 FineVCorr         const&  src2dest_v,      // in 
 		 FineCCorr         const&  src2dest_c);     // in
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/copy-overlap.C"

@@ -12,6 +12,7 @@
 #include <iostream>
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   
   typedef Triang3D              grid_type;

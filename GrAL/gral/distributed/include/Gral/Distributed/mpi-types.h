@@ -9,6 +9,8 @@
 #include <mpi.h>
 
 
+namespace GrAL {
+
 /*! \brief traits class to help calling MPI-routines
     from template functions.
     \ingroup mpidistributedgrids   
@@ -44,5 +46,6 @@ struct mpi_types<long double> {
   static MPI_Datatype tag() { return MPI_LONG_DOUBLE; }
 };
 
+} // namespace GrAL 
 
 #endif

@@ -19,6 +19,8 @@
     \see Gral base module \ref copyoperations
 */
 
+  
+namespace GrAL {
 
 /*! \brief Copy any grid \c srcG to \c  Triang2D, including geometry
 
@@ -75,6 +77,9 @@ template<class G2, class VertexMap, class CellMap>
 extern void 
 ConstructGrid0(Triang2D      & destG, 
 	       G2       const& srcG);
+
+
+} // namespace GrAL 
 
 // for inclusion model
 

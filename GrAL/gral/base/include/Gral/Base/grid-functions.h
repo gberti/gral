@@ -8,6 +8,8 @@
 #include "Config/compiler-config.h"
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 /*! \brief empty template for total grid functions.
    \ingroup gridfunctions
 
@@ -75,6 +77,6 @@ class grid_function {};
 template<class E, class T>
 class partial_grid_function;
 
-
+} // namespace GrAL 
 
 #endif

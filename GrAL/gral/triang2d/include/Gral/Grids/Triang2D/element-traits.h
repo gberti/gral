@@ -8,6 +8,7 @@
 
 #include "Gral/Grids/Triang2D/triang2d.h"
 
+namespace GrAL {
  
 template<>
 struct element_traits<Triang2D_Vertex> 
@@ -52,6 +53,7 @@ struct element_traits<Triang2D::Edge>
 
 };
 
+} // namespace GrAL 
 
 #endif
 

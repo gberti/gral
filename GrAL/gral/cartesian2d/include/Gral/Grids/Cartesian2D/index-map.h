@@ -6,9 +6,12 @@
 /*! \file
  */
 
+
 #include <iostream>
 #include "Utility/pre-post-conditions.h"
 #include "Container/tuple.h"
+
+namespace GrAL {
 
 /*! \brief Mapping between integer intervals and integer rectangles
 
@@ -46,7 +49,7 @@ public:
   struct range {
     int x,y;
     range(int xx, int yy) : x(xx), y(yy) {}
-    friend std::ostream& operator<<(std::ostream& out, const range& r) {
+    friend ::std::ostream& operator<<(::std::ostream& out, const range& r) {
       return (out << '[' << r.x << ',' << r.y << ']');
     }
   };
@@ -123,5 +126,7 @@ private:
   int nx,ny;
   int rect_size;
 };
+
+} // namespace GrAL 
 
 #endif

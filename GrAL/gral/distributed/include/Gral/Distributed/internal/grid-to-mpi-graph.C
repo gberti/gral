@@ -14,6 +14,8 @@
 #include "Gral/Base/element-sequence-references.h"
 
 
+namespace GrAL {
+
 template<class Grid>
 int mpi_graph_size_of_index_array(const Grid& G)
 { return (G.NumOfCells() == 0 ? 1 : G.NumOfCells() ); }
@@ -59,5 +61,7 @@ void mpi_graph_format(const Grid& G,
   }
 }
 
+
+} // namespace GrAL 
 
 #endif 

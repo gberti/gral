@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 /*! Construct an overlap from a partitioning and a stencil (overlap pattern)
     \ingroup overlap
     
@@ -29,6 +31,8 @@ void ConstructOverlap(Overlap          & Ovlp,         // out
 		      Part2Cell   const& part2cell,
 		      Cell2Part   const& cell2part,
 		      GridMap     const& grid_map);
+
+} // namespace GrAL 
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

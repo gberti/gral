@@ -16,6 +16,8 @@
 #include "Gral/Test/test-edge-on-cell-iterator.C"
 #else
 
+namespace GrAL {
+
 /*! \brief Test a edge-on-cell iterator
  
     Test a model of $GrAL EdgeOnCellIterator
@@ -23,7 +25,7 @@
     \ingroup incidenceiteratortests
  */
 template<class G>
-bool test_edge_on_cell_iterator(G const& g, std::ostream & out);
+bool test_edge_on_cell_iterator(G const& g, ::std::ostream & out);
 
 
 /*! \brief Test a edge-on-cell iterator
@@ -33,8 +35,9 @@ bool test_edge_on_cell_iterator(G const& g, std::ostream & out);
     \ingroup incidenceiteratortests
  */
 template<class G, class GT>
-bool test_edge_on_cell_iterator(G const& g, std::ostream & out, GT);
+bool test_edge_on_cell_iterator(G const& g, ::std::ostream & out, GT);
 
+} // namespace GrAL 
 
 #endif
 

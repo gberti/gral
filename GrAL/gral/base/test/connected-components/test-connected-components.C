@@ -14,6 +14,7 @@
 */
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   using namespace cartesian2d;
 

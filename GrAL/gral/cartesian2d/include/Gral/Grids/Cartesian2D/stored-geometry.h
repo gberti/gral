@@ -19,6 +19,8 @@
     \ingroup cartesian2dmodule
  */
 
+namespace GrAL {
+
 namespace cartesian2d {
 
 template<class Coord2D>
@@ -52,7 +54,7 @@ public:
   const coord_type& coord(const Vertex& v) const { return coords_(v); }
         coord_type& coord(const Vertex& v)       { return coords_[v]; }
 
-  void read(std::istream& in) {
+  void read(::std::istream& in) {
     for(typename grid_function<Vertex,coord_type>::iterator ii = coords_.begin(); ii != coords_.end(); ++ii)
       in >> *ii;
   }
@@ -116,7 +118,7 @@ public:
     { base::init(gg); }
   //@}
 
-  friend std::istream& operator>>(std::istream& in, self& rs) { rs.read(in); return in;}
+  friend ::std::istream& operator>>(::std::istream& in, self& rs) { rs.read(in); return in;}
 
   /*! \brief geometric representation of edges
    */
@@ -150,6 +152,6 @@ private:
 };
 
 } // namespace cartesian2d
-
+} // namespace GrAL 
 
 #endif

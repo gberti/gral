@@ -3,6 +3,8 @@
 
 #include "Gral/Grids/Complex3D/complex3d.h"
 
+namespace GrAL {
+
 Complex3D::Complex3D()
   : num_of_vertices(0)
 { offset.push_back(0); }
@@ -24,3 +26,5 @@ void Complex3D::clear()
 
 
 void Complex3D::calculate_dependent() {}
+
+} // namespace GrAL 

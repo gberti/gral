@@ -11,6 +11,7 @@
 #include "Gral/Base/restricted-grid-function-adapter.h"
 #include "Gral/Distributed/composite-grid-function.h"
 
+namespace GrAL {
 
 template<class E, class T, class CompositeG>
 composite_grid_function<E,T,CompositeG>::composite_grid_function(const CompositeG&  cg)
@@ -42,5 +43,7 @@ void composite_grid_function<E,T,CompositeG>::synchronize()
   for_each(the_senders.begin(),   the_senders.end(),   ConnectorSendData());
   for_each(the_receivers.begin(), the_receivers.end(), ConnectorRecvData());
 }
+
+} // namespace GrAL 
 
 #endif

@@ -4,6 +4,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*! \brief Mark cells on partition boundary according to pattern.
@@ -56,6 +57,8 @@ void mark_private_range(ERange& priv,
 			const ERange& exposed, 
 			const ERange& shared, 
 			const ERange& copied);
+
+} // namespace GrAL 
 
 #ifdef  NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/mark-ranges.C"

@@ -21,15 +21,17 @@
 #include "IO/control-device.h"
 
 
-// use 3D functionality for class 'point' 
-template<>
-struct dimension_dependent_primitives<point, variable_dimension_tag>
-  : public dimension_dependent_primitives_3d<point> 
-{};
-
+namespace GrAL {
+  // use 3D functionality for class 'point' 
+  template<>
+  struct dimension_dependent_primitives<point, variable_dimension_tag>
+    : public dimension_dependent_primitives_3d<point> 
+  {};
+}
 
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using std::cout;
   using cartesian3d::CartesianGrid3D;
   using cartesian3d::mapped_geometry;

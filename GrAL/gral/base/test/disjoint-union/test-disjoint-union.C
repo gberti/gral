@@ -21,6 +21,7 @@
 #include <iostream>
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   namespace c2d = cartesian2d;
 

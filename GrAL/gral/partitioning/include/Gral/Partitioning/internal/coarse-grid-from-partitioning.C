@@ -14,6 +14,7 @@
 
 #include "Gral/Base/construct-grid.h"
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 //  
@@ -141,5 +142,7 @@ void ConstructCoarsePartitionGrid(CoarseGrid& G,      // out
     coarsecell2part[CoarseCellCorr[c]] = c;
 
 }
+
+} // namespace GrAL 
 
 #endif

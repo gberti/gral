@@ -6,6 +6,8 @@
 #include "Gral/Distributed/copy-overlap-ranges.h"
 #include "Container/sequence-algorithms.h"
 
+namespace GrAL {
+
 template<class DestRange, class SrcRange,  class Filter>
 void CopyOverlapRanges(DestRange     & dest,
                        SrcRange const& src, 
@@ -48,5 +50,7 @@ void CopyOverlapRanges(DestRange& dest,
 }
 
 */
+
+} // namespace GrAL 
 
 #endif

@@ -10,6 +10,8 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
 
+namespace GrAL {
+
 /*! \defgroup complex2dgf Total grid functions for Complex2D
 
     \ingroup complex2dmodule
@@ -72,6 +74,6 @@ public:
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
 };
 
-
+} // namespace GrAL 
 
 #endif

@@ -6,6 +6,7 @@
 #include "Gral/Distributed/copy-overlapping-grid.h"
 #include "Gral/Distributed/copy-overlap.h"
 
+namespace GrAL {
 
 template
 < class OG,          //  overlapping grid
@@ -38,5 +39,6 @@ void CopyOverlappingGrid(OG             & og_dest,
   // og_dest.calc_dependent_information()
 }
 
+} // namespace GrAL 
 
 #endif

@@ -9,6 +9,8 @@
 #include "Gral/Distributed/connector.h"
 #include "Gral/Distributed/overlapping-grid-function.h"
 
+namespace GrAL {
+
 
 /*! \brief Grid function for a composite grid.
     \ingroup compositegrids
@@ -78,6 +80,8 @@ public:
   //  void end_calculation();
 
 };
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/composite-grid-function.C"

@@ -12,6 +12,7 @@
 #include "Gral/Distributed/overlapping-grid-function.h"
 #include "Gral/Distributed/mpi-distributed-grid-function-adapter.h"
 
+namespace GrAL {
 
 /*! \brief Grid function for a MPIDistributedGrid
     \ingroup mpidistributedgrids
@@ -50,5 +51,7 @@ public:
   }
  
 };
+
+} // namespace GrAL 
 
 #endif

@@ -36,7 +36,7 @@ private:
   const Complex* _cc;
 
 public:
-  friend std::ostream& operator<<(std::ostream& out, const BoundaryFacet2D_Iterator& it)
+  friend ::std::ostream& operator<<(::std::ostream& out, const BoundaryFacet2D_Iterator& it)
     { return (out << *(it._bf)); }
 };
 

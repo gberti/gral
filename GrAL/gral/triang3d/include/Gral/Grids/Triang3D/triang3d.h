@@ -16,6 +16,8 @@
 
 #include <algorithm>
 
+namespace GrAL {
+
 struct grid_types_Triang3D
   :  public virtual
     generic_facet::grid_types_facet
@@ -475,6 +477,6 @@ Triang3D_Cell_base::V(Triang3D_Cell_base::archgt::Vertex lv) const { return Vert
 //Triang3D_FacetOnCellIterator::operator*() const
 //{ return Triang3D_Edge(*this); }
 
-
+} // namespace GrAL 
 
 #endif

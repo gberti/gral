@@ -6,15 +6,17 @@
 #include "Gral/Test/test-facet-on-cell-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 template<class G, class GT>
-bool test_facet_on_cell_iterator(G const& g, std::ostream & out, GT);
+bool test_facet_on_cell_iterator(G const& g, ::std::ostream & out, GT);
 
 template<class G>
-bool test_facet_on_cell_iterator(G const& g, std::ostream & out)
+bool test_facet_on_cell_iterator(G const& g, ::std::ostream & out)
 { return test_facet_on_cell_iterator(g,out, grid_types<G>()); }
 
 template<class G, class GT>
-bool test_facet_on_cell_iterator(G const& g, std::ostream & out, GT)
+bool test_facet_on_cell_iterator(G const& g, ::std::ostream & out, GT)
 {
   typedef grid_types<G> gt;
   typedef typename gt::CellIterator        CellIterator;
@@ -49,5 +51,7 @@ bool test_facet_on_cell_iterator(G const& g, std::ostream & out, GT)
   }
   return true;
 }
+
+} // namespace GrAL 
 
 #endif

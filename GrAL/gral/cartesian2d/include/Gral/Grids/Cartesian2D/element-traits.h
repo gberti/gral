@@ -6,6 +6,8 @@
 #include "Gral/Base/element-traits.h"
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
+namespace GrAL {
+
 /*! \defgroup elementtraitsreggrid2d element traits for RegGrid2D
     \ingroup cartesian2dmodule
     
@@ -54,5 +56,6 @@ struct element_traits<cartesian2d::RegGrid2D::Cell>
   { return (g.cell(h));}
 };
 
+} // namespace GrAL 
 
 #endif

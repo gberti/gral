@@ -10,6 +10,12 @@
 
 #include <iostream>
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Test/test-facet-on-cell-iterator.C"
+#else
+
+namespace GrAL {
+
 /*! \brief Test a facet-on-cell iterator
  
     Test a model of $GrAL FacetOnCellIterator
@@ -17,7 +23,7 @@
     \ingroup incidenceiteratortests
  */
 template<class G>
-bool test_facet_on_cell_iterator(G const& g, std::ostream & out);
+bool test_facet_on_cell_iterator(G const& g, ::std::ostream & out);
 
 /*! \brief Test a facet-on-cell iterator
  
@@ -26,11 +32,11 @@ bool test_facet_on_cell_iterator(G const& g, std::ostream & out);
     \ingroup incidenceiteratortests
  */
 template<class G, class GT>
-bool test_facet_on_cell_iterator(G const& g, std::ostream & out, GT);
+bool test_facet_on_cell_iterator(G const& g, ::std::ostream & out, GT);
+
+} // namespace GrAL 
 
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Test/test-facet-on-cell-iterator.C"
 #endif
 
 #endif

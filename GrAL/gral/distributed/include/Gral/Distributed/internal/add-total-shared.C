@@ -7,6 +7,8 @@
 #include "Gral/Distributed/internal/add-total-shared.h"
 #include "Gral/Base/element-sequence-references.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 //  void AddTotalSharedRanges(...);
@@ -48,6 +50,6 @@ void AddTotalSharedRanges(VertexRange       & shared_v, // out
     shared_v.push_back(*v);
 }
 
-
+} // namespace GrAL 
 
 #endif

@@ -10,6 +10,8 @@
 #include "Gral/Algorithms/cell-neighbor-search.h"
 
 
+namespace GrAL {
+
 struct nb_type {
   nb_type(int * nbs) : nb(nbs) {}
   int& operator[](Triang2D::FacetOnCellIterator const& fc)
@@ -160,3 +162,5 @@ void TestTriang2D::test_iterators(const Triang2D& CC,
   
   
 }
+
+} // namespace GrAL 

@@ -14,10 +14,11 @@
 
 #include "Gral/IO/stream-grid-adapter.h"
 
+
 template<class PHI>
 void print_morphism(PHI const& phi, std::ostream& out)
 {
-  typedef grid_types<typename PHI::grid_type_def> gt;
+  typedef GrAL::grid_types<typename PHI::grid_type_def> gt;
   typename PHI::grid_type_def const& G(phi.DefGrid());
 
   out << "Vertices:\n";
@@ -39,7 +40,7 @@ void print_morphism(PHI const& phi, std::ostream& out)
 template<class GRID, class PHI>
 void check_identity(GRID const& G, PHI const& phi)
 {
-  typedef grid_types<GRID> gt;
+  typedef GrAL::grid_types<GRID> gt;
   std::cout << "Vertices:\n";
   for(typename gt::VertexIterator v(G); ! v.IsDone(); ++v) {
     std::cout << v.handle() <<  " -> " << phi(*v).handle() << '\n';
@@ -60,6 +61,7 @@ void check_identity(GRID const& G, PHI const& phi)
 }
 
 int main() {
+  using namespace GrAL;
   using namespace cartesian2d;
   using cartesian3d::CartesianGrid3D;
 

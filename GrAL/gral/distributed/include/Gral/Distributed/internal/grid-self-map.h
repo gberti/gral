@@ -7,6 +7,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Container/bijective-mapping.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 // template<class Grid> class GridSelfMap;
@@ -65,5 +67,7 @@ public:
 	}
   
 };
+
+} // namespace GrAL 
 
 #endif

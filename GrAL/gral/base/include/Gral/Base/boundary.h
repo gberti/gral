@@ -2,8 +2,9 @@
 #define GRAL_BASE_GB_GRID_BOUNDARY_H
 
 
-
 // $LICENSE
+
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*! \brief  A reference to the combinatorial boundary of a grid.
@@ -37,5 +38,6 @@ inline
 BoundaryRange<Grid> GetBoundaryRange(Grid const& G)
 { return BoundaryRange<Grid>(G); }
 
+} // namespace GrAL 
 
 #endif

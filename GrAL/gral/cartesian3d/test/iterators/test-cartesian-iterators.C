@@ -20,8 +20,9 @@
 #include "Utility/pre-post-conditions.h"
 
 int main() {
+  using namespace GrAL;
   using namespace std; 
-  using namespace cartesian3d;
+  using namespace GrAL::cartesian3d;
 
   ofstream* out = new ofstream("test-cartesian-iterators.out");
 
@@ -29,8 +30,8 @@ int main() {
   // testing default constructor
   CartesianGrid3D R0;
   CartesianGrid3D R1; R1 = R0;
-  std::vector<CartesianGrid3D> RR (10);
-  std::vector<CartesianGrid3D> RR2(10);
+  vector<CartesianGrid3D> RR (10);
+  vector<CartesianGrid3D> RR2(10);
   RR2 = RR;
 
   // Testing archetype

@@ -10,6 +10,9 @@
 #include "Gral/Partitioning/partitioning.h"
 #include "Container/partial-mapping.h"
 
+
+namespace GrAL {
+
 template<class Partitioning, class CellMapping>
 void CreatePartitioning(Partitioning& P,      // out
 			const CellMapping& f) // in
@@ -30,5 +33,6 @@ void CreatePartitioning(Partitioning& P,      // out
 
 }
 
+} // namespace GrAL 
 
 #endif

@@ -6,6 +6,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/ref-ptr.h"
 
+namespace GrAL {
+
 /*! \brief Helper class to reuse the archetype functionality of a base grid
 
     \ingroup gridarchetypes
@@ -46,6 +48,7 @@ struct archetypes_from_base_grid_types {
 };
 
 
+} // namespace GrAL 
 
 
 #endif

@@ -7,6 +7,7 @@
 #include <mpi.h>
 #include "Gral/Distributed/mpi-reduce.h"
 
+namespace GrAL { 
 template<class T, class CTXT> 
 T mpi_global_max(const T& t, const CTXT& Ctxt)
 {
@@ -20,5 +21,6 @@ T mpi_global_max(const T& t, const CTXT& Ctxt)
   return the_max;
 }
 
+} // namespace GrAL 
 
 #endif

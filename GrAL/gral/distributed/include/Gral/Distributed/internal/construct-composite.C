@@ -15,6 +15,8 @@
 #include "Gral/Distributed/construct-local-overlapping-grids.h"
 #include "Gral/Distributed/internal/grid-self-map.h"
 
+namespace GrAL {
+
 template<class CompositeG, class Partition, class Geometry, 
          class OVPattern, class VCorr, class CCorr>
 void ConstructComposite(CompositeG     & CG,
@@ -91,5 +93,7 @@ void ConstructComposite(CompositeG     & CG,
   check_composite_grid(CG);
 
 }
+
+} // namespace GrAL 
 
 #endif

@@ -7,6 +7,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include <iterator>
 
+namespace GrAL {
+
 /*! \defgroup streamgrid Adapter for serial 2D grid representation
     \ingroup gridio
     \see Module gridio
@@ -98,7 +100,7 @@ public:
   
   // iterator op.
   self& operator++() {
-    std::advance(vertices,numv+1);
+     ::std::advance(vertices,numv+1);
     ++c;
     if(!IsDone()) 
       numv = *vertices;
@@ -268,7 +270,7 @@ class stream_geom_mask {
 private:
   It begin;
 public:
-  typedef std::iterator_traits<It>    traits;
+  typedef  ::std::iterator_traits<It>    traits;
   typedef typename traits::value_type coord_type;
 
   stream_geom_mask(It b) : begin(b) {}
@@ -287,5 +289,7 @@ template<class It>
 inline
 stream_geom_mask<It>
 StreamGeomMask(It it) { return stream_geom_mask<It>(it);}
+
+} // namespace GrAL 
 
 #endif

@@ -17,7 +17,7 @@
 template<class GRID1D>
 void test_switch(GRID1D const& G, std::ostream& out)
 {
-  typedef grid_types<GRID1D> gt;
+  typedef GrAL::grid_types<GRID1D> gt;
   typename gt::Cell   c(* G.FirstCell()); 
   typename gt::Vertex v(* c.FirstVertex());
   typename gt::Vertex v_first = v;
@@ -36,6 +36,7 @@ void test_switch(GRID1D const& G, std::ostream& out)
 
 
 int main() {
+  using namespace GrAL;
   using namespace std;
 
   typedef grid_types<polygon1d::polygon> gt;

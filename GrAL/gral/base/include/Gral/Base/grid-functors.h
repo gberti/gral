@@ -8,6 +8,8 @@
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \defgroup element2handle  Element <-> Handle conversion function objects
     \ingroup  functors
@@ -578,5 +580,7 @@ template<class Cell>
 cell_is_nb_pred<Cell> IsNeighbourCell(const Cell& rs)
 { return cell_is_nb_pred<Cell>(rs); }
 
+
+} // namespace GrAL 
 
 #endif

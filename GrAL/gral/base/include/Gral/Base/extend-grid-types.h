@@ -4,6 +4,7 @@
 // $LICENSE_NEC
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 #define DEFINE_OVERRIDE(T) template<class V> struct  override_##T { typedef V T;};
 
@@ -129,5 +130,7 @@ struct xgt : public ORIGGT, public CHANGE {};
   SPEC_XGT(CellOnCellIterator);
 
 #undef SPEC_XGT
+
+} // namespace GrAL 
 
 #endif

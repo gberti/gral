@@ -13,6 +13,8 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
 
+namespace GrAL {
+
 /*! \defgroup triang2dgf Total grid functions for Triang2D
     \ingroup triang2dmodule
  
@@ -75,6 +77,8 @@ public:
 
 };
 
+
+} // namespace GrAL 
 
 #endif
 

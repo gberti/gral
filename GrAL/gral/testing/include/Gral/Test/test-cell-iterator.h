@@ -15,6 +15,8 @@
 #include "Gral/Test/test-cell-iterator.C"
 #else
 
+namespace GrAL {
+
 /*! \brief Test of cell iterators
 
     Models of $GrAL CellIterator are tested.
@@ -22,7 +24,9 @@
     \ingroup sequenceiteratortest
 */
 template<class G>
-bool test_cell_iterator(G const& g, std::ostream & out);
+bool test_cell_iterator(G const& g, ::std::ostream & out);
+
+} // namespace GrAL 
 
 #endif
 

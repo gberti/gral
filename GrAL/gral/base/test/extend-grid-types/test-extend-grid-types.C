@@ -16,6 +16,7 @@
 
 
 int main() {
+  using namespace GrAL;
   using namespace std; 
   typedef grid_types<cartesian2d::CartesianGrid2D> origgt;
   cout << "grid_types<CartesianGrid2D>:\n";

@@ -1,9 +1,12 @@
 #ifndef GRAL_GB_BASE_ELEMENT_HANDLE_H
 #define GRAL_GB_BASE_ELEMENT_HANDLE_H
 
+// $LICENSE 
 
 #include <iostream>
 #include "Container/my-hash-map.h"
+
+namespace GrAL {
 
 template<class GRID, class element_tag>  //, class GT = grid_types<GRID> >
 struct element_handle_int 
@@ -24,22 +27,27 @@ struct element_handle_int
 };
 
 template<class GRID, class element_tag>
-std::istream& operator>>(std::istream& in, element_handle_int<GRID, element_tag> & h)
+::std::istream& operator>>( ::std::istream& in, element_handle_int<GRID, element_tag> & h)
 { return (in >> h.h); }
+
+} // namespace GrAL
 
 namespace STDEXT {
 
   template<class T> struct hash;
 
   template<class GRID, class element_tag>
-    struct  hash<element_handle_int<GRID, element_tag> > { 
-      typedef element_handle_int<GRID, element_tag> key_type;
-      typedef element_handle_int<GRID, element_tag> argument_type;
+    struct  hash<GrAL::element_handle_int<GRID, element_tag> > { 
+      typedef GrAL::element_handle_int<GRID, element_tag> key_type;
+      typedef GrAL::element_handle_int<GRID, element_tag> argument_type;
       typedef size_t                                result_type;
-      size_t operator()(element_handle_int<GRID, element_tag> h) const { return h.h;}
+      size_t operator()(GrAL::element_handle_int<GRID, element_tag> h) const { return h.h;}
     };
-}
 
+} // namespace ::STDEXT
+
+
+namespace GrAL {
 /*! \brief Integer based vertex handle
 
      \ingroup elements
@@ -150,53 +158,56 @@ struct cell_handle_int
 
 
 template<class GRID>
-std::istream& operator>>(std::istream& in, vertex_handle_int<GRID> & h)
+::std::istream& operator>>(::std::istream& in, vertex_handle_int<GRID> & h)
 { return (in >> h.h); }
 
 template<class GRID>
-std::istream& operator>>(std::istream& in, edge_handle_int<GRID> & h)
+::std::istream& operator>>(::std::istream& in, edge_handle_int<GRID> & h)
 { return (in >> h.h); }
 
 template<class GRID>
-std::istream& operator>>(std::istream& in, facet_handle_int<GRID> & h)
+::std::istream& operator>>(::std::istream& in, facet_handle_int<GRID> & h)
 { return (in >> h.h); }
 
 template<class GRID>
-std::istream& operator>>(std::istream& in, cell_handle_int<GRID> & h)
+::std::istream& operator>>(::std::istream& in, cell_handle_int<GRID> & h)
 { return (in >> h.h); }
+
+} // namespace GrAL 
 
 namespace STDEXT  {
   template<class T> struct hash;
 
   template<class GRID>
-    struct  hash<vertex_handle_int<GRID> > { 
-      typedef vertex_handle_int<GRID> key_type;
-      typedef vertex_handle_int<GRID> argument_type;
+    struct  hash<GrAL::vertex_handle_int<GRID> > { 
+      typedef GrAL::vertex_handle_int<GRID> key_type;
+      typedef GrAL::vertex_handle_int<GRID> argument_type;
       typedef size_t                  result_type;
-      size_t operator()(vertex_handle_int<GRID> const& h) const { return h.h;}
+      size_t operator()(GrAL::vertex_handle_int<GRID> const& h) const { return h.h;}
     };
   template<class GRID>
-    struct  hash<edge_handle_int<GRID> > { 
-      typedef edge_handle_int<GRID> key_type;
-      typedef edge_handle_int<GRID> argument_type;
+    struct  hash<GrAL::edge_handle_int<GRID> > { 
+      typedef GrAL::edge_handle_int<GRID> key_type;
+      typedef GrAL::edge_handle_int<GRID> argument_type;
       typedef size_t                result_type;
-      size_t operator()(edge_handle_int<GRID> h) const { return h.h;}
+      size_t operator()(GrAL::edge_handle_int<GRID> h) const { return h.h;}
     };
   template<class GRID>
-    struct  hash<facet_handle_int<GRID> > { 
-      typedef facet_handle_int<GRID> key_type;
-      typedef facet_handle_int<GRID> argument_type;
+    struct  hash<GrAL::facet_handle_int<GRID> > { 
+      typedef GrAL::facet_handle_int<GRID> key_type;
+      typedef GrAL::facet_handle_int<GRID> argument_type;
       typedef size_t                 result_type;
-      size_t operator()(facet_handle_int<GRID> h) const { return h.h;}
+      size_t operator()(GrAL::facet_handle_int<GRID> h) const { return h.h;}
     };
   template<class GRID>
-    struct  hash<cell_handle_int<GRID> > { 
-      typedef cell_handle_int<GRID> key_type;
-      typedef cell_handle_int<GRID> argument_type;
+    struct  hash<GrAL::cell_handle_int<GRID> > { 
+      typedef GrAL::cell_handle_int<GRID> key_type;
+      typedef GrAL::cell_handle_int<GRID> argument_type;
       typedef size_t                result_type;
-      size_t operator()(cell_handle_int<GRID> h) const { return h.h;}
+      size_t operator()(GrAL::cell_handle_int<GRID> h) const { return h.h;}
     };
 }
+
 
 #endif
 

@@ -10,6 +10,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/ref-ptr.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 /*! \defgroup geometrictypes2d   Geometric types for 2D (obsolete)
@@ -235,5 +237,7 @@ bool  operator< (vertex_iterator_Polygon2d<Face,geom> const& lhs,
 template<class geom>
 class Polyhedron {};
 */
+
+} // namespace GrAL 
 
 #endif

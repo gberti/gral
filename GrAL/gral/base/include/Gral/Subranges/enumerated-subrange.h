@@ -22,6 +22,7 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/element-numbering.h"
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*! \defgroup enumsubranges Enumerated Grid Subranges
@@ -334,7 +335,7 @@ template<class E>
 class  enumerated_element_range_aux {
   typedef element_traits<E>            et;
   typedef typename et::handle_type     elt_handle;
-  typedef std::vector<elt_handle>      container_type;
+  typedef  ::std::vector<elt_handle>      container_type;
   typedef handle2element_map<E>        handle_map;
 public:
   typedef mapped_element_ra_seq_iterator<container_type,
@@ -371,7 +372,7 @@ public:
 
   //---------- own types ----------------------
 
-  typedef std::vector<elt_handle>               elt_sequence;
+  typedef  ::std::vector<elt_handle>               elt_sequence;
   typedef elt_sequence                          container_type;
   typedef typename elt_sequence::const_iterator seq_iterator;
   typedef typename elt_sequence::const_iterator const_iterator;
@@ -619,8 +620,8 @@ public:
   typedef tp<Cell>   tpC;
 
   //---------- own types ----------------------
-  typedef std::vector<vertex_handle> vertex_sequence;
-  typedef std::vector<cell_handle>   cell_sequence;
+  typedef  ::std::vector<vertex_handle> vertex_sequence;
+  typedef  ::std::vector<cell_handle>   cell_sequence;
   typedef typename vertex_sequence::const_iterator v_iterator;
   typedef typename cell_sequence  ::const_iterator c_iterator;
 
@@ -1181,6 +1182,8 @@ void ConstructSubrangeFromCells
  (Range  & R,     // OUT: the subrange to be constructed
   CellIt   Cit);  // IN : range(Cit) is the cell subrange 
 
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Subranges/enumerated-subrange.C"

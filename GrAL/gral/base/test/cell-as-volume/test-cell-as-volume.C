@@ -14,6 +14,8 @@
 
 #include <iostream>
 
+using namespace GrAL;
+
 namespace cnd = cartesiannd;
 typedef cnd::grid<2>                       grid_type;
 typedef cnd::default_coord<cnd::grid<2> >::type coord2d;

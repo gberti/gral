@@ -21,6 +21,8 @@
 #include "Gral/Grids/Complex2D/internal/copy.h"
 #include "Gral/Grids/Complex2D/internal/adjacency.h"
 
+namespace GrAL {
+
 
 template<class G2, class Geom2, class VertexIdent,
          class VertexMap, class CellMap>
@@ -127,7 +129,7 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   //--- (3) set facet table --------------------------------
 
   typedef vtuple_2d<Complex2D> vtuple;
-  typedef std::map<vtuple, FacetOnCellIterator, std::less<vtuple> > FacetTable;
+  typedef ::std::map<vtuple, FacetOnCellIterator, ::std::less<vtuple> > FacetTable;
   FacetTable facet_id; // facets contained in Iv
 
   // range(Iv) \subset V_h(G) : vertices that are identified
@@ -153,7 +155,7 @@ void EnlargeGrid(Complex2D& G,                 // in/out
 	    facet_id[vtf] = fcv;
 	  }
 	  else {
-	    std::cerr << "identfication facet not on boundary: vi = " 
+	    ::std::cerr << "identfication facet not on boundary: vi = " 
 		 << *vi << " cv = " << G.handle(*cv) << " fcv =  " << fcv << '\n';
 	  }
 	  //  facet_id[vtf] = *fcv;
@@ -264,5 +266,7 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   }
 }
 
+
+} // namespace GrAL 
 
 #endif

@@ -15,6 +15,8 @@
 #include <iostream>
 #include <cmath>
 
+namespace GrAL {
+
 /*! \brief Geometry wrapper class for Triang2D
 
    \ingroup triang2dmodule 
@@ -256,5 +258,7 @@ stored_geometry_triang2d::solid_angle(stored_geometry_triang2d::VertexOnCellIter
   coord_type dir_e2 = (coord(TheGrid().switched_vertex(v,e2)) - coord(v));
   return ap::angle(dir_e1, dir_e2);
 }
+
+} // namespace GrAL 
 
 #endif

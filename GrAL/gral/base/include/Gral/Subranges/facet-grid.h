@@ -9,7 +9,7 @@
 // for vertex_set_of_facets_iterator<>
 #include "Gral/Base/element-sequence-references.h"
 
-
+namespace GrAL {
 
 /*! \internal
     \brief helper class for facet_grid<FACETRANGE>
@@ -83,5 +83,6 @@ struct grid_types<facet_grid<FACETRANGE> >
 };
 
 
+} // namespace GrAL 
 
 #endif

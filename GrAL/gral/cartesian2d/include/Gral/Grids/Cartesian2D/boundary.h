@@ -13,6 +13,8 @@
 
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
+namespace GrAL {
+
 /*! \defgroup cartesian2dboundary Boundary Range for Cartesian2D
      \ingroup cartesian2dmodule
 */
@@ -93,6 +95,6 @@ struct grid_types<BoundaryRange<cartesian2d::RegGrid2D> >
  // typedef  gt::CellOnCellIterator   CellOnCellIterator;
 };
 
-
+} // namespace GrAL 
 
 #endif

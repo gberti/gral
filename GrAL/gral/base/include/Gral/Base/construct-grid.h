@@ -7,6 +7,15 @@
 /*! \file
  */
 
+#include "Container/dummy-mapping.h"
+#include "Container/partial-mapping.h"
+#include "Geometry/point-traits.h"
+
+#include "Gral/Base/grid-morphism.h"
+
+
+
+namespace GrAL {
 
 /*! \defgroup copyoperations Generic grid copy operations
     \brief copy-construct a grid \c destG from another grid \c srcG
@@ -47,12 +56,6 @@
   \endcode
 */
 
-
-#include "Container/dummy-mapping.h"
-#include "Container/partial-mapping.h"
-#include "Geometry/point-traits.h"
-
-#include "Gral/Base/grid-morphism.h"
 
 
 /*!  Construct combinatorial grid, without mappings
@@ -175,6 +178,7 @@ void ConstructGrid(G_DEST        & G_dest,
   ConstructGridV(G_dest, Geom_dest, G_src, Geom_src, v_corr);
 }
 
+} // namespace GrAL 
 
 #endif
 

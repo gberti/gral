@@ -47,6 +47,7 @@
 
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using std::string;
   using std::cerr;
   using std::ifstream;

@@ -6,6 +6,7 @@
 
 #include "Gral/Subranges/enumerated-subrange.h"
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 //  ConstructSubrangeFromCells
@@ -99,5 +100,7 @@ void ConstructSubrangeFromCells
 
   
 }
+
+}  // namespace GrAL 
 
 #endif

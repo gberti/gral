@@ -6,6 +6,7 @@
 
 #include "Gral/Distributed/overlap-range-input.h"
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*! \brief Input adapter for overlap ranges 
@@ -161,6 +162,7 @@ public:
   range_type_ref  local_range()  const { return range_type_ref(vertices().local(),cells().owned());}
 };
 
+} // namespace GrAL 
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

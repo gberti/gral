@@ -4,6 +4,8 @@
 #include "Gral/Distributed/overlap-output.h"
 #include <fstream>
 
+namespace GrAL {
+
 template<
   class CoarseGrid, 
   class FineGrid,
@@ -52,5 +54,7 @@ void overlap_output<CoarseGrid, FineGrid, OVLP_RANGES>
   total_ranges_v.init(basenm + ".total.vertices");
   total_ranges_c.init(basenm + ".total.cells");
 }
+
+} // namespace GrAL 
 
 #endif

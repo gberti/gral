@@ -5,6 +5,7 @@
 
 #include "Gral/Base/grid-functions.h"
 
+namespace GrAL {
 
 /*! \brief Associate data which each cell-facet incidence
 
@@ -53,5 +54,7 @@ public:
   grid_type const& TheGrid() const { return gf.TheGrid();}
 };
 
+
+} // namespace GrAL 
 
 #endif

@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \brief Enlarge a local grid by overlap
     \ingroup overlappinggrids
@@ -48,6 +50,7 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid, // OUT
 				   VertexCorr     & v_corr,    // OUT
 				   CellCorr       & c_corr);   // OUT
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/construct-local-overlapping-grids.C"

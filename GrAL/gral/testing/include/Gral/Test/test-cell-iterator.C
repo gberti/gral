@@ -6,8 +6,10 @@
 #include "Gral/Test/test-cell-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 template<class G>
-bool test_cell_iterator(G const& g, std::ostream & out)
+bool test_cell_iterator(G const& g, ::std::ostream & out)
 {
   typedef grid_types<G> gt;
   typedef typename gt::CellIterator CellIterator;
@@ -44,5 +46,7 @@ bool test_cell_iterator(G const& g, std::ostream & out)
   }
   return true;
 }
+
+} // namespace GrAL 
 
 #endif

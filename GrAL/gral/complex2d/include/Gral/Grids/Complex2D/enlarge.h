@@ -10,6 +10,12 @@
 #include "Gral/Base/enlarge-grid.h"
 #include "Gral/Grids/Complex2D/complex2d.h"
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Grids/Complex2D/internal/complex2d-enlarge.C"
+#else
+
+namespace GrAL {
+
 /*! \defgroup complex2denlarge Generic grid enlargement (glueing) for Complex2D
  
     \ingroup complex2dmodule
@@ -48,9 +54,7 @@
 */
 
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Grids/Complex2D/internal/complex2d-enlarge.C"
-#else
+
 
 /*! \brief Glue the grid \c G_src to  \c G.
 
@@ -105,6 +109,8 @@ EnlargeGridVC(Complex2D        & destG,       // in/out
 	      VertexMap        & VertexCorr,  // out src -> dest
 	      CellMap          & CellCorr);   // out src -> dest
 
+
+} // namespace GrAL 
 
 #endif
 

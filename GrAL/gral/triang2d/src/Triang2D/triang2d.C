@@ -9,6 +9,8 @@
 #include <vector>
 #include <algorithm>
 
+namespace GrAL {
+
 Triang2D::Triang2D(Triang2D const& rhs) {
   cells     = rhs.cells;
   ncells    = rhs.ncells;
@@ -89,3 +91,5 @@ Triang2D::SD::SD()
 }
 
 Triang2D::SD Triang2D::sd;
+
+} // namespace GrAL 

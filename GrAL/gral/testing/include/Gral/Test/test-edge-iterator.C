@@ -6,18 +6,20 @@
 #include "Gral/Test/test-edge-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 template<class G, class GT>
-bool test_edge_iterator(G const& g, std::ostream & out, GT);
+bool test_edge_iterator(G const& g, ::std::ostream & out, GT);
 
 
 template<class G>
-bool test_edge_iterator(G const& g, std::ostream & out)
+bool test_edge_iterator(G const& g, ::std::ostream & out)
 {
   return test_edge_iterator(g,out, grid_types<G>());
 }
 
 template<class G, class GT>
-bool test_edge_iterator(G const& g, std::ostream & out, GT)
+bool test_edge_iterator(G const& g, ::std::ostream & out, GT)
 {
   typedef GT       gt;
   typedef typename gt::EdgeIterator EdgeIterator;
@@ -49,5 +51,7 @@ bool test_edge_iterator(G const& g, std::ostream & out, GT)
   }
   return true;
 }
+
+} // namespace GrAL 
 
 #endif

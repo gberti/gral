@@ -17,6 +17,8 @@
 #include "Container/partial-mapping.h"
 #include "Gral/Partitioning/collect-element-partitions.h"
 
+namespace GrAL {
+
 template<class Grid> 
 void partitioning<Grid>::write_partition(std::ostream& out)
 {
@@ -128,5 +130,8 @@ void PartitionsByVertex<Partition>::calculate_vertex_partitions()
 			    (bool)false);             // do not count ouside as partition
 }
 
+
+
+} // namespace GrAL {
 
 #endif

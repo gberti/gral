@@ -9,6 +9,7 @@
 #include <fstream>
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using namespace std;
 
   cout << "------ Starting complex2d2dx -------\n" << endl;

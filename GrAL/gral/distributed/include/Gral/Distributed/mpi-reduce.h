@@ -8,6 +8,8 @@
 #include <mpi.h>
 #include "Gral/Distributed/mpi-types.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \brief Wrapper for MPI Global reduce function
     \ingroup mpidistributedgrids
@@ -22,6 +24,8 @@
 
 template<class T, class CTXT> 
 T mpi_global_max(const T& t, const CTXT& Ctxt);
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/mpi-reduce.C"

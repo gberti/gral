@@ -56,12 +56,14 @@
 #include "Gral/Grids/Complex2D/test-complex2d.h"
 #include "Gral/Grids/Complex2D/stored-geometry.h"
 
-typedef stored_geometry_complex2D geometry_type;
+
+typedef GrAL::stored_geometry_complex2D geometry_type;
 typedef geometry_type::coord_type coord_type;
 
 
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using namespace std;
 
   typedef grid_types<Complex2D> gt; 

@@ -8,11 +8,14 @@
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Test/test-vertex-on-vertex-iterator.C"
-
 #else
 
+namespace GrAL {
+
 template<class G>
-bool test_vertex_on_vertex_iterator(G const& g, std::ostream & out);
+bool test_vertex_on_vertex_iterator(G const& g, ::std::ostream & out);
+
+} // namespace GrAL 
 
 #endif
 

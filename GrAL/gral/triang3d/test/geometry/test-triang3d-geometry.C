@@ -13,6 +13,7 @@
 #include <iostream>
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   typedef Triang3D                 grid_type;
   typedef stored_geometry_triang3d geom_type;

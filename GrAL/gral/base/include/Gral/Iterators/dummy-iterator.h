@@ -7,6 +7,8 @@
 #include "Gral/Base/element-traits.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 /*! \brief Dummy incidence iterators
   \ingroup iterators
   
@@ -45,5 +47,6 @@ private:
   void  fail() const { REQUIRE_ALWAYS(false, "Attempt to use dummy iterator!!",1);}
 };
 
+} // namespace GrAL 
 
 #endif

@@ -23,6 +23,7 @@ struct Id {
 };
 
 int main() {
+  using namespace GrAL;
   namespace c2d = cartesian2d;
 
   typedef c2d::CartesianGrid2D               grid_type;

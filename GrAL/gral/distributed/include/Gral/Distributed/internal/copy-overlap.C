@@ -6,6 +6,8 @@
 #include "Gral/Distributed/copy-overlap.h"
 #include "Gral/Distributed/copy-overlap-ranges.h"
 
+namespace GrAL {
+
 template
 < class Ovlp1, 
   class Ovlp2,
@@ -49,5 +51,7 @@ void CopyOverlap(Ovlp1                  &  dest,            // out
 
   dest.calc_dependent_information();
 }
+
+} // namespace GrAL 
 
 #endif

@@ -23,6 +23,7 @@
     \ingroup partitioningmodule
 */
 
+namespace GrAL {
 
 /*! \brief predicate object for membership in partition p
     \ingroup partitioningds
@@ -293,6 +294,8 @@ template<class Grid>
 extern
 int
 check_partition_for_orphanes(partitioning<Grid> const& P);
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Partitioning/internal/create-partitioning.C"

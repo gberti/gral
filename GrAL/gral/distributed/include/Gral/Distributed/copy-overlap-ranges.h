@@ -3,6 +3,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 /*! \brief Copy an overlap range
     \ingroup overlapds
 */
@@ -26,6 +28,8 @@ void CopyOverlapRanges(DestRange& dest,
                        SrcRange const& priv, SrcRange const& exp,
                        SrcRange const& shd,  SrcRange const& cop,
                        Filter   const& f);
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/copy-overlap-ranges.C"

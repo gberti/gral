@@ -12,6 +12,8 @@
 #include <vector>
 #include <map>
 
+namespace GrAL {
+
 /*! \brief A generic CellOnVertexIterator
     \ingroup iterators
     \see \ref iterators module
@@ -29,13 +31,13 @@ public:
   typedef typename gt::Cell        Cell;
   typedef typename gt::cell_handle cell_handle;
 private:
-  typedef grid_function<Vertex, std::vector<cell_handle> > cov_table;
+  typedef grid_function<Vertex,  ::std::vector<cell_handle> > cov_table;
   
   ref_ptr<cov_table const> inc;
   Vertex                   v;
   int                      lc;  
 
-  static std::map<grid_type const*, cov_table*> ctxt;
+  static  ::std::map<grid_type const*, cov_table*> ctxt;
 
 
 public:
@@ -80,6 +82,8 @@ public:
   }
   
 };
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Iterators/cell-on-vertex-iterator.C"

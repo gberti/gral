@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 //  void AddPartialSharedRanges(...);
@@ -40,7 +42,7 @@ void AddPartialSharedRanges(Overlap          &  ovrlp,    // out: {coarse cell} 
 			    VtxCorr     const&  vC,
 			    FacetCorr   const&  fC);
 
-
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/add-partial-shared.C"

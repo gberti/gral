@@ -3,7 +3,7 @@
 
 // $LICENSE
 
-
+namespace GrAL {
 
 namespace cartesian2d {
 //--------------------- dimension dependend geometry parts --------------
@@ -108,5 +108,7 @@ public:
 };
 
 } // namespace cartesian2d
+
+} // namespace GrAL 
 
 #endif

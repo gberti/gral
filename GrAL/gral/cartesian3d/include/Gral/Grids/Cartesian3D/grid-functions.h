@@ -6,6 +6,8 @@
 #include "Gral/Grids/Cartesian3D/cartesian3d.h"
 #include "Gral/Base/grid-function-vector.h"
 
+namespace GrAL {
+
 /*! \defgroup cartesian3dgf Total grid functions for CartesianGrid3D
     \ingroup cartesian3dmodule
 
@@ -90,6 +92,6 @@ class grid_function<cartesian3d::Cell_Cartesian3D, T>
 
 };
 
-
+} // namespace GrAL 
 
 #endif

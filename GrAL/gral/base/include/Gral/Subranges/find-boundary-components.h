@@ -8,6 +8,8 @@
     \see Module boundaryalgorithms
  */
 
+namespace GrAL {
+
 /*! \defgroup boundaryalgorithms Algorithms for exploring Grid Boundaries
     \ingroup boundary
     
@@ -58,7 +60,7 @@ void find_boundary_component_germs(GRID const& G, FACETSET & C);
 template<class GRID, class FACETSET>
 void find_boundary_component_germs(GRID const& G, FACETSET & C,
 				   int& num_comps, int& num_facets);
-
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Subranges/find-boundary-components.C"

@@ -4,6 +4,7 @@
 #include "IO/control-device.h"
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
 
   ControlDevice Ctrl = 
     GetCommandlineAndFileControlDevice(argc,argv,"complex2d2off.in","main");

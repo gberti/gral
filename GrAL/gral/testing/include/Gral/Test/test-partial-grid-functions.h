@@ -12,6 +12,12 @@
 
 #include <iostream>
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Test/test-partial-grid-functions.C"
+#else
+
+namespace GrAL {
+
 /*! \brief Test of partial grid functions
     
      Test models of the $GrAL PartialGridFunction concept.
@@ -25,16 +31,18 @@
     MyGrid g;
     typedef grid_types<MyGrid> gt;
     // test partial grid functions on vertices
-    test_partial_grid_function<gt::Vertex>(g, std::cout);
+    test_partial_grid_function<gt::Vertex>(g, ::std::cout);
     \endcode
 */
 
 template<class E>
 bool test_partial_grid_functions(typename E::grid_type const& G, 
-				 std::ostream& out);
+				 ::std::ostream& out);
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Test/test-partial-grid-functions.C"
+} // namespace GrAL 
+
+
+
 #endif
 
 #endif

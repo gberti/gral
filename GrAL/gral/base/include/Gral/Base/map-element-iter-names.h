@@ -4,6 +4,8 @@
 // $LICENSE
 
 
+namespace GrAL {
+
 /*! \brief Map generic names like 'ElementIterator' to specific ones like 'CellIterator'
 
     This templates is specialized for different element types.
@@ -126,5 +128,7 @@ template<class EIt, class ER>
 struct map_element_iter_name<EIt, ER, cell3d_type_tag>
   : public map_element_iter_name<EIt, ER, cell_type_tag> {};
 
+
+} // namespace GrAL 
 
 #endif

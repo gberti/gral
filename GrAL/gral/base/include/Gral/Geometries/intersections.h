@@ -6,6 +6,8 @@
 #include "Geometry/algebraic-primitives.h"
 #include "Geometry/geometric-primitives.h"
 
+namespace GrAL {
+
 /*! brief Test whether an edge and a facet do intersect.
 
     \ingroup geometricgridtools
@@ -53,6 +55,8 @@ private:
   // shorthand
   coord_type const& coo(Vertex const& v) const { return geom->coord(v);}
 };
+
+} // namespace GrAL 
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

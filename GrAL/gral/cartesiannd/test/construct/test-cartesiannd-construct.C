@@ -6,13 +6,16 @@
 #include "Gral/Test/all.h"
 #include <iostream>
 
-namespace cartesiannd {
+
+
+namespace GrAL { namespace cartesiannd {
   template class grid<1>;
   template class grid<2>;
   template class grid<3>;
-}
+}}
 
 
+using namespace GrAL;
 
 template<class G>
 void print_grid(G const& g, std::ostream& out)
@@ -20,6 +23,9 @@ void print_grid(G const& g, std::ostream& out)
   for(unsigned k = 0; k <= g.dimension(); ++k)
     out << g.NumOfElements(k) << " " << k << "-elements\n";
 } 
+
+
+
 
 template<class G, int DIM>
 struct local_vertex_access_tester {

@@ -5,6 +5,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 // to be specialized for DIM
 template<class E, class ETAG, class DIM>
 class boundary_grid_aux {};
@@ -311,5 +313,7 @@ class grid_types<boundary_grid<E> >
                typename element_traits<E>::grid_dimension_tag>
 {};
 
+
+} // namespace GrAL 
 
 #endif

@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 template<class tag1, class tag2, class E1, class E2>
 struct incidence { };
@@ -97,6 +98,6 @@ bool incident(E1 const& e1, E2 const& e2)
   return false;
 }
 
-
+} // namespace GrAL 
 
 #endif

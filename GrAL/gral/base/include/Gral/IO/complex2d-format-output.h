@@ -17,7 +17,7 @@
 
 #include "Gral/IO/write-complex2d.h"
 
-
+namespace GrAL {
 
 
 /*! \brief Output adapter for Complex2D file format
@@ -30,7 +30,7 @@
 class OstreamComplex2DFmt {
   typedef OstreamComplex2DFmt self;
 protected:
-  std::ostream * out;
+   ::std::ostream * out;
   bool      owned;
   int       offset;
 
@@ -40,17 +40,17 @@ private:
 
 public: 
   OstreamComplex2DFmt();
-  OstreamComplex2DFmt(std::ostream& ot, int off = 0);
-  OstreamComplex2DFmt(std::string const& nm, int off = 0);
+  OstreamComplex2DFmt( ::std::ostream& ot, int off = 0);
+  OstreamComplex2DFmt( ::std::string const& nm, int off = 0);
 
   OstreamComplex2DFmt(self const& rhs) { copy(rhs);}
   self & operator=   (self const& rhs) { if(this != &rhs) copy(rhs); return *this; }
 
   ~OstreamComplex2DFmt();
 
-  void init(std::string const& nm);
+  void init( ::std::string const& nm);
 
-  std::ostream& Out() { return *out;}
+   ::std::ostream& Out() { return *out;}
 
   int Offset() const { return offset;}
 
@@ -203,5 +203,7 @@ OstreamComplex2DFmt::vertex(int v) const { return Vertex(*this,v);}
 
 inline OstreamComplex2DFmt::Cell 
 OstreamComplex2DFmt::cell  (int c) const { return Cell  (*this,c);}
+
+} // namespace GrAL 
 
 #endif

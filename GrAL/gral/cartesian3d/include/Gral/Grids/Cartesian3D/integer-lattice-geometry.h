@@ -3,6 +3,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 namespace cartesian3d {
 
@@ -47,6 +48,8 @@ public:
   //@}
 };
 
-}; // namespace cartesian3d
+} // namespace cartesian3d
+
+} // namespace GrAL 
 
 #endif

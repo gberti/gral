@@ -9,6 +9,8 @@
 #include "Gral/Base/element-handle.h"
 #include "Gral/Base/polygon.h"
 
+namespace GrAL {
+
 class Triang2D;
 class Triang2D_Vertex;
 class Triang2D_Edge;
@@ -57,6 +59,8 @@ struct grid_types_base_Triang2D {
   typedef int                                archetype_handle;
   typedef grid_types<archetype_type>         archgt;
 };
+
+} // namespace GrAL 
 
 #endif
 

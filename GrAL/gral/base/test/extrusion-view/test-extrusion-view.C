@@ -14,6 +14,8 @@
 
 #include <string>
 
+using namespace GrAL;
+
 template class extrusion_view::grid<Complex2D>;
 
 

@@ -7,6 +7,8 @@
 #include "Gral/Distributed/internal/add-partial-shared.h"
 #include "Gral/Partitioning/partitioning.h"
 
+namespace GrAL {
+
 template<class Partition, class Overlap,
          class Part2Cell,
          class VertexRange, class FacetRange,
@@ -55,5 +57,7 @@ void AddPartialSharedRanges(Overlap          &  ovrlp,  // out
   }
   // }
 }
+
+} // namespace GrAL 
 
 #endif

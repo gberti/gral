@@ -12,6 +12,8 @@
 
 #include <list>
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \defgroup boundaryrange Generic Grid Boundary Range
     \ingroup boundary
@@ -58,9 +60,9 @@ class boundary_range_generic {
   typedef boundary_range_edge_iterator<GRID>   EdgeIterator;
   typedef boundary_range_edge_iterator<GRID>   FacetIterator;
 
-  typedef typename std::list<Facet>::const_iterator germ_iterator;
+  typedef typename  ::std::list<Facet>::const_iterator germ_iterator;
 private:
-  std::list<Facet> component_germs;
+   ::std::list<Facet> component_germs;
   grid_type const* g;
   bool initialized;
 public:
@@ -231,5 +233,8 @@ inline
 boundary_range_edge_iterator<GRID>
 boundary_range_generic<GRID>::FirstEdge() const
 { return FirstFacet();}
+
+
+} // namespace GrAL 
 
 #endif

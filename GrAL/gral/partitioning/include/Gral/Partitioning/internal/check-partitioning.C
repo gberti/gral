@@ -8,6 +8,7 @@
 
 #include "Gral/Partitioning/partitioning.h"
 
+namespace GrAL {
 
 // return the number of orphanes, that is, cells that are not
 // connected to their partitions via at least one neighbour.
@@ -40,5 +41,7 @@ int check_partition_for_orphanes(partitioning<Grid> const& P)
   }
   return orphane_cnt;
 }
+
+} // namespace GrAL 
 
 #endif

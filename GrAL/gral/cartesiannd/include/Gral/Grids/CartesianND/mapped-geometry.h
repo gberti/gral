@@ -11,7 +11,7 @@
 #include "Container/tuple.h"
 #include "Container/tuple-point-traits.h"
 
-
+namespace GrAL {
 namespace cartesiannd {
 
   template<class CARTGRID>
@@ -220,7 +220,7 @@ namespace cartesiannd {
     void prepend_scaling_mapping()
     {
       if(f != 0) {
-	scalar_type mx = * std::min_element(delta.begin(), delta.end());
+	scalar_type mx = *  ::std::min_element(delta.begin(), delta.end());
 	// map isotropic unit coords \f$ \subset [0,1]^d \f$ to anisotropic unit coords \f$ [0,1]^d \f$ 
 	mapping_type S = mapping_type::inverse_scaling(delta / mx);
 	f.make_own(new mapping_type ((*f)(S)));
@@ -229,7 +229,7 @@ namespace cartesiannd {
     void prepend_scaling_inverse()
     {
       if(f_inverse != 0) {
-	scalar_type mx = * std::min_element(delta.begin(), delta.end());
+	scalar_type mx = *  ::std::min_element(delta.begin(), delta.end());
 	mapping_type S_inv = mapping_type::scaling(delta / mx);
 	f_inverse.make_own(new mapping_type(S_inv(*f_inverse)));
       }
@@ -265,5 +265,6 @@ namespace cartesiannd {
 
 } // namespace cartesiannd
 
+} // namespace GrAL 
 
 #endif

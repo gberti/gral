@@ -1,13 +1,15 @@
 #include "Gral/IO/complex2d-format-output.h"
+
+namespace GrAL {
  
 OstreamComplex2DFmt::OstreamComplex2DFmt()
   : out(0), owned(false), offset(0), nv(0), nc(0) {}
 
-OstreamComplex2DFmt::OstreamComplex2DFmt(std::ostream& ot, int off)
+OstreamComplex2DFmt::OstreamComplex2DFmt( ::std::ostream& ot, int off)
   : out(&ot), owned(false), offset(off), nv(0), nc(0) {}
 
-OstreamComplex2DFmt::OstreamComplex2DFmt(std::string const& nm, int off)
-  : out(new std::ofstream(nm.c_str())), owned(true), offset(off), nv(0), nc(0) {}
+OstreamComplex2DFmt::OstreamComplex2DFmt( ::std::string const& nm, int off)
+  : out(new  ::std::ofstream(nm.c_str())), owned(true), offset(off), nv(0), nc(0) {}
 
 OstreamComplex2DFmt::~OstreamComplex2DFmt()
 { if(owned) delete out;}
@@ -23,9 +25,11 @@ void OstreamComplex2DFmt::copy(OstreamComplex2DFmt const& rhs)
   nc = rhs.nc;
 }
 
-void OstreamComplex2DFmt::init(std::string const& nm)
+void OstreamComplex2DFmt::init( ::std::string const& nm)
 {
   if(owned) delete out;
   owned = true;
-  out = new std::ofstream(nm.c_str());
+  out = new  ::std::ofstream(nm.c_str());
 }
+
+} // namespace GrAL 

@@ -14,6 +14,7 @@
 #include "Gral/Iterators/boundary-iterator.h"
 #include "Gral/Base/grid-functors.h"
 
+namespace GrAL {
 
 template<class GRID>
 int count_boundary_facets(GRID const& G)
@@ -78,5 +79,7 @@ void find_boundary_component_germs(GRID const& G, FACETSET & C,
       }
     }
 }
+
+} // namespace GrAL 
 
 #endif

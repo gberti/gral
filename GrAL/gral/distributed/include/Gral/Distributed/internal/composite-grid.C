@@ -8,6 +8,8 @@
 #include <iostream>
 //#include "IO/iomgr.h"
 
+namespace GrAL {
+
 template<class Grid, class GF>
 void enumerate(const Grid& G, GF& f, int offset /* = 0 */)
 {
@@ -69,5 +71,6 @@ void check_composite_grid(const CompositeGrid<CoarseG,FineG>& CG)
   
 }
 
+} // namespace GrAL 
 
 #endif

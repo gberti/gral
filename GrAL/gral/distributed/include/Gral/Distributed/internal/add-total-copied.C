@@ -12,6 +12,8 @@
 #include "Gral/Base/grid-functors.h"
 #include "Gral/Distributed/mark-ranges.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 // Construct the local total overlap ranges from shared_{v,f} and pattern
@@ -82,5 +84,7 @@ void AddTotalRanges(Overlap          &  ovrlp,   // out
 			  vertex2handle(Prtng.TheGrid()));
   
 }
+
+} // namespace GrAL 
 
 #endif

@@ -6,6 +6,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*!  \brief Mapping of facet handle of a source grid to that
      of a target grid.
@@ -54,4 +56,5 @@ public:
     { return facet_handle((*c_corr)(f.c), f.local_facet());}
 };
 
+} // namespace GrAL 
 #endif

@@ -8,8 +8,9 @@
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Grids/Complex3D/construct-grid.C"
-
 #else
+
+namespace GrAL {
 
 /*! \defgroup complex3dcopy Generic copy operations for Complex3D
     \ingroup complex3dmodule
@@ -28,8 +29,11 @@ void ConstructGrid0(Complex3D     & G_dest,
 		    VCORR         & v_corr,
 		    CCORR         & c_corr);
 
+} // namespace GrAL
 
 #endif
+
+namespace GrAL {
 
 /*! \brief Copy any grid to Complex3D
 
@@ -49,5 +53,6 @@ void ConstructGridVC (Complex3D     & G_dest,
 		      CCORR         & c_corr)
 { ConstructGridVC_generic(G_dest,Geom_dest, G_src, Geom_src, v_corr, c_corr); }
 
+} // namespace GrAL 
 
 #endif

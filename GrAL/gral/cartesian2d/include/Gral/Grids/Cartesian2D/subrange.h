@@ -6,6 +6,8 @@
 
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
+namespace GrAL {
+
 namespace cartesian2d {
 
 /*! \brief Rectangular subrange of RegGrid2D
@@ -360,5 +362,6 @@ struct grid_types<cartesian2d::SubrangeReg2D> {
 
 };
 
+} // namespace GrAL 
 
 #endif

@@ -8,6 +8,8 @@
 
 #include "Gral/Grids/Triang3D/copy.h"
 
+namespace GrAL {
+
 template<class Conn, class VtxCorr, class CellCorr>
 void copy_cells(Triang3D       & G, 
 		Conn      const&  G_src,
@@ -44,6 +46,8 @@ void copy_cells(Triang3D       & G,
   }
   G.Steal(cells, G_src.NumOfCells(), G_src.NumOfVertices());
 }
+
+} // namespace GrAL 
 
 
 #endif

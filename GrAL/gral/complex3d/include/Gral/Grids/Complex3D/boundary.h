@@ -19,6 +19,8 @@
 #include "Gral/Grids/Complex3D/grid-functions.h"
 
 
+namespace GrAL {
+
 namespace complex3d_detail {
 
   class BdFacetIterator;
@@ -27,9 +29,9 @@ namespace complex3d_detail {
     typedef grid_types<Complex3D> gt;
     typedef facet_on_cell_function<gt::grid_type, gt::cell_handle> nb_table_type;
 
-    typedef STDHASH::hash_map<vertex_set<gt::Facet>, 
-			      gt::FacetOnCellIterator,
-			      STDEXT::hash<vertex_set<gt::Facet> > > facet_map_type;
+    typedef ::STDHASH::hash_map<vertex_set<gt::Facet>, 
+				gt::FacetOnCellIterator,
+				::STDEXT::hash<vertex_set<gt::Facet> > > facet_map_type;
 
     typedef BdFacetIterator                         FacetIterator;
     typedef BdFacetIterator                         FaceIterator;
@@ -155,5 +157,7 @@ BoundaryRange<Complex3D>::FacetIterator BoundaryRange<Complex3D>::FirstFacet() c
 inline
 BoundaryRange<Complex3D>::FacetIterator BoundaryRange<Complex3D>::EndFacet()   const 
 { return FacetIterator(*this, facet_map.end());}
+
+} // namespace GrAL 
 
 #endif

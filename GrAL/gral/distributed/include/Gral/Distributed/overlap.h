@@ -7,6 +7,8 @@
 #include "Gral/Distributed/overlap-ranges.h"
 #include <iostream>
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \defgroup overlapds  Grid overlap ranges
     \ingroup distributedgrids
@@ -204,6 +206,7 @@ public:
 template<class Overlap>
 void write_ovlp(Overlap const& ovlp, std::ostream & out);
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/overlap.C"

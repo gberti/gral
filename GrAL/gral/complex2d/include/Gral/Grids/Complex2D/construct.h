@@ -20,6 +20,11 @@
 #include "Gral/Grids/Complex2D/complex2d.h"
 
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Grids/Complex2D/internal/complex2d-construct.C"
+#else
+
+namespace GrAL {
 
 /*! \ingroup complex2dcopy
  */
@@ -61,8 +66,9 @@ ConstructGrid0(Complex2D     & destG,
 	       CellMap       & CCorrG2_G1); 
 
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Grids/Complex2D/internal/complex2d-construct.C"
+} // namespace GrAL 
+
+
 #endif
 
 #endif

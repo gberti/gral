@@ -18,8 +18,9 @@
 
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using namespace std;
-  using cartesian3d::CartesianGrid3D;
+  using GrAL::cartesian3d::CartesianGrid3D;
 
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"map.in","main");
 

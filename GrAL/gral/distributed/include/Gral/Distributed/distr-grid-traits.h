@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 /*! Traits class for distributed grids.
    \ingroup distributedgrids
 
@@ -25,5 +27,6 @@ struct distr_grid_traits {};
 template<class E, class T, class DG>
 class distr_grid_function {};
 
+} // namespace GrAL 
 
 #endif

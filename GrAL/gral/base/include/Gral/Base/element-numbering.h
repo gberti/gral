@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 template<class E, class GT, class consecutive_tag>
 class element_numbering_aux {};
@@ -87,5 +88,7 @@ public:
   element_numbering(typename base::grid_type const& g,
 		    int offset = 0) : base(g, offset) {}
 };
+
+} // namespace GrAL 
 
 #endif

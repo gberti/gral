@@ -11,6 +11,8 @@
 
 #include "Gral/Distributed/mpi-reduce.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 // global reduce methods for mpi-distributed grid functions.
@@ -36,5 +38,7 @@ global_max(R const&  range,
 template<class T, class CG, class FG>
 T global_max(T const& t, MPIDistributedGrid<CG,FG> const& MG)
 { return  mpi_global_max(t,MG); }
+
+} // namespace GrAL 
  
 #endif

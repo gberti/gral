@@ -19,6 +19,7 @@
 #include "Container/heterogeneous-list.h"
 #include "Utility/as-string.h"
 
+namespace GrAL {
 
 /*! \brief Output adapter for the GMV format.
  
@@ -104,11 +105,13 @@ public:
   archetype_iterator EndArchetype()   const { return data.archetypes->end();}
 
 };
-
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/IO/gmv-format-output3d.tt.C"
 #else
+
+namespace GrAL {
 
 /*! \brief ConstructGrid overload for OstreamGMV3DFmt
 
@@ -137,6 +140,8 @@ void ConstructGrid_GF(OstreamGMV3DFmt& Out,
 		      GRID const& G,
 		      GEOM const& GEO,
 		      heterogeneous_list::List<GF,MOREGFS> GFS);
+
+} // namespace GrAL 
 
 #endif
 

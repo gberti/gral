@@ -9,6 +9,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Config/compiler-config.h"
 
+namespace GrAL {
+
 template<class GRID> struct vtuple_2d;
 
 
@@ -105,6 +107,7 @@ get_vertices(EdgeOnCellIterator const& f)
   return vtuple((*f).V1().handle(),(*f).V2().handle());
 }
 
+} // namespace GrAL 
 
 template<class T> struct hash;
 
@@ -114,12 +117,14 @@ template<class T> struct hash;
  */
 namespace STDEXT {
   template<class GRID>
-    struct hash<vtuple_2d<GRID> > {
+    struct hash<GrAL::vtuple_2d<GRID> > {
       enum { p = 37 };
-      size_t operator()(vtuple_2d<GRID> const& vt) const { 
+      size_t operator()(GrAL::vtuple_2d<GRID> const& vt) const { 
 	return (p*vt.v[1] + (vt.v[0] % p));
       }
     };
 }
+
+
 
 #endif

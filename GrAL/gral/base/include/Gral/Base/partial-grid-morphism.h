@@ -9,6 +9,8 @@
 
 //#include "Gral/Base/partial-grid-functions.h"
 
+namespace GrAL {
+
 template<class GDEF, class GIMG, class DIM>
 class partial_grid_morphism_aux;
 
@@ -447,6 +449,7 @@ public:
 
 };
 
+} // namespace GrAL 
 
 #endif
 

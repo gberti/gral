@@ -12,6 +12,8 @@
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/Grids/CartesianND/all.h"
 
+using namespace GrAL;
+
 template class multi_grid_function<cartesian2d::CartesianGrid2D,int>;
 template class multi_grid_function<Complex2D,int>;
 

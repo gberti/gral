@@ -10,6 +10,7 @@
 
 #include "Utility/as-string.h"
 
+namespace GrAL {
 
 /*! \brief Output adapter for the GMV format (2D grids).
 
@@ -52,9 +53,13 @@ protected:
   virtual void end_variable()   { Out() << "endsvars\n";}   
 };
 
+} // namespace GrAL 
+
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/IO/gmv-format-output2d.tt.C"
 #else
+
+namespace GrAL {
 
 /*! \brief ConstructGrid overload for OstreamGMV2DFmt
 
@@ -84,6 +89,7 @@ void ConstructGrid_GF(OstreamGMV2DFmt& Out,
 		      GEOM const& GEO,
 		      heterogeneous_list::List<GF,MOREGFS> GFS);
 
+} // namespace GrAL 
 
 #endif
 

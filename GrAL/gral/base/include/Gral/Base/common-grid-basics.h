@@ -14,6 +14,7 @@
    template functions or classes where the grid type is a parameter.
 */
 
+
 // parameterized namespaces: access to grid related types.
 #include "Gral/Base/grid-types.h"
 
@@ -29,5 +30,9 @@
 
 // empty frame for boundary iteration
 #include "Gral/Base/boundary.h"
+
+/*! \brief Enclosing namespace for all components of GrAL.
+ */
+namespace GrAL { }
 
 #endif

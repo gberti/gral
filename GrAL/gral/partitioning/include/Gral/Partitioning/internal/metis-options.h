@@ -6,6 +6,7 @@
 /*! \file
  */
 
+namespace GrAL {
 
 /*! \brief  Data structure for using Metis partitioning routines with 
     different options.
@@ -45,5 +46,7 @@ public:
   ~metis_options();
 
 };
+
+} // namespace GrAL 
 
 #endif

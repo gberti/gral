@@ -4,6 +4,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Subranges/enumerated-subrange.h"
 
+namespace GrAL {
 
 namespace measurement {
 
@@ -69,6 +70,9 @@ private:
 };
 
 } //  namespace measurement;
+
+} // namespace GrAL 
+
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Measurement/check-edge-facet-intersections.C"

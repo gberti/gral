@@ -33,6 +33,8 @@
 #endif
 
 
+namespace GrAL {
+
 template<int WITHARCH>
 struct dispatch_complex2d_copy {
   
@@ -56,6 +58,6 @@ struct dispatch_complex2d_copy<0> {
   { copy_cells_no_archetypes(G_dst, G_src, vtx_corr, cell_corr);}
 };
 
-
+} // namespace GrAL 
 
 #endif

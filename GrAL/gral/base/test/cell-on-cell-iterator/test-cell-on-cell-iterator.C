@@ -12,7 +12,7 @@
 #include <iostream>
 
 
-typedef grid_types<Complex2D> cgt;
+typedef GrAL::grid_types<GrAL::Complex2D> cgt;
 
 class hasher_facet_on_cell {
 public:
@@ -24,6 +24,7 @@ public:
 
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   using namespace cartesian2d;
   

@@ -29,6 +29,7 @@ void print_grid(GRID const& G, std::ostream& out)
 }
 
 int main() {
+  using namespace GrAL;
   using namespace std;
 
   {

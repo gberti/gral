@@ -13,10 +13,10 @@
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-
 #include "Gral/Test/test-vertex-on-cell-iterator.C"
-
 #else
+
+namespace GrAL {
 
 /*! \brief Test a vertex-on-cell iterator
  
@@ -25,7 +25,7 @@
     \ingroup incidenceiteratortests
 */
 template<class G>
-bool test_vertex_on_cell_iterator(G const& g, std::ostream & out);
+bool test_vertex_on_cell_iterator(G const& g, ::std::ostream & out);
 
 /*! \brief Test a vertex-on-cell iterator
  
@@ -34,7 +34,9 @@ bool test_vertex_on_cell_iterator(G const& g, std::ostream & out);
     \ingroup incidenceiteratortests
 */
 template<class G, class GT>
-bool test_vertex_on_cell_iterator(G const& g, std::ostream & out, GT);
+bool test_vertex_on_cell_iterator(G const& g, ::std::ostream & out, GT);
+
+} // namespace GrAL 
 
 #endif
 

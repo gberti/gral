@@ -9,6 +9,7 @@
 #include "Gral/Base/grid-morphism.h"
 #include "Gral/Base/construct-grid.h"
 
+namespace GrAL {
 
 namespace complexnd  {
 
@@ -104,7 +105,8 @@ namespace complexnd  {
     \see Gral base module \ref copyoperations
 */
 
-// global namespace 
+// here  namespace  GrAL
+
 /*! \brief Copy any grid type to complexnd::ComplexND<>
 
     This function copies only the combinatorial information.
@@ -132,5 +134,6 @@ void ConstructGridVC (complexnd::ComplexND<D> & G_dest,
 		      CCORR                   & c_corr)
 { ConstructGridVC_generic(G_dest, Geom_dest, G_src, Geom_src, v_corr, c_corr);}
 
+} // namespace GrAL 
 
 #endif

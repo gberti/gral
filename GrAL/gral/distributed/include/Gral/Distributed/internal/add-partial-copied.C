@@ -7,6 +7,8 @@
 #include "Gral/Distributed/internal/add-partial-copied.h"
 #include "Gral/Partitioning/partitioning.h"
 
+namespace GrAL {
+
 template<class Overlap,     class Partition, 
          class Part2Cell,
          class VertexRange, class CellRange,
@@ -64,5 +66,6 @@ void AddPartialRanges(Overlap          &    ovrlp, // out
     //}
 }
 
+} // namespace GrAL 
 
 #endif

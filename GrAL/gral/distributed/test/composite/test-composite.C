@@ -36,6 +36,7 @@
 
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using namespace std;
 
   typedef Complex2D                 fine_grid_type;

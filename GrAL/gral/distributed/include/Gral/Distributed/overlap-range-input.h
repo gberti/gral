@@ -7,6 +7,8 @@
 #include <iostream>
 #include <fstream>
 
+namespace GrAL {
+
 /*! \brief Input adapter for an overlap range
    \ingroup overlapds
 
@@ -84,6 +86,8 @@ void CopyOverlapRanges(DestRange                   & dest,
                        overlap_range_input<E> const& src, 
                        Filter                 const& f)
 { src.copy_to(dest,f);}
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/overlap-range-input.C"

@@ -6,6 +6,9 @@
 /*! \file
  */
 
+namespace GrAL {
+
+
 class metis_options;
 
 /*! \defgroup metispartitioning Converters to Metis Formats
@@ -54,6 +57,8 @@ public:
                                    int                 np); //<! IN: number of parts 
 };
 
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Partitioning/internal/metis-partitioning-templates.C"

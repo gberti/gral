@@ -5,6 +5,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 /*! \defgroup elementtraits Traits classes for grid elements
 
@@ -290,5 +291,6 @@ struct element_traits_cell_base
   }
 };
 
+} // namespace GrAL 
 
 #endif

@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 template<class GRID>
 struct grid_types_cell_vertex_input_grid 
@@ -20,5 +21,7 @@ struct grid_types_cell_vertex_input_grid
   typedef typename GRID::VertexOnCellIterator VertexOnCellIterator;
 
 };
+
+} // namespace GrAL 
 
 #endif

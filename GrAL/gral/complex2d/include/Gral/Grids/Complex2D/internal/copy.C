@@ -11,7 +11,7 @@
 #include <vector>
 
 
-
+namespace GrAL {
 
 template<class Conn, class VtxCorr, class CellCorr>
 void copy_cells_no_archetypes(Complex2D& G, 
@@ -79,7 +79,7 @@ void copy_cells_archetypes(Complex2D      & G_dst,
 
   // (2) copy archetypes
   typedef vertex_morphism<src_archetype, dst_archetype> arch_morphism;
-  std::vector<arch_morphism> morphism;
+  ::std::vector<arch_morphism> morphism;
   bijective_mapping<src_arch_handle, dst_arch_handle> arch_corr;
   typename src_gt::archetype_iterator arch_src = G_src.BeginArchetype();
   for(; arch_src != G_src.EndArchetype() ; ++arch_src) {
@@ -126,5 +126,7 @@ void copy_cells_archetypes(Complex2D      & G_dst,
   }
 
 }
+
+} // namespace GrAL 
 
 #endif

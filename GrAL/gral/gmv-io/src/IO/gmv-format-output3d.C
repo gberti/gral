@@ -4,6 +4,8 @@
 #include "Gral/Grids/Complex2D/construct.h"
 
 #include <fstream>
+
+namespace GrAL { 
   
 OstreamGMV3DFmt::OstreamGMV3DFmt() {}
 
@@ -93,3 +95,5 @@ OstreamGMV3DFmt::StaticData::~StaticData()
   delete archetypes;
   delete names;
 }
+
+} // namespace GrAL 

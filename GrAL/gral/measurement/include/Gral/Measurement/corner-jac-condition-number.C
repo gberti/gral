@@ -9,6 +9,7 @@
 #include "Gral/Base/cell-archetype-map.h"
 #include "Gral/Algorithms/calculate-vertex-stars.h"
 
+namespace GrAL {
 
 namespace measurement {
 
@@ -80,5 +81,7 @@ corner_jacobian<GRID,GEOM>
 }
 
 } // namespace measurement;
+
+} // namespace GrAL 
 
 #endif

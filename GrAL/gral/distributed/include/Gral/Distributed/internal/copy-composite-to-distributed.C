@@ -10,6 +10,8 @@
 #include "Gral/Base/construct-grid.h"
 #include "Gral/Base/grid-morphism.h"
 
+namespace GrAL {
+
 template
 < class DG,          // distributed grid
   class CG_SRC,      // composite grid (src)
@@ -50,4 +52,7 @@ void CopyComposite2Distributed
   // dg_dest.calc_dependent_information();
 
 }
+
+} // namespace GrAL 
+
 #endif

@@ -10,6 +10,8 @@
 #include "Utility/ref-ptr.h"
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 /*!  
    \brief Implements  a grid_function on hash-basis.
    \ingroup gridfunctions
@@ -51,7 +53,7 @@ public:
   typedef typename et::grid_type            grid_type;
 
 
-  typedef STDHASH::hash_map<E,T, hasher_type>   table_type;
+  typedef ::STDHASH::hash_map<E,T, hasher_type>   table_type;
   typedef typename table_type::size_type        size_type;
   typedef T                                     value_type;
   //  typedef typename table_type::reference        reference;
@@ -231,5 +233,7 @@ public:
   }
 
 };
+
+} // namespace GrAL 
 
 #endif

@@ -12,6 +12,8 @@
 /*! \file
  */
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 //  Copy-construct a Triang3D grid from a right-hand side (Connect)
@@ -145,5 +147,7 @@ void ConstructGrid0(Triang3D       &  G,
  
 
 }
+
+} // namespace GrAL 
 
 #endif

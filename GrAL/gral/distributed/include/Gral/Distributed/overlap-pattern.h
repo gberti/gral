@@ -9,6 +9,8 @@
 
 #include "Gral/Base/type-tags.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 /*! \brief class for storing an overlap (incidence) pattern
@@ -31,6 +33,8 @@ public:
 
   bool empty() const { return q.empty();}
 };
+
+} // namespace GrAL 
 
 #endif
 

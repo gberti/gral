@@ -8,6 +8,8 @@
 /*! \file
  */
 
+
+namespace GrAL {
  
 template<>
 struct element_traits<Triang3D_Vertex> 
@@ -88,6 +90,9 @@ struct element_traits<Triang3D::Edge>
 
 };
 */
+
+} // namespace GrAL 
+
 
 #endif
 

@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+namespace GrAL {
+
 namespace measurement { 
 
 template<class GRID, class GEOM, class GT>
@@ -70,6 +72,8 @@ check_edge_facet_intersections<GRID,GEOM,GT>::check_all_cells()
 }
 
 } // namespace measurement;
+
+} // namespace GrAL 
 
 #endif
 

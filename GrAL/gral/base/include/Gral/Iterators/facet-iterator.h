@@ -10,6 +10,8 @@
 
 */
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 /*! \brief A generic iterator over the facets of a grid.
@@ -121,6 +123,6 @@ FacetIterator<FacOnCellIt>::advance()
 }
 
 
-
+} // namespace GrAL 
 
 #endif

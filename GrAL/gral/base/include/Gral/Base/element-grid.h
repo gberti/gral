@@ -6,6 +6,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/ref-ptr.h"
 
+namespace GrAL {
+
 /*! \brief View a k-dimensional grid element as a k-dimensional grid   
 
     \ingroup  subranges
@@ -75,12 +77,12 @@ inline bool operator==(single_element_iterator<E> const& lhs,
 		       single_element_iterator<E> const& rhs)
 { return lhs.equal(rhs);}
 
-#ifndef GRAL_INCLUDES_RELOPS
+//#ifndef GRAL_INCLUDES_RELOPS
 template<class E>
 inline bool operator!=(single_element_iterator<E> const& lhs,
 		       single_element_iterator<E> const& rhs)
 { return !(lhs == rhs);}
-#endif
+//#endif
 
 // sides of an element of dimension 0
 template<class E>
@@ -355,5 +357,8 @@ struct grid_types_elem_grid
 template<class E>
 struct grid_types<element_grid<E> > : public grid_types_base<detail::grid_types_elem_grid<E> > 
 {};
+
+} // namespace GrAL
+
 
 #endif

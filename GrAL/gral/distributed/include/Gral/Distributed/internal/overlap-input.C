@@ -4,6 +4,8 @@
 #include "Gral/Distributed/overlap-input.h"
 #include <fstream>
 
+namespace GrAL {
+
 template<
   class CoarseGrid, 
   class FineGrid,
@@ -44,5 +46,7 @@ void overlap_input<CoarseGrid, FineGrid, OVLP_RANGES>
     neighbour_ranges_c[*N].init(basenm + "." + as_string(number(*N)) + ".cells");
   }
 }
+
+} // namespace GrAL 
 
 #endif

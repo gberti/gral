@@ -7,6 +7,8 @@
 #include <vector>
 #include "Gral/Subranges/enumerated-subrange.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \defgroup layeredsubrange Layered Grid Subrange
     \ingroup subranges
@@ -45,7 +47,7 @@ public:
   typedef typename base::grid_type             grid_type;
 private:
   //---   DATA  ----
-  std::vector<int> layers;
+   ::std::vector<int> layers;
 
   using base::TheContainer;
   using base::TheGrid;
@@ -112,7 +114,7 @@ public:
   typedef typename base::grid_type             grid_type;
 private:
   //---   DATA  ----
-  std::vector<int> layers;
+   ::std::vector<int> layers;
 
   using base::TheContainer;
   using base::TheGrid;
@@ -155,5 +157,6 @@ private:
 };
 
 
+} // namespace GrAL 
 
 #endif

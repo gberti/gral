@@ -11,6 +11,7 @@
     \ingroup partitioningmodule
 */
 
+namespace GrAL {
 
 /*! \brief   Construct a coarse grid from a partitioning of a fine grid.
   
@@ -38,6 +39,8 @@ ConstructCoarsePartitionGrid(CoarseGrid& G,      // out
 			     const Partition& P, // in
 			     CoarseToFineVertex& coarse2fine_v,   // out
 			     CoarseCellToPart  & coarsecell2part); // out
+
+} // namespace GrAL
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Partitioning/internal/coarse-grid-from-partitioning.C"

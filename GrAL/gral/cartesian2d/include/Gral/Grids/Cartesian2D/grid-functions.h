@@ -9,6 +9,7 @@
 /*! \file
  */
 
+namespace GrAL {
 
 /*! \defgroup gridfunctionsreggrid2d Total grid functions for RegGrid2D
 
@@ -77,6 +78,6 @@ public:
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
 };
 
-
+} // namespace GrAL 
 
 #endif

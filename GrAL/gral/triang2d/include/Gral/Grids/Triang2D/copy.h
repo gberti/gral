@@ -8,6 +8,8 @@
 /*! \file
 */
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //  !! DIRTY operation.
 //  !! intended for use in other functions only, 
@@ -35,6 +37,7 @@ void copy_cells(Triang2D       & G,
 		VtxCorr   const& vtx_corr,
 		CellCorr       & cell_corr);
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Grids/Triang2D/copy.C"

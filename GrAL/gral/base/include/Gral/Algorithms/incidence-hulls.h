@@ -32,6 +32,8 @@
 
 #include <iostream>
 
+namespace GrAL {
+
 // after execution, vertex_seq contains all vertices
 // not marked as visited (visited[v] != 0) that are
 // adjacent to cells in range(seed), 
@@ -337,7 +339,7 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
     }
   } // cell
   else {
-    std::cerr << "Incidence hull: Unsupported element type: " << s.front() << std::endl;
+     ::std::cerr << "Incidence hull: Unsupported element type: " << s.front() <<  ::std::endl;
   }
   if(p_flag == periodic) {
     if(v_layers.LastLayer().NumOfVertices() == 0)
@@ -347,6 +349,6 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
   }
 }
 
-
+} // namespace GrAL 
 
 #endif

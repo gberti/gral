@@ -13,6 +13,7 @@
 /*! \file
  */
 
+namespace GrAL {
 
 /*! \defgroup triang3dgf Total grid functions for Triang3D
     \ingroup triang3dmodule
@@ -94,6 +95,8 @@ class grid_function<Triang3D::Facet, T>
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
 
 };
+
+} // namespace GrAL 
 
 
 #endif

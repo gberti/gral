@@ -106,10 +106,10 @@ inline bool operator<(const Edge2D& s1, const Edge2D& s2)
   // etwas effizienter mit ordered_pair(C(1),C(2))
   // evtl. gleich cnbit gleich so waehlen, dass reihenfolge stimmt?
   typedef Edge2D::vertex_handle vh;
-  vh max1(std::max(s1.v1(),s1.v2()));
-  vh min1(std::min(s1.v1(),s1.v2()));
-  vh max2(std::max(s2.v1(),s2.v2()));
-  vh min2(std::min(s2.v1(),s2.v2()));
+  vh max1(::std::max(s1.v1(),s1.v2()));
+  vh min1(::std::min(s1.v1(),s1.v2()));
+  vh max2(::std::max(s2.v1(),s2.v2()));
+  vh min2(::std::min(s2.v1(),s2.v2()));
   
   return ( (max1 < max2)  || ( (max1 == max2) && (min1 < min2)));
 }

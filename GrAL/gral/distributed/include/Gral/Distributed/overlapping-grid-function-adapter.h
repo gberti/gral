@@ -9,6 +9,8 @@
 #include "Config/compiler-config.h"
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \brief A grid function that knows which parts are owned by other parts.
     \ingroup overlappinggrids
@@ -102,5 +104,6 @@ public:
   const_iterator  end()   const { return data.end  ();}
 };
 
+} // namespace GrAL 
 
 #endif

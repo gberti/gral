@@ -11,6 +11,8 @@
 #include "Gral/Algorithms/incidence-hulls.h"
 #include "Gral/Algorithms/sequence-copy.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 // 
 // Mark cells on partition boundary according to pattern.
@@ -113,5 +115,7 @@ void mark_private_range(ERange& priv, Eiter eit,
   }
 
 }
+
+} // namespace GrAL 
 
 #endif

@@ -14,6 +14,7 @@
 
 #include <iostream>
 
+using namespace GrAL;
 
   typedef cartesian2d::CartesianGrid2D  grid_type_2d;
   typedef grid_types<grid_type_2d>         gt2;
@@ -41,6 +42,7 @@
 
 
 int main () 
+
 {
   using namespace std;
 

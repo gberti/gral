@@ -8,6 +8,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 /*! \defgroup restrictedgridfunctions Restrictions of grid functions
    \ingroup gridfunctions  
 */
@@ -134,5 +136,7 @@ Restriction(GF& gf, const ERange& R)
   typedef typename ERange::const_iterator e_iter;
   return restricted_grid_function_adapter<GF,e_iter>(gf,R.begin(),R.end(),R.size());
 }
+
+} // namespace GrAL 
 
 #endif

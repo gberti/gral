@@ -8,6 +8,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/grid-morphism.h"
 
+namespace GrAL {
+
 template
 < class OG,          //  overlapping grid
   class OG_SRC,      //  overlapping grid (src)
@@ -45,6 +47,8 @@ void CopyOverlappingGrid(OG             & og,
 			dummy_src2dest_v,
 			dummy_src2dest_c);
 }
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/copy-overlapping-grid.C"

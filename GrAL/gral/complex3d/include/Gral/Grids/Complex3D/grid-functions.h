@@ -8,6 +8,8 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
 
+namespace GrAL {
+
 /*! \defgroup complex3dgf Total grid functions for Complex3D
  
     \ingroup complex3dmodule
@@ -102,5 +104,6 @@ class grid_function<Complex3D::Facet, T>
 
 };
 
+} // namespace GrAL 
 
 #endif

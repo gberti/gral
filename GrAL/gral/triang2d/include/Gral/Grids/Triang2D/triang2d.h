@@ -16,6 +16,8 @@
 #include <algorithm>
 
 
+namespace GrAL {
+
 struct grid_types_Triang2D :
   public grid_types_base_Triang2D 
 {
@@ -454,8 +456,11 @@ struct grid_types<Triang2D> : public grid_types_base<grid_types_Triang2D>
   static cell_handle invalid_cell_handle(Triang2D const&) { return -1;}
 };
 
+} // namespace GrAL
 
 #include "Gral/Grids/Triang2D/partial-grid-functions.h"
+
+namespace GrAL {
 
 class Triang2D_FacetIterator 
   : public facet_iterator_of_cell_set<Triang2D_Cell>
@@ -548,5 +553,6 @@ Triang2D_FacetOnCellIterator::operator*() const
 { return Triang2D_Edge(*this); }
 
 
+} // namespace GrAL 
 
 #endif

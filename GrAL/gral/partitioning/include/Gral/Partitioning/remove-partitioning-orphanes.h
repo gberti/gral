@@ -11,6 +11,8 @@
     \ingroup partitioningmodule
  */
 
+namespace GrAL {
+
 template<class GRID> class partitioning;
 
 /*! Make all partitions in P facet-connected
@@ -28,6 +30,8 @@ template<class GRID> class partitioning;
 template<class GRID>
 extern void
 remove_orphanes(partitioning<GRID>& P);
+
+} // namespace GrAL 
 
 #ifdef  NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Partitioning/internal/remove-partitioning-orphanes.C"

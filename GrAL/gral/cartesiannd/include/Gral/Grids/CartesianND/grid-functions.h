@@ -6,6 +6,9 @@
 #include "Gral/Grids/CartesianND/cartesiannd.h"
 #include "Gral/Base/grid-function-vector.h"
 
+
+namespace GrAL {
+
 /*!  \defgroup cartesianndgf Total grid functions for CartesianND
  
       \ingroup cartesianndmodule
@@ -32,5 +35,6 @@ public:
   grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
 };
 
+} // namespace GrAL 
 
 #endif

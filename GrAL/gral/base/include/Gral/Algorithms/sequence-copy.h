@@ -6,6 +6,7 @@
 
 #include <algorithm>
 
+namespace GrAL {
 
 template<class ElemIter, class F>
 inline
@@ -117,5 +118,7 @@ EltIter copy_it_range_if_filter(EltIter src, OutputIter dest, const Pred& p, con
   }
   return src;
 }
+
+} // namespace GrAL 
 
 #endif

@@ -9,6 +9,8 @@
 #include "Geometry/point-traits.h"
 #include "Geometry/algebraic-primitives.h"
 
+namespace GrAL {
+
 /*! \brief Simple geometry, just storing vertex coordinates
 
     \ingroup  gridgeometries
@@ -65,5 +67,7 @@ public:
   bool bound() const { return coords.bound();}
   void cb() const { REQUIRE(bound(), "", 1);}
 };
+
+} // namespace GrAL 
 
 #endif

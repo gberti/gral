@@ -8,9 +8,11 @@
 
 #include <vector>
 
+namespace GrAL {
+
 template<class E>
 bool test_partial_grid_functions(typename E::grid_type const& G, 
-				 std::ostream& out)
+				 ::std::ostream& out)
 {
   typedef element_traits<E> et;
   typedef typename et::handle_type element_handle;
@@ -27,7 +29,7 @@ bool test_partial_grid_functions(typename E::grid_type const& G,
 
   partial_grid_function<E,element_handle> f2 = f1;   
   partial_grid_function<E,element_handle> f3; f3 = f1;
-  std::vector<partial_grid_function<E,element_handle> > v(2);
+  ::std::vector<partial_grid_function<E,element_handle> > v(2);
   v[0] = v[1] = f1;
 
   REQUIRE_ALWAYS( &(f1  .TheGrid()) == &G, "Wrong grid in gf!\n",1);
@@ -52,6 +54,6 @@ bool test_partial_grid_functions(typename E::grid_type const& G,
   return true;
 }
 
-
+} // namespace GrAL 
 
 #endif

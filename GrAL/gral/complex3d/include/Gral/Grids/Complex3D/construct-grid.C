@@ -15,6 +15,7 @@
 
 #include "Container/bijective-mapping.h"
 
+namespace GrAL {
 
 template<class G_SRC, class VCORR, class CCORR>
 void ConstructGrid0(Complex3D     & G_dest,
@@ -40,7 +41,7 @@ void ConstructGrid0(Complex3D     & G_dest,
 
   // (2) copy archetypes
   typedef vertex_morphism<src_archetype, dst_archetype> arch_morphism;
-  std::vector<arch_morphism> morphism;
+   ::std::vector<arch_morphism> morphism;
   bijective_mapping<src_arch_handle, dst_arch_handle> arch_corr;
   typename sgt::archetype_iterator arch_src = G_src.BeginArchetype(); 
   for(; arch_src != G_src.EndArchetype() ; ++arch_src) {
@@ -76,5 +77,7 @@ void ConstructGrid0(Complex3D     & G_dest,
   G_dest.calculate_dependent();
    
 }
+
+} // namespace GrAL 
 
 #endif

@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 /*! \defgroup elementseqviews Views of Grids as Element Sequences
     \ingroup subranges
 
@@ -640,5 +642,6 @@ inline facet_span_of_vertices<VertexRange>
 FacetSpanOfVertices(VertexRange const& vr)
 { return facet_span_of_vertices<VertexRange>(vr);}
 
+} // namespace GrAL 
 
 #endif

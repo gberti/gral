@@ -5,6 +5,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 /*! \brief Representation of a  flag (tuple of incident elements, one of each dimension)
 
   \ingroup elements
@@ -106,6 +108,7 @@ public:
 
 };
 
+} // namespace GrAL 
 
 #endif
 

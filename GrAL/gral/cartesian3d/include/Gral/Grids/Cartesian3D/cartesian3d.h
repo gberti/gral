@@ -11,6 +11,7 @@
 #include "Utility/pre-post-conditions.h"
 
 
+namespace GrAL {
 
 namespace cartesian3d {
 
@@ -934,7 +935,7 @@ Edge_Cartesian3D::EndVertex()   const  { return VertexOnEdgeIterator(*this, NumO
 
 }; // namespace cartesian3d
 
-// these must be in global namespace
+// these must be in  namespace GrAL
 
 // grid_types<>
 
@@ -986,6 +987,6 @@ struct element_traits<cartesian3d::Cell_Cartesian3D>
 };
 
 
-
+} // namespace GrAL 
 
 #endif

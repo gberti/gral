@@ -10,6 +10,7 @@
 
 #include <iostream>
 
+namespace GrAL {
 
 /*! \defgroup shrunk_grid_view A shrunk view of a grid
 
@@ -189,7 +190,7 @@ namespace shrink_grid_view {
 
  template<class GRID>
    inline
-   std::ostream& operator<<(std::ostream& out, vertex_handle_t<GRID> const& h)
+    ::std::ostream& operator<<( ::std::ostream& out, vertex_handle_t<GRID> const& h)
    { return (out << h.c << ' ' << h.v);}
 
   //---- elements and sequence  iterators -----------
@@ -537,5 +538,7 @@ namespace shrink_grid_view {
     };
 
 } // namespace shrink_grid_view 
+
+} // namespace GrAL 
 
 #endif

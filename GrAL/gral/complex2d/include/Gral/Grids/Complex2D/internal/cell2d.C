@@ -50,7 +50,7 @@ inline CellOnCell2D_Iterator Cell2D::EndCell()    const { return EndNeighbour();
 inline int Cell2D::NumOfNeighbours() const
 { 
   return count_if(base()._neighbours.begin(), base()._neighbours.end(), 
-		  bind2nd(std::not_equal_to<int>(),-1)); 
+		  bind2nd(::std::not_equal_to<int>(),-1)); 
 }
 
 inline Vertex2D Cell2D::V(int i) const

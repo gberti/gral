@@ -10,6 +10,8 @@
 #include <algorithm> // sort
 #include <iostream> 
 
+namespace GrAL {
+
 /*! \defgroup generic_facet Generic facet components
 
   \ingroup elements
@@ -121,7 +123,7 @@ namespace generic_facet {
         bool operator< (self const& rhs) const { return ((c < rhs.c) || (c == rhs.c && lh < rhs.lh));}
       };
     template<class gt>
-    std::ostream& operator<<(std::ostream& out, facet_handle_t<gt> const& h)
+     ::std::ostream& operator<<( ::std::ostream& out, facet_handle_t<gt> const& h)
       { return (out << h.c << ' ' << h.lh);}
 
 
@@ -249,27 +251,27 @@ namespace generic_facet {
 	typedef typename gt::VertexOnFacetIterator VertexOnFacetIterator;
 	typedef typename gt::Facet                 Facet;
       private:
-	std::vector<vertex_handle> v;
+	 ::std::vector<vertex_handle> v;
       public:
 	vtuple(Facet const& f) 
 	  { 
 	    v.reserve(f.NumOfVertices());
 	    for(VertexOnFacetIterator vf = f.FirstVertex(); ! vf.IsDone(); ++vf)
 	      v.push_back(vf.handle());
-	    std::sort(v.begin(), v.end());
+	     ::std::sort(v.begin(), v.end());
 	  }
 
 	vertex_handle operator[](int n) const { check_range(n); return v[n];}
 
         bool operator==(self const& rhs) const { 
-	  return (std::equal(v    .begin(),    v.end(),
+	  return ( ::std::equal(v    .begin(),    v.end(),
 			     rhs.v.begin()));
 	}
 	bool operator!=(self const& rhs) const 
 	  { return !((*this) == rhs);}
 
         bool operator< (self const& rhs) const { 
-	  return (std::lexicographical_compare
+	  return ( ::std::lexicographical_compare
 		  (v    .begin(),    v.end(),
 		   rhs.v.begin(),rhs.v.end()));
 	}
@@ -421,8 +423,8 @@ namespace generic_facet {
     private:
       CellIterator               c;
       facet_on_cell_iterator<gt> e;
-      // hash_map not in std::
-      STDHASH::hash_map<facet<gt>, bool, hasher_facet<gt> > visited;
+      // hash_map not in  ::std::
+      ::STDHASH::hash_map<facet<gt>, bool, hasher_facet<gt> > visited;
     public:
       facet_iterator() {}
       explicit 
@@ -523,7 +525,7 @@ namespace generic_facet {
 	facet_handle_t<gt> f(archCell const& af) const { c_(); return f(af.handle());}
 
 	facet<gt> F(arch_cell_handle const& h) const 
-	  { c_(); return Facet(TheGrid(),f(h));}
+	  { c_(); return Facet(base::TheGrid(),f(h));}
 	facet<gt> F(archCell const& af) const { c_(); return F(af.handle());}
         
         unsigned NumOfFacets() const { c_(); return base::TheArchetype().NumOfCells();}
@@ -536,7 +538,7 @@ namespace generic_facet {
 
 } // namespace generic_facet
 
-
+} // namespace GrAL 
 
 #endif
 

@@ -2,6 +2,8 @@
 #include "Utility/pre-post-conditions.h"
 
 #include <fstream>
+
+namespace GrAL {
   
 OstreamGMVFmt_base::OstreamGMVFmt_base()
   : out(0), owned(false) {}
@@ -34,3 +36,4 @@ void OstreamGMVFmt_base::init(std::string const& nm)
   out = new std::ofstream(nm.c_str());
 }
 
+} // namespace GrAL 

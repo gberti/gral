@@ -6,7 +6,7 @@
 #include "Config/compiler-config.h"
 #include "Gral/Base/common-grid-basics.h"
 
-
+namespace GrAL {
 
 
 namespace detail {
@@ -111,6 +111,6 @@ public:
 };
 
 
-
+} // namespace GrAL 
 
 #endif

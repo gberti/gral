@@ -9,6 +9,8 @@
 #include "Gral/Grids/Complex2D/stored-geometry.h"
 #include "Gral/Grids/Complex2D/grid-functions.h"
 
+namespace GrAL {
+
 /*! \brief Test class for Complex2D
 
    \todo This class should perhaps be removed from libgral-complex2d.
@@ -33,12 +35,14 @@ private:
 
 public:
   TestComplex2D();
-  virtual void register_at(ControlDevice& Ctrl, std::string const& prefix);
+  virtual void register_at(ControlDevice& Ctrl, ::std::string const& prefix);
   virtual void register_at(ControlDevice& Ctrl) { register_at(Ctrl,"");}
 
   /*! \brief Test combinatorial and geometric functionality.
    */
   void test_complex2d_iterators(const Complex2D& CC,
 				const stored_geometry_complex2D& geom,
-				std::ostream& out);
+				::std::ostream& out);
 };
+
+} // namespace GrAL 

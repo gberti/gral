@@ -10,6 +10,8 @@
 
 #include "Geometry/coords.h"
 
-typedef  coordN<2> point2;
+namespace GrAL {
+  typedef  coordN<2> point2;
+}
 
 #endif

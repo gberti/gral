@@ -10,6 +10,7 @@
 #include "Utility/pre-post-conditions.h"
 #include "Container/my-hash-map.h"
 
+namespace GrAL {
 
 /*! \defgroup disjoint_union_view View for handling formal unions of grids
    
@@ -545,6 +546,7 @@ struct grid_types<disjoint_union_view::grid_view<GRID1,GRID2> >
   : public disjoint_union_view::grid_types_base<GRID1,GRID2>
 { };
 
+} // namespace GrAL
 
 // specialization of hash<> for element handles
 
@@ -552,10 +554,10 @@ namespace STDEXT {
  template<class T> struct hash;
  
  template<class GRID1, class GRID2>
-   struct hash<disjoint_union_view::vertex_handle_view<GRID1,GRID2> >
+   struct hash<GrAL::disjoint_union_view::vertex_handle_view<GRID1,GRID2> >
    {
-     typedef disjoint_union_view::vertex_handle_view<GRID1,GRID2>  vertex_handle;
-     typedef disjoint_union_view::grid_types_base<GRID1,GRID2> gta;
+     typedef GrAL::disjoint_union_view::vertex_handle_view<GRID1,GRID2>  vertex_handle;
+     typedef GrAL::disjoint_union_view::grid_types_base<GRID1,GRID2> gta;
      typedef hash<typename gta::vertex_handle_1> hash1;
      typedef hash<typename gta::vertex_handle_2> hash2;
      typedef vertex_handle key_type;
@@ -572,10 +574,10 @@ namespace STDEXT {
    };
 
  template<class GRID1, class GRID2>
-   struct hash<disjoint_union_view::cell_handle_view<GRID1,GRID2> >
+   struct hash<GrAL::disjoint_union_view::cell_handle_view<GRID1,GRID2> >
    {
-     typedef disjoint_union_view::cell_handle_view<GRID1,GRID2>  cell_handle;
-     typedef disjoint_union_view::grid_types_base<GRID1,GRID2> gta;
+     typedef GrAL::disjoint_union_view::cell_handle_view<GRID1,GRID2>  cell_handle;
+     typedef GrAL::disjoint_union_view::grid_types_base<GRID1,GRID2> gta;
      typedef hash<typename gta::cell_handle_1> hash1;
      typedef hash<typename gta::cell_handle_2> hash2;
      typedef cell_handle key_type;
@@ -594,6 +596,7 @@ namespace STDEXT {
 };  
 
 
+namespace GrAL {
 // specialization of element_traits
 
 template<class GRID1, class GRID2>
@@ -705,6 +708,8 @@ public:
   unsigned size() const { return gf1.size() + gf2.size();}
   typename gt::grid_type const& TheGrid() const { return *g;}
 };
+
+} // namespace GrAL 
 
 #endif
 

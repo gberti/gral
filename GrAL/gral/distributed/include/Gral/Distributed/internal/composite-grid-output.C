@@ -6,6 +6,8 @@
 #include "Gral/Distributed/composite-grid-output.h"
 #include "Utility/as-string.h"
 
+namespace GrAL {
+
 template<class CoarseG, class OG>
 void composite_grid_output<CoarseG,OG>::coarse_grid_complete() {
   local_grids.set_grid(TheCoarseGrid());
@@ -14,5 +16,6 @@ void composite_grid_output<CoarseG,OG>::coarse_grid_complete() {
   }
 }
 
+} // namespace GrAL 
 
 #endif

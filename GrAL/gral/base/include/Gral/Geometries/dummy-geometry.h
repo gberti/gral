@@ -7,6 +7,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 /*! \brief Dummy geometry for places where one is formally required.
     \ingroup gridgeometries
     \see \ref    gridgeometries module
@@ -43,5 +45,6 @@ inline
 dummy_geometry<GRID> 
 DummyGeometry(GRID const& g) { return dummy_geometry<GRID>(g);}
 
+} // namespace GrAL 
 
 #endif

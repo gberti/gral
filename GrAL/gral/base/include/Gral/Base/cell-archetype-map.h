@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 /* \brief Map back and forth between elements and its archetype 
    counterparts in a given cell.
@@ -65,5 +66,7 @@ public:
   typename gt::vertex_handle operator()(typename agt::vertex_handle av) const
     { return c.v(av);}
 };
+
+} // namespace GrAL 
 
 #endif

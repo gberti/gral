@@ -20,6 +20,7 @@
 
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   using namespace cartesian3d;
  

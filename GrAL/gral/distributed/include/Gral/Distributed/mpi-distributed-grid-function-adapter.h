@@ -12,6 +12,8 @@
 #include "Gral/Distributed/overlapping-grid-function.h"
 
 
+namespace GrAL {
+
 /*! \brief Grid function adapter for a MPIDistributedGrid
     \ingroup mpidistributedgrids
    
@@ -136,6 +138,8 @@ public:
   //  void end_calculation();
 
 };
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/mpi-distributed-grid-function-adapter.C"

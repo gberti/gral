@@ -9,6 +9,7 @@
 #include "Gral/Distributed/mpi-distributed-grid.h"
 #include "Gral/Distributed/mpi-distributed-grid-function.h"
 
+namespace GrAL {
 
 /*! For partial specialization of distr_grid_traits
     \ingroup mpidistributedgrids
@@ -77,6 +78,8 @@ T global_max(T const& t, MPIDistributedGrid<CG,FG> const& MG);
 template<class E, class T, class CG, class FG, class OP>
 T global_reduce(distr_grid_function<E,T, MPIDistributedGrid<CG,FG> > & gf, OP const& op);
 */
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/mpi-global-reduce.C"

@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 //  void AddTotalSharedRanges(...);
@@ -30,6 +32,7 @@ void AddTotalSharedRanges(VertexRange       & shared_v, // out
 			  Partition  const& Prtng,      // in
 			  int               p,          // in
 			  Grid       const& G);         // in
+} // namespace GrAL 
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

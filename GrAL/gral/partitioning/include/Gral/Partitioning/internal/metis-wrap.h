@@ -6,11 +6,14 @@
 /*! \file
  */
 
+namespace GrAL {
+
 /*! \brief Wrapper for Metis graph partitioning routines
     \ingroup metispartitioninginternal
 
     \author Holger Kache, Guntram Berti
 */
+
 
 extern
 void metis_partGraphRecursive(int n, 
@@ -20,6 +23,13 @@ void metis_partGraphRecursive(int n,
                               int  nparts,
 			      int* opt,     int edgecut, int* part);
 
+
+/*! \brief Wrapper for Metis graph partitioning routines
+    \ingroup metispartitioninginternal
+
+    \author Holger Kache, Guntram Berti
+*/
+
 extern
 void metis_partGraphKway(int n, 
                          int* xadj,   int* adjncy, 
@@ -27,5 +37,8 @@ void metis_partGraphKway(int n,
                          int wgtflag, int numflag, 
                          int nparts, 
 			 int* opt, int edgecut, int* part);
+
+
+} // namespace GrAL 
 
 #endif

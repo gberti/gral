@@ -15,11 +15,14 @@
 #include "Gral/Base/extend-grid-types.h"
 
 // make sure all members are instantiated
+using namespace GrAL;
+
 typedef grid_types<cartesian2d::CartesianGrid2D> gt;
 template class facet_iterator_of_cell_set<gt::CellIterator>;
 
 
 int main() {
+ 
 
   gt::grid_type R(2,2);
   typedef facet_iterator_of_cell_set<gt::CellIterator> markedFacetIterator;

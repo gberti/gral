@@ -13,6 +13,7 @@
 #include "Gral/Geometries/geometric-types-2d.h" 
 #include "Gral/Grids/Complex2D/complex2d.h"
 
+namespace GrAL {
 
 struct stored_geometry_complex2D_base
   : public grid_types<Complex2D> {
@@ -115,7 +116,7 @@ public:
       VertexOnCellIterator w = vc; 
       ++w;
       for(; !w.IsDone(); ++w)
-        diam2 = std::max(diam2, ap::distance2(coord(*vc),coord(*w)));
+        diam2 = ::std::max(diam2, ap::distance2(coord(*vc),coord(*w)));
     }
     return sqrt(diam2);
   }
@@ -187,6 +188,6 @@ private:
   base const& basic_geom() const { return *this;}
 };
 
-
+} // namespace GrAL 
 
 #endif

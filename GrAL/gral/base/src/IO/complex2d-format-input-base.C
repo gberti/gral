@@ -1,5 +1,7 @@
 #include "Gral/IO/complex2d-format-input-base.h"
 
+namespace GrAL {
+
 IstreamComplex2DFmt_base::IstreamComplex2DFmt_base()    
   : offset(0),
     in(0),
@@ -9,9 +11,9 @@ IstreamComplex2DFmt_base::IstreamComplex2DFmt_base()
     cell_iter_instance(false)
 {}
 
-IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::string const& file, int off)    
+IstreamComplex2DFmt_base::IstreamComplex2DFmt_base( ::std::string const& file, int off)    
   : offset(off),
-    // in(new std::ifstream(file.c_str())),
+    // in(new  ::std::ifstream(file.c_str())),
     //checked_in(in),
     // is_in_owned(true),
     nv_nc_read(false),
@@ -21,7 +23,7 @@ IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::string const& file, int 
   init(file);
 }
 
-IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::istream& is, int off)
+IstreamComplex2DFmt_base::IstreamComplex2DFmt_base( ::std::istream& is, int off)
   : offset(off),
     in(&is),
     checked_in(&is),
@@ -51,9 +53,9 @@ void IstreamComplex2DFmt_base::copy(IstreamComplex2DFmt_base const& rhs)
     // and there must be a call to init(string) later on.
   }
 
-void IstreamComplex2DFmt_base::init(std::string const& file) 
+void IstreamComplex2DFmt_base::init( ::std::string const& file) 
 {
-  std::ifstream * fin = new std::ifstream(file.c_str());
+   ::std::ifstream * fin = new  ::std::ifstream(file.c_str());
   REQUIRE_ALWAYS( fin->is_open(), "Could not open file \"" << file << "\"\n",1);
   in = fin;
   checked_in = checked_istream(in);
@@ -71,3 +73,5 @@ void IstreamComplex2DFmt_base::init() const
 
 bool IstreamComplex2DFmt_base::initialized() const
 { return nv_nc_read; }
+
+} // namespace GrAL 

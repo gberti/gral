@@ -10,6 +10,8 @@
 #include "Gral/Base/construct-grid.h"
 #include "Gral/Base/grid-morphism.h"
 
+namespace GrAL {
+
 template
 < class CG,          // composite grid
   class CG_SRC,      // composite grid (src)
@@ -53,4 +55,7 @@ void CopyComposite(CG          & cg_dest,    // OUT
   // cg_dest.calc_dependent_information();
 
 }
+
+} // namespace GrAL 
+
 #endif

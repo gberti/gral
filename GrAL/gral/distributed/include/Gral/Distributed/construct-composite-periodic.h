@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*!  \brief  Construct a composite grid on a periodic geometry.
   \ingroup compositegrids 
@@ -28,6 +30,8 @@ void ConstructComposite_per
  VCorr          & v_corr,    // out: global x coarse cell  --> local
  CCorr          & c_corr);
 
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/construct-composite-periodic.C"

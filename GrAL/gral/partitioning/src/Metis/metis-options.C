@@ -6,6 +6,7 @@
 
 #include "Gral/Partitioning/internal/metis-options.h"
 
+namespace GrAL {
 
 metis_options::metis_options() {
     opt[0]=0; //defaults are used
@@ -54,4 +55,4 @@ void metis_options::use_kmetis() {
  
 metis_options::~metis_options() { };
 
-
+} // namespace GrAL 

@@ -18,6 +18,7 @@
 
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   namespace rcv  = restricted_grid_component_view;
   namespace cart = cartesian2d;

@@ -10,6 +10,8 @@
 #include "Gral/Base/element-numbering.h"
 #include "Geometry/point-traits.h"
 
+namespace GrAL {
+
 template<class GRID,class GEOM, class GF, class MOREGFS>
 void ConstructGrid_GF(OstreamGMV2DFmt& Out, 
 		      GRID const& G,
@@ -71,5 +73,7 @@ void ConstructGrid_GF(OstreamGMV2DFmt& Out,
   Out.copy_grid_functions(GFS);
   out << "endgmv\n";
 }
+
+} // namespace GrAL 
 
 #endif

@@ -27,19 +27,20 @@
 #include "Container/dummy-mapping.h"
 
 
+
 template<class T>
 class CellFacetMapTriang2D {
 private:
-  typedef grid_types<Triang2D> gt; 
+  typedef GrAL::grid_types<GrAL::Triang2D> gt; 
 
   //---------- DATA ---------
-  grid_function<gt::Cell, tuple<T,3> > table;
+  GrAL::grid_function<gt::Cell, GrAL::tuple<T,3> > table;
 public:
   typedef T                       value_type;
   typedef T                       result_type;
   typedef gt::FacetOnCellIterator argument_type;
 
-  CellFacetMapTriang2D(Triang2D const& tri) : table(tri) {}
+  CellFacetMapTriang2D(GrAL::Triang2D const& tri) : table(tri) {}
 
   T&       operator[](gt::FacetOnCellIterator const& fc) 
   { return table[fc.TheCell()][gt::local(fc)];}
@@ -47,7 +48,9 @@ public:
   { return table(fc.TheCell())[gt::local(fc)];}
 };
 
+
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using namespace std;
 
   typedef grid_types<Triang2D> gt; 

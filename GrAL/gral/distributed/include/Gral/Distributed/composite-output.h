@@ -6,6 +6,8 @@
 
 #include <string>
 
+namespace GrAL {
+
 /*! \brief Output adapter for composite grids
 
     \ingroup compositegrids
@@ -56,6 +58,7 @@ public:
   
 };
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/composite-output.C"

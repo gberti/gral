@@ -11,6 +11,8 @@
 
 #else
 
+namespace GrAL {
+
 /*! \defgroup construct_isomorphism_mod Construct Grid Isomorphisms
 
     \ingroup gridmorphisms
@@ -76,6 +78,7 @@ bool extend_isomorphism(CELL1 const& c1,
 			GRID2 const& G2,
 			PHI        & phi);
 
+} // namespace GrAL 
 
 #endif // NMWR_INCLUDE_TEMPLATE_DEFS
 

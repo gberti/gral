@@ -5,6 +5,7 @@
 #include "Gral/Grids/Complex2D/partial-grid-functions.h"
 #include "Gral/Grids/Complex2D/boundary.h"
 
+namespace GrAL {
 
 TestComplex2D::TestComplex2D()
   : test_vertices(true), 
@@ -21,7 +22,7 @@ TestComplex2D::TestComplex2D()
     test_cell_edge_flip(false)
 {}
 
-void TestComplex2D::register_at(ControlDevice& Ctrl, std::string const&) {
+void TestComplex2D::register_at(ControlDevice& Ctrl, ::std::string const&) {
   RegisterAt(Ctrl, "test_vertices",test_vertices);
   RegisterAt(Ctrl, "test_cells",test_cells);
   RegisterAt(Ctrl, "test_edges",test_edges);
@@ -38,7 +39,7 @@ void TestComplex2D::register_at(ControlDevice& Ctrl, std::string const&) {
 
 void TestComplex2D::test_complex2d_iterators(const Complex2D& CC,
 					     const stored_geometry_complex2D& geom,
-					     std::ostream& out) 
+					     ::std::ostream& out) 
 {
 
   typedef grid_types<Complex2D> gt;
@@ -254,3 +255,5 @@ void TestComplex2D::test_complex2d_iterators(const Complex2D& CC,
  
   }
 }
+
+} // namespace GrAL 

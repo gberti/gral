@@ -10,6 +10,7 @@
    types of Complex2D
 */
 
+namespace GrAL {
 
 template<class E> 
 struct hasher_for_complex2d {};
@@ -44,5 +45,6 @@ struct element_traits<Cell2D>
   typedef consecutive_integer_tag<0>         consecutive_tag;
 };
 
+} // namespace GrAL 
 
 #endif

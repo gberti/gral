@@ -6,6 +6,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include <string>
 
+namespace GrAL {
+
 /*! \brief Result type for point location algorithms
 
     \ingroup geometricgridtools
@@ -15,9 +17,9 @@ template<class GT, class COORD>
 class point_location_result {
 public:
   enum result_tag { inside_tag, outside_tag, projection_tag, failure_tag, num_of_tags };
-  static std::string tag_names[num_of_tags];
+  static  ::std::string tag_names[num_of_tags];
 
-  std::string tagname() const { return tag_names[t];}
+   ::std::string tagname() const { return tag_names[t];}
 
   typedef COORD                    coord_type;
   typedef typename GT::Cell        Cell;
@@ -44,7 +46,9 @@ public:
 
 
 template<class GT, class COORD>
-std::string point_location_result<GT,COORD>::tag_names[point_location_result<GT,COORD>::num_of_tags]
+::std::string point_location_result<GT,COORD>::tag_names[point_location_result<GT,COORD>::num_of_tags]
 = { "inside", "outside", "projection", "failure" };
+
+} // namespace GrAL 
 
 #endif

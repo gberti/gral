@@ -14,6 +14,7 @@
 
 #include "Container/my-hash-map.h"
 
+namespace GrAL {
 
 /*! \brief sorted vertex set of a grid element
     \ingroup elements  
@@ -30,7 +31,7 @@ private:
   typedef grid_types<typename et::grid_type> gt;
   typedef typename gt::vertex_handle         vertex_handle;
 
-  std::vector<vertex_handle> v;
+   ::std::vector<vertex_handle> v;
 public:
   vertex_set(E const& e) 
     { 
@@ -38,19 +39,19 @@ public:
       for(typename VertexOn<E>::Iterator ve(e.FirstVertex()); ! ve.IsDone(); ++ve) {
 	v.push_back(ve.handle());
       }
-      std::sort(v.begin(), v.end());
+       ::std::sort(v.begin(), v.end());
     }
 
   vertex_handle operator[](int n) const { check_range(n); return v[n];}
   unsigned      size() const { return v.size();}
 
   bool operator==(self const& rhs) const { 
-    return (std::equal(v    .begin(),    v.end(),
+    return ( ::std::equal(v    .begin(),    v.end(),
 		       rhs.v.begin()));
   }
   bool operator!=(self const& rhs) const { return !((*this) == rhs);}
   bool operator< (self const& rhs) const { 
-    return (std::lexicographical_compare
+    return ( ::std::lexicographical_compare
 	    (v    .begin(),    v.end(),
 	     rhs.v.begin(),rhs.v.end()));
   }
@@ -63,20 +64,22 @@ private:
 };
 
 
+} // namespace GrAL
+
 namespace STDEXT {
 
   template<class T>
     class hash;
   
   template<class E>
-    class hash<vertex_set<E> >
+    class hash<GrAL::vertex_set<E> >
     {
     public:
-      typedef vertex_set<E> key_type;
-      typedef vertex_set<E> argument_type;
+      typedef GrAL::vertex_set<E> key_type;
+      typedef GrAL::vertex_set<E> argument_type;
       typedef size_t        result_type;
 
-      size_t operator()(vertex_set<E> const& v) const 
+      size_t operator()(GrAL::vertex_set<E> const& v) const 
 	{
 	  size_t n = v.size();
 	  // should use ct-branch here.

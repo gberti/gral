@@ -4,6 +4,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 /*! \internal
     \brief Set of grid element. \e Incomplete!!
@@ -32,5 +33,7 @@ class element_set {
   const_iterator end()   const;
   */
 };
+
+} // namespace GrAL 
 
 #endif

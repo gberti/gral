@@ -12,6 +12,7 @@
 #include "Gral/Distributed/internal/add-total-copied.h"
 #include "Gral/Distributed/internal/add-partial-copied.h"
 
+namespace GrAL {
 
 template<class Overlap, class CoarseGrid, 
          class Partition, class OVPattern,
@@ -74,5 +75,7 @@ void ConstructOverlap(Overlap          & Ovlp,         // out
 		     grid_map); // may be identity<Cell>()
   }
 }
+
+} // namespace GrAL 
 
 #endif

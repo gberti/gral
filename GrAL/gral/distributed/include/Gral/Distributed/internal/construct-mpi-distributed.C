@@ -19,6 +19,8 @@
 #include "Gral/Distributed/composite-grid-function.h"
 #include "Gral/Distributed/overlap-pattern.h"
 
+namespace GrAL {
+
 template<class CG, class FG, class FGEOM, class MG, class GEOM, 
          class VCORRLOC, class TRAFO, class VCORR, class CCORR>
 void
@@ -117,5 +119,7 @@ ConstructMPIDistributedFromMaster
 
 
 }
+
+} // namespace GrAL 
 
 #endif

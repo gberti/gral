@@ -6,6 +6,7 @@
 #include "Gral/Geometries/intersections.h"
 #include "Container/tuple.h"
 
+namespace GrAL {
 
 template<class GEOM, class GT>
 bool 
@@ -51,5 +52,6 @@ edge_facet_intersection<GEOM,GT>::operator()
   return res;
 }
 
+} // namespace GrAL 
 
 #endif

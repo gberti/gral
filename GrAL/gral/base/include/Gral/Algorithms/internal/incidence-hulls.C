@@ -8,6 +8,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 template<class GT, class CellIt, class VtxSeq, class EltMarker>
 void mark_vertices_on_cells(CellIt      seed,
 			    VtxSeq    & vertex_seq,
@@ -171,6 +173,7 @@ void mark_on_vertices(VertexIt    seed,         // in : cell seed set
   }
 }
 
+} // namespace GrAL 
 
 #endif
 

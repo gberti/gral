@@ -22,6 +22,7 @@
 #include <iostream>
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   
   incidence_stencil s("VC");

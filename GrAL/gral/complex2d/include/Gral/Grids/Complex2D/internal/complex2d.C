@@ -45,7 +45,7 @@ inline Complex2D::edge_handle Complex2D::handle(const Edge2D& E) const
   if (c1 > c2)
     return edge_handle(c1,E._e.lf);
   else // c2 cannot be outer_pos()
-    return edge_handle(c2, std::find(_cells[c2]._neighbours.begin(),
+    return edge_handle(c2, ::std::find(_cells[c2]._neighbours.begin(),
 				     _cells[c2]._neighbours.end(), c1)
 		            - _cells[c2]._neighbours.begin());
 }

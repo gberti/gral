@@ -8,6 +8,8 @@
 
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 overlap_pattern::overlap_pattern(std::string const& pat)
 {
   for(unsigned i = 0; i < pat.size(); ++i)
@@ -20,3 +22,5 @@ overlap_pattern::overlap_pattern(std::string const& pat)
 }
 
 overlap_pattern::overlap_pattern() {}
+
+} // namespace GrAL 

@@ -7,7 +7,7 @@
 #include "Utility/pre-post-conditions.h"
 
 template<class G>
-bool test_edge_on_facet_iterator(G const& g, std::ostream & out)
+bool test_edge_on_facet_iterator(G const& g, ::std::ostream & out)
 {
   typedef grid_types<G> gt;
   typedef typename gt::FacetIterator         FacetIterator;

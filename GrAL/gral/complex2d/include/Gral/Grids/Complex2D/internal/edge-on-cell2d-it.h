@@ -107,8 +107,8 @@ public:
   }
 
 
-  void print(std::ostream& out)  const;
-  friend std::ostream& operator<<(std::ostream& out, const EdgeOnCell2D_Iterator& it)
+  void print(::std::ostream& out)  const;
+  friend ::std::ostream& operator<<(::std::ostream& out, const EdgeOnCell2D_Iterator& it)
     { it.print(out); return out; }
 
   bool bound() const { return C.valid();}

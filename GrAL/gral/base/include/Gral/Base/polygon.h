@@ -12,6 +12,7 @@
 #include "Geometry/point-traits.h"
 #include "Utility/ref-ptr.h"
 
+namespace GrAL {
 
 namespace polygon1d  { 
   
@@ -253,7 +254,7 @@ void ConstructGrid0(polygon1d::polygon      & G_dst,
   G_dst.set_number_of_vertices(G_src.NumOfVertices());
 
   if(G_src.NumOfVertices() > 0) {
-    // std::vector<typename gtsrc::vertex_handle> ordered_src_vertices(G_src.NumOfVertices());
+    //  ::std::vector<typename gtsrc::vertex_handle> ordered_src_vertices(G_src.NumOfVertices());
     
     typename gtsrc::Cell   c_src = * G_src.FirstCell();
     typename gtsrc::Vertex v_src = * c_src.FirstVertex();
@@ -357,5 +358,7 @@ namespace polygon1d {
   };
 
 } // namespace polygon1d
+
+} // namespace GrAL 
 
 #endif

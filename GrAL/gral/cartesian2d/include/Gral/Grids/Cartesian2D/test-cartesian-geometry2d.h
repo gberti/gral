@@ -8,6 +8,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 /*! \brief Test a Cartesian geometry
     
     \ingroup cartesian2dgeom
@@ -16,7 +18,7 @@
     are tested, which are defined only for 2D embeddings.
 */
 template<class GEOM>
-void test_cartesian2d_geometry(GEOM & Geo, std::ostream& out)
+void test_cartesian2d_geometry(GEOM & Geo, ::std::ostream& out)
 {
   typedef grid_types<typename GEOM::grid_type> gt;
 
@@ -42,5 +44,6 @@ void test_cartesian2d_geometry(GEOM & Geo, std::ostream& out)
 
 }
 
+} // namespace GrAL 
 
 #endif

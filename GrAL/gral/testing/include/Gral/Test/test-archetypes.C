@@ -7,14 +7,16 @@
 #include "Utility/pre-post-conditions.h"
 #include "Container/partial-mapping.h"
 
+namespace GrAL {
+
 template<class G>
-bool test_archetypes(G const& g, std::ostream & out)
+bool test_archetypes(G const& g, ::std::ostream & out)
 {
   return test_archetypes(g,out, grid_types<G>());
 }
 
 template<class G, class GT>
-bool test_archetypes(G const& g, std::ostream & out, GT)
+bool test_archetypes(G const& g, ::std::ostream & out, GT)
 {
   typedef typename GT::archetype_type     archetype_type;
   typedef typename GT::archetype_handle   archetype_handle;
@@ -43,5 +45,6 @@ bool test_archetypes(G const& g, std::ostream & out, GT)
   return true;
 }
 
+} // namespace GrAL 
 
 #endif

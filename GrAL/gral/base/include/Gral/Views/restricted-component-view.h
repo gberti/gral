@@ -8,8 +8,9 @@
 #include "Gral/Subranges/enumerated-subrange.h"
 #include "Gral/Base/grid-function-hash.h"
 
+namespace GrAL {
 
-/*! Provide a view on a connected grid part defined by a predicate
+/*! \brief Provide a view on a connected grid part defined by a predicate
     \ingroup gridviews
 
     A typical use would be to restrict analysis to a small patch
@@ -286,6 +287,8 @@ public:
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g, T const& t) : base(g,t) {}
 };
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "restricted-component-view.C"

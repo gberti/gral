@@ -10,18 +10,20 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
+
 /*! \brief Representation of incidence stencils
 
      \ingroup incidence_hull
 */
 class incidence_stencil {
-  std::queue<grid_element_tag> q;
+   ::std::queue<grid_element_tag> q;
 public:
   incidence_stencil() {}
-  incidence_stencil(std::string const& s)
+  incidence_stencil( ::std::string const& s)
   { init(s);}
 
-  void init(std::string const& s) 
+  void init( ::std::string const& s) 
   {
     for(unsigned i = 0; i < s.size(); ++i)
       switch(s[i]) {
@@ -30,7 +32,7 @@ public:
       case 'F' : q.push(facet_tag);  break;
       case 'C' : q.push(cell_tag);   break;
       default: 
-	std::cerr << "Unknown element code " << s[i] << " found!\n";
+	 ::std::cerr << "Unknown element code " << s[i] << " found!\n";
 	break;
       }
   }
@@ -41,5 +43,6 @@ public:
   unsigned size()  const { return q.size();}
 };
 
+} // namespace GrAL
 
 #endif

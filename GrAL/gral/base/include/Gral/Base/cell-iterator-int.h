@@ -7,6 +7,7 @@
 #include "Utility/ref-ptr.h"
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 template<class GT>
 class cell_iterator_int;
@@ -137,7 +138,7 @@ template<class GT>
 inline bool operator< (cell_iterator_int<GT> const& lhs, 
 		       cell_iterator_int<GT> const& rhs) { return (rhs.c <  lhs.c);}
 
-#ifndef GRAL_INCLUDES_RELOPS
+// #ifndef GRAL_INCLUDES_RELOPS
 template<class GT>
 inline bool operator!=(cell_iterator_int<GT> const& lhs, 
 		       cell_iterator_int<GT> const& rhs) { return !(lhs == rhs);}
@@ -153,6 +154,8 @@ inline bool operator<=(cell_iterator_int<GT> const& lhs,
 template<class GT>
 inline bool operator>=(cell_iterator_int<GT> const& lhs, 
 		       cell_iterator_int<GT> const& rhs) { return !(lhs < rhs);}
-#endif
+//#endif
+
+} // namespace GrAL 
 
 #endif

@@ -6,6 +6,8 @@
 
 #include "Gral/Base/grid-functions.h"
 
+namespace GrAL {
+
 /*! \brief An iterator over all cells having at least one common vertex
     with a given cell.
     \ingroup iterators
@@ -114,6 +116,8 @@ public:
  */
 template<class Grid>
 extern void test_extended_cell_on_cell_iterator(const Grid& g);
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Base/Iterators/test-ex-cell-on-cell-it.C"

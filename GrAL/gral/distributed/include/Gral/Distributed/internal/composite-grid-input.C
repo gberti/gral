@@ -6,6 +6,8 @@
 #include "Gral/Distributed/composite-grid-input.h"
 #include "Utility/as-string.h"
 
+namespace GrAL {
+
 template<class CoarseGIn, class CoarseG, class OGIn>
 composite_grid_input<CoarseGIn,CoarseG,OGIn>
 ::composite_grid_input(std::string const& base)
@@ -20,5 +22,7 @@ composite_grid_input<CoarseGIn,CoarseG,OGIn>
   }
   
 }
+
+} // namespace GrAL 
 
 #endif

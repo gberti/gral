@@ -12,6 +12,11 @@
 
 #include <iostream>
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Test/test-grid-functions.C"
+#else
+
+namespace GrAL {
 
 /*! \brief Test of total grid functions
 
@@ -26,18 +31,18 @@
     MyGrid g;
     typedef grid_types<MyGrid> gt;
     // test total grid functions on vertices
-    test_grid_function<gt::Vertex>(g, std::cout);
+    test_grid_function<gt::Vertex>(g, ::std::cout);
     \endcode
 
     \ingroup gridfunctiontests
 */
 template<class E>
 bool test_grid_functions(typename E::grid_type const& G, 
-			 std::ostream& out);
+			 ::std::ostream& out);
+
+} // namespace GrAL 
 
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Test/test-grid-functions.C"
 #endif
 
 #endif

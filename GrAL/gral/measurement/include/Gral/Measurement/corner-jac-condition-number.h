@@ -7,6 +7,8 @@
 #include "Geometry/algebraic-primitives.h"
 #include "Container/partial-mapping.h"
 
+namespace GrAL {
+
 namespace measurement {
 
 /*! \brief Class for calculating condition numbers of 
@@ -88,6 +90,8 @@ private:
 };
 
 } //  namespace measurement
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Measurement/corner-jac-condition-number.C"

@@ -12,6 +12,8 @@
 #include <vector>
 #include <algorithm>
 
+namespace GrAL {
+
 Triang3D::Triang3D(Triang3D const& rhs) {
   cells     = rhs.cells;
   ncells    = rhs.ncells;
@@ -100,3 +102,5 @@ Triang3D::SD::SD()
 
 
 Triang3D::SD Triang3D::sd;
+
+} // namespace GrAL 

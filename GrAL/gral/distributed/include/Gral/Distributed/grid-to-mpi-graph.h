@@ -3,6 +3,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 // CONTENTS:
@@ -32,6 +34,8 @@ void mpi_graph_format(const Grid& G,
 		      int* index, int* index_end, 
 		      int* edges, int* edges_end);
 
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/internal/grid-to-mpi-graph.C"

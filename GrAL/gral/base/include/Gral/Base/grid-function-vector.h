@@ -10,6 +10,7 @@
 #include "Utility/ref-ptr.h"
 #include "Gral/Base/common-grid-basics.h"
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*! \brief Implements a grid_function on vector-basis.
@@ -39,7 +40,7 @@ template<class E, class T>
 class grid_function_vector {
 public:
   // container types
-  typedef std::vector<T>                       table_type;
+  typedef ::std::vector<T>                     table_type;
   typedef typename table_type::size_type       size_type;
   typedef typename table_type::value_type      value_type;
   typedef typename table_type::reference       reference;
@@ -84,16 +85,16 @@ public:
       
       \post <tt> gf(e)  == t </tt>  for all \c e
   */
-  void set_value(value_type const& t) { std::fill(table.begin(),table.end(),t); } 
+  void set_value(value_type const& t) {  ::std::fill(table.begin(),table.end(),t); } 
 
   /*! \brief Copy sequence <tt> [t_begin, t_end[ </tt>
 
-      \post <tt> std::equal(begin(), end(), t_begin(), t_end()) </tt>
+      \post <tt>  ::std::equal(begin(), end(), t_begin(), t_end()) </tt>
   */
   template<class ForwardIterator>
   void set_values(ForwardIterator t_begin, ForwardIterator t_end)
   {
-    std::copy(t_begin, t_end, table.begin());
+     ::std::copy(t_begin, t_end, table.begin());
   }
 
   void init(ref_ptr<grid_type const> gg, const T& t) {
@@ -174,5 +175,7 @@ public:
   typedef iter       iterator;
   typedef const_iter const_iterator;
 };
+
+} // namespace GrAL 
 
 #endif

@@ -14,6 +14,7 @@
 
 */
 
+namespace GrAL {
 
 /*! \brief Namespace for classes related to ComplexND, 
      a n-dimensional unstructured grid.
@@ -1498,7 +1499,7 @@ public:
 };
 
 
-
+} // namespace GrAL 
 
 
 #endif

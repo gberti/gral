@@ -8,6 +8,8 @@
 #include "Geometry/point-traits.h"
 #include <cmath>
 
+namespace GrAL {
+
 namespace measurement {
 
 template<class P>
@@ -55,5 +57,8 @@ public:
 };
 
 } // namespace measurement
+
+} // namespace GrAL 
+
 
 #endif

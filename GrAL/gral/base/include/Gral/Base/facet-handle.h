@@ -9,6 +9,8 @@
 #include <iostream>
 #include <stdlib.h>
 
+namespace GrAL {
+
 /*! \defgroup facethandle Generic facet handle
 
    \ingroup elements
@@ -72,14 +74,14 @@ bool operator<  (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& r
  */
 template<class CHandle>
 inline
-std::ostream& operator<< (std::ostream& out, facet_handle<CHandle> const& e)
+std::ostream& operator<< ( ::std::ostream& out, facet_handle<CHandle> const& e)
  { return (out << e.c << ' ' << e.lf);}
 
 /*! \ingroup facethandle
  */
 template<class CHandle>
 inline
-std::istream& operator>> (std::istream& in,  facet_handle<CHandle>     & e)
+std::istream& operator>> ( ::std::istream& in,  facet_handle<CHandle>     & e)
  { return (in >> e.c >> e.lf);}
 
 /*! \ingroup facethandle
@@ -107,5 +109,7 @@ public:
   size_t operator()(const facet_handle<int>& h) const
     { return (8*h.c + h.lf);}
 };
+
+} // namespace GrAL 
 
 #endif

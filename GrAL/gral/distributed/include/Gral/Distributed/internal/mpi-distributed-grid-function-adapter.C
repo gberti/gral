@@ -11,7 +11,7 @@
 #include "Utility/assignment-operators.h"
 #include "Gral/Base/restricted-grid-function-adapter.h"
 
-
+namespace GrAL {
 
 template<class GF, class DistributedG>
 distributed_grid_function_adapter<GF,DistributedG>
@@ -241,5 +241,7 @@ void distributed_grid_function_adapter<GF,DistributedG>::end_synchronize()
   }
 }
 
+
+} // namespace GrAL 
 
 #endif

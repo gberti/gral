@@ -3,6 +3,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 template<class E>
 template<class OVLPRANGE, class FILTER>
 void overlap_range_output<E>::copy_from(OVLPRANGE const& src,
@@ -28,5 +30,7 @@ void overlap_range_output<E>::copy_from(OVLPRANGE const& src,
   (*out) << '\n';
   
 }
+
+} // namespace GrAL 
 
 #endif

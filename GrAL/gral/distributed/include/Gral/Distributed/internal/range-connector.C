@@ -6,9 +6,10 @@
 #include <algorithm> // STL
 
 
+
 // $LICENSE
 
-
+namespace GrAL {
 
 // STL copy requires iterator_category and such.
 // here are simpler versions.
@@ -72,5 +73,7 @@ template<class SenderIt, class ReceiverIt>
 void buffered_add_to_range_connector<SenderIt,ReceiverIt>::recv_data()
 { my_add_to(buffer.begin(), buffer.end(), dest_b);}
 
+
+} // namespace GrAL 
 
 #endif

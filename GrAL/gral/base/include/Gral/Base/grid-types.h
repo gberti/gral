@@ -6,6 +6,8 @@
 
 #include "Gral/Base/type-tags.h"
 
+namespace GrAL {
+
 template<class ELEM, class ANCHOR>
 class dummy_incidence_iterator;
 
@@ -314,7 +316,7 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_HAS_MEMBER);
 
     \templateparams
      - \c GT is a specialization of \c grid_types<>
-     - OSTREAM supports <tt> operator<<(std::string) </tt>, e.g. \c std::ostream
+     - OSTREAM supports <tt> operator<<( ::std::string) </tt>, e.g. \c  ::std::ostream
 */
 template<class GT, class OSTREAM>
 inline void checkgt(OSTREAM& out)
@@ -394,7 +396,7 @@ public:
 
 };
 
-
+} // namespace GrAL 
 
 #include "Gral/Iterators/dummy-iterator.h"
 

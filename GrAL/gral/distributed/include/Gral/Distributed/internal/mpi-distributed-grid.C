@@ -11,6 +11,8 @@
 
 // #include "IO/iomgr.h"
 
+namespace GrAL {
+
 template<class CoarseG, class FineG>
 MPIDistributedGrid<CoarseG,FineG>::MPIDistributedGrid()
  : initialized(false)
@@ -236,6 +238,8 @@ void ConstructDistributed(MPIDistributedGrid<CG1,FG1>     &  MpiG,         // ou
 
 }
 */
+
+} // namespace GrAL 
 
 #endif
 
