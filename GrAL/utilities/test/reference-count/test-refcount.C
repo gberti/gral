@@ -33,7 +33,7 @@ public:
 };
 
 template<>
-struct copy_traits<testA> {
+struct copy_traits<testA> : public copy_traits_base<testA> {
   static testA* clone(testA const& a) { return a.clone();}
 };
 
