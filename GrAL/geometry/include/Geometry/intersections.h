@@ -47,10 +47,8 @@ public:
   interval<scalar_type> operator()(OBJ const& obj) const {
     interval<scalar_type> I;
     coord_type n(dir_); // in case the two types are different.
-    //   for(typename OBJ:: geom_vertex_iterator v = obj.begin_vertex(); v != obj.end_vertex(); ++v)
-    //  I |= ap::dot(*v,n);
     for(typename OBJ::VertexIterator v = obj.FirstVertex(); v != obj.EndVertex(); ++v)
-      I |= ap::dot(obj(*v),n);
+      I |= ap::dot(convert_point<coord_type>(obj(*v)),n);
     return I;
   }
 };
@@ -284,14 +282,19 @@ public:
     polytope_directions<OBJ2> dirs2(o2);
     typedef typename polytope_directions<OBJ1>::dir_sequence_iterator dir_seq_it_1;
     typedef typename polytope_directions<OBJ2>::dir_sequence_iterator dir_seq_it_2;
+    typedef typename polytope_directions<OBJ1>::dir_iterator dir_it_1;
+    typedef typename polytope_directions<OBJ2>::dir_iterator dir_it_2;
     for(int k = 0; k <= sdim -1; ++k) {
       int d_1_k = sdim-1-k;
       // k directions from obj 1, and d-1-k directions from obj2
       for(dir_seq_it_1 d1 = dirs1.begin(k); d1 != dirs1.end(k); ++d1)
 	for(dir_seq_it_2 d2 = dirs2.begin(d_1_k); d2 != dirs2.end(d_1_k); ++d2) {
 	  std::vector<coord_type> dirs(sdim-1);
-	  std::copy(d1->begin(), d1->end(), dirs.begin());
-	  std::copy(d2->begin(), d2->end(), dirs.begin()+(d1->end()-d1->begin()));
+	  std::vector<coord_type>::iterator dir_it = dirs.begin();
+	  for(dir_it_1 dd1 = d1->begin(); dd1 != d1->end(); ++dd1, ++dir_it)
+	    *dir_it = *dd1;
+	  for(dir_it_2 dd2 = d2->begin(); dd2 != d2->end(); ++dd2, ++dir_it)
+	    *dir_it = convert_point<coord_type>(*dd2);
 	  coord_type normal = ap::perp(dirs.begin(), dirs.end()); 
 	  line_projector<coord_type> p(normal);
 	  if(disjoint(p(o1),p(o2)))
