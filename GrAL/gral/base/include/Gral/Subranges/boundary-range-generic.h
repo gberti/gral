@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRID_BOUNDARY_GENERIC_H
-#define NMWR_GB_GRID_BOUNDARY_GENERIC_H
+#ifndef GRAL_BASE_GB_GRID_BOUNDARY_GENERIC_H
+#define GRAL_BASE_GB_GRID_BOUNDARY_GENERIC_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1999
@@ -11,9 +11,9 @@
 
 
 
-#include "Grids/boundary-iterator.h"
-#include "Grids/grid-functors.h"
-#include "Grids/Algorithms/find-boundary-components.h"
+#include "Gral/Base/boundary-iterator.h"
+#include "Gral/Base/grid-functors.h"
+#include "Gral/Base/Algorithms/find-boundary-components.h"
 
 #include "list.h"
 

@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRIDFUNCTORS_H
-#define NMWR_GB_GRIDFUNCTORS_H
+#ifndef GRAL_BASE_GB_GRIDFUNCTORS_H
+#define GRAL_BASE_GB_GRIDFUNCTORS_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -10,7 +10,7 @@
 //----------------------------------------------------------------
 #include "compiler-config.h"
 #include "Utility/pre-post-conditions.h"
-#include "Grids/common-grid-basics.h"
+#include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
 //

@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_WRITE_COMPLEX2D_H
-#define NMWR_GB_WRITE_COMPLEX2D_H
+#ifndef GRAL_BASE_GB_WRITE_COMPLEX2D_H
+#define GRAL_BASE_GB_WRITE_COMPLEX2D_H
 
 
 //----------------------------------------------------------------
@@ -10,7 +10,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/common-grid-basics.h"
+#include "Gral/Base/common-grid-basics.h"
 
 //-------------------------------------------------------------------------
 //

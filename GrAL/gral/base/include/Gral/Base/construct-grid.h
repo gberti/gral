@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_CONSTRUCT_GRID_H
-#define NMWR_GB_CONSTRUCT_GRID_H
+#ifndef GRAL_BASE_GB_CONSTRUCT_GRID_H
+#define GRAL_BASE_GB_CONSTRUCT_GRID_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998

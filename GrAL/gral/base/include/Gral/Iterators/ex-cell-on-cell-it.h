@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_EXT_CELL_ON_CELL_IT_H
-#define NMWR_GB_EXT_CELL_ON_CELL_IT_H
+#ifndef GRAL_BASE_GB_EXT_CELL_ON_CELL_IT_H
+#define GRAL_BASE_GB_EXT_CELL_ON_CELL_IT_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/grid-functions.h"
+#include "Gral/Base/grid-functions.h"
 
 //----------------------------------------------------------------
 //
@@ -107,7 +107,7 @@ template<class Grid>
 extern void test_extended_cell_on_cell_iterator(const Grid& g);
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Iterators/test-ex-cell-on-cell-it.C"
+#include "Gral/Base/Iterators/test-ex-cell-on-cell-it.C"
 #endif
 
 

@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRID_FIND_BOUNDARY_COMPONENTS_H
-#define NMWR_GB_GRID_FIND_BOUNDARY_COMPONENTS_H
+#ifndef GRAL_BASE_GB_GRID_FIND_BOUNDARY_COMPONENTS_H
+#define GRAL_BASE_GB_GRID_FIND_BOUNDARY_COMPONENTS_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1999
@@ -27,7 +27,7 @@ void find_boundary_component_germs(GRID const& G, FACETSET & C,
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Algorithms/generic/find-boundary-components.C"
+#include "Gral/Base/Algorithms/generic/find-boundary-components.C"
 #endif
 
 #endif

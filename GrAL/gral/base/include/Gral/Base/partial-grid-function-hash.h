@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_PARTIAL_GRID_FUNCTION_HASH_H
-#define NMWR_GB_PARTIAL_GRID_FUNCTION_HASH_H
+#ifndef GRAL_BASE_GB_PARTIAL_GRID_FUNCTION_HASH_H
+#define GRAL_BASE_GB_PARTIAL_GRID_FUNCTION_HASH_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -12,8 +12,8 @@
 #include <my-hash-map.h> // STL
 
 #include "Utility/pre-post-conditions.h"
-#include "Grids/common-grid-basics.h"
-#include "Grids/grid-function-hash.h"
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/grid-function-hash.h"
 
 //----------------------------------------------------------------
 // 

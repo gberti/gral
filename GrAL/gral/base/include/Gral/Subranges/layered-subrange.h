@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_LAYERED_SUBRANGE_H
-#define NMWR_GB_LAYERED_SUBRANGE_H
+#ifndef GRAL_BASE_GB_LAYERED_SUBRANGE_H
+#define GRAL_BASE_GB_LAYERED_SUBRANGE_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -10,7 +10,7 @@
 //----------------------------------------------------------------
 
 
-#include "Grids/enumerated-subrange.h"
+#include "Gral/Base/enumerated-subrange.h"
 
 //----------------------------------------------------------------
 // template<class Grid> class layered_vertex_range;

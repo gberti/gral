@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_FACET_HANDLE_CORR_H
-#define NMWR_GB_FACET_HANDLE_CORR_H
+#ifndef GRAL_BASE_GB_FACET_HANDLE_CORR_H
+#define GRAL_BASE_GB_FACET_HANDLE_CORR_H
 
 //----------------------------------------------------------------
 //
@@ -10,14 +10,14 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/common-grid-basics.h"
+#include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
 //  facet_handle_corr - map facet handle of a source grid to that
 //                      of a target grid.
 //  It is assumed a facet handle is a pair (c,lf) of cell_handle
 //  and local facet number, as is the case for the facet_handle<>
-//  template ( Grids/facet-handle.h )
+//  template ( Gral/Base/facet-handle.h )
 //  This class is rather ad hoc in that it assumes that the 
 //  corr. facet of the target has the same local number with
 //  respect to the corresponding cell.

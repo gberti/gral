@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRID_FACET_HANDLE_H
-#define NMWR_GB_GRID_FACET_HANDLE_H
+#ifndef GRAL_BASE_GB_GRID_FACET_HANDLE_H
+#define GRAL_BASE_GB_GRID_FACET_HANDLE_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1999

@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_BOUNDARY_ITERATOR_H
-#define NMWR_GB_BOUNDARY_ITERATOR_H
+#ifndef GRAL_BASE_GB_BOUNDARY_ITERATOR_H
+#define GRAL_BASE_GB_BOUNDARY_ITERATOR_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -9,8 +9,8 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/common-grid-basics.h"
-#include "Grids/grid-functors.h"
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/grid-functors.h"
 
 //----------------------------------------------------------------
 //

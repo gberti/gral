@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_ENUMERATED_SUBRANGE_H
-#define NMWR_GB_ENUMERATED_SUBRANGE_H
+#ifndef GRAL_BASE_GB_ENUMERATED_SUBRANGE_H
+#define GRAL_BASE_GB_ENUMERATED_SUBRANGE_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1997
@@ -14,9 +14,9 @@
 #include "compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 
-#include "Grids/mapped-iterators.h"
-#include "Grids/grid-functors.h"
-#include "Grids/Iterators/facet-by-cell-it.h"
+#include "Gral/Base/mapped-iterators.h"
+#include "Gral/Base/grid-functors.h"
+#include "Gral/Base/Iterators/facet-by-cell-it.h"
 
 //----------------------------------------------------------------
 //
@@ -699,7 +699,7 @@ void ConstructSubrangeFromCells
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/generic/enumerated-subrange.C"
+#include "Gral/Base/generic/enumerated-subrange.C"
 #endif
 
 

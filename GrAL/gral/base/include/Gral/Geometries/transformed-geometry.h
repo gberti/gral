@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_TRANSFORMED_GEOMETRY_H
-#define NMWR_GB_TRANSFORMED_GEOMETRY_H
+#ifndef GRAL_BASE_GB_TRANSFORMED_GEOMETRY_H
+#define GRAL_BASE_GB_TRANSFORMED_GEOMETRY_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/common-grid-basics.h"
+#include "Gral/Base/common-grid-basics.h"
 #include "Geometry/algebraic-primitives.h"
 
 //----------------------------------------------------------------

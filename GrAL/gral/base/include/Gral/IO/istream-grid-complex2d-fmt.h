@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_ISTREAM_GRID_COMPLEX2D_FMT
-#define NMWR_GB_ISTREAM_GRID_COMPLEX2D_FMT
+#ifndef GRAL_BASE_GB_ISTREAM_GRID_COMPLEX2D_FMT
+#define GRAL_BASE_GB_ISTREAM_GRID_COMPLEX2D_FMT
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -16,10 +16,10 @@
 #include "vector.h"
 
 #include "mystring.h"
-#include "Grids/common-grid-basics.h"
+#include "Gral/Base/common-grid-basics.h"
 #include "Geometry/point3.h"
 #include "Utility/pre-post-conditions.h"
-#include "Grids/Algorithms/write-complex2d.h"
+#include "Gral/Base/Algorithms/write-complex2d.h"
 
 //----------------------------------------------------------------
 // IstreamComplex2DFmt -- a grid mask for grids 

@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_ELEMENT_SEQ_REFERENCES_H
-#define NMWR_GB_ELEMENT_SEQ_REFERENCES_H
+#ifndef GRAL_BASE_GB_ELEMENT_SEQ_REFERENCES_H
+#define GRAL_BASE_GB_ELEMENT_SEQ_REFERENCES_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998

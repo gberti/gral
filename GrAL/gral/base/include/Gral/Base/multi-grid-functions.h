@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_MULTI_GRIDFUNCTIONS_H
-#define NMWR_GB_MULTI_GRIDFUNCTIONS_H
+#ifndef GRAL_BASE_GB_MULTI_GRIDFUNCTIONS_H
+#define GRAL_BASE_GB_MULTI_GRIDFUNCTIONS_H
 
 
 //----------------------------------------------------------------
@@ -11,7 +11,7 @@
 //----------------------------------------------------------------
 
 #include "compiler-config.h"
-#include "Grids/common-grid-basics.h"
+#include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
 //
