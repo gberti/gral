@@ -1,11 +1,11 @@
 #include "Container/tuple.h"
 #include "Container/tuple-point-traits.h"
 
-template tuple<int, 0>;
-template tuple<int, 1>;
-template tuple<int, 2>;
-template tuple<int, 3>;
-template tuple<int, 4>;
+template class tuple<int, 0>;
+template class tuple<int, 1>;
+template class tuple<int, 2>;
+template class tuple<int, 3>;
+template class tuple<int, 4>;
 
 
 int main() {
