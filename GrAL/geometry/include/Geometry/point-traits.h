@@ -108,8 +108,9 @@ struct point_traits_fixed_size_array :
 
 
   static Ptype Origin() {
-    Ptype P; 
-    for(int i = 0; i < DIM; ++i) p[i] = component_type(0.0);
+    Ptype p; 
+    for(unsigned i = 0; i < DIM; ++i) p[i] = component_type(0.0);
+    return p;
   }
   static Ptype Origin(unsigned) { return Origin();}
 
@@ -143,7 +144,7 @@ struct array_operators
   }
   ARRAY& operator+=(ARRAY const& rhs) {
     for(unsigned i  = 0; i < N; ++i) 
-      to_derived()[i] -= rhs[i];
+      to_derived()[i] += rhs[i];
     return to_derived(); 
   }
   ARRAY operator+(ARRAY const& rhs) const {
