@@ -236,8 +236,9 @@ namespace grid_types_detail
   // the following technique for detecting member types is described
   // e.g. in Josuttis & Vandevoorde, C++ Templates, Addison-Wesley 2002
 
+  // on SX, a definition of size2 with dummy[2] is of the same size as size1!
   struct size1 { char dummy;};
-  struct size2 { char dummy[2];};
+  struct size2 { char dummy[8];};
 
 #define DEFINE_TESTFOR(T) \
   template<class X> size1 test_for_##T(typename X:: T *); \
