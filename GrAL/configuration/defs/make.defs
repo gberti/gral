@@ -103,6 +103,6 @@ ifeq ($(DEVELOP),develop)
 IFLAGS  += $(addsuffix /include,$(addprefix -I$(ALLROOT)/,$(DEPMODULES)))
 LDFLAGS += $(addsuffix /lib/$(LIBPATH),$(addprefix -L$(ALLROOT)/,$(DEPMODULES)))
 else # use installed versions
-IFLAGS  += $(PREFIX)/include
-LDFLAGS += $(PREFIX)/lib/$(LIBPATH)
+IFLAGS  += -I$(PREFIX)/include
+LDFLAGS += -L$(PREFIX)/lib/$(LIBPATH)
 endif
