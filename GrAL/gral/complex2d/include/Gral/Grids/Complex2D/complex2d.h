@@ -531,7 +531,7 @@ public:
   void add_archetype_of(Cell const& c) { _cc.add_archetype_of(c);}
 
   cell_handle   _new_cell(int i)                                { return _cc._new_cell(i);}
-  vertex_handle _new_vertex(const CoordType& coo = CoordType()) { return _cc._new_vertex(coo);}
+  vertex_handle _new_vertex(const CoordType& coo = CoordType(0,0)) { return _cc._new_vertex(coo);}
   Complex2D::archetype_handle add_archetype(Complex2D::archetype_type const& A, int nv) { return _cc.add_archetype(A, nv);}
   
   CoordType& coord(const Vertex2D& V) { return _cc.Coord(V);}
