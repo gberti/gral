@@ -6,7 +6,7 @@ LOCALSOURCES= connector.C overlap-pattern.C
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
 
-OBJDIR=obj
+OBJDIR=obj.tmp.tmp
 
 new: partial-clean all
 

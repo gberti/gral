@@ -7,7 +7,7 @@ LOCALSOURCES= control-device.C istream-control-device.C\
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
 
-OBJDIR=obj
+OBJDIR=obj.tmp
 
 new: partial-clean all
 
