@@ -1,4 +1,4 @@
-SUBDIRS = iterators
+SUBDIRS = iterators gridfunctions
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
