@@ -49,7 +49,7 @@ int main(int argc, char* argv[]) {
   using std::cout;
 
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"map.in","main");
-  double wf;// warping factor.
+  double wf = 0.0;// warping factor.
   // wf = 0.5 corresponds to warping top of cube by 90 degrees
   // and results in invalid cell!
   RegisterAt(Ctrl, "-wf", wf);
