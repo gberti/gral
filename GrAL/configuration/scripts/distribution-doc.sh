@@ -46,5 +46,5 @@ tar cf gral-doc.tar ./${DOC}
 gzip -f gral-doc.tar;
 mv gral-doc.tar.gz ..;
 cd ..;
-rm -rf ${ALLROOT};
+#rm -rf ${ALLROOT};
 

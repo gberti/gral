@@ -1,38 +1,66 @@
 <!DOCTYPE HTML PUBLIC "-//IETF//DTD HTML//EN">
 <html>
   <head>
-    <title>Index to the GrAL and related modules</title>
+    <title>Introduction to the GrAL</title>
   </head>
 
   <body>
-    <h1> Index to the GrAL and related modules</h1>
+    <h1> Introduction to the GrAL </h1>
 
     GrAL is the  <FONT color=0000ff>Gr</FONT>id 
                 <FONT color=0000ff>A</FONT>lgorithms
                 <FONT color=0000ff>L</FONT>ibrary.
+    It contains generic algorithms and data structures
+    working on grids (or meshes), such as used in finite element modelling,
+    but also in computer graphics, geometric modelling and so on.
+    It also contains some concrete grid data structures,
+    but the focus is clearly on the generic (data-structure neutral) stuff.
+    <BR>
     <BR>
 
-     GrAL consist of a growing number of grid-related modules,
-     and is bundled with some low-level support modules,
-     which are not part of GrAL in a proper sense, 
-     but are used at some places.
-
+     GrAL consist of 
+    <UL>
+      <LI> a growing number (currently 4) of grid-related modules,
+      <LI>  some low-level support modules,
+        which are not part of GrAL in a proper sense, 
+        but are used at some places.
+    </UL>
+   <EM> GrAL is very much work in progress.
+      The contents (especially grid-related modules) are not very
+    complete at the moment, and are expected to grow quite a bit.
+    </EM>
+    <BR>
+    For an in-depth treatment of the concepts underlying GrAL, 
+    see Guntram Berti's 
+    <A HREF="http://www.math.tu-cottbus.de/~berti/diss"> PhD dissertation </A>.
      <BR>
      <BR>
     Look <A HREF="$GRALDOC/gral/doxygen/html/index.html"> here </A>
-    for the top level entry point to the documentation of
+    for the top level entry point to the technical documentation of
     all (support and GrAL) modules.
     <BR>
     <EM> Warning: Some links do not yet work.</EM>
 
     <BR>
     <BR>
+    There is currently no tutorial of how to use GrAL's generic 
+    algorithms. (This is certainly an urgent TODO.) 
+    However, if you are acquainted with other generic libraries,
+    especially <A HREF="http://www.boost.org/libs/graph/doc/table_of_contents.html"> BTL </A> 
+    (formerly <A HREF="http://www.lsc.nd.edu/research/ggcl/"> ggcl </A>),
+    you should have no major problems. 
+    A good place to start
+    is the <A HREF="doc/gral/base/doc/hyperlatex/html/top.html"> concepts </A>
+    section of this documentation.
+    <BR>
+    <BR>
     The GrAL is distributed under the terms of 
      <A HREF="LICENSE"> this License </A>.
     <BR>
     <BR>
-    See the file <A HREF="INSTALL"> INSTALL </A> for installation
-    instructions.
+    See the file 
+    <A HREF="README"> README </A> for some general information, 
+    and  <A HREF="INSTALL"> INSTALL </A> for installation instructions.
     <BR>
     <BR>
     Up-to-date information on GrAL can be found on the
@@ -42,7 +70,7 @@
     <address><a href="mailto:berti@math.tu-cottbus.de">Guntram Berti</a></address>
 <!-- Created: Tue Feb 27 20:00:49 MET 2001 -->
 <!-- hhmts start -->
-Last modified: Wed Feb 28 11:01:13 MET 2001
+Last modified: Wed Feb 28 16:13:49 MET 2001
 <!-- hhmts end -->
   </body>
 </html>

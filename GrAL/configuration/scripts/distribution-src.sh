@@ -23,9 +23,8 @@ mv gral/Makefile.global ./Makefile
 rm -rf configuration/scripts
 
 # assume docs will be installed under ./doc
-DOC=doc
 mv gral/index-global.html ./index.html 
-perl -p -i -e 's|\$GRALDOC|${DOC}|g' ./index.html
+perl -p -i -e 's|\$GRALDOC|doc|g' ./index.html
 
 
 # insert license text in all sources
