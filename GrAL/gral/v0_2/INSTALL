@@ -69,9 +69,18 @@ $ gmake test [PREFIX=/your/prefix]
 To perform the checks, call
 $ gmake check [PREFIX=/your/prefix]
 
-If you don't have MPI / are not interested in
-parallel computing, use the above with unsetting
-WITHMPI (WITHMPI= )
+Notes on using GrAL parts depending 3rd party libraries
+-------------------------------------------------------
+
+These are disabled by default.
+
+- If you want to test also  MPI-related stuff,
+  use the above with setting WITHMPI=true,
+  or set this variable in gral/distributed/mk.config
+- If you want to test Metis related stuff,
+  set WITHMETIS=true on the command line or in
+  gral/partitioning/mk.config (here you have also to adapt
+  some paths pointing to Metis)
 
 
 Documentation 

@@ -16,7 +16,7 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
-module-check: test-new-check-clean
+
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Gral/Distributed/internal

@@ -55,7 +55,7 @@ check:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) check ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        $(MAKE) check ALLROOT=$(ALLROOT) DEVELOP=user DEPS='' CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 new-check-clean:

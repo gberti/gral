@@ -10,6 +10,7 @@ all:
 new: libclean
 	(cd src; $(MAKE) new)
 
+
 compile:
 
 lib:
@@ -32,7 +33,7 @@ realclean: clean
 test:
 	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
-module-check: test-new-check-clean
+
 
 # depth + 1
 ADDRELPATH :=..#

@@ -11,5 +11,6 @@ endif
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
 
-
+check:
+	echo "No checks"
 
