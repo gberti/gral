@@ -419,6 +419,8 @@ public:
 
   inline bool is_valid_vertex(vertex_handle v) const { return ((0 <= v) && (v < (int)_vertices.size()));}
   inline bool is_valid_cell  (cell_handle c)   const { return ((0 <= c) && (c < (int)_cells.size()));}
+  bool valid(vertex_handle v) const { return ((0 <= v) && (v < (int)_vertices.size()));}
+  bool valid(cell_handle   c) const { return ((0 <= c) && (c < (int)_cells   .size()));}
 
   inline edge_handle handle(const Edge& E) const;
 
@@ -513,7 +515,7 @@ struct hash_vertex2d;
 struct hash_edge2d;
 struct hash_cell2d;
 
-struct grid_types<Complex2D>  : public complex2d_types {
+struct grid_types_Complex2D  : public complex2d_types {
 
   typedef Vertex2D_Iterator       VertexIterator;
   typedef Edge2D_Iterator         EdgeIterator;
@@ -558,6 +560,10 @@ struct grid_types<Complex2D>  : public complex2d_types {
   static cell_handle invalid_cell_handle(grid_type const& G) 
   { return G.outer_cell_handle();}
 };
+
+
+template<>
+struct grid_types<Complex2D> : public grid_types_base<grid_types_Complex2D> {};
 
 
 struct hash_vertex2d {
