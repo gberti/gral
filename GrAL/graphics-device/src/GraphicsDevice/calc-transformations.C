@@ -2,6 +2,7 @@
 
 #include <cmath>
 
+namespace GrAL {
 
 Transformation 
 TransformRectangle(Transformation::coord_type const& b_l, 
@@ -47,3 +48,5 @@ TransformRectangle(Transformation::coord_type const& b_l,
 
   return TF1(TF5(TF4(TF3(TF2))));
 }
+
+} // namespace GrAL 

@@ -5,6 +5,8 @@
 
 #include "GraphicsDevice/transformation.h"
 
+namespace GrAL {
+
 
 /*! \brief Calculate affine mapping which maps a rectangle in x,y-plane to plane 
     \f$ \{ b_l +\lambda (b_r-b_l) + \mu (t_l - b_l) \} \f$.
@@ -19,5 +21,7 @@ extern
 Transformation TransformRectangle(Transformation::coord_type const& b_l, // lower left corner
                                   Transformation::coord_type const& b_r, 
                                   Transformation::coord_type const& t_l);
+
+} // namespace GrAL 
 
 #endif

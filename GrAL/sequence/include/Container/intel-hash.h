@@ -5,13 +5,15 @@
 
 #include <hash_map>
 
+namespace GrAL {
+
 namespace my_hash_intel {
 
   template<class I>
   struct intel_hash {
   public:
     typedef I key_type;
-    size_t operator()(I const& t) const { std::hash<I> h; return h(t);}
+    size_t operator()(I const& t) const { ::std::hash<I> h; return h(t);}
   };
 
   template<class H, class _Pr>
@@ -50,9 +52,9 @@ namespace my_hash_intel {
 
   // Wrapper to icc's hash_map, behaving like the SGI hash_map
   template<class K, class T, class H = intel_hash<K> >
-  class hash_map : public std::hash_map<K,T, intel_hash_compare<H, std::less<K> > >
+  class hash_map : public ::std::hash_map<K,T, intel_hash_compare<H, ::std::less<K> > >
   {
-    typedef std::hash_map<K,T, intel_hash_compare<H, std::less<K> > > base;
+    typedef ::std::hash_map<K,T, intel_hash_compare<H, ::std::less<K> > > base;
   public:
     hash_map() {}
     hash_map(unsigned /* sz */) : base() {}
@@ -60,7 +62,6 @@ namespace my_hash_intel {
 
 }
 
-
-
+} // namespace GrAL 
 
 #endif

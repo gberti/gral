@@ -12,6 +12,7 @@ class rendering_language;
 
 #include "Utility/reference-count.h"
 
+namespace GrAL {
 
 /*! \brief Envelope class for geom
      \ingroup geometricshape
@@ -52,5 +53,6 @@ public:
   virtual void write_geom_to(rendering_language&) const;
 };
 
+} // namespace GrAL 
 
 #endif

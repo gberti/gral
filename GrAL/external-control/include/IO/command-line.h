@@ -9,6 +9,8 @@
 #include <string>
 // #include <strstream.h>
 
+namespace GrAL {
+
 class  Commandline {
 public:
   Commandline(int argc, char* argv[]);
@@ -16,8 +18,9 @@ public:
   //strstream get() const;
   const char* c_str() const;
 private:
-  std::string commands;
+  ::std::string commands;
 };
 
+} // namespace GrAL 
 
 #endif

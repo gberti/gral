@@ -13,6 +13,7 @@
 #include <vector>
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   namespace ctf = compile_time_functions;
 

@@ -5,6 +5,8 @@
 
 #include <vector>
 
+namespace GrAL {
+
 /*! \defgroup notifyobserve Notifier and Observer
 
   \brief  A framework for automatically notifying observers of changes to their notifiers.
@@ -74,7 +76,7 @@ class observer;
 class observer {
 private:
   friend class notifier;
-  typedef std::vector<notifier const*> notifier_table;
+  typedef ::std::vector<notifier const*> notifier_table;
 
   notifier_table notifiers;
 public:
@@ -118,7 +120,7 @@ private:
 class notifier {
 private:
   friend class observer;
-  typedef std::vector<observer *>   observer_table;
+  typedef ::std::vector<observer *>   observer_table;
 public:
   //! Iterator over sequence of registered observers
   typedef observer_table::iterator observer_iterator;
@@ -149,4 +151,5 @@ private:
   void remove_observer(observer* obs) const;
 };
 
+} // namespace GrAL
 #endif

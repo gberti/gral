@@ -13,6 +13,8 @@
 
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 /*! \brief Test 2D primitives in dimension_dependent_primitives_2d
   
     \ingroup algebraicprimitives 
@@ -85,5 +87,6 @@ void test_algebraic_primitives2d<POINT>::do_tests(std::ostream& out)
   
 }
 
+} // namespace GrAL 
 
 #endif

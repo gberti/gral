@@ -10,6 +10,9 @@
     Algorithms operating on octrees.     
 */
 
+namespace GrAL {
+
+
 /*! \brief Balance an octree
 
     \author Guntram Berti    
@@ -45,5 +48,7 @@ void balance_octree(OCTREE& Tree, int balance)
     --k;
   } // while(k >= Tree.coarsest_level())
 }
+
+} // namespace GrAL
 
 #endif

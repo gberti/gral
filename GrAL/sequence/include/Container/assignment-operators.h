@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 /*!  \defgroup operators Operator classes
      \ingroup accessors
 */
@@ -51,5 +53,7 @@ struct div_assign {
 
 
 } // namespace assigment_operators
+
+} // namespace GrAL 
 
 #endif

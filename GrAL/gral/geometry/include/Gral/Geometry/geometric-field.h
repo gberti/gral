@@ -9,6 +9,8 @@
 
 #include "Utility/ref-ptr.h"
 
+namespace GrAL {
+
 template<class GEOM, class F, class I, class GT = grid_types<typename GEOM::grid_type> >
 class geometric_field {
 public:
@@ -77,6 +79,6 @@ public:
   ref_ptr<point_locator_type >      TheLocator()       { return loc;}
 };
 
-
+} // namespace GrAL 
 
 #endif

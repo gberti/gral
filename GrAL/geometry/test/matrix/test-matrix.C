@@ -9,6 +9,8 @@
 #include "Geometry/matrix.h"
 #include "Geometry/coords.h"
 
+using namespace GrAL;
+
 template class matrix<2,2,0>;
 template class matrix<2,2,1>;
 template class matrix_traits<matrix<2,2,0> >;

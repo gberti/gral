@@ -8,6 +8,8 @@
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 /*! To be specialized for concrete P
 
    \see real_point_traits
@@ -318,5 +320,6 @@ P convert_point(Q const& q)
 template<class P>
 P convert_point(P const& p) { return p;}
 
+} // namespace GrAL 
 
 #endif

@@ -6,6 +6,7 @@
 #include "Gral/Hierarchical/octree.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
 
 namespace octree {
   template<class Grid, class GT>
@@ -215,5 +216,6 @@ namespace octree {
 
 
 } // namespace octree
+} // namespace GrAL 
 
 #endif

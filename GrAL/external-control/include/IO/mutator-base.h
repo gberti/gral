@@ -7,6 +7,7 @@
 #include <iostream>
 #include <string>
 
+namespace GrAL {
 
 
 //! Placeholder-class for arbitrary variables
@@ -17,12 +18,12 @@
 
 class Mutator {
 public:
-  virtual void read (std::istream& in)  = 0;
-  virtual void print(std::ostream& out) const = 0;
-  virtual void print(std::ostream& out, const std::string& name) const = 0;
+  virtual void read (::std::istream& in)  = 0;
+  virtual void print(::std::ostream& out) const = 0;
+  virtual void print(::std::ostream& out, const ::std::string& name) const = 0;
 
-  virtual std::string vartypename() const = 0;
-  virtual std::string description() const;
+  virtual ::std::string vartypename() const = 0;
+  virtual ::std::string description() const;
   virtual ~Mutator() {}
 };
 
@@ -45,7 +46,7 @@ public:
   //! expose internal data to ControlDevice Ctrl
   virtual void register_at(ControlDevice& Ctrl) {}
   //! expose internal data to ControlDevice Ctrl, prepending prefix to the name
-  virtual void register_at(ControlDevice& Ctrl, const std::string& /*prefix*/) {}
+  virtual void register_at(ControlDevice& Ctrl, const ::std::string& /*prefix*/) {}
 
   //! may be used to signal a change
   virtual void notify()  {} 
@@ -53,5 +54,6 @@ public:
   virtual ~controlable() {}
 };
 
+} // namespace GrAL 
 
 #endif

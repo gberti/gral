@@ -11,6 +11,8 @@
 
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 /*! \brief A geometric (non-linear) cube
    
    \ingroup geometricshape
@@ -75,5 +77,8 @@ extern RenderableGeom RCube(double a);
 extern RenderableGeom RCube(RenderableGeom::coord_type p000,
 			    RenderableGeom::coord_type p111)
 */
+
+} // namespace GrAL 
+
 
 #endif

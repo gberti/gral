@@ -6,6 +6,8 @@
 #include "Gral/Hierarchical/hierarchical-grid-table.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 namespace hierarchical {
 
   template<class HGRID, class GE>
@@ -221,5 +223,7 @@ namespace hierarchical {
 
 
 } // namespace hierarchical
+} // namespace GrAL 
+
 
 #endif

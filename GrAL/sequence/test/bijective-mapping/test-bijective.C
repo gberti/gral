@@ -14,6 +14,7 @@
 */
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using namespace std;
 
   typedef  bijective_mapping<int,int>::domain_type domain_type;

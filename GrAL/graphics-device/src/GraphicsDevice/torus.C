@@ -2,6 +2,9 @@
 // $LICENSE
 
 #include "GraphicsDevice/torus.h"
+
+namespace GrAL {
+
 void  geom_torus::write_geom_to(rendering_language& L) const 
 { 
   if (style=='n') 
@@ -12,3 +15,5 @@ void  geom_torus::write_geom_to(rendering_language& L) const
 
 RenderableGeom RTorus(double r1, double r2, char style)
 { return RenderableGeom(new geom_torus(r1,r2,style));}
+
+} // namespace GrAL 

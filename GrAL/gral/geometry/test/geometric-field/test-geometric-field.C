@@ -10,6 +10,9 @@
 
 #include <iostream>
 
+
+using namespace GrAL;
+
 //typedef Complex2D                 grid2d_type;
 //typedef stored_geometry_complex2D geom2d_type;
 typedef Triang2D                 grid2d_type;
@@ -23,6 +26,7 @@ template class linear_simplex_interpolator<geom2d_type, gf2d_type>;
 template class geometric_field<geom2d_type, gf2d_type, interpolator2d_type>;
 
 int main () {
+  using namespace GrAL;
   using namespace std;
   typedef gt2d gt;
 

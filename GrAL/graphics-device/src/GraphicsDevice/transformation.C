@@ -5,6 +5,7 @@
 #include "GraphicsDevice/transformation.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
 
 typedef Transformation::coord_type coord_type;
 
@@ -66,3 +67,5 @@ Transformation::GetMat4() const
  
  return m;
 }
+
+} // namespace GrAL 

@@ -11,14 +11,16 @@
 #include "GraphicsDevice/renderable-geom.h"
 
 
+namespace GrAL {
+
 class rgb_color;
 class GraphicsDevice;
 
-extern GraphicsDevice OOGLDevice(std::ostream&);
-extern GraphicsDevice OOGLDevice(const std::string& name);
+extern GraphicsDevice OOGLDevice(::std::ostream&);
+extern GraphicsDevice OOGLDevice(const ::std::string& name);
 
 
-extern RenderableGeom RFileGeom(std::string const&);
+extern RenderableGeom RFileGeom(::std::string const&);
 
 // g++ does not correctly take the special version RSegment(point,point)
 // instead of the template version, therefore the hack with "_1" - suffix.
@@ -226,17 +228,17 @@ extern RenderableGeom RTorus(double r1, double r2, char style='n');
 
 extern RenderableGeom RLetter(char ch,RenderableGeom::coord_type const& offset);
 
-extern RenderableGeom RWord(const std::string& str, 
+extern RenderableGeom RWord(const ::std::string& str, 
 			    RenderableGeom::coord_type const& c1, 
 			    RenderableGeom::coord_type const& c2, 
 			    RenderableGeom::coord_type const& c3);
 
-extern RenderableGeom RWord_1(const std::string& str, 
+extern RenderableGeom RWord_1(const ::std::string& str, 
                               RenderableGeom::coord_type const& c1, 
                               RenderableGeom::coord_type const& c2, 
                               RenderableGeom::coord_type const& c3);
 template<class P>
-inline RenderableGeom RWord(const std::string& s, const P& c1, const P& c2, const P& c3)
+inline RenderableGeom RWord(const ::std::string& s, const P& c1, const P& c2, const P& c3)
 {
   typedef point_traits<P> pt;
   typedef RenderableGeom::coord_type coord_type;
@@ -245,5 +247,7 @@ inline RenderableGeom RWord(const std::string& s, const P& c1, const P& c2, cons
   coord_type pp3=coord_type(pt::x(c3),pt::y(c3),pt::z(c3));
   return RWord_1(s,pp1,pp2,pp3);
 }
+
+} // namespace GrAL 
 
 #endif

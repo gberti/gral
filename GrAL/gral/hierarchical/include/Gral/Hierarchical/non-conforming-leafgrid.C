@@ -6,6 +6,8 @@
 
 #include "Gral/Hierarchical/non-conforming-leafgrid.h"
 
+namespace GrAL {
+
 namespace octree {
 
   template<class OCTREE>
@@ -21,5 +23,6 @@ namespace octree {
   }
 } // namespace octree
 
+} // namespace GrAL 
 
 #endif

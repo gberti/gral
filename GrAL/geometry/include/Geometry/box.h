@@ -10,6 +10,8 @@
 
 #include <boost/limits.hpp>
 
+namespace GrAL {
+
 /*! \defgroup boundingbox Bounding boxes 
     
 */
@@ -44,8 +46,8 @@ private:
 public:
   /*! \brief Create empty box
    */
-  box() : minc( std::numeric_limits<scalar_type>::max()),
-	  maxc(-std::numeric_limits<scalar_type>::max())
+  box() : minc( ::std::numeric_limits<scalar_type>::max()),
+	  maxc(-::std::numeric_limits<scalar_type>::max())
   {
     REQUIRE(empty(), "minc=" << minc << " maxc=" << maxc,1);
   }  
@@ -62,12 +64,12 @@ public:
   template<class INPUTITERATOR >
   void init(INPUTITERATOR begin, INPUTITERATOR end)
   {
-    minc = coord( std::numeric_limits<scalar_type>::max());
-    maxc = coord(-std::numeric_limits<scalar_type>::max());
+    minc = coord( ::std::numeric_limits<scalar_type>::max());
+    maxc = coord(-::std::numeric_limits<scalar_type>::max());
     while(begin != end) {
       for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
-	minc[i] = std::min(minc[i], (*begin)[i]);
-	maxc[i] = std::max(maxc[i], (*begin)[i]);
+	minc[i] = ::std::min(minc[i], (*begin)[i]);
+	maxc[i] = ::std::max(maxc[i], (*begin)[i]);
       }
       ++begin;
     }
@@ -167,8 +169,8 @@ public:
   //! intersection
   self& operator &=(self const& rhs) {
     for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
-      minc[i] = std::max(minc[i], rhs.minc[i]);
-      maxc[i] = std::min(maxc[i], rhs.maxc[i]);
+      minc[i] = ::std::max(minc[i], rhs.minc[i]);
+      maxc[i] = ::std::min(maxc[i], rhs.maxc[i]);
     }
     if(empty())
       *this = self();
@@ -180,8 +182,8 @@ public:
   self & operator |= (self const& rs)
     {
       for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
-          minc[i] = std::min(minc[i],rs.minc[i]);
-          maxc[i] = std::max(maxc[i],rs.maxc[i]);
+          minc[i] = ::std::min(minc[i],rs.minc[i]);
+          maxc[i] = ::std::max(maxc[i],rs.maxc[i]);
       }
       return *this;
     }
@@ -227,7 +229,7 @@ inline
 typename box<COORD>::scalar_type distance(box<COORD> const& b1, box<COORD> const& b2)
 {
   typedef algebraic_primitives<COORD> ap;
-  return std::max(ap::distance(b1.the_min(), b2.the_min()),
+  return ::std::max(ap::distance(b1.the_min(), b2.the_min()),
 		  ap::distance(b1.the_max(), b2.the_max()));
 }
 
@@ -243,6 +245,8 @@ typename box<COORD>::scalar_type diameter(box<COORD> const& b)
   typedef algebraic_primitives<COORD> ap;
   return ap::distance(b.the_min(), b.the_max());
 }
+
+} // namespace GrAL 
 
 #endif
 

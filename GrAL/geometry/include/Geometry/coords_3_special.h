@@ -4,6 +4,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 // 
@@ -69,5 +70,6 @@ struct is_specialized<coordN<3> > {
   static const char* name() { return "coordN<3>";}
 };
 
+} // namespace GrAL 
 
 #endif

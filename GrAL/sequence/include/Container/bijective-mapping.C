@@ -6,8 +6,10 @@
 
 #include "Container/bijective-mapping.h"
 
+namespace GrAL {
+
 template<class T1, class T2>
-void write_bm(bijective_mapping<T1,T2> const& m, std::ostream& out)
+void write_bm(bijective_mapping<T1,T2> const& m, ::std::ostream& out)
 {
   typedef typename bijective_mapping<T1,T2>::domain_type dt;
   typedef typename dt::const_iterator                    d_iter;
@@ -16,7 +18,7 @@ void write_bm(bijective_mapping<T1,T2> const& m, std::ostream& out)
 }
 
 template<class T1, class T2>
-void read_bm(bijective_mapping<T1,T2> & m, std::istream& in)
+void read_bm(bijective_mapping<T1,T2> & m, ::std::istream& in)
 {
   T1 x;
   T2 mx;
@@ -45,4 +47,5 @@ bijective_mapping<T1,T2>::bijective_mapping(inverse_mapping<T2,T1> const& inv)
     the_map[*x] = inv(*x);
 }
 
+} // namespace GrAL 
 #endif

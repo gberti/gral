@@ -6,6 +6,8 @@
 
 #include <iostream>
 
+using namespace GrAL;
+
 typedef coordN<2> ct2;
 typedef coordN<3> ct3;
 
@@ -37,6 +39,7 @@ inline std::ostream&  operator<<(std::ostream& out, tetrahedron<P> T)
 
 
 int main() {
+  using namespace GrAL;
 
   using namespace std;
 

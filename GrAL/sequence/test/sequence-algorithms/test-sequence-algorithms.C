@@ -10,6 +10,7 @@
 
 
 int main() {
+  using namespace GrAL;
   using namespace std;
 
   namespace seq = sequence;

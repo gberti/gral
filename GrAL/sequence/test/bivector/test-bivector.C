@@ -8,6 +8,8 @@
 
 #include <iostream>
 
+using namespace GrAL;
+
 class bivector_valuetype_arch {
   typedef bivector_valuetype_arch self;
 public:
@@ -16,10 +18,11 @@ public:
   self& operator=(self const&) { return *this;}
 };
 
-  template class bivector<bivector_valuetype_arch>;
-  template class bivector<int>;
+template class bivector<bivector_valuetype_arch>;
+template class bivector<int>;
 
 int main() {
+
 
 
   bivector<int> bv1;

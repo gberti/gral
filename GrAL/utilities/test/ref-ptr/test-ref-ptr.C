@@ -4,6 +4,8 @@
 #include <iostream>
 
 
+using namespace GrAL;
+
 class A_ {
 public:
   int i;
@@ -54,6 +56,7 @@ public:
 };
 
 int main() {
+  // using namespace GrAL;
   using namespace std;
 
   A_ a;

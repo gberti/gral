@@ -3,6 +3,8 @@
 
 // $LICENSE_NEC_2003
 
+namespace GrAL {
+
 /*! To be specialized for concrete matrix types
  */
 template<class MATRIX>
@@ -26,5 +28,7 @@ struct matrix_traits_fixed_dim_base : public matrix_traits_base<MATRIX> {
 
   enum { num_of_rows = m, num_of_cols = n};
 };
+
+} // namespace GrAL
 
 #endif

@@ -8,6 +8,7 @@
 #include "Container/combinatorial.h"
 #include "Utility/ref-ptr.h"
 
+namespace GrAL {
 
 template<class COORD>
 class midpoint_cubature_simplex {
@@ -130,6 +131,6 @@ public:
 
 };
 
-
+} // namespace GrAL 
 
 #endif

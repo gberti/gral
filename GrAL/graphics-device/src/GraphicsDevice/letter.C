@@ -7,7 +7,9 @@
 #include "GraphicsDevice/segment.h"
 #include "ctype.h"
 
-typedef std::list<geom_segment> segment_list;
+namespace GrAL { 
+
+typedef ::std::list<geom_segment> segment_list;
 
 
 static void make_alist(segment_list& l,RenderableGeom::coord_type const& offset)
@@ -1099,3 +1101,5 @@ RenderableGeom RLetter(char ch, RenderableGeom::coord_type const& offset)
   }
   //  return SLetter0(offset); // never reached, but keeps xlC quiet.
 }
+
+} // namespace GrAL 

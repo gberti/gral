@@ -3,6 +3,8 @@
 
 // $LICENSE_NEC
 
+namespace GrAL {
+
 /*! \brief Templates for promotion of numeric types (floating point and integral)
 
     \todo This is very incomplete. No promotion rules among integral types specified.
@@ -32,5 +34,6 @@ namespace numeric_types {
 
 } // namespace numeric_types
 
+} // namespace GrAL
 
 #endif

@@ -6,6 +6,8 @@
 
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
 /*! \brief Adapter for enforcing reference semantic 
     in case of "heavy" function objects.
     \ingroup accessors
@@ -117,7 +119,7 @@ compose_map( M1 const& m1, M2 const& m2)
 */
 
 template<class ARG, class RES> 
-class constant : public std::unary_function<ARG,RES> {
+class constant : public ::std::unary_function<ARG,RES> {
   RES r;
 public:
   constant() {}
@@ -161,5 +163,7 @@ public:
   void operator()(const index_type& i) { (*m)[i] = t;}
 };
 */
+
+} // namespace GrAL 
 
 #endif

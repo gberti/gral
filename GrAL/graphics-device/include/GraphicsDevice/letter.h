@@ -9,11 +9,15 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
+
 /*! \brief Creator function for a geometric letter
      \ingroup geometricshape
 */
 extern RenderableGeom RLetter(char ch,
                               RenderableGeom::coord_type const& offset);
 
+
+} // namespace GrAL 
 
 #endif

@@ -3,6 +3,7 @@
 #include <iostream>
 
 using namespace std;
+using namespace GrAL;
 
 class NA : public virtual notifier {
   int i;
@@ -73,6 +74,7 @@ public:
 
 
 int main() {
+  // using namespace GrAL;
  NA na1(1);
  OA oa1(2,na1);
 

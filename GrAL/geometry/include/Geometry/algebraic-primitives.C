@@ -7,6 +7,8 @@
 
 #include "Geometry/algebraic-primitives.h"
 
+namespace GrAL {
+
 //-------------------------------------------------------------------------
 //
 // calculate centroid and area of a simple polygon, given by the vertices
@@ -72,5 +74,7 @@ void get_polygon2d_center_and_area(PIt begin, PIt end, // in:  iterator over pol
   Qpt::x(center) = xtmp / (3.0 * area_2);
   Qpt::y(center) = ytmp / (3.0 * area_2);
 }
+
+} // namespace GrAL 
 
 #endif

@@ -8,13 +8,15 @@
 #include <iostream>
 #include <string>
 
+namespace GrAL {
+
 template<class KEY>
 class generic_value {
 public:
   virtual generic_value<KEY>* getval()       const         = 0;
   virtual void           setval(const generic_value<KEY>*) = 0;
   virtual KEY key() const = 0;
-  virtual void print(std::ostream& out) const = 0;
+  virtual void print(::std::ostream& out) const = 0;
 };
 
 
@@ -31,7 +33,7 @@ public:
 }
 
  void                setval(const generic_value<KEY>* v) { t=((typed_value<T,KEY>*)v)->t;} 
- void print(std::ostream& out) const {t.print(out);}
+ void print(::std::ostream& out) const {t.print(out);}
  T   Value() const {return(t);}
  KEY   key() const {return(t.key());}
 };
@@ -48,7 +50,7 @@ template<class KEY>
 class ValueTable {
 private:
   //typedef leda_d_array<KEY, const generic_value<KEY> *>  table_type;
-  typedef std::map<KEY, const generic_value<KEY> *,std::less<KEY> >  table_type;
+  typedef ::std::map<KEY, const generic_value<KEY> *,::std::less<KEY> >  table_type;
   table_type table;
   int entries;
 public:
@@ -92,5 +94,7 @@ inline bool GetVal(const ValueTable<KEY>& VT,  T& v)
   v = res->Value();
   return done;
 }
+
+} // namespace GrAL 
 
 #endif

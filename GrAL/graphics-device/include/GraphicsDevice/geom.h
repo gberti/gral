@@ -6,6 +6,8 @@
 #include "Geometry/point.h"
 #include "Utility/copy-traits.h"
 
+namespace GrAL {
+
 
 class rendering_language;
 
@@ -32,6 +34,7 @@ struct copy_traits<geom> : public copy_traits_base<geom> {
     static geom* clone(geom const& g) { return g.clone();}
 };
 
+} // namespace GrAL 
 
 #endif
 

@@ -9,6 +9,8 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
+
 /*! \brief A geometric triangle in 3D
    \ingroup geometricshape
    \todo could be complemented by geom_color_triangle,
@@ -46,5 +48,7 @@ extern RenderableGeom RTriangle(RenderableGeom::coord_type const& c1,
                                 RenderableGeom::coord_type const& c2, 
                                 RenderableGeom::coord_type const& c3);
 
+
+} // namespace GrAL 
 
 #endif

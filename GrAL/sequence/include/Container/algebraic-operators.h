@@ -6,6 +6,7 @@
 
 // $LICENSE_NEC
 
+namespace GrAL {
 
 /*! \brief Binary algebraic operators to be used as template arguments
 
@@ -47,14 +48,15 @@ namespace algebraic_operators {
 
 
   struct min { 
-    template<class T,class U>  typename nt::promote<T,U>::type operator()(T const& t, U const& u) const { return std::min(t,u); } 
+    template<class T,class U>  typename nt::promote<T,U>::type operator()(T const& t, U const& u) const { return ::std::min(t,u); } 
   };
 
   struct max { 
-    template<class T,class U>  typename nt::promote<T,U>::type operator()(T const& t, U const& u) const { return std::max(t,u); } 
+    template<class T,class U>  typename nt::promote<T,U>::type operator()(T const& t, U const& u) const { return ::std::max(t,u); } 
   };
 
 } // namespace algebraic_operators
 
+} // namespace GrAL {
 
 #endif

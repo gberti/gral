@@ -13,7 +13,7 @@
 
 
 template<class COORD>
-inline void  print_contains(box<COORD> const& b, COORD const& p)
+inline void  print_contains(GrAL::box<COORD> const& b, COORD const& p)
 {
   std::cout << " box [" << b.the_min() << ";" << b.the_max() << "] " 
 	    << (b.contains(p) ? "contains " : "does not contain ")
@@ -21,6 +21,7 @@ inline void  print_contains(box<COORD> const& b, COORD const& p)
 }
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   typedef coordN<2> coord_type;
   typedef box<coord_type> box_type;

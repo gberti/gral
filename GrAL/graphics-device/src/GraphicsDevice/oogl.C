@@ -32,23 +32,25 @@
 #include "GraphicsDevice/transformation.h"
 #include "GraphicsDevice/graphics-device.h"
 
-GraphicsDevice OOGLDevice(std::ostream& out) {
-  out << std::setprecision(9);
+namespace GrAL {
+
+GraphicsDevice OOGLDevice(::std::ostream& out) {
+  out << ::std::setprecision(9);
   return GraphicsDevice(new oogl(&out));
 }
  
 
-GraphicsDevice OOGLDevice(const std::string& name) {
-  std::string name1 = name + ".oogl";
+GraphicsDevice OOGLDevice(const ::std::string& name) {
+  ::std::string name1 = name + ".oogl";
   // should be replaced by FileDevice or so.
-  std::ofstream* out = new std::ofstream(name1.c_str());
-  (*out) << std::setprecision(9);
+  ::std::ofstream* out = new ::std::ofstream(name1.c_str());
+  (*out) << ::std::setprecision(9);
   return GraphicsDevice(new oogl(out));
 }
 
-oogl::oogl(std::ostream* out) : rendering_language(out) 
+oogl::oogl(::std::ostream* out) : rendering_language(out) 
 {
-  std::cerr << "output: OOGL\n";
+  ::std::cerr << "output: OOGL\n";
   the_stream() << "(normalization world keep)\n";
   //       << "(bbox-draw world no)\n";
 }
@@ -59,7 +61,7 @@ oogl * oogl::clone() const { return new oogl(*this);}
 void oogl::pause(double seconds) 
 { the_stream() << "\n(sleep-for " << seconds << ")\n";} 
 
-void oogl::read_from_file(const std::string& file)
+void oogl::read_from_file(const ::std::string& file)
 { the_stream() << " < " << '"' << file << '"'  << " ";}
 
 
@@ -71,7 +73,7 @@ void oogl::begin_object(const RenderableGeom& Obj)
 void oogl::end_object()  { the_stream() << "}\n";}
 
 
-void oogl::begin_group(const std::string& name)
+void oogl::begin_group(const ::std::string& name)
 {
   the_stream() << "(geometry \"" << name << "\" {  LIST {\n";
   //the_stream() << "LIST {";
@@ -535,3 +537,5 @@ void oogl::write_circle(const geom_circle& cir)
   the_stream() << "\n";
  
 }
+
+} // namespace GrAL 

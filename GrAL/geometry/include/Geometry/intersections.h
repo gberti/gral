@@ -10,6 +10,8 @@
 
 #include <vector>
 
+namespace GrAL {
+
 /*! \defgroup geomintersections Geometric intersections
     \brief Components for calculating intersections for geometric objects
     
@@ -65,9 +67,9 @@ template<class OBJ>
 class polytope_directions_base {
 protected:
   typedef typename OBJ::coord_type coord_type;
-  typedef std::vector<coord_type>   dir_sequence;
-  typedef std::vector<dir_sequence> dimension_dirs;
-  std::vector<dimension_dirs> dirs;
+  typedef ::std::vector<coord_type>   dir_sequence;
+  typedef ::std::vector<dir_sequence> dimension_dirs;
+  ::std::vector<dimension_dirs> dirs;
 
 public:
   typedef typename dimension_dirs::const_iterator dir_sequence_iterator;
@@ -289,8 +291,8 @@ public:
       // k directions from obj 1, and d-1-k directions from obj2
       for(dir_seq_it_1 d1 = dirs1.begin(k); d1 != dirs1.end(k); ++d1)
 	for(dir_seq_it_2 d2 = dirs2.begin(d_1_k); d2 != dirs2.end(d_1_k); ++d2) {
-	  std::vector<coord_type> dirs(sdim-1);
-	  typename std::vector<coord_type>::iterator dir_it = dirs.begin();
+	  ::std::vector<coord_type> dirs(sdim-1);
+	  typename ::std::vector<coord_type>::iterator dir_it = dirs.begin();
 	  for(dir_it_1 dd1 = d1->begin(); dd1 != d1->end(); ++dd1, ++dir_it)
 	    *dir_it = *dd1;
 	  for(dir_it_2 dd2 = d2->begin(); dd2 != d2->end(); ++dd2, ++dir_it)
@@ -310,5 +312,7 @@ inline bool intersects(OBJ1 const& o1, OBJ2 const& o2)
 {
   return intersection_by_separating_axes<OBJ1,OBJ2>::intersects(o1,o2);
 } 
+
+} // namespace GrAL 
 
 #endif

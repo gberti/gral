@@ -1,6 +1,10 @@
 #ifndef NMWR_GB_RFUNCTION_MISC_H
 #define NMWR_GB_RFUNCTION_MISC_H
 
+// $LICENSE
+
+namespace GrAL {
+
 
 inline double hermite(double a, double b, double x)
 {
@@ -18,5 +22,7 @@ inline double d_hermite(double a, double b, double x)
   else return 0.0;
 }
 
+
+} // namespace GrAL 
 
 #endif

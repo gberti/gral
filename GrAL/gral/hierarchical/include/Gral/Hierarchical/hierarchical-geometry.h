@@ -7,6 +7,8 @@
 #include "Gral/Hierarchical/hierarchical-grid-table.h"
 #include "Gral/Hierarchical/hierarchical-grid.h"
 
+namespace GrAL {
+
 namespace hierarchical {
 
   /*! \brief A geometry type  for hierarchical grids
@@ -80,6 +82,7 @@ namespace hierarchical {
 
 } // namespace hierarchical
 
+} // namespace GrAL
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "hierarchical-geometry.C"

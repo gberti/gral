@@ -14,6 +14,7 @@
 
 
 int main() {
+  using namespace GrAL;
 
   typedef coordN<3> coord3d_type;
   typedef coordN<2> coord2d_type;

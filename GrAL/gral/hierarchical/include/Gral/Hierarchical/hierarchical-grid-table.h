@@ -5,6 +5,8 @@
 
 #include "Utility/ref-ptr.h"
 
+namespace GrAL {
+
 namespace hierarchical {
 
   /*! \brief A container for storing grid-entities bound to the levels of an hierarchical grid
@@ -127,6 +129,7 @@ namespace hierarchical {
 
 } // namespace hierarchical
 
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "hierarchical-grid-table.C"

@@ -60,6 +60,8 @@
 
 #include "IO/mutator.h"
 
+namespace GrAL {
+
 
 // this is basically a dictionary that maps strings
 // to placeholders for a variable reference.
@@ -67,7 +69,7 @@
 // from polymorphism (derived classes are automatically
 // generated via templates in class TypedMutator).
 
-class string_table_1: public std::map<std::string, Mutator*, std::less<std::string> > {
+class string_table_1: public ::std::map< ::std::string, Mutator*, ::std::less< ::std::string> > {
 public:
   string_table_1() {}
 };
@@ -91,19 +93,19 @@ public:
   MutableVars();
   ~MutableVars();
 
-  void AddVariable(std::string const& name, Mutator* m);
+  void AddVariable(::std::string const& name, Mutator* m);
   void AddVariable(char        const* name, Mutator* m);
-  void ReadVariable(std::istream& is);
-  void ReadValues  (std::istream& in);
-  void PrintValues (std::ostream& out,
-                    std::string const& prefix = "",
-                    std::string const& sep = " ") const;
+  void ReadVariable(::std::istream& is);
+  void ReadValues  (::std::istream& in);
+  void PrintValues (::std::ostream& out,
+                    ::std::string const& prefix = "",
+                    ::std::string const& sep = " ") const;
   bool HasUnrecognized() const;
-  void PrintUnrecognized(std::ostream& out) const;
+  void PrintUnrecognized(::std::ostream& out) const;
  
   unsigned size() const;
-  bool     defined   (std::string const& nm) const;
-  Mutator* getMutator(std::string const& nm);
+  bool     defined   (::std::string const& nm) const;
+  Mutator* getMutator(::std::string const& nm);
   
   const_iterator begin() const { return table->begin();}
   const_iterator end()   const { return table->end();}
@@ -116,13 +118,14 @@ public:
 // (as a member function) is not (yet) allowed to be a template function
 
 template<class T> 
-inline void AddVar(MutableVars& MV, const std::string& name, T& v)
+inline void AddVar(MutableVars& MV, const ::std::string& name, T& v)
 { MV.AddVariable(name,GetMutator(v));}
 
 
 template<class T> 
 inline void AddVar(MutableVars& MV, const char* name, T& v)
-{ AddVar(MV,std::string(name),v);}
+{ AddVar(MV,::std::string(name),v);}
 
+} // namespace GrAL 
 
 #endif

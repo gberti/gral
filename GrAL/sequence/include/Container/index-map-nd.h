@@ -7,6 +7,9 @@
 #include "Container/tuple-point-traits.h"
 #include "Utility/pre-post-conditions.h"
 
+
+namespace GrAL {
+
 /*! \brief Map between \f$ [l_0,b_0[ \times [l_1,b_1[ \times \cdots \times [l_{N-1},b_{N-1}[ \subset \Z^N \f$ 
     and \f$ [0,n_0 n_1  \cdots n_{N-1} -1] \subset \Z\f$ (where \f$ n_i = b_i - l_i \f$)
 
@@ -160,7 +163,7 @@ private:
   void c(int               i) const { REQUIRE(valid(i), "i = " << i, 1);}
 };
 
-
+} // namespace GrAL 
 
 
 #endif

@@ -17,6 +17,8 @@
 #include "Utility/type-name-traits.h"
 
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 //
 //  Some implementations of the Mutator-interface
@@ -40,17 +42,17 @@ public:
 public:
   TypedMutator(T& vv) : v(vv) {}
   //  T value() {return v;}
-  virtual void read(std::istream& in)   { 
+  virtual void read(::std::istream& in)   { 
     REQUIRE_ALWAYS((in.good()), "Stream not good! v = " << v << '\n',1);
     in >> v;
     ENSURE_ALWAYS((in.eof() || in.good()), "Input failed! v = " << v << '\n',1);
   }
-  virtual void print(std::ostream& out) const 
+  virtual void print(::std::ostream& out) const 
     { out << v;}
-  virtual void print(std::ostream& out, const std::string& prefix = "") const 
+  virtual void print(::std::ostream& out, const ::std::string& prefix = "") const 
     { out << prefix << v;}
 
-  virtual std::string vartypename() const { return std::string(type_name_traits<T>::name());}
+  virtual ::std::string vartypename() const { return ::std::string(type_name_traits<T>::name());}
 };
 
  
@@ -61,7 +63,7 @@ public:
   typedef  TypedMutator<T> base;
   NotifyOnChangeMutator(T& t, controlable& c)
     : base(t), controlee(c) {}
-  virtual void read(std::istream& in) {
+  virtual void read(::std::istream& in) {
     T old(base::v);
     base::read(in);
     if( old != base::v) controlee.notify();
@@ -82,9 +84,9 @@ class SetTrueOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   SetTrueOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(std::istream&) { v = true;}
-  virtual void print(std::ostream& out) const { out << v;}
-  virtual void print(std::ostream& out, const std::string& name) const 
+  virtual void read(::std::istream&) { v = true;}
+  virtual void print(::std::ostream& out) const { out << v;}
+  virtual void print(::std::ostream& out, const ::std::string& name) const 
     { if(v) out << name;} 
 };
 
@@ -93,9 +95,9 @@ class SetFalseOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   SetFalseOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(std::istream&) { v = false;}
-  virtual void print(std::ostream& out) const { out << !v;}
-  virtual void print(std::ostream& out, const std::string& name) const 
+  virtual void read(::std::istream&) { v = false;}
+  virtual void print(::std::ostream& out) const { out << !v;}
+  virtual void print(::std::ostream& out, const ::std::string& name) const 
     { if(!v) out << name;} 
 };
 
@@ -112,9 +114,9 @@ class FlipOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   FlipOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(std::istream&) { v = !v;}
-  virtual void print(std::ostream& out) const { out << v;}
-  virtual void print(std::ostream& out, const std::string& name) const 
+  virtual void read(::std::istream&) { v = !v;}
+  virtual void print(::std::ostream& out) const { out << v;}
+  virtual void print(::std::ostream& out, const ::std::string& name) const 
     {  out << name;} 
 };
 
@@ -134,7 +136,7 @@ protected:
   Tsec  deflt;
 public:
   SetOnReadMutator(T& t, Tsec& t2, Tsec def) : tm(t), v2(t2), deflt(def) {}
-  virtual void read(std::istream& in) { tm::read(in); v2 = deflt;} 
+  virtual void read(::std::istream& in) { tm::read(in); v2 = deflt;} 
 };
 
 
@@ -144,13 +146,13 @@ public:
 template<class T>
 class CommentedMutator : public TypedMutator<T> {
   typedef TypedMutator<T> tm;
-  std::string comment;
+  ::std::string comment;
 public:
-  CommentedMutator(T& t, const std::string& c) 
+  CommentedMutator(T& t, const ::std::string& c) 
     //: tm(t), comment(c) {}
     : TypedMutator<T>(t), comment(c) {}
   //  virtual void print(ostream& out) const { tm::print(out); out  << "  " << comment;} 
-  virtual std::string description() const { return comment;}
+  virtual ::std::string description() const { return comment;}
 };
 
 /*! \brief Mutator which prints a message to an ostream if read.
@@ -164,16 +166,16 @@ public:
 
 class MessageOnReadMutator : public Mutator {
 private:
-  std::ostream* out;
-  std::string   text;
+  ::std::ostream* out;
+  ::std::string   text;
 public:
-  MessageOnReadMutator(std::ostream & ou, std::string const& txt) 
+  MessageOnReadMutator(::std::ostream & ou, ::std::string const& txt) 
     : out(&ou), text(txt) {}
-  virtual void read (std::istream& in) { (*out) << text; exit(0); }
-  virtual void print(std::ostream&   ) const {}
-  virtual void print(std::ostream& , std::string const& ) const {}
+  virtual void read (::std::istream& in) { (*out) << text; exit(0); }
+  virtual void print(::std::ostream&   ) const {}
+  virtual void print(::std::ostream& , ::std::string const& ) const {}
 
-  virtual std::string vartypename() const { return "";}
+  virtual ::std::string vartypename() const { return "";}
 
 }; 
 
@@ -198,7 +200,7 @@ inline TypedMutator<T>* GetMutator(T& t) { return new TypedMutator<T>(t);}
     \ingroup mutatorcreators 
  */
 template<class T>
-inline CommentedMutator<T>* GetMutator(T& t, std::string const& comment) 
+inline CommentedMutator<T>* GetMutator(T& t, ::std::string const& comment) 
 { return new CommentedMutator<T>(t,comment);}
 
 /*! \brief Creator function for CommentedMutator
@@ -251,7 +253,7 @@ inline SetOnReadMutator<T,TObs>* GetSetOnReadMutator(T& t, TObs& obs, TObs deflt
     \ingroup mutatorcreators 
  */
 template<class T>
-inline CommentedMutator<T>* GetCommentedMutator(T& t, std::string const& comment)
+inline CommentedMutator<T>* GetCommentedMutator(T& t, ::std::string const& comment)
 { return  new  CommentedMutator<T>(t,comment); }
 
 /*! \brief Creator function for CommentedMutator
@@ -260,6 +262,9 @@ inline CommentedMutator<T>* GetCommentedMutator(T& t, std::string const& comment
  */
 template<class T>
 inline CommentedMutator<T>* GetCommentedMutator(T& t, const char* comment)
-{ return  new  CommentedMutator<T>(t,std::string(comment)); }
+{ return  new  CommentedMutator<T>(t,::std::string(comment)); }
+
+
+} // namespace GrAL 
 
 #endif

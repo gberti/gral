@@ -8,6 +8,8 @@
 #include "GraphicsDevice/renderable-geom.h"
 
 
+namespace GrAL {
+
 /*! A geometric 3D simplex (tetrahedron)
     \ingroup geometricshape
     \see RSimplex
@@ -50,5 +52,7 @@ extern RenderableGeom RSimplex(RenderableGeom::coord_type const& c1,
     \ingroup geometricshape
  */
 extern RenderableGeom RSimplex(double a);
+
+} // namespace GrAL 
 
 #endif

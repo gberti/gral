@@ -10,6 +10,8 @@
 // FIXME: workaround for missing <limits>
 #include <boost/limits.hpp>
 
+namespace GrAL {
+
 template<class Geom>
 struct geom_traits {};
 
@@ -327,7 +329,7 @@ public:
     {}
 
   real eps() const { 
-    return std::numeric_limits<real>::epsilon();
+    return ::std::numeric_limits<real>::epsilon();
   }
 
   bool ray_intersects_plane() {
@@ -376,6 +378,8 @@ public:
     return rt::p0(R) + t * rt::dir(R);
   }
 };
+
+} // namespace GrAL 
 
 #endif
 

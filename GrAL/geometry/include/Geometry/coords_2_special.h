@@ -5,6 +5,8 @@
 // $LICENSE
 
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 // 
 // to be included by coord.h
@@ -68,5 +70,7 @@ struct is_specialized<coordN<2> > {
   static bool specialized() { return true;}
   static const char* name() { return "coordN<2>";}
 };
+
+} // namespace GrAL 
 
 #endif

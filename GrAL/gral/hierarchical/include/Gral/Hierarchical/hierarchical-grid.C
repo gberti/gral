@@ -4,6 +4,7 @@
 // $LICENSE_NEC
 #include "Gral/Hierarchical/hierarchical-grid.h"
 
+namespace GrAL {
 
 namespace hierarchical {
 
@@ -147,5 +148,7 @@ namespace hierarchical {
 
 
 } // namespace hierarchical
+
+} // namespace GrAL 
 
 #endif

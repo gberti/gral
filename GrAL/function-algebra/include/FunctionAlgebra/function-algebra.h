@@ -14,6 +14,7 @@
 #include "Utility/reference-count.h"
 
 
+namespace GrAL {
 
 
 class Derivative; 
@@ -135,17 +136,17 @@ public:
    {return a*ff->derive(x,h);}
   //@}  
 
-  std::string name() const {return ff->name();}
+  ::std::string name() const {return ff->name();}
 
   /*@{ @name code generation functions.
        Write C++ code evaluating the function.
   */
-  std::string write_code_eval(std::ostream& out, int& vnum, 
-                              const std::string& var)    const;
-  std::string write_code_derive(std::ostream& out, int& vnum, 
-                                const std::string& varx, 
-                                const std::string& varh) const;
-  void write_class(std::ostream& out, const std::string& name) const;
+  ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                              const ::std::string& var)    const;
+  ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                const ::std::string& varx, 
+                                const ::std::string& varh) const;
+  void write_class(::std::ostream& out, const ::std::string& name) const;
   /*@}*/
 
 };
@@ -233,5 +234,8 @@ RFunction LinearSegment(P const& p1, P const& p2)
   RFunction t = X(1,1);
   return ((1.0-t)*Constant(q1,1) + t*Constant(q2,1));
 }
+
+
+} // namespace GrAL 
 
 #endif

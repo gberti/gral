@@ -1,8 +1,9 @@
+#ifndef GRAL_IS_SPECIALIZED_H
+#define GRAL_IS_SPECIALIZED_H
 
 // $LICENSE
 
-#ifndef IS_SPECIALIZED_H
-#define IS_SPECIALIZED_H
+namespace GrAL {
 
 template<class V>
 struct is_specialized {
@@ -10,4 +11,5 @@ struct is_specialized {
   static const char* name() { return "";}
 };
 
+} // namespace GrAL {
 #endif

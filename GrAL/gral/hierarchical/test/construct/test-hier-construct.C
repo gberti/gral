@@ -10,6 +10,8 @@
 
 #include <iostream>
 
+using namespace GrAL;
+
 template<class GRID>
 void test_hier_grid(GRID const& root,
 		    GRID const& pattern,
@@ -114,6 +116,7 @@ void test_hier_grid(GRID const& root,
 }
 
 // explicit instantiation to make sure all members are compilable
+namespace GrAL {
 namespace hierarchical { 
   // Temporarily disabled
   //  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
@@ -132,9 +135,10 @@ namespace hierarchical {
   typedef  h_element_base_t<hier_grid_3d> element_base_type_3d;
   template class h_vertex_t<element_base_type_3d>;
   template class h_cell_t  <element_base_type_3d>;
-}
+}}
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   namespace hier = hierarchical;
 

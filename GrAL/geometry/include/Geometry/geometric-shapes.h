@@ -5,6 +5,8 @@
 
 #include <string>
 
+namespace GrAL {
+
 /*! \brief Elementary geometric shapes with point inclusion and intersection tests. 
 
    \ingroup geomintersections 
@@ -31,7 +33,7 @@ public:
 struct geom_base {
   enum intersection_result { inside, outside, intersection};
   
-  static std::string name(intersection_result r) {
+  static ::std::string name(intersection_result r) {
     return (r == inside ? "inside" 
 	    : (r == outside ? "outside" 
 	       : "intersections"));
@@ -91,5 +93,7 @@ public:
 
 
 } // namespace geometric_shapes
+
+} // namespace GrAL 
 
 #endif

@@ -8,6 +8,8 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
+
 /*! \brief Empty geometry
      
     \ingroup geometricshape 
@@ -34,5 +36,6 @@ public:
  */
 inline RenderableGeom REmptyGeom() { return RenderableGeom(new empty_geom());}
 
+} // namespace GrAL 
 
 #endif

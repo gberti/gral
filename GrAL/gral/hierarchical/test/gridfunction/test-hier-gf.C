@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+using namespace GrAL;
+
 template<class GRID>
 void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out) 
 {
@@ -80,6 +82,7 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
 
 
 // explicit instantiation to make sure all members are compilable
+namespace GrAL {
 namespace hierarchical { 
   typedef cartesiannd::grid<3>       cart_grid_type;
   typedef grid_types<cart_grid_type> cgt;
@@ -96,10 +99,11 @@ namespace hierarchical {
   template class hier_grid_function_base<hier_grid_type,         multi_grid_function<cart_grid_type, int> >;
   template class hier_grid_function_base<hier_grid_type, partial_multi_grid_function<cart_grid_type, int> >;
  
-}
+}}
 
 
 
+namespace GrAL {
 namespace hierarchical { 
   typedef cartesiannd::grid<2>       cart_grid_type_2d;
   typedef grid_types<cart_grid_type_2d> cgt2d;
@@ -114,10 +118,11 @@ namespace hierarchical {
 
   template class hier_grid_function_base<hier_grid_type_2d,         multi_grid_function<cart_grid_type_2d, int> >;
   template class hier_grid_function_base<hier_grid_type_2d, partial_multi_grid_function<cart_grid_type_2d, int> >;
-}
+}}
 
 
 int main() {
+  using namespace GrAL;
 
   using namespace std;
   cout << "\n------------- 2D --------------\n";

@@ -3,10 +3,13 @@
 
 #include "IO/skip-comments.h"
 
+namespace GrAL {
+
+
 template<>
-skip_comments_istream& operator>>(skip_comments_istream& in, std::string& s)
+skip_comments_istream& operator>>(skip_comments_istream& in, ::std::string& s)
 {
-  std::istream& in1(in.the_istream());
+  ::std::istream& in1(in.the_istream());
   int max_len = 256;
   char* ss = new char[max_len];
   // string ss = "";
@@ -28,3 +31,6 @@ skip_comments_istream& operator>>(skip_comments_istream& in, std::string& s)
   s = ss;
   return in;
 }
+
+
+} // namespace GrAL 

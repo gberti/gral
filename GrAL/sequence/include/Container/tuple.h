@@ -12,6 +12,9 @@
 
 #include <cmath>
 
+
+namespace GrAL {
+
 // 'internal' class 
 template<class T, unsigned N>
 class tuple_base {
@@ -305,7 +308,7 @@ tuple<T,N> operator/(tuple<T,N> const& lhs, T t)
 
 template<class T, unsigned N>
 inline
-std::ostream& operator<<(std::ostream& out, tuple<T,N> const& t)
+::std::ostream& operator<<(::std::ostream& out, tuple<T,N> const& t)
 {
   for(unsigned i = 0; i < N; ++i)
     out << t[i] << (i < N-1 ? " " : "");
@@ -314,7 +317,7 @@ std::ostream& operator<<(std::ostream& out, tuple<T,N> const& t)
 
 template<class T, unsigned N>
 inline
-std::istream& operator>>(std::istream& in, tuple<T,N> & t)
+::std::istream& operator>>(::std::istream& in, tuple<T,N> & t)
 {
   for(unsigned i = 0; i < N; ++i)
     in >> t[i];
@@ -454,5 +457,6 @@ clamp_tuple(tuple<T,N> const& low, tuple<T,N> const& high, tuple<T,N> const p)
   return res;
 }
 
+} // namespace GrAL 
 
 #endif

@@ -17,6 +17,8 @@
 
 #include "Geometry/point-traits.h"
 
+using namespace GrAL;
+
 
 template<class OCTREE>
 void print_state(OCTREE const& oct, std::ostream& out) 
@@ -34,13 +36,15 @@ void print_state(OCTREE const& oct, std::ostream& out)
   }
 }
 
+namespace GrAL {
 namespace octree {
   template class Octree<cartesian2d::CartesianGrid2D>;
   // disabled: no grid cartesian_subrange_type
   //  template class Octree<cartesian3d::CartesianGrid3D>;
-}
+}}
 
 int main() {
+  using namespace GrAL;
   using namespace std;
 
   {

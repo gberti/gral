@@ -9,6 +9,8 @@
 
 #include <fstream>
 
+namespace GrAL {
+
 inline DevManip1<Transformation> 
 BT(const Transformation& T) { return BeginTransformation(T);}
 
@@ -22,8 +24,10 @@ BA(const Attribute& A) { return BeginAttribute(A);}
 inline void 
 EA(rendering_language& L) { L.end_attribute();}
 
+}
 
 int main() {
+  using namespace GrAL;
 
   std::ofstream out("simple.out");
   GraphicsDevice dev(OOGLDevice(out));

@@ -9,6 +9,7 @@
 #include "Utility/pre-post-conditions.h"
 
 using namespace std;
+using namespace GrAL;
 
 class testA {
 public:
@@ -34,10 +35,13 @@ public:
 
 };
 
-template<>
-struct copy_traits<testA> : public copy_traits_base<testA> {
-  static testA* clone(testA const& a) { return a.clone();}
-};
+namespace GrAL {
+  template<>
+  struct copy_traits<testA> : public copy_traits_base<testA> {
+    static testA* clone(testA const& a) { return a.clone();}
+  };
+}
+
 
 int main() {
 

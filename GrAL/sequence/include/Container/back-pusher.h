@@ -3,6 +3,8 @@
 
 #include <iostream>
 
+namespace GrAL {
+
 
 template<class CONTAINER>
 class back_pusher {
@@ -12,7 +14,7 @@ public:
   back_pusher() : cont(0) {}
   back_pusher(CONTAINER& c) : cont(&c) {}
 
-  void read(std::istream& in)
+  void read(::std::istream& in)
     { 
       typename CONTAINER::value_type tmp;  
       in >> tmp;
@@ -23,7 +25,7 @@ public:
 
 template<class CONTAINER>
 inline
-std::istream& operator>>(std::istream& in, 
+std::istream& operator>>(::std::istream& in, 
 			 back_pusher<CONTAINER> & b)
 {
   b.read(in);
@@ -32,10 +34,12 @@ std::istream& operator>>(std::istream& in,
 
 template<class CONTAINER>
 inline
-std::ostream& operator<<(std::ostream& out, 
+std::ostream& operator<<(::std::ostream& out, 
 			 back_pusher<CONTAINER> & b)
 {
   return out;
 }
+
+} // namespace GrAL 
 
 #endif

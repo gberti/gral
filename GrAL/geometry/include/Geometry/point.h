@@ -10,7 +10,10 @@
 // error handling macro
 #include "Utility/pre-post-conditions.h"
 
+#include "Geometry/point-traits.h"
+#include "Geometry/algebraic-primitives.h"
 
+namespace GrAL {
 
 
 /****************************************************************
@@ -72,8 +75,8 @@ public:
   friend point operator * (const double d, const point& a);     // d * a
   friend double operator * (const point& a, const point& b);    // dot product
   friend point operator / (const point& a, const double d);	    // a / d
-  friend std::ostream& operator << (std::ostream& s, const point& v);    
-  friend std::istream& operator >> (std::istream& s, point& v);	    
+  friend ::std::ostream& operator << (::std::ostream& s, const point& v);    
+  friend ::std::istream& operator >> (::std::istream& s, point& v);	    
   friend void swap(point& a, point& b);			    // interchange a and b
 };
 
@@ -121,7 +124,6 @@ public:
 };
 */
 
-#include "Geometry/point-traits.h"
 
 template<>
 struct point_traits<point> 
@@ -160,7 +162,6 @@ struct point_traits<point>
   // use a proxy here.
 };
 
-#include "Geometry/algebraic-primitives.h"
 
 template<>
 struct dimension_dependent_primitives<point> 
@@ -222,5 +223,7 @@ struct dimension_dependent_primitives<point>
 
 
 //extern void test_algebraic_primitives(const point&);
+
+} // namespace GrAL 
 
 #endif

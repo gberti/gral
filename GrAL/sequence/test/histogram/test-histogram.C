@@ -10,6 +10,7 @@
 #include <iostream>
 
 int main() {
+  using namespace GrAL;
 
   histogram_table<int> H;
   H[0]++;

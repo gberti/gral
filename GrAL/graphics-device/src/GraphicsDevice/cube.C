@@ -3,6 +3,8 @@
 
 #include "GraphicsDevice/cube.h"
 
+namespace GrAL {
+
 void geom_cube::init(double aa) 
 {
   c[5]=point( aa/2, aa/2,aa/2); c[4]=point( aa/2, aa/2,-aa/2);
@@ -24,3 +26,5 @@ RenderableGeom RCube(RenderableGeom::coord_type const& c1,
 
 RenderableGeom RCube(double a)
 { return RenderableGeom(new geom_cube(a));}
+
+} // namespace GrAL 

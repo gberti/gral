@@ -7,8 +7,10 @@
 #include "IO/skip-comments.h"
 #include "IO/read-parameters.h"
 
+namespace GrAL {
 
-class string_list : public std::list<std::string> {
+
+class string_list : public ::std::list< ::std::string> {
 public:
   string_list() {}
 };
@@ -18,11 +20,11 @@ MutableVars::MutableVars()
     unrecognized(new string_list)  {}
 
 unsigned MutableVars::size() const { return table->size();}
-bool     MutableVars::defined(std::string const& nm) const { 
+bool     MutableVars::defined(::std::string const& nm) const { 
   return (table->find(nm) != table->end());
 }
 
-Mutator* MutableVars::getMutator(std::string const& nm)
+Mutator* MutableVars::getMutator(::std::string const& nm)
 {
   return (table->find(nm) != table->end() ? 
 	  (*(table->find(nm))).second : 0);
@@ -31,11 +33,11 @@ Mutator* MutableVars::getMutator(std::string const& nm)
 //MutableVars::~MutableVars() { delete(table); delete(unrecognized);}
 MutableVars::~MutableVars() {}
 
-void MutableVars::AddVariable(std::string const& name, Mutator* m)
+void MutableVars::AddVariable(::std::string const& name, Mutator* m)
   { (*table)[name]=m; }
 
 void MutableVars::AddVariable(char const*  name, Mutator* m)
-  { (*table)[std::string(name)]=m; }
+  { (*table)[::std::string(name)]=m; }
 
 
 // read values as long as there are any, 
@@ -45,15 +47,15 @@ void MutableVars::AddVariable(char const*  name, Mutator* m)
 static inline char comment_start() { return '#';}
 static inline char comment_end()   { return '\n';}
 
-void MutableVars::ReadVariable(std::istream& is)
+void MutableVars::ReadVariable(::std::istream& is)
 {
-  is >> std::ws;
+  is >> ::std::ws;
   //  skip_comments_istream in(is,comment_start(),comment_end());
   if(is) {
-    std::string s; 
+    ::std::string s; 
     is >> s;
 
-     std::map<std::string, Mutator*, std::less<std::string> >::iterator it;
+     ::std::map< ::std::string, Mutator*, ::std::less< ::std::string> >::iterator it;
     if( (it = table->find(s)) != table->end()) {
       //  cerr << "found: " << s << endl;
       // (*table)[s]->read(is);//.the_istream()); // hier nur istream-Funktionalitaet!
@@ -64,7 +66,7 @@ void MutableVars::ReadVariable(std::istream& is)
   }
 }
 
-void MutableVars::ReadValues(std::istream& is)
+void MutableVars::ReadValues(::std::istream& is)
 { 
   while (is) { 
     skip_comment(is);
@@ -72,9 +74,9 @@ void MutableVars::ReadValues(std::istream& is)
   }
 }
 
-void MutableVars::PrintValues(std::ostream     & out, 
-			      std::string const& pre, 
-			      std::string const& sep) const
+void MutableVars::PrintValues(::std::ostream     & out, 
+			      ::std::string const& pre, 
+			      ::std::string const& sep) const
 {
    table_type::const_iterator item(table->begin());
   for(; item != table->end(); item++) {
@@ -90,9 +92,11 @@ void MutableVars::PrintValues(std::ostream     & out,
 
 bool MutableVars::HasUnrecognized() const { return (unrecognized->size() != 0);} 
 
-void MutableVars::PrintUnrecognized(std::ostream& out) const
+void MutableVars::PrintUnrecognized(::std::ostream& out) const
 {
   string_list::const_iterator item(unrecognized->begin());
   for(; item != unrecognized->end(); ++item)
     out << *item << '\n';
 }
+
+} // namespace GrAL 

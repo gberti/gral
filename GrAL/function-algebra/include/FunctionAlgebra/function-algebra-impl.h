@@ -10,6 +10,8 @@
 
 #include "Utility/copy-traits.h"
 
+namespace GrAL {
+
 /*! Abstract base class defining the behavior of a RFunction
     
 */
@@ -41,12 +43,12 @@ public:
   unsigned  dDef()     const  {return d_Def;}
   bool      IsAffine() const  {return (is_affine);}
 
-  virtual std::string name() const = 0;
-  virtual std::string write_code_eval  (std::ostream& out, int& /*vnum*/, 
-                                        std::string const& /*var*/) const; 
-  virtual std::string write_code_derive(std::ostream& out, int& /*vnum*/, 
-                                        std::string const& /*varx*/ , 
-                                        std::string const& /* varh */) const;
+  virtual ::std::string name() const = 0;
+  virtual ::std::string write_code_eval  (::std::ostream& out, int& /*vnum*/, 
+                                        ::std::string const& /*var*/) const; 
+  virtual ::std::string write_code_derive(::std::ostream& out, int& /*vnum*/, 
+                                        ::std::string const& /*varx*/ , 
+                                        ::std::string const& /* varh */) const;
 };
 
 
@@ -57,5 +59,8 @@ struct copy_traits<function_algebra_impl>
   static function_algebra_impl* clone(function_algebra_impl const& f)
   { return f.clone();}
 };
+
+} // namespace GrAL 
+
 
 #endif

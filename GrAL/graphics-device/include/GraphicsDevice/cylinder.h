@@ -7,6 +7,8 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
+
 /*!  \brief Geometric cylinder
      \ingroup geometricshape
  
@@ -40,5 +42,6 @@ public:
  */
 extern RenderableGeom RCylinder(double r, double h);
 
+} // namespace GrAL 
 
 #endif

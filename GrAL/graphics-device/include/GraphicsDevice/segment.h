@@ -10,6 +10,7 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
 
 class geom_segment : public geom {
 private:
@@ -48,15 +49,16 @@ extern RenderableGeom RSegment(RenderableGeom::coord_type const& c1,
 class geom_segment_list : public geom {
 private:
   typedef geom_segment_list self;
-  std::list<geom_segment> LI;
+  ::std::list<geom_segment> LI;
 protected:
   
 public:
-  geom_segment_list(std::list<geom_segment> const& LL) : LI(LL){}
+  geom_segment_list(::std::list<geom_segment> const& LL) : LI(LL){}
   virtual self * clone() const { return new self(*this); }
 
   virtual void  write_geom_to(rendering_language& L) const;
 };
 
+} // namespace GrAL 
 
 #endif

@@ -22,6 +22,8 @@
 
 #include <vector>
 
+namespace GrAL {
+
 /*! \brief Point location in a grid by bucketing
     
     \test test-point-locator.C
@@ -374,5 +376,7 @@ void point_locator<GRID,GEOM,GT>::init()
     */
   }
 }
+
+} // namespace GrAL 
 
 #endif

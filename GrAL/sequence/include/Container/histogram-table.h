@@ -3,6 +3,8 @@
 
 #include "Container/my-hash-map.h"
 
+namespace GrAL {
+
 
 /*! \brief Table for managing histograms
 
@@ -90,6 +92,6 @@ public:
   }
 };
 
-
+} // namespace GrAL 
 
 #endif

@@ -10,14 +10,14 @@
 namespace stdext {
 
   template <class T>
-  struct identity : public std::unary_function<T, T> {
+  struct identity : public ::std::unary_function<T, T> {
     const T& operator()(const T& x) const { return x; }
   };
 
   // stolen from SGI STL 
   template <class _Operation1, class _Operation2>
   class unary_compose
-    : public std::unary_function<typename _Operation2::argument_type,
+    : public ::std::unary_function<typename _Operation2::argument_type,
 				 typename _Operation1::result_type> 
   {
   protected:
@@ -41,7 +41,7 @@ namespace stdext {
   
   template <class _Operation1, class _Operation2, class _Operation3>
   class binary_compose
-    : public std::unary_function<typename _Operation2::argument_type,
+    : public ::std::unary_function<typename _Operation2::argument_type,
 				 typename _Operation1::result_type> {
   protected:
     _Operation1 _M_op1;

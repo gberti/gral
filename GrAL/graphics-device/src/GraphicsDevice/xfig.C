@@ -1,14 +1,8 @@
 
 // $LICENSE
 
-/*----------------------------------------------------------------------------
-    xfig.C		write routines for different geometric figures
+// INCOMPLETE FILE
 
-    by Heiko Schwierz, BTU-Cottbus, torus@math.tu-cottbus.de
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        August 6, 1997
------------------------------------------------------------------------------*/
 #include <math.h>
 #include "Geometry/algebra.h"
 
@@ -18,6 +12,8 @@
 #include "GraphicsDevice/segment.h"
 #include "GraphicsDevice/quadrilateral.h"
 #include "GraphicsDevice/triangle.h"
+
+namespace GrAL { 
 
 // this matrix is nessessary to transform points
 mat4 M(vec4(1,0,0,0),vec4(0,1,0,0),vec4(0,0,1,0),vec4(0,0,0,1));
@@ -179,3 +175,5 @@ void xfig::write_segment(const geom_segment& sg)
   the_stream() << "4 0 -1 0 0 0 ";
 }
 */
+
+} // namespace GrAL 

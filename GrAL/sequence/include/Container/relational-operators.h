@@ -3,6 +3,8 @@
 
 // $LICENSE_NEC
 
+namespace GrAL {
+
 /*! \brief Relational operators for use in templates
    
     \ingroup operators
@@ -19,5 +21,6 @@ namespace relational_operators {
 
 }
 
+} // namespace GrAL 
 
 #endif

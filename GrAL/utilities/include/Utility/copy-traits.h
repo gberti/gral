@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 /*! \brief  Default implementation for \c copy_traits<>
  */
 template<class T>
@@ -60,5 +62,6 @@ struct copy_traits_base {
 template<class T>
 struct copy_traits : public copy_traits_base<T> {};
 
+} // namespace GrAL 
 
 #endif

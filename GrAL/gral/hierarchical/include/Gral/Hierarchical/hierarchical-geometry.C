@@ -5,6 +5,7 @@
 
 #include "Gral/Hierarchical/hierarchical-geometry.h"
 
+namespace GrAL {
 namespace hierarchical {
 
   template<class HGRID, class FLATGEOM>
@@ -139,5 +140,7 @@ namespace hierarchical {
 
 
 } // namespace hierarchical
+
+} // namespace GrAL 
 
 #endif

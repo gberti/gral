@@ -22,6 +22,7 @@
 /*! \defgroup outputadapter Output adapter for generic file I/O
 */
 
+namespace GrAL {
 
 /*! \brief Output adapter for OFF/geomview file format
     
@@ -62,6 +63,7 @@ public:
 
 };
 
+} // namespace GrAL 
 
 #include "Gral/IO/geomview-format-output-construct.h"
 

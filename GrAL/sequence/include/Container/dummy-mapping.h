@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 /*! \brief dummy mapping to substitute for an unneeded mapping parameter.
     \ingroup mappings
 
@@ -23,5 +25,7 @@ public:
   typedef T1 argument_type;
   typedef T2 result_type;
 };
+
+} // namespace GrAL 
 
 #endif

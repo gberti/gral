@@ -5,6 +5,8 @@
 
 #include <iostream>
 
+namespace GrAL {
+
 /*! \brief Test dimension-independent primitives.
 
     POINT must be capable of representing a point 
@@ -13,9 +15,10 @@
 template<class POINT>
 struct test_algebraic_primitives 
 {
-  void do_tests(std::ostream & out);
+  void do_tests(::std::ostream & out);
 };
 
+} // namespace GrAL 
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

@@ -1,4 +1,6 @@
 #include "Gral/IO/geomview-format-output.h"
+
+namespace GrAL {
  
 OstreamOFF2DFmt::OstreamOFF2DFmt()
   : out(0), owned(false), offset(0) {}
@@ -28,3 +30,6 @@ void OstreamOFF2DFmt::init(std::string const& nm)
   owned = true;
   out = new std::ofstream(nm.c_str());
 }
+
+
+} // namespace GrAL 

@@ -7,15 +7,18 @@
 #include <deque>
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
+
 /*! \brief Double-ended dynamic vector with stable indexing
   
    \author Guntram Berti
    \ingroup mappings
 
-   Similarly to std::deque, this class offers a random-access container
+   Similarly to ::std::deque, this class offers a random-access container
    which can grow at both ends.
-   Unlike std::deque (but like std::vector), indices will continue to be valid
-   if insertion is performed only at the beginning/end (for std::vector: only at the end).
+   Unlike ::std::deque (but like ::std::vector), indices will continue to be valid
+   if insertion is performed only at the beginning/end (for ::std::vector: only at the end).
    The first item inserted will get index 0, items inserted later on at the beginning will
    get negative indices.
 
@@ -27,7 +30,7 @@
 template<class T>
 class bivector {
 private:
-  typedef std::deque<T> table_type;
+  typedef ::std::deque<T> table_type;
   typedef table_type    tt;
 
   table_type table;
@@ -59,7 +62,7 @@ public:
   void pop_front() { table.pop_front(); offset--; }
 
   void clear() { offset = 0; table.clear();}
-  void swap(bivector<T> & rhs) { std::swap(offset,rhs.offset); std::swap(table,rhs.table); }
+  void swap(bivector<T> & rhs) { ::std::swap(offset,rhs.offset); ::std::swap(table,rhs.table); }
 
   //! index of first item
   int begin_index() const { return -offset;}
@@ -88,5 +91,6 @@ public:
   const_iterator end  () const { return table.end();}
 };
 
+} // namespace GrAL 
 
 #endif

@@ -3,19 +3,13 @@
 
 // $LICENSE
 
-/*----------------------------------------------------------------------------
-    ball.h		class to create a ball (sphere with triangles)
-
-    by Heiko Schwierz, BTU-Cottbus, torus@math.tu-cottbus.de
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        July 4, 1997
------------------------------------------------------------------------------*/
 
 #include "GraphicsDevice/geom.h"
 
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
+
+namespace GrAL {
 
 
 /*! \brief A geometric representation of a sphere
@@ -45,5 +39,6 @@ public:
 
 extern RenderableGeom RBall(double r, const point& m);
 
+} // namespace GrAL 
 
 #endif

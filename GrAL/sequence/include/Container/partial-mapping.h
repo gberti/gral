@@ -9,6 +9,7 @@
 #include "Container/proxies.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
 
 //----------------------------------------------------------------
 /*!  
@@ -58,7 +59,7 @@ public:
   typedef T2                         result_type;
 
 private:
-  typedef STDHASH::hash_map<T1,T2 >  map_table_type;
+  typedef ::STDHASH::hash_map<T1,T2 >  map_table_type;
 
   //   typedef write_only_proxy<T2>                    proxy_type;
 
@@ -106,5 +107,7 @@ public:
   }
 
 };
+
+} // namespace GrAL 
 
 #endif

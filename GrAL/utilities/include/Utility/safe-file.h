@@ -9,6 +9,8 @@
 #include <fstream>
 #include "Forward/string_fwd.h"
 
+namespace GrAL {
+
 //--------------------------------------------------------------
 //! Try to open a file and ask if it does not exist.
 /*! 
@@ -50,7 +52,7 @@ public:
       if file could not be opened.
 
       Result is in { is_open, failed }. */
-  static int open(std::ifstream& in,  std::string const& filename);
+  static int open(::std::ifstream& in,  ::std::string const& filename);
 
   ///! Try to open also filename.gz if filename does not exist.
   /*! If strictness = insist, do ask interactively
@@ -58,14 +60,14 @@ public:
 
       Result is in { is_open, is_open_gz, failed }.
   */
-  static int open_gz(std::ifstream& in,  std::string const& filename, int strictness = insist);
+  static int open_gz(::std::ifstream& in,  ::std::string const& filename, int strictness = insist);
   //! Close ifstream. If gz = is_open_gz, gzip the file.
-  static void       close(std::ifstream& in, std::string const& nm, int gz = is_open);
+  static void       close(::std::ifstream& in, ::std::string const& nm, int gz = is_open);
 
   //! Open ofstream.
-  static int        open (std::ofstream& out, std::string const& filename);
+  static int        open (::std::ofstream& out, ::std::string const& filename);
     // FIXME: does not work for both gcc 2.95 and 3.0.1  
-  //	  std::ios_base::openmode mode = std::ios_base::out);
+  //	  ::std::ios_base::openmode mode = ::std::ios_base::out);
 
 
   //! close ofstream.
@@ -73,7 +75,9 @@ public:
 
       Parameter nm needed only if gz == is_open_gz (cannot deduce file name from stream).
   */
-  static void       close(std::ofstream& in, std::string const& nm, int gz = is_open);
+  static void       close(::std::ofstream& in, ::std::string const& nm, int gz = is_open);
 };
+
+} // namespace GrAL 
 
 #endif

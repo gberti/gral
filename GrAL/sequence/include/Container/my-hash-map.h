@@ -7,8 +7,8 @@
 
 // define STDEXT  as the namespace where hash<> templates live.
 // define STDHASH as the namespace where hash_map<> templates live
-// (These may be different, e.g. intel defines hash<> in std::, 
-//  but our substitute for their hash_map cannot be in std::)
+// (These may be different, e.g. intel defines hash<> in ::std::, 
+//  but our substitute for their hash_map cannot be in ::std::)
 
 // KCC currently not supported
 #if defined __KCC

@@ -2,7 +2,7 @@
 #include <math.h>
 #include "Geometry/point.h"
 
-
+namespace GrAL {
 
 // CONSTRUCTORS
 
@@ -164,14 +164,14 @@ double operator * (const point& a, const point& b)
   return sum;
 }
 
-std::ostream& operator << (std::ostream& s, const point& v)
+std::ostream& operator << (::std::ostream& s, const point& v)
 { 
   for(int i=1;i<=v.n;i++)
     s << v[i] << " ";
   return s;
 }
 
-std::istream& operator >> (std::istream& s, point& v) {
+std::istream& operator >> (::std::istream& s, point& v) {
   for(int i =1;i<=v.n;i++)
     s >> v[i];
   return s;
@@ -180,4 +180,5 @@ std::istream& operator >> (std::istream& s, point& v) {
 void swap(point& a, point& b)
 { point tmp(a); a = b; b = tmp; }
 
+} // namespace GrAL
 

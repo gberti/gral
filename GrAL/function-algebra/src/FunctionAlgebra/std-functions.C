@@ -9,6 +9,9 @@
 #include "FunctionAlgebra/function-algebra.h"
 #include "./write-code.h"
 
+namespace GrAL {
+
+
 point Derivative::operator() (const point& h) const { return f->derive(x,h);} 
 
 class function_algebra_identity : public function_algebra_impl {
@@ -20,16 +23,16 @@ public:
 
   virtual coord_type eval(const coord_type& x) const {return(x);}
 
-  virtual std::string name() const {return ("function_algebra_identity");}
-  virtual std::string write_code_eval(std::ostream& , 
+  virtual ::std::string name() const {return ("function_algebra_identity");}
+  virtual ::std::string write_code_eval(::std::ostream& , 
                                       int& /*vnum*/, 
-                                      std::string const& var) const
+                                      ::std::string const& var) const
   {return var;}
 
-  virtual std::string write_code_derive(std::ostream&, 
+  virtual ::std::string write_code_derive(::std::ostream&, 
                                         int& /*vnum*/, 
-                                        std::string const& /*varx*/, 
-                                        std::string const& varh) const
+                                        ::std::string const& /*varx*/, 
+                                        ::std::string const& varh) const
   {return varh;}
 
 };
@@ -45,13 +48,13 @@ public:
 
   virtual coord_type eval(const coord_type& x) const { return coord_type(sin(x[1]));}
 
-  virtual std::string name() const {return "function_algebra_sin";}
+  virtual ::std::string name() const {return "function_algebra_sin";}
 
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const
    { return write_code_eval_libfct(out,vnum,var,"sin"); }
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx, std::string const& varh) const
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx, ::std::string const& varh) const
   { return write_code_derive_libfct(out,vnum,varx,varh,"cos");}
 };
 
@@ -67,12 +70,12 @@ public:
   virtual coord_type eval(const coord_type& x) const { return coord_type(cos(x[1]));}
 
 
-  virtual std::string name() const {return "function_algebra_cos";}
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const
+  virtual ::std::string name() const {return "function_algebra_cos";}
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const
   {return write_code_eval_libfct(out,vnum,var,"cos");}
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx, std::string const& varh) const
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx, ::std::string const& varh) const
   {return write_code_derive_libfct(out,vnum,varx,varh,"-sin");}
 };
 
@@ -89,16 +92,16 @@ public:
 
   virtual coord_type eval(const coord_type& x) const { return coord_type(atan(x[1]));}
 
-  virtual std::string name() const {return "function_algebra_atan";}
+  virtual ::std::string name() const {return "function_algebra_atan";}
 
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const
   {return write_code_eval_libfct(out,vnum,var,"atan");}
 
-  virtual  std::string write_code_derive(std::ostream& out, int& vnum, 
-                                         std::string const& varx, std::string const& varh) const
+  virtual  ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                         ::std::string const& varx, ::std::string const& varh) const
   {
-    std::string r(makename("d_atan",vnum++)); 
+    ::std::string r(makename("d_atan",vnum++)); 
     out << "double " << r << "(" << varh << "/(1+sqr( " << varx << ")));\n ";
     return r;
   } 
@@ -120,20 +123,20 @@ public:
   virtual coord_type eval(const coord_type& x) const { return coord_type(atan2(x[2],x[1]));}
 
 
-  virtual std::string name() const {return "function_algebra_atan2";}
+  virtual ::std::string name() const {return "function_algebra_atan2";}
 
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const
   { 
-    std::string r(makename("atan2_",vnum++));
+    ::std::string r(makename("atan2_",vnum++));
     out << "double " << r << "( atan2(" << var << "[2]," << var << "[1]));\n"; 
     return r;
   }
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx, std::string const& varh) const
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx, ::std::string const& varh) const
   {
-    std::string norm(makename("norm",vnum++)); 
-    std::string r   (makename("d_atan2_",vnum++));
+    ::std::string norm(makename("norm",vnum++)); 
+    ::std::string r   (makename("d_atan2_",vnum++));
     out << "double " << norm << "(sqr(" << varx << "[1]) + sqr(" << varx << "[2]));\n" 
 	<< "double " << r << "((-" << varx << "[2] * " << varh << "[1] + "
 	<<  varx << "[1] * " << varh << "[2])/" << norm << ");\n";
@@ -153,14 +156,14 @@ public:
   virtual coord_type eval(const coord_type& x) const { return coord_type(exp(x[1]));}
 
 
-  virtual std::string name() const {return "function_algebra_exp";}
+  virtual ::std::string name() const {return "function_algebra_exp";}
 
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const
   {return write_code_eval_libfct(out,vnum,var,"exp");}
 
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx, std::string const& varh) const
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx, ::std::string const& varh) const
   {return write_code_derive_libfct(out,vnum,varx,varh,"exp");}
 };
 
@@ -175,14 +178,14 @@ public:
 
   virtual coord_type eval(const coord_type& x) const { return coord_type(log(x[1]));}
 
-  virtual std::string name() const {return "function_algebra_log";}
-  virtual  std::string write_code_eval(std::ostream& out, int& vnum, 
-                                       std::string const& var) const
+  virtual ::std::string name() const {return "function_algebra_log";}
+  virtual  ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                       ::std::string const& var) const
   {return write_code_eval_libfct(out,vnum,var,"log");}
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx, std::string const& varh) const
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx, ::std::string const& varh) const
   {
-    std::string r(makename("d_log",vnum++)); 
+    ::std::string r(makename("d_log",vnum++)); 
     out << "double " << r << "(" << varh << "/("<< varx << "));\n ";
     return r;
   }
@@ -201,14 +204,14 @@ public:
 
   virtual coord_type eval(const coord_type& x) const { return coord_type(sqrt(x[1]));}
 
-  virtual std::string name() const {return "function_algebra_sqrt";}
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const
+  virtual ::std::string name() const {return "function_algebra_sqrt";}
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const
   {return write_code_eval_libfct(out,vnum,var,"sqrt");}
-  virtual  std::string write_code_derive(std::ostream& out, int& vnum, 
-                                         std::string const& varx, std::string const& varh) const
+  virtual  ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                         ::std::string const& varx, ::std::string const& varh) const
   {
-    std::string r(makename("d_sqrt",vnum++)); 
+    ::std::string r(makename("d_sqrt",vnum++)); 
     out << "double " << r << "(" << varh << " * 0.5/(sqrt("<< varx << ")));\n ";
     return r;
   }
@@ -226,24 +229,24 @@ public:
 
   virtual coord_type eval(const coord_type& x) const { return coord_type(x*x);}
 
-  virtual std::string name() const {return "function_algebra_sqr";}
-  virtual std::string write_code_eval(std::ostream& , int& /*vnum*/, 
-                                      std::string const& var) const
+  virtual ::std::string name() const {return "function_algebra_sqr";}
+  virtual ::std::string write_code_eval(::std::ostream& , int& /*vnum*/, 
+                                      ::std::string const& var) const
   { 
 #ifdef GRAL_HAS_SSTREAM
-    std::ostringstream s; 
+    ::std::ostringstream s; 
 #else
-    std::ostrstream s; 
+    ::std::ostrstream s; 
 #endif
     s << "sqr(" << var <<")"; return (s.str());
   }
-  virtual  std::string write_code_derive(std::ostream& /*out*/, int& /*vnum*/, 
-                                         std::string const& varx, std::string const& varh) const
+  virtual  ::std::string write_code_derive(::std::ostream& /*out*/, int& /*vnum*/, 
+                                         ::std::string const& varx, ::std::string const& varh) const
   { 
 #ifdef GRAL_HAS_SSTREAM
-    std::ostringstream s; 
+    ::std::ostringstream s; 
 #else
-    std::ostrstream s; 
+    ::std::ostrstream s; 
 #endif  
     s << "2.0 * " << varx << " * " << varh; return (s.str());}
 };
@@ -263,3 +266,5 @@ const RFunction Exp(new function_algebra_exp());
 const RFunction Log(new function_algebra_log());
 const RFunction Sqr(new function_algebra_sqr());
 const RFunction Sqrt(new function_algebra_sqrt());
+
+} // namespace GrAL 

@@ -11,13 +11,16 @@
 
 #include <iostream>
 
-template class coordN<1>;
-//template class coordN<2>;
-//template class coordN<3>;
-template class coordN<4>;
+namespace GrAL {
+  template class coordN<1>;
+  //template class coordN<2>;
+  //template class coordN<3>;
+  template class coordN<4>;
+}
 
 
 int main() {
+  using namespace GrAL;
   using namespace std;
 
   coordN<2> p(1,2);

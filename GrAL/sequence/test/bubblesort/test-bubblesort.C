@@ -7,7 +7,9 @@
 #include "Utility/pre-post-conditions.h"
 #include <numeric>
 
-namespace sequence {
+using namespace GrAL;
+
+namespace GrAL { namespace sequence {
   template<class ForwardIterator>
   bool increasing(ForwardIterator begin, ForwardIterator end)
   { return std::accumulate(begin,end, true, std::less_equal<typename std::iterator_traits<ForwardIterator>::value_type>());}
@@ -19,7 +21,7 @@ namespace sequence {
   template<class ForwardIterator>
   bool decreasing(ForwardIterator begin, ForwardIterator end)
   { return std::accumulate(begin,end, true, std::greater_equal<typename std::iterator_traits<ForwardIterator>::value_type>());}
-}
+}}
 
 
 int main() {

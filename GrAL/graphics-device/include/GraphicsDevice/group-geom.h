@@ -11,6 +11,8 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
+
 class geom_group : public geom {
   typedef geom_group self;
 public:
@@ -24,7 +26,9 @@ public:
   //  friend geom_group& operator<<(geom_group& grp, const RenderableGeom& g) 
   //   {  return grp.add_geom(g);}
 private:
-  std::list<RenderableGeom> geoms;
+  ::std::list<RenderableGeom> geoms;
 };
+
+} // namespace GrAL 
 
 #endif

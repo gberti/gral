@@ -13,6 +13,8 @@
 #include "Container/functions.h"
 #include <iostream>
 
+using namespace GrAL;
+
 
 template<class GEOM, class GRID>
 void test_level(GRID const& G, GEOM const& Geom, std::ostream& out)
@@ -110,14 +112,16 @@ void test_hier_grid_table(GRID const& root,
 }
 
 // explicit instantiation to make sure all members are compilable
+namespace GrAL {
 namespace hierarchical { 
   //  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
   template class hgrid_cartesian<cartesiannd::grid<3> >;
   template class hgrid_cartesian<cartesian2d::CartesianGrid2D>; 
-}
+}}
 
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   namespace hier = hierarchical;
  

@@ -9,7 +9,9 @@
 #include "GraphicsDevice/calc-transformations.h"
 #include "Geometry/algebraic-primitives.h"
 
-void geom_word::init(std::string           const& ss, 
+namespace GrAL {
+
+void geom_word::init(::std::string           const& ss, 
                      geom_word::coord_type const& cc1) 
 {
   str=ss;
@@ -18,7 +20,7 @@ void geom_word::init(std::string           const& ss,
   c[2]=cc1+coord_type(0,1,0);
 }
 
-void geom_word::init(std::string           const& ss,
+void geom_word::init(::std::string           const& ss,
                      geom_word::coord_type const& cc1,
                      geom_word::coord_type const& cc2,
                      geom_word::coord_type const& cc3) 
@@ -51,10 +53,10 @@ void geom_word::write_geom_to(rendering_language& L) const
   double x_shrink=x_length*1.0/(1.05*max);      // skale in x-direction
   double y_shrink=y_length*1.0/(1.15*ycount);   // skale in y-direction
   if (x_shrink==0) {
-    std::cerr << "No X-LENGTH <using standards> \n";
+    ::std::cerr << "No X-LENGTH <using standards> \n";
   }
   if (y_shrink==0) {
-    std::cerr << "No Y-LENGTH <using standards> \n";
+    ::std::cerr << "No Y-LENGTH <using standards> \n";
   }
   // correture of shrink-factors
   // if ((x_shrink*1.0/y_shrink < 1.2) || (x_shrink*1.0/y_shrink > 2.8)){
@@ -85,14 +87,16 @@ void geom_word::write_geom_to(rendering_language& L) const
  L.end_block();
 }
 
-extern RenderableGeom RWord(std::string                const& str, 
+extern RenderableGeom RWord(::std::string                const& str, 
                             RenderableGeom::coord_type const& c1,  //< lower left
                             RenderableGeom::coord_type const& c2,  //< lower right
                             RenderableGeom::coord_type const& c3) //< upper left
 {return RenderableGeom(new geom_word(str,c1,c2,c3));}
 
-extern RenderableGeom RWord_1(std::string                const& str, 
+extern RenderableGeom RWord_1(::std::string                const& str, 
                               RenderableGeom::coord_type const& c1,  //< lower left
                               RenderableGeom::coord_type const& c2,  //< lower right
                               RenderableGeom::coord_type const& c3) //< upper left
 { return RenderableGeom(new geom_word(str,c1,c2,c3));}
+
+} // namespace GrAL 

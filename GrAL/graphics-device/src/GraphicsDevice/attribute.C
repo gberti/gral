@@ -4,6 +4,8 @@
 #include "GraphicsDevice/attribute.h"
 #include "GraphicsDevice/rgb-color.h"
 
+namespace GrAL {
+
 static Attribute MakeAttr(const rgb_color& c) 
 { 
   Attribute A;// = new Attribute;
@@ -25,3 +27,4 @@ Attribute Attribute::new_color(double r, double g, double b)
 {return MakeAttr(rgb_color(r,g,b));}
 //Attribute Attribute::transparent(double alpha) {init(alpha);}
 
+} // namespace GrAL 

@@ -10,6 +10,8 @@
 #include "Container/sequence-algorithms.h"
 #include <algorithm>
 
+namespace GrAL {
+
 template<unsigned K, class P = int>
 class simplex_base {
   typedef  simplex_base self;
@@ -24,10 +26,10 @@ public:
   simplex_base() {}
 
   template<class It>
-  simplex_base(It b, It e) { std::copy(b,e,p);}
+  simplex_base(It b, It e) { ::std::copy(b,e,p);}
 
   simplex_base(P const& apex, simplex_base<K-1, P> base)
-  { p[0] = apex; std::copy(base.begin(), base.end(), p+1);}
+  { p[0] = apex; ::std::copy(base.begin(), base.end(), p+1);}
 
   coord_type const& operator[](int i) const { return p[i];}
   coord_type      & operator[](int i)       { return p[i];}
@@ -119,7 +121,7 @@ struct compare_ordered {
   { 
     simplex<K,P> sorted_lhs(lhs); sequence::bubble_sort(sorted_lhs.begin(), sorted_lhs.end());
     simplex<K,P> sorted_rhs(rhs); sequence::bubble_sort(sorted_rhs.begin(), sorted_rhs.end());
-    return std::lexicographical_compare(sorted_lhs.begin(), sorted_lhs.end(),
+    return ::std::lexicographical_compare(sorted_lhs.begin(), sorted_lhs.end(),
 					sorted_rhs.begin(), sorted_rhs.end());
   }
   
@@ -132,7 +134,7 @@ struct compare_unordered {
   template<unsigned K, class P>
   static bool less(simplex<K,P> const& lhs, simplex<K,P> const& rhs) 
   { 
-    return std::lexicographical_compare(lhs.begin(), lhs.end(),
+    return ::std::lexicographical_compare(lhs.begin(), lhs.end(),
 					rhs.begin(), rhs.end());
   }
   template<unsigned K, class P>
@@ -145,7 +147,7 @@ struct equal_ordered {
   { 
     simplex<K,P> sorted_lhs(lhs); sequence::bubble_sort(sorted_lhs.begin(), sorted_lhs.end());
     simplex<K,P> sorted_rhs(rhs); sequence::bubble_sort(sorted_rhs.begin(), sorted_rhs.end());
-    return std::equal(sorted_lhs.begin(), sorted_lhs.end(),
+    return ::std::equal(sorted_lhs.begin(), sorted_lhs.end(),
 		      sorted_rhs.begin());
   }
 
@@ -157,7 +159,7 @@ struct equal_unordered {
   template<unsigned K, class P>
   static bool equal(simplex<K,P> const& lhs, simplex<K,P> const& rhs)
   { 
-    return std::equal(lhs.begin(), lhs.end(),
+    return ::std::equal(lhs.begin(), lhs.end(),
 		      rhs.begin());
   }
   template<unsigned K, class P>
@@ -183,6 +185,7 @@ bool operator!=(simplex<K,P> const& lhs, simplex<K,P> const& rhs)
 
 
 
+} // namespace GrAL 
 
 
 #endif

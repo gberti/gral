@@ -7,6 +7,8 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
+
 
 /*! \brief A geometric circle
     \ingroup geometricshape
@@ -48,5 +50,7 @@ extern RenderableGeom RCircle(RenderableGeom::coord_type const& c1, double r);
 extern RenderableGeom REllipse(RenderableGeom::coord_type const& c1, 
                                double r1, double r2);
 
+
+} // namespace GrAL 
 
 #endif

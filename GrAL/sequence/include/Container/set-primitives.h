@@ -6,6 +6,8 @@
 
 #include "Container/set-traits.h"
 
+namespace GrAL {
+
 /*! \defgroup setalgorithms Set Algorithms
     \ingroup  algorithms
 
@@ -78,7 +80,7 @@ public:
   typedef T    argument_type;
   typedef bool result_type;
 
-  /*! returns false \f$ \iff \f$ std::find(begin,end,t) == end. 
+  /*! returns false \f$ \iff \f$ ::std::find(begin,end,t) == end. 
   */
   bool operator()(const T& t) const {
     bool found = false;
@@ -114,5 +116,7 @@ is_element_of(const Cont& c)
   typedef typename Cont::value_type     val;
   return  is_element_of_pred<it,val>(c.begin(),c.end());
 } 
+
+} // namespace GrAL 
 
 #endif

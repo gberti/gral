@@ -5,7 +5,6 @@
 
 
 
-
 /*! \class copy_on_write_ptr 
     \brief A smart copy-on-write pointer.
 
@@ -15,6 +14,8 @@
 */
 
 #include "Utility/copy-traits.h"
+
+namespace GrAL {
 
 
 /*! \brief base class for reference counted objects
@@ -110,5 +111,6 @@ inline void copy_on_write_ptr<T>::copy()
   }
 }
 
+} // namespace GrAL 
 
 #endif

@@ -10,6 +10,8 @@
 #include <algorithm>
 #include <numeric>
 
+namespace GrAL {
+
 namespace sequence {
 
   /*! \defgroup helperfunctors Helper functors for common tasks 
@@ -131,7 +133,7 @@ namespace sequence {
   */
  template <typename InputIterator, typename Value>
  inline bool contains(InputIterator first, InputIterator end, Value const& v) {
-   return std::find(first,end,v) != end;
+   return ::std::find(first,end,v) != end;
  }
 
 
@@ -140,10 +142,10 @@ namespace sequence {
       \see \ref test-sequence-algorithms.C
    */ 
   template <typename InputIterator>
-  inline typename std::iterator_traits<InputIterator>::value_type
+  inline typename ::std::iterator_traits<InputIterator>::value_type
   sum(InputIterator first, InputIterator end) 
   {
-    return std::accumulate(first,end, 0, std::plus<typename std::iterator_traits<InputIterator>::value_type>());
+    return ::std::accumulate(first,end, 0, ::std::plus<typename ::std::iterator_traits<InputIterator>::value_type>());
   }
 
   /*! \brief The classic bubble sort.
@@ -165,7 +167,7 @@ namespace sequence {
       ordered = true;
       while(next != end) {
 	if(! less(*begin, *next)) {
-	  std::swap(*begin, *next);
+	  ::std::swap(*begin, *next);
 	  ordered = false;
 	  ++num_transpositions;
 	}
@@ -178,7 +180,7 @@ namespace sequence {
 
   template<typename ForwardIterator>
   int bubble_sort(ForwardIterator begin, ForwardIterator end)
-  { return bubble_sort(begin, end, std::less<typename std::iterator_traits<ForwardIterator>::value_type>());}
+  { return bubble_sort(begin, end, ::std::less<typename ::std::iterator_traits<ForwardIterator>::value_type>());}
 
 
   /*! \brief Check wether the two sequences have the same permutation sign
@@ -193,7 +195,7 @@ namespace sequence {
   { 
     int t1 = bubble_sort(begin1, end1);
     int t2 = bubble_sort(begin2, end2);
-    REQUIRE(std::equal(begin1, end1, begin2), "", 1);
+    REQUIRE(::std::equal(begin1, end1, begin2), "", 1);
     return (t1%2) == (t2%2);
   }
 
@@ -224,13 +226,13 @@ namespace sequence {
     
     The output is the sequence f(*b), ... f(*(e-1)).
     
-    This algorithm could also be expressed using std::copy
+    This algorithm could also be expressed using ::std::copy
     and an iterator-adaptor of InputIt using Filter.
     However, as a filter rather operates on the
     corresponding value_type, this version seems to be 
     more natural.
 
-   \todo Use std::transform(b,e,dest,f) instead.
+   \todo Use ::std::transform(b,e,dest,f) instead.
   */
   template<class InputIt, class OutputIt, class Filter>
   inline
@@ -291,5 +293,8 @@ namespace sequence {
  
 
 } // namespace sequence
+
+} // namespace GrAL 
+
 
 #endif

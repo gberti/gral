@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 /*! \brief dummy container to substitute for an unneeded container parameter.
  
   sample use: see Grids/Algorithms/find-boundary-components.h
@@ -31,4 +33,5 @@ public:
   void push_back(T const&) const {}
 };
 
+} // namespace GrAL 
 #endif

@@ -12,6 +12,8 @@
 #include "Geometry/algebraic-primitives.h"
 
 
+namespace GrAL {
+
 // some concrete classes defining often used RFunctions, mainly
 // geometric transformations and projections. See end of file
 // for list of defined RFunctions
@@ -29,22 +31,22 @@ public:
 
   virtual coord_type  eval(const coord_type& /*x*/) const {return c;}
 
-  virtual std::string name() const { return "function_algebra_constant";}
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const;
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx, 
-                                        std::string const& varh) const;
+  virtual ::std::string name() const { return "function_algebra_constant";}
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const;
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx, 
+                                        ::std::string const& varh) const;
 };
 
 
-std::string  function_algebra_constant::write_code_eval(std::ostream&, int& /*vnum*/, 
-                                                        std::string const& /*var*/) const
+std::string  function_algebra_constant::write_code_eval(::std::ostream&, int& /*vnum*/, 
+                                                        ::std::string const& /*var*/) const
 { 
 #ifdef GRAL_HAS_SSTREAM
-      std::ostringstream s; 
+      ::std::ostringstream s; 
 #else
-      std::ostrstream s; 
+      ::std::ostrstream s; 
 #endif
  if (dIm() == 1)
    s << c[1];
@@ -58,14 +60,14 @@ std::string  function_algebra_constant::write_code_eval(std::ostream&, int& /*vn
 }
  
 
-std::string function_algebra_constant::write_code_derive(std::ostream&, int& /*vnum*/, 
-                                                         std::string const& /*varx*/, 
-                                                         std::string const& /*varh*/) const
+std::string function_algebra_constant::write_code_derive(::std::ostream&, int& /*vnum*/, 
+                                                         ::std::string const& /*varx*/, 
+                                                         ::std::string const& /*varh*/) const
 {
 #ifdef GRAL_HAS_SSTREAM
-      std::ostringstream s; 
+      ::std::ostringstream s; 
 #else
-      std::ostrstream s; 
+      ::std::ostrstream s; 
 #endif
  if (dIm() == 0)
    s << "0.0";
@@ -89,35 +91,35 @@ public:
 
   virtual coord_type eval(const coord_type& x) const {return coord_type(x[i]);}
 
-  virtual std::string name() const {return "function_algebra_coordinate";}
-  virtual std::string  write_code_eval(std::ostream& out, int& vnum, 
-                                       std::string const& var) const;
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx, 
-                                        std::string const& varh) const;
+  virtual ::std::string name() const {return "function_algebra_coordinate";}
+  virtual ::std::string  write_code_eval(::std::ostream& out, int& vnum, 
+                                       ::std::string const& var) const;
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx, 
+                                        ::std::string const& varh) const;
 };
 
 
-std::string  function_algebra_coordinate::write_code_eval(std::ostream&, int& /*vnum*/, 
-                                                          std::string const& var) const
+std::string  function_algebra_coordinate::write_code_eval(::std::ostream&, int& /*vnum*/, 
+                                                          ::std::string const& var) const
 { 
 #ifdef GRAL_HAS_SSTREAM
-      std::ostringstream s; 
+      ::std::ostringstream s; 
 #else
-      std::ostrstream s; 
+      ::std::ostrstream s; 
 #endif
   if (d_Def == 1) {s << var;} else  {s << var << "[" << i <<"]";} 
   return(s.str());
 }
 
-std::string function_algebra_coordinate::write_code_derive(std::ostream& , int& /*vnum*/, 
-                                                           std::string const& /*varx*/, 
-                                                           std::string const& varh) const
+std::string function_algebra_coordinate::write_code_derive(::std::ostream& , int& /*vnum*/, 
+                                                           ::std::string const& /*varx*/, 
+                                                           ::std::string const& varh) const
 { 
 #ifdef GRAL_HAS_SSTREAM
-      std::ostringstream s; 
+      ::std::ostringstream s; 
 #else
-      std::ostrstream s; 
+      ::std::ostrstream s; 
 #endif
  if (d_Def == 1) {s << varh;} else  {s << varh << "[" << i <<"]";} 
   return(s.str());
@@ -133,7 +135,7 @@ public:
   function_algebra_coordinate_with_dim(int ii, int dim) : function_algebra_coordinate(ii) {d_Im=1;d_Def=dim;} 
   virtual self* clone() const { return new self(*this);}
 
-  virtual std::string name() const {return "function_algebra_coordinate_with_dim";}
+  virtual ::std::string name() const {return "function_algebra_coordinate_with_dim";}
 };
 
 
@@ -158,29 +160,29 @@ public:
   virtual coord_type eval(const coord_type& x) const
   { return coord_type(hermite(a,b,x[1]));}
 
-  virtual std::string name() const {return "function_algebra_hermite";}
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const;
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx, 
-                                        std::string const& varh) const;
+  virtual ::std::string name() const {return "function_algebra_hermite";}
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const;
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx, 
+                                        ::std::string const& varh) const;
 };
 
 
-std::string function_algebra_hermite::write_code_eval(std::ostream& out, int& vnum, 
-                                                      std::string const& var) const
+std::string function_algebra_hermite::write_code_eval(::std::ostream& out, int& vnum, 
+                                                      ::std::string const& var) const
 { 
-  std::string r(makename("herm",vnum++));
+  ::std::string r(makename("herm",vnum++));
   out << "double " << r << "( hermite(" << a << "," << b << "," << var << "));\n";
   return r;
 }
 
 
-std::string function_algebra_hermite::write_code_derive(std::ostream& out, int& vnum, 
-                                                        std::string const& varx, 
-                                                        std::string const& varh) const
+std::string function_algebra_hermite::write_code_derive(::std::ostream& out, int& vnum, 
+                                                        ::std::string const& varx, 
+                                                        ::std::string const& varh) const
 {
-  std::string r(makename("d_herm",vnum++));
+  ::std::string r(makename("d_herm",vnum++));
   out << "double " << r << "( d_hermite(" << a << "," << b << "," << varx << ") * " << varh << ");\n";
   return r;
 }
@@ -215,20 +217,20 @@ public:
   virtual coord_type eval(const coord_type& x) const; 
 
   int degree() const { return (coeffs.dim() -1);}
-  virtual std::string name() const {return "function_algebra_polynomial1D";}
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const;
-  virtual std::string write_code_deriv(std::ostream& out, int& vnum, 
-                                       std::string const& varx, 
-                                       std::string const& varh) const;
+  virtual ::std::string name() const {return "function_algebra_polynomial1D";}
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const;
+  virtual ::std::string write_code_deriv(::std::ostream& out, int& vnum, 
+                                       ::std::string const& varx, 
+                                       ::std::string const& varh) const;
 };
 
-std::string function_algebra_polynomial1D::write_code_eval(std::ostream& out, int& vnum, 
-                                                           std::string const& var) const
+std::string function_algebra_polynomial1D::write_code_eval(::std::ostream& out, int& vnum, 
+                                                           ::std::string const& var) const
 {
-  std::string bk(makename("bk",vnum++));
-  std::string x1(makename("xtmp",vnum));
-  std::string r(makename("poly",vnum));
+  ::std::string bk(makename("bk",vnum++));
+  ::std::string x1(makename("xtmp",vnum));
+  ::std::string r(makename("poly",vnum));
 
   int n = degree();
   out << "double " << bk << "(" << coeffs[n+1] << ");\n"
@@ -263,13 +265,13 @@ function_algebra_polynomial1D::derive(const coord_type& x, const coord_type& h) 
   return coord_type(bk*h[1]);
 }
 
-std::string function_algebra_polynomial1D::write_code_deriv(std::ostream& out, int& vnum, 
-                                                            std::string const& varx, 
-                                                            std::string const& varh) const
+std::string function_algebra_polynomial1D::write_code_deriv(::std::ostream& out, int& vnum, 
+                                                            ::std::string const& varx, 
+                                                            ::std::string const& varh) const
 {
-  std::string bk(makename("bk",vnum++));
-  std::string x1(makename("xtmp",vnum));
-  std::string r(makename("poly",vnum));
+  ::std::string bk(makename("bk",vnum++));
+  ::std::string x1(makename("xtmp",vnum));
+  ::std::string r(makename("poly",vnum));
 
   int n = degree();
   out << "double " << bk << "(" << n*coeffs[n+1] << ");\n"
@@ -295,7 +297,7 @@ public:
   virtual coord_type eval(const coord_type& x) const 
    { return coord_type(ap::squared_norm_2(x)); }
 
-  virtual std::string name() const {return "function_algebra_norm2";}
+  virtual ::std::string name() const {return "function_algebra_norm2";}
 };
 
 
@@ -318,7 +320,7 @@ public:
 
   virtual coord_type eval(const coord_type& x) const;
 
-  virtual std::string name() const {return "function_algebra_scale";}
+  virtual ::std::string name() const {return "function_algebra_scale";}
 };
 
 function_algebra_impl::coord_type 
@@ -344,7 +346,7 @@ public:
 
   virtual coord_type eval(const coord_type& x) const {return (x+t);}
 
-  virtual std::string name() const {return "function_algebra_translate";}
+  virtual ::std::string name() const {return "function_algebra_translate";}
 };
 
 
@@ -364,7 +366,7 @@ public:
 
   virtual coord_type eval(const coord_type& x) const { return (x - (x*normal-dist)*normal);}
 
-  virtual std::string name() const {return "function_algebra_project";}
+  virtual ::std::string name() const {return "function_algebra_project";}
 };
 
 // distance to hyperplane {x | <x,normal> = dist}
@@ -380,23 +382,23 @@ public:
   virtual self* clone() const { return new self(*this);}
   virtual coord_type eval(const coord_type& x) const { return coord_type(x*normal-dist);}
 
-  virtual std::string name() const {return "function_algebra_distance";}
-  virtual std::string write_code_eval(std::ostream& out, int& vnum, 
-                                      std::string const& var) const;
-  virtual std::string write_code_derive(std::ostream& out, int& vnum, 
-                                        std::string const& varx,
-                                        std::string const& varh) const;
+  virtual ::std::string name() const {return "function_algebra_distance";}
+  virtual ::std::string write_code_eval(::std::ostream& out, int& vnum, 
+                                      ::std::string const& var) const;
+  virtual ::std::string write_code_derive(::std::ostream& out, int& vnum, 
+                                        ::std::string const& varx,
+                                        ::std::string const& varh) const;
 };
 
-std::string function_algebra_distance::write_code_eval(std::ostream& out, int& vnum, 
-                                                       std::string const& var) const
+std::string function_algebra_distance::write_code_eval(::std::ostream& out, int& vnum, 
+                                                       ::std::string const& var) const
 {
-  std::string r(makename("dist2hyp",vnum++));
-  std::string nrm(makename("n",vnum++));
+  ::std::string r(makename("dist2hyp",vnum++));
+  ::std::string nrm(makename("n",vnum++));
 #ifdef GRAL_HAS_SSTREAM
-  std::ostringstream coords; 
+  ::std::ostringstream coords; 
 #else
-  std::ostrstream coords; 
+  ::std::ostrstream coords; 
 #endif
   coords << normal;
   int dim = normal.dim();
@@ -406,16 +408,16 @@ std::string function_algebra_distance::write_code_eval(std::ostream& out, int& v
 }
 
 
-std::string function_algebra_distance::write_code_derive(std::ostream& out, int& vnum, 
-                                                         std::string const& /*varx*/,
-                                                         std::string const& varh) const
+std::string function_algebra_distance::write_code_derive(::std::ostream& out, int& vnum, 
+                                                         ::std::string const& /*varx*/,
+                                                         ::std::string const& varh) const
 {
-  std::string r(makename("d_dist2hyp",vnum++));
-  std::string nrm(makename("n",vnum++));
+  ::std::string r(makename("d_dist2hyp",vnum++));
+  ::std::string nrm(makename("n",vnum++));
 #ifdef GRAL_HAS_SSTREAM
-  std::ostringstream coords; 
+  ::std::ostringstream coords; 
 #else
-  std::ostrstream coords; 
+  ::std::ostrstream coords; 
 #endif
   coords << normal;
   int dim = normal.dim();
@@ -481,7 +483,7 @@ public:
     return (xa* axis + (sina*x1+cosa*x2)*e2 + (cosa*x1 - sina*x2)*e1);
   }
 
-  virtual std::string name() const {return "function_algebra_rotation3D";}
+  virtual ::std::string name() const {return "function_algebra_rotation3D";}
 };
 
 
@@ -500,7 +502,7 @@ public:
 
   virtual coord_type eval(const coord_type& x) const {return coord_type((x-m).length() - r);}
 
-  virtual std::string name() const {return "function_algebra_circle";}
+  virtual ::std::string name() const {return "function_algebra_circle";}
 };
 
 
@@ -536,3 +538,4 @@ RFunction Rotation2D(double a)
 RFunction S3(const double& a, const double& b) { return RFunction(new function_algebra_hermite(a,b));}
 RFunction Polynomial1D(const coord_type& c)    { return RFunction(new function_algebra_polynomial1D(c));}
 
+} // namespace GrAL 

@@ -15,6 +15,7 @@
 
 #include <iostream>
 
+using namespace GrAL;
 
 template<class GRID, class GEOM>
 void test_hier_geom(GRID const& root,
@@ -69,6 +70,7 @@ namespace hierarchical {
 }
 */
 
+namespace GrAL {
 namespace hierarchical { 
   typedef cartesiannd::grid<2>                                           cart_grid2d_type;
   typedef hgrid_cartesian<cartesiannd::grid<2> >                         hier_grid2d_type;
@@ -80,9 +82,10 @@ namespace hierarchical {
 
   template class hgrid_cartesian<cart_grid2d_type>;
   template class hier_geometry<hier_grid2d_type, cart_geom2d_type>;
-}
+}}
 
 int main() {
+  using namespace GrAL;
   using namespace std;
   namespace hier = hierarchical;
 

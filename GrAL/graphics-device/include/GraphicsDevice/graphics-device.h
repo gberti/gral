@@ -6,6 +6,8 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/manips.h"
 
+namespace GrAL {
+
 /*! \brief Envelope class for rendering_language
 
   \ingroup renderers
@@ -39,5 +41,7 @@ inline void draw_geom(GraphicsDevice& Dev, const Container& C)
   for(cit g = C.begin(); g != C.end(); ++g)
     Dev << (*g);
 }
+
+} // namespace GrAL 
 
 #endif

@@ -7,6 +7,8 @@
 #include <boost/limits.hpp>
 #include <algorithm> // swap
 
+namespace GrAL {
+
 /*! Representation of real interval
 
  */
@@ -18,8 +20,8 @@ private:
 public:
 
   //! create empty interval
-  interval() : t0( std::numeric_limits<scalar_type>::max()),
-	       t1(-std::numeric_limits<scalar_type>::max())
+  interval() : t0( ::std::numeric_limits<scalar_type>::max()),
+	       t1(-::std::numeric_limits<scalar_type>::max())
   {}
   //! 
   interval(scalar_type left, scalar_type right) 
@@ -28,7 +30,7 @@ public:
   {}
   bool empty() const { return t0 > t1;}
 
-  void sort() { if (t0 > t1) std::swap(t0,t1);}
+  void sort() { if (t0 > t1) ::std::swap(t0,t1);}
   scalar_type l() const { return t0;}
   scalar_type r() const { return t1;}
 
@@ -68,5 +70,7 @@ template<class REAL>
 inline bool disjoint(interval<REAL> I1, interval<REAL> I2)
 { return I1.r() < I2.l() || I1.l() > I2.r(); }
 
+
+} // namespace GrAL 
 
 #endif

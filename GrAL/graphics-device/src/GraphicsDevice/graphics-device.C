@@ -4,6 +4,8 @@
 #include "GraphicsDevice/graphics-device.h"
 #include "GraphicsDevice/rendering-language.h"
 
+namespace GrAL {
+
 // class for renderers expecting data from a stream,
 // e.g. a file or a pipe (like geomview)
 
@@ -17,3 +19,5 @@ private:
   FileDevice          dev;        
 };
 */
+
+} // namespace GrAL 

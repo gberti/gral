@@ -3,6 +3,8 @@
 
 // $LICENSE_NEC
 
+namespace GrAL {
+
 
   /*! \brief A heterogeneous list 
 
@@ -71,4 +73,7 @@ namespace heterogeneous_list {
     { return List<T,List<END,END> >(t,List<END,END>());}
 
 } // namespace heterogeneous_list
+
+} // namespace GrAL 
+
 #endif

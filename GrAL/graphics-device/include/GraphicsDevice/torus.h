@@ -7,6 +7,8 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
+
 /*! \brief Geometric torus
   \ingroup geometricshape
   \see RTorus()
@@ -39,5 +41,7 @@ extern RenderableGeom RTorus(double major,
                              double minor, 
                              char style='n');
 
+
+} // namespace GrAL 
 
 #endif

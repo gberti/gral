@@ -22,6 +22,7 @@
 
 
 int main(int argc, char* argv[]) {
+  using namespace GrAL;
   using namespace std;
 
   //  read variables from file only: uncomment the following line

@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 
 //----------------------------------------------------------------
 /*! \file
@@ -160,6 +162,8 @@ get2nd(It i) {
   return mapped_value_iterator<It,get_second<v_type> >(i);
 }
 
+} // namespace GrAL 
+
 //----------------------------------------------------------------
 //        iterator traits for the above templates
 //----------------------------------------------------------------
@@ -170,7 +174,7 @@ namespace std {
   template<typename It> struct iterator_traits;
   
   template<class It, class F>
-    struct iterator_traits<mapped_value_const_iterator<It,F> >
+    struct iterator_traits<GrAL::mapped_value_const_iterator<It,F> >
     {
       typedef iterator_traits<It> bt;
       typedef typename bt::iterator_category iterator_category;
@@ -183,7 +187,7 @@ namespace std {
 
 
   template<class It, class F>
-    struct iterator_traits<mapped_value_iterator<It,F> >
+    struct iterator_traits<GrAL::mapped_value_iterator<It,F> >
     {
       typedef iterator_traits<It> bt;
       typedef typename bt::iterator_category iterator_category;
@@ -195,5 +199,6 @@ namespace std {
     };
   
 } // namespace std
+
 
 #endif

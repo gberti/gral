@@ -7,6 +7,7 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
 
 /*! \brief A geometric sphere
    
@@ -38,5 +39,6 @@ public:
  */
 extern RenderableGeom RSphere(double r,  RenderableGeom::coord_type const& m);
 
+} // namespace GrAL 
 
 #endif

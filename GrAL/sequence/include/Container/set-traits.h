@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+namespace GrAL {
+
 
 /*! \brief empty frame for generic access to functionality of representations of sets.
     \ingroup setalgorithms
@@ -27,5 +29,7 @@ template<class S> class set_traits {
   // typedef ... element_type
   // bool is_member(const element_type&);
 };
+
+} // namespace GrAL 
 
 #endif

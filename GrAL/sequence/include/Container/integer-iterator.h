@@ -3,6 +3,10 @@
 
 // LICENSE_NEC_2003
 
+
+namespace GrAL {
+
+
 /*! \brief View an integral type as iterator
    
    \todo support full random-access iterator interface
@@ -27,10 +31,15 @@ template<class INT, class C>
 inline bool operator==(integer_iterator<INT, C> i1, integer_iterator<INT, C> i2) { return *i1 == *i2;}
 
 
-#ifndef GRAL_INCLUDES_RELOPS
+  //#ifndef GRAL_INCLUDES_RELOPS
 template<class INT, class C>
 inline bool operator!=(integer_iterator<INT, C> i1, integer_iterator<INT, C> i2) { return *i1 != *i2;}
-#endif
+  //#endif
+
+} // namespace GrAL 
+
+
+
 
 
 #endif

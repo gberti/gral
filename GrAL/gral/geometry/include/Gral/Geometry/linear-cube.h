@@ -18,6 +18,7 @@
 
 #include <vector>
 
+namespace GrAL {
 
 
 template<class COORD>
@@ -330,5 +331,7 @@ linear_cube_interpolator<GEOM,F,GT>::mesh2cart;
 template<class GEOM, class F, class GT>
 typename linear_cube_interpolator<GEOM,F,GT>::cubature_type
 linear_cube_interpolator<GEOM,F,GT>::cubature_rule;
+
+} // namespace GrAL 
 
 #endif

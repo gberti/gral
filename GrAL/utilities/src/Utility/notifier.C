@@ -2,7 +2,7 @@
 
 #include <algorithm>
 
-
+namespace GrAL {
 
 //----------------- observer ------------------------
 
@@ -50,7 +50,7 @@ void observer::add_notifier(const notifier* nt)
 void observer::remove_notifier(const notifier* nt)
 {
   if(nt != 0) {
-    notifier_table::iterator it = std::find(notifiers.begin(),notifiers.end(),nt);
+    notifier_table::iterator it = ::std::find(notifiers.begin(),notifiers.end(),nt);
     if (it != notifiers.end())
       notifiers.erase(it);
   }
@@ -127,12 +127,12 @@ void notifier::add_observer(observer* obs) const {
 
 void notifier::remove_observer(observer* obs) const
 {
-  observer_table::iterator it = std::find(observers.begin(),observers.end(),obs);
+  observer_table::iterator it = ::std::find(observers.begin(),observers.end(),obs);
   if (it != observers.end())
     observers.erase(it);
 }
 
 
-
+} // namespace GrAL 
 
 

@@ -16,6 +16,9 @@
 #include <functional> // mem_fun_ref
 
 
+
+namespace GrAL {
+
 /*! \brief Implementation of a generalized octree
     \author Guntram Berti 
 
@@ -467,7 +470,7 @@ public:
    
 
 } // namespace octree
-
+} // namespace GrAL
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Hierarchical/octree.C"

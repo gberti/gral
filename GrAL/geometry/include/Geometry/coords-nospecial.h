@@ -7,6 +7,8 @@
 #include "is-specialized.h"
 #include "geometric-point-traits.h"
 
+namespace GrAL {
+
 typedef double component;
 
 template<unsigned N>
@@ -121,5 +123,7 @@ struct point_traits<coordN_ns<N> > :  public point_traits_for_coordN_ns<N> {};
 // totale Spezialisierung f"ur alle ben"otigten N.
 struct point_traits<coordN_ns<2> > : public point_traits_for_coordN_ns<2> {};
 struct point_traits<coordN_ns<3> > : public point_traits_for_coordN_ns<3> {};
+
+} // namespace GrAL 
 
 #endif

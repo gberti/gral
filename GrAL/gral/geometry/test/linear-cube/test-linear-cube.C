@@ -19,6 +19,9 @@
 
 #include <iostream>
 
+using namespace GrAL;
+
+
 // Explicit instantiation for 2D
 typedef Complex2D                                  grid2d_type;
 typedef tuple<double,2>                            coord2d_type;
@@ -42,6 +45,7 @@ template class linear_cube_interpolator<geom3d_type, gf3d_type>;
 
 
 int main() {
+  using namespace GrAL;
   using namespace std;
 
     

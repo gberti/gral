@@ -6,6 +6,8 @@
 
 #include "Container/mapped-value-iterator.h"
 
+namespace GrAL {
+
 //----------------------------------------------------------------
 /*! \brief This class gives a const view to the values sequences
      of an associative container.
@@ -48,4 +50,5 @@ template<class Cont>
 inline ValueMask<Cont>
 values_of(const Cont& c) { return ValueMask<Cont>(c);}
 
+} // namespace GrAL 
 #endif

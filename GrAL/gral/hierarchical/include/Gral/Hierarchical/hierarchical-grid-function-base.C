@@ -5,6 +5,7 @@
 
 #include "Gral/Hierarchical/hierarchical-grid-function-base.h"
 
+namespace GrAL {
 
 namespace hierarchical {
 
@@ -129,6 +130,7 @@ namespace hierarchical {
   {}
 
 
-} //  namespace hierarchical
+} // namespace hierarchical
+} // namespace GrAL 
 
 #endif

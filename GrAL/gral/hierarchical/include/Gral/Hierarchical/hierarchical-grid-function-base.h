@@ -4,6 +4,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Hierarchical/hierarchical-grid-table.h"
 
+namespace GrAL {
 
 namespace hierarchical {
 
@@ -101,6 +102,7 @@ namespace hierarchical {
   }; // class hier_grid_function_base
 
 } //  namespace hierarchical
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "hierarchical-grid-function-base.C"

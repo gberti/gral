@@ -12,7 +12,8 @@
 #include <iostream>
 #include <string>
 
-inline void check_operator(point const& p1,point const& p2, 
+
+inline void check_operator(GrAL::point const& p1, GrAL::point const& p2, 
 			   std::string const& op)
 {
   REQUIRE( (p1[1] == p2[1]), "F1" << op << "F2: Unequal results: "
@@ -21,6 +22,7 @@ inline void check_operator(point const& p1,point const& p2,
 }
 
 int main() {
+  using namespace GrAL;
   using std::cout;
 
   RFunction F1(Sin);

@@ -9,6 +9,8 @@
 #include "Gral/IO/geomview-format-output.h"
 #include "Geometry/point-traits.h"
 
+namespace GrAL {
+
 template<class GRID, class GEOM>
 void ConstructGrid(OstreamOFF2DFmt& Out, 
                    GRID const& G, GEOM const& Geom)
@@ -63,5 +65,7 @@ void ConstructGrid(OstreamOFF2DFmt& Out,
 
 
 }
+
+} // namespace GrAL 
 
 #endif

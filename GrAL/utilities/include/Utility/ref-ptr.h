@@ -3,6 +3,8 @@
 
 // $LICENSE_NEC
 
+namespace GrAL {
+
 /*! \brief class for disallowing taking the address of temporary.
     \author Guntram Berti
 
@@ -113,7 +115,7 @@ public:
   // If we disable this, at least the caller must apply the address-of operator&
   // which could inhibit some misuse.
   explicit ref_ptr(T  &     t) : owned_(false) 
-  { ptr = &t; } // std::cout << "ref_ptr(T const&     t)" << std::endl;}
+  { ptr = &t; } // ::std::cout << "ref_ptr(T const&     t)" << ::std::endl;}
 
   // FIXME: This might result in memory leak if called with newly allocated ptr and own=false
   // Perhaps add shared_ptr<T> to data and allow only ref_ptr(shared_ptr<T>) ?
@@ -121,12 +123,12 @@ public:
   { ptr = tptr; }
   // explicit 
   ref_ptr(temporary<T> t) : owned_(true)  
-  { ptr = new T(t.value()); } // std::cout << "ref_ptr(temporary<T> t)" << std::endl;} 
+  { ptr = new T(t.value()); } // ::std::cout << "ref_ptr(temporary<T> t)" << ::std::endl;} 
 
   template<class U>
   explicit
   ref_ptr(temporary<U> t) : owned_(true)  
-  { ptr = new T(t.value()); } // std::cout << "ref_ptr(temporary<T> t)" << std::endl;} 
+  { ptr = new T(t.value()); } // ::std::cout << "ref_ptr(temporary<T> t)" << ::std::endl;} 
 
   // copy constructors and assigment
   ref_ptr(ref_ptr<T> const& rhs) { copy(rhs);}
@@ -221,5 +223,7 @@ public:
 
 template<class T>
 inline ref_ptr<T> make_ref_ptr(temporary<T> t) { return ref_ptr<T>(t);}
+
+} // namespace GrAL 
 
 #endif

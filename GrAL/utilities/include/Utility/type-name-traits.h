@@ -7,6 +7,8 @@
 
 #include "Forward/string_fwd.h"
 
+namespace GrAL { 
+
 //----------------------------------------------------------------
 
 /*! \file
@@ -72,9 +74,12 @@ struct type_name_traits<double> {
 };
 
 template<>
-struct type_name_traits<std::string> {
+struct type_name_traits< ::std::string> {
   static const char* name() { return "string";}
 };
 
 //@}
+
+} // namespace GrAL 
+
 #endif

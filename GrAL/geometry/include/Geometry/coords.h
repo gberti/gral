@@ -18,6 +18,8 @@
 #include "Geometry/algebraic-primitives.h"
 
 
+namespace GrAL {
+
 typedef double coord_N_component;
 
 /*! \defgroup coordNalg Simple vector type and related operations
@@ -154,7 +156,7 @@ inline coordN<N> operator-(const coordN<N>& rhs)
    \ingroup coordNalg
  */
 template<unsigned N>
-inline std::ostream& operator<<(std::ostream& out, const coordN<N>& P)
+inline ::std::ostream& operator<<(::std::ostream& out, const coordN<N>& P)
 {
   for(unsigned i = 1; i<= N-1; i++)
     out <<  P[i] << ' ';
@@ -167,7 +169,7 @@ inline std::ostream& operator<<(std::ostream& out, const coordN<N>& P)
    \ingroup coordNalg
  */
 template<unsigned N>
-inline std::istream& operator>>(std::istream& in, coordN<N>& P)
+inline ::std::istream& operator>>(::std::istream& in, coordN<N>& P)
 {
   for(unsigned i = 1; i<= N; i++)
     in >> P[i];
@@ -271,5 +273,7 @@ template<>
 struct dimension_dependent_primitives<coordN<2> >
   : public dimension_dependent_primitives_2d<coordN<2> > {};
 */
+
+} // namespace GrAL 
 
 #endif

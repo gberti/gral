@@ -4,6 +4,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 /*! \brief 
 Wrap reference to T such that only writing is possible
@@ -16,5 +17,8 @@ public:
   write_only_proxy(T& tt) : t(&tt) {}
   void operator=(const T& rs) { (*t) = rs;}
 };
+
+} // namespace GrAL 
+
 
 #endif

@@ -4,6 +4,8 @@
 #include "Gral/Hierarchical/hierarchical-grid-function.h"
 #include <algorithm>
 
+namespace GrAL {
+
 namespace hierarchical {
 
  template<class E, class T>
@@ -72,5 +74,7 @@ namespace hierarchical {
 
 
 } //  namespace hierarchical
+
+} // namespace GrAL 
 
 #endif

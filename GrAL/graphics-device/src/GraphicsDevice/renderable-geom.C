@@ -8,6 +8,8 @@
 
 #include "FunctionAlgebra/function-algebra.h"
 
+namespace GrAL {
+
 RenderableGeom::RenderableGeom() : g((geom*) 0), T(Identity3D), has_trafo(false) {} // g = empty_geom
 RenderableGeom::RenderableGeom(geom* gg) : g(gg), T(Identity3D), has_trafo(false) {init();}
  
@@ -29,3 +31,4 @@ void RenderableGeom::Map(const Transformation& T1)
   has_trafo = true;
 }
 
+} // namespace GrAL 

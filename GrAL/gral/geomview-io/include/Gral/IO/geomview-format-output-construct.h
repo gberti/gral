@@ -11,6 +11,8 @@
 #include "Gral/IO/geomview-format-output.tt.C"
 #else
 
+namespace GrAL {
+
 /*! \brief ConstructGrid overload for OstreamOFF2DFmt
 
   \relates OstreamOFF2DFmt
@@ -24,8 +26,12 @@ extern
 void ConstructGrid(OstreamOFF2DFmt& Out, 
                    GRID const& G, GEOM const& Geom);
 
+} // namespace GrAL 
+
 #endif
 
+
+namespace GrAL {
 
 /*! \brief ConstructGrid overload for OstreamOFF2DFmt
 
@@ -46,5 +52,6 @@ ConstructGrid(OstreamOFF2DFmt& Out,
   ConstructGrid(Out,G,Geom);
 }
 
+} // namespace GrAL 
 
 #endif

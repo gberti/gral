@@ -8,6 +8,9 @@
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+namespace GrAL {
+
+
 /*! A geometric (truncated) cone
    \ingroup geometricshape
    \see RCone
@@ -38,5 +41,6 @@ public:
  */
 extern RenderableGeom RCone(double r1, double r2, double h);
 
+} // namespace GrAL 
 
 #endif

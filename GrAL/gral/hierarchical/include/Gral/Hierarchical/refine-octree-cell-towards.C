@@ -10,6 +10,7 @@
     Algorithms operating on octrees.     
 */
 
+namespace GrAL {
 
 /*! \brief Refine an octree cell towards a descendent cell
 
@@ -51,5 +52,7 @@ void refine_towards(OCTREE & Tree, OCTCELL const& Leaf, OCTCELL const& subLeaf, 
   }
 
 }
+
+} // namespace GrAL 
 
 #endif

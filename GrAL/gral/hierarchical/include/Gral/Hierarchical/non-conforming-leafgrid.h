@@ -12,6 +12,7 @@
 #include "Gral/Base/grid-function-hash.h"
 #include "Gral/Base/partial-grid-function-hash.h"
 
+namespace GrAL {
 
 namespace octree {
 
@@ -343,13 +344,15 @@ class grid_function<octree::nc_leafgrid_vertex_t<
   grid_function(grid_type const& g, T const& t) : base(g,t) {}
 };
 
+} // namespace GrAL
+
 
 namespace STDEXT {
   template<class T> struct hash;
   
   template<class OCTREE, class FLATHANDLE>
-  struct hash<hierarchical::h_element_handle_t<octree::non_conforming_leafgrid<OCTREE>, FLATHANDLE> > {
-    typedef hierarchical::h_element_handle_t<octree::non_conforming_leafgrid<OCTREE>, FLATHANDLE> key_type;
+  struct hash<GrAL::hierarchical::h_element_handle_t<GrAL::octree::non_conforming_leafgrid<OCTREE>, FLATHANDLE> > {
+    typedef GrAL::hierarchical::h_element_handle_t<GrAL::octree::non_conforming_leafgrid<OCTREE>, FLATHANDLE> key_type;
     typedef key_type        argument_type;
     typedef unsigned        result_type;
     // bad hash function - does not use level.

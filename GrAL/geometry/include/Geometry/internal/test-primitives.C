@@ -6,6 +6,7 @@
 
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
 
 template<class POINT>
 void test_algebraic_primitives<POINT>::do_tests(std::ostream& out)
@@ -40,5 +41,6 @@ void test_algebraic_primitives<POINT>::do_tests(std::ostream& out)
   }
 }
 
+} // namespace GrAL 
 
 #endif

@@ -9,6 +9,9 @@
 #include "Container/mapped-value-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
+
+
 /*! \defgroup bijectivemapping Representations for one-to-one mappings 
 
     \ingroup mappings
@@ -90,13 +93,13 @@ class range_of_bijective_mapping;
     \ingroup bijectivemapping 
  */
 template<class T1, class T2>
-void write_bm(bijective_mapping<T1,T2> const& m, std::ostream& out);
+void write_bm(bijective_mapping<T1,T2> const& m, ::std::ostream& out);
 
 /*! \brief read a bijective map from istream
     \ingroup bijectivemapping 
  */
 template<class T1, class T2>
-void read_bm(bijective_mapping<T1,T2>       & m, std::istream& in);
+void read_bm(bijective_mapping<T1,T2>       & m, ::std::istream& in);
 
 /*! \brief helper class for custom output of  a bijective map 
     \ingroup bijectivemapping 
@@ -108,7 +111,7 @@ private:
 public:
   printer_of_bij_mapping(bijective_mapping<T1,T2> const& m) : mp(&m) {}
 
-  friend std::ostream& operator<<(std::ostream& out, printer_of_bij_mapping<T1,T2> const& p)
+  friend ::std::ostream& operator<<(::std::ostream& out, printer_of_bij_mapping<T1,T2> const& p)
     { write_bm(*(p.mp),out); return out;}
 
 };
@@ -154,9 +157,9 @@ public:
   typedef T2                         result_type;
 
 private:
-  // hash_map not yet in std::
-  typedef STDHASH::hash_map<T1,T2>  map_table_type;
-  typedef STDHASH::hash_map<T2,T1>  inv_table_type; 
+  // hash_map not yet in ::std::
+  typedef ::STDHASH::hash_map<T1,T2>  map_table_type;
+  typedef ::STDHASH::hash_map<T2,T1>  inv_table_type; 
   //--------------- DATA -------------------------
 
   map_table_type         the_map;
@@ -395,6 +398,8 @@ inline
 typename inverse_mapping<T1,T2>::domain_type //range_of_bijective_mapping<T1,T2>
 inverse_mapping<T1,T2>::domain() const { return bmap->range();}
 
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "bijective-mapping.C"

@@ -11,7 +11,7 @@
 
 #include "Utility/pre-post-conditions.h"
 
-
+namespace GrAL {
 
 class geom_quadrilateral : public geom {
 private:
@@ -113,5 +113,7 @@ extern RenderableGeom RQuadrilateral(RenderableGeom::coord_type const& c1, const
 				     RenderableGeom::coord_type const& c3, const rgb_color& color3,
 				     RenderableGeom::coord_type const& c4, const rgb_color& color4);
 
+
+} // namespace GrAL 
 
 #endif

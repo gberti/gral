@@ -3,6 +3,8 @@
 
 #include "GraphicsDevice/simplex.h"
 
+namespace GrAL {
+
 void geom_simplex::init(double aa) 
 {
   c[0]=point(0    ,  aa*sqrt(3)/3, 0           );
@@ -20,3 +22,5 @@ RenderableGeom RSimplex(RenderableGeom::coord_type const& c1,
 
 RenderableGeom RSimplex(double a)
 { return RenderableGeom(new geom_simplex(a));}
+
+} // namespace GrAL 

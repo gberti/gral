@@ -6,14 +6,17 @@
 #include "Container/tuple.h"
 #include "Container/tuple-point-traits.h"
 
-template class tuple<int, 0>;
-template class tuple<int, 1>;
-template class tuple<int, 2>;
-template class tuple<int, 3>;
-template class tuple<int, 4>;
+namespace GrAL {
+  template class tuple<int, 0>;
+  template class tuple<int, 1>;
+  template class tuple<int, 2>;
+  template class tuple<int, 3>;
+  template class tuple<int, 4>;
+}
 
 
 int main() {
+  using namespace GrAL;
   tuple<int, 0> ti0;
 
   tuple<int,   3> ti3(1,1,2);

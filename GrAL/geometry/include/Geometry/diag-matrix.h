@@ -6,6 +6,8 @@
 
 #include "Geometry/matrix.h"
 
+namespace GrAL {
+
 template<unsigned N>
 class diag_matrix : public coordN<N> {
   typedef coordN<N> base_vec;
@@ -95,5 +97,7 @@ inline ostream& operator<<(ostream& out, const diag_matrix<N>& rs)
 template<unsigned N>
 inline istream& operator>>(istream& in, diag_matrix<N>& rs)
 { return (in >> (coordN<N>&)(rs)); }
+
+} // namespace GrAL {
 
 #endif

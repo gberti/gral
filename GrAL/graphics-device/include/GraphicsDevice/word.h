@@ -13,6 +13,8 @@
 #include "GraphicsDevice/renderable-geom.h"
 #include "GraphicsDevice/transformation.h"
 
+namespace GrAL {
+
 /*! \brief A geometric representation of a string
     \ingroup geometricshape
     \todo replace member corner() with ll(), ul(), br().
@@ -22,18 +24,18 @@
 class geom_word : public geom {
 private:
   typedef geom_word self;
-  std::string str;
+  ::std::string str;
   coord_type c[3]; //< c[0] = lower left, c[1] = lower right, c[2] = upper left
 protected:
-  void init(std::string const& ss, 
+  void init(::std::string const& ss, 
             coord_type  const& cc1);
-  void init(std::string const& ss,
+  void init(::std::string const& ss,
             coord_type  const& cc1,
             coord_type  const& cc2,
             coord_type  const& cc3);
 public:
-  geom_word(const std::string& ss,coord_type const& cc1) {str=ss;c[0]=cc1;}
-  geom_word(const std::string& ss,
+  geom_word(const ::std::string& ss,coord_type const& cc1) {str=ss;c[0]=cc1;}
+  geom_word(const ::std::string& ss,
             coord_type const& cc1,
             coord_type const& cc2,
             coord_type const& cc3) 
@@ -42,7 +44,7 @@ public:
 
   virtual void write_geom_to(rendering_language& L) const; 
 
-  std::string text() const { return str;}
+  ::std::string text() const { return str;}
 
   coord_type const&  corner(int i) const 
     {
@@ -56,10 +58,12 @@ public:
 /*! \brief Creator function for geometric string
     \ingroup geometricshape
  */
-extern RenderableGeom RWord(std::string                const& str, 
+extern RenderableGeom RWord(::std::string                const& str, 
                             RenderableGeom::coord_type const& c1,  //< lower left
                             RenderableGeom::coord_type const& c2,  //< lower right
                             RenderableGeom::coord_type const& c3); //< upper left
 
+
+} // namespace GrAL 
 
 #endif

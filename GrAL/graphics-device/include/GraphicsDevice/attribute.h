@@ -8,8 +8,9 @@
 
 #include "Utility/reference-count.h"
 
+namespace GrAL {
 
-typedef std::string          attr_key;
+typedef ::std::string          attr_key;
 typedef ValueTable<attr_key> attribute;
 
 
@@ -55,5 +56,7 @@ inline bool GetValue(const Attribute& A, Attr& a)
 template<class Attr>
 inline void SetValue(Attribute& A, const Attr& a)
 { AddVal(A.AttrTable(),a);}
+
+} // namespace GrAL 
 
 #endif

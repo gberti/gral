@@ -16,6 +16,8 @@
 
 #include <vector>
 
+namespace GrAL {
+
 template<class P>
 void check_intersections(P const& s0, P const& s1,
 			 P const& t0, P const& t1, P const& t2,
@@ -274,5 +276,7 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
 
   
 }
+
+} // namespace GrAL 
 
 #endif

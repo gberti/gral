@@ -5,13 +5,15 @@
 
 #include <hash_map>
 
+namespace GrAL {
+
 namespace my_hash_sx {
 
   template<class I>
   struct hash {
   public:
     typedef I key_type;
-    size_t operator()(I const& t) const { std::hash_compare<I> h; return h(t);}
+    size_t operator()(I const& t) const { ::std::hash_compare<I> h; return h(t);}
   };
 
   template<class T>
@@ -58,9 +60,9 @@ namespace my_hash_sx {
 
   // Wrapper to sxc++'s hash_map, behaving like the SGI hash_map
   template<class K, class T, class H = hash<K> >
-  class hash_map : public std::hash_map<K,T, hash_compare<H, std::less<K> > >
+  class hash_map : public ::std::hash_map<K,T, hash_compare<H, ::std::less<K> > >
   {
-    typedef std::hash_map<K,T, hash_compare<H, std::less<K> > > base;
+    typedef ::std::hash_map<K,T, hash_compare<H, ::std::less<K> > > base;
   public:
     hash_map() {}
     hash_map(unsigned /* sz */) : base() {}
@@ -69,6 +71,7 @@ namespace my_hash_sx {
 }
 
 
+} // namespace GrAL 
 
 
 #endif

@@ -12,6 +12,8 @@
 
 #include <iostream>
 
+namespace GrAL {
+
 /*! \brief Support for hierarchical grids
 
     \author Guntram Berti
@@ -1073,6 +1075,8 @@ struct element_traits<hierarchical::h_element_t<ELEMBASE, FLATELEM> >
 {
   typedef typename hierarchical::h_element_t<ELEMBASE, FLATELEM>::element_handle handle_type;
 };
+
+} // namespace GrAL 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Hierarchical/hierarchical-grid.C"

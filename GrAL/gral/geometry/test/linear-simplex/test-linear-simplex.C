@@ -11,6 +11,8 @@
 
 #include <iostream>
 
+using namespace GrAL;
+
 template<class RES, class ARG>
 class constant {
 public:
@@ -35,6 +37,7 @@ typedef linear_simplex_interpolator<geom2d_type, gf2d_type> interpolator2d_type;
 template class linear_simplex_interpolator<geom2d_type, gf2d_type>;
 
 int main() {
+  using namespace GrAL;
   using namespace std;
 
   typedef int triangle[3];

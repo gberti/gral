@@ -14,6 +14,7 @@
 
 #include <iostream>
 
+using namespace GrAL;
 
 
 typedef cartesiannd::grid<2> grid_type;
@@ -22,7 +23,10 @@ typedef matrix<2,2,0>  matrix_type;
 typedef affine_mapping<matrix_type, coord_type> mapping_type;
 typedef cartesiannd::mapped_geometry<grid_type, mapping_type> geom_type;
 typedef grid_types<grid_type>                    gt;
-template class point_locator<grid_type, geom_type, gt>;
+
+namespace GrAL {
+  template class point_locator<grid_type, geom_type, gt>;
+}
 
 
 struct size_functor {
@@ -72,6 +76,7 @@ void test_locator(LOCATOR const& Loc, IT begin, IT end, std::ostream& out)
 
 int main()
 {
+  using namespace GrAL;
   using namespace std;
   typedef gt::index_type it;
 

@@ -2,11 +2,13 @@
 
 #include "./write-code.h"
 
+namespace GrAL {
 
-void RFunction::write_class(std::ostream& out, std::string const& name) const
+
+void RFunction::write_class(::std::ostream& out, ::std::string const& name) const
 {
- std::string varx("x");
- std::string varh("h");
+ ::std::string varx("x");
+ ::std::string varh("h");
 
  out << "////////////////////////////////////////////////\n"
      << "//\n"
@@ -22,12 +24,12 @@ void RFunction::write_class(std::ostream& out, std::string const& name) const
      << "  coord_type derive(const coord_type& x, const coord_type& h) const;\n"
      << "public:\n"
      << "  function_algebra_" << name << "() {d_Def = " << dDef() << "; d_Im = " << dIm() <<";}\n"
-     << "  std::string name() const { return " << '"' << "function_algebra_" << name << '"' << ";}\n"
+     << "  ::std::string name() const { return " << '"' << "function_algebra_" << name << '"' << ";}\n"
      << "  coord_type eval(const coord_type& x) const;\n"
-     << "  std::string write_code_eval(std::ostream& out, int& vnum, std::string const& var) const\n"
+     << "  ::std::string write_code_eval(::std::ostream& out, int& vnum, ::std::string const& var) const\n"
      << "  {return write_code_eval_libfct(out,vnum,var," << '"' << name << '"' << ");}\n"
-     << "  std::string write_code_derive(std::ostream& out, int& vnum,\n"
-     << "                          std::string const& varx, std::string const& varh) const\n"
+     << "  ::std::string write_code_derive(::std::ostream& out, int& vnum,\n"
+     << "                          ::std::string const& varx, ::std::string const& varh) const\n"
      << "  {return write_code_derive_libfct(out,vnum,varx,varh," 
      << '"' << "d_" << name << '"' << ");}\n"
      << "};\n\n"
@@ -36,25 +38,25 @@ void RFunction::write_class(std::ostream& out, std::string const& name) const
 
  int vnum = 0;
 
- std::string result(write_code_eval(out,vnum,varx));
+ ::std::string result(write_code_eval(out,vnum,varx));
  out << "\n return(" << result << ");\n}\n\n";
 
  out << "inline coord_type " << "function_algebra_" << name << "::derive(const coord_type& " << varx 
      << ", const coord_type& " << varh << ") const\n"
      << "{\n";
  vnum = 0;
- std::string d_result(write_code_derive(out,vnum,varx,varh));
+ ::std::string d_result(write_code_derive(out,vnum,varx,varh));
  out << "\n return(" << d_result << ");\n}\n\n";
 }
 
 
-std::string RFunction::write_code_eval(std::ostream& out, int& vnum, 
-                                       std::string const& var) const
+std::string RFunction::write_code_eval(::std::ostream& out, int& vnum, 
+                                       ::std::string const& var) const
 {
-  std::string r(ff->write_code_eval(out,vnum,var));
+  ::std::string r(ff->write_code_eval(out,vnum,var));
   if(a!= 1.0 || ! IsNullvector(b)){
-    std::string rr(makename("tmp",vnum++));
-    std::string rtype( (dIm() == 1? "double" : "coord_type"));
+    ::std::string rr(makename("tmp",vnum++));
+    ::std::string rtype( (dIm() == 1? "double" : "coord_type"));
     out << rtype << " " << rr << "(" << r << ");\n";
     if (a!= 1.0)
       out << rr << " *= " << a << ";\n";
@@ -71,17 +73,19 @@ std::string RFunction::write_code_eval(std::ostream& out, int& vnum,
 }
 
 
-std::string RFunction::write_code_derive(std::ostream& out, int& vnum, 
-                                         std::string const& varx, 
-                                         std::string const& varh) const
+std::string RFunction::write_code_derive(::std::ostream& out, int& vnum, 
+                                         ::std::string const& varx, 
+                                         ::std::string const& varh) const
 {
-  std::string r(ff->write_code_derive(out,vnum,varx,varh));
+  ::std::string r(ff->write_code_derive(out,vnum,varx,varh));
   if(a != 1.0){
-    std::string rr(makename("tmp",vnum++));
-    std::string rtype( (dIm() == 1? "double" : "coord_type"));
+    ::std::string rr(makename("tmp",vnum++));
+    ::std::string rtype( (dIm() == 1? "double" : "coord_type"));
     out << rtype << " " << rr << "(" << r << ");\n";
     out << rr << " *= " << a << ";\n";
     return rr;
   }
   return r;
 }
+
+} // namespace GrAL 

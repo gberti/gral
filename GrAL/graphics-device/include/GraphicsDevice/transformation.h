@@ -7,6 +7,8 @@
 #include "FunctionAlgebra/function-algebra.h"
 #include "Geometry/matrix.h"
 
+namespace GrAL {
+
 class RenderableGeom;
 
 class Transformation: public RFunction {
@@ -24,6 +26,6 @@ public:
   matrix4_type GetMat4() const;
 };
 
-
+} // namespace GrAL 
 
 #endif

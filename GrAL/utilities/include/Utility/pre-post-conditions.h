@@ -41,14 +41,14 @@
 //----------------------------------------------------------------
 
 
-#define GRAL_ERRORLOG std::cerr
-#define GRAL_ABORT abort() 
+#define GRAL_ERRORLOG ::std::cerr
+#define GRAL_ABORT ::abort() 
 #define GRAL_DATE_INFO  " (compiled on " << __DATE__ << " at " __TIME__  << " )"
 
 
 #ifdef  GRAL_NO_ABORT
 #undef  GRAL_ABORT
-#define GRAL_ABORT throw std::exception()
+#define GRAL_ABORT throw ::std::exception()
 #endif
 
 #ifdef  GRAL_NO_SHOW_DATE
@@ -77,18 +77,18 @@
 
 
 #define REQUIRE_ALWAYS(condition, error_msg, severity)\
- if(! (condition))  { GRAL_PRECONDITION_ERROR << #condition << ' ' << error_msg << std::endl; GRAL_ABORT;}
+ if(! (condition))  { GRAL_PRECONDITION_ERROR << #condition << ' ' << error_msg << ::std::endl; GRAL_ABORT;}
 
 #define ENSURE_ALWAYS(condition, error_msg, severity)\
- if(! (condition)) { GRAL_POSTCONDITION_ERROR << #condition << ' ' << error_msg << std::endl; GRAL_ABORT;}
+ if(! (condition)) { GRAL_POSTCONDITION_ERROR << #condition << ' ' << error_msg << ::std::endl; GRAL_ABORT;}
 
 #ifdef NMWR_DEBUG
 
 #define REQUIRE(condition, error_msg, severity)  REQUIRE_ALWAYS(condition, error_msg, severity) 
-// if(! (condition))  { GRAL_PRECONDITION_ERROR << #condition << ' ' << error_msg << std::endl; GRAL_ABORT;}
+// if(! (condition))  { GRAL_PRECONDITION_ERROR << #condition << ' ' << error_msg << ::std::endl; GRAL_ABORT;}
 
 #define ENSURE(condition, error_msg, severity) ENSURE_ALWAYS(condition, error_msg, severity)
-// if(! (condition)) { GRAL_POSTCONDITION_ERROR << #condition << ' '  << error_msg << std::endl; GRAL_ABORT;}
+// if(! (condition)) { GRAL_POSTCONDITION_ERROR << #condition << ' '  << error_msg << ::std::endl; GRAL_ABORT;}
 
 #else
 #define REQUIRE(condition, error_msg, severity) 

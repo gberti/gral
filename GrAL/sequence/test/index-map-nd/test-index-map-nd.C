@@ -34,6 +34,7 @@ void test_map(MAP const& map, std::ostream& out)
 
 
 int main() {
+  using namespace GrAL;
 
   using std::endl;
   std::ostream& out = std::cout;
