@@ -5,16 +5,14 @@
 #include "Gral/Grids/CartesianND/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
 #include "Gral/Grids/Cartesian2D/all.h"
+#include "Geometry/affine-mapping.h"
+#include "Geometry/matrix.h"
 
 #include "Geometry/point-traits.h"
 
 #include "Container/functions.h"
 #include <iostream>
 
-/*
-template<class T, unsigned N>
-struct point_traits<tuple<T,N> > : public point_traits_fixed_size_array<tuple<T,N>, T, N> {};
-*/
 
 template<class GEOM, class GRID>
 void test_level(GRID const& G, GEOM const& Geom, std::ostream& out)
@@ -39,7 +37,7 @@ void test_hier_grid_table(GRID const& root,
   typedef hierarchical::hier_grid_table<hier_grid_type, flat_geom_type> hier_geom_type;
   typedef typename flat_geom_type::mapping_type         mapping_type;
   
-  mapping_type M;
+  mapping_type M(mapping_type::identity());
 
   hier_grid_type H(root,pattern);
   H.add_finer_level();
@@ -122,7 +120,8 @@ int main() {
     namespace cart = cartesiannd;
     typedef cart::grid<3>                       cart_grid_type;
     typedef tuple<double,3>                     coord_type;
-    typedef stdext::identity<coord_type>        mapping_type;
+    typedef matrix<3,3,0>                                       matrix_type;
+    typedef affine_mapping<matrix_type, coord_type>             mapping_type;
     typedef cart::mapped_geometry<cart_grid_type, mapping_type> cart_geom_type;
     typedef grid_types<cart_grid_type> gt;
     typedef gt::index_type it;
@@ -138,7 +137,8 @@ int main() {
     namespace cart = cartesian2d;
     typedef cart::CartesianGrid2D               cart_grid_type;
     typedef tuple<double,2>                     coord_type;
-    typedef stdext::identity<coord_type>        mapping_type;
+    typedef matrix<2,2,0>                                       matrix_type;
+    typedef affine_mapping<matrix_type, coord_type>             mapping_type;
     typedef cart::mapped_geometry<mapping_type> cart_geom_type;
 
     cart_grid_type root(3,3);
