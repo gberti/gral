@@ -111,6 +111,7 @@ public:
   ~Triang2D();
  
 
+
   /*! \brief  make a physical copy
     \post
       The storage pointing to the cells array is owned 
@@ -133,6 +134,12 @@ public:
  
   */
   void Steal(int* c, int nc, int nv);
+
+  /*! \brief Initialize using the connectivity given by c, 
+       \e without assuming ownership.
+
+   */
+  void init (int* c, int nc, int nv) { Steal(c,nc,nv); owned = false; }
   //@}
 private:
   void clear(); 
