@@ -159,10 +159,13 @@ class grid_function_hash
   : public grid_function_hash_base<E,T>
 {
   typedef grid_function_hash_base<E,T> base_gf;
+
+  using base_gf::table;
 public:
   typedef element_traits<E> et1;
   typedef typename et1::ElementIterator ElementIterator;
   typedef typename base_gf::grid_type grid_type;
+  using base_gf::TheGrid;
 
   //--------------------- construction ------------------------------   
 

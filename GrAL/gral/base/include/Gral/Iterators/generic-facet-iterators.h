@@ -201,7 +201,7 @@ namespace generic_facet {
       typedef typename base::VertexOnFacetIterator VertexOnFacetIterator;
       typedef typename base::EdgeOnFacetIterator   EdgeOnFacetIterator;
       typedef typename base::grid_type        grid_type;
-
+      typedef typename base::vtuple_type      vtuple_type;
     private:
       facet_on_cell_iterator<gt> fc;
     public:
@@ -503,7 +503,13 @@ namespace generic_facet {
           public gt::cell_base_type
       {
 	typedef grid_types_facet<gt> gtf;
+	typedef typename gt::cell_base_type base;
+
       public:
+	using base::TheGrid;
+	using base::TheArchetype;
+	using base::handle;
+	using base::c_;
 	typedef typename gtf::facet_handle      facet_handle;
 	typedef typename gtf::Facet             Facet;
 	typedef typename gtf::arch_cell_handle  arch_cell_handle;

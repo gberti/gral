@@ -390,10 +390,15 @@ class partial_grid_morphism_aux<GDEF,GIMG,grid_dim_tag<3> >
 {
   typedef partial_grid_morphism_aux<GDEF,GIMG,grid_dim_tag<2> > base;
 public:
+  typedef typename base::gtimg gtimg;
+  typedef typename base::gtdef gtdef;
   typedef typename gtimg::Facet   FacetImg;
   typedef typename gtimg::facet_handle facet_handle_img;
   typedef typename gtdef::Facet   FacetDef;
   typedef typename gtdef::facet_handle facet_handle_def;
+
+  using base::g_img;
+  using base::g_def;
 private:
   partial_grid_function<FacetDef,  facet_handle_img>   phi_f;
   //  partial_grid_function<FacetImg,  facet_handle_def>   phi_f_inv;
@@ -414,7 +419,7 @@ public:
 
   FacetImg operator()(FacetDef const& f) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return FacetImg(*g_img,phi_f(v));
+    return FacetImg(*g_img,phi_f(f));
   }
 
   facet_handle_img operator()(facet_handle_def f) const {

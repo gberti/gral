@@ -312,12 +312,18 @@ namespace generic_edge {
       class cell_mixin : public /*typename*/ gt::cell_base_type // , public CELL
       {
 	typedef grid_types_edge<gt> gte;
+	typedef typename gt::cell_base_type base;
+
       public:
 	typedef typename gte::edge_handle edge_handle;
 	typedef typename gte::Edge        Edge;
 	typedef typename gte::arch_edge_handle arch_edge_handle;
 	typedef typename gte::archEdge         archEdge;
 	typedef typename gte::Cell             Cell;
+	using base::TheGrid;
+	using base::TheArchetype;
+	using base::handle;
+	using base::c_;
 
 	// map local (archetype) edges to global (grid) edges
 	edge_handle_t<gt> e(arch_edge_handle const& h) const {

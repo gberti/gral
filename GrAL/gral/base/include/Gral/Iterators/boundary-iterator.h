@@ -186,6 +186,7 @@ public:
   typedef typename base::Vertex   Vertex;
   typedef typename base::Edge     Edge;
   typedef Vertex                  value_type;
+  using base::curr_vertex;
 
   BoundaryComponentVertexIterator2D() {}
   BoundaryComponentVertexIterator2D(const base& bs) : base(bs) {}
@@ -215,6 +216,7 @@ private:
 public:
   typedef typename base::Edge     Edge;
   typedef Edge                    value_type;
+  using base::curr_edge;
 
   BoundaryComponentEdgeIterator2D() {}
   BoundaryComponentEdgeIterator2D(const base& bs) : base(bs) {}

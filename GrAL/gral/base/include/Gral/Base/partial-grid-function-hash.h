@@ -78,8 +78,10 @@ class partial_grid_function
 private:
   T default_value;
 
+  using base_gf::table;
 public:
-  typedef typename base_gf::grid_type grid_type;
+  typedef typename base_gf::grid_type  grid_type;
+  typedef typename base_gf::table_type table_type;
 
   partial_grid_function() 
     : base_gf(), default_value(T()) {} 
