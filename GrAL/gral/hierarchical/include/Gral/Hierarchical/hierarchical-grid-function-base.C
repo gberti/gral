@@ -10,13 +10,18 @@ namespace hierarchical {
 
  template<class E, class T, template<class EE, class TT> class GF>
  void hier_grid_function_base<E,T,GF>::
- init(typename hier_grid_function_base<E,T,GF>::value_type const& t)
+ init(typename hier_grid_function_base<E,T,GF>::hier_grid_type const& gg,
+      typename hier_grid_function_base<E,T,GF>::value_type const& t)
  {
-   for(level_handle lev = TheGrid()->coarsest_level(); lev <= TheGrid()->finest_level(); ++lev)
-     std::fill(gfs[lev].begin(), gfs[lev].end(),t);
+   set_grid (gg);
+   set_value(t);
  }
+
  template<class E, class T, template<class EE, class TT> class GF>
  void hier_grid_function_base<E,T,GF>::clear() { gfs.clear();}
+
+ template<class E, class T, template<class EE, class TT> class GF>
+ void hier_grid_function_base<E,T,GF>::update() { gfs.update();}
 
  template<class E, class T, template<class EE, class TT> class GF>
  void hier_grid_function_base<E,T,GF>::
@@ -26,6 +31,13 @@ namespace hierarchical {
    gfs.set_grid(gg);
  }
 
+ template<class E, class T, template<class EE, class TT> class GF>
+ void hier_grid_function_base<E,T,GF>::
+ set_value(typename hier_grid_function_base<E,T,GF>::value_type t)
+ {
+   for(level_handle lev = TheGrid()->coarsest_level(); lev <= TheGrid()->finest_level(); ++lev)
+     gfs[lev].set_value(t);
+ }
 
  template<class E, class T, template<class EE, class TT> class GF>
  typename hier_grid_function_base<E,T,GF>::level_handle
