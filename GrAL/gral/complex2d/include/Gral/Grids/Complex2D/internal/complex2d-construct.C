@@ -180,6 +180,9 @@ void Construct_complex2d0(Complex2D     & CC,
 
   cc.calculate_vertex_cells();    // unordered list of adjacent cells per vertex
   cc.calculate_neighbour_cells(); // correct neighbour is calculated here
+  // setup archetype info. NOTE: if the src G2 has archetype info, this should be used.
+  if(CC.NumOfArchetypes() == 0)
+    cc.calculate_archetypes();     
 }
 
 #endif

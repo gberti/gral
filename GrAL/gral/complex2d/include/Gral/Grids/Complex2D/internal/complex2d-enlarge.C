@@ -104,9 +104,8 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   typedef typename gt::CellOnVertexIterator CellOnVertexIterator;
   typedef typename gt::BoundaryFacetIterator BdFacetIterator;    
 
-  friend_for_input gg(G);  // template routines cannot be friends,
-                           // so we use a dirty trick
-
+  // FIXME: new we can have template friends
+  friend_for_input gg(G);  
 
   //--- (1) construct vertices ---------------------------
 
@@ -255,6 +254,12 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   //  gg.notify_observers()
   //  or:
   //  gg.end_modification()
+
+  // setup archetype info. NOTE: if the src G2 has archetype info, this should be used.
+  for(src_cell_it src_c = G_src.FirstCell(); ! src_c.IsDone(); ++src_c) {
+    Cell C =   G.cell(CellCorr(G_src.handle(*src_c)));
+    gg.add_archetype_of(C);
+  }
 }
 
 
