@@ -7,6 +7,8 @@
 
 #include "Config/compiler-config.h"
 #include "Geometry/algebraic-primitives.h"
+#include "Gral/Base/common-grid-basics.h"
+#include "Utility/ref-ptr.h"
 
 //----------------------------------------------------------------
 //
@@ -17,7 +19,7 @@
 
    \b Contents:
     - template<class Edge, class geom> class Segment;
-    - template<class Edge, class geom> class Polygon2d;
+    - template<class Face, class geom> class Polygon2d;
 
    These geometric types assume a linear geometry, segments
    are straight lines.
@@ -127,7 +129,7 @@ public:
   typedef point_traits<coord_type> pt;
 
   typedef typename geom::grid_type grid_type;
-  typedef grid_types<grid_type> gt;
+  typedef grid_types<grid_type>    gt;
   typedef typename gt::Vertex      Vtx;
 public:
 
@@ -172,7 +174,7 @@ public:
      return c;
     }
 
-  //! Area calcultation works for general simple polygons
+  //! Area calculation works for general simple polygons
   double    area() const {
     double a = 0.0;
     for(int i = 3; i<= NumOfVertices(); ++i) {
@@ -228,15 +230,6 @@ bool  operator< (vertex_iterator_Polygon2d<Face,geom> const& lhs,
 /*
 template<class geom>
 class Polyhedron {};
-*/
-
-/*
-template<class gt, class geom> 
-struct geometric_types {
-  
-  typedef Segment<typename gt::Edge,geom> segment;
-  typedef Polygon<typename gt::Face,geom> polygon;
-};
 */
 
 #endif
