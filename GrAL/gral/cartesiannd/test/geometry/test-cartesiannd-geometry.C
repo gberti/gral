@@ -11,11 +11,11 @@
 
 
 namespace cartesiannd {
-
+  
   typedef default_coord<grid<1> >::type coord1d;
   typedef default_coord<grid<2> >::type coord2d;
   typedef default_coord<grid<3> >::type coord3d;
-
+  
   typedef matrix<1,1,0>  matrix1d;
   typedef matrix<2,2,0>  matrix2d;
   typedef matrix<3,3,0>  matrix3d;
@@ -32,12 +32,13 @@ namespace cartesiannd {
 template<class GEOM>
 void test_geometry(GEOM const& Geom, std::ostream& out) 
 {
+
   typedef grid_types<typename GEOM::grid_type> gt; 
   out << "Print Geom of Grid [" 
       << Geom.TheGrid()->low_vertex_index() 
       << "," 
       << Geom.TheGrid()->high_vertex_index() 
-      << "]" << endl;
+      << "]" << std::endl;
   for(typename gt::VertexIterator v(Geom.TheGrid()); ! v.IsDone(); ++v) {
     out << v.index() << " @ " << Geom.coord(*v);
     out << " in cell " << Geom.locate(Geom.coord(*v)).TheCell().index()
@@ -45,7 +46,7 @@ void test_geometry(GEOM const& Geom, std::ostream& out)
     if( Geom.locate(Geom.coord(*v)).tagname() == "projection")
       out << ":  " << Geom.locate(Geom.coord(*v)).TheCoord();
     out << ")"
-	<< endl;
+	<< std::endl;
   }
 }
 
@@ -102,7 +103,7 @@ int main()
  
 
   {
-    grid_type R2(gt::index_type(0,0), gt::index_type(5,3));
+    grid_type R2(gt::index_type(0,0), gt::index_type(3,2));
     matrix_type A(0.0);
     A(0,0) = 1.0; A(1,1) = 1.0;
     matrix_type  A_inv(A);
@@ -114,5 +115,34 @@ int main()
     GeomR.set_inverse_mapping(M_inv);
     test_geometry(GeomR,cout);
   }
+   {
+     grid_type R2(gt::index_type(0,0), gt::index_type(2,3));
+     matrix_type A(0.0);
+     A(0,0) = 1.0; A(1,1) = 1.0;
+     matrix_type  A_inv(A);
+     mapping_type M(A);
+     mapping_type M_inv(A_inv);
+     mapping_type M_dummy;
+     geom_type GeomR(R2, M_dummy);
+     GeomR.set_mapping(M);
+     GeomR.set_inverse_mapping(M_inv);
+     test_geometry(GeomR,cout);
+   }
+
+   {
+     grid_type R2(gt::index_type(0,0), gt::index_type(2,3));
+     matrix_type A(0.0);
+     A(0,0) = 1.0; A(1,1) = 1.0;
+     matrix_type  A_inv(A);
+     mapping_type M(A);
+     mapping_type M_inv(A_inv);
+     mapping_type M_dummy;
+     geom_type GeomR(R2, M_dummy);
+     GeomR.set_mapping(M);
+     GeomR.set_inverse_mapping(M_inv);
+     grid_type R_refined(gt::index_type(0,0), gt::index_type(2,5));
+     geom_type Geom_refined(R_refined, GeomR);
+     test_geometry(Geom_refined,cout);
+   }
    
 }
