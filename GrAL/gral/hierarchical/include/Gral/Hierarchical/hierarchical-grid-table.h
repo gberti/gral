@@ -53,6 +53,7 @@ namespace hierarchical {
     typedef typename hgt::level_handle   level_handle;
 
     typedef GE                value_type;
+    typedef GE                grid_entity_type;
     typedef value_type      & reference;
     typedef value_type const& const_reference;
   private:
@@ -68,6 +69,9 @@ namespace hierarchical {
     //hier_grid_table(hier_grid_type const& gg, T const& initializer);
     void set_grid  (hier_grid_type const& gg);
     void clear();
+
+    //! get in sync with grid: add/remove missing/superfluous level
+    void update();
 
     reference       operator[](level_handle lev)       { return entities[lev];}
     const_reference operator()(level_handle lev) const { return entities(lev);}
