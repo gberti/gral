@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Geometry/algebraic-primitives.h"
+#include "Utility/pre-post-conditions.h"
 
 //----------------------------------------------------------------
 // 
@@ -36,6 +37,7 @@ public:
   typedef typename gt::Vertex         Vertex;
   typedef typename gt::Edge           Edge;
   typedef typename Trafo::result_type coord_type;
+  typedef point_traits<coord_type>         pt;
   typedef algebraic_primitives<coord_type> ap;
 private:
   Geom  const*  geom;
@@ -50,8 +52,13 @@ public:
 
   grid_type const& TheGrid() const { return geom->TheGrid();}
 
+  bool empty() const { cb(); return TheGrid().NumOfVertices() == 0;}
+  // does not work for empty grid
+  int space_dimension() const { cb(); return pt::Dim(coord(* (TheGrid().FirstVertex())));}
+
   bool bound() const { return geom->bound();}
   void rebind(grid_type const& g) { geom->rebind(g);}
+  void cb() const { REQUIRE(bound(), "", 1);}
 };
 
 /*! \brief Creator function for transformed_geom<Geom,Trafo>
