@@ -26,7 +26,8 @@ struct hasher_for_complex2d<Cell2D>
 struct element_traits<Vertex2D> 
  : public element_traits_vertex_base<Complex2D> 
 {
-  typedef hasher_for_complex2d<element_type> hasher_type;
+  // typedef hasher_for_complex2d<element_type> hasher_type;
+  struct hasher_type : public hasher_type_base<Complex2D, Vertex2D> {};
   typedef consecutive_integer_tag<0>         consecutive_tag;
 };
 
@@ -43,7 +44,9 @@ template<>
 struct element_traits<Cell2D>
   : public element_traits_cell_base<Complex2D>
 {
-  typedef hasher_for_complex2d<element_type> hasher_type;
+  //  typedef hasher_for_complex2d<element_type> hasher_type;
+  struct hasher_type : public hasher_type_base<Complex2D, Cell2D> {};
+
   typedef consecutive_integer_tag<0>         consecutive_tag;
 };
 

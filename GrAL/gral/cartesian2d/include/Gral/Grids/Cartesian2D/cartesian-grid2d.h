@@ -5,7 +5,6 @@
 // $LICENSE
 
 
-#include <algobase.h> // for min/max
 #include <string>
 
 

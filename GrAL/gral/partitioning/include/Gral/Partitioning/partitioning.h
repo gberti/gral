@@ -120,8 +120,8 @@ public:
   }
 
   //void read_grid(istream& in);
-  void read_partition(istream& in);
-  void write_partition(ostream& out);
+  void read_partition (std::istream& in);
+  void write_partition(std::ostream& out);
 
   void create_vertex_partitions();
 

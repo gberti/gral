@@ -223,6 +223,7 @@ class Cell_Complex3D
 {
   typedef Cell_Complex3D      self;
 
+public:
   // these typedefs are superflous (already defined in base classes,
   // but g++ forgets them, because doubly defined!
   typedef grid_types_Complex3D gt;
@@ -405,7 +406,7 @@ struct grid_types<Complex3D>
 
 // element traits
 
-namespace std {
+namespace STDEXT {
   template<class T> struct hash;
   
   template<>
@@ -416,13 +417,14 @@ namespace std {
   struct hash<Cell_Complex3D> {
     size_t operator()(Cell_Complex3D const& e) const { return e.handle();}
   };
-};
+} // namespace STDEXT
 
 template<>
 struct element_traits<Vertex_Complex3D>
   : public element_traits_vertex_base<Complex3D>
 { 
-  typedef std::hash<Vertex_Complex3D> hasher_type; 
+  //  typedef std::hash<Vertex_Complex3D> hasher_type; 
+  struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>         consecutive_tag;
 };
 
@@ -430,7 +432,17 @@ template<>
 struct element_traits<Complex3D::Edge>
   : public element_traits_edge_base<Complex3D>
 { 
-  typedef Complex3D::Edge::edge_hasher_type hasher_type; 
+  typedef Complex3D::Edge::edge_hasher_type edge_hasher_type;
+  struct hasher_type :  public hasher_type_elem_base,
+			public edge_hasher_type 
+  {
+    typedef Complex3D::Edge key_type;
+    typedef Complex3D::Edge argument_type;
+    size_t operator()(key_type const& k) const { 
+      return Complex3D::Edge::edge_hasher_type::operator()(k);
+    }
+    // using Complex3D::Edge::edge_hasher_type::operator();
+  }; 
 };
 
 
@@ -438,14 +450,27 @@ template<>
 struct element_traits<Complex3D::Facet>
   : public element_traits_facet_base<Complex3D>
 { 
-  typedef Complex3D::Facet::facet_hasher_type hasher_type; 
+  typedef Complex3D::Facet::facet_hasher_type facet_hasher_type; 
+  struct hasher_type : public hasher_type_elem_base,
+		       public facet_hasher_type
+  {
+    typedef Complex3D::Facet key_type;
+    typedef Complex3D::Facet argument_type;
+
+    size_t operator()(key_type const& k) const { 
+      return Complex3D::Facet::facet_hasher_type::operator()(k);
+    }
+    //      using Complex3D::Facet::facet_hasher_type::operator();
+  }; 
 };
 
 template<>
 struct element_traits<Cell_Complex3D>
   : public element_traits_cell_base<Complex3D>
 { 
-  typedef std::hash<Cell_Complex3D>  hasher_type; 
+  // ypedef std::hash<Cell_Complex3D>  hasher_type; 
+  struct hasher_type : public hasher_type_elem_base {};
+
   typedef consecutive_integer_tag<0> consecutive_tag;
 };
 

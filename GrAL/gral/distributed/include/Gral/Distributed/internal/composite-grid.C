@@ -5,6 +5,7 @@
 
 
 #include "Gral/Distributed/composite-grid.h"
+#include <iostream>
 //#include "IO/iomgr.h"
 
 template<class Grid, class GF>
@@ -37,32 +38,32 @@ void check_composite_grid(const CompositeGrid<CoarseG,FineG>& CG)
   grid_function<Cell,int> Num(CG.TheCoarseGrid());
   enumerate(CG.TheCoarseGrid(),Num,0);
   for(CellIterator C = CG.TheCoarseGrid().FirstCell(); ! C.IsDone(); ++C) {
-    cerr << "-------------------------------------------------\n"
+    std::cerr << "-------------------------------------------------\n"
 		  << "checking cell " << Num(*C) << "\n\n";
     for(NeighbourIterator Nb = CG.FirstNeighbour(*C); ! Nb.IsDone(); ++Nb) {
-      cerr << "   |CopiedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+       std::cerr << "   |CopiedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).vertices(*C ).copied() .size() << " = "
 		    <<  CG.Overlap(*C).vertices(*Nb ).exposed() .size() << " = "
 		    << "|ExposedVertices(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-      cerr << "   |CopiedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+       std::cerr << "   |CopiedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).cells(*C ).copied() .size() << " = "
 		    <<  CG.Overlap(*C).cells(*Nb ).exposed() .size() << " = "
 		    << "|ExposedCells(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-      cerr << "   |SharedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+       std::cerr << "   |SharedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).vertices(*C ).shared() .size() << " = "
 		    <<  CG.Overlap(*C).vertices(*Nb ).shared() .size() << " = "
 		    << "|SharedVertices(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-      cerr << "   |SharedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+       std::cerr << "   |SharedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).cells(*C ).shared() .size() << " = "
 		    <<  CG.Overlap(*C).cells(*Nb ).shared() .size() << " = "
 		    << "|SharedCells(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
 
 
     }
-    cerr << "-------------------------------------------------\n";
+     std::cerr << "-------------------------------------------------\n";
 
   }
   

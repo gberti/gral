@@ -12,23 +12,15 @@
 
 #include "Gral/Grids/Triang2D/triang2d.h"
 
-namespace std {
-  template<class T> struct hash;
-  
-
-  
-  
- 
-  
-} // namespace std
  
 template<>
 struct element_traits<Triang2D_Vertex> 
   : public element_traits_vertex_base<Triang2D> 
 { 
-  struct hasher_type {
+  struct hasher_type : public hasher_type_base<Triang2D, Triang2D_Vertex> {
     size_t operator()(Triang2D_Vertex const& v) const { return v.handle();}
   };
+  // vertices are numbered consecutively 
   typedef consecutive_integer_tag<0> consecutive_tag;
 };
 
@@ -36,9 +28,10 @@ template<>
 struct element_traits<Triang2D_Cell> 
   : public element_traits_cell_base<Triang2D> 
 { 
-  struct hasher_type {
+  struct hasher_type : public hasher_type_base<Triang2D, Triang2D_Cell> {
     size_t operator()(Triang2D_Cell const& c) const { return c.handle();}
   };
+  // cells are numbered consecutively
   typedef consecutive_integer_tag<0> consecutive_tag;
 };
 
@@ -48,7 +41,8 @@ template<>
 struct element_traits<Triang2D::Edge> 
   : public element_traits_edge_base<Triang2D> 
 {
-  struct hasher_type : public grid_types_base_Triang2D {
+  struct hasher_type : public grid_types_base_Triang2D, 
+		       public hasher_type_base<Triang2D, Triang2D_Cell> {
     enum { p= 37};
     size_t operator()(Triang2D::Edge const& e) const { 
       vertex_handle v1 = e.V1().handle();

@@ -2,7 +2,7 @@
 #include "Gral/Grids/Triang2D/triang2d.h"
 
 #include <vector>
-
+#include <algorithm>
 
 Triang2D::Triang2D(Triang2D const& rhs) {
   cells     = rhs.cells;
@@ -62,7 +62,7 @@ int Triang2D::calc_num_of_vertices()
 void Triang2D::do_copy() 
 {
     int * my_cells = new int[3*ncells];
-    copy(cells, cells+3*ncells, my_cells);
+    std::copy(cells, cells+3*ncells, my_cells);
     cells = my_cells;
     owned = true;
 }

@@ -2,6 +2,7 @@
 #define NMWR_GB_OVERLAP_OUTPUT_C
 
 #include "Gral/Distributed/overlap-output.h"
+#include <fstream>
 
 template<
   class CoarseGrid, 
@@ -11,7 +12,7 @@ template<
 void overlap_output<CoarseGrid, FineGrid, OVLP_RANGES>::set_neighbours()
 {
   neighbours.set_grid(TheCoarseGrid());
-  ofstream nbout((basenm + ".neighbors").c_str());
+  std::ofstream nbout((basenm + ".neighbors").c_str());
   for(VertexNbIterator VNb = FirstVertexNeighbour(); ! VNb.IsDone(); ++VNb) {
     neighbours.push_back(*VNb);
     nbout << VNb.handle() <<  ' ';
@@ -30,7 +31,7 @@ void overlap_output<CoarseGrid, FineGrid, OVLP_RANGES>::set_neighbours()
       nbout << CNb.handle() << ' ';
     }
   }
-  nbout << endl;
+  nbout << std::endl;
   nbout.close();
 }
 

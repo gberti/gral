@@ -9,12 +9,14 @@
 template<class CoordMap>
 class mapped_geometry_cartesian3d {
 
+public:
   typedef CoordMap mapping_type;
   typedef typename mapping_type::result_type coord_type;
   typedef CartesianGrid3D grid_type;
   typedef grid_types<grid_type> gt;
   typedef gt::Vertex            Vertex;
 
+private:
   grid_type const* g;
   mapping_type f;
   double dx,dy,dz;

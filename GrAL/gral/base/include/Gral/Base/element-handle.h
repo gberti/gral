@@ -3,6 +3,7 @@
 
 
 #include <iostream>
+#include "Container/my-hash-map.h"
 
 template<class GRID, class element_tag>  //, class GT = grid_types<GRID> >
 struct element_handle_int 
@@ -13,7 +14,7 @@ struct element_handle_int
   element_handle_int() {}
   element_handle_int(int hh) : h(hh) {}
 
-  operator const int()  const { return h;}
+  operator int()  const { return h;}
   // operator       int&()       { return h;}
   self& operator=(int hh) { h = hh; return *this;}
   self& operator++() { ++h; return *this;}
@@ -26,7 +27,7 @@ template<class GRID, class element_tag>
 std::istream& operator>>(std::istream& in, element_handle_int<GRID, element_tag> & h)
 { return (in >> h.h); }
 
-namespace std {
+namespace STDEXT {
   template<class T> struct hash;
 
   template<class GRID, class element_tag>
@@ -53,7 +54,7 @@ struct vertex_handle_int
   vertex_handle_int() {}
   vertex_handle_int(int hh) : h(hh) {}
 
-  operator const int()  const { return h;}
+  operator  int()  const { return h;}
   // operator       int&()       { return h;}
   self& operator=(int hh) { h = hh; return *this;}
   self& operator++() { ++h; return *this;}
@@ -81,7 +82,7 @@ struct edge_handle_int
   edge_handle_int() {}
   edge_handle_int(int hh) : h(hh) {}
 
-  operator const int()  const { return h;}
+  operator int()  const { return h;}
   // operator       int&()       { return h;}
   self& operator=(int hh) { h = hh; return *this;}
   self& operator++() { ++h; return *this;}
@@ -107,7 +108,7 @@ struct facet_handle_int
   facet_handle_int() {}
   facet_handle_int(int hh) : h(hh) {}
 
-  operator const int()  const { return h;}
+  operator int()  const { return h;}
   // operator       int&()       { return h;}
   self& operator=(int hh) { h = hh; return *this;}
   self& operator++() { ++h; return *this;}
@@ -135,7 +136,7 @@ struct cell_handle_int
   cell_handle_int() {}
   cell_handle_int(int hh) : h(hh) {}
 
-  operator const int()  const { return h;}
+  operator int()  const { return h;}
   //  operator       int&()       { return h;}
   self& operator=(int hh) { h = hh; return *this;}
   self& operator++() { ++h; return *this;}
@@ -160,12 +161,12 @@ template<class GRID>
 std::istream& operator>>(std::istream& in, cell_handle_int<GRID> & h)
 { return (in >> h.h); }
 
-namespace std {
+namespace STDEXT  {
   template<class T> struct hash;
 
   template<class GRID>
     struct  hash<vertex_handle_int<GRID> > { 
-      size_t operator()(vertex_handle_int<GRID> h) const { return h.h;}
+      size_t operator()(vertex_handle_int<GRID> const& h) const { return h.h;}
     };
   template<class GRID>
     struct  hash<edge_handle_int<GRID> > { 

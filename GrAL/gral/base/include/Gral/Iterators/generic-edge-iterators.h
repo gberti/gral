@@ -85,7 +85,12 @@ namespace generic_edge {
     template<class gt>
       class edge_handle_t : public grid_types_edge<gt> {
 	typedef edge_handle_t<gt> self;
+	typedef grid_types_edge<gt> base;
+
       public:
+	typedef typename base::cell_handle 	cell_handle;
+	typedef typename base::arch_edge_handle arch_edge_handle;
+
 	cell_handle      c;
 	arch_edge_handle eh;
 	edge_handle_t() {}
@@ -112,6 +117,17 @@ namespace generic_edge {
 	: public grid_types_edge<gt> {
 	
 	typedef edge_on_cell_iterator<gt> self;
+	typedef grid_types_edge<gt>       base;
+      public:
+	typedef typename base::Vertex        Vertex;
+	typedef typename base::vertex_handle vertex_handle;
+	typedef typename base::Cell          Cell;
+	typedef typename base::archEdge         archEdge;
+	typedef typename base::archEdgeIterator archEdgeIterator;
+	typedef typename base::arch_edge_handle arch_edge_handle;
+	typedef typename base::Edge          Edge;
+	typedef typename base::edge_handle   edge_handle;
+	typedef typename base::grid_type     grid_type;
       private:
 	Cell              c;
 	archEdgeIterator  e;
@@ -160,6 +176,14 @@ namespace generic_edge {
     template<class gt>
     class edge : public grid_types_edge<gt> {
       typedef edge<gt> self;
+      typedef grid_types_edge<gt>       base;
+      public:
+	typedef typename base::Vertex        Vertex;
+	typedef typename base::vertex_handle vertex_handle;
+	typedef typename base::Cell          Cell;
+	typedef typename base::Edge          Edge;
+	typedef typename base::edge_handle   edge_handle;
+	typedef typename base::grid_type     grid_type;
     private:
       edge_on_cell_iterator<gt> e;
     public:
@@ -184,6 +208,13 @@ namespace generic_edge {
       }
       bool operator!=(self const& rhs) const 
 	{ return !((*this) == rhs);}
+      bool operator<(self const& rhs) const {
+	vertex_handle v_max = std::max(v1(), v2()), 
+	              v_min = std::min(v1(), v2());
+	vertex_handle w_max = std::max(rhs.v1(), rhs.v2()),
+	              w_min = std::min(rhs.v1(), rhs.v2());
+	return ( (v_max < w_max) ||  (v_max == w_max && v_min < w_min));
+      }
 
       bool bound() const { return e.bound();}
       bool valid() const { return e.valid();}
@@ -195,6 +226,10 @@ namespace generic_edge {
 
     template<class gt>
       struct hasher_edge {
+	typedef edge<gt> key_type;
+	typedef edge<gt> argument_type;
+	typedef size_t   result_type;
+	
 	size_t operator()(edge<gt> const& e) const 
 	  { 
 	    typename gt::vertex_handle vmax = std::max(e.v1(),e.v2());
@@ -211,11 +246,20 @@ namespace generic_edge {
     template<class gt>
     class edge_iterator : public grid_types_edge<gt> {
       typedef edge_iterator<gt> self;
-    private:
+      typedef grid_types_edge<gt>       base;
+    public:
+      typedef typename base::Vertex        Vertex;
+      typedef typename base::vertex_handle vertex_handle;
+      typedef typename base::Cell          Cell;
+      typedef typename base::CellIterator  CellIterator;
+      typedef typename base::Edge          Edge;
+      typedef typename base::edge_handle   edge_handle;
+      typedef typename base::grid_type     grid_type;
+   private:
       CellIterator                      c;
       edge_on_cell_iterator<gt>         e;
       // partial_grid_function<Edge,bool>  visited;
-      std::hash_map<edge<gt>, bool, hasher_edge<gt>, std::equal_to<edge<gt> > > visited;
+      hash_map<edge<gt>, bool, hasher_edge<gt> > visited;
     public:
       edge_iterator() {}
       explicit

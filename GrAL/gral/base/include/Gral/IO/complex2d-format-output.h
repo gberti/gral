@@ -144,6 +144,8 @@ class grid_function<int_cell_iterator<OstreamComplex2DFmt>,T>
 {
   typedef grid_function_vector<int_cell_iterator<OstreamComplex2DFmt>,T> base;
 public: 
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& tt) : base(gg,tt) {}
@@ -178,7 +180,7 @@ template<>
 struct element_traits<int_vertex_iterator<OstreamComplex2DFmt> >
   : public element_traits_vertex_base<OstreamComplex2DFmt> 
 {
-  struct hasher_type {
+  struct hasher_type : public hasher_type_elem_base {
     unsigned operator()(int_vertex_iterator<OstreamComplex2DFmt> const& v) const
     { return unsigned(v.handle());}
   };
@@ -188,7 +190,7 @@ template<>
 struct element_traits<int_cell_iterator<OstreamComplex2DFmt> >
   : public element_traits_cell_base<OstreamComplex2DFmt> 
 {
-  struct hasher_type {
+  struct hasher_type  : public hasher_type_elem_base {
     unsigned operator()(int_cell_iterator<OstreamComplex2DFmt> const& c) const
     { return unsigned(c.handle());}
   };

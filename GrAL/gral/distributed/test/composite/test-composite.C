@@ -1,7 +1,7 @@
 
 // $LICENSE
 
-#include <fstream.h>
+#include <fstream>
 
 #include "Container/bijective-mapping.h"
 
@@ -18,13 +18,7 @@
 
 #include "Gral/IO/complex2d-format.h"
 
-#include "Gral/Grids/Complex2D/complex2d.h"
-#include "Gral/Grids/Complex2D/boundary.h"
-#include "Gral/Grids/Complex2D/stored-geometry.h"
-#include "Gral/Grids/Complex2D/construct.h"
-#include "Gral/Grids/Complex2D/enlarge.h"
-#include "Gral/Grids/Complex2D/grid-functions.h"
-#include "Gral/Grids/Complex2D/partial-grid-functions.h"
+#include "Gral/Grids/Complex2D/all.h"
 
 
 /*! \file 
@@ -42,8 +36,7 @@
 
 
 int main(int argc, char* argv[]) {
-  using std::string;
-  using std::cout;
+  using namespace std;
 
   typedef Complex2D                 fine_grid_type;
   typedef Complex2D                 coarse_grid_type;
@@ -58,14 +51,14 @@ int main(int argc, char* argv[]) {
 
   fine_grid_type MasterG;
   fine_geom_type MasterGeom(MasterG);
-  std::ifstream grd(gridfile.c_str());
+  ifstream grd(gridfile.c_str());
   IstreamComplex2DFmt InG(grd);
   ConstructGrid(MasterG, MasterGeom, InG, InG);
 
   //----- create partitioning ---------
 
   partitioning<fine_grid_type> Prtng(MasterG);
-  std::ifstream prt(partitionfile.c_str());
+  ifstream prt(partitionfile.c_str());
   Prtng.read_partition(prt);
   prt.close();
 

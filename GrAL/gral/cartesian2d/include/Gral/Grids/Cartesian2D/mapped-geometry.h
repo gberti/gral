@@ -101,7 +101,10 @@ template<class CM, class GEOM, class DIM>
 class dd_mapped_geom_reg2d 
   : public mapped_geometry_reg2d_base<CM> 
 {
+  typedef mapped_geometry_reg2d_base<CM> base;
 public:
+  typedef typename base::index_type index_type;
+
   dd_mapped_geom_reg2d() {} 
 
   dd_mapped_geom_reg2d(const CM& ff, const RegGrid2D& gg) 
@@ -118,23 +121,35 @@ class dd_mapped_geom_reg2d<CM, GEOM, tag2D>
   : public mapped_geometry_reg2d_base<CM> { 
   //   only useful if dim(coord_type) == 2 !
 
+public:
+  typedef  mapped_geometry_reg2d_base<CM> base;
+  typedef typename base::Vertex Vertex;
+  typedef typename base::Edge   Edge;
+  typedef typename base::Facet  Facet;
+  typedef typename base::Cell   Cell;
+
+  typedef typename base::CellIterator        CellIterator;
+  typedef typename base::CellOnCellIterator  CellOnCellIterator;
+  typedef typename base::FacetOnCellIterator FacetOnCellIterator;
+
+  typedef typename base::coord_type coord_type;
+  typedef typename base::index_type index_type;
 
 protected:
   GEOM      * _sub()       { return static_cast<GEOM      *>(this);}
   GEOM const* _sub() const { return static_cast<GEOM const*>(this);}
 
-  typedef mapped_geometry_reg2d_base<CM> base_geo;
-  base_geo       & basic_geom()       { return *this;}
-  base_geo  const& basic_geom() const { return *this;}
+  base       & basic_geom()       { return *this;}
+  base  const& basic_geom() const { return *this;}
 public:
   dd_mapped_geom_reg2d() {} 
 
   dd_mapped_geom_reg2d(const CM& ff, const RegGrid2D& gg) 
-    : base_geo(ff,gg) {}
+    : base(ff,gg) {}
 
   dd_mapped_geom_reg2d(const CM& ff, const RegGrid2D& gg,
 		       const index_type& LL, const index_type& UR) 
-    : base_geo(ff,gg,LL,UR) {}
+    : base(ff,gg,LL,UR) {}
 
 
   // coord_type from base
@@ -142,7 +157,7 @@ public:
 
   coord_type 
   normal(CellIterator const& ,
-	 NeighbourCellIterator const& nb) const  // |.| == 1
+	 CellOnCellIterator const& nb) const  // |.| == 1
   {
     Edge e(nb);
     typename GEOM::segment_type S(e, basic_geom());
@@ -151,7 +166,7 @@ public:
   
   coord_type 
   area_normal(CellIterator const& ,
-	      NeighbourCellIterator const& nb) const 
+	      CellOnCellIterator const& nb) const 
   {
     Edge e(nb);
     typename GEOM::segment_type S(e, basic_geom());
@@ -191,13 +206,27 @@ class mapped_geometry_cartesian2d
 {
   
 public:
+  typedef dd_mapped_geom_reg2d<CM, mapped_geometry_cartesian2d<CM>,
+                               typename point_traits<typename CM::result_type>::dimension_tag>
+  base;
+
+  typedef typename base::Vertex Vertex;
+  typedef typename base::Edge   Edge;
+  typedef typename base::Face   Face;
+  typedef typename base::Facet  Facet;
+  typedef typename base::Cell   Cell;
+
+  typedef typename base::CellIterator        CellIterator;
+  typedef typename base::CellOnCellIterator  CellOnCellIterator;
+  typedef typename base::FacetOnCellIterator FacetOnCellIterator;
+
+  typedef typename base::coord_type coord_type;
+  typedef typename base::index_type index_type;
+
   typedef CM mapping_type;
 
   typedef point_traits<coord_type>                         pt;
   typedef mapped_geometry_reg2d_base<CM>                   geom_base;
-  typedef dd_mapped_geom_reg2d<CM, 
-                               mapped_geometry_cartesian2d<CM>,
-                               typename pt::dimension_tag> base;
  
   mapped_geometry_cartesian2d() {}
 
@@ -216,7 +245,7 @@ public:
 
   double volume(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
   double length(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
-  double volume(const EdgeIterator& e) const {return volume(*e);}
+  // double volume(const EdgeIterator& e) const {return volume(*e);}
   double volume(const Cell& c) const { return (polygon_type(c,basic_geom()).area());}
   
   coord_type center(const Edge& e) const {return(segment_type(e,basic_geom()).center());}

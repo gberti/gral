@@ -17,7 +17,7 @@
 
 
 template<class GRID>
-void write_complex2d(GRID const& G,  ostream& out, int offset)
+void write_complex2d(GRID const& G,  std::ostream& out, int offset)
 { 
   typedef grid_types<GRID>                  gt;
   dummy_mapping<typename gt::vertex_handle, int> G2Out_v;
@@ -26,12 +26,12 @@ void write_complex2d(GRID const& G,  ostream& out, int offset)
 }
 
 template<class GRID, class VCORR, class CCORR>
-void write_complex2d(GRID const& G,  ostream& out, 
+void write_complex2d(GRID const& G,  std::ostream& out, 
                      VCORR & G2Out_v, CCORR & G2Out_c)
 { write_complex2d(G,out,0,G2Out_v, G2Out_c); }
 
 template<class GRID, class VCORR, class CCORR>
-void write_complex2d(GRID const& G,  ostream& out, int offset, 
+void write_complex2d(GRID const& G,  std::ostream& out, int offset, 
                      VCORR & G2Out_v, CCORR & G2Out_c)
 {
   typedef grid_types<GRID>                  gt;
@@ -77,11 +77,11 @@ void write_complex2d(GRID const& G,  ostream& out, int offset,
 
 
 template<class GRID, class GEOM>
-void write_complex2d(GRID const& G, GEOM const& Geo, ostream& out)
+void write_complex2d(GRID const& G, GEOM const& Geo, std::ostream& out)
 { write_complex2d(G,Geo,out,1); }
 
 template<class GRID, class GEOM>
-void write_complex2d(GRID const& G, GEOM const& Geo, ostream& out, int offset)
+void write_complex2d(GRID const& G, GEOM const& Geo, std::ostream& out, int offset)
 {
   typedef grid_types<GRID>                  gt;
   typedef typename gt::Vertex               Vertex;

@@ -53,7 +53,7 @@ public:
   { return (lhs._pos == rhs._pos);}
   friend bool operator!=(const self& lhs, const self& rhs)
     { return !(lhs == rhs);}
-  friend ostream& operator <<(ostream& out, self const& rs)
+  friend std::ostream& operator <<(std::ostream& out, self const& rs)
     { return (out << rs._pos << ' ' << rs._cc); }
 
 private:

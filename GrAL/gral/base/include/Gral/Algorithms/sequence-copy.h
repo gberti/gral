@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-#include <algobase.h>
+#include <algorithm>
 
 
 template<class ElemIter, class F>

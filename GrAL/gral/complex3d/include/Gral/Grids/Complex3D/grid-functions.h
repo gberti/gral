@@ -14,6 +14,8 @@ class grid_function<Vertex_Complex3D, T>
 {
   typedef grid_function_vector<Vertex_Complex3D,T> base;
  public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
@@ -27,6 +29,8 @@ class grid_function<Cell_Complex3D, T>
 {
   typedef grid_function_vector<Cell_Complex3D,T> base;
  public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
@@ -40,6 +44,8 @@ class grid_function<Complex3D::Edge, T>
 {
   typedef grid_function_hash<Complex3D::Edge,T> base;
  public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
@@ -52,6 +58,8 @@ class grid_function<Complex3D::Facet, T>
 {
   typedef grid_function_hash<Complex3D::Facet,T> base;
  public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}

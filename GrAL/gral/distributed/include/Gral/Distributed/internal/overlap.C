@@ -29,7 +29,7 @@ void overlap<CoarseGrid, FineGrid, OVLP_RANGES>::set_neighbours()
 
 
 template<class Overlap>
-void write_ovlp(Overlap const& ovlp, ostream & out)
+void write_ovlp(Overlap const& ovlp, std::ostream & out)
 {
   out << "Total ranges\n";
   out << "vertices:\n";

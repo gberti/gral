@@ -29,6 +29,8 @@ class grid_function<RegGrid2D::Vertex,T>
   typedef grid_function<RegGrid2D::Vertex,T>        self;
   typedef grid_function_vector<RegGrid2D::Vertex,T> base;
 public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
@@ -47,6 +49,8 @@ class grid_function<RegGrid2D::Edge,T>
   typedef grid_function<RegGrid2D::Edge,T>        self;
   typedef grid_function_vector<RegGrid2D::Edge,T> base;
 public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
@@ -65,6 +69,8 @@ class grid_function<RegGrid2D::Cell,T>
   typedef grid_function<RegGrid2D::Cell,T>        self;
   typedef grid_function_vector<RegGrid2D::Cell,T> base;
 public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}

@@ -5,6 +5,7 @@
 // $LICENSE
 
 #include "Gral/Distributed/overlap-ranges.h"
+#include <iostream>
 
 //----------------------------------------------------------------
 /*! \defgroup overlapds  Grid overlap ranges
@@ -201,7 +202,7 @@ public:
    \ingroup overlapds
  */
 template<class Overlap>
-void write_ovlp(Overlap const& ovlp, ostream & out);
+void write_ovlp(Overlap const& ovlp, std::ostream & out);
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

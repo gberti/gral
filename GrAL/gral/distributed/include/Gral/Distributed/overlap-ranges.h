@@ -5,6 +5,8 @@
 // $LICENSE
 
 #include <vector>
+#include <iostream>
+
 #include "Config/compiler-config.h"
 #include "Gral/Subranges/enumerated-subrange.h"
 
@@ -58,6 +60,8 @@ public:
   typedef typename element_seq::const_iterator const_e_iterator;
   typedef element_handle                       value_type;
   typedef element_handle  const                const_reference;
+  typedef element_handle  &                    reference;
+
 
 
   typedef element_range_ref<E,element_seq>     range_ref;
@@ -187,7 +191,7 @@ public:
 //----------------------------------------------------------------
 
 template<class OVRange>
-void write_ovrge(OVRange const& rnge, ostream& out);
+void write_ovrge(OVRange const& rnge, std::ostream& out);
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

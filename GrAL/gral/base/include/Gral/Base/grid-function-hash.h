@@ -49,7 +49,7 @@ public:
   typedef typename et::grid_type            grid_type;
 
 
-  typedef hash_map<E,T, hasher_type, equal_to<E> > table_type;
+  typedef hash_map<E,T, hasher_type>   table_type;
   typedef typename table_type::size_type           size_type;
 
   typedef E const& argument_type;
@@ -155,6 +155,7 @@ class grid_function_hash
 public:
   typedef element_traits<E> et1;
   typedef typename et1::ElementIterator ElementIterator;
+  typedef typename base_gf::grid_type grid_type;
 
   //--------------------- construction ------------------------------   
 

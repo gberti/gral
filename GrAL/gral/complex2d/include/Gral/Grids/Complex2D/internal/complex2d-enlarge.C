@@ -4,12 +4,14 @@
 
 // $LICENSE
 
-#include <map>  // STL
+#include <map>  
+#include <functional>
 
 #include "Container/bijective-mapping.h"
 #include "Container/set-primitives.h"
 #include "Container/container-adapter.h"
 #include "Container/function-adapter.h"
+#include "Container/functions.h" // STL extensions
 
 #include "Gral/Base/grid-functors.h"
 #include "Gral/Base/mapped-iterators.h"
@@ -152,7 +154,7 @@ void EnlargeGrid(Complex2D& G,                 // in/out
 	    facet_id[vtf] = fcv;
 	  }
 	  else {
-	    cerr << "identfication facet not on boundary: vi = " 
+	    std::cerr << "identfication facet not on boundary: vi = " 
 		 << *vi << " cv = " << G.handle(*cv) << " fcv =  " << fcv << '\n';
 	  }
 	  //  facet_id[vtf] = *fcv;
@@ -216,9 +218,9 @@ void EnlargeGrid(Complex2D& G,                 // in/out
     (G,
      map_cell_sequence // this is the seq of new cells in C(G) corr. to C(G_src)
      (G_src,  
-      compose1(handle2cell(G), // C(G_src) --> C(G)
-	       compose1(make_unary_fct_ref(CellCorr), // avoid copying CellCorr
-			cell2handle(G_src)))
+      stdext::compose1(handle2cell(G), // C(G_src) --> C(G)
+		       stdext::compose1(make_unary_fct_ref(CellCorr), // avoid copying CellCorr
+					cell2handle(G_src)))
       ),
      facet_id);
 

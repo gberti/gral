@@ -7,7 +7,7 @@
 #include "Gral/Distributed/internal/add-total-copied.h"
 
 
-#include <iterator.h>  // STL
+#include <iterator>  // STL
 
 #include "Container/some-algorithms.h"
 
@@ -30,7 +30,7 @@
 
 template <class Predicate>
 class my_unary_negate : 
-    public unary_function<typename Predicate::argument_type, bool> {
+    public std::unary_function<typename Predicate::argument_type, bool> {
 protected:
     Predicate pred;
 public: 

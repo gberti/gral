@@ -18,6 +18,8 @@ class grid_function<Triang2D_Vertex, T>
 {
   typedef grid_function_vector<Triang2D_Vertex, T> base;
 public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
@@ -34,6 +36,8 @@ class grid_function<Triang2D_Cell, T>
 {
   typedef grid_function_vector<Triang2D_Cell, T> base;
 public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
@@ -50,6 +54,8 @@ class grid_function<Triang2D::Edge, T>
 {
   typedef grid_function_hash<Triang2D::Edge, T> base;
 public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}

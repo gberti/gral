@@ -26,7 +26,7 @@ void ConstructGrid_GF(OstreamGMV2DFmt& Out,
   typedef grid_types<GRID> gt;
   typedef point_traits<typename GEOM::coord_type> pt;
 
-  ostream& out = Out.Out();
+  std::ostream& out = Out.Out();
   out << "gmvinput ascii\n";
   out << "nodev " << G.NumOfVertices() << '\n';
 

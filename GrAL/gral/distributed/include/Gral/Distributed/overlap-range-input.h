@@ -4,6 +4,8 @@
 // $LICENSE
 
 #include "Utility/pre-post-conditions.h"
+#include <iostream>
+#include <fstream>
 
 /*! \brief Input adapter for an overlap range
    \ingroup overlapds
@@ -32,7 +34,7 @@ public:
     : in(0),  is_in_owned(true), 
       npriv(0), nexposed(0), nshared(0), ncopied(0) 
   {}
-  overlap_range_input(istream& in_) 
+  overlap_range_input(std::istream& in_) 
     : in(&in_), is_in_owned(false)
   {
     init();
@@ -46,7 +48,7 @@ public:
 
   void init(std::string const& in_nm)
   {
-    ifstream* fin = new std::ifstream(in_nm.c_str());
+    std::ifstream* fin = new std::ifstream(in_nm.c_str());
     REQUIRE( (fin->is_open()), "Could not open file " << in_nm << "!\n", 1);
     in = fin;
     is_in_owned = true;

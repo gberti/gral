@@ -6,7 +6,7 @@
 
 #include "Config/compiler-config.h"
 
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
 
 //----------------------------------------------------------------
@@ -66,14 +66,14 @@ bool operator<  (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& r
  */
 template<class CHandle>
 inline
-ostream& operator<< ( ostream& out, facet_handle<CHandle> const& e)
+std::ostream& operator<< (std::ostream& out, facet_handle<CHandle> const& e)
  { return (out << e.c << ' ' << e.lf);}
 
 /*! \relates facet_handle
  */
 template<class CHandle>
 inline
-istream& operator>> ( istream& in,  facet_handle<CHandle>     & e)
+std::istream& operator>> (std::istream& in,  facet_handle<CHandle>     & e)
  { return (in >> e.c >> e.lf);}
 
 /*! \relates facet_handle

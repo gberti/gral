@@ -112,7 +112,7 @@ template<class T> struct hash;
 
     \relates vtuple_2d<GRID>
  */
-namespace std {
+namespace STDEXT {
   template<class GRID>
     struct hash<vtuple_2d<GRID> > {
       enum { p = 37 };

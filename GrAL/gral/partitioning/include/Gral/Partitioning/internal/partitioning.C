@@ -8,13 +8,14 @@
 
 // STD
 #include <string>
+#include <iostream>
 #include <ctype.h> // for isdigit()
 
 #include "Container/partial-mapping.h"
 #include "Gral/Partitioning/collect-element-partitions.h"
 
 template<class Grid> 
-void partitioning<Grid>::write_partition(ostream& out)
+void partitioning<Grid>::write_partition(std::ostream& out)
 {
  CellIterator C = TheGrid().FirstCell();
  for(; ! C.IsDone(); ++C)
@@ -22,7 +23,7 @@ void partitioning<Grid>::write_partition(ostream& out)
 }
 
 template<class Grid> 
-void partitioning<Grid>::read_partition(istream& in)
+void partitioning<Grid>::read_partition(std::istream& in)
 { 
  int p;
  partial_mapping<int,int> part_nums(-1);
@@ -45,8 +46,8 @@ void partitioning<Grid>::read_partition(istream& in)
      ++C;
    }
    if(!in && ! C.IsDone()) {
-     cerr << "partitioning<Grid>::read_partition(): input ended prematurely!\n"
-	  << "creating new partition for the remaining cells.\n";
+     std::cerr << "partitioning<Grid>::read_partition(): input ended prematurely!\n"
+	       << "creating new partition for the remaining cells.\n";
      p = add_partition();
      while(! C.IsDone()) {
        add_cell(p,*C);
@@ -80,7 +81,7 @@ void partitioning<Grid>::calculate_ranges()
 } 
 
 template<class Grid>
-void read_handle_partition_pair(partitioning<Grid> & P, istream& in)
+void read_handle_partition_pair(partitioning<Grid> & P, std::istream& in)
 {
   typedef grid_types<Grid> gt;
   typedef typename gt::Cell         Cell;
@@ -94,7 +95,7 @@ void read_handle_partition_pair(partitioning<Grid> & P, istream& in)
   int cnt = 0;
   while(in && cnt < (int) P.TheGrid().NumOfCells()) {
     in >> c >> p;
-    in >> ws;
+    in >> std::ws;
     ++cnt;
     if( part_nums(p) == -1) {
       part_nums[p] = P.add_partition();
@@ -103,7 +104,7 @@ void read_handle_partition_pair(partitioning<Grid> & P, istream& in)
     if( ! marked(C)) {
       marked[C] = true;
       P.add_cell(part_nums(p),C);
-      cerr << "added C = " << c <<  "; p = " << part_nums(p) << endl;
+      std::cerr << "added C = " << c <<  "; p = " << part_nums(p) << std::endl;
     }
     else {
       ENSURE(false, 

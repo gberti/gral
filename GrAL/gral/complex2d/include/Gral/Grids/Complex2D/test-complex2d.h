@@ -1,7 +1,7 @@
 
 // $LICENSE
 
-#include <iostream.h>
+#include <iostream>
 
 #include "IO/control-device.h"
 

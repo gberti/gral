@@ -40,7 +40,7 @@ EdgeOnCell2D_Iterator::CyclicPred() const
 }
 
 inline
-void EdgeOnCell2D_Iterator::print(ostream& out)  const
+void EdgeOnCell2D_Iterator::print(std::ostream& out)  const
 {
   out << "C: " << C
       << " lf: " << lf; 

@@ -60,7 +60,18 @@ private:
   const geom& g;
 };
 
+template<class Face, class geom>
+class vertex_iterator_Polygon2d;
 
+template<class Face, class geom>
+inline bool operator==(vertex_iterator_Polygon2d<Face,geom> const&,
+		      vertex_iterator_Polygon2d<Face,geom> const&);
+template<class Face, class geom>
+inline bool operator!=(vertex_iterator_Polygon2d<Face,geom> const&,
+		      vertex_iterator_Polygon2d<Face,geom> const&);
+template<class Face, class geom>
+inline bool operator<(vertex_iterator_Polygon2d<Face,geom> const&,
+		      vertex_iterator_Polygon2d<Face,geom> const&);
 
 template<class Face, class geom> class Polygon2d;
 
@@ -180,6 +191,7 @@ private:
 
 template<class Face, class geom>
 inline
+typename 
 vertex_iterator_Polygon2d<Face,geom>::value_type 
 vertex_iterator_Polygon2d<Face,geom>::operator*() const { return p->V(i);}
 

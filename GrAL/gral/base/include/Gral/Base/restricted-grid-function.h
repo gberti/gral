@@ -57,30 +57,14 @@ public:
 
   //------------------ comparision ---------------------
 
-  friend bool operator== <> (const self& ls, const self& rs);
-  friend bool operator!= <> (const self& ls, const self& rs);
-  friend bool operator<  <> (const self& ls, const self& rs);
+  bool operator==(const self& rs) const  { return (it == rs.it);}
+  bool operator!=(const self& rs) const  { return (it != rs.it);}
+  bool operator< (const self& rs) const  { return (it <  rs.it);}
 private:
   //------- DATA ---------
   E_iter it;
   grid_function<E,T>* gf;
 };
-
-
-template<class E, class T, class E_iter>
-inline bool operator==(restr_gf_iterator<E,T,E_iter> const& ls,
-		       restr_gf_iterator<E,T,E_iter> const& rs)
- { return (ls.it == rs.it);}
-
-template<class E, class T, class E_iter>
-inline bool operator!=(restr_gf_iterator<E,T,E_iter> const& ls,
-		       restr_gf_iterator<E,T,E_iter> const& rs)
- { return (ls.it != rs.it);}
-
-template<class E, class T, class E_iter>
-inline bool operator< (restr_gf_iterator<E,T,E_iter> const& ls,
-		       restr_gf_iterator<E,T,E_iter> const& rs)
- { return (ls.it <  rs.it);}
 
 //----------------------------------------------------------------
 

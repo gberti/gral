@@ -150,14 +150,14 @@ struct edge_handle_complex2d {
   friend bool operator< (const self& ls, const self& rs)
     { return ((ls.c <rs.c)  || ((ls.c == rs.c) &&  (ls.le < rs.le))); }
 
-  friend ostream& operator<< (ostream& out, const self& e)
+  friend std::ostream& operator<< (std::ostream& out, const self& e)
     { return (out << e.c << ' ' << e.le);}
-  friend istream& operator>>(istream& in,         self& e)
+  friend std::istream& operator>>(std::istream& in,         self& e)
     { return (in >> e.c >> e.le);}
 };
 
 
-namespace std {
+namespace STDEXT  {
   template<class T> class hash;
   struct hash<edge_handle_complex2d> {
   public:
@@ -168,7 +168,7 @@ namespace std {
       { return (6*e.c + e.le);}
   };
   
-} // namespace std
+} // namespace STDEXT
 
 struct complex2d_types { 
   typedef Complex2D Complex;
@@ -571,7 +571,10 @@ struct hash_vertex2d {
 struct hash_edge2d {
   typedef grid_types<Complex2D> gt;
   typedef  gt::Edge     Edge;
-  int operator()(const Edge& E) const { return gt::hash(E);}
+  typedef Edge   key_type;
+  typedef Edge   argument_type;
+  typedef size_t result_type;
+  size_t  operator()(const Edge& E) const { return gt::hash(E);}
 
   void operator=(hash_edge2d const&) {} // suppress warnings about statement w/o effect
 };
@@ -584,7 +587,7 @@ struct hash_cell2d {
   void operator=(hash_cell2d const&) {} // suppress warnings about statement w/o effect
 };
 
-namespace std {
+namespace STDEXT {
   template<class T>
     struct hash;
   

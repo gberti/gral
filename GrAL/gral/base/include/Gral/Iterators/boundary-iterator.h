@@ -183,8 +183,9 @@ class BoundaryComponentVertexIterator2D
     //private:
   typedef BoundaryComponentIterator2D<Grid,CellPred> base;
 public:
-  // typedef typename base_it::Vertex   Vertex;
-  typedef Vertex                     value_type;
+  typedef typename base::Vertex   Vertex;
+  typedef typename base::Edge     Edge;
+  typedef Vertex                  value_type;
 
   BoundaryComponentVertexIterator2D() {}
   BoundaryComponentVertexIterator2D(const base& bs) : base(bs) {}
@@ -212,7 +213,8 @@ class BoundaryComponentEdgeIterator2D
 private:
   typedef BoundaryComponentIterator2D<Grid,CellPred> base;
 public:
-  typedef Edge                                 value_type;
+  typedef typename base::Edge     Edge;
+  typedef Edge                    value_type;
 
   BoundaryComponentEdgeIterator2D() {}
   BoundaryComponentEdgeIterator2D(const base& bs) : base(bs) {}

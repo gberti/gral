@@ -8,6 +8,7 @@
 #include <functional>
 
 #include "Utility/pre-post-conditions.h"
+#include "Container/my-hash-map.h"
 
 
 /*! \defgroup disjoint_union_view View for handling formal unions of grids
@@ -99,6 +100,9 @@ namespace disjoint_union_view {
     class vertex_handle_view :
   public grid_types_base<GRID1,GRID2> {
       typedef vertex_handle_view<GRID1,GRID2> self;
+      typedef grid_types_base<GRID1,GRID2>    base;
+      typedef typename base::vertex_handle_1 vertex_handle_1;
+      typedef typename base::vertex_handle_2 vertex_handle_2;
   private:
     vertex_handle_1 v1_;
     vertex_handle_2 v2_;
@@ -133,6 +137,10 @@ namespace disjoint_union_view {
 	}
       bool operator!=(self const& rhs) const 
 	{ return !((*this) == rhs);}
+      bool operator < (self const& rhs) const {
+	return (which() < rhs.which() || 
+		(which() == 1 ? v1_ < rhs.v1_ : v2_ < rhs.v2_));
+      }
 
     };
 
@@ -141,6 +149,9 @@ namespace disjoint_union_view {
     struct cell_handle_view 
       : public grid_types_base<GRID1,GRID2> {
       typedef cell_handle_view<GRID1,GRID2> self;
+      typedef grid_types_base<GRID1,GRID2>    base;
+      typedef typename base::cell_handle_1 cell_handle_1;
+      typedef typename base::cell_handle_2 cell_handle_2;
     private:
       cell_handle_1 c1_;
       cell_handle_2 c2_;
@@ -179,16 +190,19 @@ namespace disjoint_union_view {
 
   template<class GRID1, class GRID2>
     class element_base :
-  public grid_types_base<GRID1,GRID2> {
-  public:
-    element_base(): g(0) {}
-    element_base(grid_type const& gg) : g(&gg) {}
-    
-    grid_type const& TheGrid() const { return *g;}
-    bool bound() const { return (g != 0);}
-  private:
-    grid_type const* g;
-  };
+    public grid_types_base<GRID1,GRID2> {
+      typedef grid_types_base<GRID1,GRID2> base;
+    public:
+      typedef typename base::grid_type grid_type;
+    public:
+      element_base(): g(0) {}
+      element_base(grid_type const& gg) : g(&gg) {}
+      
+      grid_type const& TheGrid() const { return *g;}
+      bool bound() const { return (g != 0);}
+    private:
+      grid_type const* g;
+    };
 
 
 /*! \brief View two separate grids as a single one
@@ -205,7 +219,11 @@ namespace disjoint_union_view {
  */
 template<class GRID1, class GRID2>
 class grid_view :
-  public grid_types_base<GRID1,GRID2> {
+    public grid_types_base<GRID1,GRID2> {
+  typedef grid_types_base<GRID1,GRID2>  base;
+public:
+  typedef typename base::grid_type_1 grid_type_1;
+  typedef typename base::grid_type_2 grid_type_2;
 private:
   grid_type_1 const& g1;
   grid_type_2 const& g2;
@@ -243,7 +261,16 @@ public:
      : public element_base<GRID1, GRID2> {
      typedef Vertex_view<GRID1, GRID2> self;
      typedef element_base<GRID1,GRID2> base;
-     
+   public:
+     typedef typename base::VertexIterator1 VertexIterator1;
+     typedef typename base::VertexIterator2 VertexIterator2;
+     typedef typename base::Vertex1         Vertex1;
+     typedef typename base::Vertex2         Vertex2;
+     typedef typename base::vertex_handle_1  vertex_handle_1;
+     typedef typename base::vertex_handle_2  vertex_handle_2;
+     typedef typename base::vertex_handle    vertex_handle;
+
+     typedef typename base::grid_type       grid_type;
    private:
      VertexIterator1 v1_;
      VertexIterator2 v2_;
@@ -301,6 +328,16 @@ public:
      typedef Cell_view   <GRID1,GRID2> self;
      typedef element_base<GRID1,GRID2> base;
      friend class VertexOnCellIterator_view<GRID1,GRID2>;
+    public:
+     typedef typename base::CellIterator1 CellIterator1;
+     typedef typename base::CellIterator2 CellIterator2;
+     typedef typename base::Cell1         Cell1;
+     typedef typename base::Cell2         Cell2;
+     typedef typename base::cell_handle_1  cell_handle_1;
+     typedef typename base::cell_handle_2  cell_handle_2;
+     typedef typename base::cell_handle    cell_handle;
+
+     typedef typename base::grid_type      grid_type;
   private:
     CellIterator1 c1_;
     CellIterator2 c2_;
@@ -363,7 +400,16 @@ public:
     : public element_base<GRID1,GRID2> {
     typedef VertexOnCellIterator_view<GRID1,GRID2> self;
     typedef element_base             <GRID1,GRID2> base;
+  public:
+    typedef typename base::VertexOnCellIterator1 VertexOnCellIterator1;
+    typedef typename base::VertexOnCellIterator2 VertexOnCellIterator2;
+    typedef typename base::Vertex    Vertex;
+    typedef typename base::Cell      Cell;
+    typedef typename base::vertex_handle vertex_handle;
 
+    typedef typename base::grid_type grid_type;
+
+  private:
     VertexOnCellIterator1 vc1;
     VertexOnCellIterator2 vc2;
     Cell c;
@@ -498,7 +544,7 @@ struct grid_types<disjoint_union_view::grid_view<GRID1,GRID2> >
 
 // specialization of hash<> for element handles
 
-namespace std {
+namespace STDEXT {
  template<class T> struct hash;
  
  template<class GRID1, class GRID2>
@@ -513,7 +559,7 @@ namespace std {
      hash2 h2;
 
      hash() {}
-     // this is unsatisfctory, because it will typically map
+     // this is unsatisfactory, because it will typically map
      // different vertices onto the same value.
      size_t operator()(vertex_handle const& v) const 
        { return (v.which() == 1 ? h1(v.v1()) : h2(v.v2())); } 
@@ -545,9 +591,14 @@ template<class GRID1, class GRID2>
 struct element_traits<disjoint_union_view::Vertex_view<GRID1,GRID2> >
   : public element_traits_vertex_base<disjoint_union_view::grid_view<GRID1,GRID2> > 
 {
-  class hasher_type 
-    : public disjoint_union_view::grid_types_base<GRID1,GRID2>  
+  class hasher_type : public hasher_type_elem_base
+
   {
+    typedef disjoint_union_view::grid_types_base<GRID1,GRID2> gt;
+    typedef typename gt::vertex_handle_1 vertex_handle_1;
+    typedef typename gt::vertex_handle_2 vertex_handle_2;
+    typedef typename gt::Vertex          Vertex;
+
     typedef typename element_traits<vertex_handle_1>::hasher_type hash1;  
     typedef typename element_traits<vertex_handle_2>::hasher_type hash2;
 
@@ -568,9 +619,15 @@ template<class GRID1, class GRID2>
 struct element_traits<disjoint_union_view::Cell_view<GRID1,GRID2> >
   : public element_traits_cell_base<disjoint_union_view::grid_view<GRID1,GRID2> > 
 {
-  class hasher_type 
-    : public disjoint_union_view::grid_types_base<GRID1,GRID2>  
+  typedef element_traits_cell_base<disjoint_union_view::grid_view<GRID1,GRID2> > base;
+
+  class hasher_type  : public hasher_type_elem_base
   {
+    typedef disjoint_union_view::grid_types_base<GRID1,GRID2> gt;
+    typedef typename gt::cell_handle_1 cell_handle_1;
+    typedef typename gt::cell_handle_2 cell_handle_2;
+    typedef typename gt::Cell          Cell;
+
     typedef typename element_traits<cell_handle_1>::hasher_type hash1;  
     typedef typename element_traits<cell_handle_2>::hasher_type hash2;
 

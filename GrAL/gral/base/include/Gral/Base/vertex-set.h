@@ -12,6 +12,7 @@
 #include <vector>
 #include <algorithm>
 
+#include "Container/my-hash-map.h"
 
 
 /*! \brief sorted vertex set of a grid element
@@ -42,29 +43,26 @@ public:
   vertex_handle operator[](int n) const { check_range(n); return v[n];}
   unsigned      size() const { return v.size();}
 
-  // FIXME: lexicographical_compare_3way is not in std::
-  // (only a SGI extension)
   bool operator==(self const& rhs) const { 
-    return (0 == std::lexicographical_compare_3way
-	    (v    .begin(),    v.end(),
-	     rhs.v.begin(),rhs.v.end()));
+    return (std::equal(v    .begin(),    v.end(),
+		       rhs.v.begin()));
   }
   bool operator!=(self const& rhs) const { return !((*this) == rhs);}
   bool operator< (self const& rhs) const { 
-    return (0  >  std::lexicographical_compare_3way
+    return (std::lexicographical_compare
 	    (v    .begin(),    v.end(),
 	     rhs.v.begin(),rhs.v.end()));
   }
 private:
-  void check_range(unsigned i) const {
-    REQUIRE( ((0 <= i ) && (i < v.size())), 
+  void check_range(int i) const {
+    REQUIRE( ((0 <= i ) && (i < (int) v.size())), 
 	     " i = " << i << " must be in [0," << v.size()-1 << "]\n",1);
           
   }
 };
 
 
-namespace std {
+namespace STDEXT {
 
   template<class T>
     class hash;

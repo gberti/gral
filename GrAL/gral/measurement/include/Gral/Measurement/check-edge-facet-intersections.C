@@ -8,6 +8,7 @@
 
 #include "Gral/Base/predicates.h" // incident
 
+#include <iostream>
 
 template<class GRID, class GEOM, class GT>
 void
@@ -57,10 +58,10 @@ check_edge_facet_intersections<GRID,GEOM,GT>::check_all_cells()
 	  num_intersections_c[*c ]++;
 	  num_intersections_e[e]++;
 	  num_intersections_f[*fc]++;
-	  cout << "intersection found: " << intersection.location() << "\n";
+	  std::cout << "intersection found: " << intersection.location() << "\n";
 	}
       }
-      cout << "\n";
+      std::cout << "\n";
     }	
   }
 

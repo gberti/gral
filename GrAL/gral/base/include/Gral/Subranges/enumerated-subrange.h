@@ -172,6 +172,8 @@ class vertex_range_ref
 public:
   typedef typename base::Element         Vertex;
   typedef typename base::ElementIterator VertexIterator;
+  typedef typename base::grid_type       grid_type;
+  typedef typename base::range_type      range_type;
 
   vertex_range_ref() {}
   vertex_range_ref(const grid_type& g) : base(g) {}
@@ -203,6 +205,8 @@ class edge_range_ref
 public:
   typedef typename base::Element         Edge;
   typedef typename base::ElementIterator EdgeIterator;
+  typedef typename base::grid_type       grid_type;
+  typedef typename base::range_type      range_type;
 
   edge_range_ref() {}
   edge_range_ref(const grid_type& g) : base(g) {}
@@ -231,6 +235,8 @@ class facet_range_ref
 public:
   typedef typename base::Element         Facet;
   typedef typename base::ElementIterator FacetIterator;
+  typedef typename base::grid_type       grid_type;
+  typedef typename base::range_type      range_type;
 
   facet_range_ref() {}
   facet_range_ref(const grid_type& g) : base(g) {}
@@ -258,6 +264,8 @@ class cell_range_ref
 public:
   typedef typename base::Element         Cell;
   typedef typename base::ElementIterator CellIterator;
+  typedef typename base::grid_type       grid_type;
+  typedef typename base::range_type      range_type;
 
 
   cell_range_ref() {}
@@ -388,6 +396,8 @@ class enumerated_vertex_range
 public:
   typedef typename base::Element         Vertex;
   typedef typename base::ElementIterator VertexIterator;
+  typedef typename base::grid_type       grid_type;
+  typedef typename base::elt_sequence    elt_sequence;
 
   typedef vertex_range_ref<grid_type, elt_sequence>  range_type_ref;
 
@@ -416,6 +426,8 @@ class enumerated_edge_range
 public:
   typedef typename base::Element         Edge;
   typedef typename base::ElementIterator EdgeIterator;
+  typedef typename base::grid_type       grid_type;
+  typedef typename base::elt_sequence    elt_sequence;
   
   typedef edge_range_ref<grid_type, elt_sequence>  range_type_ref;
 
@@ -444,6 +456,8 @@ class enumerated_facet_range
 public:
   typedef typename base::Element         Facet;
   typedef typename base::ElementIterator FacetIterator;
+  typedef typename base::grid_type       grid_type;
+  typedef typename base::elt_sequence    elt_sequence;
   
   typedef facet_range_ref<grid_type, elt_sequence>  range_type_ref;
 
@@ -473,6 +487,8 @@ class enumerated_cell_range
 public:
   typedef typename base::Element         Cell;
   typedef typename base::ElementIterator CellIterator;
+  typedef typename base::grid_type       grid_type;
+  typedef typename base::elt_sequence    elt_sequence;
 
   typedef cell_range_ref<grid_type, elt_sequence>  range_type_ref;
 

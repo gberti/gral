@@ -8,7 +8,7 @@
 #include "Gral/IO/stream-grid-adapter.h"
 
 template<class PHI>
-void print_morphism(PHI const& phi, ostream& out)
+void print_morphism(PHI const& phi, std::ostream& out)
 {
   typedef grid_types<typename PHI::grid_type_def> gt;
   typename PHI::grid_type_def const& G(phi.DefGrid());

@@ -17,6 +17,8 @@ class grid_function<Vertex_Cartesian3D, T>
 {
   typedef grid_function_vector<Vertex_Cartesian3D,T> base;
  public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
@@ -30,6 +32,8 @@ class grid_function<Cell_Cartesian3D, T>
 {
   typedef grid_function_vector<Cell_Cartesian3D,T> base;
  public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}

@@ -32,7 +32,7 @@ void collect_vertex_partitions(const Partition& P,      // in
   for(CellIterator c = P.TheGrid().FirstCell(); ! c.IsDone(); ++c)
     for(VertexOnCellIterator vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc) {
       int pt = P.partition(*c);
-      if(find(p_of_v[*vc].begin(),p_of_v[*vc].end(),pt) == p_of_v[*vc].end())
+      if(std::find(p_of_v[*vc].begin(),p_of_v[*vc].end(),pt) == p_of_v[*vc].end())
 	p_of_v[*vc].push_back(pt);
     }
 

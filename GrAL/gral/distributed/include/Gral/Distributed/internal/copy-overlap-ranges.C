@@ -24,13 +24,13 @@ void CopyOverlapRanges(DestRange& dest,
                        SrcRange const& shd,  SrcRange const& cop,
                        Filter   const& f)
 {
-  copy_filter(priv.begin(),priv.end(), back_inserter(dest), f);
+  copy_filter(priv.begin(),priv.end(), std::back_inserter(dest), f);
   dest.set_exposed_begin();
-  copy_filter(exp.begin(),exp.end(), back_inserter(dest), f);
+  copy_filter(exp.begin(),exp.end(), std::back_inserter(dest), f);
   dest.set_shared_begin();
-  copy_filter(shd.begin(),shd.end(), back_inserter(dest), f);
+  copy_filter(shd.begin(),shd.end(), std::back_inserter(dest), f);
   dest.set_copied_begin();
-  copy_filter(cop.begin(),cop.end(), back_inserter(dest), f);
+  copy_filter(cop.begin(),cop.end(), std::back_inserter(dest), f);
   // dest.set_copied_end();
 }
 

@@ -6,11 +6,12 @@
 #include "Utility/pre-post-conditions.h"
 
 int main() {
+  using namespace std;
 
   typedef CartesianGrid3D grid_type;
   typedef grid_types<grid_type> gt;
  
-  std::ofstream* out = new std::ofstream("grid-functions.out");
+  ofstream* out = new ofstream("grid-functions.out");
 
   grid_type EmptyG; 
   REQUIRE_ALWAYS(EmptyG.NumOfVertices() == 0,

@@ -8,16 +8,18 @@
 
 #include "Gral/Test/all.h"
 
+#include "Container/functions.h" // std extensions: identity
 
 
 
 int main() {
+  using namespace std;
  
   // create Cartesian grid & geometry
   typedef CartesianGrid3D            reg_grid_type;
   typedef grid_types<reg_grid_type>  rgt; 
-  typedef coordN<3>                  coord_type;
-  typedef std::identity<coord_type>  mapping_type;
+  typedef coordN<3>                                 coord_type;
+  typedef stdext::identity<coord_type>              mapping_type;
   typedef mapped_geometry_cartesian3d<mapping_type> reg_geom_type;
 
   reg_grid_type R(3,2,2);

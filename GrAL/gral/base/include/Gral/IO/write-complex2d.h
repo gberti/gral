@@ -5,6 +5,7 @@
 
 // $LICENSE
 
+#include <iostream>
 #include "Gral/Base/common-grid-basics.h"
 
 //-------------------------------------------------------------------------
@@ -28,7 +29,7 @@
     \see Module \ref  writecomplex2d
 */
 template<class GRID>
-void write_complex2d(GRID const& G,  ostream& out, int offset = 0);
+void write_complex2d(GRID const& G,  std::ostream& out, int offset = 0);
 
 /*! \ingroup writecomplex2d
     Does not write any vertex coordinates
@@ -38,7 +39,7 @@ void write_complex2d(GRID const& G,  ostream& out, int offset = 0);
     \see Module \ref  writecomplex2d
 */
 template<class GRID, class VCORR, class CCORR>
-void write_complex2d(GRID const& G,  ostream& out, int offset, 
+void write_complex2d(GRID const& G,  std::ostream& out, int offset, 
                      VCORR & G2Out_v, CCORR & G2Out_c);
 
 
@@ -51,7 +52,7 @@ void write_complex2d(GRID const& G,  ostream& out, int offset,
     \see Module \ref  writecomplex2d
 */
 template<class GRID, class VCORR, class CCORR>
-void write_complex2d(GRID const& G,  ostream& out, 
+void write_complex2d(GRID const& G,  std::ostream& out, 
                      VCORR & G2Out_v, CCORR & G2Out_c);
 
 
@@ -61,14 +62,14 @@ void write_complex2d(GRID const& G,  ostream& out,
     \see Module \ref writecomplex2d
 */
 template<class GRID, class GEOM>
-void write_complex2d(GRID const& G, GEOM const& Geo, ostream& out);
+void write_complex2d(GRID const& G, GEOM const& Geo, std::ostream& out);
 
 /*! \ingroup writecomplex2d
 
     \see Module \ref writecomplex2d
 */
 template<class GRID, class GEOM>
-void write_complex2d(GRID const& G, GEOM const& Geo, ostream& out, int offset);
+void write_complex2d(GRID const& G, GEOM const& Geo, std::ostream& out, int offset);
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

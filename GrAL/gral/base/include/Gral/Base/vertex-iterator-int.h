@@ -30,6 +30,7 @@ public:
   int handle() const { return v;}
   bool operator==(self const& rhs) const { return (rhs.v == v) && (rhs.g == g);}
   bool operator!=(self const& rhs) const { return !((*this) == rhs);}
+  bool operator< (self const& rhs) const { return (v < rhs.v);}
 };
 
 

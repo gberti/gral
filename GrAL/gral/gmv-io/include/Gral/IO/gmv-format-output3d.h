@@ -19,15 +19,6 @@
 #include "Container/heterogeneous-list.h"
 #include "Utility/as-string.h"
 
-// move to Container/hash-spec.h
-namespace std {
-
-template<class T>
-  struct hash<T*> {
-    unsigned operator()(T* p) const { T* p0 = 0; return p - p0;}
-  };
-
-}
 
 /*! \brief Output adapter for the GMV format.
 

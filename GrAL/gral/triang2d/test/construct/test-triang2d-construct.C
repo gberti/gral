@@ -6,6 +6,7 @@
 
  */
 
+#include <iostream>
 #include <fstream>
 #include <string>
 
@@ -45,7 +46,7 @@ public:
 };
 
 int main(int argc, char* argv[]) {
-  using std::ostream;
+  using namespace std;
 
   typedef grid_types<Triang2D> gt; 
 

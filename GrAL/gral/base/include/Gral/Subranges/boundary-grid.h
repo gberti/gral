@@ -54,7 +54,17 @@ template<class E>
 class boundary_grid_aux<E, cell_type_tag, grid_dim_tag<2> > 
   : public  boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<2> >
 {
+public:
+  typedef boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<2> > base;
+  typedef typename base::Vertex Vertex;
+  typedef typename base::Cell   Cell;
+  typedef typename base::VertexIterator VertexIterator;
+  typedef typename base::CellIterator   CellIterator;
+  typedef typename base::Facet  Facet;
+  typedef typename base::FacetOnCellIterator FacetOnCellIterator;
   typedef E BaseCell;
+private:
+
   BaseCell  bc;
 public:
   boundary_grid_aux() {}
@@ -106,7 +116,16 @@ template<class E>
 class boundary_grid_aux<E, cell_type_tag, grid_dim_tag<3> > 
   : public  boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<3> >
 {
+public:
+  typedef boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<3> > base;
+  typedef typename base::Vertex Vertex;
+  typedef typename base::Cell   Cell;
+  typedef typename base::VertexIterator VertexIterator;
+  typedef typename base::CellIterator   CellIterator;
+  typedef typename base::Facet  Facet;
+  typedef typename base::FacetOnCellIterator FacetOnCellIterator;
   typedef E BaseCell;
+private:
   BaseCell  bc;
 public:
   boundary_grid_aux() {}
@@ -160,7 +179,17 @@ template<class E>
 class boundary_grid_aux<E, facet_type_tag, grid_dim_tag<3> > 
   : public boundary_grid_types_aux<E, facet_type_tag, grid_dim_tag<3> > 
 {
+public:
+  typedef boundary_grid_types_aux<E, facet_type_tag, grid_dim_tag<3> > base;
+  typedef typename base::Vertex Vertex;
+  typedef typename base::Cell   Cell;
+  typedef typename base::VertexIterator VertexIterator;
+  typedef typename base::CellIterator   CellIterator;
+  typedef typename base::Facet  Facet;
+  typedef typename base::FacetOnCellIterator FacetOnCellIterator;
+
   typedef E BaseFacet;
+private:
   BaseFacet  bf;
 public:
   boundary_grid_aux() {}
@@ -190,6 +219,7 @@ template<class E,class DIM>
 class boundary_grid_types_aux<E, edge_type_tag, DIM> 
   : public boundary_grid_types_base<E, edge_type_tag, DIM>
 {
+public:
   typedef grid_dim_tag<0> dimension_tag;
 
   typedef typename boundary_grid_types_base<E, edge_type_tag, DIM>::bgt bgt;
@@ -207,7 +237,15 @@ template<class E,class DIM>
 class boundary_grid_aux<E, edge_type_tag, DIM> 
   : public boundary_grid_types_aux<E, edge_type_tag, DIM> 
 {
+public:
+  typedef boundary_grid_types_aux<E, edge_type_tag, DIM> base;
+  typedef typename base::Vertex         Vertex;
+  typedef typename base::Cell           Cell;
+  typedef typename base::VertexIterator VertexIterator;
+  typedef typename base::CellIterator   CellIterator;
+
   typedef E BaseEdge;
+private:
   BaseEdge  be;
 public:
   boundary_grid_aux() {}

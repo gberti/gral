@@ -20,7 +20,7 @@ void ConstructGrid_GF(OstreamGMV3DFmt& Out,
 		      heterogeneous_list::List<GF,MOREGFS> GFS)
 {
   typedef OstreamGMV3DFmt GMV3D;
-  ostream& out = Out.Out();
+  std::ostream& out = Out.Out();
   typedef grid_types<GRID> gt;
   typedef grid_types<GMV3D::archetype_type> gmv_agt;
 

@@ -333,8 +333,8 @@ class grid_function<VertexIterator_istream_complex2d,T>
   typedef grid_function_vector<VertexIterator_istream_complex2d,T> base;
 public: 
   grid_function() {}
-  grid_function(grid_type const& gg) : base(gg) {}
-  grid_function(grid_type const& gg, T const& tt) : base(gg,tt) {}
+  grid_function(typename base::grid_type const& gg) : base(gg) {}
+  grid_function(typename base::grid_type const& gg, T const& tt) : base(gg,tt) {}
 };
 
 template<class T>
@@ -344,8 +344,8 @@ class grid_function<CellIterator_istream_complex2d,T>
   typedef grid_function_vector<CellIterator_istream_complex2d,T> base;
 public: 
   grid_function() {}
-  grid_function(grid_type const& gg) : base(gg) {}
-  grid_function(grid_type const& gg, T const& tt) : base(gg,tt) {}
+  grid_function(typename base::grid_type const& gg) : base(gg) {}
+  grid_function(typename base::grid_type const& gg, T const& tt) : base(gg,tt) {}
 };
 
 

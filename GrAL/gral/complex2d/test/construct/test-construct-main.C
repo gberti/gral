@@ -6,7 +6,7 @@
 #include <algorithm>
 #include <vector>
 
-#include <fstream.h>
+#include <fstream>
 
 // External control
 #include "IO/control-device.h"
@@ -33,9 +33,7 @@ typedef geometry_type::coord_type coord_type;
 
 
 int main(int argc, char* argv[]) {
-  using std::ifstream;
-  using std::ofstream;
-  using std::string;
+  using namespace std;
 
   typedef grid_types<Complex2D> gt; 
 
@@ -51,12 +49,12 @@ int main(int argc, char* argv[]) {
 
   Ctrl.update();
 
-  std::ostream& testout(cout);  
+  ostream& testout(cout);  
 
 
    
   int NCC = 4;
-  std::vector<Complex2D> CC(NCC);
+  vector<Complex2D> CC(NCC);
   
   testout << "constructing Complex2D CC[0] from file " << grid_file << "\n";
   
@@ -113,7 +111,7 @@ int main(int argc, char* argv[]) {
 
   // textual output
    
-   std::vector<Complex2D>::const_iterator CCi;
+   vector<Complex2D>::const_iterator CCi;
    for(CCi = CC.begin(); CCi != CC.end()-Ncases; ++CCi) { 
      testout << "Testing CC[" << CCi - CC.begin() << "]\n";
      T.test_complex2d_iterators(*CCi,geometry_type(*CCi),testout);

@@ -91,7 +91,7 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid,
   CopyOverlap(ovlp_grid.TheOverlap(),
 	      ovlp,
               ovlp_grid.TheCoarseGrid(), 
-	      identity<coarse_cell_handle>(),   // ovlp.TheCoarse() == ovlp_grid.TheCoarse()
+	      stdext::identity<coarse_cell_handle>(),   // ovlp.TheCoarse() == ovlp_grid.TheCoarse()
               ovlp_grid.TheGrid(),      // ovlp_grid.TheGrid() == local grid,
 	                                // ovlp     .TheGrid() == global_grid
 	      v_corr,                   // ovlp.TheGrid() --> ovlp_grid.TheGrid()

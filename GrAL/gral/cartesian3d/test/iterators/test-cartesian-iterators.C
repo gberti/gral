@@ -10,8 +10,8 @@
 #include "Utility/pre-post-conditions.h"
 
 int main() {
-
-  std::ofstream* out = new std::ofstream("vertex-iterator.out");
+  using namespace std; 
+  ofstream* out = new ofstream("vertex-iterator.out");
 
   OstreamComplex2DFmt OG(*out);
   ConstructGrid0(OG, * (CartesianGrid3D::BeginArchetype()));

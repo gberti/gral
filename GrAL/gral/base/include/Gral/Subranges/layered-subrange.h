@@ -40,7 +40,7 @@ class layered_vertex_range
 public:
   typedef enumerated_vertex_range<Grid>        base;
   typedef typename base::range_type_ref        range_type_ref;
-
+  typedef typename base::grid_type             grid_type;
 private:
   //---   DATA  ----
   std::vector<int> layers;
@@ -103,7 +103,7 @@ class layered_cell_range
 public:
   typedef enumerated_cell_range<Grid>          base;
   typedef typename base::range_type_ref        range_type_ref;
-
+  typedef typename base::grid_type             grid_type;
 private:
   //---   DATA  ----
   std::vector<int> layers;

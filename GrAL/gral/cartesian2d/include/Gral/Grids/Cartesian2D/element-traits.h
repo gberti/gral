@@ -16,7 +16,8 @@
 /*! \ingroup elementtraitsreggrid2d
  */
 template<class E> 
-struct hasher_for_reg2d {
+struct hasher_for_reg2d 
+  : public element_traits_base<E>::hasher_type_base<RegGrid2D, E> {
   int operator()(const E& e) const { return e.GlobalNumber();}
 };
 

@@ -146,6 +146,8 @@ private:
   T default_value;
 
 public:
+  typedef typename base_gf::grid_type grid_type;
+
   partial_grid_function() 
     : base_gf(), default_value(T()) {} 
   partial_grid_function(const grid_type& gg) 

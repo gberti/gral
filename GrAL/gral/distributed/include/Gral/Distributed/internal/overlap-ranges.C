@@ -9,7 +9,7 @@
 #include "Container/range.h"
 
 template<class OVRange>
-void write_ovrge(OVRange const& rnge, ostream& out)
+void write_ovrge(OVRange const& rnge, std::ostream& out)
 {
   out << "private:\n"
       << range(rnge.privee().begin(),  rnge.privee().end()) << '\n' 

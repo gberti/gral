@@ -30,6 +30,7 @@ public:
 
   bool operator==(self const& rhs) const { return (rhs.c == c) && (rhs.g == g);}
   bool operator!=(self const& rhs) const { return !((*this) == rhs);}
+  bool operator< (self const& rhs) const { return (c < rhs.c);}
 };
 
 #endif

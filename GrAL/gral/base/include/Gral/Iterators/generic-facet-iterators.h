@@ -91,7 +91,13 @@ namespace generic_facet {
 
     template<class gt>
       class facet_handle_t : public grid_types_facet<gt> {
-	typedef facet_handle_t<gt> self;
+	typedef facet_handle_t  <gt> self;
+	typedef grid_types_facet<gt> base;
+
+      public:
+	typedef typename base::cell_handle 	 cell_handle;
+	typedef typename base::arch_cell_handle  arch_cell_handle;
+
       public:
 	cell_handle      c;
 	arch_cell_handle lh;
@@ -121,8 +127,17 @@ namespace generic_facet {
 	: public grid_types_facet<gt> {
 	
 	typedef facet_on_cell_iterator<gt> self;
+	typedef grid_types_facet<gt>       base;
 	friend class vertex_on_facet_iterator<gt>;
 	friend class facet<gt>;
+      public:
+	typedef typename base::Cell         Cell;
+	typedef typename base::Facet        Facet;
+	typedef typename base::facet_handle facet_handle;
+	typedef typename base::archCell         archCell;
+	typedef typename base::archCellIterator archCellIterator;
+	typedef typename base::arch_cell_handle arch_cell_handle;
+	typedef typename base::grid_type        grid_type;
       private:
 	Cell              c;
 	archCellIterator  lf;
@@ -167,8 +182,14 @@ namespace generic_facet {
 
     template<class gt>
     class facet : public grid_types_facet<gt> {
-      typedef facet<gt> self;
+      typedef facet<gt>            self;
+      typedef grid_types_facet<gt> base;
       friend class vertex_on_facet_iterator<gt>;
+    public:
+      typedef typename base::facet_handle facet_handle;
+      typedef typename base::VertexOnFacetIterator VertexOnFacetIterator;
+      typedef typename base::grid_type        grid_type;
+
     private:
       facet_on_cell_iterator<gt> fc;
     public:
@@ -189,6 +210,8 @@ namespace generic_facet {
       }
       bool operator!=(self const& rhs) const 
 	{ return !((*this) == rhs);}
+
+      bool operator<(self const& rhs) const { return vtuple_type(*this) < vtuple_type(rhs);}
 
       bool bound() const { return fc.bound();}
       bool valid() const { return fc.valid();}
@@ -218,24 +241,21 @@ namespace generic_facet {
 
 	vertex_handle operator[](int n) const { check_range(n); return v[n];}
 
-	// FIXME: lexicographical_compare_3way is not in std::
-	// (only a SGI extension)
         bool operator==(self const& rhs) const { 
-	  return (0 == std::lexicographical_compare_3way
-		             (v    .begin(),    v.end(),
-			      rhs.v.begin(),rhs.v.end()));
+	  return (std::equal(v    .begin(),    v.end(),
+			     rhs.v.begin()));
 	}
 	bool operator!=(self const& rhs) const 
 	  { return !((*this) == rhs);}
 
         bool operator< (self const& rhs) const { 
-	  return (0  >  std::lexicographical_compare_3way
-		              (v    .begin(),    v.end(),
-			       rhs.v.begin(),rhs.v.end()));
+	  return (std::lexicographical_compare
+		  (v    .begin(),    v.end(),
+		   rhs.v.begin(),rhs.v.end()));
 	}
       private:
-	void check_range(unsigned i) const {
-	  REQUIRE( ((0 <= i ) && (i < v.size())), 
+	void check_range(int i) const {
+	  REQUIRE( ((0 <= i ) && (i < (int) v.size())), 
 		   " i = " << i << " must be in [0," << v.size()-1 << "]\n",1);
 	  
 	}
@@ -244,7 +264,13 @@ namespace generic_facet {
 
     template<class gt>
       struct hasher_facet : public grid_types_facet<gt> {
-	size_t operator()(Facet const& f) const 
+	typedef grid_types_facet<gt> base;
+	typedef typename base::vtuple_type vtuple_type;
+	typedef facet<gt> key_type;
+	typedef facet<gt> argument_type;
+	typedef size_t    result_type;
+
+	size_t operator()(argument_type const& f) const 
 	  { 
 	    vtuple_type v(f);
             int n = f.NumOfVertices()-1; // v[n] > v[n-1] > v[n-2].
@@ -258,7 +284,16 @@ namespace generic_facet {
 
     template<class gt>
       class vertex_on_facet_iterator : public grid_types_facet<gt> {
-         typedef vertex_on_facet_iterator<gt> self;
+	typedef vertex_on_facet_iterator<gt> self;
+	typedef grid_types_facet<gt>         base;
+      public:
+	typedef typename base::Vertex        Vertex;
+	typedef typename base::vertex_handle vertex_handle;
+	typedef typename base::Facet         Facet;
+	typedef typename base::facet_handle  facet_handle;
+	typedef typename base::archVertexOnCellIterator archVertexOnCellIterator;
+	typedef typename base::grid_type        grid_type;
+
       private:
 	 facet_on_cell_iterator<gt> f;
 	 archVertexOnCellIterator  vf;
@@ -301,18 +336,27 @@ namespace generic_facet {
      */
     template<class gt>
     class facet_iterator : public grid_types_facet<gt> {
-      typedef facet_iterator<gt> self;
+      typedef facet_iterator<gt>   self;
+      typedef grid_types_facet<gt> base;
+    public:
+      typedef typename base::Cell         Cell;
+      typedef typename base::CellIterator CellIterator;
+      typedef typename base::Facet        Facet;
+      typedef typename base::facet_handle facet_handle;
+      typedef typename base::archCellIterator archCellIterator;
+      typedef typename base::arch_cell_handle arch_cell_handle;
+      typedef typename base::grid_type        grid_type;
+
     private:
       CellIterator               c;
       facet_on_cell_iterator<gt> e;
-      // FIXME: not in std::
-      std::hash_map<facet<gt>, bool, 
-                    hasher_facet<gt>, equal_to<facet<gt> > > visited;
+      // hash_map not in std::
+      hash_map<facet<gt>, bool, hasher_facet<gt> > visited;
     public:
       facet_iterator() {}
       explicit 
       facet_iterator(grid_type const& g) 
-	: c(g), e(c), visited(TheGrid().NumOfCells()*8)
+	: c(g), e(c), visited() // TheGrid().NumOfCells()*8)
 	{
 	  if (! IsDone()) visited[*e] = true;
 	}

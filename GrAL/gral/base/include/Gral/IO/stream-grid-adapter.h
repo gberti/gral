@@ -95,7 +95,7 @@ public:
   
   // iterator op.
   self& operator++() {
-    advance(vertices,numv+1);
+    std::advance(vertices,numv+1);
     ++c;
     if(!IsDone()) 
       numv = *vertices;

@@ -31,14 +31,18 @@ class overlapping_grid_function
   : public  overlapping_grid_function_adapter<grid_function<E1,T1>, DGrid> 
 {
   
-  typedef overlapping_grid_function<E1,T1,DGrid> self;
+  typedef overlapping_grid_function<E1,T1,DGrid>                          self;
   typedef overlapping_grid_function_adapter<grid_function<E1,T1>, DGrid>  base;
   
 public:
+  typedef typename base::ovrlp_grid_type ovrlp_grid_type;
+  // typedef typename base::ovrlp_grid_type grid_type;
+  typedef T1 value_type;
+
   overlapping_grid_function() {}
   overlapping_grid_function(const ovrlp_grid_type& og) 
     : base(og) {}
-  overlapping_grid_function(const ovrlp_grid_type& og, const T& t) 
+  overlapping_grid_function(const ovrlp_grid_type& og, const value_type& t) 
     : base(og,t) {}
 
   overlapping_grid_function(self const& rhs) : base(rhs) {}

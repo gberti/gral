@@ -36,7 +36,7 @@ public:
   const coord_type& coord(const Vertex& v) const { return coords_(v); }
         coord_type& coord(const Vertex& v)       { return coords_[v]; }
 
-  void read(istream& in) {
+  void read(std::istream& in) {
     for(typename grid_function<Vertex,coord_type>::iterator ii = coords_.begin(); ii != coords_.end(); ++ii)
       in >> *ii;
   }
@@ -71,28 +71,42 @@ class stored_geometry_reg2d
 {
   
 public:
-  typedef stored_geometry_reg2d_base<Coord2D>    geom_base;
+  typedef stored_geometry_reg2d_base<Coord2D>    base;
   typedef stored_geometry_reg2d<Coord2D> self;
 
   typedef point_traits<Coord2D> pt;
   typedef algebraic_primitives<Coord2D> ap;
 
+  typedef typename base::Vertex Vertex;
+  typedef typename base::Edge   Edge;
+  typedef typename base::Face   Face;
+  typedef typename base::Facet  Facet;
+  typedef typename base::Cell   Cell;
+
+  typedef typename base::CellIterator        CellIterator;
+  typedef typename base::CellOnCellIterator  CellOnCellIterator;
+  typedef typename base::FacetOnCellIterator FacetOnCellIterator;
+
+  typedef typename base::coord_type coord_type;
+  // typedef typename base::EdgeIterator   EdgeIterator;
+
+
   stored_geometry_reg2d() {}
   stored_geometry_reg2d(const RegGrid2D& gg) 
-    : geom_base(gg) {}
+    : base(gg) {}
 
-  friend istream& operator>>(istream& in, self& rs) { rs.read(in); return in;}
+  friend std::istream& operator>>(std::istream& in, self& rs) { rs.read(in); return in;}
 
 
-  typedef Segment<Edge,geom_base>   segment_type;
-  typedef Polygon2d<Face,geom_base> polygon_type;
+  typedef Segment<Edge,base>   segment_type;
+  typedef Polygon2d<Face,base> polygon_type;
 
   segment_type segment(const Edge& e) const { return segment_type(e,basic_geom());}
   polygon_type polygon(const Face& f) const { return polygon_type(f,basic_geom());}
 
   double volume(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
   double length(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
-  double volume(const EdgeIterator& e) const {return volume(*e);}
+  // double volume(const EdgeIterator& e) const {return volume(*e);}
   double volume(const Cell& c) const { return (polygon_type(c,basic_geom()).area());}
   
   coord_type center(const Edge& e) const {return(segment_type(e,basic_geom()).center());}
@@ -101,7 +115,7 @@ public:
   coord_type center(const Cell& c) const {return(polygon_type(c,basic_geom()).center());}
 
   coord_type outer_area_normal(/*const CellIterator& c,*/
-			       const NeighbourCellIterator& nb)
+			       const CellOnCellIterator& nb)
     { // this could be done more efficiently.
       //coord_type ctr(center(*c));
       coord_type ctr(center(nb.TheCell()));
@@ -179,7 +193,7 @@ public:
   }
   */
 private:
-  const geom_base& basic_geom() const { return *this;}  
+  const base& basic_geom() const { return *this;}  
 };
 
 

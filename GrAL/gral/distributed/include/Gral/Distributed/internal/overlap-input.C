@@ -2,6 +2,7 @@
 #define NMWR_GB_OVERLAP_INPUT_C
 
 #include "Gral/Distributed/overlap-input.h"
+#include <fstream>
 
 template<
   class CoarseGrid, 
@@ -10,7 +11,7 @@ template<
   >
 void overlap_input<CoarseGrid, FineGrid, OVLP_RANGES>::set_neighbours()
 {
-  ifstream nbin( (basenm + ".neighbors").c_str());
+  std::ifstream nbin( (basenm + ".neighbors").c_str());
   typename cgt::cell_handle c;
   while(nbin >> c) {
     neighbours.push_back(c);
