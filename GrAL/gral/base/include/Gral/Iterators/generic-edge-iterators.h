@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Container/my-hash-map.h"
+#include <iostream>
 
 /*! \defgroup generic_edge Generic edge components
 
@@ -74,6 +75,9 @@ namespace generic_edge {
         bool operator==(self const& rhs) const { return (c == rhs.c && eh == rhs.eh);}
         bool operator!=(self const& rhs) const { return !((*this) == rhs);}
       };
+    template<class gt>
+      std::ostream& operator<<(std::ostream& out, edge_handle_t<gt> const& h)
+      { return (out << h.c << ' ' << h.eh);}
 
 
   /*! \brief A generic iterator over the edges of cell.
