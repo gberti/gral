@@ -4,6 +4,8 @@
 
 // $LICENSE
 
+#include "Utility/ref-ptr.h"
+
 namespace GrAL {
 
 
@@ -76,15 +78,19 @@ struct get_second {
 template<class It, class F>
 class mapped_value_const_iterator {
 public:
-  typedef typename F::value_type value_type;
+  typedef typename F::result_type  value_type;
+  typedef F mapping_type;
 private:
   It it;
+  ref_ptr<F> f;
   typedef mapped_value_const_iterator<It,F> self;
 public:
-  mapped_value_const_iterator(const It& i) : it(i) {}
+  //  mapped_value_const_iterator(It i, F const&    ff) : it(i), f(ff) {}
+  mapped_value_const_iterator(It i, ref_ptr<F>  ff) : it(i), f(ff) {}
+  mapped_value_const_iterator(It i)                 : it(i), f(copy_to_ref_ptr(mapping_type())) {}
 
   self& operator++() { ++it; return *this;}
-  const value_type&  operator*() const { return F::value(*it);}
+  const value_type&  operator*() const { return (*f)(*it);}
   //  friend
   bool operator==(const self& rs) const
     { return (it == rs.it);}
@@ -95,23 +101,23 @@ public:
 
 template<class It, class F>
 inline mapped_value_const_iterator<It,F>
-map_iter_c(It i, const F& f) { return mapped_value_const_iterator<It,F>(i);}
+map_iter_c(It i, ref_ptr<F> f) { return mapped_value_const_iterator<It,F>(i,f);}
 
 template<class It>
-inline mapped_value_const_iterator<It,get_first<typename It::value_type> >
+inline mapped_value_const_iterator<It, const get_first<typename It::value_type> >
 get1st_c(It i) {
   typedef typename It::value_type v_type;
-  return mapped_value_const_iterator<It,get_first<v_type> >(i);
+  return mapped_value_const_iterator<It, const get_first<v_type> >(i, copy_to_const_ref_ptr(get_first<v_type>()));
 }
 
 template<class It>
-inline mapped_value_const_iterator<It,get_second<typename It::value_type> >
+inline mapped_value_const_iterator<It, const get_second<typename It::value_type> >
 get2nd_c(It i) { 
   typedef typename It::value_type v_type;
-  return mapped_value_const_iterator<It,get_second<v_type> >(i);
+  return mapped_value_const_iterator<It,const get_second<v_type> >(i, copy_to_const_ref_ptr(get_second<v_type>()));
 }
 
-/*! \brief Forward iterator mapping the value of T>It::op*</TT> with <TT> F </TT>
+/*! \brief Forward iterator mapping the value of <TT>It::op*</TT> with <TT> F </TT>
   (non-const version).
   \ingroup accessors
 
@@ -129,7 +135,7 @@ private:
   It it;
   typedef mapped_value_iterator<It,F>  self;
 public:
-  typedef typename F::value_type value_type;
+  typedef typename F::result_type value_type;
 
   mapped_value_iterator(const It& i) : it(i) {}
 
