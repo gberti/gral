@@ -37,6 +37,7 @@ public:
 
   const coord& the_min() const { return minc;}
   const coord& the_max() const { return maxc;}
+  coord        center()  const { return 0.5*(minc+maxc);}
 
   // dangerous - cannot check consistency
   coord& the_min()  { return minc;}
