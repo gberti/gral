@@ -43,7 +43,7 @@ clean:
 
 
 realclean: clean
-	rm -rf lib/*/
+	rm -rf lib/$(ARCH)/
 
 
 docs:

@@ -39,7 +39,7 @@ clean:
 	rm -f *~ include/*~ include/*/*~
 
 realclean: clean
-	rm -f lib/*/
+	rm -f lib/$(ARCH)/
 
 demo:
 	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
