@@ -1,0 +1,36 @@
+#ifndef NMWR_GB_GRIDS_TEST_TRIANG2D_H
+#define NMWR_GB_GRIDS_TEST_TRIANG2D_H
+
+#include <iostream.h>
+
+#include "IO/control-device.h"
+
+#include "Grids/Triang2D/triang2d.h"
+#include "Grids/Triang2D/grid-functions.h"
+
+
+class TestTriang2D  : public controlable {
+private:
+  bool test_vertices;
+  bool test_cells;
+  bool test_edges;
+  bool test_boundary_facets;
+  bool test_boundary_range;
+
+  bool test_cell_vertices;
+  bool test_cell_edges;
+  bool test_cell_neighbours;
+  bool test_cell_nb_edges;
+
+  bool test_cell_nb_iter;
+  bool test_cell_edge_flip;
+
+public:
+  TestTriang2D();
+  virtual void register_at(ControlDevice& Ctrl, const string& prefix);
+  virtual void register_at(ControlDevice& Ctrl) { register_at(Ctrl,"");}
+  void test_iterators(const Triang2D& CC,
+		      ostream& out);
+};
+
+#endif
