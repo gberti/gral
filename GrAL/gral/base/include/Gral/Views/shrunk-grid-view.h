@@ -66,6 +66,7 @@ namespace shrink_grid_view {
 
   template<class GRID>
     class local_grid_types {
+    public:
       typedef grid_view<GRID>        grid_type;
       typedef cell_iterator<GRID>    Cell;
       typedef cell_iterator<GRID>    CellIterator;
@@ -114,6 +115,15 @@ namespace shrink_grid_view {
    */
   template<class GRID>
     class grid_view : public local_grid_types<GRID> {
+      typedef grid_view<GRID>        self;
+      typedef local_grid_types<GRID> gt;
+    public:
+      typedef typename gt::ArchetypeIterator ArchetypeIterator;
+      typedef typename gt::archetype_type    archetype_type;
+      typedef typename gt::archetype_handle  archetype_handle;
+      typedef typename gt::base_grid_type    base_grid_type;
+      typedef typename gt::Cell              Cell;
+      typedef typename gt::cell_handle       cell_handle;
     private:
       base_grid_type const* g; // ref
 
@@ -159,32 +169,40 @@ namespace shrink_grid_view {
 
     };
 
-  //--------- element handles ---------------------
-  template<class GRID>
-    struct vertex_handle_t : public local_grid_types<GRID> {
-      typedef typename bgt::vertex_handle base_vertex_handle;
-      
-      cell_handle        c;
-      base_vertex_handle v;
-    public:
-      vertex_handle_t() {}
-      vertex_handle_t(cell_handle cc, base_vertex_handle vv) : c(cc), v(vv) {}
-    };
-  
-  template<class GRID>
-    inline
-    ostream& operator<<(ostream& out, vertex_handle_t<GRID> const& h)
-    { return (out << h.c << ' ' << h.v);}
+ template<class GRID>
+   struct vertex_handle_t : public local_grid_types<GRID> {
+     typedef local_grid_types<GRID> base;
+     typedef typename base::bgt bgt;
+     typedef typename bgt::vertex_handle base_vertex_handle;
+     typedef typename base::cell_handle  cell_handle;
 
+     cell_handle        c;
+     base_vertex_handle v;
+   public:
+     vertex_handle_t() {}
+     vertex_handle_t(cell_handle cc, base_vertex_handle vv) : c(cc), v(vv) {}
+   };
+
+ template<class GRID>
+   inline
+   std::ostream& operator<<(std::ostream& out, vertex_handle_t<GRID> const& h)
+   { return (out << h.c << ' ' << h.v);}
 
   //---- elements and sequence  iterators -----------
   
   template<class GRID>
     class cell_iterator : public local_grid_types<GRID> {
     private:
-      typedef cell_iterator<GRID> self; 
+      typedef cell_iterator<GRID>    self; 
+      typedef local_grid_types<GRID> base;
       friend class vertex_on_cell_iterator<GRID>;
-
+    public:
+      typedef typename base::bgt           bgt;
+      typedef typename base::archgt        archgt;
+      typedef typename base::grid_type     grid_type;
+      typedef typename base::cell_handle   cell_handle;
+      typedef typename base::vertex_handle vertex_handle;
+    private:
       grid_type  const*          g;
       typename bgt::CellIterator c;
     public:
@@ -210,6 +228,7 @@ namespace shrink_grid_view {
 
       bool operator==(self const& rhs) const { return c == rhs.c;}
       bool operator!=(self const& rhs) const { return !(*this == rhs);}
+      bool operator< (self const& rhs) const { return c <  rhs.c;}
 
       bool bound() const { return (g!= 0);}
       bool valid() const { return bound() && c.valid();}
@@ -222,7 +241,16 @@ namespace shrink_grid_view {
   template<class GRID>
     class vertex_iterator : public local_grid_types<GRID> {
     private:
-      typedef vertex_iterator<GRID> self;
+      typedef vertex_iterator<GRID>  self;
+      typedef local_grid_types<GRID> base;
+    public:
+      typedef typename base::bgt           bgt;
+      typedef typename base::archgt        archgt;
+      typedef typename base::grid_type     grid_type;
+      typedef typename base::cell_handle   cell_handle;
+      typedef typename base::vertex_handle vertex_handle;
+      typedef typename base::Cell          Cell;
+    private:
 
       grid_type const* g;
       typename bgt::CellIterator c;
@@ -262,7 +290,7 @@ namespace shrink_grid_view {
 
       bool operator==(self const& rhs) const { return vc == rhs.vc;}
       bool operator!=(self const& rhs) const { return !(*this == rhs);}
-
+      bool operator< (self const& rhs) const { return vc < rhs.vc;}
 
       Cell Cell_()  const { return Cell(*g,c.handle());}
       typename bgt::Vertex BaseVertex() const { return *vc;}
@@ -274,6 +302,13 @@ namespace shrink_grid_view {
   template<class GRID>
     class vertex_on_cell_iterator : public local_grid_types<GRID> {
       typedef vertex_on_cell_iterator<GRID> self;
+      typedef local_grid_types<GRID>        gt;
+    public:
+      typedef typename gt::bgt           bgt;
+      typedef typename gt::grid_type     grid_type;
+      typedef typename gt::vertex_handle vertex_handle;
+      typedef typename gt::Vertex        Vertex;
+      typedef typename gt::Cell          Cell;
     private:
       grid_type const* g;
       typename bgt::VertexOnCellIterator vc;
@@ -294,6 +329,7 @@ namespace shrink_grid_view {
 
       bool operator==(self const& rhs) const { return vc == rhs.vc;}
       bool operator!=(self const& rhs) const { return !(*this == rhs);}
+      bool operator< (self const& rhs) const { return vc == rhs.vc;}
 
     };
 
@@ -335,10 +371,18 @@ namespace shrink_grid_view {
    */
   template<class GRID, class GEOM>
     class geom_view : public local_grid_types<GRID> {
-      typedef GEOM base_geom_type;
+      typedef GEOM                   base_geom_type;
+      typedef local_grid_types<GRID> gt;
     public:
       typedef typename base_geom_type::coord_type coord_type;
-      typedef point_traits<coord_type> pt;
+      typedef point_traits<coord_type>            pt;
+      typedef typename gt::bgt                    bgt;
+      typedef typename gt::grid_type              grid_type;
+      typedef typename gt::vertex_handle          vertex_handle;
+      typedef typename gt::Vertex                 Vertex;
+      typedef typename gt::Cell                   Cell;
+      typedef typename gt::VertexOnCellIterator   VertexOnCellIterator;
+
     private:
       grid_type      const* g;
       base_geom_type const* geom;
@@ -368,7 +412,10 @@ namespace shrink_grid_view {
 } // namespace shrink_grid_view
 
 
-//----- traits classes in global scope: grid_types<>, element_traits<> ---------
+
+//----- classes in global scope: grid_types<>, element_traits<>, grid_function<>  ---------
+// Do grid_function have to be in global scope??
+
 
 template<class GRID>
 class grid_types<shrink_grid_view::grid_view<GRID> > :
@@ -379,9 +426,12 @@ template<class GRID>
 struct element_traits<shrink_grid_view::vertex_iterator<GRID> >
   : public element_traits_vertex_base<shrink_grid_view::grid_view<GRID> > 
 {
-  typedef shrink_grid_view::vertex_handle_t<GRID> element_handle;
-  struct hasher_type {
-    unsigned operator()(element_handle const&  v) const 
+  typedef element_traits_vertex_base<shrink_grid_view::grid_view<GRID> >  base;
+  typedef typename base::element_type   element_type;
+  typedef typename base::handle_type    handle_type;
+
+  struct hasher_type : public hasher_type_elem_base {
+    unsigned operator()(handle_type const&  v) const 
       { return (8*v.c + v.v);}
     unsigned operator()(element_type const&  v) const 
       { return (*this)(v.handle());}
@@ -393,14 +443,18 @@ template<class GRID>
 struct element_traits<shrink_grid_view::cell_iterator<GRID> >
   : public element_traits_cell_base<shrink_grid_view::grid_view<GRID> > 
 {
+  typedef element_traits_vertex_base<shrink_grid_view::grid_view<GRID> >  base;
+  typedef typename base::element_type   element_type;
+  typedef typename base::handle_type    handle_type;
+
   typedef shrink_grid_view::local_grid_types<GRID> lgt; // gt of view
   typedef typename lgt::bgt                        bgt; // gt of GRID
-  typedef typename lgt::cell_handle                element_handle;
   typedef element_traits<typename bgt::Cell>       bet;
   typedef typename bet::hasher_type                base_hasher_type;
 
-  struct hasher_type {
-    unsigned operator()(element_handle const&  v) const 
+  struct hasher_type : public hasher_type_elem_base {
+
+    unsigned operator()(handle_type const&  v) const 
       { base_hasher_type h; return h(v);}
     unsigned operator()(element_type const&  v) const 
       { return (*this)(v.handle());}
@@ -413,9 +467,10 @@ template<class GRID, class T>
 class grid_function<shrink_grid_view::vertex_iterator<GRID>, T>
   : public grid_function_hash<shrink_grid_view::vertex_iterator<GRID>, T>
 {
-  typedef grid_function_hash<shrink_grid_view::vertex_iterator<GRID>, T> 
-  base;
+  typedef grid_function_hash<shrink_grid_view::vertex_iterator<GRID>, T>  base;
 public:
+  typedef typename base::grid_type grid_type;
+
   grid_function() {}
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g,
