@@ -1,0 +1,22 @@
+/*! \mainpage Index of the Geometry module
+    
+    \section intro Introduction
+    
+    The Geometry package contains classes for representing
+    geometric entities like points and lines, and some
+    algebraic/geometric primitives for operating on them,
+    like norms, distances, and intersections.
+
+
+    Please note that things in this package have been developed
+    in an ad-hoc fashion, driven by the needs of the various GrAL
+    algorithms, and do not  represent an attempt to provide
+    a `complete' set of primitives (whatever this would mean).
+
+
+    I tried to make geometric and algebraic algorithms
+    as generic as possible. The main technique for achieving this
+    aim is a traits technique giving uniform access to the
+    functionality of geometric point classes via specializations
+    of the point_traits template.
+*/
