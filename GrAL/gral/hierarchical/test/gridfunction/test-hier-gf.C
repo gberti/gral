@@ -6,6 +6,8 @@
 #include "Gral/Grids/Cartesian3D/all.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 
+#include "Gral/Base/multi-grid-functions.h"
+#include "Gral/Base/partial-multi-grid-functions.h"
 
 #include <iostream>
 
@@ -79,13 +81,37 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
 
 // explicit instantiation to make sure all members are compilable
 namespace hierarchical { 
-  typedef cartesiannd::grid<3>  cart_grid_type;
+  typedef cartesiannd::grid<3>       cart_grid_type;
+  typedef grid_types<cart_grid_type> cgt;
+
   template class hgrid_cartesian<cart_grid_type>;
-  typedef hgrid_cartesian<cart_grid_type>::hier_cell_type hier_cell_type;
+
+  typedef hgrid_cartesian<cart_grid_type> hier_grid_type;
+  typedef hier_grid_type::hier_cell_type hier_cell_type;
   template class hier_grid_function<hier_cell_type, int>;
 
-  template class hier_grid_function_base<hier_cell_type, int, grid_function>;
-  template class hier_grid_function_base<hier_cell_type, int, partial_grid_function>;
+  template class hier_grid_function_base<hier_grid_type,         grid_function<cgt::Cell, int> >;
+  template class hier_grid_function_base<hier_grid_type, partial_grid_function<cgt::Cell, int> >;
+
+  template class hier_grid_function_base<hier_grid_type,         multi_grid_function<cart_grid_type, int> >;
+  template class hier_grid_function_base<hier_grid_type, partial_multi_grid_function<cart_grid_type, int> >;
+}
+
+
+namespace hierarchical { 
+  typedef cartesiannd::grid<2>       cart_grid_type_2d;
+  typedef grid_types<cart_grid_type_2d> cgt2d;
+  template class hgrid_cartesian<cart_grid_type_2d>;
+
+  typedef hgrid_cartesian<cart_grid_type_2d> hier_grid_type_2d;
+  typedef hier_grid_type_2d::hier_cell_type hier_cell_type_2d;
+  template class hier_grid_function<hier_cell_type_2d, int>;
+
+  template class hier_grid_function_base<hier_grid_type_2d, grid_function<cgt2d::Cell, int> >;
+  template class hier_grid_function_base<hier_grid_type_2d, partial_grid_function<cgt2d::Cell, int> >;
+
+  template class hier_grid_function_base<hier_grid_type_2d,         multi_grid_function<cart_grid_type_2d, int> >;
+  template class hier_grid_function_base<hier_grid_type_2d, partial_multi_grid_function<cart_grid_type_2d, int> >;
 }
 
 
