@@ -20,9 +20,9 @@ void write_ovrge(OVRange const& rnge, ostream& out)
       << range(rnge.privee().begin(),  rnge.privee().end()) << '\n' 
       << "exposed:\n"
       << range(rnge.exposed().begin(), rnge.exposed().end()) << '\n' 
-      << "shared:\n";
+      << "shared:\n"
       << range(rnge.shared().begin(),  rnge.shared().end()) << '\n' 
-      << "copied\n";
+      << "copied\n"
       << range(rnge.copied().begin(),  rnge.copied().end()) << '\n'; 
 }
 
