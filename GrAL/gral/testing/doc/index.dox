@@ -5,6 +5,8 @@
 
     All tests are accessible by including Test/all.h.
 
-    Examples are found in the tests of complex3d
-    and cartesian2d modules.
+    Examples are found in the tests of $gral-gral/complex3d GrAL-Complex3D
+    (in test-complex3d-iterators.C)
+    and $gral-gral/cartesian2d cartesian2d 
+    (in test-cartesian-iterators.C) modules.
 */

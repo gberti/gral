@@ -82,7 +82,8 @@
 
     \ingroup gralbasemodules
 
-    \brief Contains algorithms which do not use geometric functionality.
+    \brief Contains basic algorithms which do not use 
+     geometric functionality.
 
 */
 

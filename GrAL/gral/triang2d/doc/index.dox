@@ -20,9 +20,10 @@
      (see $GrAL PartialGridFunction concept, partial-grid-functions.h )
    - ConstructGrid0(Triang2D,...) for copying an arbitrary grid into
      a Triang2D grid (construct.h)
+   - stored_geometry_Triang2D for a simple geometry 
+     (see $GrAL VertexGridGeometry concept)
    - all.h for all of the above.
 
    \status 
-   - a stored grid geometry has to be added
    - switch operators have to be defined (for edges and vertices)
 */
