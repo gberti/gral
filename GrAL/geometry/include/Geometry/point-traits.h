@@ -100,12 +100,14 @@ inline void assign_point(P & p, T const* b, T const* e)
 }  
 
 template<class P>
-void assign_point(P& p, P const& q) { p = q;}
+inline void assign_point(P& p, P const& q) { p = q;}
 
+// these specializations should not be necessary!
 template<class P>
-void assign_point(float& p, P const& q) 
+inline void assign_point(float& p, P const& q) 
 
 { p = point_traits<P>::x(q);}
 
-void assign_point(float& p, float q) { p = q;}
+inline void assign_point(float& p, float q) { p = q;}
+
 #endif
