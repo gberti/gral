@@ -37,10 +37,11 @@ private:
     DistributedG
   >        base;
 public:
+  typedef typename base::distributed_grid_type distributed_grid_type;
   distributed_grid_function() {}
   distributed_grid_function(distributed_grid_type const& dg) : base(dg) {}
   distributed_grid_function(distributed_grid_type const& dg,
-			    T                     const& t ) : base(dg,t) {}
+			    T1                    const& t ) : base(dg,t) {}
 
   distributed_grid_function(self const& rhs) : base(rhs) {}
   self& operator=(self const& rhs) { 
