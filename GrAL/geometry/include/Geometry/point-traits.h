@@ -83,6 +83,7 @@ struct point_traits<double>
 
 
 
+
 template<class ARRAY, class COMPONENT, unsigned DIM>
 struct point_traits_fixed_size_array :
   public point_traits_base<ARRAY>
@@ -107,6 +108,7 @@ struct point_traits_fixed_size_array :
   }
   static Ptype Origin(unsigned) { return Origin();}
 
+
   // should branch on DIM here.
   static component_type  x(const Ptype& p) {return p[0];}
   static component_type& x(      Ptype& p) {return p[0];}
@@ -114,6 +116,35 @@ struct point_traits_fixed_size_array :
   static component_type& y(      Ptype& p) {return p[1];}
   static component_type  z(const Ptype& p) {return p[2];}
   static component_type& z(      Ptype& p) {return p[2];}
+
+};
+
+
+template<class ARRAY, unsigned N>
+struct array_operators 
+{
+  ARRAY      & to_derived()       { return static_cast<ARRAY&>(*this);}
+  ARRAY const& to_derived() const { return static_cast<ARRAY const&>(*this);}
+
+
+  ARRAY& operator-=(ARRAY const& rhs) {
+    for(unsigned i  = 0; i < N; ++i) 
+      to_derived()[i] -= rhs[i];
+    return to_derived(); 
+  }
+  ARRAY operator-(ARRAY const& rhs) const {
+    ARRAY lhs(to_derived());
+    return lhs -= rhs;
+  }
+  ARRAY& operator+=(ARRAY const& rhs) {
+    for(unsigned i  = 0; i < N; ++i) 
+      to_derived()[i] -= rhs[i];
+    return to_derived(); 
+  }
+  ARRAY operator+(ARRAY const& rhs) const {
+    ARRAY lhs(to_derived());
+    return lhs += rhs;
+  }
 
 };
 
