@@ -101,38 +101,38 @@ inline void RegisterAt(ControlDevice& Ctrl, char const*   name, T& t)
     
     \ingroup ControlDeviceCreators 
  */
-extern ControlDevice GetStreamDevice(::std::istream* in, 
-                                     ::std::string const& name = "");
+extern ControlDevice GetStreamDevice(std::istream* in, 
+                                     std::string const& name = "");
 
 
 /*! \brief Create a  ControlDevice that reads name-value-pairs from a file
  */
 extern ControlDevice GetFileControlDevice(char const*   filename, 
-                                          ::std::string const& name);
+                                          std::string const& name);
 
 /*! \brief Create a ControlDevice that first reads from file and then from command line
     
     \ingroup ControlDeviceCreators 
  */
 extern ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
-							::std::string const& filename, 
-							::std::string const& name);
+							std::string const& filename, 
+							std::string const& name);
 
 /*! \brief Create a ControlDevice that reads from given a stream and from a file
     
     \ingroup ControlDeviceCreators 
  */
-extern ControlDevice GetDuplexControlDevice(::std::istream     & in2,
+extern ControlDevice GetDuplexControlDevice(std::istream     & in2,
 					    char        const* filename, 
-                                            ::std::string const& name);
+                                            std::string const& name);
     
 /*! \brief Create a ControlDevice that reads from given a stream and from a file
     
     \ingroup ControlDeviceCreators 
  */
-extern ControlDevice GetDuplexControlDevice(::std::istream     & in2,
-					    ::std::string const& filename, 
-                                            ::std::string const& name);
+extern ControlDevice GetDuplexControlDevice(std::istream     & in2,
+					    std::string const& filename, 
+                                            std::string const& name);
 
 } // namespace GrAL 
 
