@@ -22,6 +22,10 @@ namespace detail {
 
     grid_function<element_type, T> f;
   public:
+    typedef typename base::value_type      value_type;
+    typedef typename base::reference       reference;
+    typedef typename base::const_reference const_reference;
+
     multi_gf_aux() {}
     multi_gf_aux(Grid const& g) : base(g), f(g) {}
     multi_gf_aux(Grid const& g, T const& t) : base(g,t), f(g,t) {}
@@ -34,6 +38,9 @@ namespace detail {
 
     grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
     grid_type const& TheGrid() const { return f.TheGrid();} 
+
+    void set_value_(value_type const& t) { base::set_value_(t);  f.set_value(t);}
+    void set_grid_ (grid_type const& g)    { base::set_grid_(g);   f.set_grid(g);}
  };
 
   // end recursion
@@ -62,7 +69,8 @@ namespace detail {
     grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
     grid_type const& TheGrid() const { return f.TheGrid();} 
 
-    void set_value(value_type const& t) { f.set_value(t);}
+    void set_value_(value_type const& t) { f.set_value(t);}
+    void set_grid_(grid_type const& g)   { f.set_grid(g);}
   };
   
 
@@ -108,6 +116,10 @@ public:
 
   template<class E>
   unsigned size() const { return ElementFunction<E>().size();}
+
+  void set_value(value_type const& t) { set_value_(t);}
+  void set_grid(grid_type const& g)   { set_grid_(g);}
+  void set_grid(grid_type const& g, value_type const& t) { set_grid_(g); set_value(t); }
 };
 
 
