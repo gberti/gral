@@ -307,14 +307,10 @@ public:
     { switch_edge(v,e,c);}
   inline void switch_cell(Edge const& e, Cell & c) const;
 
-  inline Vertex switched_vertex(Vertex const& v, Edge const& e) const
-    { Vertex sv(v); switch_vertex(sv,e); return sv;}
-  inline Edge switched_edge(Vertex const& v, Edge const& e, Cell const& c) const
-    { Edge se(e); switch_edge(v,se,c); return se;}
-  inline Facet switched_facet(Vertex const& v, Edge const& e, Cell const& c) const
-    { Edge se(e); switch_edge(v,se,c); return se;}
-  inline Cell switched_cell(Edge & e, Cell const& c) const
-    { Cell sc(c); switch_cell(e,sc); return sc;}
+  inline Vertex switched_vertex(Vertex const& v, Edge const& e) const;
+  inline Edge   switched_edge  (Vertex const& v, Edge const& e, Cell const& c) const;
+  inline Facet  switched_facet (Vertex const& v, Edge const& e, Cell const& c) const;
+  inline Cell   switched_cell  (Edge & e, Cell const& c) const;
   //@}
 
 
