@@ -27,7 +27,8 @@ struct element_handle_int
 };
 
 template<class GRID, class element_tag>
-::std::istream& operator>>( ::std::istream& in, element_handle_int<GRID, element_tag> & h)
+inline
+std::istream& operator>>(std::istream& in, element_handle_int<GRID, element_tag> & h)
 { return (in >> h.h); }
 
 } // namespace GrAL
@@ -158,19 +159,19 @@ struct cell_handle_int
 
 
 template<class GRID>
-::std::istream& operator>>(::std::istream& in, vertex_handle_int<GRID> & h)
+inline std::istream& operator>>(std::istream& in, vertex_handle_int<GRID> & h)
 { return (in >> h.h); }
 
 template<class GRID>
-::std::istream& operator>>(::std::istream& in, edge_handle_int<GRID> & h)
+inline std::istream& operator>>(std::istream& in, edge_handle_int<GRID> & h)
 { return (in >> h.h); }
 
 template<class GRID>
-::std::istream& operator>>(::std::istream& in, facet_handle_int<GRID> & h)
+inline std::istream& operator>>(std::istream& in, facet_handle_int<GRID> & h)
 { return (in >> h.h); }
 
 template<class GRID>
-::std::istream& operator>>(::std::istream& in, cell_handle_int<GRID> & h)
+inline std::istream& operator>>(std::istream& in, cell_handle_int<GRID> & h)
 { return (in >> h.h); }
 
 } // namespace GrAL 

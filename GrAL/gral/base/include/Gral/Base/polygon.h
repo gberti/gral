@@ -77,8 +77,8 @@ namespace polygon1d  {
     unsigned NumOfEdges()  const { return NumOfCells();}
     unsigned NumOfFacets() const { return NumOfVertices();}
 
-    VertexIterator FirstVertex() const;
-    CellIterator   FirstCell()   const;
+    inline VertexIterator FirstVertex() const;
+    inline CellIterator   FirstCell()   const;
 
     EdgeIterator  FirstEdge()  const { return FirstCell();}
     FacetIterator FirstFacet() const { return FirstVertex();}
