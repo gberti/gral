@@ -1,0 +1,19 @@
+/*! \mainpage Index of the GrAL Distributed Grids Package
+
+    This package contains data structures and algorithms for handling
+    distributed grids. 
+   
+    The top level module is \ref distributedgrids.
+*/
+
+
+/*! \defgroup distributedgrids Components for distributed grids
+
+     The main package for distributed grids are
+     - \ref compositegrids, 
+       which defines a grid composed from smaller grids in a single global memory space.
+       This can be useful to test algorithms on distributed grids, or for shared memory
+       parallelization
+     - \ref mpidistributedgrids, 
+        which defines a grid composed of smaller grids in distributed memory, communicating via MPI.
+*/
