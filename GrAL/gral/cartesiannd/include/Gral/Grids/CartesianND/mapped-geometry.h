@@ -7,6 +7,7 @@
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Geometries/point-location-base.h"
 
+#include "Geometry/algebraic-primitives.h"
 #include "Container/tuple.h"
 #include "Container/tuple-point-traits.h"
 
