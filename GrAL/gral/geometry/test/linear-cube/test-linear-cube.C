@@ -75,6 +75,7 @@ int main() {
       cout << "Cell " << c.handle() << endl;
       interpolator2d_type I(GeomG, f, *c);
       I.TheCubature()->init(1);
+      I.init_integration();
       for(int i = 0; i < (int)I.TheCubature()->size(); ++i) {
 	cout << "  local cubature point: " << I.TheCubature()->point(i)
 	     << "  weight= " << I.TheCubature()->weight(i) 
@@ -116,6 +117,7 @@ int main() {
       cout << "Cell " << c.handle() << endl;
       interpolator2d_type I(GeomG, f, *c);
       I.TheCubature()->init(1);
+      I.init_integration();
       for(int i = 0; i < (int)I.TheCubature()->size(); ++i) {
 	cout << "  local cubature point: " << I.TheCubature()->point(i)
 	     << "  weight= " << I.TheCubature()->weight(i) 
@@ -168,6 +170,7 @@ int main() {
       cout << "Cell " << c.handle() << endl;
       interpolator3d_type I(GeomG, f, *c);
       I.TheCubature()->init(1);
+      I.init_integration();
       for(int i = 0; i < (int)I.TheCubature()->size(); ++i) {
 	cout << "  local cubature point: " << I.TheCubature()->point(i)
 	     << "  weight= " << I.TheCubature()->weight(i) 
