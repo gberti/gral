@@ -149,6 +149,16 @@ int main(int argc, char* argv[]) {
   for(RgeVertexIterator V = MpiG.LocalRange().FirstVertex(); ! V.IsDone(); ++V) {
     REQUIRE_ALWAYS( (dgfv(*V) == dgfv_copy(*V)), "copy not identical!\n",1);
   }
+  distr_grid_function<Cell,  int,distr_grid_type> dgfc_copy2;
+  dgfc_copy2 = dgfc;
+  distr_grid_function<Vertex,int,distr_grid_type> dgfv_copy2;
+  dgfv_copy2 = dgfv;
+  for(RgeCellIterator   C = MpiG.LocalRange().FirstCell();   ! C.IsDone(); ++C) {
+    REQUIRE_ALWAYS( (dgfc(*C) == dgfc_copy2(*C)), "copy not identical!\n",1);
+  }
+  for(RgeVertexIterator V = MpiG.LocalRange().FirstVertex(); ! V.IsDone(); ++V) {
+    REQUIRE_ALWAYS( (dgfv(*V) == dgfv_copy2(*V)), "copy not identical!\n",1);
+  }
 
   // put # adj local cells on dgfv2
   distr_grid_function<Vertex,int,distr_grid_type> dgfv2(MpiG,0);
