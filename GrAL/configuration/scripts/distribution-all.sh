@@ -19,8 +19,8 @@ mv gral/MODULES .
 mv gral/INSTALL .
 mv gral/Makefile.global ./Makefile
 
-find . -name "*.h" -exec ${cvsroot}/configuration/replace-license.pl {} \;
-find . -name "*.C" -exec ${cvsroot}/configuration/replace-license.pl {} \;
+find . -name "*.h" -exec ${cvsroot}/configuration/scripts/replace-license.pl {} \;
+find . -name "*.C" -exec ${cvsroot}/configuration/scripts/replace-license.pl {} \;
 
 
 cd ..;
