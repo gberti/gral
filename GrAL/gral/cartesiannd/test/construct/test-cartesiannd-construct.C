@@ -130,6 +130,7 @@ int main() {
       cout << "c=[" << c.direction() << "," << c.index() << "] ";
       cout << "v=[" << v.index() << "] ";
     } while ( v != v_first);
+    cout << endl;
   }
 
   {
