@@ -2,7 +2,7 @@ CONFIG=$(shell pwd)/../../mk.config
 include  $(CONFIG)
 
 
-LOCALSOURCES= cartesian-grid2d.C general-index-map.C
+LOCALSOURCES= cartesian-grid2d.C
 
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
