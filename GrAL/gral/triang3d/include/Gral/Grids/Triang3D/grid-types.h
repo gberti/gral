@@ -10,6 +10,7 @@ class Triang3D;
 class Triang3D_Vertex;
 //class Triang3D_Edge;
 class Triang3D_Cell;
+class Triang3D_Cell_base;
 class Triang3D_VertexOnCellIterator;
 //class Triang3D_FacetOnCellIterator;
 //class Triang3D_FacetIterator;
@@ -24,6 +25,8 @@ struct grid_types_base_Triang3D {
   // typedef Triang3D_Edge   Edge;
   // typedef Edge            Facet;
   typedef Triang3D_Cell   Cell;
+
+  typedef Triang3D_Cell_base cell_base_type;
 
   typedef Cell            CellIterator;
   typedef Vertex          VertexIterator;
