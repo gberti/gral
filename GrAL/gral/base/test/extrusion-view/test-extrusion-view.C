@@ -1,4 +1,7 @@
-
+/*! \file
+   
+     Test for extrusion_view
+ */
 #include "Gral/Views/extrusion-view.h"
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/IO/complex2d-format-input.h"
@@ -54,10 +57,14 @@ int main() {
     ConstructGrid(G, GeomG, In, In);
     
     extrusion_view::grid<Complex2D> ExG(G);
-    extrusion_view::geometry<stored_geometry_complex2D, mapping_type> ExGeom(ExG, GeomG, f);
+    typedef extrusion_view::geometry<stored_geometry_complex2D, mapping_type> geom_type;
+    geom_type ExGeom   (ExG, GeomG, f);
+    geom_type ExGeomSym(ExG, GeomG, f, geom_type::symmetric);
     
     OstreamGMV3DFmt Out("ex2.gmv");
-    ConstructGrid(Out,ExG,ExGeom);
+    ConstructGrid(Out,ExG,ExGeom);  
+    OstreamGMV3DFmt Out2("ex2sym.gmv");
+    ConstructGrid(Out2,ExG,ExGeomSym);
   }
 
 
