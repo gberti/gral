@@ -18,11 +18,8 @@ public:
 
 
   // range-checking possible
-  T& operator[](unsigned i)       { 
-    check_range(i);
-    return X[i];
-  }
-  T  operator[](unsigned i) const {return X[i];}
+  T& operator[](unsigned i)       {check_range(i); return X[i];}
+  T  operator[](unsigned i) const {check_range(i); return X[i];}
 
   iterator       begin() { return &(X[0]);}
   iterator       end()   { return (begin() + N);}
@@ -156,6 +153,26 @@ tuple<T,N> operator-(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
     tmp[k] -= rhs[k];
   return tmp;
 }
+
+template<class T, unsigned N>
+inline
+tuple<T,N> operator*(T t, tuple<T,N> const& rhs)
+{
+  tuple<T,N> tmp;
+  for(unsigned k = 0; k < N; ++k)
+    tmp[k] = t*rhs[k];
+  return tmp;
+}
+
+template<class T, unsigned N>
+inline
+tuple<T,N> operator*(tuple<T,N> const& lhs, T t)
+{ return t*lhs;}
+
+template<class T, unsigned N>
+inline
+tuple<T,N> operator/(tuple<T,N> const& lhs, T t)
+{ return lhs * (1/t);}
 
 
 template<class T, unsigned N>
