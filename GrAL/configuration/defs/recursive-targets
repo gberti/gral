@@ -15,6 +15,12 @@ generic:
 
 # Some special cases
 
+new-check-clean:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new-check-clean;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
 new:
 	@set -e; \
 	for i in $(SUBDIRS); \
