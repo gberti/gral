@@ -1,7 +1,7 @@
 
 
 PSTRICKS=$(shell ls *.tex)
-EPSFIGS:=$(PSTRICKS:%.tex=%.ps)
+EPSFILES:=$(PSTRICKS:%.tex=%.eps)
 GIFFILES=$(PSTRICKS:%.tex=%.gif)
 JPGFILES=$(PSTRICKS:%.tex=%.jpeg)
 
@@ -40,8 +40,10 @@ CONVERT = convert
 
 all: stop-sign.eps $(JPGFILES)
 
+eps: stop-sign.eps $(EPSFILES)
+
 clean:
-	rm -f *.eps *.ps *.aux *.log *.dvi *~ 
+	rm -f  *.aux *.log *.dvi *~ 
 
 realclean: clean
-	rm -f $(JPGFILES) $(GIFFILES)
+	rm -f $(JPGFILES) $(GIFFILES) $(EPSFILES)

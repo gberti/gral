@@ -382,7 +382,7 @@ This part is actually quite easy, as predefined components
 for the common cases exist.
 In the case of vertices and cells, which are
 numbered consecutively, we take the class
-template \gralclasslink{grid_function_vector}{base}
+template \gralclasslink{grid\_function\_vector}{base}
 as our implementation:
 
 \begin{example}
@@ -411,7 +411,7 @@ class grid_function<Triang2D::Edge, T>
 };
 \end{example}
 In order to make it work this way, we have to somehow
-pass a hash function to the \code{grid_\function\_hash<>}
+pass a hash function to the \code{grid\_function\_hash<>}
 template. This is done by specializing the traits class
 \code{element\_traits<>} for \code{Triang2D::Edge}
 and providing a \code{hasher\_type}:
@@ -436,7 +436,7 @@ We do the same for \code{Triang2D::Vertex} and \code{Triang2D::Cell}.
 Here the hash function just returns the handle.
 
 For defining partial grid function, there effectively does not remain
-anything to do (given the provision of a \code{hasher_type} by
+anything to do (given the provision of a \code{hasher\_type} by
 \code{element\_traits} above), because they are already defined in a generic
 way. Thus, in \gralfilelink{partial-grid-functions}{h}{triang2d},
 we just include the generic \gralfilelink{partial-grid-function-hash}{h}{base}.

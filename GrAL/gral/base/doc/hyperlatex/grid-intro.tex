@@ -22,7 +22,7 @@
    \begin{figure}[h]
      \begin{center}
        \begin{Label}{algo-surface-2}
-       \T\input{bilder/algo-surface.tex}
+       \T\includegraphics{bilder/algo-surface}
        \W\htmlimage[ALT="A simple algorithm calculating cell surfaces"]{%
           \img{algo-surface}}
         \end{Label}
@@ -178,7 +178,7 @@ for(\Conceptlinkfoot{CellIterator} c(Grid); !c.IsDone(); ++c) {
   how to access `halo types' in a consistent and uniform manner. 
 
   The way chosen here is to collect all non-generic grid-related types into
-  a dedicated entity called {\tt grid_types},
+  a dedicated entity called {\tt grid\_types},
    associated to a concrete grid type.
   (With `non-generic', we mean types that have to be specialized for each
   concrete grid type.) 

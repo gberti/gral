@@ -33,6 +33,8 @@
     \endcode
 
     \see test-shrunk-grid.C
+
+    \todo add Edge and Facet elements
  */
 
 /*! \brief An ``exploded'' view of a grid
@@ -106,6 +108,9 @@ namespace shrink_grid_view {
   } // namespace detail
 
   /*! \brief The combinatorial shrunk view
+
+    \todo branch in grid_view::NumOfVertices() depending on availability
+    of \c GRID::CellOnVertexIterator.
    */
   template<class GRID>
     class grid_view : public local_grid_types<GRID> {
@@ -154,22 +159,26 @@ namespace shrink_grid_view {
 
     };
 
- template<class GRID>
-   struct vertex_handle_t : public local_grid_types<GRID> {
-     typedef typename bgt::vertex_handle base_vertex_handle;
+  //--------- element handles ---------------------
+  template<class GRID>
+    struct vertex_handle_t : public local_grid_types<GRID> {
+      typedef typename bgt::vertex_handle base_vertex_handle;
+      
+      cell_handle        c;
+      base_vertex_handle v;
+    public:
+      vertex_handle_t() {}
+      vertex_handle_t(cell_handle cc, base_vertex_handle vv) : c(cc), v(vv) {}
+    };
+  
+  template<class GRID>
+    inline
+    ostream& operator<<(ostream& out, vertex_handle_t<GRID> const& h)
+    { return (out << h.c << ' ' << h.v);}
 
-     cell_handle        c;
-     base_vertex_handle v;
-   public:
-     vertex_handle_t() {}
-     vertex_handle_t(cell_handle cc, base_vertex_handle vv) : c(cc), v(vv) {}
-   };
 
- template<class GRID>
-   inline
-   ostream& operator<<(ostream& out, vertex_handle_t<GRID> const& h)
-   { return (out << h.c << ' ' << h.v);}
-
+  //---- elements and sequence  iterators -----------
+  
   template<class GRID>
     class cell_iterator : public local_grid_types<GRID> {
     private:
@@ -260,6 +269,7 @@ namespace shrink_grid_view {
       typename bgt::Vertex Base()       const { return *vc;}
     };
 
+  //--------------- incidence iterators -----------------------
 
   template<class GRID>
     class vertex_on_cell_iterator : public local_grid_types<GRID> {
@@ -287,6 +297,8 @@ namespace shrink_grid_view {
 
     };
 
+
+  //------------- inline functions -----------------------
 
   template<class GRID>
     inline
@@ -316,6 +328,7 @@ namespace shrink_grid_view {
 
 
 
+  //---------------- grid geometry view ---------------------
 
   /*! \brief The geometric shrunk view
 
@@ -355,11 +368,12 @@ namespace shrink_grid_view {
 } // namespace shrink_grid_view
 
 
-//----- traits classes in global sope: grid_types<>, element_traits<> ---------
+//----- traits classes in global scope: grid_types<>, element_traits<> ---------
 
 template<class GRID>
 class grid_types<shrink_grid_view::grid_view<GRID> > :
   public shrink_grid_view::local_grid_types<GRID> {};
+
 
 template<class GRID>
 struct element_traits<shrink_grid_view::vertex_iterator<GRID> >
