@@ -3,6 +3,8 @@
 
 #include "Gral/IO/gmv-format-output2d.h"
 #include "Gral/Base/element-numbering.h"
+#include "Geometry/point-traits.h"
+
 
 template<class GRID,class GEOM>
 void ConstructGrid(OstreamGMV2DFmt& Out, 
@@ -21,14 +23,18 @@ void ConstructGrid(OstreamGMV2DFmt& Out,
 		   heterogeneous_list::List<GF,MOREGFS> GFS)
 {
   typedef OstreamGMV2DFmt GMV3D;
-  ostream& out = Out.Out();
   typedef grid_types<GRID> gt;
+  typedef point_traits<typename GEOM::coord_type> pt;
 
+  ostream& out = Out.Out();
   out << "gmvinput ascii\n";
   out << "nodev " << G.NumOfVertices() << '\n';
 
   for(typename gt::VertexIterator v = G.FirstVertex(); ! v.IsDone(); ++v)
-    out << GEO.coord(*v) << '\n';
+    out << pt::x(GEO.coord(*v)) << ' '
+	<< pt::y(GEO.coord(*v)) << ' '
+	<< pt::z(GEO.coord(*v)) << ' '
+	<< '\n';
 
   // map G's vertices to GMV numbers, starting from 1.
   //  element_numbering<typename gt::Vertex> G2GMV(G,1);
