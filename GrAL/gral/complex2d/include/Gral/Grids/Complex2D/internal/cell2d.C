@@ -56,11 +56,11 @@ inline int Cell2D::NumOfNeighbours() const
 inline Vertex2D Cell2D::V(int i) const
 {
   REQUIRE((is_valid()),"Cell2D: action with invalid cell!",1);
-  REQUIRE((1 <= i && i <= NumOfVertices()),\
+  REQUIRE((0 <= i && i < NumOfVertices()),\
 	  "Cell2D::Vertex(int i): i = " << i\
-	  << ", must be in [1," << NumOfVertices() << "] !", 1);
+	  << ", must be in [0," << NumOfVertices()-1 << "] !", 1);
 
-  return( _cc->vertex(base()._vertices[i-1]));
+  return( _cc->vertex(base()._vertices[i]));
 }
 
 inline Edge2D Cell2D::E(int i) const
