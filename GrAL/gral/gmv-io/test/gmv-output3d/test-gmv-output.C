@@ -1,5 +1,5 @@
 
-#include "Gral/IO/gmv-format-output.h"
+#include "Gral/IO/gmv-format-output3d.h"
 #include "Gral/Grids/Cartesian3D/all.h"
 
 #include "Geometry/coords.h"
