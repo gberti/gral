@@ -15,7 +15,7 @@ include $(DEPS)
 
 
 
-LIBS += -lgral-distributed -lgral-complex2d  -lexternal-control -lutilities 
+LIBS += -lgral-distributed -lgral-complex2d -lgral-base  -lexternal-control -lutilities 
 
 
 
@@ -40,5 +40,5 @@ clean: stdclean
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
 	rm -f .depend *.oogl *.out 
-	rm -r out?x?p?
+	rm -f out?x?p?
 
