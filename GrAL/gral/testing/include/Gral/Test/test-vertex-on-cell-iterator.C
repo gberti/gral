@@ -18,7 +18,7 @@ bool test_vertex_on_cell_iterator(G const& g, std::ostream & out)
     for(VertexOnCellIterator vc(*c); ! vc.IsDone(); ++vc, ++v_cnt) {
     ;
     }
-    REQUIRE_ALWAYS(v_cnt == (*c).NumOfVertices(), 
+    REQUIRE_ALWAYS(v_cnt == (int)(*c).NumOfVertices(), 
                    "v_cnt = " << v_cnt << " != c.NumOfVertices() = " 
                    << (*c).NumOfVertices() << '\n',1);
 

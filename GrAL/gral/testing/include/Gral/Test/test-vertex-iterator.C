@@ -16,7 +16,7 @@ bool test_vertex_iterator(G const& g, std::ostream & out)
   for(VertexIterator v(g); ! v.IsDone(); ++v, ++v_cnt) {
     ;
   }
-  REQUIRE_ALWAYS(v_cnt == g.NumOfVertices(), 
+  REQUIRE_ALWAYS(v_cnt == (int)g.NumOfVertices(), 
                  "v_cnt = " << v_cnt << " != g.NumOfVertices() = " << g.NumOfVertices() << '\n',1);
 
   VertexIterator v;
