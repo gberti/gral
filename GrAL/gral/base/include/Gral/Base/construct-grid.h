@@ -17,18 +17,18 @@
   the `destination' parameter G1.
 
   Template parameters:
-   - G2: model of $GrAL CellVertexInputGrid, i.e. must support
+   - G2: model of $GrAL Cell-VertexInputGridRange, i.e. must support
      - grid_types<>, 
-     - $Gral CellIterator, $Gral VertexIterator, $Gral VertexOnCellIterator,
+     - $GrAL GridCellIterator, $GrAL GridVertexIterator, $GrAL Vertex-On-CellIterator,
      - vertex_handle
    - Geom2 : model of VertexGridGeometry
-     - Geom2::coord(Vertex2)
+     - <tt> Geom2::coord(Vertex2) </tt>
    - VertexMap:  map V(G2) -> V(G1)
-      - vertex_handle1 operator()(vertex_handle2) (read)
-      - vertex_handle1 operator[](vertex_handle2) (write)
+      - <tt> vertex_handle1  operator()(vertex_handle2) </tt>(read)
+      - <tt> vertex_handle1 operator[](vertex_handle2)  </tt> (write)
    - CellMap: map C(G2) -> C(G1)
-     - cell_handle1 operator()(cell_handle2) (read)
-     - cell_handle1 operator[](cell_handle2) (write)
+     - <tt> cell_handle1 operator()(cell_handle2) </tt> (read)
+     - <tt> cell_handle1 operator[](cell_handle2) </tt> (write)
  
   The following template functions have to be implemented
   separately for each special type of G1:

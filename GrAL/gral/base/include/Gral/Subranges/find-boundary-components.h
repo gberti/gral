@@ -12,6 +12,16 @@
 /*! \defgroup boundaryalgorithms Algorithms for exploring Grid Boundaries
     \ingroup algorithms
     \ingroup boundary
+    
+    The algorithms in this module count and find boundary facets and connected components.
+
+    \todo The algorithms could take an additional parameter \c IsOnBd
+    which is a predicate deciding whether a $GrAL Facet is on the boundary.
+    Then one could handle also internal boundaries, for example
+    between two partitions.
+
+    \see Module \ref boundaryrange
+    \see Module \ref boundarycompiter
  */
 
 /*! \ingroup boundaryalgorithms 
