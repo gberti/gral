@@ -1,0 +1,175 @@
+\xname{cell-neighbor-search}
+\begin{Label}{cell-neighbor-search}
+\algosection{Cell-neighbor-search}
+\end{Label}
+
+\algosubsection{Declaration}
+\begin{example}
+[1] template<class NBF, class CELLRANGE>
+    void CalculateNeighborCells
+          (NBF             &  Nb,   // out
+           CELLRANGE  const&  C);   // in
+
+[2] template<class NBF, class CELLRANGE, class FACETMAP>
+    void CalculateNeighborCells
+          (NBF             &  Nb,   // out
+           CELLRANGE  const&  C,    // in
+           FACETMAP        &  F);   // inout
+
+[3] template<class NBF, class CELLRANGE, class FACETMAP, class CGT>
+    void CalculateNeighborCells
+         (NBF             &  Nb,    // out
+          CELLRANGE  const&  C,     // in
+          FACETMAP        &  F,     // inout
+          CGT        const&);       // in (only type used) 
+\end{example}
+
+
+\algosubsection{Description}
+\function{CalculateNeighborRange} takes a range of cells \variable{C} 
+and determines
+the neighbor relation on its cells.
+(Two cells are neighbors if they share a facet.)
+The output is stored in \variable{nb}.
+
+\function{CalculateNeighborRange} (versions [2], [3]) 
+can be used incrementally
+in the variable \variable{C}:
+If $C = C_1 \cup \ldots \cup C_n$ is a partition of a given cell set,
+then calling \function{CalculateNeighborRange} with the cell set $C$ is
+equivalent to the successive calls with cell sets $C_1, \ldots, C_n$.
+(The remaining arguments stay identical.)
+
+\algosubsection{Definition}
+\function{CalculateNeighborRange} is defined in 
+\nmwrcodelink{cell-neighbor-search.h}{Grids/Algorithms}
+
+\algosubsection{Requirements on types}
+\begin{itemize}
+\item \templateparam{CELLRANGE}, \templateparam{CGT}:\\
+  \templateparam{CELLRANGE} is a model of 
+  \sectionlink{\concept{CellGridRange}}{VertexGridRange}. 
+
+  The following types must be 
+  \glossarylink{published}{publishing a type}
+  by 
+  the type \templateparam{CGT} (version [3])
+  or 
+  the template \type{grid\_types<CELLSET>} (versions [1], [2]):
+ 
+  \begin{itemize}
+  \item \type{Cell}: a model of 
+    \sectionlink{\concept{Grid Cell}}{GridCell} 
+    and
+    \sectionlink{\concept{Facet Grid Range}}{VertexGridRange}
+  \item \type{FacetOnCellIterator}: a model of 
+    \sectionlink{\concept{Facet-On-Cell Iterator}}{Vertex-On-CellIterator}.
+  \item \type{Facet}: a model of
+    \sectionlink{\concept{Grid Facet}}{GridFacet} and of 
+    \sectionlink{\concept{Vertex Grid Range}}{VertexGridRange}
+  \item \type{Vertex}: a model of \sectionlink{\concept{Grid Vertex}}{GridVertex}.
+  \end{itemize}
+
+  In the following, we use
+  \templateparam{CGT} also for \footlink{\type{grid\_types}}{intro-grid-types}\type{<CELLSET>} 
+  in versions [1], [2].
+\item \templateparam{NBF} \\ 
+  is a model of 
+  \sectionlinkUNDEF{\concept{Mutable Mapping}}{MutableMapping}
+  from \type{CGT::FacetOnCellIterator} to \type{CGT::cell\_handle}.
+\item \templateparam{FACETMAP} \\
+  is a model of 
+  \sectionlinkUNDEF{\concept{Mutable Mapping}}{MutableMapping}
+  from 
+  \sectionlink{\type{vtuple}}{vtuple}\type{<CGT::grid\_type>}
+  to \type{CGT::FacetOnCellIterator}.
+  In addition, the following expressions must be defined:
+  (Here {\tt i} is of type \type{FACETMAP::iterator}, {\tt f}
+  is of type \type{CGT::FacetOnCellIterator}, and
+  {\tt F} is of type \type{FACETMAP}. )
+  \begin{itemize}
+  \item type \type{iterator}
+  \item {\tt i = F.end();}
+  \item {\tt i = F.find(f);}
+  \item {\tt F.erase(i);}
+  \end{itemize}
+  This is for example fullfilled if \templateparam{FACETMAP}
+  is a model of STL \stllink{Pair Associative Container}{PairAssociativeContainer}.
+\end{itemize}
+
+
+\algosubsection{Notation}
+$F$ is the set of facets of \variable{C}.
+\\
+$I$  the set of  \glossarylink{interior facets}{interior facet}
+of  \variable{C}.
+\\$B$ the \glossarylink{boundary facets}{boundary facet} of  \variable{C}
+(such that $I \cup B = F$).
+\\
+$D$ is the domain of the map \variable{F} before the call.
+\\
+$D^\prime$ is the domain of the map \variable{F} after the call.
+
+\algosubsection{Preconditions}
+The grid underlying \variable{C} is a 
+subgrid of a \glossarylink{manifold-with-boundary complex}{manifold-with-boundary}.
+\\
+For versions [2] and [3],
+the domain of the map 
+\variable{F} may already contain facets,
+but these must be  boundary facets:
+\[
+   D \cap I = \emptyset
+\]
+
+\algosubsection{Postconditions}
+All pairs of cells sharing an interior facets $\in I$ have been found,
+as well as all cells having a Facet such that the corresponding 
+vertex set has been in $D$.
+
+After the call, 
+\variable{F} 
+contains exactly the boundary facets,
+except those that have been in it before (versions [2], [3]).
+In version [1], the value of \variable{Nb} is set to an invalid cell handle
+for boundary facets (that is, facets which have been visited by only
+facet-on-cell iterator).
+
+
+\[
+  D^\prime = (D \setminus B) \cup (B \setminus D)
+\]
+It follows that  $D^\prime \cap I = \emptyset$.
+
+\algosubsection{Complexity}
+Expected time $O(F)$.
+
+\algosubsection{Example}
+\begin{example}
+#include "Grids/Algorithms/cell-neighbor-search.h"
+
+\xlinkUNDEF{Triang2D}{Triang2D} t;
+typedef grid_types<Triang2D> gt;
+...
+\xlink{hash_map.html}{\STLURL/hash_map}<gt::FacetOnCellIterator> , gt::cell_handle> Nbs;
+CalculateNeighborCells(nbf,T);
+
+for(gt::CellIterator c(t); ! c.IsDone(); ++c) {
+  for(gt::FacetOnCellIterator fc(c); ! fc.IsDone(); ++fc)
+    out << nbf[fc] << ' ';
+  out << '\\\\n';
+}
+\end{example}
+The mapping from \code{gt::FacetOnCellIterator} to \code{gt::cell\_handle}
+can of course be done much more efficiently than with a hash table, see
+the example in  \xlink{{\tt main-triang2d.C}}{\NMWRROOT/test/Grids/triang2d/main-triang2d.C}.
+
+\algosubsection{Known Uses}
+
+Used in \xlink{test}{\NMWRROOT/test/Grids/triang2d/main-triang2d.C}
+of \sectionlinkUNDEF{\type{Triang2D}}{Triang2D}.
+
+\algosubsection{Notes}
+
+\algosubsection{See also}
+

@@ -1,0 +1,141 @@
+\xname{ConstructGrid}
+\begin{Label}{ConstructGrid}
+\algosection{ConstructGrid}
+\end{Label}
+
+\needswork{This documentation is still incomplete!}
+
+\algosubsection{Declaration}
+This is actually a family of related functions:
+\begin{example}
+[1]
+template<class G1, class G2>
+inline void 
+ConstructGrid0(G1            & destG, 
+               G2       const& srcG);
+
+[2]
+template<class G1, class G2, class VertexMap, class CellMap>
+extern void 
+ConstructGrid0VC(G1            & destG, 
+                 G2       const& srcG,
+                 VertexMap     & V21,
+                 CellMap       & C21); 
+
+[3]
+template<class G1, class Geom1, class G2, class Geom2>
+extern void 
+ConstructGrid(G1         & destG,
+              Geom1 const& destGeom,
+              G2    const& srcG, 
+              Geom2 const& srcGeom);
+
+[4]
+template<class G1, class Geom1, 
+         class G2, class Geom2, class VertexMap>
+extern void 
+ConstructGridV(G1            & destG, 
+               Geom1         & destGeom,
+               G2       const& srcG,
+               Geom2    const& srcGeom,
+               VertexMap     & V21); 
+
+[5]
+template<class G1, class Geom1, 
+         class G2, class Geom2, class VertexMap, class CellMap>
+extern void 
+ConstructGridVC(G1            & destG, 
+                Geom1         & destGeom,
+                G2       const& srcG,
+                Geom2    const& srcGeom,
+                VertexMap     & V21,
+                CellMap       & C21);
+\end{example}
+
+\algosubsection{Description}
+The \code{ConstructGridXXX} family of template functions
+make an \Glossarylink{associative copy} 
+of a source grid \variable{Gsrc} to a destination grid \variable{Gdest}.
+The  \code{ConstructGrid0XXX} functions ([1], [2])
+do only a copy of combinatoric grids,
+the other copy also geometry information.
+
+The templates above are actually not really fully generic ---
+they must be specialized to the type of the first parameter, \type{G1}.
+The more general grids the \type{G1} grid type can represent,
+the more useful these functions are.
+For very specialized grids, like Cartesian ones, 
+they do not make much sense.
+
+This algorithm is in some sense the analogue to the STL
+\stllink{\type{copy}}{copy} algorithm for sequences,
+only that it cannot be fully generic on the destination argument.
+\algosubsection{Definition}
+Declared in \nmwrcodelink{construct-grid.h}{Grids/Algorithms}.
+\\
+Specialized in 
+\nmwrcodelink{complex2d-construct.C}{Grids/Complex2D/generic}
+for \sectionlink{\type{Complex2D}}{Complex2D}
+and
+\nmwrcodelink{construct.C}{Grids/Triang2D/generic}
+
+\algosubsection{Template parameters}
+
+\algosubsection{Type requirements}
+\type{Geom1} is a model of \conceptlink{Mutable Vertex Grid Geometry}{VertexGridGeometry}
+\type{G2} is a model of \conceptlink{Cell-Vertex Input Grid Range}{Cell-VertexInputGridRange}
+\\ 
+\type{Geom2} is a model of \conceptlink{Vertex Grid Geometry}{VertexGridGeometry}
+\\
+\type{VertexMap} is a model of \sectionlinkUNDEF{Mutable Mapping}{MutableMapping}
+from \type{G2::vertex\_handle} to \type{G1::vertex\_handle}
+\\
+\type{CellMap} is a model of \sectionlinkUNDEF{Mutable Mapping}{MutableMapping}
+from \type{G2::cell\_handle} to \type{G1::cell\_handle}
+
+\algosubsection{Preconditions}
+\variable{srcGeom} is \glossarylink{bound}{bound to a grid} to 
+\variable{srcG}.
+
+\algosubsection{Postconditions}
+\variable{destG} contains a copy of \variable{srcG},
+and ([3]-[5]) \variable{destGeom} contains a copy of 
+\variable{srcGeom},
+such that the mappings 
+\variable{V21} and \variable{C21} induce a 
+\Glossarylink{grid morphism}
+from \variable{srcG} to \variable{destG}.
+
+\algosubsection{Complexity}
+Linear in the size of \variable{srcG}.
+
+\algosubsection{Example}
+\begin{example}
+\sectionlinkfoot{RegGrid2D}{RegGrid2D} R(10,10);  // 10x10 Cartesian grid
+\sectionlinkUNDEF{mapped_geometry_reg2d<Linear2D>}{MappedGeometryReg2D}  geomR(R, Linear2D::identity); // 
+\sectionlink{Complex2D}{Complex2D} G;         // empty grid
+\sectionlinkUNDEF{stored_geometry_complex2d}{StoredGeometryComplex2D} geomG(G);
+ConstructGrid(G,geomG, R,geomR); // copy R to G;
+assert(G.NumOfVertices() == R.NumOfVertices());
+assert(G.NumOfCells()    == R.NumOfCells());
+typedef grid\_types<Complex2D> gt; // 'namespace' for Complex2D-related types 
+for(gt::CellIterator c(G), ! c.IsDone(); ++c)
+  cout << "Cell " << c.handle() << "  "
+       << "has "  << (*c).NumOfVertices() << " vertices";
+\end{example}
+
+\algosubsection{Uses}
+
+\algosubsection{Used by}
+The operation of copying is so fundamental that
+it is used virtually everywhere a grid has to be created.
+For example, the algorithm is used for implementing 
+the member function \code{Complex2D::read(istream\&)}, 
+defined in \link{complex.io.C}{\NMWRROOT/src/Grids/Complex2D/complex2d.io.C}.
+Here an adapter \sectionlink{\type{IstreamComplex2DFmt}}{istream-complex2d-fmt}
+for a grid stored in a file is used.
+\algosubsection{Notes}
+
+\algosubsection{See also}
+\sectionlinkUNDEF{EnlargeGrid}{EnlargeGrid}
+

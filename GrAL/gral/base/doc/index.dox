@@ -4,10 +4,14 @@
    This packages is used by all other parts of the GrAL.
 
    See \ref toplevelmodules for a coarse overview on the contents.  
+
+   See $GrAL top for an introduction into the concepts of GrAL.
 */
 
 /*! \defgroup toplevelmodules Top Level Modules
- 
+
+   \todo Namespace \c gral
+
     Contents:
     - \ref traits: Some really basic traits classes (like \ref grid_types),
        which in general must be specialized
@@ -35,6 +39,7 @@
 
 /*! \defgroup subranges Components for Grid Subranges
    \ingroup toplevelmodules  
+
 */
 
 /*! \defgroup gridmappings Components for Grid Mappings

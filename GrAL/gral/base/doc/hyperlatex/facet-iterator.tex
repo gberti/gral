@@ -1,0 +1,85 @@
+\xname{GenericFacetIterator}
+\begin{Label}{GenericFacetIterator}
+\itersection{FacetIterator<>}
+\end{Label}
+
+\itersubsection{Declaration}
+\begin{example}
+template<class FacetOnCellIt>
+class FacetIterator;
+\end{example}
+\itersubsection{Description}
+
+%\noindent
+The class template \type{FacetIterator<>} implements a 
+\conceptlink{Grid Facet Iterator}{GridVertexIterator}
+based on cell iteration and local facet iteration.
+The iteration proceeds by iterating over each facet of each cell;
+in order to ensure visiting each facet only once, 
+there is established an arbitrary order between the two
+possible occurences of an interior facet, and the
+greater one is silently skipped over.
+
+In order to evaluate the comparison, an order must be 
+defined on cells, and neighbor cells must be accessible\noteref{note-fi-neighbors}.
+
+\itersubsection{Definition}
+Defined in \nmwrcodelink{facet-iterator.h}{Grids/Iterators}
+
+\itersubsection{Template parameters}
+
+\par
+\begin{tabular}{lll} \hline
+  \bf Parameter & \bf Description & \bf Default \\
+  \hline
+  \type{FacetOnCellIt}  & a local facet-on-cell iterator & ~ \\
+  \hline
+\end{tabular}
+
+\itersubsection{Model of}
+\conceptlink{Facet Iterator}{GridVertexIterator}
+
+\itersubsection{Type requirements}
+\type{FacetOnCellIt} is a model of
+\conceptlink{FacetOnCell Iterator}{Vertex-On-CellIterator}.
+The grid type of \type{FacetOnCellIt} must be a model of
+\conceptlink{Cell Grid Range}{VertexGridRange}
+and of \Conceptlink{Grid-With-Boundary};
+the associated cell type must be a model
+of STL \Stllink{LessThanComparable}.
+
+\itersubsection{Members}
+\itersubsection{Complexity}
+Each facet is visited at most $2$ times.
+Memory consumption is constant --- one
+\type{CellOnCellIterator} and one \type{FacetOnCellIterator}.
+\itersubsection{Example}
+\begin{example}
+a_grid_type g;
+a_geometry_type geom(g); // a \conceptlinkfoot{grid geometry}{GeometricalLayer} for g
+
+typedef grid_types<a_grid_type> gt;
+\sectionlinkfoot{grid_function}{ContainerGridFunction}<gt::\conceptlinkfoot{Facet}{GridFacet}, double> volume(g);
+
+typedef FacetIterator<gt::\conceptlinkfoot{FacetOnCellIterator}{Vertex-On-CellIterator}> FacetIt;
+for(FacetIt f(g); ! f.IsDone(); ++f)
+  volume[*f] = \conceptlinkfoot{geom.volume}{VolumeGridGeometry}(*f);
+\end{example}
+\itersubsection{Uses}
+\itersubsection{Used by}
+
+\itersubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-fi-neighbor}
+If information about cell neighbors is not available, 
+one has to mark visited facets explicitely,
+which is done by \sectionlinkUNDEF{\type{facet\_set\_of\_cells\_iterator}}{facet-set-of-cells}.
+In a future version, there could be a compile-time switch on the
+availability of cell neighbor information, 
+selecting the appropriate version of \type{FacetIterator}
+automatically.
+\end{enumerate}
+\itersubsection{See also}
+\sectionlink{\type{facet\_handle}}{facet-handle}
+~
+\sectionlinkUNDEF{\type{facet\_set\_of\_cells\_iterator}}{facet-set-of-cells}

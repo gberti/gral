@@ -1,0 +1,65 @@
+    \xname{Cell-VertexInputGridRange}
+\begin{Label}{Cell-VertexInputGridRange}
+\conceptsection{Cell-Vertex Input Grid Range}
+\end{Label}
+
+\conceptsubsection{Description}
+A {\em Cell-Vertex Input Grid Range\/} is a Grid Range which can be used to construct
+another grid. More precisely, its representation is cell-based:
+Supported is mostly iteration over cells and over vertices incident to cells.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{ Cell Grid Range }}{CellGridRange}
+\\
+\sectionlink{\concept{ Vertex Grid Range }}{VertexGridRange}
+
+\conceptsubsection{Associated types}\noteref{note-gridtypes}
+
+\begin{tabularx}{12cm}{llR} \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Description   \\
+  \hline
+  cell type &
+  {\tt R::Cell} &
+  model of \sectionlink{\concept{ Grid Cell }}{GridCell} 
+  defining 
+  \par {\tt R::Cell::VertexIterator}
+  \par (a model of \sectionlink{\concept{VertexOnCellIterator}}{Vertex-On-CellIterator}) 
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\begin{ifhtml}
+
+\conceptsubsection{Valid Expressions}
+
+None, besides those defined in 
+\sectionlink{\concept{ Cell   Grid Range }}{CellGridRange}
+and
+\sectionlink{\concept{ Vertex Grid Range }}{VertexGridRange}
+
+\conceptsubsection{Expression semantics}
+None, besides those defined in 
+\sectionlink{\concept{ Cell   Grid Range }}{CellGridRange}
+and 
+\sectionlink{\concept{ Vertex Grid Range }}{VertexGridRange}
+
+\end{ifhtml}
+
+\conceptsubsection{Models}
+\sectionlink{{\tt enumerated\_grid\_range}}{EnumeratedGridRange}
+\\
+\sectionlink{{\tt Complex2D}}{Complex2D}
+\\
+\sectionlink{{\tt Complex2DInput}}{Complex2DInput}
+    
+\W\conceptsubsection{Notes}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{ Grid Range }}{GridRange} ~ 
+\sectionlink{\concept{ Cell   Grid Range }}{CellGridRange} ~
+\sectionlink{\concept{ Vertex Grid Range }}{VertexGridRange} ~
+\sectionlink{\concept{ VertexOnCellIterator }}{Vertex-On-CellIterator}
+  
+

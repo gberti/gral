@@ -1,0 +1,129 @@
+  
+\xname{TotalGridFunction}
+\begin{Label}{TotalGridFunction}
+  \conceptsection{Total Grid Function Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+
+The  {\em Total Grid Function\/} concept refines the 
+\sectionlink{\concept{ Container Grid Function}}{ContainerGridFunction} concept.
+A total grid function reserves storage to hold a value for each element in
+its range.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{ Container Grid Function}}{ContainerGridFunction}
+
+\conceptsubsection{Notation}
+{\tt F} is a type which is a model of Total  Grid  Function 
+\\
+{\tt f} is an object of type  {\tt F}
+\\
+{\tt G} is shorthand for  {\tt F::grid\_type}
+\\
+{\tt g} is an object of type  {\tt G}.
+
+\begin{ifhtml}
+\conceptsubsection{Associated types}
+None, exept those defined in
+\sectionlink{\concept{ Container Grid Function}}{ContainerGridFunction}
+
+\conceptsubsection{Valid Expressions}
+None, exept those defined in
+\sectionlink{\concept{ Container Grid Function}}{ContainerGridFunction}
+\end{ifhtml}
+
+\conceptsubsection{Expression semantics}
+\begin{tabularx}{15cm}{RRRRR}
+  \hline    
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  construction from grid & 
+  {\tt F f(g);} &
+  ~ &
+  construct and bind {\tt f}  to {\tt g},
+  allocate memory for {\tt f.size()} values. &
+  {\tt f} is \link{bound}[\footnote{see \Ref}]{bound} to {\tt g} 
+  \par write access is allowed 
+  \par read access is undefined
+  \par {\tt f.size()} is equal to the cardinality of the 
+  \link{range}[\footnote{see \Ref}]{range}  of {\tt f}
+  \\ 
+  construction and initialization & 
+  {\tt F f(g,t);} &
+  ~ &
+  construct and bind {\tt f}  to {\tt g}, 
+  \par allocate memory for {\tt f.size()} values,
+  \par initialize all values to {\tt t} 
+  &
+  {\tt f} is bound to {\tt g} 
+  \par write access is allowed 
+  \par {\tt f(e)} is equal to {\tt t} for all elements {\tt e}
+  in the range of {\tt f}.
+  \par {\tt f.size()} is equal to the cardinality of the 
+  \link{range}{range} of {\tt f}
+  \\ 
+  Binding to grid &
+  {\tt f.set\_grid(g);} &
+  f is unbound &
+  bind {\tt f}  to {\tt g},
+  \par allocate memory for {\tt f.size()} values. &
+  {\tt f} is bound to {\tt g} 
+  \par write access is allowed, 
+  \par read access is undefined
+  \par {\tt f.size()} is equal to the cardinality of the 
+  \link{range}{range} of {\tt f}
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\conceptsubsection{Complexity Guarantees}
+Default construction takes constant time.
+\\
+Construction from grid and construction with initalization both
+take time at  O({\tt f.size()}), that is, the number of 
+elements of type {\tt F::element\_type} of {\tt g}.
+
+
+
+\conceptsubsection{Models}
+\sectionlink{{\tt grid\_function\_vector<E,T>}}{grid-function-vector}
+defined in
+\xlink{{\tt grid-function-vector.h}}{\NMWRINC/Grids/grid-function-vector.h}
+
+Total grid functions for the
+\sectionlink{{\tt Complex2D}}{Complex2D}
+concrete grid, defined in
+\xlink{{\tt Complex2D/grid-functions.h}}{\NMWRINC/Grids/Complex2D/grid-functions.h}.
+
+For {\tt E = \sectionlink{\concept{Complex}2D::Vertex}{Complex2D::Vertex}} 
+and {\tt E = Complex2D::Cell},
+the total grid functions are derived from
+\sectionlink{{\tt grid\_function\_vector<E,T>}}{grid-function-vector};
+and for  {\tt E = Complex2D::Edge}, 
+the total grid function is derived from 
+\sectionlink{{\tt grid\_function\_hash<E,T>}}{grid-function-hash}.
+The reason  is taht edges are not stored in the 
+\sectionlink{{\tt Complex2D}}{Complex2D}
+data structure, and hence there is no consecutive index available for type  
+{\tt Complex2D::Edge}.
+
+
+\W\conceptsubsection{Notes}
+    
+
+\conceptsubsection{See also}
+\sectionlink{\concept{ Grid Element Function }}{GridElementFunction} ~
+\sectionlink{\concept{ Grid  Function }}{GridFunction} ~
+\sectionlink{\concept{ Mutable Grid  Function }}{MutableGridFunction} ~
+\sectionlink{\concept{ Container Grid  Function }}{ContainerGridFunction} ~
+\sectionlink{\concept{ Partial Grid Function }}{PartialGridFunction} ~
+
+  
+

@@ -1,0 +1,192 @@
+
+\xname{GridIntro}
+\begin{Label}{GridIntro}
+\introsection{Overview over the Grid Category}
+\end{Label} 
+
+{\em 
+  NOTE: This documentation follows the pattern of the 
+  \xlink{STL Documentation}[\footnote{see {\tt http://www.sgi.com/Technology/STL}}]{http://www.sgi.com/Technology/STL},
+  it may be helpful consulting its sections
+  \xlink{{\em Introduction\/}}{"http://www.sgi.com/Technology/STL/stl_introduction.html}
+  and
+  \xlink{{\em Usage of the documentation\/}}{http://www.sgi.com/Technology/STL/doc_introduction.html}.
+}
+      
+  Components belonging to the 
+  \glossarylink{category}{category}
+  {\em Grid\/} provide a uniform 
+  interface for geometric grids. 
+  As unifying mathematical framework
+  we utilize the notion of a
+  \xlink{CW-complex}{http://www.treasure-troves.com/math/CW-Complex.html}
+  provided by algebraic topology. 
+  More common special cases are
+  simplicial complexes or triangulations,
+  planar straight line graphs (PSLG),
+  finite element meshes and Cartesian grids.
+  
+  We distinguish three fundamental layers of functionality (sub-categories):
+  \begin{itemize}
+  \item  the \sectionlink{ combinatorial layer }{CombinatorialLayer}
+  \item the \sectionlink{ data association layer }{DataAssociationLayer}
+  \item the \sectionlink{ geometrical layer }{GeometricalLayer} 
+  \end{itemize}
+  
+  The {\em combinatorial layer\/} views a grid 
+  simply as a {\em lattice\/} or, more generally, {\em poset},
+  given by the {\em incidence\/} relationship.
+  The entities involved are of  a purely discrete nature;
+  there is not notion of coordinates of vertices or the like.
+  The notion of dimension used here is a combinatorial or {\em intrinsic\/}
+  dimension.
+  
+  The {\em grid function\/} layer adds the possibility to associate data 
+  with the discrete grid elements, 
+  for example to put marks on vertices,
+  or to store solution values on cells.
+  
+  
+  The {\em geometrical layer\/} provides an embedding into a concrete geometrical space of 
+  an ({\em external\/}) dimension which is at least the intrinsic dimension. 
+  For example, a grid of (intrinsic) dimension 2 could be embedded in 3-space,
+  like the surface of a torus.
+  
+
+  
+  We  informally discuss these layers in the introductory sections
+  on the
+  \sectionlink{combinatorial}{CombinatorialLayer}, 
+ \sectionlink{grid function}{DataAssociationLayer}
+ and \sectionlink{geometrical}{GeometricalLayer} layers, respectively.
+
+ A more formal description of the
+ \glossarylink{concepts}{concept} involved starts in 
+ \sectionlink{the concept section.}{Concepts}
+ We will refer to them with a trailing (C).
+
+ In the third part of the documentation, concrete \sectionlink{components}{Components}
+ are described, sorted by functionality (algorithms, grid ranges, iterators and so on).
+ These components separate into two layers, depending on whether they are `leaf' components
+ (for example basic grid implementations),
+ or generic extensions, that is, classes which provide additional functionality 
+ for each grid component that is a \Glossarylink{model} of a certain \Glossarylink{concept}.
+ In fact, most components belong to this second layer,
+ which evidently greatly enhances reuse.
+  
+  \bigsep 
+
+  In the present framework, a mathematical grid is not represented by a {\em single\/}
+  entity (e.g. a class), 
+  rather, {\em different\/} classes cooperate to this aim.
+  This is already visible by the dissection into the three fundamental categories,
+  namely combinatorics, data association and geometry.
+  
+  Moreover, each of these categories introduces many sub-categories 
+  and refined concepts, 
+  especially the combinatorial one.
+  In order to understand how grids are represented by these concepts,
+  it is important to understand their mutual relationship.
+
+  For each concrete grid type, there is one class implementing
+  the abstract \sectionlink{grid concept}{Grid}.
+  {\small (In the STL parlance, it is \glossarylink{{\em models\/}}{model} of the concepts.)}
+  To actually use this grid type, one has to access a number of
+  different classes accounting for a representation 
+  of this mental "The Grid" thing one may have in mind.
+  Thus, there are seperate classes for 
+  \link{grid elements}{element-intro} (vertices, edges, cells),
+  \link{iterators}{sequential-it-intro}, 
+  and \sectionlink{grid functions}{DataAssociationLayer}.
+  The concrete grid types act as a sort of {\em central entry point\/} 
+  giving access to these {\sl associated types\/},
+  which one can think of  as  forming a sort of `halo'
+  around the central grid type.
+
+  The number of supported types  will not be the same for all grids.
+  The basic \conceptlink{Grid}{Grid} concepts requires any types at all
+  --- everything useful comes in through refinements of this concept.
+  A grid even does not need to define all possible element types ---
+  there are grid types used only for I/O 
+  (see \sectionlink{\type{IstreamComplex2DFmt}}{istream-complex2d-fmt})
+  which do with a quite
+  minimalistic set of associated types.
+  Most profoundly, grids differ in the amount of
+  \link{incidence iteration}[~(see section \Ref)~]{incidence-it-intro}
+  they can support --- a trade-off between storage consumption and functionality.
+
+
+  At first reading, 
+  one can consider this type association as fixed.
+  But in principle, it is possible to use different `halo' types 
+  with one and the same grid type.
+  This technique allows a fine control of grid functionality
+  which is not attainable with a monolithic approach.
+
+  \label{intro-grid-types}
+  An important  technical question is now  
+  how to access `halo types' in a consistent and uniform manner. 
+
+  The way chosen here is to collect all non-generic grid-related types into
+  a dedicated entity called {\tt grid_types},
+   associated to a concrete grid type.
+  (With `non-generic', we mean types that have to be specialized for each
+  concrete grid type.) 
+  In practice, this is just a class template that has to be
+  \glossarylink{specialized}{partial specialization} for concrete grids.
+
+  This mechanism provides algorithms with a single entry point to 
+  type information (and perhaps other) related to a grid parameter.
+  It also offers a clean possibility to pass a different `halo',
+  that is, a customized set of types which behave differently.
+  For example, one could use special iterators for doing 
+  limited algorithm animation in an automatic way.
+  Currently, only few algorithms are actually parameterized by 
+  grid types, an example is the \type{CGT} parameter of 
+  \sectionlink{CalculateNeighborCells}{cell-neighbor-search}.
+  
+  We may contrast this  with the corresponding mechanisms for STL containers:
+  These, too, are associated with some service types, namely the 
+  iterator type(s), which are accessed by means of nested typedefs:
+  \begin{example}
+    Container C;
+    typedef Container::iterator iter_type;
+    iter_type i = C.begin();
+  \end{example}
+  In our approach, an analogous action would look like the following:
+  \begin{example}
+    MyGrid g;
+    typedef grid_types<MyGrid> gt; // default set of related types
+    gt::VertexIterator vi = g.FirstVertex();
+  \end{example}
+  A {\em quantitative\/} difference to the STL is, that in the grid category,
+  many more types are necessary. 
+  The total functionality making up a grid is also more broadly
+  distributed among these types.
+
+  An important {\em qualitative\/} difference is the parameterization of algorithms.
+  STL algorithms are never parameterized by containers but always by iterators
+  forming a logical range {\tt [begin, end)}. This captures well the only aspect of 
+  containers the algorithms are interested in, namely that they represent linear 
+  sequences.
+  In contrast, algorithms for grids are parameterized by grids, and often also
+  by grid functions or grid geometries, which correspond  in some sense
+  to the STL containers. 
+  This is due to the fact that grids in this case act as placeholders
+  for the underlying mathematical structures on top of which the algorithm
+  performs its tasks.
+
+  The set of types used by these algorithms is rich, corresponding to
+  the richer structures of the domain. Moreover, these types are not
+  independent, by closely relate to each other.
+  Therefore, the responsibility for bundling the right types together
+  has to be concentrated somewhere.
+  This is in essence what the {\tt grid\_types} mechanism does:
+  It maps grid types to a set of related types.
+  If one want to control the way  algorithms access grid-related types,
+  one has to parameterize them with such mappings, 
+  in addition to their regular parameters.
+ 
+
+  
+

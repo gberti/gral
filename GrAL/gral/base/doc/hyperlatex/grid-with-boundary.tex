@@ -1,0 +1,185 @@
+\xname{Grid-With-Boundary}
+\begin{Label}{Grid-With-Boundary}
+ \conceptsection{Grid-With-Boundary Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A \concept{Grid-With-Boundary}  allows to query 
+whether a facet is a \Glossarylink{boundary facet}.
+Moreover, it defines a special cell handle for an `outside cell', 
+and allows to query whether a cell is inside the grid.
+
+\conceptsubsection{Refinement of}
+\conceptlink{Grid}{Grid}
+\\
+\conceptlink{Cell Grid Range}{VertexGridRange}
+\\
+\conceptlink{Facet Grid Range}{VertexGridRange}
+\\
+The cell type of a  \concept{Grid-With-Boundary} is a model
+of \conceptlink{Grid Cell}{GridCell} and of 
+\conceptlink{Facet Grid Range}{VertexGridRange}.
+
+
+\conceptsubsection{Notation}
+\type{G} is a type which is a model of \concept{Grid-With-Boundary}\\
+\variable{g} is an object of type \type{G}\\
+\variable{c} is an object of type \type{G::Cell} \\
+\variable{h} is an object of type \type{G::cell\_handle}\\
+\variable{f} is an object of type \type{G::Facet}\\
+\variable{fc} is an object of type \type{G::FacetOnCellIterator}
+
+\conceptsubsection{Definitions}
+
+\conceptsubsection{Associated types}
+No new ones, but the requirements on \code{G::Cell}
+are strengthened.
+
+\begin{tabular}{ccc} \\ 
+  \hline
+  {\bf  Name  } & {\bf  Expression  } & {\bf  Description  } \\ 
+  \hline
+  cell type  & \code{G::Cell} &
+  the cell element type of \code{G}
+  \par model of \conceptlink{Grid Cell}{GridCell}
+  and of \conceptlink{Facet Grid Range}{VertexGridRange} 
+  \\
+  \hline
+  \\
+\end{tabular}
+
+\conceptsubsection{Valid Expressions}
+
+\noindent
+\begin{tabular}{llll} \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
+  \hline
+  inside test &
+  \code{g.IsInside(c)} &
+   ~ & 
+  \type{bool} \\
+  inside test &
+  \code{g.IsInside(h)} &
+  ~  & 
+  \type{bool} \\
+  boundary test &
+  \code{g.IsOnBoundary(fc)} &
+  ~ & 
+  \type{bool} \\
+  boundary test&
+  \code{g.IsOnBoundary(f)} &
+  ~  & 
+  \type{bool} \\
+  outer cell handle &
+  \code{g.outer\_cell\_handle()} &
+  ~ &
+  \type{G::cell\_handle}
+  \\
+  \hline
+  \\
+\end{tabular}
+
+\conceptsubsection{Expression semantics}
+
+\noindent
+\begin{tabularx}{14cm}{RRRRR} \\
+  \hline
+  \bf  Name       &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf   Semantics &
+  \bf   Postcondition
+  \\
+  \hline
+  inside test &
+  \code{g.IsInside(c);} &
+  \variable{c} is \footlink{bound}{bound}   to \variable{g}
+  \par
+   \variable{c} is  \footlink{valid}{valid} 
+   or \code{c.handle() == g.outer\_cell\_handle()} &
+   Test if \variable{c} is inside the grid &
+   true if \variable{c} is  \link{valid}{valid} for \variable{g}.
+   \par
+   false if  \code{c.handle() == g.outer\_cell\_handle()}
+   \\
+   inside test&
+  \code{g.IsInside(h);} &
+   \variable{h} is  \footlink{valid}{valid} 
+   or \code{h == g.outer\_cell\_handle()} &
+   Test if \variable{h} is handle of a cell inside the grid &
+   true if \variable{h} is  \link{valid}{valid} for \variable{g}.
+   \par
+   false if  \code{h == g.outer\_cell\_handle()} 
+   \\
+   boundary test &
+   \code{g.IsOnBoundary(f)} &
+   \variable{f} is \link{valid}{valid} &
+   Returns \code{true} if \variable{f}
+   is a \Glossarylink{boundary facet} of \variable{g} &
+   ~ 
+   \\
+   boundary test &
+   \code{g.IsOnBoundary(fc)} &
+   \variable{fc} is \link{valid}{valid} &
+   equivalent to \code{g.IsOnBoundary(*fc)}.& 
+   ~ 
+   \\
+   outer cell handle &
+  \code{h = g.outer\_cell\_handle();} &
+   ~ &
+  return a handle denoting an `outside' cell &
+  \code{g.IsInside(h)} is false 
+  \\
+  \hline
+\end{tabularx}
+
+\conceptsubsection{Invariants}
+
+\noindent
+\begin{tabularx}{14cm}{RR}
+  \\
+  \hline
+  & \code{g.IsInside(g.outer\_cell\_handle()) == false}\\
+  & \code{g.IsInside(c) == g.IsInside(c.handle())} \\
+  & \code{g.IsOnBoundary(fc) == ! g.IsInside(fc.OtherCell())}\noteref{note-gwb-othercell} \\
+  & \code{g.IsOnBoundary(f) == (!g.IsInside(f.TheCell()) || !g.IsInside(f.OtherCell()))} \\
+  & \code{g.IsInside()} evaluates to \code{true} for all
+  cells in the range [\code{g.FirstCell()},\code{g.EndCell()}).\\
+  \hline
+\end{tabularx}
+
+\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+\sectionlink{\type{Complex2D}}{Complex2D.html}   
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-gwb-outer-non-unique}
+It does however not follow that if 
+\code{! g.IsInside(h)}, then
+{\code h == g.outer\_cell\_handle()}, 
+because it is possible that there are many different handles
+denoting an outer cell. For example, when we consider Cartesian grids,
+cells with an logical index $(i,j)$ outside the grid range would 
+satisfy \code{! g.IsInside(c)}
+but do not necessarily possess a handle equal to
+{\code g.outer\_cell\_handle()}.
+
+\item  \notelabel{note-gwb-othercell}
+It is possible to create a cell with the `outer' cell handle:
+\begin{example}
+ Cell c = g.cell(g.outer_cell_handle())
+\end{example}
+is possible, as is 
+\begin{example}
+Cell c = fc.OtherCell()
+\end{example} 
+when \code{g.IsOnBoundary(fc)} is true.
+However, the only operation guaranteed to work with \variable{c} is
+the query \code{g.IsInside(c)} which evaluates to \code{false}.
+\end{enumerate}
+\conceptsubsection{See also}
+
+

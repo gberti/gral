@@ -1,0 +1,87 @@
+
+\xname{DataAssociationLayer}
+\begin{Label}{DataAssociationLayer}
+\introsection{Data associations}
+\end{Label}
+
+      In any serious application, we need to deal with values attached to k-elements:
+      for example, state variables living on vertices in a typical FEM-program,
+      costs on edges in network-flow algorithms or state variables on cells
+      in a cell-centered Finite-Volume-code.
+      There are two different aspects of this necessity:
+      
+      On the one hand, such mappings are often passed to algorithms.
+      Then, algorithms should make only minimal assumptions on the nature 
+      of the mapping, in particular, they should not commit to a particular representation
+      of such data associations.
+
+      On the other hand, algorithms themselves often need to attach values to
+      element temporarily. In this case, they have to be able to create such data
+      associations themselves, and perhaps to decide on some performance-critical
+      features of the implementations.
+      
+      The underlying mathematical model of the first usage scenario 
+      is that of a function $f$ from the set 
+      of k-Elements of a Grid \T${\cal G}$ \W$G$ to values of an arbitrary type {\em T\/}.
+      With the grid function concept \sectionlink{(C)}{GridFunction},
+      we develop a natural interface
+      closely following the  mathematical model.
+      This can be possibly satisfied by many different representations,
+      including calculation on-the-fly, and corresponds to the first
+      requirement (data abstraction).
+      
+      Beyond this, the second scenario requires a  container component,
+      which extends this interface with
+      methods for creation of grid functions. 
+      The corresponding concept 
+      is {\em container grid function\/}  \sectionlink{(C)}{ContainerGridFunction}.
+
+      There is a interesting and important choice left open now:
+      Either, we can reserve memory for the value of each element in the grid,
+      and considering each value not explicitly set on an element an error.
+      Or, we could determine a default value, and consider each element whose
+      valeu is not explicitely set having this default value.
+      The first option leads to the {\em total\/} grid function concept
+      \sectionlink{ (C) }{TotalGridFunction},
+      storing a value for every element.
+      
+      The second option gives rise to  {\em partial\/}
+      grid functions     \sectionlink{ (C) }{PartialGridFunction}
+      which stores values  only on a part of the grid elements,
+      assigning a default value to the others.
+      
+      Depending on the choice, there are slightly different semantics of the constructors,
+      as well as same new operations in the case of  partial grid functions.
+      
+      Owing to the great importance of both total and partial grid function containers
+      for the implementation of many algorithms, these entities should be 
+      available under a uniform syntax, if they are defined for a concrete grid type.
+      More precisely, the following class templates are then available: 
+     {\small ({\tt E} is constrained to be an element type \sectionlink{(C)}{GridElement} 
+      associated to this grid type, {\tt T} can be chosen arbitrary.)}
+     
+\begin{example}
+template<class E, class T> 
+class grid\_function; // total grid function 
+template<class E, class T>
+class partial\_grid\_function; // partial grid function
+\end{example}
+
+There are examples of grids types without such associated grid functions.
+These are typically used for special restricted purposes only,
+like grid adapters for input from a file, which offer a clean way 
+to encapsulate specific file formats from the rest of the world.
+An example is 
+\sectionlink{{\tt Complex2DInput}}{istream-complex2d-fmt}.
+
+\begin{Label}{refine-example}
+{\bf Example:}
+We can use  a partial grid function to mark cells for refinement:
+\begin{example}
+partial\_grid\_function<Cell,bool> refine(G,false);
+....
+for(CellIterator c = G.FirstCell(); ! c.IsDone(); ++c)
+ if(error(*c) > tolerance())
+   refine[*c] = true;
+\end{example}
+\end{Label}

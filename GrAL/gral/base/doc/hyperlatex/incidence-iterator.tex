@@ -1,0 +1,153 @@
+ \xname{GridIncidenceIterator}
+\begin{Label}{GridIncidenceIterator}
+ \conceptsection{Grid Incidence Iterator Concept}
+\end{Label}
+
+ \conceptsubsection{Description}
+ A {\em Grid Incidence Iterator\/} allows to access all elements of a given type incident
+ to an given element (the {\em anchor\/}), 
+ for example  all vertices incident to a given cell,
+ or all edges incident to a given vertex. 
+ 
+ For each combination of 
+ \sectionlink{\concept{element types}}{GridElement}, 
+ there is a subconcept of incidence iterator,
+ for example,  the 
+ \sectionlink{\concept{Vertex}-On-Cell Iterator}{Vertex-On-CellIterator}.
+
+ \conceptsubsection{Refinement of}
+ STL \xlink{Forward Iterator}{http://www.sgi.com/Technology/STL/ForwardIterator.html}
+ \\
+ \sectionlink{\concept{Grid Entity}}{GridEntity}
+ 
+ \conceptsubsection{Notation}
+ {\tt I} is a model of incidence iterator
+ \\ 
+ {\tt i, j} are  objects of type  {\tt I}
+ 
+ \conceptsubsection{Associated types}
+ \begin{tabularx}{12cm}{llR}\\
+   \hline
+   \bf  Name  &\bf  Expression  &\bf  Description   \\ 
+   \hline
+   grid type  &  
+   {\tt I::grid\_type} &
+   type of the iterators underlying grid (range)   \\ 
+   anchor type  & 
+   {\tt I::anchor\_type} &
+   type of the iterators anchor element  \\ 
+   element type  &
+   {\tt I::element\_type} &
+   type of the \sectionlink{\concept{Element}}{GridElement} that the iterator references   \\ 
+   value type  & 
+   {\tt I::value\_type} &
+   synomym for {\tt I::element\_type} \\ 
+   \hline
+   \\
+ \end{tabularx}
+ 
+
+ \conceptsubsection{Valid Expressions}
+ \begin{tabular}{llll} \\
+   \hline
+   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\
+   \hline
+   prefix increment  &
+   {\tt ++it;} &
+   ~ &
+   {\tt I\&} 
+   \\
+   dereference  &
+   {\tt *it;} & 
+   ~ &
+   {\tt I::element\_type} 
+   \\
+   equality comparison  &
+   {\tt i == j} & 
+   \ &
+   {\tt bool} 
+   \\
+   validity check  &
+   {\tt i.IsDone();}\noteref{note-isdone} & 
+   ~ &
+   {\tt bool} \\
+   \hline
+   \\
+ \end{tabular}
+
+   
+ \conceptsubsection{Expression semantics}
+
+\begin{tabularx}{15cm}{RlRRR} \\
+  \hline      
+  \bf  Name       &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  constructor  &
+  {\tt i(a);} &
+  {\tt e} is \link{valid}[~(see sec.\ \Ref)~]{valid} &
+  set i to  {\tt e}'s first incident element of type {\tt I::element\_type}  & 
+  {\tt i.TheAnchor() == a} 
+  \\ 
+  prefix increment  &
+  {\tt ++i;} &
+  {\tt ! i.IsDone()} &
+  move iterator forward  & 
+  {\tt i.IsDone()} or {\tt *i} is a \link{valid}{valid}
+  grid element 
+  \\ 
+  dereference  &
+  {\tt e = *it;} & 
+  {\tt ! it.IsDone()} &  
+  access the element {\tt it} points to &
+  {\tt E == (*it);}
+  \\ 
+  equality comparison  &
+  {\tt i == j} & 
+  {\tt \&(i.TheGrid()) == \&(j.TheGrid())} &  
+  true if i and j reference the same element:  {\tt *i == *j}  &
+  ~
+  \\ 
+  validity check  &
+  {\tt i.IsDone();} & 
+  ~ &  
+  true iff {\tt i} is past-the-end. &
+  ~ 
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\W\conceptsubsection{Complexity guarantees}
+
+\conceptsubsection{Refinements}
+\sectionlink{\concept{Vertex}-On-Cell Iterator}{Vertex-On-CellIterator}
+\\
+\sectionlink{\concept{Edge}-On-Cell Iterator}{Edge-On-CellIterator}
+\\
+    
+\W\conceptsubsection{Models}
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item 
+\notelabel{note-isdone}
+For circular sequences, such as the vertices around a cell, there is no natural,
+predefined past-the-end value. Therefore it is more natural to let the iterator
+itself decide when it is invalid, instead of the standard comparison with a
+past-the-end iterator (which is defined as well, in order to be able to use
+STL algorithms).
+\end{enumerate}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{Grid}}{Grid} ~
+\sectionlink{\concept{Grid Element}}{GridElement} ~
+\sectionlink{\concept{Grid Sequence Iterator}}{GridSequenceIterator} ~
+
+
+  
+

@@ -1,0 +1,61 @@
+\xname{Grid}
+\begin{Label}{Grid}
+\conceptsection{Grid Concept}
+\end{Label}
+
+\conceptsubsection{Description }
+The  mathematical concept underlying {\em  Grid }    
+is that of (a subset of) a (finite)     
+\xlink{CW-complex}[\cite{weingram}]{http://www.treasure-troves.com/math/CW-Complex.html}. 
+Some well-known specialization of this concept are    
+triangulations, boundary complexes of convex  
+\xlink{polytopes}{http://www.treasure-troves.com/math/Polytope.html} 
+and Cartesian grids.     
+
+\conceptsubsection{Refinement of }
+\sectionlink{\concept{Grid Range}}{GridRange}  
+
+The main difference to grid ranges is that grids stand for their own ---
+there is no underlying base grid. 
+This means that all grid entities produced by calls to member functions of a grid      
+{\tt  g} refer to {\tt  g} with their grid anchor references.    
+
+Virtually all algorithms can do with grid ranges, they do not require grids.    
+
+\conceptsubsection{Notation }
+{\tt  G} is a type which is a model of grid      
+
+\conceptsubsection{Associated types}
+    
+\begin{tabular}{ccc} \\ 
+  \hline
+  {\bf  Name  } & {\bf  Expression  } & {\bf  Description  } \\ 
+  \hline 
+  base grid  & {\tt  G::grid\_type}  & identical to {\tt  G }  \\ 
+  \hline
+  \\
+\end{tabular}
+
+
+\conceptsubsection{Refinements}
+\conceptlink{Grid-With-Boundary}{Grid-With-Boundary}
+\conceptsubsection{Models }
+\sectionlinkUNDEF{\type{Triang2D}}{Triang2D}
+\\
+\sectionlink{\type{Complex2D}}{Complex2D.html}   
+
+\conceptsubsection{Notes}
+ \begin{enumerate}
+   \item Technically, these types are bundled in a struct 
+     {\tt  grid\_types<G>}      
+     which is used by the algorithms to access these types. 
+     This opens up the possibility  to parameterize algorithms by such a {\em  traits class } 
+     like {\tt  grid\_types<G> },      
+     thereby introducing different iterator and element types, 
+     for example counting iterators or debug iterators producing graphical output.    
+\end{enumerate}
+
+\conceptsubsection{See also }
+\sectionlink{\concept{Grid  Range}}{GridRange} ~
+\sectionlink{\concept{Grid Element}}{GridElement} ~ 
+\sectionlink{\concept{Grid Sequence Iterator}}{GridSequenceIterator} 

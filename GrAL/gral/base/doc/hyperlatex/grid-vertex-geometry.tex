@@ -1,0 +1,104 @@
+\xname{VertexGridGeometry}
+\begin{Label}{VertexGridGeometry}
+ \conceptsection{Vertex Grid Geometry Concept} 
+\end{Label}
+
+\conceptsubsection{Description}
+The \concept{Vertex Grid Geometry} concept is the weakest
+\sectionlinkshort{grid geometry}{GeometricalLayer} concept.
+It simply provides a mapping from grid vertices to points in some space.
+
+The \concept{Mutable Vertex Grid Geometry} concept allows in addition
+the assignment of vertex coordinates.
+
+\conceptsubsection{Refinement of}
+
+\conceptsubsection{Notation}
+\type{Geo} is a type which is a model of \concept{Vertex Grid Geometry} \\
+{\tt g} is an object of type \type{Geo}\\
+{\tt v, v1, v2} are objects of a type \type{V} which is a model of \conceptlink{Grid Vertex}{GridVertex}.\\
+{\tt q} is an object of {\tt Geo::coord\_type}
+
+\W\conceptsubsection{Definitions}
+
+\conceptsubsection{Associated types}
+
+\noindent
+\begin{tabularx}{14cm}{llR} 
+  \\ \hline
+  \bf  Name  & \bf  Expression  &\bf  Description   \\
+  \hline
+  grid type &
+  {\tt Geo::grid\_type} &
+  underlying grid type, model of \conceptlink{Vertex Grid Range}{VertexGridRange}.
+  \\
+   point type &
+   {\tt Geo::coord\_type}&
+   the geometric point type, 
+   representation of the elements of the topological 
+   space where the geometry lives
+   \par model
+   of STL \Stllink{Assignable}.
+   \\
+  \hline
+\end{tabularx}
+
+\conceptsubsection{Valid Expressions}
+
+\noindent
+\begin{tabular}{llll}
+  \\ \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\
+  \hline
+   get vertex coordinates & q = g.coord(v)  &  & \type{coord\_type const\&} \\
+   set vertex coordinates & g.coord(v) = q & \type{Geo} is mutable & \type{coord\_type \&} \\
+  \hline
+\end{tabular}
+
+\conceptsubsection{Expression semantics}
+
+\noindent 
+ \begin{tabularx}{15cm}{RlRRR} 
+   \\ 
+   \hline 
+   \bf  Name    &
+   \bf  Expression &
+   \bf  Precondition&
+   \bf  Semantics &
+   \bf  Postcondition
+   \\ 
+   \hline
+    coordinate read access & 
+    {\tt q = g.coord(v)} &
+    {\tt v} is \footlink{valid}{valid} &
+    if {\tt v1 == v2} then {\tt g.coord(v1)} is the same as\noteref{note-gvg-comparison}
+    {\tt g.coord(v2)} &
+    \\
+    coordinate write access &
+    {\tt g.coord(v) = q} &
+    {\tt v} is \link{valid}{valid} &
+    set the coordinate of {\tt v} to {\tt q} &
+    {\tt g.coord(v)} is equal to {\tt q}
+    \\
+   \hline
+\end{tabularx}
+
+\W\conceptsubsection{Invariants}
+
+\conceptsubsection{Refinements}
+\conceptlink{Volume Grid Geometry}{VolumeGridGeometry}
+
+\conceptsubsection{Models}
+\sectionlink{\type{IstreamComplex2DFmt}}{istream-complex2d-fmt}
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-gvg-comparison} 
+In general, the type \type{Geo::coord\_type} will not be a model
+of STL \stllink{Equality Comparable}{EqualityComparable},
+because this is normally not useful for floating point values.
+\end{enumerate}
+
+\conceptsubsection{See also}
+
+

@@ -1,0 +1,122 @@
+\xname{GridElementFunction}
+\begin{Label}{GridElementFunction}
+  \conceptsection{Grid Element Function Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+The {\em Grid Element Function\/} concept 
+models the mathematical concept of a mapping from
+grid elements of some fixed type (vertex, edge, cell)
+which is a model of \sectionlink{\concept{Grid Element}}{GridElement},
+to values of  some type {\tt T}.
+
+\conceptsubsection{Refinement of}
+STL \xlink{Adaptable Unary Function}{http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html}
+
+\conceptsubsection{Notation}
+{\tt F} is a type which is a model of  Grid Element Function 
+\\
+{\tt f} is an object of type  {\tt F}
+\\
+{\tt e, e1, e2} are objects of  {\tt F::element\_type}
+\\
+{\tt t} is an object of  {\tt F::value\_type}
+
+\conceptsubsection{Associated types}
+
+\noindent
+\begin{tabularx}{14cm}{llR}  
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Description   \\ 
+  \hline
+  element type  & 
+  {\tt F::element\_type} &
+  type of the underlying element, 
+  \par model of \sectionlink{\concept{ Grid Element}}{GridElement} 
+  \par synonym for {\tt F::argument\_type}
+  (from \xlink{Adaptable Unary Function}{http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html})
+  \\
+  value type  &
+  {\tt F::value\_type} &
+  synomym for {\tt F::result\_type}   
+  \par (from \xlink{Adaptable Unary Function}{http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html})
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+    
+\conceptsubsection{Valid Expressions}
+No new ones, besides those from 
+\xlink{Adaptable Unary Function}{http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html}
+
+\noindent
+\begin{tabular}{llll} \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
+  \hline
+  function evaluation  &
+  {\tt t = f(e);} &
+  ~      &
+  {\tt value\_type} 
+  \\ 
+  \hline
+  \\
+\end{tabular}
+
+\conceptsubsection{Expression semantics}
+The semantics of function evaluation are more restrictive than those for
+\xlink{Adaptable Unary Function}{http://www.sgi.com/Technology/STL/AdaptableUnaryFunction.html}
+see the notes below\noteref{note-evaluation}.
+
+\noindent
+\begin{tabularx}{14cm}{llRRR} \\
+  \hline
+  \bf  Name       &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  evaluation  &
+  {\tt t = f(e)} &
+  {\tt e} is in the domain of {\tt f} &
+  evaluate {\tt f} at the argument {\tt e} & 
+  {\tt t} is equal to {\tt f(e)}\noteref{note-evaluation}
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\conceptsubsection{Invariants}
+\begin{tabular}{ll} 
+  Argument identity &
+  if {\tt e1 == e2} then {\tt f(e1)} is equal to {\tt f(e2)} \noteref{note-equal-comp}
+  \\ 
+\end{tabular}
+
+\conceptsubsection{Refinements}
+\sectionlink{\concept{ Grid Function }}{GridFunction}
+
+\conceptsubsection{Models}
+\sectionlink{{\tt cell\_nb\_degree<GRID>}}{cell_nb_degree}
+defined in
+\xlink{{\tt grid-functors.h}}{\NMWRINC/Grids/grid-functors.h}.
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-evaluation}
+  The important difference to STL function objects
+  is that the latter are {\em not\/} guaranteed to deliver the same result 
+  for subsequent evaluations on the same argument.
+\item \notelabel{note-equal-comp}    
+  The type {\tt F::value\_type} is not required to be 
+  STL \xlink{ Equality Comparable }{http://www.sgi.com/Technology/STL/EqualityComparable.html}
+  If it is, then {\tt e1 == e2} implies {\tt f(e1) == f(e2)}.
+\end{enumerate}
+    
+\conceptsubsection{See also}
+\sectionlink{\concept{ Grid Function }}{GridFunction} ~
+
+  
+

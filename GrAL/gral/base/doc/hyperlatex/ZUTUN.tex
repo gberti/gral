@@ -1,0 +1,36 @@
+\documentclass[german]{article}
+
+\begin{document}
+
+\section{Offene Fragen}
+\begin{itemize}
+\item {\tt FacetOnCellIt} vs.\ {\tt Facet}: \\
+{\tt TheCell() / OtherCell()} vs.\ {\tt C1() / C2() }
+bei {\tt C1() / C2() } keine Ordnung festgelegt.
+\item {\tt incit.LocalNumber()}: 0 oder 1? Kl"arung durch 
+RA-Iteratoren, Tendenz zu 0. Dann aber auch {\tt c.V(i)} bein 0 anfangen lassen!
+\item partielle Gitterfunktionen k"onnen PairAssocContainer verfeinern,
+auch MutableMapping
+\item Gitterfunktionen: {\tt swap} spezialisieren!
+\item Vergleich von GridEntities, z.B. IncIters: soll
+{\tt REQUIRE(i1.TheAnchor()==i2.TheAnchor())} gelten?
+\item Sollen die {\tt ConstructGrid} Funktionen Member-Templates sein?
+\item Adapter PairAssocContainer zu MutableMapping?
+\end{itemize}
+
+\section{Inkonsistenzen}
+
+\begin{itemize}
+\item {\tt enumerated_subrange::VertexIterator} kennt {\tt anchor} nicht!
+\end{itemize}
+
+\section{Zu Schreiben}
+\begin{itemize}
+\item MutableMapping
+\item {\tt element\_traits}
+\item {\tt Triang2D}
+\item {\tt Complex2D} ist noch nicht vollst"andig!
+\item Konsequente Umstellung von Elementen auf GridRange-Konzept.
+\end{itemize}
+
+\end{document}

@@ -1,0 +1,215 @@
+% \xname{GridGlossary}
+%\begin{Label}{GridGlossary}
+%\section{Glossary of Grid Category Terms}
+%\end{Label}
+
+\begin{Glossar}
+\item[associative copy]
+  An associative copy between two grids is a copy operation
+  which preserves (outputs) a mapping between the elements of the first and
+  those of the second grid, such that this mapping is (part of) a 
+  \Glossarylink{grid morphism}.
+
+\item[boundary facet] See \Glossarylink{interior facet}.
+
+\item[bound to a grid] 
+  We say that a grid entity \variable{e} of type \type{E}
+  is bound to a grid \variable{g}
+  if \variable{g} is an object of type \type{E::grid\_type} 
+  and \code{\&g == \&(e.TheGrid())}.
+  Here \type{E} might be a \Glossarylink{model} of 
+  \conceptlink{Grid Element}{GridElement},
+  \conceptlink{Grid Function}{GridFunction} or the like.
+
+\item[category]
+  is used to denote a group of related components
+  which implement concepts from the same problem domain, such
+  as grid-related components (grid category), which has 
+  sub-categories combinatorial grids, grid functions (or data association),
+  and grid geometries.
+
+\item[component]
+  A component is any piece of code which can be used elsewhere,
+  for example a class template, a single class, a set of related classes,
+  or a function implementing an algorithm.
+
+\item[concept]
+  Following to the 
+  \xlink{STL}{\STLURL} parlance
+  a concept is a set of type requirements.
+  Generic algorithms require their arguments to be \glossarylink{models}{model}
+  of certain concepts.
+  The STL documentation explains further:
+  \begin{quote}
+    Concepts are not a part of the C++ language; there is no way to declare a concept in a
+    program, or to declare that a particular type is a model of a concept.
+  \end{quote}
+
+\item[dimension-homogeneous]
+  A grid element is called {\sl principal\/} if it is not incident to a higher dimensional element.
+   A grid is dimension-homogeneous, if each principal element is of
+   the highest dimension (namely, the dimension of the grid, $d$).
+
+   This property excludes for example isolated vertices,
+   or `free' edges (if the dimension is at least $2$).
+
+\item[geometric realization]
+
+\item[grid morphism]
+
+\item[interior facet] A facet $f$ is called interior with respect to a cell set 
+  $C$ (which is assumed to be a sub-range of a manifold-with-boundary grid),
+  if there two different cells in $C$ which are incident to $f$.
+  If there is exactly one cell in $C$ incident to $f$, then $f$ is a
+  {\sl boundary facet\/} of $C$. If there is no such cell, $f$ is not a facet 
+  of $C$.
+
+\item[manifold-with-boundary]
+  A combinatorial grid of dimension $d$ is a manifold-with-boundary grid,
+  if it has a {\sl \Glossarylink{geometric realization}} which is a manifold with boundary.
+
+\item[model]
+  A concrete type is a model of a \Glossarylink{concept},
+  if it fullfils the requirements of the concept.
+
+\item[partial specialization] refers to binding a part of the parameters 
+  of some generic component (class template) to some more specialized type.
+  For example, consider the fully generic template frame for 
+  \conceptlink{total grid functions}{TotalGridFunction}:
+  \begin{example}
+  template<class E, class T>
+  class grid_function<E,T> \{\};
+  \end{example}
+  In generic algorithms, this serves as a placeholder for the actual implementations of 
+  \type{grid\_function} for concrete element  types \type{E}.
+  For example, total grid functions for the \sectionlinkfoot{\type{Complex2D}}{Complex2D}
+  grid type are implemented by using vectors for the element types \type{Complex2D::Vertex}
+  and \type{Complex2D::Cell}, and by using hash tables for the element type \type{Complex2D::Edge}:
+  \begin{example}
+  template<class T>
+  grid_function<Complex2D::Vertex, T> 
+    : public \sectionlinkweb{grid\_function\_vector}{grid-function-vector}<Complex2D::Vertex, T> \{
+    // repeat constructors
+  \};
+
+  template<class T>
+  grid_function<Complex2D::Cell, T> 
+    : public \sectionlinkweb{grid_function_vector}{grid-function-vector}<Complex2D::Cell, T> \{
+    // repeat constructors
+  \};
+
+  template<class T>
+  grid_function<Complex2D::Edge, T> 
+    : public \sectionlinkweb{grid_function_hash}{grid-function-hash}<Complex2D::Edge, T> \{
+    // repeat constructors
+  \};
+  \end{example}
+
+\item[poset]
+A (strict) poset ${\cal S}$ is a {\bf p}artially {\bf o}rdered finite {\bf set}, 
+that is, a set with a partial order $<$ 
+which is antisymmetric and transitive. 
+The poset of a grid consists of the grid's elements,
+partially ordered by inclusion.
+
+A poset is {\sl bounded\/} if there are unique minimal and maximal elements
+$\hat{0}$ and $\hat{1}$.
+A {\sl chain\/} is a totally ordered subset of a poset. A bounded poset
+is called {\sl graded\/} if every maximal chain has the same {\sl length}
+(its number of elements minus 1). 
+For $ a \leq b$, the {\sl interval\/} $[a,b]$ 
+is the set of all elements in between:
+\[
+  [a,b] = \{ c \in {\cal S} | a \leq c \leq b \}
+\]
+If ${\cal S}$ is graded, the {\sl rank\/} of $a \in {\cal S}$ is the length
+of a maximal chain in $[\hat{0},a]$.
+
+The poset of a grid ${\cal G}$ can be made into a bounded one by adjoining
+the {\sl improper elements\/}  $\hat{0} = \emptyset$
+and $\hat{1} = \|{\cal G}\|$, with dimensions $-1$ and $d+1$.
+
+  
+\item[publishing a type] means a standard way of associating types with classes.
+  One way to do it is to use nested typedefs within the class, like in the following
+  example from the STL:
+  \begin{example}
+   template<class T>
+   class vector \{
+   public:
+     typedef T  value_type;
+     typedef T* iterator;
+     ...
+   \};
+  \end{example}
+  Here the class template \type{vector} publishes \type{value\_type} and \type{iterator},
+  which can be used in another component:
+  \begin{example}
+    template<class Container>
+    void f(Container const& C, Container::value_type const& t) {
+      Container::iterator i = C.begin();
+      // ...
+    }
+  \end{example}
+  Another way to look at it is to say that \type{vector<T>} defines
+  a mapping from type \type{vector<T>} to a set of associated type like
+  \type{vector<T>::iterator}.
+
+  A different and somewhat more flexible way of achieving this is using so called
+  \webref{traits}{\traitsURL}{Meyers95}
+  classes, which makes use of several different such mappings
+  for a given type possible. For this purpose, responsibility for the type definitions
+  is delegated to a separate class, the {\sl traits class}.
+  \begin{example}
+   template<class C>
+   struct container_traits \{\}; // default: empty
+
+   // specialize for vectors
+   template<class T>
+   struct container_traits< vector<T> > \{
+     typedef T  value_type;
+     typedef T* iterator;
+     // ...
+   \};
+  \end{example}
+  If the algorithm {\tt f} above continues to be parameterized by {\tt C} alone,
+  not much changes, only the occurences of {\tt C::iterator} has to replaced by
+  {\tt container\_traits<C>::iterator}.
+  On the other hand, one might imagine a {\sl counted iterator}, which counts the number
+  of increments. It would not be easy to introduce this without traits.
+  However, we can use an additional traits parameter to the algorithm {\tt f}:
+  \begin{example}
+    template<class Container, class Traits>
+    void f(Container const& C, Container::value_type const& t, Traits const&) {
+      Traits::iterator i = C.begin();
+      // ...
+    }
+  \end{example}
+  Now it is possible to introduce counted iterators, without any change to the algorithm
+  implementation:
+  \begin{example}
+  template<class C>
+  struct counted_traits {
+    typedef C::value_type value_type; // use same value type
+    typedef counted_iterator<C::iterator> iterator;
+    // ... 
+  };
+
+  // use f, count increments
+  MyContainer myc;
+  typedef counted_traits<MyContainer> my_traits;
+  
+  f(my_c, t, my_traits());
+  \end{example}
+  In the grid component framework, the template \type{grid\_types<>}
+  plays exactly the r{\^o}le of \type{container\_traits<>} above.
+
+  A similar effect could be achieved by deriving from the container class,
+  or defining a wrapper class with a delegation mechanism, which would contain
+  the changed typedefs. However, this would not work for built-in types,
+  and also not for aggregations (containers of containers), because there is no
+  way of changing the type of contained items.
+\end{Glossar}
+
+  
+

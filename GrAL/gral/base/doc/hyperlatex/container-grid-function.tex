@@ -1,0 +1,133 @@
+\xname{ContainerGridFunction}
+\begin{Label}{ContainerGridFunction}
+\conceptsection{Container Grid Function Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+
+The  {\em Container Grid Function\/} concept refines the 
+\sectionlink{\concept{ Mutable Grid Function}}{MutableGridFunction} concept.
+A Container Grid Function can be created and filled with values by a client,
+much like a ordinary container. This of particular importance for 
+algorithms needing temporary storage, such as boolean flags on grid elements.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{ Mutable Grid Function}}{MutableGridFunction}
+\\
+STL \xlink{Assignable}{http://www.sgi.com/Technology/STL/Assignable.html}
+
+\conceptsubsection{Notation}
+{\tt F} is a type which is a model of  Container Grid  Function 
+\\
+{\tt f} is an object of type  {\tt F}
+\\
+{\tt G} is shorthand for  {\tt F::grid\_type}
+\\
+{\tt g} is an object of type  {\tt G}.
+
+\conceptsubsection{Associated types}
+None, exept those defined in
+\sectionlink{\concept{ Mutable Grid Function}}{MutableGridFunction}
+
+\conceptsubsection{Valid Expressions}
+\begin{tabular}{llll} 
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ \hline
+  Default construction & 
+  {\tt F f();} &
+  ~ &
+  ~ 
+  \\ 
+  Construction from grid & 
+  {\tt F f(g);} &
+  ~ &
+  ~ 
+  \\ 
+  Construction and initialization & 
+  {\tt F f(g,t);} &
+  ~ &
+  ~ 
+  \\ 
+  Binding to grid &
+  {\tt f.set\_grid(g);} &
+  ~ &
+  ~ 
+  \\ 
+  \hline
+\end{tabular}
+
+\conceptsubsection{Expression semantics}
+\begin{tabularx}{15cm}{RRRRR} 
+  \hline    
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  Default construction & 
+  {\tt F f();} &
+  ~ &
+  default construct {\tt f} &
+  {\tt f} is unbound
+  \par write access is an error
+  \par read  access is an error
+  ~
+  \\ 
+  construction from grid & 
+  {\tt F f(g);} &
+  ~ &
+  construct and bind {\tt f}  to {\tt g} &
+  {\tt f} is bound to {\tt g} 
+  \par write access is allowed 
+  \par read access is undefined
+  \\ 
+  construction and initialization & 
+  {\tt F f(g,t);} &
+  ~ &
+  construct and bind {\tt f}  to {\tt g}, 
+  initialize all values to {\tt t} &
+  {\tt f} is bound to {\tt g} 
+  \par write access is allowed 
+  \par {\tt f(e)} is equal to {\tt t} for all elements {\tt e}
+  in the range of {\tt f}.
+  \\ 
+  Binding to grid &
+  {\tt f.set\_grid(g);} &
+  f is unbound &
+  bind {\tt f}  to {\tt g} &
+  {\tt f} is bound to {\tt g} 
+  \par write access is allowed, 
+  \par read access is undefined
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\conceptsubsection{Complexity Guarantees}
+Default construction takes constant time.
+\\
+Construction from grid and construction with initalization both
+take time at most O({\tt f.size()}), that is, the number of 
+elements of type {\tt F::element\_type} of {\tt g}.
+ 
+
+\conceptsubsection{Refinements}
+\sectionlink{\concept{ Total Grid Function}}{TotalGridFunction} ~
+\W\\
+\sectionlink{\concept{ Partial Grid Function}}{PartialGridFunction}
+
+\W\conceptsubsection{Models}
+    
+
+\W\conceptsubsection{Notes}
+
+ 
+\conceptsubsection{See also}
+\sectionlink{\concept{ Grid Element Function }}{GridElementFunction} ~
+\sectionlink{\concept{ Grid  Function }}{GridFunction} ~
+\sectionlink{\concept{ Mutable Grid  Function }}{MutableGridFunction} ~
+
+  
+

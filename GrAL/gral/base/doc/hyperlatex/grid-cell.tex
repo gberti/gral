@@ -1,0 +1,93 @@
+ 
+\xname{GridCell}
+\begin{Label}{GridCell}
+\conceptsection{Grid Cell Concept}
+\end{Label}
+
+\conceptsubsection{Description} 
+The {\em Grid Cell\/} concept  corresponds to the mathematical concept of a d-dimensional entity
+of a d-dimensional \sectionlink{\concept{Grid}}{Grid}
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{Grid Element}}{GridElement}
+
+\conceptsubsection{Notation}
+{\tt C} is a type which is a model of \concept{Grid Cell}
+\\
+{\tt c} is an object of type {\tt C}
+\\
+{\tt g} is an object of type {\tt C::grid\_type}
+\\
+{\tt h} is an object of type {\tt C::vertex\_handle}
+\\
+
+\conceptsubsection{Associated types}
+
+\noindent
+\begin{tabular}{lll} \hline
+  \bf  Name  &\bf  Expression  &\bf  Description  \\ \hline
+  handle type & 
+  {\tt C::cell\_handle} &
+  type of the corresponding \sectionlink{\concept{cell handle}}{GridVertexHandle} 
+  \\ \hline
+\end{tabular}
+
+
+\conceptsubsection{Valid Expressions}
+
+\noindent
+\begin{tabular}{llll} \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ \hline
+  handle & 
+  {\tt c.handle()} &
+  ~ &
+  {\tt C::vertex\_handle} 
+  \\ \hline
+\end{tabular}
+
+\conceptsubsection{Expression semantics}
+
+\noindent
+\begin{tabularx}{14cm}{RRRRR}
+  \hline
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ \hline
+  handle &
+  {\tt h = c.handle();} &
+  {\tt c} is \link{valid}{valid} &
+  shorthand for 
+  \par  {\tt h = c.TheGrid(). handle(c)} &
+  {\tt c == c.TheGrid().cell(h)}  
+  \\ \hline
+\end{tabularx}
+
+\conceptsubsection{Refinements}
+
+\par
+\noindent
+\sectionlinkUNDEF{\concept{Vertex-Range Cell}}{Vertex-RangeCell}
+\\
+\sectionlinkUNDEF{\concept{Edge-Range Cell}}{Edge-RangeCell}
+\\
+\sectionlinkUNDEF{\concept{Neighbor-Range Cell}}{Neighbor-RangeCell}
+\\
+\sectionlinkUNDEF{\concept{Full Grid Cell}}{FullGridCell}
+\\
+
+\conceptsubsection{Models}
+\sectionlinkUNDEF{ \type{Complex2D::Cell}}{Complex2DCell} defined in
+\nmwrcodelink{cell2d.h}{Grids/Complex2D}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{Grid Vertex}}{GridVertex} ~
+\sectionlink{ \concept{Grid Element}}{GridElement} ~
+\sectionlink{ \concept{Vertex-On-Cell Iterator}}{Vertex-On-CellIterator} ~
+\sectionlink{\concept{Grid Range}}{GridRange} ~
+\sectionlink{\concept{Vertex Grid Range}}{VertexGridRange} ~
+
+  
+

@@ -1,0 +1,170 @@
+\xname{GridRange}
+\begin{Label}{GridRange}  
+  \conceptsection{Grid Range Concept}
+\end{Label}
+
+    \conceptsubsection{Description}
+    A {\em  Grid Range} is a part of a grid, its {\em  base grid}.
+    The underlying mathematical concept
+    is that of (a subset of) a (finite) 
+    \xlink{CW-complex}{http://www.treasure-troves.com/math/CW-Complex.html}.
+    Some well-known specializations of this concept are
+    \xlink{triangulations}{http://www.treasure-troves.com/math/Triangulation.html}
+    boundary complexes of convex 
+    \xlink{polytopes}{http://www.treasure-troves.com/math/Polytope.html} 
+    and regular Cartesian grids.
+
+    A Grid Range behaves in most circumstances like a 
+%    \xlink{Grid}[~(section \ref{Grid})~]{Grid.html}. 
+    \sectionlink{\concept{Grid}}{Grid}
+    The main difference is that a Grid Range has reference semantics with respect to
+    its underlyin base grid, that is, the incidence relationship is determined by the 
+    base grid.
+    This influences the behaviour of
+    \sectionlink{\concept{Incidence Iterators}}{GridIncidenceIterator}
+    associated with a Grid Range,
+    which may  visit 
+    \sectionlink{\concept{grid elements}}{GridElement}
+    that are contained in the base grid,
+    but not  in the grid range    
+    \noteref{note-incidence}
+%    \link*{\arabic{\value{notecounter}}}[\Ref]{note-incidence}).
+    
+    A Grid is a special case of a Grid 
+    Range \noteref{note-reference} %\link*{\ref{note-reference}}[~(see note \Ref)~]{note-reference}.
+
+    {\em  NOTE:} A grid range as such does offer almost no functionality at all.
+    Any useful model will be a specialization of one or more 
+    element ranges 
+    \noteref{note-element-types}
+    %\link*{\ref{note-element-types}}[~(see note \Ref)~]{note-element-types}
+    like     
+    \sectionlink{\concept{Grid Vertex Range}}{VertexGridRange}.
+
+    \conceptsubsection{Refinement of}
+     STL \xlink{Assignable}[]{http://www.sgi.com/Technology/STL/Assignable.html}
+
+
+    \conceptsubsection{Notation }
+    {\tt  R} is a type which is a model of grid range
+    \\
+    {\tt  r} is an object of type {\tt  R}
+    \\
+    {\tt G} is {\tt R::grid\_type}
+
+    \conceptsubsection{Associated types}\noteref{note-gridtypes}
+
+    \begin{tabular}{lll} \\
+      \hline
+      \bf  Name  &\bf  Expression  &\bf  Description   \\ 
+      \hline
+      base grid &
+      {\tt  R::grid\_type}  &
+      type of the  ranges' base grid 
+      \\ 
+      \hline
+      \\
+    \end{tabular}
+ 
+
+    \conceptsubsection{Valid Expressions }
+   \begin{tabular}{llll} \\
+     \hline
+       \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
+       \hline
+       base grid reference  &
+       {\tt  r.TheGrid()}  &
+       & 
+       {\tt  grid\_type const\&}  \\ 
+       \hline
+       \\
+    \end{tabular}
+
+   
+    \conceptsubsection{Expression semantics }
+    \begin{tabularx}{14cm}{RRRRR} \\
+      \hline
+      \bf  Name       &
+      \bf  Expression &
+      \bf  Precondition&
+      \bf   Semantics &
+      \bf   Postcondition
+      \\
+      \hline
+      base grid   reference  &
+      {\tt G const\&  g = r.TheGrid()}  &
+      {\tt r } has not been default constructed &
+      get the grid {\tt  r} references  &
+      {\tt  \&g == \&(g.TheGrid())} {\tt == \&(r.TheGrid())}  \\ 
+    \hline
+    \\
+  \end{tabularx}
+
+  \W\conceptsubsection{Complexity guarantees }
+
+    \conceptsubsection{Refinements}
+    \sectionlink{\concept{Vertex Grid Range}}{VertexGridRange} ~
+    \W\\
+    \sectionlink{\concept{Edge Grid Range}}{VertexGridRange} ~
+    \W\\
+    \sectionlink{\concept{Facet Grid Range}}{VertexGridRange} ~
+    \W\\
+    \sectionlink{\concept{Cell Grid Range}}{VertexGridRange} ~
+    \W\\
+    
+    \conceptsubsection{Models }
+    \link{{\tt enumerated\_grid\_range} }[~(\Ref)~]{EnumeratedGridRange} ~
+    \W\\
+    \link{{\tt Complex2D}}[~(\Ref)~]{Complex2D} ~
+    \W\\
+    \link{{\tt  Complex2DInput}}[~(\Ref)~]{Complex2DInput} ~
+
+    \conceptsubsection{Notes}
+    \begin{enumerate}
+    \item       \notelabel{note-reference}
+      If {\tt  R} is a model of
+      \sectionlinkshort{\concept{Grid}}{Grid},
+      then {\tt  R::grid\_type} is identical to {\tt  R}.
+      An object {\tt  r} of type {\tt R} 
+      then references itself via {\tt  r.TheGrid()}, 
+      that is, it has value semantics.
+          
+      \item   \notelabel{note-gridtypes}
+        Technically, these types are bundled in a struct {\tt  grid\_types<R>}
+      which is used by the algorithms to access these types. This opens up the possibility
+      to parameterize algorithms by such a {\em  traits class} like {\tt  grid\_types<R>},
+      thereby introducing different iterator and element types, for example counting iterators
+      or debug iterators producing graphical output.
+    
+      In this case, it would be more precise to say that one 
+      ``associates types with {\tt  R}'', 
+      instead of speaking of ``types associated with {\tt  R}''.
+
+      
+      \item \notelabel{note-incidence}
+        This may seem as an odd behaviour. However, this faithfully reflects what many
+      locally operating grid-based algorithms are intuitively expected to do when
+      given a proper subrange of a grid: The range restricts the region where some
+      work is to be done, but on each element, the algorithm accesses also some
+      meighboring elements via incidence iterators, which may or may not belong to the
+      range. The most striking example for this occurs if grids are distributed with
+      some overlap: On each part, the algorithm works only on the locally owned range, 
+      but it accesses also elements in the overlap which are copied from other parts.
+
+     
+      \item 
+        \notelabel{note-element-types}
+        It is not necessary to require all possible element types to be defined.
+      Useful examples are Input Grids, 
+      such as \link{ {\tt  Complex2DInput} }[~(\Ref )~]{Complex2DInput}
+      which are used just to read a grid from
+      a specific file format.
+    \end{enumerate}
+
+    \conceptsubsection{See also }
+    \link{Grid }[~(\Ref )~]{Grid} ~
+    \link{Grid Element }[~(\Ref )~]{GridElement} ~
+    \link{Sequence Iterator }[~(\Ref )~]{SequenceIterator} ~
+    \link{Incidence Iterator }[~(\Ref )~]{IncidenceIterator} 
+
+

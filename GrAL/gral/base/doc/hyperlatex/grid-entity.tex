@@ -1,0 +1,192 @@
+\xname{GridEntity}
+\begin{Label}{GridEntity}
+\conceptsection{Grid Entity Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+The {\em Grid Entity\/} concept is rather abstract in that it gives rise to rather
+separate sub-concepts, notably \sectionlink{\concept{ Grid Element }}{GridElement},
+\sectionlink{\concept{Grid Sequence Iterator}}{GridSequenceIterator},
+and \conceptlink{Grid Incidence Iterator}{GridIncidenceIterator}.
+Its purpose is to bundle some fundamental properties, much like the STL concepts
+\xlink{Assignable}{http://www.sgi.com/Technology/STL/Assignable.html} and 
+\xlink{Equality Comparable}{http://www.sgi.com/Technology/STL/EqualityComparable.html}
+which it refines.
+
+The fundamental property captured by {\em Grid Entity\/} is binding to a 
+\sectionlink{\concept{Grid}}{Grid}
+(the {\em anchor grid\/}), 
+and global identity, 
+in contrast to \sectionlink{\concept{Element Handles}}{GridElementHandle},
+which are unique only within a single grid.
+
+Conceptually, a grid is the owner of its entities; 
+an entities lifetime cannot exceed that of
+its anchor grid. 
+Also, an grid entity need  not be necessarily permanently stored,
+it may be constructed only temporarily, 
+for example a
+\concept{Grid Iterator}
+or a  
+\sectionlink{\concept{Grid Element}}{GridElement}
+obtained by dereferencing a  Grid Iterator.
+
+\conceptsubsection{Refinement of}
+STL \xlink{ Assignable }{http://www.sgi.com/Technology/STL/Assignable.html}
+\\
+STL \xlink{Equality Comparable}{http://www.sgi.com/Technology/STL/EqualityComparable.html}
+
+
+\conceptsubsection{Notation}
+{\tt E} is a type which is a model of {\em Grid Entity\/}
+\\
+{\tt e, e1, e2} are objects of type {\tt E}
+
+\conceptsubsection{Definitions}
+
+      \label{anchor}
+      An {\em anchor\/} of {\tt e} is a logically superior entity.
+      It is either an object of a type which is a model of 
+      \sectionlink{\concept{Grid}}{Grid}
+      or an object of a type which is a model of 
+      \sectionlink{\concept{Grid Element}}{GridElement},
+      to which {\tt e} is incident. 
+      This is defined more precisely depending on the
+      subconcept involved. For example, for
+      \sectionlink{\concept{ Grid Element}}{GridElement}
+      the anchor is the underlying grid;
+      for a \sectionlink{\concept{Grid Sequence Iterator}}{GridSequenceIterator}
+      on a 
+      \sectionlink{\concept{Grid Range}}{GridRange},
+      it is the grid range, 
+      and for a
+      \sectionlink{\concept{Grid Incidence Iterator}}{GridIncidenceIterator},
+      it is a grid element.
+      So, the anchor of a 
+      \sectionlink{\concept{Vertex}-On-Cell Iterator}{Vertex-On-CellIterator},
+      is the cell over whose incident vertices the iteration is performed.
+ 
+    \label{valid}
+    
+     A grid entity {\tt e} is {\em valid\/}, 
+      if its anchor is valid (either refers to an existing grid, or is itself a valid Grid Entity),
+      and its handle is a valid handle of that grid.
+
+
+\conceptsubsection{Associated types}
+
+\begin{tabular}{lll} 
+  \\ \hline
+  \bf  Name  & \bf  Expression  &\bf  Description   \\ \hline
+  Grid type &  {\tt E::grid\_type} &
+  type of the corresponding \sectionlinkshort{anchor grid}{Grid}   \\ 
+  Anchor type &  {\tt E::anchor\_type} &
+  type of the corresponding \footlink{anchor}{anchor}   \\ 
+  handle type &  {\tt E::handle\_type} &
+  type of the corresponding \sectionlinkshort{element handle}{GridElementHandle}  \\ \hline
+  \\
+\end{tabular}
+
+
+
+\conceptsubsection{Valid Expressions}
+\begin{tabular}{llll}
+  \\ \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ \hline
+  Anchor grid &  {\tt e.TheGrid()} & 
+   ~ & 
+  {\tt grid\_type const\&} 
+  \\ 
+  Anchor entity &  {\tt e.TheAnchor()} & 
+  ~ & 
+   {\tt anchor\_type const\&} 
+   \\
+   Handle &  {\tt e.handle()} & 
+   ~ & 
+   {\tt handle\_type}
+   \\ \hline
+   \\
+ \end{tabular}
+ 
+ \conceptsubsection{Expression semantics}
+ 
+ %\begin{tabular}{|p{2cm}|l|p{4cm}|p{4cm}|p{4cm}} \hline
+ \begin{tabularx}{15cm}{XlXXX} 
+   \\ \hline 
+   \bf  Name    &
+   \bf  Expression &
+   \bf  Precondition&
+   \bf  Semantics &
+   \bf  Postcondition
+   \\ \hline
+   Copy constructor &
+   {\tt E e1(e2)} &
+   ~    &
+   ~    &
+   {\tt e1 == e2} 
+   \\ 
+   Assignment &
+   {\tt e1 = e2} &
+   ~    &
+   {\tt e1} is a copy of {\tt e2}       &
+   {\tt e1 == e2}
+   \\ 
+   Anchor grid  &
+   {\tt e.TheGrid()} &
+   {\tt e} is \link{valid}[~(section \Ref)~]{valid} &
+   get the grid to which {\tt e} is bound   & 
+   ~  
+   \\ 
+   Equality comparison &
+   {\tt e1 == e2} &
+   {\tt e1.TheAnchor() == e2.TheAnchor()} \noteref{note-anchor} &
+     true if {\tt e1} and {\tt e2}
+     refer to the same element of  {\tt e1.TheGrid()} 
+     {\tt e1 == e2} is equivalent to
+     {\tt e1.handle() == e2.handle()} 
+     and 
+     {\tt e1.TheAnchor() == e2.TheAnchor()}\noteref{note-grid-comparison}
+  & ~
+   \\ \hline
+   \\ 
+ \end{tabularx}
+
+ \conceptsubsection{Refinements}
+ \sectionlink{\concept{Grid Element}}{GridElement}
+ \\ 
+ \sectionlink{\concept{Grid Sequence Iterator}}{GridSequenceIterator}
+ \\ 
+ \sectionlink{\concept{Grid Incidence Iterator}}{GridIncidenceIterator}
+ \\ 
+
+ \conceptsubsection{Notes}
+
+ \begin{enumerate}
+ \item 
+   \notelabel{note-grid-comparison}
+   This does not imply that for grids, there is a real equality comparison required.
+   Rather, equality of grids generally means  {\em physical\/} identity of the corresponding
+   objects, that is, their addresses.
+   In contrast, equality for Grid Entities generally means {\em logical\/} rather than physical
+   identity, because they might be created only temporarily.
+   
+   Put another way, for grid entities, {\tt e1 = e2} entails {\tt e1 == e2},
+   which is not the case for grids.
+
+ \item
+   \notelabel{note-anchor}
+   It can be discussed if this precondition is necessary. 
+   Formally, two entities
+   compare as different if not {\tt e1.TheAnchor() == e2.TheAnchor()}.
+   However, requiring this equality allows to compare only the handles, 
+   which is  faster.
+ \end{enumerate}
+
+ \conceptsubsection{See also}
+ 
+ \sectionlink{\concept{Grid}}{Grid} ~
+ \sectionlink{\concept{Element Handle}}{GridElementHandle}
+
+      
+  
+

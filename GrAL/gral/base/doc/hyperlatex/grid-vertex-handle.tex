@@ -1,0 +1,73 @@
+\xname{GridVertexHandle}
+\begin{Label}{GridVertexHandle}
+\conceptsection{Vertex (Cell, Edge, ...) Handle Concept}
+\end{Label}
+
+
+\conceptsubsection{Description}
+A {\em Grid Vertex Handle\/} is a placeholder for a 
+\sectionlink{\concept{Vertex}}{GridVertex}
+with minimal space requirements.
+
+The same description applies in principle to cell handles, edge handles and so on.
+Therefore, this documentation is understood to stand {\em sui generis\/} for these, too.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{Grid Element Handle}}{GridElementHandle}
+
+\W\conceptsubsection{Notation}
+{\tt G} is a type which is a model of \sectionlink{\concept{Grid}}{Grid}
+\\
+{\tt g} is an object of type  {\tt G}
+\\
+\type{H} is a shorthand for \type{G::vertex\_handle}, which is a model 
+of \concept{Grid Vertex Handle}
+\\
+{\tt h1, h2} are objects of type \type{H}
+
+\W\conceptsubsection{Associated Types}
+
+\W\conceptsubsection{Valid Expressions}
+
+\conceptsubsection{Expression semantics}
+\begin{tabularx}{15cm}{Rllp{5cm}R} \\ 
+  \hline 
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  Equality comparison & 
+  {\tt h1 == h2} &
+  ~ &
+  equivalent to  {\tt g.vertex(h1) == g.vertex(h2)}
+  \par (if  {\tt h1, h2}
+  are valid handles of {\tt g}) &
+  ~  
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+
+\conceptsubsection{Models}
+{\tt Complex2D::vertex\_handle} is equal to {\tt int}.
+\\
+{\tt Complex2D::cell\_handle} is equal to {\tt int}.
+\\
+A generic version for facet handles 
+(for non-stored facets)
+is {\tt facet\_handle<Complex2D::cell\_handle>},
+defined in \xlink{{\tt facet-handle.h}}{\NMWRROOT/include/Grids/facet-handle.h}.
+
+\conceptsubsection{See also}
+\sectionlink{\concept{ Grid }}{Grid} ~
+\sectionlink{\concept{ Grid Entity}}{GridEntity} ~
+\sectionlink{\concept{ Grid Element}}{GridElement} ~
+\sectionlink{\concept{ Grid Element Handle}}{GridElementHandle} ~
+\sectionlink{\concept{ Grid Vertex}}{GridVertex} ~
+
+  
+

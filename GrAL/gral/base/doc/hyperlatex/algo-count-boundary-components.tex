@@ -1,0 +1,50 @@
+\xname{count-boundary-components}
+\begin{Label}{count-boundary-components}
+\algosection{Count boundary components}
+\end{Label}
+
+\algosubsection{Declaration}
+
+\begin{example}
+template<class GRID>
+int count\_boundary\_components(GRID const& G);
+\end{example}
+
+\algosubsection{Description}
+Counts the number of connected components of the boundary of {\tt G}.
+\algosubsection{Definition}
+Declared in \nmwrcodelink{find-boundary-components.h}{Grids/Algorithms}\\
+Defined  in \nmwrcodelink{find-boundary-components.C}{Grids/Algorithms/generic}\\
+
+\algosubsection{Type requirements}
+\type{GRID} is a model of 
+\Conceptlink{Grid} and of
+\conceptlink{Facet Grid Range}{VertexGridRange}.\\
+There is a \conceptlink{Partial Grid Function}{PartialGridFunction}
+container on facets
+associated to \type{GRID} \noteref{note-cbc-partial-gf}.
+\algosubsection{Preconditions}
+\Var{G} represents a \Glossarylink{manifold-with-boundary} grid.
+\algosubsection{Postconditions}
+The value returned is the number of connected components of \Var{G}'s boundary.
+\algosubsection{Complexity}
+Expected time $O(F)$, where $F$ is the number of facets of \Var{G}.
+\algosubsection{Example}
+
+\algosubsection{Uses}
+ \sectionlink{find-boundary-component-germs}{find-boundary-component-germs}.
+
+\algosubsection{Used in}
+
+\algosubsection{Notes}
+\begin{enumerate}
+\item \label{note-cbc-partial-gf}
+This is not a real constraint, because there is a 
+\sectionlink{generic implementation}{partial-grid-function-hash}
+of partial grid functions.
+The only thing needed to use it is to define (specialize)
+the \xlink{\type{hash<>}}{\STLURL/hash.html}
+template on \type{Grid::Facet}.
+\end{enumerate}
+\algosubsection{See also}
+

@@ -1,0 +1,323 @@
+\documentclass{report}
+%\documentclass{article}
+\usepackage[compact]{titlesec}
+\usepackage{hyperlatex}
+\usepackage{tabularx}
+\usepackage{xspace}
+\usepackage[dvips]{graphicx}
+
+%\W\usepackage[simple]{frames}
+\W\usepackage{math}
+
+\htmltitle{Documentation of the Grid Category Components}
+\title{Documentation of the Grid Category Components}
+\author{Guntram Berti}
+\htmladdress{\xlink{Guntram Berti}{mailto:berti@math.tu-cottbus.de}}
+\htmlattributes{TABLE}{BORDER}
+\htmldepth{5}
+\htmldirectory{html}
+
+\T\newcommand{\usc}{\_}
+%\W\newcommand{\usc}{_}
+%\setcounter{secnumdepth}{6}
+
+
+% Pfade
+\newcommand{\NMWRROOT}{../}
+\newcommand{\NMWRINC}[1]{\NMWRROOT/include/#1}
+\newcommand{\STLURL}{http://www.sgi.com/Technology/STL}
+\newcommand{\STLPATH}[1]{\STLURL/#1}
+\newcommand{\traitsURL}{}
+
+%\T\parindent0cm
+%\T\parskip0.25cm
+
+\newcommand{\htmlfill}{\ifhtml{%
+    \begin{rawhtml}
+      <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR>
+      <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR>
+      <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR>
+    \end{rawhtml}}}
+
+\T\newcommand{\nix}{\rule{0cm}{0cm}}
+\W\newcommand{\nix}{}
+\W\newcommand{\smallskip}{}
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+%%%    Referenzen     %%%%
+%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\newcounter{notecounter}[section]
+%\newcommand{\notelabel}[1]{\refstepcounter{notecounter}{\label{#1}}}
+\newcommand{\notelabel}[1]{{\label{#1}}}
+%\newcommand{\noteref}[1]{\link*{\arabic{\value}{notecounter}}[{(see note \arabic{\value{notecounter}})}]{#1}}
+
+\newcommand{\noteref}[1]{\link*{\htmlref{#1}}[~{\small(see note \ref{#1})}]{#1}}
+%\newcommand{\noteref}[1]{\link*{\ref{#1}}[{\footnote{see note \ref{#1}}}]{#1}}
+
+\newcommand{\sectionlink}[2]{\xlink{#1}[~(section \ref{#2})~]{#2.html}}
+\newcommand{\sectionlinkfoot}[2]{\xlink{#1}[\footnote{see section \ref{#2}}]{#2.html}}
+\newcommand{\sectionlinkweb}[2]{\xlink{#1}{#2.html}}
+\newcommand{\sectionlinkshort}[2]{%
+ \xlink{#1}[{{\small\xspace{} $\rightarrow$ S \ref{#2}}}]{#2.html}}
+\newcommand{\Sectionlink}[1]{\sectionlink{#1}{#1}}
+\newcommand{\Sectionlinkfoot}[1]{\sectionlinkfoot{#1}{#1}}
+\newcommand{\Sectionlinkshort}[1]{\sectionlinkshort{#1}{#1}}
+
+\newcommand{\footlink}[2]{\link{#1}[\footnote{see \ref{#2}}]{#2}}
+
+\newcommand{\glossarylink}[2]{%
+ \link{#1}[~($\rightarrow$ p.\ \pageref{glossary-#2})~]{glossary-#2}}
+\newcommand{\Glossarylink}[1]{\glossarylink{#1}{#1}}
+\newcommand{\glossarylinkfoot}[2]{%
+  \link{#1}[\footnote{see page  \pageref{glossary-#2}}]{glossary-#2}}
+\newcommand{\Glossarylinkfoot}[1]{\glossarylinkfoot{#1}}
+
+\newcommand{\nmwrcodelink}[2]{\xlink{{\tt #1}}{\NMWRINC{#2}/#1}}
+\newcommand{\stllink}[2]{\xlink{\concept{#1}}{\STLURL/#2.html}}
+\newcommand{\stltypelink}[2]{\xlink{\type{#1}}{\STLURL/#2.html}}
+\newcommand{\Stllink}[1]{\stllink{#1}{#1}}
+\newcommand{\Stltypelink}[1]{\stltypelink{#1}{#1}}
+\newcommand{\conceptlink}[2]{\sectionlink{\concept{#1}}{#2}}
+\newcommand{\Conceptlink}[1]{\conceptlink{#1}{#1}}
+\newcommand{\conceptlinkfoot}[2]{\sectionlinkfoot{\concept{#1}}{#2}}
+\newcommand{\Conceptlinkfoot}[1]{\conceptlinkfoot{#1}{#1}}
+
+\newcommand{\webref}[3]{\xlink{#1}[~\cite{#3}~]{#2}}
+
+%\newcommand{\htmlcolor}[2]{%
+%  \begin{rawhtml}<FONT COLOR="#\end{rawhtml}#1
+%  \begin{rawhtml}> \end{rawthml} #2 \begin{rawhtml} </FONT>  \end{rawthml}}
+
+\newcommand{\htmlcolor}[2]{#2}
+
+\newcommand{\undefcb}{\begin{rawhtml}<FONT COLOR="008F00">\end{rawhtml}}
+\newcommand{\undefce}{\begin{rawhtml}</FONT>\end{rawhtml}}
+
+\newcommand{\sectionlinkUNDEF}[2]{\texorhtml{#1}{\xlink{#1}{not-yet-done.html}}}
+%\newcommand{\xlinkUNDEF}[2]{\texorhtml{#1}{\xlink{#1}{not-yet-done.html}}}
+
+\newcommand{\xlinkUNDEF}[2]{\texorhtml{#1}{\xlink{\undefcb{}#1\undefce}{not-yet-done.html}}}
+
+\newcommand{\bigsep}{%
+\T\bigskip
+\W\htmlrule[width=70% align=center]
+}
+
+ 
+\W\begin{iftex}
+\newenvironment{Glossar}{%
+  \begin{list}{}{%
+    \renewcommand{\makelabel}[1]{{\bf ##1} \label{glossary-##1}}  %
+   }
+}{\end{list}}
+\W\end{iftex}
+
+\begin{ifhtml}
+\newenvironment{Glossar}{\HlxBlk\html{DL}\begingroup
+  \newcommand{\item}[1][]{ \label{glossary-##1} \HlxBlk\html{DT}\textbf{##1}\html{DD}}%
+  \ignorespaces}{\endgroup\HlxBlk\html{/DL}}
+\end{ifhtml}
+
+
+% Tabellen
+\T\newcolumntype{R}{>{\raggedright\arraybackslash}X}
+\W\newcolumntype{R}{X}
+
+\renewcommand{\arraystretch}{1.3}
+\T\setlength{\extrarowheight}{1pt}
+
+% Gliederung
+\newcommand{\RelativeSection}[1]{\subsection{#1}}
+\newcommand{\RelativeSubsection}[1]{\subsubsection{#1}}
+%\renewcommand{\RelativeSubsection}[1]{\paragraph*{#1} \nix  \par\noindent }
+\T\titlespacing*{\paragraph}{0pt}{*2}{*1}
+\T\titleformat{\paragraph}[hang]{\bf\sl }{}{0pt}{}{}
+\renewcommand{\RelativeSubsection}[1]{\paragraph{#1}}
+
+\newcommand{\typesection}[1]{\RelativeSection{#1}}
+\newcommand{\typesubsection}[1]{\RelativeSubsection{#1}}
+\newcommand{\conceptsection}[1]{\RelativeSection{#1}}
+\newcommand{\conceptsubsection}[1]{\RelativeSubsection{#1}}
+\T\newcommand{\algosection}[1]{\RelativeSection{{\sc #1} Algorithm}}
+\W\newcommand{\algosection}[1]{\RelativeSection{{\tt #1} Algorithm}}
+\newcommand{\algosubsection}[1]{\RelativeSubsection{#1}}
+\newcommand{\datasection}[1]{\RelativeSection{{\tt #1} Type}}
+\newcommand{\datasubsection}[1]{\RelativeSubsection{#1}}
+\newcommand{\itersection}[1]{\RelativeSection{{\tt #1} Type}}
+\newcommand{\itersubsection}[1]{\RelativeSubsection{#1}}
+
+
+\newcommand{\introsection}[1]{\section{#1}}
+\newcommand{\introsubsection}[1]{\par \noindent{\bf\large #1} \par\noindent}
+
+\newcommand{\xchapter}[2]{\xname{#2}\begin{Label}{#2} \chapter{#1} \end{Label}}
+
+% Fonts
+\newcommand{\type}[1]{{\tt #1}}
+\newcommand{\pcode}[1]{{\tt #1}}
+\newcommand{\concept}[1]{\texorhtml{{\sf #1}}{{\em{}#1}}}
+\newcommand{\function}[1]{{\tt #1}}
+\newcommand{\variable}[1]{{\tt #1}}
+\newcommand{\Var}[1]{{\tt #1}}
+\newcommand{\templateparam}[1]{{\tt #1}}
+
+% images
+\newcommand{\Image}[1]{%
+ \texorhtml{\includegraphics{#1.eps}}{\htmlimage{#1.gif}}}
+
+% Status
+\newcommand{\needswork}[1]{ {\begin{center}{\LARGE #1} \end{center}}}
+\newcommand{\Needswork}[1]{ Sorry, this page is still incomplete!}
+
+\begin{document}
+
+%\W\maketitle
+\W\htmlmenu{4}
+
+
+\chapter{Introduction}
+\input{grid-intro}
+\input{combinatorial-intro}
+\input{grid-function-intro}
+\input{grid-geometry-intro}
+
+\T\begin{small}
+
+\xchapter{Concepts}{Concepts}
+\W\htmlmenu{2}
+%% entities
+% % elements
+\section{Grid Entities}
+\T\begin{small}
+\input{grid-entity}
+\input{grid-element}
+\input{grid-vertex}
+\input{grid-edge}
+\input{grid-facet}
+\input{grid-cell}
+\input{grid-element-handle}
+\input{grid-vertex-handle}
+
+ % iterators
+\section{Grid Iterators}
+\input{sequence-iterator}
+\input{incidence-iterator}
+\input{grid-vertex-iterator}
+\input{vertex-on-cell-iterator}
+
+% ranges
+\section{Grids and Grid Ranges}
+\input{grid-range}
+\input{grid}
+\input{cell-vertex-input-grid-range}
+\input{vertex-grid-range}
+\input{grid-with-boundary}
+
+\T\end{small}
+
+% grid functions
+\section{Grid Functions}
+\input{grid-element-function}
+\input{grid-function}
+\input{mutable-grid-function}
+\input{container-grid-function}
+\input{total-grid-function}
+\input{partial-grid-function}
+
+% grid geometries
+\section{Grid Geometries}
+\input{grid-vertex-geometry}
+\input{grid-volume-geometry}
+
+\xchapter{Components}{Components}
+\W\htmlmenu{2}
+\setcounter{htmlautomenu}{1}
+%\renewcommand{\RelativeSection}[1]{\subsubsection{#1}}
+%\renewcommand{\RelativeSubsection}[1]{\par\medskip\noindent{\bf #1}\par\noindent}
+%\renewcommand{\RelativeSubsection}[1]{\paragraph*{#1} \nix \smallskip \par\noindent }
+
+\section{Grids and grid ranges}
+%  \W\htmlmenu{1}
+
+ % `native' grids
+\input{complex2d}
+\input{cartesian2d}
+ %%\input{triang2d}
+ %% subranges/ subgrids
+ \input{enumerated-grid-range}
+ %%\input{enumerated-vertex-range}
+ %%\input{enumerated-grid-range-ref}
+ %%\input{enumerated-vertex-range-ref}
+ %%\input{remove-cells-grid}
+ %%\input{boundary}
+ %%\input{neumann-triang2d}
+
+ %% input grids %% 
+ \input{istream-complex2d-fmt}
+ %%\input{ostream-complex2d-fmt}
+ %%\input{array-complex2d-fmt}
+
+
+ \section{Grid elements}
+ \input{vtuple}
+%\input{facet-handle}
+
+ \section{Grid iterators}
+ \input{facet-iterator}
+ %%\input{facet-set-of-cells-iterator}
+ %%\input{boundary-iterator}
+
+\section{Grid functions}
+\input{grid-function-vector}
+\input{grid-function-hash}
+\input{partial-grid-function-hash}
+
+\section{Grid geometries}
+%\input{linear-geometry}
+%\input{transformed-geometry}
+\section{Functors}
+
+\htmldepth{5}
+\section{Grid algorithms}
+
+%%\subsection{Combinatorial algorithms}
+
+\noindent
+{\bf Combinatorial algorithms}
+\input{algo-cell-neighbor-search}
+\input{algo-count-boundary-components}
+\input{algo-construct.tex}
+%%\input{algo-find-boundary-component-germs}
+%%\input{algo-adjacency-hull}
+
+%%\noindent
+%%{\bf Geometric algorithms}
+%%\subsection{Geometric algorithms}
+
+\section{Adapters to other libraries}
+%%\input{cgal-adapter}
+%%\input{ggcl-adapter}
+%%\input{graph-adapter}
+
+\section{Distributed Grids}
+\subsection{Data structures}
+%%\input{overlapping-grid}
+%%\input{distributed-grid}
+%%\input{composite-grid}
+%%\input{global-grid}
+%%\input{overlapping-gridfunction}
+%%\input{distributed-gridfunction}
+%%\input{composite-gridfunction}
+%%\input{global-gridfunction}
+\subsection{Algorithms}
+
+%\input{intro-examples}
+
+\T\end{small}
+
+\xchapter{Glossary of Grid Category Terms}{Glossary}
+\input{glossary}
+
+
+\end{document}

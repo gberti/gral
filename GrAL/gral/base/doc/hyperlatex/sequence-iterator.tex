@@ -1,0 +1,148 @@
+\xname{GridSequenceIterator}
+\begin{Label}{GridSequenceIterator}
+\conceptsection{Grid Sequence iterator Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A {\em Grid Sequence Iterator\/}
+lets a \sectionlink{\concept{Grid Range}}{GridRange}
+be seen as a sequence of the iterators element type.
+
+\conceptsubsection{Refinement of}
+STL \xlink{Forward iterator}{http://www.sgi.com/Technology/STL/ForwardIterator.html}
+\noteref{note-forward}
+\\
+\sectionlink{\concept{Grid Entity}}{GridEntity}
+
+
+\conceptsubsection{Notation}
+{\tt I} is a model of sequence iterator
+\\ 
+{\tt i, j} are  objects of type  {\tt I}
+
+\conceptsubsection{Associated types}
+\begin{tabularx}{12cm}{llR} \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Description  \\ 
+  \hline
+  grid type  & 
+  {\tt I::grid\_type} &
+  type of the  underlying grid, 
+  model of  \sectionlink{\concept{Grid}}{Grid}
+  \\ 
+  anchor type  & 
+  {\tt I::anchor\_type} &
+  type of the underlying grid range,
+   model of \sectionlink{\concept{Grid Range}}{GridRange}
+  \\ 
+  element type  & 
+  {\tt I::element\_type} &
+  type of the underlying element, 
+  model of \sectionlink{\concept{Grid Element}}{GridElement}
+  \\ 
+  value type  &
+  {\tt I::value\_type} &
+  synomym for {\tt I::element\_type}   
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+ 
+
+\conceptsubsection{Valid Expressions}
+\begin{tabular}{llll} \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
+  \hline
+  prefix increment  &
+  {\tt ++it;} &
+  ~ &
+  {\tt I\&} 
+  \\ 
+  dereference  &
+  {\tt *it;} & 
+  ~ &
+  {\tt I::element\_type} 
+  \\
+  equality comparison  &
+  {\tt i == j} & 
+  ~ &
+  {\tt bool} 
+  \\ 
+  validity check  &
+  {\tt i.IsDone();} & 
+  ~ &
+  {\tt bool} 
+  \\ 
+  \hline
+  \\
+\end{tabular}
+
+   
+\conceptsubsection{Expression semantics}
+
+\begin{tabularx}{15cm}{RlRRR} \\
+  \hline
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  prefix increment  &
+  {\tt ++i;} &
+  {\tt ! i.IsDone()} &
+  move iterator forward  & 
+  {\tt i.IsDone()} or {\tt *i} is a valid grid element 
+  \\ 
+  dereference  &
+  {\tt e = *it;} & 
+  {\tt ! it.IsDone()} &  
+  access the element {\tt it} points to &
+  {\tt E == (*it);} 
+  \\ 
+  equality comparison  &
+  {\tt i == j} & 
+  {\tt \&(i.TheGrid()) == \&(j.TheGrid())} &  
+  true if i and j reference the same element:  {\tt *i == *j}  &
+  ~ 
+  \\ 
+  validity check  &
+  {\tt i.IsDone();} & 
+  ~ &  
+  true iff {\tt i} is past-the-end. &
+  ~ 
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\W\conceptsubsection{Complexity guarantees}
+
+\conceptsubsection{Refinements}
+\sectionlink{\concept{Grid Vertex Iterator}}{GridVertexIterator}
+\\
+\sectionlink{\concept{Grid Edge Iterator}}{GridVertexIterator}
+    
+\W\conceptsubsection{Models}
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item 
+  \notelabel{note-forward}
+  For the existing models, this is currently only partially implemented: postfix increment is missing
+  (it is inefficient because of the temporary object involved), and
+  \xlink{{\tt iterator\_traits<>}}{http://www.sgi.com/Technology/STL/iterator_traits.html} 
+  is not (yet) specialized.
+  However, the main property of Forward Iterator, namely support of multiple passes,
+  is satisfied.
+\end{enumerate}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{Grid}}{Grid} ~
+\sectionlink{\concept{Grid Element}}{GridElement} ~
+\sectionlink{\concept{Grid Incidence Iterator}}{GridIncidenceIterator} 
+
+  
+

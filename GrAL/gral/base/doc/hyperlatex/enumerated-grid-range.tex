@@ -1,0 +1,121 @@
+\xname{EnumeratedGridRange}
+\begin{Label}{EnumeratedGridRange}
+\datasection{enumerated\_subrange}
+\end{Label}
+
+\datasubsection{Declaration}
+\begin{example}
+template<class G>
+class enumerated\_subrange;
+\end{example}
+
+\datasubsection{Description}
+The  class template \type{enumerated\_subrange} implements
+a sub-range of a grid.
+Cells and vertices must be explicitly joined 
+to the range\noteref{note-vertex-cell-consistency}.
+Iteration over facets is provided.
+
+\datasubsection{Model of}
+\sectionlink{\concept{Vertex Grid Range}}{VertexGridRange}
+\\
+\sectionlink{\concept{Edge Grid Range}}{EdgeGridRange}\noteref{note-edgerange-in-2d-only}
+\\
+\sectionlink{\concept{Facet Grid Range}}{FacetGridRange}
+\\
+\sectionlink{\concept{Cell Grid Range}}{CellGridRange}
+
+\datasubsection{Definition}
+Defined in \nmwrcodelink{enumerated-subrange.h}{Grids/}
+\datasubsection{Template parameters}
+
+\begin{tabular}{lll} \hline
+  \bf Parameter & \bf Description & \bf Default \\
+  \hline
+  {\tt G}  & the base grid  & ~ \\
+  \hline
+\end{tabular}
+
+\datasubsection{Type requirements}
+{\tt G} must be a model of \sectionlink{\concept{Grid}}{Grid}.
+
+\datasubsection{Public base classes}
+None.
+\datasubsection{Members}
+
+\datasubsection{New members}
+
+\begin{tabularx}{11cm}{lR}
+  \hline
+  \bf Member & \bf Description \\
+  \hline
+   \multicolumn{2}{c}{\bf\em Types} \\
+   \hline
+   {\tt vertex\_range\_ref } 
+   & reference to vertex range, 
+   \par defined as {\tt \sectionlinkfoot{vertex\_range\_ref}{VertexRangeRef}<G,R>} \\
+   {\tt cell\_range\_ref } 
+   & reference to cell range, 
+   \par defined as {\tt \sectionlinkfoot{cell\_range\_ref}{CellRangeRef}<G,R>} \\
+   \hline
+   \multicolumn{2}{c}{\bf\em Functions} \\
+   \hline
+  {\tt append\_vertex(vertex\_handle v)} & add a new vertex to {\tt r} \\
+  {\tt append\_cell(cell\_handle c)} & add a new cell to {\tt r} \\
+  {\tt vertex\_range\_ref vertices()}  & reference to vertex range \\
+  {\tt cell\_range\_ref cells()}  & reference to cell range \\
+  \hline
+\end{tabularx}
+
+\datasubsection{Example}
+\begin{example}
+  a\_grid\_type g;
+  ...
+  enumerated\_subrange<a\_grid\_type>  r(g); // empty range
+  // fill with cells
+  for(gt::CellIterator c(g); ! c.IsDone(); ++c)
+    if(predicate(*c)) // some predicate on cells
+      r.append_cell(c.handle());
+  // determine vertex set of r.cells()
+  \sectionlinkfoot{GetCellRangeVertices}{GetCellRangeVertices}(r.cells(),%
+\sectionlinkfoot{vertex\_back\_inserter}{VertexBackInserter}(r));
+  
+\end{example}
+\datasubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-vertex-cell-consistency}
+  The availability of these operations means that
+  instances of  \type{enumerated\_subrange}
+  do not ensure that their 
+  vertex range is the vertex set of the 
+  their cell range.
+  It is the responsibility of the client to ensure this 
+  {\em if\/} it is needed.
+  If this equality is not satisfied, it simply means that the range
+  does not represent a \Glossarylink{dimension-homogeneous} grid.
+
+  Note, however, that there are components that can help in ensuring
+  this property in a subrange, for example the 
+  \sectionlinkshort{\type{GetCellRangeVertices}}{GetCellRangeVertices} algorithm.
+
+\item \notelabel{note-edgerange-in-2d-only}
+  The  \sectionlinkshort{\concept{Edge Grid Range}}{EdgeGridRange} concept
+  is supported in 2D only (when edges and facets coincide).
+  The current implementation simply assumes that the template parameter
+  {\tt G} is two-dimensional; for future extension, 
+  a compile-time switch on the dimension should be performed here.
+\item \notelabel{note-element-types-of-subrange}
+  The element types and incidence iterator types of
+   \type{enumerated\_subrange} are forwarded from the template
+   parameter \type{G}. There is currently no mechanism implemented
+   to determine at compile time which types are provided by \type{G},
+   therefore, some default assumption has to be made, excluding 
+   some simler grid types from the set of possible parameters.
+   This restiction is artificial and should be removed.
+\end{enumerate}
+
+\datasubsection{See also}
+
+\sectionlinkshort{\type{enumerated\_element\_range}}{EnumeratedElementRange} ~
+\sectionlinkshort{\type{enumerated\_element\_range\_ref}}{EnumeratedElementRangeRef} ~
+\sectionlinkshort{\concept{Grid Range}}{Grid Range}

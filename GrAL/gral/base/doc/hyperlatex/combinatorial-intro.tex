@@ -1,0 +1,197 @@
+  \xname{CombinatorialLayer}
+  \begin{Label}{CombinatorialLayer}
+    \introsection{The combinatorial grid layer}
+  \end{Label}
+  Central to the notion of a grid are the combinatorial relationships
+  among its entities of different dimension, namely, their incidence relation.
+
+  The combinatorial grid layer consists of 
+  (combinatorial) {\em Grids\/} \sectionlink{(C)}{Grid}
+  as comprehensive entities,
+  {\em grid elements\/} \sectionlink{(C)}{GridElement},
+  like Vertex, Edge, or Cell, which are its building blocks,
+  {\em element handles\/} \sectionlink{(C)}{GridElementHandle}
+  (minimal representations or indices of elements),
+  {\em sequences iterators\/}  \sectionlink{(C)}{GridSequenceIterator}
+  that allow to iterate over all elements of a given type,
+  and {\em incidence iterators\/} \sectionlink{(C)}{GridIncidenceIterator}
+  allowing to iterate over all elements of some fixed dimension
+  incident to a given element.
+
+  \begin{center}
+  \begin{figure}[h]
+    \T\begin{minipage}{6cm}
+        \T\includegraphics[width=5cm]{bilder/cellcx-2triang.eps} 
+        \W\htmlimage[ALT="a grid consisting of 2 adjacent triangles (2 cells, 5 edges, 4 vertices)"]{bilder/cellcx-2triang.gif}
+        \caption{A simple grid \ldots}
+      \T\end{minipage}  \T\hspace{1cm}
+    \T\begin{minipage}{6cm}
+        \T\includegraphics[width=5cm]{bilder/cellcx-2triang-lattice.eps} 
+        \W\htmlimage[ALT="the lattice of this grid"]{bilder/cellcx-2triang-lattice.gif}
+        \caption{\ldots and its lattice}
+      \T\end{minipage}
+    \end{figure}
+  \end{center}
+
+  For example, in the images, the grid consists of the following elements:
+  vertices $v_1, \ldots, v_4$, edges $e_1, \ldots e_5$ and cells $c_1, c_2$.
+  Their incidence relation is given by the lattice, where two different elements
+  $x, y$
+  are incident, if there is a path from  $x$ down to $y$  (the path is not allowed to
+  visit the same level more than once). Therefore, elements of the same dimension
+  are never incident, only adjacent. For example, $c_1$ is incident to $v_3$,
+  and adjacent to $c_2$.
+
+  These concepts give rise to a lot of different concrete types which are associated with a
+  concrete grid type.
+  Because this association is so fundamental and important,
+  we use the special  {\em grid-types\/} entity to represent it.
+  This is a class template which is specialized for concrete grid types,
+  and thus acts as a mapping from  concrete grid types to the associated types introduced below.
+  
+  \begin{Label}{element-intro}
+  \introsubsection{Elements}
+  \end{Label}
+
+  Basically, a grid consists of a collection of {\em vertices\/}, {\em edges\/}
+  etc. which are termed {\em k-Elements\/} (other common
+  names are {\em k-Faces\/} or {\em k-cells\/}). 
+  \\
+  The notion is captured by the following types, named according to their dimension and their
+  co-dimension.
+
+      
+  \begin{tabular}{lcc} \\ \hline
+    \bf  k-Element &  \bf  Dimension &  \bf  Codimension  \\ \hline
+    {\tt Vertex} &   0 &   -  \\
+    {\tt Edge} &   1 &   -  \\ 
+    {\tt Face} &   2 &   -  \\
+    {\tt Facet} &   - &   1  \\
+    {\tt Cell} &   - &   0  \\ \hline \\
+  \end{tabular}
+  
+  Other common names are {\em node\/} (for vertex) and {\em volume\/} (for cell).
+  These are not used here.
+        
+  The above naming scheme allows for a dimension-independent
+  formulation of many algorithms: e.g. fluxes are always defined on {\tt Facets}
+  (see \link{example}[~on page \pageref{flux-example}~]{flux-example}).
+      
+  In general, some of these types can coincide: for a 2D-grid, the types {\tt Edge}
+  and {\tt Facet} are often the same. 
+  Also,  the type {\tt Face} cannot be defined for 1D-grids.
+
+  \begin{Label}{handle-intro}
+    \introsubsection{Element handles}
+  \end{Label}
+   An element  implementation must be a class, 
+   because there are some member functions
+   required \sectionlink{(C)}{GridElement}. 
+   A corresponding object must contain a reference to the underlying grid,
+   which is redundant when considering sets of elements belonging to the same grid.
+   For a minimal representation of elements, often just a number (a {\em element handle\/})
+   is required, which allows unambiguous reconstruction of an element belonging to a given grid.
+   
+   Element handles can be used to represent sets of elements in an economic way,
+   or to implement mappings between different grids (grid morphisms).
+
+   \begin{Label}{sequence-it-intro}
+     \introsubsection{Sequence iterators}
+   \end{Label}
+   At a basic level, a grid can be seen as a container of its elements, that is,
+   as a sequence of vertices, edges and so on. Correspondingly, a grid defines
+   sequence iterators \sectionlink{(C)}{GridSequenceIterator}
+   to capture this property.
+
+   These iterators satisfy the STL Forward Iterator requirements.
+
+   \begin{figure}[h]
+     \begin{center}
+       \T\includegraphics{bilder/cell-it.eps}
+       \W\htmlimage[ALT="A cell iterator hopping from cell to cell"]{bilder/cell-it.gif}
+       \caption{A cell iterator}
+     \end{center}
+   \end{figure}
+
+   {\bf Examples:} 
+   A loop over all vertices of a grid {\tt G} would read:
+   \begin{example}
+       my_grid_type g;
+       // ...
+       int nv = 0;
+       for(\link{VertexIterator}{GridVertexIterator.html} v = g.FirstVertex(); ! v.IsDone(); ++v)
+         nv++;
+       ASSERT( nv == \link{g.NumOfVertices()}{VertexGridRange.html} );
+\end{example}
+      To draw the line-graph of a grid, we would do:
+
+\begin{example}
+       my_geometry geom(g);
+       // ...
+       for(\link{EdgeIterator}{GridEdgeRange.html} e = G.FirstEdge(); ! e.IsDone(); ++e)
+         draw(geom.\link{segment}{GeomSegment.html}(*e));
+\end{example}
+
+\begin{Label}{incidence-it-intro}
+    \introsubsection{Incidence iterators}
+    \end{Label}
+    Grids are more than just a collection of vertices, edges and so
+    on. We want to be able to navigate through the neighbourhood of an k-element.
+    For this purpose, we need {\em incidence iterators\/}. 
+    For example we might want
+    to access all vertices incident to a cell.
+
+   \begin{figure}[h]
+     \begin{center}
+       \T\includegraphics{bilder/cell-on-cell.eps}
+       \W\htmlimage[ALT="A cell-on-cell iterator loops through the 3 adjacent triangles of a triangle"]{%
+        bilder/cell-on-cell.gif}
+      \caption{A cell-on-cell iterator}
+     \end{center}
+   \end{figure}
+
+    In order to iterate 
+    over the incident elements of a {\tt Cell}, 
+    we can implement (and use) the following iterators:
+
+    \begin{tabular}{ll} 
+      \\
+      {\tt VertexOnCellIterator} &  {\tt Cell::FirstVertex()}  \\ 
+      {\tt EdgeOnCellIterator} &   {\tt Cell::FirstEdge()} \\ 
+      {\tt FacetOnCellIterator} &  {\tt Cell::FirstFacet()}  \\
+      {\tt CellOnCellIterator} &  {\tt Cell::FirstCell()} \\ 
+      \\
+    \end{tabular}
+
+    The corresponding iterators for vertices have analogous names.
+    Strictly speaking {\tt CellOnCellIterator}  is not an 
+    incidence-iterator, because two
+    neighboring cells are not incident.
+    A typical example might be to calculate flows over cell boundaries.
+    In pseudo-code, this reads:
+    \begin{example}
+     for all cells c of the grid g
+        initialize the flux to 0
+        for all facets fc  of the cell c
+          add the flux over fc to the flux of c
+    \end{example}
+     
+   Using our concepts, this translates into the following:
+ 
+    \begin{Label}{flux-example}
+ 
+  \begin{example}
+ a_grid_type g;
+ typedef \link{grid\_types}{grid_types.html}<a_grid_type> gt;
+ // ....
+ \link{grid\_function}{DataAssociationLayer}<\sectionlink{Cell}{GridCell},flux\_type> fluxes(g);
+ for(gt::\sectionlink{CellIterator}{GridVertexIterator} c = g.FirstCell(); ! c.IsDone(); ++c) \{
+   fluxes[*c]= flux\_type(0.0);
+   for(gt::\sectionlink{FacetOnCellIterator}{VertexOnCellIterator} f = (*c).FirstFacet(); ! f.IsDone(); ++f)
+     fluxes[*c] += calculate\_flow(f);
+   \}
+\end{example}
+\end{Label}
+
+Here {\tt flux\_type} depends on the application and typically is a vector
+of low dimension.

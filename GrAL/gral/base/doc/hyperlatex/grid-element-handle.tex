@@ -1,0 +1,60 @@
+\xname{GridElementHandle} 
+\begin{Label}{GridElementHandle} 
+ \conceptsection{Grid Element Handle Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A {\em Grid Element Handle\/} is a minimal representation of  a
+\sectionlink{\concept{Grid Elements}}{GridElement}. 
+They are unique only within a single 
+\sectionlink{\concept{Grid}}{Grid}, 
+which allows to map back and forth between handles and their
+corresponding elements.
+ 
+
+\conceptsubsection{Refinement of}
+STL \xlink{Assignable}{http://www.sgi.com/Technology/STL/Assignable.html}
+\\
+STL \xlink{Equality Comparable}{http://www.sgi.com/Technology/STL/EqualityComparable.html}
+
+
+
+\W\conceptsubsection{Notation}
+
+\W\conceptsubsection{Valid Expressions}
+
+\W\conceptsubsection{Expression semantics}
+
+\conceptsubsection{Refinements}
+\conceptlink{Grid Vertex Handle}{GridVertexHandle}
+\\
+\conceptlink{Grid Edge   Handle}{GridVertexHandle}
+\\
+\conceptlink{Grid Facet  Handle}{GridVertexHandle}
+\\
+\conceptlink{Grid Cell   Handle}{GridVertexHandle}
+\\
+
+\W\conceptsubsection{Models}
+
+\conceptsubsection{Note}
+\begin{enumerate}
+\item \notelabel{note-handles-are-builtin}
+  Typical models of \concept{Element Handles} are basic built-in types, 
+  such as integral types or pointers.
+  As such, it is not required that the types of handles corresponding to different element types
+  (such as vertices and cells) be themselves different.
+\item
+  Often, handles have to fullfil additional requirements. 
+  For example, implementations of \conceptlink{Container Grid Functions}{ContainerGridFunction}
+  often exploit special properties of handles, such as being consecutively ordered integral types,
+  or being a hashable type (that is, the \stltypelink{hash}{hash} template has been specialized
+  for them).
+\end{enumerate}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{Grid}}{Grid} ~
+\sectionlink{\concept{ Grid Entity}}{GridEntity} ~
+\sectionlink{\concept{ Grid Element}}{GridElement} ~
+
+

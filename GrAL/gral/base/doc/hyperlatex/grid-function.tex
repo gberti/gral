@@ -1,0 +1,168 @@
+\xname{GridFunction}
+\begin{Label}{GridFunction}
+\conceptsection{Grid Function Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+
+The  {\em Grid Function\/} concept refines the 
+\sectionlink{\concept{ Grid Element Function}}{GridElementFunction} concept
+in that it bind the function
+to a particular grid. 
+Evaluating  a grid function without a valid grid set or
+with an element whose grid is different from that of the grid function
+is considered an error.
+
+By binding to a particular grid, it is possible to treat both domain
+and range of a grid function as  sequences with associated iterators.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{Grid Element Function}}{GridElementFunction}
+
+\conceptsubsection{Notation}
+{\tt F} is a type which is a model of  Grid  Function 
+\\
+{\tt f} is an object of type  {\tt F}
+\\
+{\tt i} is an object of  {\tt F::const\_iterator}
+\\
+{\tt e} is an object of  {\tt F::element\_type}
+\\
+{\tt n} is an object of  {\tt F::size\_type}
+\\
+{\tt G} is shorthand for  {\tt F::grid\_type}
+
+\conceptsubsection{Definitions}
+\label{bound}
+A grid function {\tt f} is {\em bound\/} to a grid {\tt g},
+if {\tt \&g == \&f.TheGrid()}. Else  {\tt f} is {\em unbound\/}.
+
+\label{range}    
+The {\em range\/} of a grid function {\tt f} is the set of all elements of type
+{\tt F::element\_type} in {\tt f.TheGrid()}.
+
+\label{domain}
+The {\em domain\/} of a grid function is the set of all values of the form {\tt f(e)} 
+where {\tt e} is in the range of {\tt f}.
+
+\conceptsubsection{Associated types}
+
+\begin{tabularx}{14cm}{llR}
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Description   \\ 
+  \hline
+  Grid type & 
+  {\tt F::grid\_type} &
+  type of the corresponding associated grid,
+  \par model of \sectionlink{\concept{ Grid}}{Grid} 
+  \\ 
+  value iterator &
+  {\tt F::const\_iterator} &
+  iterator over the values of {\tt f}
+  \par model of STL
+  \xlink{Forward iterator}{http://www.sgi.com/Technology/STL/ForwardIterator.html}
+  \\ 
+  size type & 
+  {\tt F::size\_type} &
+  integral type capable of representing the possible sizes
+  of the value sequence.
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\conceptsubsection{Valid Expressions}
+\begin{tabularx}{14cm}{RRll} 
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\
+  \hline
+  Grid reference  &
+  {\tt f.TheGrid();} &
+  ~ &
+  {\tt F::grid\_type const\&} 
+  \\ 
+  start of value sequence  &
+  {\tt f.begin();} &
+  ~ &
+  {\tt F::const\_iterator} 
+  \\ 
+  end of value sequence  &
+  {\tt f.end();} &
+  ~ &
+  {\tt F::const\_iterator} 
+  \\ 
+  size of value sequence  &
+  {\tt f.size();} &
+  ~ &
+  {\tt F::size\_type} 
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\T\begin{small}
+\conceptsubsection{Expression semantics}
+\W\begin{tabularx}{15cm}{RRRRR} 
+\T\begin{tabularx}{15cm}{>{\raggedright\arraybackslash}p{1.5cm}RRRR}
+  \hline
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  Grid reference  &
+  {\tt G\& g = f.TheGrid();} &
+  {\tt f} is bound to a grid  &
+  get reference to the underlying grid & 
+  {\tt \&(g.TheGrid()) == \&(f.TheGrid())} 
+  \\ 
+  start of value sequence  &
+  {\tt i = f.begin();} &
+  {\tt f} is bound to a grid  &
+  return iterator to start of value sequence &
+  {\tt \xlink{distance}{\STLURL/distance.html} (i,f.end()) == f.size()}
+  \\ 
+  end of value sequence  &
+  {\tt i = f.end();} &
+  {\tt f} is bound to a grid  &
+  return iterator to past-the-end of value sequence &
+  {\tt i} is past-the-end, {\tt i == f.end()}
+  \\ 
+  size of value sequence  &
+  {\tt n = f.size();} &
+  {\tt f} is bound to a grid  &
+  return size of value sequence &
+  {\tt f.size() == 
+    \xlink{distance}{\STLURL/distance.html} (f.begin(),f.end())}
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+\T\end{small}
+
+\conceptsubsection{Refinements}
+\sectionlink{\concept{ Mutable Grid Function }}{MutableGridFunction}
+
+\conceptsubsection{Models}
+\sectionlink{{\tt cell2handle\_map<G>}}{cell2handle-map} 
+defined in
+\xlink{{\tt grid-functors.h}}{\NMWRINC/Grids/grid-functors.h} 
+(\noteref{note-functors})
+\\
+\sectionlink{{\tt vertex2coord\_map<Geom>}}{vertex2coord-map}
+defined in
+\xlink{{\tt geometry-functors.h}}{\NMWRINC/Grids/geometry-functors.h} 
+(\noteref{note-functors})
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-functors}
+       Currently, iteration and size is not supported in these examples.
+\end{enumerate}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{ Grid Element Function }}{GridElementFunction} ~
+  
+

@@ -1,0 +1,159 @@
+\xname{VolumeGridGeometry}
+\begin{Label}{VolumeGridGeometry}
+ \conceptsection{Volume Grid Geometry Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+ The \concept{Volume Grid Geometry} assigns a geometric entity
+to every combinatorial element of a grid. 
+Moreover, the it offers methods to calculate the 
+volumes of these geometric entities, 
+which means volume in the combinatorial dimension of the 
+entities, for example, length of edges or area of faces.
+
+\conceptsubsection{Refinement of}
+\conceptlink{Vertex Grid  Geometry}{VertexGridGeometry}
+
+\conceptsubsection{Notation}
+\type{Geo} is a type which is a model of \concept{Vertex Grid Geometry} \\
+{\tt g} is an object of type \type{Geo}\\
+{\tt x} is an object of type \type{Geo::real\_type} \\
+{\tt q} is an object of {\tt Geo::coord\_type}\\
+{\tt s} is an object of type \type{Geo::segment\_type} \\
+{\tt p} is an object of type \type{Geo::polygon\_type}\\
+{\tt h} is an object of type \type{Geo::polyhedron\_type}\\
+{\tt e} is an objects of type \type{Geo::grid\_type::Edge},
+ which is a model of \conceptlink{Grid Edge}{GridEdge}.\\
+{\tt f}  is an objects of type \type{Geo::grid\_type::Face},
+which is a model of \conceptlink{Grid Face}{GridFace}.\\
+{\tt c}  is an objects of type \type{Geo::grid\_type::Cell},
+which is a model of \conceptlink{Grid Cell}{GridCell}.\\
+
+\W\conceptsubsection{Definitions}
+
+\conceptsubsection{Associated types}
+\begin{tabularx}{14cm}{llR} 
+  \\ \hline
+  \bf  Name  & \bf  Expression  &\bf  Description   \\
+  \hline
+   point type &
+   {\tt Geo::coord\_type}&
+   the geometric point type, 
+   representation of the elements of the topological 
+   space where the geometry lives
+   \par model
+   of STL \Stllink{Assignable}.
+   \\
+   real number type & 
+   \type{real\_type} &
+   representation of a real number,
+   model of   STL \Stllink{Assignable} 
+   \\
+   segment type &
+   \type{segment\_type} & 
+   geometric type corressponding to edges,
+   \par model of   STL \Stllink{Assignable} 
+   \\
+   polygon type &
+   \type{polygon\_type} &
+   geometric type corresponding to faces 
+   (if the grid type has combinatorial dimension $\geq 2$.)
+   \par model of   STL \Stllink{Assignable} 
+   \\
+   polyhedron type &
+   \type{polyhedron\_type} &
+   geometric type corresponding to cells 
+   (if the grid type has combinatorial dimension $3$.)
+   \par model of   STL \Stllink{Assignable} 
+   \\
+   \hline
+ \end{tabularx}
+
+\conceptsubsection{Valid Expressions}
+ 
+\begin{tabularx}{14cm}{RRRR}
+  \\ \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  
+  \\
+  \hline
+   $1$-dimensional geometric entity &
+   \pcode{s = g.segment(e)} &
+   & \type{Geo::segment\_type}
+   \\
+   $2$-dimensional geometric entity &
+   \pcode{p = g.polygon(f)} &
+   & \type{Geo::polygon\_type}
+   \\
+   $3$-dimensional geometric entity &
+   \pcode{h = g.polyhedron(c)} &
+   & \type{Geo::polyhedron\_type}
+   \\
+   $1$-dimensional volume &
+   \pcode{x = g.volume(e);} &
+    & real\_type
+    \\
+   $1$-dimensional volume &
+   \pcode{x = g.length(e);} &
+    & real\_type
+    \\
+   $2$-dimensional volume &
+   \pcode{x = g.volume(f);} &
+    & real\_type
+    \\
+   $2$-dimensional volume &
+   \pcode{x = g.area(f);} &
+    & real\_type
+    \\
+   $3$-dimensional volume &
+   \pcode{x = g.volume(c);} &
+    & \type{real\_type}
+    \\
+  \hline
+\end{tabularx}
+
+\conceptsubsection{Expression semantics}
+
+The general requirement here is that the mapping to geometric entities
+is faithful with respect to the combinatorial structure,
+ that is, the poset defined by the inclusion relation of the geometric elements
+is identical or a refinement of the poset of the grid:
+The relative boundary of a geometric image of a grid element is identical of
+the union of the geometric images of its lower-dimensional incidents.
+Note, however, that self-intersecting immersions are not excluded.
+
+ \begin{tabularx}{15cm}{RRRRR} 
+   \\ 
+   \hline 
+   \bf  Name    &
+   \bf  Expression &
+   \bf  Precondition&
+   \bf  Semantics &
+   \bf  Postcondition
+   \\ 
+   \hline
+   $1$-dimensional geometric entity &
+   \pcode{s = g.segment(e)} &
+   \pcode{e} is \footlink{valid}{valid} &
+   get the segment corresponding to \pcode{e} &
+    \pcode{s == g.segment(e)} 
+    \par \pcode{start(s) == g.coord(e.V1())}
+    \par \pcode{end(s) == g.coord(e.V2())}
+    \\
+    $2$-dimensional geometric entity &
+    \pcode{p = g.polygon(f)} &
+    \pcode{f} is \link{valid}{valid} &
+    get the polygon corresponding to \pcode{f} &
+    $\texorhtml{\partial}{\mbox{boundary of}}
+      \mbox{\tt p} = \bigcup_{\mbox{\tt e} \prec \mbox{\tt f}} \mbox{\tt g.segment(e)}$
+      \\
+      \hline
+\end{tabularx}
+
+\conceptsubsection{Invariants}
+\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+\conceptsubsection{Notes}
+\conceptsubsection{See also}
+
+

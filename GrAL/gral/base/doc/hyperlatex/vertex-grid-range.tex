@@ -1,0 +1,179 @@
+\xname{VertexGridRange}
+\begin{Label}{VertexGridRange}
+\conceptsection{Vertex (Edge, Cell, ...) Grid Range Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A {\em Vertex Grid Range\/} is a sequence of objects of type {\tt V}
+which is a model of 
+\sectionlink{\concept{Grid Vertex}}{GridVertex}.
+
+Virtually the same definitions can be made for the other element types,
+replacing {\tt Vertex} with {\tt Edge, Cell} etc.
+Therefore, Vertex Grid Range is chosen to stand {\em sui generis\/} for 
+Edge Grid  Range, Cell  Grid Range and so on.
+
+The Vertex Grid Range concept is seldom useful as such;
+its primary use is to
+define further refinements of the basic 
+\sectionlink{\concept{Grid Range}}{GridRange} concept: 
+Useful concrete grid types generally
+will be models of (at least) two different range concepts,
+such as Vertex Grid Range and Grid Cell Sequence.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{ Grid Range }}{GridRange}
+
+\conceptsubsection{Notation}
+{\tt R} is a type which is a model of Vertex Range 
+\\
+{\tt r} is an object of type {\tt R::grid\_type}
+\\
+{\tt v} is an object of type  {\tt R::Vertex}
+\\
+{\tt vi} is an object of type  {\tt R::VertexIterator}
+
+\conceptsubsection{Associated types}
+\begin{tabularx}{14cm}{llR} \\ 
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Description  \\ \hline
+  Vertex & 
+  {\tt R::Vertex} &
+  type of vertex (model of \sectionlink{\concept{Grid Vertex}}{GridVertex})
+  \\ 
+  \hline
+       
+  handle  & 
+  {\tt R::vertex\_handle} &
+  \sectionlink{\concept{ handle}}{GridElementHandle} type 
+  corresponding to {\tt R::Vertex} 
+  \par
+   model of \sectionlink{\concept{ Grid Vertex Handle }}{GridVertexHandle}
+  \par
+   ({\tt R::Vertex::handle\_type} is identical to  {\tt R::vertex\_handle}) 
+   \\ 
+   Vertex iterator  & 
+   {\tt R::VertexIterator} &
+   type of the  \sectionlink{\concept{Sequence Iterator}}{GridSequenceIterator}
+   corresponding to {\tt R::Vertex}
+   \par
+   model of \sectionlink{\concept{ Grid Vertex Iterator }}{GridVertexIterator}
+   \par
+    ({\tt R::Vertex} is identical to  {\tt R::VertexIterator::Vertex}) 
+   \\ 
+   \hline
+   \\
+ \end{tabularx}
+
+ \conceptsubsection{Valid Expressions}
+ \begin{tabularx}{14cm}{RlRR} \\
+   \hline
+   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
+   \hline
+   start of sequence &
+   {\tt vi = r.FirstVertex()} & 
+   ~ & 
+   {\tt VertexIterator}  
+   \\
+   end of sequence & 
+   {\tt vi = r.EndVertex()} & 
+   ~ & 
+   {\tt VertexIterator} 
+   \\
+   size of sequence  & 
+   {\tt r.NumOfVertices()} & 
+   ~ &
+   {\tt size\_type} 
+   \\
+   handle-to-element conversion &
+   {\tt v = r.vertex(h)} & 
+   ~ &
+   {\tt Vertex} 
+   \\
+   element-to-handle  conversion   &
+   {\tt h = r.handle(v)} & 
+   ~ &
+   {\tt vertex\_handle} 
+   \\
+   \hline
+   \\
+ \end{tabularx}
+
+ \conceptsubsection{Expression semantics}
+
+\T\begin{small}
+ \begin{tabularx}{16cm}{RRRRR} \\
+   \hline
+   \bf  Name    &
+   \bf  Expression &
+   \bf  Precondition&
+   \bf   Semantics &
+   \bf   Postcondition
+   \\ 
+   \hline
+   start of  sequence &
+   {\tt v = r.FirstVertex()} &
+   ~    &
+   return iterator pointing to the first vertex of {\tt s} &
+   {\tt v} is \footlink{valid}{valid}, or  {\tt v == r.EndVertex()}  
+   \\
+   end of sequence &
+   {\tt v = r.EndVertex()} &
+   ~    &
+   ~    &
+   {\tt v} is past-the-end.
+   \\
+   size of sequence & 
+   {\tt n = r.NumOfVertices()} & 
+   ~ &
+   get the number of vertices of {\tt s} &
+   {\tt n == \xlink{distance}{http://www.sgi.com/Technology/STL/distance.html}
+     (r.FirstVertex(), r.EndVertex())} 
+   \\
+   handle-to-element &
+   v = r.vertex(h) &
+   {\tt h} is a handle of {\tt r.TheGrid()} &
+   Construct the vertex corresponding to the handle {\tt h}  & 
+   {\tt r.handle(v) == h} 
+   \\
+   element-to-handle &
+   h = r.handle(v) &
+   {\tt v} is a vertex of {\tt r.TheGrid()} &
+   Construct the vertex corresponding to the handle {\tt h}  & 
+   {\tt r.element(h) == v} 
+   \\
+   \hline
+   \\
+ \end{tabularx}
+\T\end{small}
+
+ \conceptsubsection{Complexity guarantees}
+ The {\tt r.NumOfVertices()} operation has complexity at most O(V), where
+ V is  the number of vertices of {\tt r} \noteref{note-complexity}
+ 
+ \conceptsubsection{Models}
+ Virtually every concrete grid  or grid range:
+ \\
+ \sectionlink{{\tt enumerated\_grid\_range}}{EnumeratedGridRange}
+ \\
+ \sectionlink{\concept{Complex}2D}{Complex2D}
+ 
+ \conceptsubsection{Notes}
+ \begin{enumerate}
+ \item \notelabel{note-complexity}
+   The reason why a general Vertex Range cannot guarantee $O(1)$ complexity for
+   this operation is the following: 
+   Such a sequence  might arise from a grid range
+   given by a simple enumeration
+   of its cells 
+   (or their handles,
+   see for example   \sectionlink{{\tt enumerated\_grid\_range}}{EnumeratedGridRange}).
+   The elements of lower dimension belonging to {\tt r} are then implicitely defined
+   by the closure (in a topological sense) of the set of cells in the underlying grid.
+   The determination of, for example, the set of vertices can be done in expected time
+   O(V) (using \sectionlink{\concept{partial grid functions}}{PartialGridFunction}).
+   Requiring to do this determination at time of construction of the range would 
+   impose the cost of doing so also to clients not interested in this functionality.
+ \end{enumerate}
+  
+
