@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC_2003
+
+/*! \file Test harness for combinatorial algorithms
+
+*/
+
 #include "Container/combinatorial.h"
 #include "Container/range.h"
 
@@ -6,6 +13,21 @@
 
 int main() {
   using namespace std;
+  namespace ctf = compile_time_functions;
+
+  // test power
+  cout << "Testing power:\n";
+  cout << "power<2,0>=" << ctf::power<2,0>::value << endl;
+  cout << "power<2,1>=" << ctf::power<2,1>::value << endl;
+  cout << "power<2,31>=" << ctf::power<2,31>::value << endl;
+  cout << "power<2,32>=" << ctf::power<2,32>::value << endl; // overflow
+
+  // test factorial
+  cout << "Testing factorial:\n";
+  // overflow for i = 15
+  for(int i = 0; i <= 15; ++i)
+    cout << "factorial(" << i << ")=" << factorial(i) << endl;
+    
 
   // test binomial coeff.
   cout << "Testing binomial coefficient:\n";
