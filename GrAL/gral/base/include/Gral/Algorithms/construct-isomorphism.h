@@ -5,12 +5,26 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
-/*! \brief Construct an isomorphism between two grids.
+/*! \defgroup construct_isomorphism_mod Construct Grid Isomorphisms
+
     \ingroup gridmorphisms
     \ingroup combinatoric_grid_algorithms
+    
+    \brief Algorithms for finding an isomorphism between two grids.
+
+    Grid Isomorphisms are bijective mappings between grids, respecting
+    incidence relationships. Two isomorphic grids are indistinguishable
+    from a combinatorial point of view.
+ */
+
+/*! \brief Construct an isomorphism between two grids.
+    \ingroup construct_isomorphism_mod
+    \partof  construct_isomorphism_mod
 
     Return value is true on successful construction,
     else false.
+
+   \see test-construct-isomorphism.C for an example
 
     \bug It does not really try all possible isomorphisms.
     If an isomorphism of 2 cells does not extend to an isomorphism
@@ -27,8 +41,10 @@ bool construct_isomorphism(GRID1 const& G1,
 			   GT2   gt2,                //    
 			   PHI        & phi);   // OUT
 
-/*! Convenience wrapper for general construct_isomorphism 
-  \ingroup gridmorphisms
+/*! \brief Convenience wrapper for general construct_isomorphism 
+
+    \ingroup construct_isomorphism_mod
+    \partof  construct_isomorphism_mod
  */
 template<class GRID1, class GRID2, 
          class PHI>
@@ -43,8 +59,9 @@ bool construct_isomorphism(GRID1 const& G1,
 			       phi);
 }
 
-/*! Extend a given isomorphism to the whole grid.
-    \ingroup isomorphism
+/*! \brief Extend a given isomorphism to the whole grid.
+    \ingroup construct_isomorphism_mod
+    \partof  construct_isomorphism_mod
 
     Return value is true on successful extension to the whole
     grid (more precisely, to the component containing c1).

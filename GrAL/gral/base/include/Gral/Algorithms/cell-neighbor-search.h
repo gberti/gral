@@ -4,11 +4,11 @@
 
 // $LICENSE
 
-/*! \defgroup  cell_neighbor_search
+/*! \defgroup  cell_neighbor_search Cell Neighbor Search
    \ingroup combinatoric_grid_algorithms
    \see combinatoric_grid_algorithms
     
-   A collection of routines for finding
+   \brief A collection of routines for finding
    cell neighborhood relationsships and boundary facets.
 */
 
@@ -113,7 +113,8 @@ void CalculateNeighborCells(NBF             &  Nb,         // out
 			    CGT        const&);            // in (only type used) 
 
 /*! \brief convenience wrapper for CalculateNeighborCells
-     \ingroup combinatoric_grid_algorithms
+   \ingroup cell_neighbor_search
+
  
  */
 template<class NBF, class CELLSET, class FACETMAP>

@@ -9,10 +9,12 @@
 
 #include <iostream>
 
-/*! Geometry wrapper class for Triang2D
+/*! \brief Geometry wrapper class for Triang2D
 
    This class assumes vertex coordinates in an array
    \f$ (x_0,y_0, x_1, y_1, \ldots) \f$.
+
+   It is a model of $GrAL VertexGridGeometry.
  */
 class stored_geometry_triang2d {
 public:
@@ -25,16 +27,19 @@ private:
   bool             owned;
 public:
   stored_geometry_triang2d() : g(0), xy(0), owned(false) {}
+  //! initialize with value semantics (coords are owned)
   stored_geometry_triang2d(grid_type const& g_)
     : g(&g_)
     { 
       init_xy();
     }
+  //! initialize with reference semantics (coords are referenced)
   stored_geometry_triang2d(grid_type const& g_, double* xy_)
     : g(&g_), xy(xy_), owned(false) {}
 
   ~stored_geometry_triang2d() { clear();}
 
+  //! change to value semantics
   void set_grid(grid_type const& g_) {
     clear();
     g = & g_;

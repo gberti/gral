@@ -44,6 +44,7 @@ public:
 	if( vc.handle() == v)
 	  return typename agt::vertex_handle(vc.local_handle());
       }
+      // not found? Error!
       ENSURE(false, "Vertex " << v 
 	     << " not incident to cell " << c.handle() << '\n',1); 
     }

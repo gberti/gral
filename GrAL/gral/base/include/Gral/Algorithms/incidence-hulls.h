@@ -7,9 +7,11 @@
 
 /*! \defgroup incidence_hull Incidence Hull Calculation
     \ingroup combinatoric_grid_algorithms
+
    
-    Incidence hulls are subsets of a grid defined by a germ set
+   \brief  Incidence hulls are subsets of a grid defined by a germ set
     and a stencil (incidence sequence).
+
     See the paper "A calculus for stencils on arbitrary grids"
     or $DISS.
 
