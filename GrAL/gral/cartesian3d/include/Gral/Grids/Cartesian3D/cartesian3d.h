@@ -200,6 +200,8 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs)
   { return (lhs.h == rhs.h);}
+  friend bool operator!=(self const& lhs, self const& rhs)
+  { return !(lhs == rhs);}
   friend bool operator< (self const& lhs, self const& rhs)
   { return (lhs.h <  rhs.h);}
 
@@ -248,6 +250,8 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs)
   { return (lhs.h == rhs.h);}
+  friend bool operator!=(self const& lhs, self const& rhs)
+  { return !(lhs == rhs);}
   friend bool operator< (self const& lhs, self const& rhs)
   { return (lhs.h <  rhs.h);}
 
@@ -297,6 +301,8 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs)
   { return (*(lhs.c) == *(rhs.c)) && (lhs.lv == rhs.lv);}
+  friend bool operator!=(self const& lhs, self const& rhs)
+  { return !(lhs == rhs);}
   friend bool operator< (self const& lhs, self const& rhs)
   { return (*(lhs.c) < *(rhs.c)) || ((*(lhs.c) == *(rhs.c)) && (lhs.lv <  rhs.lv));}
 
