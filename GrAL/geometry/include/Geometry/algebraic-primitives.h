@@ -166,14 +166,18 @@ template<class POINT>
 struct dimension_dependent_primitives<POINT, tag3D>
   : public  dimension_dependent_primitives_3d<POINT>  {};
 
-
-
 template<class POINT>
+struct dimension_dependent_primitives<POINT, variable_dimension_tag>
+  : public dimension_dependent_primitives_2d<POINT>,
+    public dimension_dependent_primitives_3d<POINT>
+  {};
+
+template<class POINT, class PT = point_traits<POINT> >
 struct algebraic_primitives 
   : public dimension_dependent_primitives
     <
      POINT,
-     typename  point_traits<POINT>::dimension_tag
+     typename  PT::dimension_tag
     > 
 {};
 
