@@ -220,6 +220,7 @@ struct complex2d_types {
   typedef std::vector<archetype_type>        archetype_sequence;
   typedef archetype_sequence::const_iterator archetype_iterator;
   typedef int                                archetype_handle;
+  typedef grid_types<archetype_type>         archgt;
 
 };
 
