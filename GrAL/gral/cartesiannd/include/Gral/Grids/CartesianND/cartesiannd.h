@@ -568,10 +568,10 @@ namespace cartesiannd {
 
   template<class CARTGRID, unsigned K>
   class sequence_iterator_t : public grid_types_base<CARTGRID, CARTGRID::dim> {
-    typedef CARTGRID                                 grid_type;
     typedef grid_types_base<CARTGRID, CARTGRID::dim> base;
     typedef sequence_iterator_t<CARTGRID, K>         self;
   public:
+    typedef CARTGRID                                 grid_type;
     enum { dim = K, codim = CARTGRID::dim -K, griddim = CARTGRID::dim};
     unsigned dimension()   const { return dim;}
     unsigned codimension() const { return codim;}
@@ -739,10 +739,26 @@ namespace cartesiannd {
  inline bool operator==(sequence_iterator_t<CARTGRID,K> lhs, sequence_iterator_t<CARTGRID,K> rhs)
  { return lhs.local_handle() == rhs.local_handle();} 
 
+ template<class CARTGRID, unsigned K>
+ inline bool operator<(sequence_iterator_t<CARTGRID,K> lhs, sequence_iterator_t<CARTGRID,K> rhs)
+ { return lhs.local_handle() < rhs.local_handle();} 
+
 #ifndef GRAL_INCLUDES_RELOPS
  template<class CARTGRID, unsigned K>
  inline bool operator!=(sequence_iterator_t<CARTGRID,K> lhs, sequence_iterator_t<CARTGRID,K> rhs)
  { return !(lhs==rhs);}
+
+ template<class CARTGRID, unsigned K>
+ inline bool operator>(sequence_iterator_t<CARTGRID,K> lhs, sequence_iterator_t<CARTGRID,K> rhs)
+ { return  (rhs<lhs);}
+
+ template<class CARTGRID, unsigned K>
+ inline bool operator<=(sequence_iterator_t<CARTGRID,K> lhs, sequence_iterator_t<CARTGRID,K> rhs)
+ { return  !(rhs<lhs);}
+
+ template<class CARTGRID, unsigned K>
+ inline bool operator>=(sequence_iterator_t<CARTGRID,K> lhs, sequence_iterator_t<CARTGRID,K> rhs)
+ { return  !(lhs<rhs);}
 #endif
 
 
