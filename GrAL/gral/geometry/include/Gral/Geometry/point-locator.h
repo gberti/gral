@@ -9,6 +9,7 @@
 #include "Geometry/algebraic-primitives.h"
 
 #include "Utility/ref-ptr.h"
+#include "Container/sequence-algorithms.h"
 
 #include "Gral/Geometries/point-location-base.h"
 #include "Gral/Grids/CartesianND/all.h"
@@ -64,14 +65,25 @@ private:
   typedef partial_grid_function<bucket_cell, cell_set_type> bucket_type;
   bucket_type                                               intersecting;  
  
-  double edge_length;
-
+  double edge_length;  // prescribed edge length of bucket grid
+  bool   assume_cartesian; // try to build optimal bucket grid for Cartesian target grid
+  double shrink_factor;  // control location of additional points used to associate cells to buckets
+                         // = 0.0: use vertices, = 0.5: use midpoints between centers and vertices
+  // for statistics
+  mutable int num_point_in_cell_tests;
+  
 public:
   point_locator() {}
-  point_locator(grid_type const& g, geom_type const& geo) : the_grid(g), the_geom(geo), edge_length(-1.0) {}
+  point_locator(grid_type const& g, geom_type const& geo) 
+    : the_grid(g), the_geom(geo)  { init_parameters();}
   point_locator(ref_ptr<grid_type const> g, 
-		ref_ptr<geom_type const> geo) : the_grid(g), the_geom(geo), edge_length(-1.0) {}
+    ref_ptr<geom_type const> geo) : the_grid(g), the_geom(geo) { init_parameters();}
   void init();
+  void init_parameters() { 
+    edge_length      = -1.0; 
+    shrink_factor    = 0.25; 
+    assume_cartesian = false;
+  }
 
   ref_ptr<grid_type const> TheGrid()     const { return the_grid;}
   ref_ptr<geom_type const> TheGeometry() const { return the_geom;}
@@ -79,8 +91,14 @@ public:
   ref_ptr<cart_grid_type const> TheBucketGrid()     const { return buckets;}
   ref_ptr<cart_geom_type const> TheBucketGeometry() const { return bucket_geometry;}
   ref_ptr<bucket_type const>    TheBuckets()        const { return ref_ptr<bucket_type const>(intersecting);}
+  unsigned NumUsedBuckets() const { return TheBuckets()->size();}
+  unsigned NumEmptyBuckets() const { return TheBucketGrid()->NumOfCells() - NumUsedBuckets();}
 
 
+  void reset_statistics() const { num_point_in_cell_tests = 0;}
+  int  point_in_cell_tests() const { return  num_point_in_cell_tests;}
+
+  void do_assume_cartesian() { assume_cartesian = true;}
   void set_edge_length(double el) { edge_length = el;}
 
   /*! \brief Find a cell containing \c p
@@ -119,7 +137,10 @@ point_locator<GRID,GEOM,GT>::locate(COORD const& p) const
     return location_result_type();
   else if(loc.tag() == cart_result_type::projection_tag) {
     location_result_type res = project(loc.TheCoord(), loc.TheCell());
-    return location_result_type(res.TheCell(), res.TheCoord(),  location_result_type::projection_tag);
+    if(res.tag() ==  location_result_type::outside_tag)
+      return res;
+    else
+      return location_result_type(res.TheCell(), res.TheCoord(),  location_result_type::projection_tag);
   }
   else { // loc.tag() == cart_result_type::inside_tag  => inside bucket grid
     if(intersecting(loc.TheCell()).empty())
@@ -129,6 +150,7 @@ point_locator<GRID,GEOM,GT>::locate(COORD const& p) const
       for(typename cell_set_type::const_iterator c = intersecting(loc.TheCell()).begin(); 
 	  c !=  intersecting(loc.TheCell()).end(); ++c) {
 	cell_volume_type vol_c(*TheGeometry(), Cell(*TheGrid(), *c));
+	++num_point_in_cell_tests;
 	if(vol_c.is_inside(p)) {
 	  return location_result_type(Cell(*TheGrid(), *c), p, location_result_type::inside_tag);
 	}
@@ -170,10 +192,11 @@ point_locator<GRID,GEOM,GT>::project(COORD const& p, typename point_locator<GRID
     for(typename cell_set_type::const_iterator c=intersecting(*xloc).begin(); c != intersecting(*xloc).end(); ++c) {
       Cell C(* TheGrid(), *c);
       cell_volume_type vol_c(*TheGeometry(), C);
+      ++num_point_in_cell_tests;
       if(vol_c.is_inside(p))
-	return location_result_type(C, p, location_result_type::inside_tag);
+	return location_result_type(C, convert_point<coord_type>(p), location_result_type::inside_tag);
       for(typename gt::VertexOnCellIterator vc(C); !vc.IsDone(); ++vc) {
-	double dist = ap::distance(p, TheGeometry()->coord(*vc));
+	double dist = ap::distance(convert_point<coord_type>(p), TheGeometry()->coord(*vc));
 	if(dist < mindist) {
 	  mindist = dist;
 	  proj    = TheGeometry()->coord(*vc);
@@ -190,69 +213,96 @@ point_locator<GRID,GEOM,GT>::project(COORD const& p, typename point_locator<GRID
 template<class GRID, class GEOM, class GT>
 void point_locator<GRID,GEOM,GT>::init()
 {
+  typedef point_traits<cart_coord_type> cpt;
+  num_point_in_cell_tests = 0;
   // create a Cartesian bucket grid
   box<coord_type> bbox = get_grid_bounding_box(*TheGrid(), *TheGeometry());
   index_type size(0);
   cart_coord_type boxmin = convert_point<cart_coord_type>(bbox.the_min());
   cart_coord_type boxmax = convert_point<cart_coord_type>(bbox.the_max());
+
+  // get adequate cartesian grid size 
+  cart_coord_type  diag = boxmax-boxmin;
+  int  maxdiff_idx = std::max_element(diag.begin(), diag.end()) - diag.begin();
+  double scale_factor; // scale [0,1]^d to bbox
+
+  if(assume_cartesian) 
+    edge_length = TheGeometry()->length(* TheGrid()->FirstEdge());
+
   if(edge_length > 0.0) {
-    size = round_tuple((boxmax - boxmin)/edge_length);
+    size = ceil_tuple((boxmax - boxmin)/edge_length);
+    scale_factor = edge_length*size[maxdiff_idx]; // >= diag[maxdiff_idx]
   }
   else {
-    int n = (int) pow(TheGrid()->NumOfCells(), 1.0/spacedim);  
-    if(n <= 0) n = 1;
-    size = index_type(n);
+    double sizeratio = 1.0;
+    int li = cpt::LowerIndex(diag);
+    for(int i = 0; i < spacedim; ++i)
+      if(i != maxdiff_idx)
+	sizeratio *= diag[i+li]/diag[maxdiff_idx];
+    // aim: size[0]* ... *size[dim-1] \approx  TheGrid()->NumOfCells()
+    int n_max = (int) pow(TheGrid()->NumOfCells()/sizeratio, 1.0/spacedim);  
+    if(n_max <= 0) n_max = 1;
+    for(int i = 0; i < spacedim; ++i)
+      size[i] = (int) ceil(n_max * (diag[i+li]/diag[maxdiff_idx+li]));
+    scale_factor = diag[maxdiff_idx]; 
   }
-  size = size + index_type(1);
 
-  buckets = ref_ptr<cart_grid_type>(new cart_grid_type(size));
+
+  buckets.make_own(new cart_grid_type(size+index_type(1)));
 
   // create corresponding Cartesian geometry (scaling & translation)
   matrix_type A    (0.0);
   matrix_type A_inv(0.0);
-  cart_coord_type T; assign_point(T, bbox.the_min());
+  cart_coord_type T = boxmin; 
   cart_coord_type T_inv;
 
   // scaling + translation
   // Ax + T = y  => x = A^-1(y-T) = A^-1 y - A^-1 T
-  int li = pt::LowerIndex(bbox.the_min());
-  int lt = point_traits<cart_coord_type>::LowerIndex(T);
+  int lt = cpt::LowerIndex(T);
   for(int i = 0; i < spacedim; ++i) {
-    A(i,i) = (bbox.the_max() - bbox.the_min())[i+li];
-    A_inv(i,i) = 1.0 / A(i,i);
+    A(i,i) = scale_factor; //(bbox.the_max() - bbox.the_min())[i+li];
+    A_inv(i,i)  = 1.0 / A(i,i);
     T_inv[i+lt] = - A_inv(i,i)*T[i+lt]; 
   }
 
   mapping_type mapping        (A,     T);
   mapping_type inverse_mapping(A_inv, T_inv);
-  bucket_geometry = ref_ptr<cart_geom_type>(new cart_geom_type(*buckets, mapping));
+  bucket_geometry.make_own(new cart_geom_type(*buckets, mapping));
   bucket_geometry->set_inverse_mapping(inverse_mapping);
 
-  // intersect each cell of the target mesh with the bucket grid
-  // this is very heuristic
+
+  //-----  intersect each cell of the target mesh with the bucket grid -----
+  // We use a very heuristical approximation 
+
+  // First, add each cell to the bucket containing its center.
   for(typename gt::CellIterator c(*TheGrid()); !c.IsDone(); ++c) {
-    // find one cartesian cell 'loc' intersecting c
     typename cgt::Cell loc_c = bucket_geometry->locate(TheGeometry()->barycenter(*c)).TheCell();
     intersecting[loc_c].push_back(c.handle());
   }
 
+  // Then, add cell to buckets containing some other points of the cell
+  // Here, we take points between the vertices and the center of the cell
   for(typename gt::CellIterator c(*TheGrid()); !c.IsDone(); ++c) {
     // find the bucket cells containing the vertices of c
     for(typename gt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc) {
-      typename cgt::Cell loc = bucket_geometry->locate(TheGeometry()->coord(*vc)).TheCell();
-      if(intersecting[loc].empty()) // || intersecting[loc].back() != c.handle())
+      double s = shrink_factor;
+      typename cgt::Cell loc = bucket_geometry->locate(  TheGeometry()->coord(*vc)    *(1.0-s) 
+						       + TheGeometry()->barycenter(*c)*  s   ).TheCell();
+      //if(intersecting[loc].empty()) // || intersecting[loc].back() != c.handle())
+      if(! sequence::contains(intersecting[loc].begin(), intersecting[loc].end(), c.handle()))
 	intersecting[loc].push_back(c.handle());
     }
-    // find all Cartesian cells intersecting c
     
+    // find all Cartesian cells intersecting c - very expensive!
+    // If this step is done, the buckets always contain all cells intersecting them,
+    // and no search is necessary.
     /*
-    typedef cell_intersects<cell_volume_type, cart_geom_type>  pred_type;
+    typedef cell_intersects<cell_volume_type, cart_geom_type>    pred_type;
     namespace rcv =                                              restricted_grid_component_view;
     typedef rcv::grid_view<cart_grid_type, pred_type>            intersection_range_type;
     typedef grid_types<intersection_range_type>                  rgt;
     cell_volume_type polyc(*TheGeometry(), 
 			     *c);
-    // pred_type intersects(cell_volume_type(*TheGeometry(), *c), * bucket_geometry);
     pred_type intersects(polyc, * bucket_geometry);
     intersection_range_type intersecting_buckets(* buckets, intersects, loc);
     for(typename rgt::CellIterator bucket(intersecting_buckets); !bucket.IsDone(); ++bucket)
