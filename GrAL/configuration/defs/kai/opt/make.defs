@@ -1,6 +1,6 @@
 # kai/opt/make.defs
 
-THISDIR = $(DEFDIR)
+THISDIR = $(COMPILERDIR)
 include $(THISDIR)/../make.defs
 
 OPTFLAGS = +K2
