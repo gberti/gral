@@ -64,6 +64,25 @@ get_grid_bounding_box(GRID const& G, GEOM const& Geom)
   return get_grid_iter_bounding_box(G.FirstVertex(), Geom);
 } 
 
+/*! \brief Get bounding box of a cell
+
+    \ingroup gridboundingbox
+
+    Convenience wrapper for get_grid_iter_bounding_box.
+
+    \note This works only if the bounding box of a cell is the bounding
+    box of its vertices, i.e. for linear or d-linear geometries. 
+  
+    \see Module gridboundingbox
+ */
+template<class CELL, class GEOM>
+box<typename GEOM::coord_type>
+inline
+get_cell_bounding_box(CELL const& C, GEOM const& Geom)
+{
+  return get_grid_iter_bounding_box(C.FirstVertex(), Geom);
+} 
+
 } // namespace GrAL 
 
 #endif

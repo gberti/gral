@@ -19,15 +19,16 @@ namespace GrAL {
     \ingroup boundary
     \ingroup subranges   
  
-   \brief Classes implementing generically a  grid boundary range.
+   \brief Classes implementing generically a grid boundary range for 2D grids.
 
    Initalization time is \f$ O(|F|) \f$, \f$ F \f$ is the facet set of the grid.
    Storage is \f$ O(|Cb|) \f$ , where \f$ Cb \f$ is the number of boundary components.
 
-   This works only for 2D, as it uses the 2D-component iterators.
+   This works only for 2D, as it uses the 2D-component iterators. 
+   For higher dimensions, use GrAL::boundary_range_nd.
 
-   \see Module boundarycompiter
-   \see Module boundaryalgorithms
+   \see Module \ref boundarycompiter
+   \see Module \ref boundaryalgorithms
 */
 //----------------------------------------------------------------
 

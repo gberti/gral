@@ -223,8 +223,6 @@ public:
   typedef typename vertex_range::range_type_ref    vertex_layer_type;
   typedef typename cell_range::range_type_ref      cell_layer_type;
 
-  //typedef typename vertex_range::VertexIterator rgeVertexIterator;
-  //typedef typename cell_range  ::CellIterator   rgeCellIterator;
   typedef typename vertex_range::VertexIterator LayerVertexIterator;
   typedef typename cell_range  ::CellIterator   LayerCellIterator;
 
@@ -238,35 +236,72 @@ private:
   stencil_type the_stencil;
   int          far_distance_;
 public:
+  //! \brief Construct empty hull
   incidence_hull() : far_distance_(-1) {}
+
+  /*! \brief Construct from seed range.
+
+    Equivalent to 
+    \code
+     indicence_hull H();
+     H.init(seed,stencil,p_flag);
+    \endcode
+  */
   template<class RANGE>
   incidence_hull(RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag = non_periodic);
+
+  /*! \brief  Construct from seed range.
+
+    Equivalent to 
+    \code
+     indicence_hull H();
+     H.init(seed,stencil,p_flag, pred);
+    \endcode
+  */
   template<class RANGE, class PRED>
   incidence_hull(RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
 
+  //! \brief initialize with seed, stencil (optionally periodic)
   template<class RANGE>
   void init   (RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag = non_periodic);
+
+  //! \brief initialize with seed, stencil (optionally periodic), considering only elements matching pred.
   template<class RANGE, class PRED>
   void init   (RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
 
+  //! \brief make this hull empty (stencil is preserved)
   void clear();
+  //! \brief true iff hull is empty
   bool empty() const { return NumOfVertexLayers() == 0 && NumOfCellLayers() == 0;}
 
   template<class RANGE, class PRED>
   void compute(RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
 
+  //! \brief recompute hull after adding seed to seed range
   template<class RANGE>
   void add_seed_range     (RANGE const& seed);
+  /*! \brief recompute hull after adding seed to seed range
+
+      Works incrementally. Layers are not correct afterwards, but distance map interface is.
+  */
   template<class RANGE>
   void add_seed_range_incr(RANGE const& seed);
 
+  /*! \brief recompute hull after removing seed from seed range
+   */
   template<class RANGE>
   void remove_seed_range(RANGE const& seed);
 
 
   grid_type    const& TheGrid()  const { return v_layers.TheGrid();}
+  /*! \brief Vertex range of hull
+    \note This is not necessarily equal to the closure of \c cells()
+   */
   vertex_range const& vertices() const { return v_layers;}
+  /*! \brief Cell range of hull
+   */
   cell_range   const& cells   () const { return c_layers;}
+
 
   LayerVertexIterator FirstVertex() const { return v_layers.FirstVertex();}
   LayerVertexIterator EndVertex()   const { return v_layers.EndVertex();}
@@ -280,16 +315,13 @@ public:
       which are typically interleaved. For instance, a stencil VCVCVC... 
       will generate level numbers 0,2,4,... for the vertices and 1,3,5,... for the cells.
       \note This is \e not the layer number to use eg. in \c vertices()
-      \todo Implement <tt>int layer(Element e)</tt> such that \c e \f$\in\f$ <tt>element(layer(e))</tt>
   */
   //@{
   int level(Vertex const& v) const { return visited(v);}
   int level(Cell   const& c) const { return visited(c);}
   //@}
 
-  int layer(Vertex const& v) const { return vertexlevel2layer[level(v)];}
-  int layer(Cell   const& c) const { return celllevel2layer  [level(c)];}
-  
+
   template<class CFG2>
   class contains_pred_type {
   private:
@@ -302,8 +334,13 @@ public:
     bool operator()(E const& e) const { return h->contains(e);}
   };
 
+  /*! \brief Predicate returning true iff an element is inside the hull
+      <tt> H.contains_pred()(e)</tt> is equivalent to <tt> H.contains(e) </tt>. 
+  */
   contains_pred_type<CFG> contains_pred() const { return contains_pred_type<CFG>(*this);}
 
+  /*! \brief  True iff e is inside hull.
+  */
   template<class E>
   bool contains(E const& e) const { return visited.defined(e);}
 
@@ -317,13 +354,36 @@ public:
   int operator()(Vertex const& v) const { return (visited.defined(v) ? layer(v)-1 : far_distance_);}
   int operator()(Cell   const& c) const { return (visited.defined(c) ? layer(c)-1 : far_distance_);}
   int  far_distance() const { return far_distance_;}
+  //! \brief set value used for elements outside the hull
   void set_far_distance(int f) { far_distance_ = f;}
   //@}
 
+  /*! \name Element layers.
+      \brief  Consecutive layers of elements
+  */   
+
+  */
+  //@{
+  /*! \brief Consecutive layer of vertex v
+
+      \post \c v \f$\in\f$ <tt>vertices(layer(v))</tt>
+  */
+  int layer(Vertex const& v) const { return vertexlevel2layer[level(v)];}
+  /*! \brief Consecutive layer of cell c 
+
+      \post \c c \f$\in\f$ <tt>cells(layer(c))</tt>
+  */
+  int layer(Cell   const& c) const { return celllevel2layer  [level(c)];}
+
   int NumOfVertexLayers() const { return v_layers.NumOfLayers();}
   int NumOfCellLayers  () const { return c_layers.NumOfLayers();}
+  /*! \brief i-th vertex layer (<tt> 1 <= i <= NumOfVertexLayers() </tt>)
+   */
   temporary<vertex_layer_type> vertices(int i) const { return temporary<vertex_layer_type>(v_layers.Layer(i));}
+  /*! \brief i-th cell layer (<tt> 1 <= i <= NumOfCellLayers()</tt>)
+   */
   temporary<cell_layer_type  > cells   (int i) const { return temporary<cell_layer_type  >(c_layers.Layer(i));}
+  //@}
 
 }; // class incidence_hull
 
