@@ -57,9 +57,9 @@ public:
   NotifyOnChangeMutator(T& t, controlable& c)
     : base(t), controlee(c) {}
   virtual void read(std::istream& in) {
-    T old(value());
+    T old(base::v);
     base::read(in);
-    if( old != value()) controlee.notify();
+    if( old != base::v) controlee.notify();
   }
 private:
   controlable& controlee;

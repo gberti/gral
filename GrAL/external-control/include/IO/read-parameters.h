@@ -122,7 +122,7 @@ inline void AddVar(MutableVars& MV, const std::string& name, T& v)
 
 template<class T> 
 inline void AddVar(MutableVars& MV, const char* name, T& v)
-{ AddVar(MV,string(name),v);}
+{ AddVar(MV,std::string(name),v);}
 
 
 #endif
