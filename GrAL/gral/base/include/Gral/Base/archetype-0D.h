@@ -4,6 +4,7 @@
 // $LICENSE_NEC
 
 #include "Gral/Base/grid-function-vector.h"
+#include "Gral/Base/element-handle.h"
 
 namespace archetype_0D {
 
@@ -12,6 +13,7 @@ namespace archetype_0D {
 */
 
 class archetype_t {
+  typedef archetype_t self;
 public:
   enum { dim = 0 };
   typedef grid_dim_tag<0> dimension_tag;  
@@ -40,8 +42,8 @@ public:
   typedef VertexIterator Vertex;
   typedef VertexIterator Cell;
   typedef VertexIterator CellIterator;
-  typedef int vertex_handle;
-  typedef int cell_handle;
+  typedef vertex_handle_int<self> vertex_handle;
+  typedef cell_handle_int<self>   cell_handle;
 
   unsigned NumOfVertices() const { return 2;}
   unsigned NumOfCells()    const { return 2;}
