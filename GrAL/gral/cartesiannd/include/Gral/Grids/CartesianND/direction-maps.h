@@ -23,7 +23,7 @@ namespace cartesiannd {
 
    
     struct direction_table {
-       std::vector<vector_system> num2vec;
+      std::vector<vector_system> num2vec;
 
       direction_table() {}
       direction_table(unsigned k) { init(k); }
@@ -59,21 +59,21 @@ namespace cartesiannd {
 
 
     struct incidences {
-       std::vector< std::vector<inc_descriptor> > nb;
+      std::vector< std::vector<inc_descriptor> > nb;
       unsigned K_;
       unsigned m_;
 
-       std::vector<inc_descriptor> const& operator()(unsigned dir_k) const { cv(dir_k);  return nb[dir_k];}
-       std::vector<inc_descriptor> const& operator[](unsigned dir_k) const { cv(dir_k);  return nb[dir_k];}
-       std::vector<inc_descriptor>      & operator[](unsigned dir_k)       { cv(dir_k);  return nb[dir_k];}
+      std::vector<inc_descriptor> const& operator()(unsigned dir_k) const { cv(dir_k);  return nb[dir_k];}
+      std::vector<inc_descriptor> const& operator[](unsigned dir_k) const { cv(dir_k);  return nb[dir_k];}
+      std::vector<inc_descriptor>      & operator[](unsigned dir_k)       { cv(dir_k);  return nb[dir_k];}
 
       void cv(unsigned dir_k) const { REQUIRE( (0<= dir_k && dir_k < nb.size()), 
 					       "nb.size()=" << nb.size() << " dir_k=" << dir_k, 1);}
 
       void init(unsigned K, unsigned m);
-      void init_vertex_on_vertex() {} // not yet implemented
+      void init_vertex_on_vertex();
       void init_cell_on_cell(); 
-      void init_upward  (unsigned K, unsigned m) { } // not yet implemented
+      void init_upward  (unsigned K, unsigned m);
       void init_downward(unsigned K, unsigned m);
 
       void print( std::ostream& out) const; 
@@ -191,7 +191,7 @@ namespace cartesiannd {
       }
     }
 
-     std::vector<index_map_type>  maps;
+    std::vector<index_map_type>  maps;
     unsigned num_of_maps()       const { return maps.size();}
     unsigned num_of_directions() const { return maps.size();}
     
@@ -244,7 +244,7 @@ namespace cartesiannd {
     num2vec.resize(binomial_coeff(DIM,k));
     // std::cout << ": " << num2vec.size() << "direction" <<  std::endl;
     vector_system v(k,0);
-    for(unsigned j = 1; j < k; ++j)
+    for(unsigned j = 0; j < k; ++j)
       v[j] = j;
     num2vec[0] = v;
     for(unsigned m = 1; m < num2vec.size(); ++m)
@@ -274,7 +274,7 @@ namespace cartesiannd {
     if(K > m) init_downward(K,m);
     if(K < m) init_upward  (K,m);
     if(K == m) {
-      if( K == 0) init_vertex_on_vertex();
+      if(K == 0)   init_vertex_on_vertex();
       if(K == DIM) init_cell_on_cell();
     }
   }
@@ -286,27 +286,28 @@ namespace cartesiannd {
   {
     nb.resize(dirs[K].size());
     // for all directions of anchor elements of dim. K
-
     for(unsigned d_k = 0; d_k < dirs[K].size(); ++d_k) {
       vector_system dir_k = num2vec(K, d_k);
 
       //--- loop over all  directions dir_km \subset dir_k ---
-
       // will have \choice{K,m} m-subdirections dir_km of dir_k,
-      //  and for each 2^{K-m} parallel elements of dim m
+      // and for each 2^{K-m} parallel elements of dim m
       unsigned p2 = (unsigned)pow(2.0,(int)(K-m));
-      nb[d_k].resize(p2*binomial_coeff(K,m));
+      unsigned num_directions = binomial_coeff(K,m);
+      nb[d_k].resize(p2*num_directions);
+      int nb_cnt = 0;
 
       // ddir_km traverses all ordered sequences of length m in [0, K-1],
       // to be mapped to a m-subdirection dir_m of dir_k
+
       // initialize ddir_km
       vector_system ddir_km(m,0);
       for(unsigned d_m = 0; d_m < m; ++d_m)
 	ddir_km[d_m] = d_m;
 
-      int cnt = 0;
-      // begin loop over all  directions dir_m \subset dir_k: \choice{K,m} of them
-      for(unsigned dd_km = 0; dd_km < binomial_coeff(K,m); ++dd_km) { // nb[d_k].size(); ++dd_km) {
+      // begin loop over all  directions dir_m \subset dir_k: 
+      // \choice{K,m} of them
+      for(unsigned dd_km = 0; dd_km < num_directions; ++dd_km) { 
 	// map ddir_km to subsequence dir_km of dir_k
 	vector_system dir_km(m); // m out of the k dirs of dir_k
 	for(unsigned d_m = 0; d_m < m; ++d_m)
@@ -319,12 +320,12 @@ namespace cartesiannd {
 
 	// loop over  all 2^{K-m} vectors 'eps'  \in {0,1}^{K-m} 
 	vector_system eps(K-m,0);
-	for(unsigned n = 0; n < pow(2.0,(int)(K-m)); ++n, ++cnt) {
+	for(unsigned n = 0; n < pow(2.0,(int)(K-m)); ++n, ++nb_cnt) {
 	  // get offset from dir_m_k and eps 
 	  index_type offset(0);
 	  for(unsigned i = 0; i < dir_km_complement.size(); ++i)
 	    offset[dir_km_complement[i]] = eps[i];
-	  nb[d_k][cnt] = inc_descriptor(offset, vec2num(m,dir_km));
+	  nb[d_k][nb_cnt] = inc_descriptor(offset, vec2num(m,dir_km));
 	  eps = succ_binary_number(eps);
 	}
 	    
@@ -332,6 +333,65 @@ namespace cartesiannd {
       }
     }
   }
+
+  
+  template<unsigned DIM>
+  void delta_map<DIM>::incidences::init_upward(unsigned K, unsigned m)
+  {
+    nb.resize(dirs[K].size());
+    // for all directions of anchor elements of dim. K
+    for(unsigned d_k = 0; d_k < dirs[K].size(); ++d_k) {
+      vector_system dir_k = num2vec(K, d_k); 
+
+      //--- loop over all  directions dir_km \superset dir_k ---
+      // We have \choice{DIM-K,m-K} m-superdirections dir_km of dir_k,
+      // and for each dir_km there are 2^{m-K} parallel elements of dim m
+      unsigned p2 = (unsigned)pow(2.0,(int)(m-K));
+      unsigned num_directions = binomial_coeff(DIM-K,m-K);
+      nb[d_k].resize(p2*num_directions);
+      int nb_cnt = 0;
+ 
+      // dir_km_compl traverses all ordered sequences of length m-K in [0, DIM-K-1],
+      // to be mapped to a m-superdirection dir_km of dir_k
+
+      // initialize dir_km_compl to {0, ... , m-K-1}
+      vector_system dir_km_compl(m-K,0);
+      for(unsigned d_m = 0; d_m < m-K; ++d_m)
+	dir_km_compl[d_m] = d_m;
+
+      for(unsigned dd_km = 0; dd_km < num_directions; ++dd_km) {
+	//--- map dir_km_compl to supersequence dir_km of dir_k
+	vector_system dir_km(m); // m dirs, containing the k dirs of dir_k
+
+        // map dir_km_compl from  [0,DIM-K-1] to [0, DIM-1] \ dir_k
+	vector_system dir_km_compl_mapped(dir_km_compl);
+	int nk = 0;
+	for(int i = 0; i < (int)(m-K); ++i) {
+	  while(nk < (int)dir_k.size() && dir_k[nk] <= dir_km_compl[i] + nk) {
+	    ++nk;
+	  }
+	  dir_km_compl_mapped[i] = dir_km_compl[i] + nk;
+	}
+	// combine dir_km_compl and dir_k into dir_km
+	std::merge(dir_km_compl_mapped.begin(), dir_km_compl_mapped.end(),
+		   dir_k.begin(),               dir_k.end(),
+		   dir_km.begin());
+
+	// loop over  all 2^{m-K} vectors 'eps'  \in {0,1}^{m-K} 
+	vector_system eps(m-K,0);
+	for(unsigned n = 0; n < pow(2.0,(int)(m-K)); ++n, ++nb_cnt) {
+	  // get offset from dir_m_k and eps 
+	  index_type offset(0);
+	  for(unsigned i = 0; i < dir_km_compl_mapped.size(); ++i)
+	    offset[dir_km_compl_mapped[i]] = -eps[i];
+	  nb[d_k][nb_cnt] = inc_descriptor(offset, vec2num(m,dir_km));
+  	  eps = succ_binary_number(eps);
+	}
+	dir_km_compl = succ_ordered(dir_km_compl, DIM-K-1);
+      }
+    }
+  }
+  
 
   template<unsigned DIM>
   void delta_map<DIM>::incidences::init_cell_on_cell() 
@@ -346,6 +406,22 @@ namespace cartesiannd {
       nb[0][2*dir-1] = inc_descriptor(offset,0);
     }
   }
+
+  template<unsigned DIM>
+  void delta_map<DIM>::incidences::init_vertex_on_vertex()
+  {
+    nb.resize(dirs[0].size());
+    nb[0].resize(2*DIM);
+    for(unsigned dir = 1; dir <= DIM; ++dir) {
+      index_type offset(0);
+      offset[dir-1] =  1;
+      nb[0][2*dir-2] = inc_descriptor(offset,0);
+      offset[dir-1] = -1;
+      nb[0][2*dir-1] = inc_descriptor(offset,0);
+    }
+  }
+
+
 
   template<unsigned DIM>
   void delta_map<DIM>::incidence_table::init(unsigned K) 
