@@ -31,7 +31,7 @@ int main(int argc, char* argv[]) {
   typedef grid_types<fine_grid_type> fgt;
   
   string gridfile       = "grid.complex2d";
-  string partitionfile  = "grid.part.2";
+  string partitionfile  = "grid.part";
   string pattern_string = "VC";
 
   //---------- construct master grid --------------
@@ -67,4 +67,32 @@ int main(int argc, char* argv[]) {
                      Prtng,MasterGeom,
                      ovlp_pattern,
                      master2part_v, master2part_c);
+
+
+  grid_function<cgt::Cell,fine_geom_type> compGeom(compG.TheCoarseGrid());
+
+  OstreamComplex2DFmt OG(cout);
+  ConstructGrid0(OG,compG.TheCoarseGrid());
+  cout << "master -> part (vertices):\n";
+  for(cgt::CellIterator C(compG.TheCoarseGrid()); !C.IsDone(); ++C) {
+    cout << "part " << C.handle() << '\n'; 
+    for(fgt::VertexIterator v(MasterG); !v.IsDone(); ++v) {
+      if(master2part_v(*C).defined(v.handle()))
+        cout << v.handle() << " -> " << master2part_v(*C)(v.handle()) << '\n';
+    }
+  }
+  cout << '\n';
+  for(cgt::CellIterator C(compG.TheCoarseGrid()); !C.IsDone(); ++C) {
+    fine_grid_type const& G_C = compG.Grid(*C);
+    compGeom[*C].set_grid(G_C);
+    for(fgt::VertexIterator v(MasterG); !v.IsDone(); ++v) {
+      if(master2part_v(*C).defined(v.handle()))
+        compGeom[*C].coord(G_C.vertex(master2part_v(*C)(v.handle())))
+          = MasterGeom.coord(*v);
+    }
+    OstreamComplex2DFmt OG_C(cout);
+    ConstructGrid(OG_C, compG.Grid(*C), compGeom(*C));
+    cout << '\n';
+ }
+
 }
