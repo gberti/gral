@@ -1,0 +1,90 @@
+
+/*! \mainpage Index of the  GrAL Base Package, part of the GrAL (Grid Algorithms Library)
+  
+   This packages is used by all other parts of the GrAL.
+
+   See \ref toplevelmodules for a coarse overview on the contents.  
+*/
+
+/*! \defgroup toplevelmodules Top Level Modules
+ 
+    Contents:
+    - \ref traits: Some really basic traits classes (like \ref grid_types),
+       which in general must be specialized
+    - \ref functors: These are not very essential 
+     (i.e. do not add new  functionality), but come in handy for
+      parameterizing generic algorithms.     
+    - \ref elements: Some generic implementations of some element types and
+       handles (not much at the moment)
+    - \ref iterators
+    - \ref subranges: Different stuff for representig grid subranges,
+      for example by plain enumeration, by providing views to grid subranges,
+      or views to the grid boundary
+    - \ref gridmappings: These mappings are useful when grids are copied
+        and additional information has to be transferred.
+    - \ref gridfunctions: Grid functions are a means of storing data on grid elements.
+      The module contains some generic implementations for them.
+    - \ref geometries: These represent geometric embeddings of a combinatorial grid
+      into some space, and provide basic geometric operations.
+    - \ref io: File formats for grids may be seen as special grid representations.
+        Therefore, grid i/o is nothing than a generic grid copy operation on
+        these special representations.
+    - \ref mutatingoperations: These are grid copy and enlargement.
+*/
+
+
+/*! \defgroup subranges Components for Grid Subranges
+   \ingroup toplevelmodules  
+*/
+
+/*! \defgroup gridmappings Components for Grid Mappings
+    \ingroup toplevelmodules  
+
+   Grid mappings (or Grid Morphisms) are necessary for 
+   performing so-called associative copies.
+*/
+
+/*! \defgroup gridfunctions Components for Gridfunctions
+   \ingroup toplevelmodules  
+
+*/
+
+/*! \defgroup iterators   Components for Grid Iterators
+   \ingroup toplevelmodules  
+
+*/
+
+/*! \defgroup geometries  Components for Grid Geometries
+    \ingroup toplevelmodules  
+
+   \see Module \ref geometricfunctors
+*/
+
+/*! \defgroup io         Components for Grid I/O
+   \ingroup toplevelmodules  
+
+*/
+
+/*! \defgroup functors   Function Objects 
+   \ingroup toplevelmodules  
+
+   This module contains models of Adaptable Unary Function,
+   to be used as function object arguments to generic algorithms.
+*/
+
+/*! \defgroup elements   Components for Grid Elements and Handles
+    \ingroup toplevelmodules  
+
+*/
+
+/*! \defgroup traits    Traits classes for Grids
+    \ingroup toplevelmodules  
+
+*/
+
+/*! \defgroup mutatingoperations Mutating Grid Operations
+    \ingroup toplevelmodules 
+
+   This module contains coarse grained primitives for operations
+   changing a grid, such as grid copy or grid enlargement.
+*/
