@@ -103,7 +103,7 @@ struct algebraic_primitives
 
 
 
-/*! \brief calculate centroid and area of a simple polygon
+/*! \brief calculate centroid and area of a simple polygon in 2D
  
  The polygon is given by a sequence of vertices \c [begin, end).
 

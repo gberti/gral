@@ -13,7 +13,10 @@
 namespace GrAL {
 
 
-
+  /*! \brief Dimension-independent algebraic primitives
+ 
+      \ingroup algebraicprimitives   
+  */
 template<class POINT>
 struct basic_algebraic_primitives : public point_traits<POINT> {
 
@@ -36,6 +39,7 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
       return sum;
     }
 
+  //! \brief Squared Euclidean distance
   static scalar distance2(const POINT& p1, const POINT& p2)
     {
       scalar sum = 0;
@@ -44,9 +48,11 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
       return sum;
     }
 
+  //! \brief Euclidean distance
   static scalar  distance(const POINT& p1, const POINT& p2)
     { return sqrt(distance2(p1,p2));}
 
+  //! \brief Squared Euclidean norm
   static scalar squared_norm_2(const POINT& p)
     {
       scalar sum = 0;
@@ -56,10 +62,16 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
       return sum;
     }
 
+  //! \brief Euclidean norm
   static real norm_2(const POINT& p) { return sqrt(squared_norm_2(p));}
+
+  //! \brief Result has Euclidean norm 1
   static POINT normalization(const POINT& p) { return(p/norm_2(p));}
+
+  //! \brief Scale \c p to Euclidean norm 1
   static void  normalize(POINT & p) { p = normalization(p);}
 
+  //! \brief Returns \f$ \|p\|_1 \f$ (sum of absolute values of entries)
   static real norm_1(POINT const& p) {
     real sum = 0;
     for(int i = pt::LowerIndex(p); i <= pt::UpperIndex(p); ++i)
@@ -67,21 +79,24 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
     return sum;
   }
 
+  //! \brief Returns \f$ \|p\|_\infty \f$ (max of absolute value of entries)
   static real norm_infinity(POINT const& p) {
    real max_comp = 0;
    for(int i = pt::LowerIndex(p); i < pt::UpperIndex(p); ++i)
       max_comp = ( max_comp < fabs(p[i]) ? fabs(p[i]): max_comp);
    return max_comp;
   }
+
   // better: ?
   // static void normalize(POINT& p) { p *= 1.0/norm(p);}
 
+  //! \brief Relative Euclidean distance 
   static real rel_diff(POINT const& p1, POINT const& p2)
     {
      POINT p(p1-p2);
      real result = norm_2(p);
      if(result != 0.0) {
-       result /= ::std::max(norm_2(p1), norm_2(p2));
+       result /= std::max(norm_2(p1), norm_2(p2));
      }
      return result;
     }
@@ -102,7 +117,7 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
   static  scalar angle(const POINT& p, const POINT& q)
     {return acos(cos_of_angle(p,q));}
 
-  /*! \brief Complete the vector system \c dirs with linearly independent vectors
+  /* \brief Complete the vector system \c dirs with linearly independent vectors
 
       If \c dirs contains \em k linearly independent vectors, the union of \c dirs and the result
       \c basis_completion(dirs) will form a basis of \f$ \R^n \f$. 
