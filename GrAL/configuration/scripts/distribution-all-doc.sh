@@ -8,6 +8,7 @@ MODULES=`$cvswork/configuration/scripts/modules.sh`;
 
 TMP=${HOME}/tmp;
 ALLROOT=${TMP}/modules;
+DOC=doc
 cd ${HOME}/tmp;
 rm -rf ${ALLROOT};
 mkdir -p  ${ALLROOT};
@@ -31,16 +32,19 @@ do
 done;
 
 
-mkdir ${ALLROOT}/graldoc;
-cd ${ALLROOT}/graldoc;
+mkdir ${ALLROOT}/${DOC};
+cd ${ALLROOT}/${DOC};
 for i in ${MODULES}
 do
   mkdir -p $i
-  (cd ${ALLROOT}/$i; gmake copydoc DOCDEST=${ALLROOT}/graldoc/$i)
+  (cd ${ALLROOT}/$i; gmake copydoc DOCDEST=${ALLROOT}/${DOC}/$i)
 done;
 cd ${ALLROOT};
 
-tar cf gral-doc.tar ./graldoc
+mv gral/index-global.html ${ALLROOT}
+perl -p -i -e "s|\$GRALDOC|${DOC}|g" ${ALLROOT}/index.html
+
+tar cf gral-doc.tar ./${DOC}
 gzip -f gral-doc.tar;
 mv gral-doc.tar.gz ..;
 cd ..;

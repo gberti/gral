@@ -76,7 +76,9 @@ install-doc:
 
 
 # assumes that RELPATH=../../..
+
 additional-copydoc:
-	cp $(DOXYPATH)/index.html $(DOCDEST)
-	perl -p -i -e "s|\.\./\.\./\.\.|\.|g" $(DOCDEST)/index.html
+
+#	cp $(DOXYPATH)/index.html $(DOCDEST)
+#	perl -p -i -e "s|\.\./\.\./\.\.|\.|g" $(DOCDEST)/index.html
 
