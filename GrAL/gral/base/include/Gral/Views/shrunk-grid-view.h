@@ -151,6 +151,9 @@ namespace shrink_grid_view {
 	{ return BaseGrid().BeginArchetype();}  
       archetype_iterator EndArchetype() const 
 	{ return BaseGrid().EndArchetype();}
+      archetype_handle   handle(archetype_iterator it) const { return BaseGrid().handle(it);}
+
+      archetype_type const& Archetype(archetype_handle a) const { return BaseGrid().Archetype(a);}
       archetype_type const& ArchetypeOf(Cell const& c) const
 	{ return BaseGrid().ArchetypeOf(c.BaseCell()); }
       archetype_handle archetype_of(Cell const& c) const
