@@ -4,7 +4,7 @@
 // $LICENSE
 
 
-#include <iostream.h>
+#include <iostream>
 #include "Utility/pre-post-conditions.h"
 #include "Geometry/coords.h"
 
@@ -113,7 +113,7 @@ inline coordN<M> operator*(const matrix<M,N>& ls, const coordN<N>& rs)
 //----------------------- IO ------------------------------------
 
 template<unsigned N, unsigned M>
-inline ostream& operator<<(ostream& out, const matrix<M,N>& rs)
+inline std::ostream& operator<<(std::ostream& out, const matrix<M,N>& rs)
 {
   for(unsigned i = 1; i<= M; i++) {
     for(unsigned j = 1; j <= N; j++)
@@ -124,7 +124,7 @@ inline ostream& operator<<(ostream& out, const matrix<M,N>& rs)
 }
 
 template<unsigned N, unsigned M>
-inline istream& operator>>(istream& in, matrix<M,N>& rs)
+inline std::istream& operator>>(std::istream& in, matrix<M,N>& rs)
 {
   for(unsigned i = 1; i<= M; i++) {
     for(unsigned j = 1; j <= N; j++)
