@@ -73,6 +73,34 @@ namespace gf_array_adapter {
       { for(int i = 0; i < (int)N; ++i) f[i] = p[i];}
   };
 
+  // specialization for N=1
+  template<class T> 
+  class value_type<T,1> : public array_operators<value_type<T,1>, 1> {
+    T f[1];
+  public:
+    value_type() {}
+    value_type(value_proxy<T,1> p)            { init(p.f);}
+    value_type(T const* f)               { init(f);}
+    value_type& operator=(value_proxy<T,1> p) { init(p.f); return *this;}
+
+
+    T const& operator()(int i) const { check_range(i); return f[i];}
+    T const& operator[](int i) const { check_range(i); return f[i];}
+    T      & operator[](int i)       { check_range(i); return f[i];}
+    operator T () const { return f[0];}
+    operator T&()       { return f[0];}
+
+    void check_range(int i) const {
+      REQUIRE( 0 <= i && i < 1, "i = " << i << " out of range!\n",1);
+    }
+
+  private:
+    void init(T const* p)
+      { for(int i = 0; i < 1; ++i) f[i] = p[i];}
+  };
+
+
+
   template<class T, unsigned N>
   inline void value_proxy<T,N>::operator=(value_type<T,N> const& p)
   { for(int i = 0; i < N; ++i) f[i] = p[i]; }
