@@ -122,6 +122,7 @@ public:
   Octree(ref_ptr<flat_grid_type const> C0,
 	 pattern_grid_type   const& refpat);
   Octree(hier_grid_type const& H);
+  Octree(ref_ptr<hier_grid_type const> H);
 
   // Octree(int nx_, int ny_, int nz_);
 
@@ -366,7 +367,7 @@ public:
     { make_valid();}
     leaf_cell_iterator_t(ref_ptr<const grid_type> o)
       : base(o, o->TheOctree()->coarsest_level()),
-      c(oct->ActiveRange(o->TheOctree()->coarsest_level())->FirstCell())
+      c(o->TheOctree()->ActiveRange(o->TheOctree()->coarsest_level())->FirstCell())
     { make_valid();}
 
     bool IsDone()    const { cb(); return level() > TheOctree()->finest_level();}
