@@ -101,11 +101,13 @@ namespace shrink_grid_view {
     template<class GRID>
       struct map_types_for_grid_view<GRID, vertex_type_tag> {
 	typedef shrink_grid_view::vertex_iterator<GRID> element_type;
+	typedef shrink_grid_view::vertex_iterator<GRID> element_iterator;
       };
     
     template<class GRID>
       struct map_types_for_grid_view<GRID, cell_type_tag> {
 	typedef shrink_grid_view::cell_iterator<GRID> element_type;
+	typedef shrink_grid_view::cell_iterator<GRID> element_iterator;
       };
   } // namespace detail
 
@@ -143,6 +145,8 @@ namespace shrink_grid_view {
       }
       cell_iterator<GRID>   FirstCell()   const;
       vertex_iterator<GRID> FirstVertex() const;
+      cell_iterator<GRID>   EndCell()   const;
+      vertex_iterator<GRID> EndVertex() const;
       base_grid_type const& BaseGrid() const { return *g;}
 
 
@@ -217,6 +221,8 @@ namespace shrink_grid_view {
       cell_iterator(grid_type const& gg) : g(&gg), c(g->BaseGrid()) {}
       cell_iterator(grid_type const& gg,
 		    cell_handle      cc) : g(&gg), c(g->BaseGrid(), cc) {}
+      cell_iterator(grid_type const& gg,
+		    typename bgt::CellIterator bc) : g(&gg), c(bc) {}
       self      & operator++()      { ++c; return *this;}
       self const& operator*() const { return *this;}
       bool IsDone() const { return c.IsDone();}
@@ -263,10 +269,17 @@ namespace shrink_grid_view {
       typename bgt::VertexOnCellIterator vc;
     public:
       vertex_iterator() {}
+
       explicit
       vertex_iterator(grid_type const& gg) 
 	: g(&gg), c(g->BaseGrid().FirstCell())
-	{ if (!c.IsDone()) vc = c.FirstVertex(); }
+      { if (!c.IsDone()) vc = c.FirstVertex(); }
+
+      vertex_iterator(grid_type const& gg,
+		      typename bgt::CellIterator bc)
+	: g(&gg), c(bc)
+      { if (!c.IsDone()) vc = c.FirstVertex(); }
+
       vertex_iterator(grid_type const& gg, 
 		      vertex_handle h) 
 	: g(&gg), c(gg.BaseGrid(),h.c) 
@@ -276,6 +289,7 @@ namespace shrink_grid_view {
 	  REQUIRE(vc.handle() == h.v, 
 		  "invalid handle h = " << h << '\n' ,1);
 	}
+
       explicit
       vertex_iterator(vertex_on_cell_iterator<GRID> const& vvc);
 
@@ -335,7 +349,7 @@ namespace shrink_grid_view {
 
       bool operator==(self const& rhs) const { return vc == rhs.vc;}
       bool operator!=(self const& rhs) const { return !(*this == rhs);}
-      bool operator< (self const& rhs) const { return vc == rhs.vc;}
+      bool operator< (self const& rhs) const { return vc < rhs.vc;}
 
     };
 
@@ -367,6 +381,16 @@ namespace shrink_grid_view {
     inline
     cell_iterator<GRID> 
     grid_view<GRID>::FirstCell() const { return typename gt::CellIterator(*this);}
+
+  template<class GRID>
+    inline
+    vertex_iterator<GRID> 
+    grid_view<GRID>::EndVertex() const { return typename gt::VertexIterator(*this, BaseGrid().EndCell());}
+
+  template<class GRID>
+    inline
+    cell_iterator<GRID> 
+    grid_view<GRID>::EndCell() const { return typename gt::CellIterator(*this, BaseGrid().EndCell());}
 
 
 
@@ -420,7 +444,6 @@ namespace shrink_grid_view {
 
 
 //----- classes in global scope: grid_types<>, element_traits<>, grid_function<>  ---------
-// Do grid_function have to be in global scope??
 
 
 template<class GRID>
@@ -515,15 +538,22 @@ namespace shrink_grid_view {
   template<class GF>
     class grid_function_view {
     private:
+      typedef grid_function_view<GF>    self;
       typedef typename GF::grid_type    base_grid_type;
       typedef typename GF::element_type base_element_type;
       typedef element_traits<base_element_type> bet;
       typedef typename bet::element_type_tag    btag;
+      typedef typename GF::const_iterator       base_const_iterator;
     public:
-      typedef typename GF::value_type   value_type;
-      typedef grid_view<base_grid_type> grid_type;
+      typedef typename GF::value_type      value_type;
+      typedef typename GF::reference       reference;
+      typedef typename GF::const_reference const_reference;
+      typedef typename GF::size_type       size_type;
+
+      typedef grid_view<base_grid_type>    grid_type;
       typedef typename grid_type::template map_types<btag> map_types;
-      typedef typename map_types::element_type element_type;
+      typedef typename map_types::element_type     element_type;
+      typedef typename map_types::element_iterator element_iterator;
       typedef element_traits<element_type> et;
     private:
       grid_view<base_grid_type> const* g;
@@ -534,7 +564,45 @@ namespace shrink_grid_view {
 
       value_type const& operator()(element_type const& e) const { return (*gf)(e.Base());}
       grid_type  const& TheGrid() const { return *g;}
-      size_t             size() const { return et::size(*g);}
+
+      element_iterator FirstElement() const { return et::FirstElement(TheGrid());}
+      element_iterator EndElement()   const { return et::EndElement  (TheGrid());}
+
+
+      template<class GFV, class BASEIT> // , class REF>
+      class const_iterator_t {
+	typedef const_iterator_t<GFV,BASEIT> self;
+	typedef GFV gf_type;
+	typedef typename gf_type::element_iterator element_iterator;
+	typedef std::iterator_traits<BASEIT> bt;
+      public:
+	typedef typename gf_type::const_reference  const_reference;
+
+	typedef typename bt::reference        reference;
+	typedef typename bt::value_type       value_type;
+	typedef typename bt::pointer          pointer;
+	typedef typename bt::difference_type  difference_type;
+	typedef std::forward_iterator_tag     iterator_category;
+      private:
+        gf_type      const*  gfv;
+	element_iterator     e;
+      public:
+	const_iterator_t() : gfv(0) {}
+	const_iterator_t(gf_type const& gf, element_iterator const& ee)
+	  : gfv(&gf), e(ee) {}
+
+	const_reference operator*() const { return (*gfv)(*e);}
+	self & operator++() { ++e; return *this;}
+	bool operator==(self const& rhs) const { return e == rhs.e;}
+	bool operator!=(self const& rhs) const { return e != rhs.e;}
+      };
+
+      typedef const_iterator_t<self,base_const_iterator> const_iterator;
+
+      size_type      size()  const { return et::size(*g);}
+      const_iterator begin() const { return const_iterator(*this, FirstElement());}
+      const_iterator end()   const { return const_iterator(*this, EndElement());}
+
     };
 
 } // namespace shrink_grid_view 
