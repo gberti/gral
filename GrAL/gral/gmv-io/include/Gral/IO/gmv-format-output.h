@@ -13,7 +13,7 @@
 #include "Gral/Base/partial-grid-morphism.h"
 #include "Gral/Algorithms/construct-isomorphism.h"
 
-#include "Container/inhomogeneous-list.h"
+#include "Container/heterogeneous-list.h"
 #include "Utility/as-string.h"
 
 
@@ -87,11 +87,12 @@ public:
 	*out << gf(*e) << ' ';
       }
     }
+  namespace hl = heterogeneous_list;
 
-  void copy_grid_functions_rec(List<END,END>) {}
+  void copy_grid_functions_rec(hl::List<END,END>) {}
 
   template<class GF, class TAIL>
-  void copy_grid_functions_rec(List<GF,TAIL> gfs)
+  void copy_grid_functions_rec(hl::List<GF,TAIL> gfs)
     { 
       num_vars++;
       copy_gf(gfs.head());
@@ -99,10 +100,10 @@ public:
     }
 
  
-  void copy_grid_functions(List<END,END>) {}
+  void copy_grid_functions(hl::List<END,END>) {}
 
   template<class GF, class TAIL>
-  void copy_grid_functions(List<GF,TAIL> gfs)
+  void copy_grid_functions(hl::List<GF,TAIL> gfs)
     {
       *out << "variable" << '\n';
       copy_grid_functions_rec(gfs);
