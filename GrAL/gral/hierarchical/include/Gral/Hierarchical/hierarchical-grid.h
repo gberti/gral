@@ -6,6 +6,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Container/bivector.h"
 #include "Utility/pre-post-conditions.h"
+#include "Utility/const-ptr.h"
 
 /*! \brief Support for hierarchical grids
 
@@ -82,14 +83,18 @@ namespace hierarchical {
     pattern_grid_type      the_pattern;
     table_type             grids;
   public:
-    hgrid_cartesian();
+    hgrid_cartesian() {}
     hgrid_cartesian(flat_grid_type    const& root, // const_ptr<grid_type> root,
 		    pattern_grid_type const& pat)
+    {
+      init(root,pat);
+    }
+    void init(flat_grid_type    const& root, 
+	      pattern_grid_type const& pat)
     {
       grids.push_back(root);
       the_pattern = pat;
     }
-    
 
     /*! \name Level navigation
      */
@@ -111,9 +116,12 @@ namespace hierarchical {
     //@}
 
     pattern_grid_type const& ThePatternGrid() const { return the_pattern;}
+
+    flat_grid_type    const& operator()(level_handle lev) const { cv(lev); return grids(lev);}
     flat_grid_type    const& FlatGrid(level_handle lev) const { cv(lev); return grids(lev);}
     bool  empty() const { return num_of_levels()==0;}
 
+    const_ptr<table_type> table() const { return const_ptr<table_type>(grids);}
 
     /*! \name Modifying operations
      */
@@ -203,15 +211,17 @@ namespace hierarchical {
     h_cell(hier_grid_type const& gg, FlatCell f, level_handle lev) : g(&gg), h(f.handle(), lev) {}
 
     FlatCell Flat() const { return FlatCell(g->FlatGrid(level()), h.flat_handle());}
-    
+    operator FlatCell() const { return Flat();}
+
     level_handle level() const { return h.level();}
+    HierCell Parent    () { return g->Parent(*this);}
     HierCell ParentCell() { return g->Parent(*this);}
 
     hier_grid_type const& TheHGrid() const { return *g;}
     bool operator==(self const& rhs) const { return h == rhs.h;}
    
     inline ChildIterator FirstChild() const;
-    // ChildIterator EndChild  () const;
+    inline ChildIterator EndChild  () const;
 
     // checking functions
     bool bound() const { return g != 0;}
@@ -249,7 +259,7 @@ namespace hierarchical {
 
     level_handle  level() const { return TheHGrid().next_finer_level(p.level());}
     FlatCell Flat() const { cv(); return operator*().Flat();} 
-    
+
     HierCell const& Parent() const { cb(); return p;}
     hier_grid_type const& TheHGrid() const { cb(); return p.TheHGrid();}
 
@@ -258,6 +268,9 @@ namespace hierarchical {
     bool valid() const { return bound() && ch.valid();}
     void cb() const { REQUIRE(bound(), "", 1);}
     void cv() const { REQUIRE(valid(), "", 1);}
+
+    bool operator==(self const& rhs) const { return ch == rhs.ch;}
+
   }; // class h_cell_child_iterator<HGrid>
 
 
@@ -268,6 +281,11 @@ namespace hierarchical {
   inline  typename h_cell<HGrid>::ChildIterator
   h_cell<HGrid>::FirstChild() const 
   { return ChildIterator(*this, TheHGrid().ThePatternGrid().FirstCell());}
+
+  template<class HGrid>
+  inline  typename h_cell<HGrid>::ChildIterator
+  h_cell<HGrid>::EndChild() const 
+  { return ChildIterator(*this, TheHGrid().ThePatternGrid().EndCell());}
 
 } // namespace hierarchical
 
