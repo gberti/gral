@@ -150,18 +150,33 @@ struct algebraic_primitives_for_dim
   : public dimension_dependent_primitives_3d {};
   */
 
+#include "Geometry/primitives2d.h"
+#include "Geometry/primitives3d.h"
 
-template<class POINT>
+
+template<class POINT, class DIM_TAG = tag_unknown_dim>
 struct dimension_dependent_primitives 
   : public basic_algebraic_primitives<POINT>  {};
 
+template<class POINT>
+struct dimension_dependent_primitives<POINT, tag2D>
+  : public dimension_dependent_primitives_2d<POINT>  {};
+
+template<class POINT>
+struct dimension_dependent_primitives<POINT, tag3D>
+  : public  dimension_dependent_primitives_3d<POINT>  {};
+
 
 
 template<class POINT>
-struct algebraic_primitives : public dimension_dependent_primitives<POINT> {};
+struct algebraic_primitives 
+  : public dimension_dependent_primitives
+    <
+     POINT,
+     typename  point_traits<POINT>::dimension_tag
+    > 
+{};
 
-#include "Geometry/primitives2d.h"
-#include "Geometry/primitives3d.h"
 
 
 //-------------------------------------------------------------------------
