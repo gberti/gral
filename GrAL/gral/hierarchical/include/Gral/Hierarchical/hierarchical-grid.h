@@ -6,7 +6,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Container/bivector.h"
 #include "Utility/pre-post-conditions.h"
-#include "Utility/const-ptr.h"
+#include "Utility/ref-ptr.h"
 
 /*! \brief Support for hierarchical grids
 
@@ -14,27 +14,37 @@
  */
 namespace hierarchical {
 
-  template<class HGrid> class h_cell;
-  template<class HGrid> class h_cell_child_iterator;
+  template<class HGrid> class h_element_base_t;
+  template<class ELEMENTBASE> class h_vertex_t;
+  template<class ELEMENTBASE> class h_cell_t;
+  template<class HGrid> class h_cell_child_iterator_t;
 
-  /*! \brief Handle type for hierarchical cells.
+  /*! \brief Handle type for hierarchical elements
 
   */
-  template<class HGrid> class h_cell_handle {
-    typedef h_cell_handle<HGrid> self;
+  template<class HGrid, class FlatHandle> class h_element_handle_t {
+    typedef h_element_handle_t<HGrid, FlatHandle>     self;
     typedef HGrid                                     hier_grid_type;
     typedef typename hier_grid_type::level_handle     level_handle;
-    typedef typename hier_grid_type::flat_cell_handle flat_cell_handle;
+    typedef FlatHandle                                flat_element_handle;
 
-    flat_cell_handle h;
-    level_handle     lev;
+    flat_element_handle h;
+    level_handle        lev;
   public:
-    h_cell_handle() {}
-    h_cell_handle(flat_cell_handle hh, level_handle llev) : h(hh), lev(llev) {}
+    h_element_handle_t() {}
+    h_element_handle_t(flat_element_handle hh, level_handle llev) : h(hh), lev(llev) {}
     level_handle     level()       const { return lev;}
-    flat_cell_handle flat_handle() const { return h;}
-    
+    flat_element_handle flat_handle() const { return h;}
+
+    operator flat_element_handle() const { return h;}    
     bool operator==(self const& rhs) const { return h == rhs.h && lev == rhs.lev;}
+    bool operator!=(self const& rhs) const { return (!*this == rhs);}
+
+    /*
+    struct hasher_type : public typename base::hasher_type_elem_base {
+      size_t operator()(h_element_handle_t<HGrid, FlatHandle> h) const { return 
+    }
+    */
   };
 
   /*! \brief Hierarchical Cartesian grid
@@ -52,22 +62,44 @@ namespace hierarchical {
   */
   template<class Grid, class GT = grid_types<Grid> >
   class hgrid_cartesian {
-    typedef hgrid_cartesian<Grid> self;
+    typedef hgrid_cartesian<Grid,GT> self;
   public:
     typedef  Grid  flat_grid_type;
     typedef  Grid  pattern_grid_type;
+    typedef  GT    flatgt;
     typedef  GT    patterngt;
     typedef  int   level_handle;
 
     typedef typename patterngt::index_type pattern_index_type;
 
-    typedef  typename GT::Cell        FlatCell;
-    typedef  typename GT::cell_handle flat_cell_handle;
-    typedef  typename GT::index_type  index_type;
+    typedef  typename flatgt::Cell          FlatCell;  
+    typedef  typename flatgt::Vertex        FlatVertex;  
+    typedef  typename flatgt::cell_handle   flat_cell_handle;
+    typedef  typename flatgt::vertex_handle flat_vertex_handle;
+    typedef  typename flatgt::index_type    index_type;
 
-    typedef h_cell_handle<self>          hier_cell_handle;
-    typedef h_cell<self>                 HierCell;
-    typedef h_cell_child_iterator<self>  CellChildIterator;
+    typedef h_element_base_t<self>                        element_base_type;
+    typedef h_element_handle_t<self, flat_vertex_handle>  hier_vertex_handle;
+    typedef h_element_handle_t<self, flat_cell_handle>    hier_cell_handle;
+    typedef h_cell_t  <element_base_type>                 HierCell;
+    typedef h_vertex_t<element_base_type>                 HierVertex;
+
+    typedef hier_vertex_handle vertex_handle;
+    typedef hier_cell_handle   cell_handle;
+    typedef HierVertex         Vertex;
+    typedef HierCell           Cell;
+
+    typedef h_cell_child_iterator_t<self>  CellChildIterator;
+
+    // export associated templates
+    template<class HG, class FLAT_HANDLE>
+    struct element_handle_template { typedef h_element_handle_t<HG, FLAT_HANDLE> type;};
+    template<class ELEMENT_BASE>
+    struct vertex_template { typedef h_vertex_t<ELEMENT_BASE> type;};
+    template<class ELEMENT_BASE>
+    struct cell_template   { typedef h_cell_t  <ELEMENT_BASE> type;};
+
+
 
     // export type of hierarchical indexed table for dependent classes
     template<class T>
@@ -84,7 +116,7 @@ namespace hierarchical {
     table_type             grids;
   public:
     hgrid_cartesian() {}
-    hgrid_cartesian(flat_grid_type    const& root, // const_ptr<grid_type> root,
+    hgrid_cartesian(flat_grid_type    const& root, // ref_ptr<const grid_type> root,
 		    pattern_grid_type const& pat)
     {
       init(root,pat);
@@ -100,9 +132,9 @@ namespace hierarchical {
      */
     //@{
     //! get the coarsest (root) level
-    level_handle  coarsest_level() const { return level_handle(grids.begin_index());}
+    level_handle  coarsest_level() const { cv(); return level_handle(grids.begin_index());}
     //! get the finest level
-    level_handle  finest_level()   const {  return level_handle(grids.back_index());}
+    level_handle  finest_level()   const { cv(); return level_handle(grids.back_index());}
     /*! \brief get handle of next finer level
       \pre <tt> lev != finest_level() </tt>
     */
@@ -115,13 +147,16 @@ namespace hierarchical {
     size_type     num_of_levels() const { return grids.size();}
     //@}
 
-    pattern_grid_type const& ThePatternGrid() const { return the_pattern;}
+    ref_ptr<pattern_grid_type const> ThePatternGrid() const 
+    {  return ref_ptr<pattern_grid_type const>(the_pattern);}
 
-    flat_grid_type    const& operator()(level_handle lev) const { cv(lev); return grids(lev);}
-    flat_grid_type    const& FlatGrid(level_handle lev) const { cv(lev); return grids(lev);}
+    ref_ptr<flat_grid_type const> operator()(level_handle lev) const { return FlatGrid(lev);}
+    ref_ptr<flat_grid_type const> FlatGrid(level_handle lev) const   
+    { cv(lev); return  ref_ptr<flat_grid_type const>(grids(lev));}
+ 
     bool  empty() const { return num_of_levels()==0;}
-
-    const_ptr<table_type> table() const { return const_ptr<table_type>(grids);}
+    
+    ref_ptr<const table_type> table() const { return ref_ptr<table_type const>(grids);}
 
     /*! \name Modifying operations
      */
@@ -155,88 +190,295 @@ namespace hierarchical {
     /*! 
       \pre <tt> num_of_levels() > 0 </tt>
     */
-    void remove_finest_level() { grids.pop_back();}
+    void remove_finest_level()   { ce(); grids.pop_back();}
     
     /*! 
       \pre <tt> num_of_levels() > 0 </tt>
     */
-    void remove_coarsest_level() { grids.pop_front();}
+    void remove_coarsest_level() { ce(); grids.pop_front();}
     //@}
 
-    bool valid(hier_cell_handle h) const { return valid(h.level()) && FlatGrid(h.level()).valid(h.flat_handle());} 
+    template<class HG, class flat_handle_type>
+    bool valid(h_element_handle_t<HG,flat_handle_type> h) const 
+    { return valid(h.level()) && FlatGrid(h.level())->valid(h.flat_handle());} 
+    bool valid(hier_cell_handle   h) const { return valid(h.level()) && FlatGrid(h.level())->valid(h.flat_handle());} 
     bool valid(level_handle lev)   const { return coarsest_level() <= lev && lev <= finest_level();}
     void cv   (level_handle lev) const { REQUIRE( valid(lev), "lev=" << lev, 1); }
+    bool valid() const { return !empty();}
+    void cv   () const { REQUIRE(valid(), "", 1);}
+    void ce   () const { REQUIRE( (!empty()), "", 1);}
 
     index_type parent_cell_index(index_type ch, level_handle lev) const 
-    { return quotient(ch,  the_pattern.cell_size());}
+    { cv(lev); cv(lev-1); return quotient(ch,  the_pattern.cell_size());}
     HierCell  Parent(HierCell const& ch) const 
     {
+      cv(ch.level()); 
       level_handle pl = next_coarser_level(ch.level());
-      return HierCell(*this,FlatCell(FlatGrid(pl), parent_cell_index(ch.Flat().index(), ch.level())), pl); 
+      return HierCell(*this,FlatCell(* FlatGrid(pl), parent_cell_index(ch.Flat().index(), ch.level())), pl); 
     }
 
     index_type child_cell_index(index_type parent, pattern_index_type loc_ch, level_handle parent_lev) const
-    { return product(parent, the_pattern.cell_size()) + loc_ch; }
+    { cv(parent_lev); return product(parent, the_pattern.cell_size()) + loc_ch; }
+
     HierCell Child(HierCell const& p, pattern_index_type loc) const 
     { 
       level_handle chl = next_finer_level(p.level());
-      return HierCell(*this, FlatCell(FlatGrid(chl), child_cell_index(p.Flat().index(), loc, chl)), chl);
+      return HierCell(*this, FlatCell(* FlatGrid(chl), child_cell_index(p.Flat().index(), loc, chl)), chl);
+    }
+
+    template<class HVERTEX>
+    HVERTEX CoarsestParent(HVERTEX const& v) const
+    { 
+      return HVERTEX(v.TheGrid(),coarsest_parent(v));
+    } 
+
+    template<class HVERTEX>
+    //std::pair<flat_vertex_handle, level_handle> 
+    typename HVERTEX::vertex_handle
+    coarsest_parent(HVERTEX const& v) const {
+      index_type pat0  = the_pattern.cell_size(); //vertex_size();
+      index_type pat   = pat0;
+      index_type vidx = v.Flat().index();
+      int level_diff = 0;
+      while(v.level() - level_diff > coarsest_level() && does_divide(pat, vidx)) {
+	++level_diff;
+	pat = product(pat, pat0);
+      }
+      pat = quotient(pat, pat0); // pat = pat0^level_diff
+ 
+      level_handle  newlev = v.level() - level_diff;
+      return  typename HVERTEX::vertex_handle(FlatGrid(newlev)->get_vertex_handle(quotient(vidx,pat)), newlev); 
     }
 
     // hier_cell_handle parent(HierCell const& c) const { return quotient(c.Flat().index(), the_pattern.size());}
     // hier_cell_handle child(HCell const& c, pattern_cell_handle h) const;
-  }; // class hgrid<Grid>
+  }; // class hgrid_cartesian<Grid>
 
 
 
   //-------------------- Grid Elements and Iterators ------------------------
 
+  /*! \brief Base type to parameterize element and iterator types on \c HGrid
 
+      \author Guntram Berti
+
+      \templateparams
+      - \c HGrid is a hierarchical grid type.
+         Model: hgrid_cartesian<GRID, GT>
+
+      For using the element types like \c h_vertex_t<>, \c h_cell_t<> for other
+      hierarchical structures, we must provide an adaptation of this class,
+      see e.g. 
+      \c octree::oct_element_base_t or 
+      \c octree::nc_leaf_grid_element_base_t.
+   */
   template<class HGrid>
-  class h_cell {
-    typedef h_cell<HGrid> self;
-    typedef HGrid    hier_grid_type;
-    typedef typename HGrid::level_handle level_handle;
-    typedef typename HGrid::FlatCell FlatCell;
-    typedef typename HGrid::HierCell HierCell;
-
-    typedef FlatCell                          flat_element_type;
-    typedef typename HGrid::hier_cell_handle  hier_cell_handle;
-    typedef typename HGrid::CellChildIterator ChildIterator;
-
-    hier_grid_type const* g;
-    hier_cell_handle      h;
+  class h_element_base_t {
   public:
-    h_cell(hier_grid_type const& gg, hier_cell_handle hh) : g(&gg), h(hh) {}
-    h_cell(hier_grid_type const& gg, FlatCell f, level_handle lev) : g(&gg), h(f.handle(), lev) {}
+    // types related to hierarchical grid type
+    typedef HGrid                        hier_grid_type;
+    typedef HGrid                        hgt; // hierarchical grid types
 
-    FlatCell Flat() const { return FlatCell(g->FlatGrid(level()), h.flat_handle());}
-    operator FlatCell() const { return Flat();}
+    // types related to the 'current' grid type (which is the hierarchical grid)
+    // This (and all types derived from gt) will be the main difference when
+    // implementing adaptations of this class to other hierarchical grid classes
+    // building on hgrid<>. 
+    typedef hgt                          gt; //  grid types
+    typedef HGrid                        grid_type;
 
-    level_handle level() const { return h.level();}
-    HierCell Parent    () { return g->Parent(*this);}
-    HierCell ParentCell() { return g->Parent(*this);}
+    typedef typename gt::Cell           Cell;
+    typedef typename gt::Vertex         Vertex;
+    typedef typename gt::cell_handle    cell_handle;
+    typedef typename gt::vertex_handle  vertex_handle;
+    typedef typename gt::level_handle   level_handle;
 
-    hier_grid_type const& TheHGrid() const { return *g;}
-    bool operator==(self const& rhs) const { return h == rhs.h;}
+    // types related to the underlying flat grid
+    typedef typename hgt::flatgt         flatgt;
+    typedef typename hgt::flat_grid_type flat_grid_type;
+  private:
+    ref_ptr<const grid_type> hg;
+    level_handle             lev;
+  public:
+    h_element_base_t() {}
+    h_element_base_t(grid_type const* hgg, level_handle l = hgg->finest_level())
+      : hg(hgg), lev(l)  {}
+    h_element_base_t(ref_ptr<const grid_type> hgg, level_handle l = hgg->finest_level())
+      : hg(hgg), lev(l)  {}
+
+  protected:
+    void set(level_handle l) { lev = l;}
+  public:
+    bool bound() const { return hg != 0;}
+    void cb()    const { REQUIRE(bound(), "", 1); }
+    level_handle level() const { return lev;}
+
+    ref_ptr<const hier_grid_type> TheHierGrid() const { return hg;}
+    ref_ptr<const flat_grid_type> TheFlatGrid() const { return hg->FlatGrid(lev);}
+    // ref_ptr<const grid_type>      TheGrid() const { return TheHierGrid();}
+    const grid_type&              TheGrid() const { return *TheHierGrid();}
+
+    // transparent access to different grid types via their types
+    // we cannot specialize member function templates of a non-specialized template class,
+    // so we must use the tp<> hack.
+    ref_ptr<const hier_grid_type> Grid(tp<hier_grid_type>) const { return TheHierGrid();}
+    ref_ptr<const flat_grid_type> Grid(tp<flat_grid_type>) const { return TheFlatGrid();}
+  };
+
+  /*! \brief A family of vertex types, to be used with hierarchical grids and 'derivative work'.
+
+      \author Guntram Berti
+
+      'Derivative work' may be octrees which use hierarchical grids.
+
+      \templateparams
+      - \c ELEMENTBASE
+         defines the types needed by elements, introducing grid type specific
+         information.
+         Example: \c  h_element_base_t<> 
+   */
+  template<class ELEMENTBASE>
+  class h_vertex_t : public ELEMENTBASE {
+    typedef h_vertex_t<ELEMENTBASE> self;
+    typedef ELEMENTBASE             base;
+
+  public:
+    typedef typename base::gt              gt;
+    typedef typename base::grid_type       grid_type;
+    typedef typename base::level_handle    level_handle;
+    typedef typename gt::Vertex            Vertex;
+    typedef typename gt::vertex_handle     vertex_handle;
+
+    typedef typename base::flatgt          flatgt;
+    typedef typename flatgt::vertex_handle flat_vertex_handle;
+    typedef typename flatgt::Vertex        FlatVertex;
+
+    typedef FlatVertex                     flat_element_type;
+  private:
+    flat_vertex_handle       h;
+  public:
+    h_vertex_t() {}
+    h_vertex_t(grid_type const& gg, vertex_handle hh) : base(&gg, hh.level()), h(hh.flat_handle()) {}
+    h_vertex_t(grid_type const& gg, FlatVertex         f, level_handle lev) : base(&gg,lev), h(f.handle()) {}
+    h_vertex_t(grid_type const& gg, flat_vertex_handle f, level_handle lev) : base(&gg,lev), h(f) {}
+    h_vertex_t(ref_ptr<grid_type const> gg, vertex_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
+    h_vertex_t(ref_ptr<grid_type const> gg, FlatVertex         f, level_handle lev) : base(gg,lev), h(f.handle()) {}
+    h_vertex_t(ref_ptr<grid_type const> gg, flat_vertex_handle f, level_handle lev) : base(gg,lev), h(f) {}
+
+    // construct from 'sibling' using another ELEMBASE type.
+    // Can only upcast: ELEMBASE must know about EBASE2
+    template<class EBASE2>
+    h_vertex_t(h_vertex_t<EBASE2> const& s) : base(s.Grid(tp<grid_type>()), s.level()), h(s.flat_handle()) {}
+
+    // can only 'downcast' :ELEMBASE must know about EBASE2
+    template<class EBASE2>
+    h_vertex_t<EBASE2> to() const { cv(); return h_vertex_t<EBASE2>(Grid(tp<typename EBASE2::grid_type>()), level(), h);}
+
+  protected:
+    void set(vertex_handle newh) { set(newh.flat_handle(), newh.level());}
+    void set(flat_vertex_handle newfh, level_handle newlev) { base::set(newlev); h = newfh;}
+  public:
+    vertex_handle handle() const { cv(); return vertex_handle(h,level());}
+
+    flat_vertex_handle flat_handle() const { cv(); return h;}
+    FlatVertex Flat() const { cv(); return FlatVertex(* TheFlatGrid(),h);}
+    operator FlatVertex() const { return Flat();}
+
+    // level_handle natural_level() const { return TheHierGrid()->natural_level(*this);}
+
+    // HierVertex Parent () { return TheHierGrid()->Parent(*this);}
+    // unsigned dim_of_parent() const { return TheHierGrid()->dim_of_parent(*this);}
+    // HierCell   ParentCell() { return g->Parent(*this);}
+    // ParentCellIterator   FirstParentCell() { return g->Parent(*this);}
+
+    friend bool operator==(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h == rhs.h;}
+    friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h != rhs.h;}
    
+    // inline ChildIterator FirstChild() const;
+    // inline ChildIterator EndChild  () const;
+
+    // checking functions
+    bool valid() const { return bound() && TheHierGrid()->valid(vertex_handle(h,level()));}
+    void cv() const { REQUIRE(valid(), "", 1);}
+    
+  }; // class h_vertex_t<HGrid>
+
+
+  /*! \brief A family of cell types, to be used with hierarchical grids and 'derivative work'.
+      \author Guntram Berti
+
+      'Derivative work' may be octrees which use hierarchical grids.
+
+      \templateparams
+      - \c ELEMENTBASE
+         defines the types needed by elements, introducing grid type specific
+         information.
+         Example: \c  h_element_base_t<> 
+   */
+  template<class ELEMENTBASE>
+  class h_cell_t : public ELEMENTBASE {
+    typedef h_cell_t<ELEMENTBASE> self;
+    typedef ELEMENTBASE           base;
+    typedef typename base::gt              gt;
+    typedef typename base::grid_type       grid_type;
+    typedef typename base::level_handle    level_handle;
+    typedef typename gt::Cell              Cell;
+    typedef typename gt::cell_handle       cell_handle;
+
+    typedef typename base::flatgt          flatgt;
+    typedef typename flatgt::cell_handle   flat_cell_handle;
+    typedef typename flatgt::Cell          FlatCell;
+    typedef FlatCell                          flat_element_type;
+
+    typedef typename gt::CellChildIterator ChildIterator;
+
+    flat_cell_handle         h;
+  public:
+    h_cell_t() {}
+    h_cell_t(grid_type const& gg, cell_handle hh) : base(&gg, hh.level()), h(hh.flat_handle()) {}
+    h_cell_t(grid_type const& gg, FlatCell         f, level_handle lev) : base(&gg,lev), h(f.handle()) {}
+    h_cell_t(grid_type const& gg, flat_cell_handle f, level_handle lev) : base(&gg,lev), h(f) {}
+    h_cell_t(ref_ptr<grid_type const> gg, cell_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
+    h_cell_t(ref_ptr<grid_type const> gg, FlatCell         f, level_handle lev) : base(gg,lev), h(f.handle()) {}
+    h_cell_t(ref_ptr<grid_type const> gg, flat_cell_handle f, level_handle lev) : base(gg,lev), h(f) {}
+ 
+    // construct from 'sibling' using another ELEMBASE type
+    // Can only 'upcast':  EBASE2 must 'know' about ELEMENTBASE
+    template<class EBASE2>
+    h_cell_t(h_cell_t<EBASE2> const& s) : base(s.Grid(tp<grid_type>()), s.level()), h(s.flat_handle()) {}
+
+    // can only 'downcast' :ELEMBASE must know about EBASE2
+    template<class EBASE2>
+    h_cell_t<EBASE2> to() const { cv(); return h_cell_t<EBASE2>(Grid(tp<typename EBASE2::grid_type>()), level(), h);}
+
+    cell_handle handle() const { cv(); return cell_handle(h,level());}
+
+    flat_cell_handle flat_handle() const { cv();  return h;}
+    FlatCell Flat() const { cv(); return FlatCell(* TheFlatGrid(), flat_handle());}
+    operator FlatCell() const { cv(); return Flat();}
+
+    // Does not work for conforming leaf grids, but these should pobably not use this class anyhow.
+    size_t NumOfVertices() const { return Flat().NumOfVertices();}
+    // will this work with ELEMENTBASE other than h_element_base_t<> ?
+    Cell Parent    () { cv(); return Cell(TheHierGrid()->Parent(*this));}
+    Cell ParentCell() { cv(); return Cell(TheHierGrid()->Parent(*this));}
+
+    friend bool operator==(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h == rhs.h;}
+    friend bool operator!=(self const& lhs, self const& rhs) { lhs.cv(); rhs.cv(); return lhs.h != rhs.h;}
+
     inline ChildIterator FirstChild() const;
     inline ChildIterator EndChild  () const;
 
     // checking functions
-    bool bound() const { return g != 0;}
-    bool valid() const { return bound() && TheHGrid().valid(h);}
-    void cb() const { REQUIRE(bound(), "", 1);}
+    bool valid() const { return bound() && TheHierGrid()->valid(cell_handle(h, level()));}
     void cv() const { REQUIRE(valid(), "", 1);}
-    
-  }; // class h_cell<HGrid>
+  }; // class h_cell_t<ELEMENTBASE>
 
 
 
 
   template<class HGrid>
-  class h_cell_child_iterator {
-    typedef h_cell_child_iterator<HGrid> self;
+  class h_cell_child_iterator_t {
+    typedef h_cell_child_iterator_t<HGrid> self;
   public:
     typedef HGrid    hier_grid_type;
     typedef typename HGrid::level_handle level_handle;
@@ -249,19 +491,20 @@ namespace hierarchical {
     HierCell             p;  // parent
     PatternCellIterator  ch; // current child
   public:
-    h_cell_child_iterator(HierCell pp) : p(pp), ch(TheHGrid().ThePatternGrid().FirstCell()) {}
-    h_cell_child_iterator(HierCell pp, PatternCellIterator cch) : p(pp), ch(cch) {}
+    h_cell_child_iterator_t() {}
+    h_cell_child_iterator_t(HierCell pp) : p(pp), ch(TheHierGrid()->ThePatternGrid()->FirstCell()) {}
+    h_cell_child_iterator_t(HierCell pp, PatternCellIterator cch) : p(pp), ch(cch) {}
 
-    HierCell operator*()         const { cv(); return TheHGrid().Child(Parent(),(*ch).index());}
+    HierCell operator*()         const { cv(); return TheHierGrid()->Child(Parent(),(*ch).index());}
     self& operator++() { cv(); ++ch; return *this;}
     //    hier_cell_handle handle() const { return TheHGrid().child_cell(ch,p);}
     bool IsDone() { cb(); return ch.IsDone();}
 
-    level_handle  level() const { return TheHGrid().next_finer_level(p.level());}
+    level_handle  level() const { return TheHierGrid()->next_finer_level(p.level());}
     FlatCell Flat() const { cv(); return operator*().Flat();} 
 
     HierCell const& Parent() const { cb(); return p;}
-    hier_grid_type const& TheHGrid() const { cb(); return p.TheHGrid();}
+    ref_ptr<const hier_grid_type>  TheHierGrid() const { cb(); return p.TheHierGrid();}
 
     // checking functions
     bool bound() const { return p.bound();}
@@ -269,23 +512,67 @@ namespace hierarchical {
     void cb() const { REQUIRE(bound(), "", 1);}
     void cv() const { REQUIRE(valid(), "", 1);}
 
-    bool operator==(self const& rhs) const { return ch == rhs.ch;}
+    friend bool operator==(self const& lhs, self const& rhs)  { lhs.cb(); rhs.cb(); return lhs.ch == rhs.ch;}
+    friend bool operator!=(self const& lhs, self const& rhs)  { lhs.cb(); rhs.cb(); return lhs.ch != rhs.ch;}
 
-  }; // class h_cell_child_iterator<HGrid>
+  }; // class h_cell_child_iterator_t<HGrid>
+
+
+
+  template<class ELEMBASE> 
+  class h_vertex_on_cell_iterator_t : public ELEMBASE {
+    typedef  h_vertex_on_cell_iterator_t<ELEMBASE> self;
+    typedef  ELEMBASE                              base;
+  public:
+    typedef typename base::grid_type     grid_type;
+    typedef typename base::gt            gt;
+    typedef typename gt::Vertex          Vertex;
+    typedef typename gt::Cell            Cell;
+    typedef typename gt::vertex_handle   vertex_handle;
+
+    typedef Cell                         anchor_type;
+    typedef Vertex                       value_type;
+    typedef Vertex                       element_type;
+
+    typedef typename gt::flatgt                   flatgt;
+    typedef typename flatgt::VertexOnCellIterator flat_vertex_on_cell_iterator;
+
+
+    h_vertex_on_cell_iterator_t() {}
+    explicit h_vertex_on_cell_iterator_t(Cell const& cc)
+      : base(cc),  vc(cc.Flat().FirstVertex()) {}
+
+    self&   operator++()       { cv(); ++vc; return  (*this);}
+    Vertex  operator*()  const { cv(); return Vertex(TheGrid(), handle());}
+    bool    IsDone()     const { cb(); return vc.IsDone();}
+  
+    vertex_handle   handle() const { cv(); return vertex_handle(vc.handle(), level()); }
+  
+    temporary<Cell> TheCell()     const { cb(); return temporary<Cell>(Cell(TheGrid(), vc.TheCell(), level())) ;}
+    temporary<Cell> TheAnchor()   const { cb(); return TheCell(); }
+  
+    friend bool operator==(self const& lhs, self const& rhs) { lhs.cb(); rhs.cb(); return lhs.vc == rhs.vc;}
+    friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
+  
+    bool valid() const { return bound() && vc.valid();}
+    void cv()    const { REQUIRE(valid(), "", 1);}
+  private:
+    flat_vertex_on_cell_iterator  vc;
+  };
 
 
 
   //------------- inline functions -----------------
   
   template<class HGrid>
-  inline  typename h_cell<HGrid>::ChildIterator
-  h_cell<HGrid>::FirstChild() const 
-  { return ChildIterator(*this, TheHGrid().ThePatternGrid().FirstCell());}
+  inline  typename h_cell_t<HGrid>::ChildIterator
+  h_cell_t<HGrid>::FirstChild() const 
+  { return ChildIterator(*this, TheHierGrid()->ThePatternGrid()->FirstCell());}
 
   template<class HGrid>
-  inline  typename h_cell<HGrid>::ChildIterator
-  h_cell<HGrid>::EndChild() const 
-  { return ChildIterator(*this, TheHGrid().ThePatternGrid().EndCell());}
+  inline  typename h_cell_t<HGrid>::ChildIterator
+  h_cell_t<HGrid>::EndChild() const 
+  { return ChildIterator(*this, TheHierGrid()->ThePatternGrid()->EndCell());}
 
 } // namespace hierarchical
 
