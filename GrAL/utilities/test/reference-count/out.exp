@@ -1,0 +1,170 @@
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2
+*p = 1  *q = 1  *r = 1
+*p = 1  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 1
+*p = 3  *q = 2  *r = 3
+*p = 3  *q = 2  *r = 4
+-> pA1->do_mut() 
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+-> pA3 = pA1 
+-> pA2->do_const()
+-> pA3 = pA2 
+-> pA2->do_const()
+D::clone() called , i = 1
+D::D(D const&) called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 1
+D::~D() called, i = 2

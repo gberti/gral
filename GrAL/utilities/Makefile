@@ -17,6 +17,9 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
+test:
+	(cd test; $(MAKE) $(TARGET))
+
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Utility

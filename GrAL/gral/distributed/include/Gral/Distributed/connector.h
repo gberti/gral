@@ -78,7 +78,7 @@ struct copy_traits<connector_impl> {
  */
 class Connector {
 private:
-   RCIPtr<connector_impl> impl; 
+   copy_on_write_ptr<connector_impl> impl; 
 public: 
    typedef Connector self;
   Connector(connector_impl* im = 0)  :impl(im) {}
