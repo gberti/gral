@@ -184,7 +184,7 @@
  a_grid_type g;
  typedef \link{grid\_types}{grid_types.html}<a_grid_type> gt;
  // ....
- \link{grid\_function}{DataAssociationLayer}<\sectionlink{Cell}{GridCell},flux\_type> fluxes(g);
+ \sectionlink{grid\_function}{DataAssociationLayer}<\sectionlink{Cell}{GridCell},flux\_type> fluxes(g);
  for(gt::\sectionlink{CellIterator}{GridVertexIterator} c = g.FirstCell(); ! c.IsDone(); ++c) \{
    fluxes[*c]= flux\_type(0.0);
    for(gt::\sectionlink{FacetOnCellIterator}{VertexOnCellIterator} f = (*c).FirstFacet(); ! f.IsDone(); ++f)
