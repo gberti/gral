@@ -79,6 +79,10 @@ template<class T>
 class tuple<T,3> : public tuple_base<T,3> {
   typedef tuple_base<T,3> base;
  public:
+  // should not be necessary ... but problems with gcc 2.96
+  typedef typename base::iterator       iterator;
+  typedef typename base::const_iterator const_iterator;
+
   tuple() {}
   tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
