@@ -20,8 +20,8 @@ namespace hierarchical {
 
   */
   template<class HGRID, class FLATGEOM>
-  class hier_geometry : public HGRID::observer_type {
-    typedef typename HGRID::observer_type base;
+  class hier_geometry : public hier_grid_table<HGRID, FLATGEOM> {
+    typedef hier_grid_table<HGRID, FLATGEOM> base;
     typedef typename base::notifier_base  notifier_base;
     typedef typename base::notifier_type  notifier_type;
   public:
@@ -33,57 +33,42 @@ namespace hierarchical {
     typedef FLATGEOM                                flat_geometry_type;
     typedef typename flat_geometry_type::coord_type coord_type;
 
-    typedef hier_grid_table<hier_grid_type, flat_geometry_type>  table_type;
-    typedef typename table_type::reference         reference;
-    typedef typename table_type::const_reference   const_reference;
+    typedef typename base::reference         reference;
+    typedef typename base::const_reference   const_reference;
 
     template<class ELEMBASE>
     struct vertex_template { typedef typename hier_grid_type::template vertex_template<ELEMBASE>::type type;};
   private:
-    table_type geoms;
- 
+    ref_ptr<flat_geometry_type const> root_geom;
   public:
     hier_geometry();
-    hier_geometry(hier_grid_type const& gg);
+    hier_geometry(        hier_grid_type const& gg);
     hier_geometry(ref_ptr<hier_grid_type const> gg);
+    hier_geometry(        hier_grid_type const& gg,         flat_geometry_type const& root_geo);
+    hier_geometry(ref_ptr<hier_grid_type const> gg, ref_ptr<flat_geometry_type const> root_geo);
 
-    void set_grid  (hier_grid_type const& gg);
+
+    void set_grid  (        hier_grid_type const& gg);
     void set_grid  (ref_ptr<hier_grid_type const> gg);
+    //void set_grid  (        hier_grid_type const& gg,         flat_geometry_type const& root_geo);
+    //void set_grid  (ref_ptr<hier_grid_type const> gg, ref_ptr<flat_geometry_type const> root_geo);
+
     void clear();
 
     //! get in sync with grid: add/remove missing/superfluous level
     void update();
 
-    reference       operator[](level_handle lev)       { return geoms[lev];}
-    const_reference operator()(level_handle lev) const { return geoms(lev);}
+    reference       Geom(level_handle lev)       { return base::operator[](lev);}
+    const_reference Geom(level_handle lev) const { return base::operator()(lev);}
 
-    // template<class ELEMBASE>
-    //    coord_type  coord(typename vertex_template<ELEMBASE>::type const& v) const 
-      // coord_type  coord(typename hier_grid_type::vertex_template<ELEMBASE>::type const& v) const 
-      // coord_type  coord(h_vertex_t<ELEMBASE> const& v) const 
     template<class V>
     coord_type coord(V const& v) const
-    { return geoms(v.level()).coord(v.Flat());}
-
-
-    //! get the coarsest (root) level
-    level_handle  coarsest_level() const { return geoms.coarsest_level();}
-    //! get the finest level
-    level_handle  finest_level()   const { return geoms.finest_level();}
-
-    ref_ptr<const hier_grid_type> TheGrid() const { return geoms.TheGrid();}
-
-
-    virtual void notifier_assigned  (notifier_base const* n);
-    virtual void hgrid_level_added  (notifier_type const* n, level_handle added);
-    virtual void hgrid_level_removed(notifier_type const* n, level_handle removed);
+    { return Geom(v.level()).coord(v.Flat());}
 
   private:
     //    void init(hier_grid_type const& gg);
   public:
-    // could deduce coordinates by restriction from children
     level_handle add_coarser_level();
-    // could calculate coordinates from pattern
     level_handle add_finer_level();
     void         remove_coarsest_level();
     void         remove_finest_level();
