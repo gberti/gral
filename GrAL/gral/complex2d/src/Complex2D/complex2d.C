@@ -14,13 +14,17 @@
 // in the special case of vectors of integers, this could be done
 // more efficiently by just copying the vectors.
 Complex2D::Complex2D(const Complex2D& rhs)
-{ Construct(*this,rhs,stored_geometry_complex2D(rhs)); }
+{ 
+  stored_geometry_complex2D dummy(*this);
+  ConstructGrid(*this,dummy,
+                rhs,stored_geometry_complex2D(rhs)); }
 
 Complex2D& Complex2D::operator=(const Complex2D& rhs)
 { 
   if(this != &rhs) {
     clear();
-    Construct(*this,rhs,stored_geometry_complex2D(rhs)); 
+    stored_geometry_complex2D dummy(*this);
+    ConstructGrid(*this,dummy, rhs,stored_geometry_complex2D(rhs)); 
   }
   return (*this);
 }
