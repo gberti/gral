@@ -22,7 +22,7 @@ namespace GrAL {  namespace sequence {
    */
   template<class INT> class integer_range {
     typedef interval<INT> interval_type;
-    std::vector<interval<int> > intervals;
+    std::vector<interval_type> intervals;
   public:
     //! Construct empty range
     integer_range() {}
@@ -38,7 +38,7 @@ namespace GrAL {  namespace sequence {
     void clear()       { intervals.clear();}
 
     //! STL-compliant iterator
-    typedef std::vector<interval<int> >::const_iterator const_iterator;
+    typedef std::vector<interval_type>::const_iterator const_iterator;
     //! First interval
     const_iterator begin() const { return intervals.begin();}
     //! Past-the-end interval
@@ -53,7 +53,9 @@ namespace GrAL {  namespace sequence {
     }
     void read(std::istream& in);
   private:
+    // returns false if read not successful
     bool read_interval(std::istream& in, interval_type& iv, bool& end);
+    // returns false if read not successful
     bool read_number  (std::istream& in, INT & i);
     //  void compactify() { /* sort and join overlapping intervals */ }
   };
