@@ -271,7 +271,7 @@ public:
   virtual self* clone() const { return new self(*this);}
 
   virtual coord_type eval(const coord_type& x) const 
-   { return coord_type(ap::norm2(x)); }
+   { return coord_type(ap::squared_norm_2(x)); }
 
   virtual std::string name() const {return "function_algebra_norm2";}
 };
