@@ -22,6 +22,13 @@
 #define STDEXT  std
 #define STDHASH my_hash_intel
 
+
+#elif defined SXCPP
+// SXCPP uses Dinkumware
+#include "Container/sx-hash.h"
+#define STDEXT  my_hash_sx
+#define STDHASH my_hash_sx
+
 #elif defined __GNUC__ && __GNUC__ >= 3 && __GNUC_MINOR__>= 1
 // use SGI-like hash_map
 #include <ext/hash_map>
