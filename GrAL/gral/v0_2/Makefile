@@ -4,6 +4,14 @@ SUBDIRS= configuration utilities external-control sequence geometry \
          gral
 
 
+new:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new ALLROOT=$(ALLROOT) DEVELOP=develop CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
+
 clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
@@ -27,12 +35,6 @@ all:
         $(MAKE) all ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-new:
-	@set -e; \
-        (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) new ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
-        echo "LEAVING  directory" $$i;cd ..; done)
 
 install:
 	@set -e; \
@@ -46,7 +48,7 @@ test:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) test ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        $(MAKE) test ALLROOT=$(ALLROOT) TARGET=new DEVELOP=user CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 check:
