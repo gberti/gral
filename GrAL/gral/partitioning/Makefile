@@ -34,11 +34,14 @@ install: install-headers  install-libs
 
 clean: stdclean
 	find . -name "*~" -exec rm {} \; -print
+	(cd src;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
+	(cd test; $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 
 realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen/
-
+	(cd src;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
+	(cd test; $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
 
 
 # depth + 1

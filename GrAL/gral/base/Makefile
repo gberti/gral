@@ -38,6 +38,8 @@ install: install-headers install-libs
 
 clean: stdclean
 	(cd doc;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
+	(cd src;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
+	(cd test; $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
 	rm -f doxy.tags doxy.log
 
@@ -46,7 +48,9 @@ tarclean: clean
 
 realclean: tarclean
 	rm -rf doxygen/
-	(cd doc; $(MAKE) realclean)
+	(cd doc;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
+	(cd src;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
+	(cd test; $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
 
 
 
