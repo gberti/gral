@@ -37,7 +37,7 @@ void test_hier_grid(GRID const& root,
   for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev)) {
     out << "Level " << lev << ": " << H.FlatGrid(lev)->cell_size() << " cells" << std::endl;
     for(typename cgt::CellIterator c = H.FlatGrid(lev)->FirstCell(); !c.IsDone(); ++c) {
-      typename hgt::cart_subrange_type R = H.descendants(hier_cell_type(H,*c,lev), H.finest_level());
+      typename hgt::cart_subrange_type R = * H.descendants(hier_cell_type(H,*c,lev), H.finest_level());
       out << "Descendant of cell " << (*c).index() << ": " 
 	  << R.NumOfCells()    << " cells: "    << "[" << R.low_cell_index()   << "," << R.high_cell_index()   << "]"
 	  << "  "
@@ -51,7 +51,7 @@ void test_hier_grid(GRID const& root,
     }
     for(typename cgt::FacetIterator f = H.FlatGrid(lev)->FirstFacet(); !f.IsDone(); ++f) {
       hier_facet1_type hf(H,*f,lev);
-      typename hgt::cart_subrange_type R = H.descendants(hf, H.finest_level());
+      typename hgt::cart_subrange_type R = * H.descendants(hf, H.finest_level());
       
       out << "All descendants of facet " << (*f).index() << ": " 
 	  << R.NumOfFacets()    << " facets: "    << "[" << R.low_cell_index()   << "," << R.high_cell_index()   << "]"
@@ -60,7 +60,7 @@ void test_hier_grid(GRID const& root,
 	  << std::endl;
       if(lev < H.finest_level()) {
 	out << "Children of facet " << (*f).index() << ": " << std::flush;
-	typename hgt::cart_subrange_type Ch = H.children(hf);
+	typename hgt::cart_subrange_type Ch = * H.children(hf);
 	out << Ch.NumOfFacets()    << " facets: "    << "[" << Ch.low_cell_index()   << "," << Ch.high_cell_index()   << "]"
 	    << "  " << std::flush
 	    << Ch.NumOfVertices() << " vertices: " << "[" << Ch.low_vertex_index() << "," << Ch.high_vertex_index() << "]"
@@ -88,7 +88,7 @@ void test_hier_grid(GRID const& root,
 
     for(HierVertexOnCellIterator vc(h); !vc.IsDone(); ++vc) {
       hier_vertex_type v = *vc;
-      hier_cell_type   c = vc.TheAnchor();
+      hier_cell_type   c = *vc.TheAnchor();
       REQUIRE_ALWAYS(c == h, "", 1);
     }
   }
