@@ -4,6 +4,7 @@ CCC      = /SX/opt/sxc++/inst/bin/sxc++
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += -DGRAL_HAS_SSTREAM
 CCFLAGS += -DSXCPP
+CCFLAGS += -DGRAL_NO__FUNCTION__
 
 CCFLAGS += -wall 
 CCFLAGS += -woff=186  # 
