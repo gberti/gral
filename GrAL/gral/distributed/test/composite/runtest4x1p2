@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 
 out=out4x1p2
 rm -f grid.complex2d grid.part $out

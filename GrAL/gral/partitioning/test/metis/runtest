@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 ./test-metis 2> out
 /bin/echo "\n"
 for i in grid.complex2d.2

@@ -1,4 +1,4 @@
-#!/bin/bash
+#!/bin/sh
 ./test-construct 2>&1 | sed -e '/nan/s//NaN/g' > out.out
 /bin/echo "\n"
 for i in out.out case*.grid.out 
