@@ -31,10 +31,10 @@ partial-clean: makefile
 	(cd $(OBJDIR); $(MAKE) clean DEPS="")
 
 
-clean: stdclean makefile
+clean: stdclean 
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
 	rm -f .depend *.oogl *.out 
-	(cd $(OBJDIR); $(MAKE) clean DEPS="")
+	rm -rf $(OBJDIR)
 	rm -rf tempinc/*.o
 

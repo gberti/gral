@@ -13,6 +13,7 @@ new: partial-clean all
 
 # use generic makefile for building objects
 makefile:
+	mkdir -p $(OBJDIR)
 	cp $(CONFIGURATION)/defs/Makefile.objects $(OBJDIR)/Makefile 
 
 all: compile lib
@@ -30,10 +31,10 @@ partial-clean: makefile
 	(cd $(OBJDIR); $(MAKE) clean DEPS="")
 
 
-clean: stdclean makefile
+clean: stdclean 
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
 	rm -f .depend *.oogl *.out 
-	(cd $(OBJDIR); $(MAKE) clean DEPS="")
+	rm -rf  $(OBJDIR)
 	rm -rf tempinc/*.o
 
