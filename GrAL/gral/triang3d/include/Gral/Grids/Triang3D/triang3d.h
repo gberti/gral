@@ -234,6 +234,7 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs) { return lhs.handle() == rhs.handle();}
   friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
+  friend bool operator< (self const& lhs, self const& rhs) { return lhs.handle() <  rhs.handle();}
 };
 
 
@@ -270,6 +271,7 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs) { return lhs.v == rhs.v;}
   friend bool operator!=(self const& lhs, self const& rhs) { return lhs.v != rhs.v;}
+  friend bool operator< (self const& lhs, self const& rhs) { return lhs.v <  rhs.v;}
 };
 
 
@@ -309,7 +311,7 @@ public:
 };
 
 
-
+template<>
 struct grid_types<Triang3D> : public grid_types_base<grid_types_Triang3D>
 {
 
