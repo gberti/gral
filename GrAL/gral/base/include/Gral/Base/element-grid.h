@@ -133,9 +133,9 @@ struct grid_types_element_sides_range<E, 2> : public grid_types_element_sides_ra
 {
 private:
   typedef grid_types_element_sides_range<E, 1>  base;
+public: 
   typedef typename base::gt   gt;
   typedef typename base::etag etag;
-public: 
   typedef typename gt::incidence_iterator<edge_type_tag,etag>::type      EdgeIterator;
   typedef typename gt::Edge                                              Edge;
   typedef typename gt::edge_handle                                       edge_handle;
@@ -149,9 +149,10 @@ template<class E>
 class element_sides_range<E,2> : public element_sides_range<E,1>, public grid_types_element_sides_range<E, 2> {
   typedef element_sides_range<E,1>    base;
   typedef grid_types_element_sides_range<E, 2> gts;
+public:
   typedef typename base::element_type element_type;
   typedef typename base::etag         etag;
-public:
+
   element_sides_range() {}
   element_sides_range(element_type const& e) : base(e) {}
 
@@ -180,11 +181,11 @@ public:
 // sides of an element of dimension 3
 template<class E>
 class element_sides_range<E,3> : public element_sides_range<E,2>, public grid_types_element_sides_range<E, 3> {
-  typedef element_sides_range<E,2>    base;
+  typedef element_sides_range<E,2>             base;
   typedef grid_types_element_sides_range<E, 3> gts;
+public:
   typedef typename base::element_type element_type;
   typedef typename base::etag         etag;
-public:
   element_sides_range() {}
   element_sides_range(element_type const& e) : base(e) {}
 
