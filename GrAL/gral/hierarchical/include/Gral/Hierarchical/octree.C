@@ -93,6 +93,15 @@ namespace octree {
     }
   }
 
+
+  template<class Grid, class GT>
+  void Octree<Grid, GT>::add_finer_level() 
+  {
+    REQUIRE_ALWAYS( ! empty(), "", 1);
+    levels.add_finer_level();
+    active_range[levels.finest_level()].set_default(false);
+  }
+
   template<class Grid, class GT>
   typename Octree<Grid,GT>::oct_cell_type
   Octree<Grid,GT>::leaf_ancestor(typename Octree<Grid,GT>::oct_cell_type subLeaf) const
