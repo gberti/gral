@@ -132,8 +132,8 @@ public:
   {
     if(obj.space_dimension() == 2) {
       // make the segment an infinitesimal rectangle
-      dirs[1].push_back(dir_sequence(1, obj(1)-obj(0)));
-      dirs[1].push_back(dir_sequence(1, ap::any_perp(obj(1)-obj(0))));
+      base::dirs[1].push_back(dir_sequence(1, obj(1)-obj(0)));
+      base::dirs[1].push_back(dir_sequence(1, ap::any_perp(obj(1)-obj(0))));
     }
     else if(obj.space_dimension() == 3) {
       // make segment an infinitesimal brick
@@ -143,16 +143,16 @@ public:
       // get first orthogonal direction
       edges[1] = ap::any_perp(edges[0]);
       edges[2] = ap::perp(edges,edges+2);
-      dirs[1].push_back(dir_sequence(1,edges[0]));
-      dirs[1].push_back(dir_sequence(1,edges[1]));
-      dirs[1].push_back(dir_sequence(1,edges[2]));
+      base::dirs[1].push_back(dir_sequence(1,edges[0]));
+      base::dirs[1].push_back(dir_sequence(1,edges[1]));
+      base::dirs[1].push_back(dir_sequence(1,edges[2]));
      
       for(int i = 0; i < 3; ++i) {
 	int j = (i+1)%3;
 	dir_sequence f(2);
-	f[0] = dirs[1][i][0];
-	f[1] = dirs[1][j][0];
-	dirs[2].push_back(f);
+	f[0] =  base::dirs[1][i][0];
+	f[1] =  base::dirs[1][j][0];
+	base::dirs[2].push_back(f);
       }
     }
     else if(obj.space_dimension() > 3) {
@@ -179,27 +179,27 @@ public:
   polytope_directions(object_type const& obj) : base(obj) 
   {
     // existing edges
-    dirs[1].push_back(dir_sequence(1,obj(1)-obj(0)));
-    dirs[1].push_back(dir_sequence(1,obj(2)-obj(1)));
-    dirs[1].push_back(dir_sequence(1,obj(0)-obj(2)));
+    base::dirs[1].push_back(dir_sequence(1,obj(1)-obj(0)));
+    base::dirs[1].push_back(dir_sequence(1,obj(2)-obj(1)));
+    base::dirs[1].push_back(dir_sequence(1,obj(0)-obj(2)));
     if(obj.space_dimension() == 3) {
       // make it a 3D prism
       // additional edge: normal
       coord_type edges[2] = { obj(1)-obj(0),obj(2)-obj(0)};
-      dirs[1].push_back(dir_sequence(1, ap::perp(edges, edges+2)));
+      base::dirs[1].push_back(dir_sequence(1, ap::perp(edges, edges+2)));
 
       // faces
       // existing face
       dir_sequence f1(2);
       f1[0] = obj(1)-obj(0);
       f1[1] = obj(2)-obj(0);
-      dirs[2].push_back(f1);
+      base::dirs[2].push_back(f1);
       // additional faces
       for(int i = 0; i < 3; ++i) {
 	dir_sequence f(2);
-	f[0]  = dirs[1][i][0];
-	f[1] = dirs[1][3][0];
-	dirs[2].push_back(f);
+	f[0] =  base::dirs[1][i][0];
+	f[1] =  base::dirs[1][3][0];
+	base::dirs[2].push_back(f);
       }
     }
     else if(obj.space_dimension() > 3) {
@@ -228,7 +228,7 @@ public:
     // edges -> dirs[1]
     for(int i = 0; i < 4; ++i)
       for(int j = i+1; j < 4; ++j)
-	dirs[1].push_back(dir_sequence(1,obj(j)-obj(i)));
+	base::dirs[1].push_back(dir_sequence(1,obj(j)-obj(i)));
     // faces -> dirs[2]
     for(int i = 0; i < 4; ++i)
       for(int j = i+1; j < 4; ++j)
@@ -236,7 +236,7 @@ public:
 	  dir_sequence face(2);
 	  face[0] = obj(j)-obj(i);
 	  face[1] = obj(k)-obj(i);
-	  dirs[2].push_back(face);
+	  base::dirs[2].push_back(face);
 	}
   }
 };

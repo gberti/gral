@@ -71,6 +71,7 @@ template<class P>
 class simplex<0,P> : public simplex_base<0,P>
 {
   typedef simplex_base<0, P> base;
+  using base::p;
 public:
   simplex() {}
   simplex(P const& P0) { p[0]=P0;}
@@ -80,6 +81,7 @@ template<class P>
 class simplex<1,P> : public simplex_base<1,P>
 {
   typedef simplex_base<1, P> base;
+  using base::p;
 public:
   simplex() {}
   simplex(P const& P0, P const& P1) { p[0]=P0;p[1]=P1;}
@@ -90,6 +92,7 @@ template<class P>
 class simplex<2,P> : public simplex_base<2,P>
 {
   typedef simplex_base<2, P> base;
+  using base::p;
 public:
   simplex() {}
   simplex(P const& P0, P const& P1, P const& P2) { p[0]=P0;p[1]=P1;p[2]=P2;}
@@ -100,6 +103,7 @@ template<class P>
 class simplex<3,P> : public simplex_base<3,P>
 {
   typedef simplex_base<3, P> base;
+  using base::p;
 public:
   simplex() {}
   simplex(P const& P0, P const& P1, P const& P2, P const& P3) { p[0]=P0;p[1]=P1;p[2]=P2;p[3]=P3;}
