@@ -91,7 +91,7 @@ public:
   }
   coord_type global(local_coord_type x) const {
     coord_type res = XV(0);
-    for(int v = 1; v < TheCell()->NumOfVertices(); ++v)
+    for(int v = 1; v < (int)TheCell()->NumOfVertices(); ++v)
       res += (XV(v)-XV(0))*x[v-1+pt::LowerIndex(x)];
     return res;
   }
