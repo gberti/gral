@@ -60,6 +60,7 @@ public:
 
 
   typedef element_range_ref<E,element_seq>     range_ref;
+  typedef typename range_ref::const_iterator   const_iterator;
 
 private:
   //----- DATA -----
