@@ -185,8 +185,9 @@ public:
   }
   bool cub_initialized() const { return (jacdet_cub.size() == cubature_rule.size());}
 
-  result_type operator()(coord_type X) const {
-    local_coord_type x = local(X);
+  result_type operator()(coord_type X) const { return eval_local(local(X)); }
+
+  result_type eval_local(local_coord_type x) const {
     result_type res(0.0); 
     //    for(int  v= 0; v < c.NumOfVertices(); ++v) {
     int vcnt = 0;
@@ -198,8 +199,16 @@ public:
       res += prod;
     }
     return res;
+
   }
 
+  bool is_inside_local(local_coord_type x) const {
+    bool res = true;
+    for(int i = 0; i < dim; ++i) {
+      res = res && (0 <= x[i+ptl::LowerIndex(x)] && x[i+ptl::LowerIndex(x)] <= 1);
+    }
+    return res;
+  }
 
   local_coord_type local(coord_type X) const {
     local_coord_type res;
@@ -226,7 +235,7 @@ public:
     coord_type res(0.0);
     int vcnt = 0;
     for(VertexOnCellIterator v(c); !v.IsDone(); ++v, ++vcnt) {
-       result_type prod = coord(*v);
+       coord_type prod = coord(*v);
        index_type idx = mesh2index(vcnt);
        for(int i = 0; i < dim; ++i)
 	 prod *= (1.0-idx[i]) + (2*idx[i]-1)*x[i+ptl::LowerIndex(x)];
