@@ -96,11 +96,11 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
     inv[i] = pt::Origin(3);
   }
   out << "ap::inverse(e[0],e[1],e[2]) = ";
-  ap::inverse(e[0],e[1],e[2],inv[0],inv[1],inv[2]);
+  ap::invert(e[0],e[1],e[2],inv[0],inv[1],inv[2]);
   out << inv[0] << "  " << inv[1] << "  " << inv[2] << '\n';
 
   out << "ap::inverse(e[0],e[2],e[1]) = ";
-  ap::inverse(e[0],e[2],e[1],inv[0],inv[1],inv[2]);
+  ap::invert(e[0],e[2],e[1],inv[0],inv[1],inv[2]);
   out << inv[0] << "  " << inv[1] << "  " << inv[2] << '\n';
 
   out<< "ap::condition(e[0],e[1],e[2],ap::Norm_frobenius()) = "
@@ -118,10 +118,10 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
 
 
   out << "ap::inverse(a[0],a[1],a[2]) = ";
-  ap::inverse(a[0],a[1],a[2],inv[0],inv[1],inv[2]);
+  ap::invert(a[0],a[1],a[2],inv[0],inv[1],inv[2]);
   out << inv[0] << "  " << inv[1] << "  " << inv[2] << '\n';
   out << "ap::inverse(a[0],a[1],a[2]) = ";
-  ap::inverse(a[0],a[2],a[1],inv[0],inv[1],inv[2]);
+  ap::invert(a[0],a[2],a[1],inv[0],inv[1],inv[2]);
   out << inv[0] << "  " << inv[1] << "  " << inv[2] << '\n';
 
   out << "ap::matrixnorm_frobenius(a[0],a[1],a[2]) = "
