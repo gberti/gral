@@ -1,0 +1,16 @@
+# Settings for SX C++
+
+CCC      = /SX/opt/sxc++/inst/bin/sxc++
+CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
+CCFLAGS += -DNMWR_PARTIAL_SPEC
+
+CCFLAGS += -w all -T auto -prelink 
+CCFLAGS += -DSXCPP
+CCFLAGS += -DGRAL_HAS_SSTREAM
+LDFLAGS += -prelink
+
+AR=/SX/usr/bin/sxar
+DEPEND    = gcc 
+DEPFLAGS += -MM 
+
+
