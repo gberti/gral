@@ -184,9 +184,9 @@ public:
 //----------- general geometry : include dimension dependend parts ----------
 
 template<class CM>
-class mapped_geometry_reg2d 
+class mapped_geometry_cartesian2d
   : 
-  public  dd_mapped_geom_reg2d<CM, mapped_geometry_reg2d<CM>,
+  public  dd_mapped_geom_reg2d<CM, mapped_geometry_cartesian2d<CM>,
                                typename point_traits<typename CM::result_type>::dimension_tag>
 {
   
@@ -196,16 +196,16 @@ public:
   typedef point_traits<coord_type>                         pt;
   typedef mapped_geometry_reg2d_base<CM>                   geom_base;
   typedef dd_mapped_geom_reg2d<CM, 
-                               mapped_geometry_reg2d<CM>,
+                               mapped_geometry_cartesian2d<CM>,
                                typename pt::dimension_tag> base;
  
-  mapped_geometry_reg2d() {}
+  mapped_geometry_cartesian2d() {}
 
-  mapped_geometry_reg2d(const CM& ff, const RegGrid2D& gg) 
+  mapped_geometry_cartesian2d(const RegGrid2D& gg, const CM& ff)
     : base(ff,gg) {}
 
-  mapped_geometry_reg2d(const CM& ff, const RegGrid2D& gg,
-                        const index_type& LL, const index_type& UR) 
+  mapped_geometry_cartesian2d( const RegGrid2D& gg,  const CM& ff,
+			       const index_type& LL, const index_type& UR) 
     : base(ff,gg,LL,UR) {}
 
   typedef Segment<Edge,geom_base>   segment_type;
