@@ -70,7 +70,7 @@ namespace cartesiannd {
 
       void init(unsigned K, unsigned m);
       void init_vertex_on_vertex() {} // not yet implemented
-      void init_cell_on_cell() {} // not yet implemented
+      void init_cell_on_cell(); 
       void init_upward  (unsigned K, unsigned m) { } // not yet implemented
       void init_downward(unsigned K, unsigned m);
 
@@ -319,6 +319,19 @@ namespace cartesiannd {
     }
   }
 
+  template<unsigned DIM>
+  void delta_map<DIM>::incidences::init_cell_on_cell() 
+  {
+    nb.resize(dirs[DIM].size());
+    nb[0].resize(2*DIM);
+    for(unsigned dir = 1; dir <= DIM; ++dir) {
+      index_type offset(0);
+      offset[dir-1] =  1;
+      nb[0][2*dir-2] = inc_descriptor(offset,0);
+      offset[dir-1] = -1;
+      nb[0][2*dir-1] = inc_descriptor(offset,0);
+    }
+  }
 
   template<unsigned DIM>
   void delta_map<DIM>::incidence_table::init(unsigned K) 
