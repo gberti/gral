@@ -24,7 +24,9 @@ namespace detail {
     partial_grid_function<typename grid_types<Grid>::element_d<ED>::type, T> f;
 
   public:
-    typedef typename base::value_type value_type;
+    typedef typename base::value_type      value_type;
+    typedef typename base::reference       reference;
+    typedef typename base::const_reference const_reference;
 
     partial_multi_gf_aux() {}
     partial_multi_gf_aux(Grid const& g) : base(g), f(g) {}
@@ -33,8 +35,8 @@ namespace detail {
     using base::operator();
     using base::operator[];
     //  using base::ElementFunction_();
-    T  operator()(element_type const& e) const { return f(e);}
-    T& operator[](element_type const& e)       { return f[e];}
+    const_reference  operator()(element_type const& e) const { return f(e);}
+    reference        operator[](element_type const& e)       { return f[e];}
 
     grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
     grid_type const& TheGrid() const { return f.TheGrid();} 
@@ -66,8 +68,8 @@ namespace detail {
     partial_multi_gf_aux(Grid const& g, T const& t) :  f(g,t) {}
 
 
-    T  operator()(element_type const& e) const { return f(e);}
-    T& operator[](element_type const& e)       { return f[e];}
+    const_reference  operator()(element_type const& e) const { return f(e);}
+    reference        operator[](element_type const& e)       { return f[e];}
 
     grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
     grid_type const& TheGrid() const { return f.TheGrid();} 
