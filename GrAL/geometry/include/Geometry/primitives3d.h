@@ -24,6 +24,63 @@ public:
   typedef typename base::scalar scalar;
   typedef typename base::real   real;
 
+  struct matrix_type {
+    typedef point_traits<POINT>         pt;
+    typedef dimension_dependent_primitives_3d<POINT> ap;
+    typedef typename ap::scalar         scalar;
+    
+    POINT a[3];
+   
+    matrix_type() { init();}
+    matrix_type(POINT const& a0, POINT const& a1, POINT const& a2)
+    { 
+      a[0] = a0; a[1] = a1; a[2] = a2;
+    }      
+    matrix_type(scalar s) 
+    { 
+      init();
+      for(int i = 0; i < 3; ++i)
+	for(int j = pt::LowerIndex(a[i]); j <= pt::UpperIndex(a[i]); ++j)
+	  a[i][j] = s;
+    }
+    void init() 
+    {
+      for(int i = 0; i < 3; ++i)
+	pt::ConstructWithDim(3, a[i]);
+    }
+
+    POINT const& operator[](int i) const { cv(i); return a[i-offset()];}
+    POINT      & operator[](int i)       { cv(i); return a[i-offset()];}
+    scalar   operator()(int i, int j) const { cv(i); cv(j); return a[i-offset()][j];}
+    scalar & operator()(int i, int j)       { cv(i); cv(j); return a[i-offset()][j];}
+
+    int LowerIndex()  const { return pt::LowerIndex(a[0]);}
+    int UpperIndex()  const { return pt::UpperIndex(a[0]);}
+
+    static matrix_type UnitMatrix() {
+      matrix_type res(0);
+      for(int i = res.LowerIndex(); i <= res.UpperIndex(); ++i)
+	res(i,i) = 1;
+      return res;
+    }
+
+    matrix_type operator *(matrix_type const& rhs) const {
+     matrix_type res;
+     for(int i = 0; i < 3; ++i)
+       ap::matrix_vector_product(a[0],a[1],a[2], rhs.a[i], res.a[i]);
+     return res;
+    }
+    matrix_type & operator *=(matrix_type const& rhs) {
+      *this = *this * rhs;
+      return *this;
+    }
+    POINT operator* (POINT const& b) { POINT res; ap::matrix_vector_product(a[0],a[1],a[2],b,res); return res;}
+
+    int offset() const { return pt::LowerIndex(a[0]);}
+    void cv(int i) const { REQUIRE( pt::LowerIndex(a[0]) <= i && i <= pt::UpperIndex(a[0]), "i= " << i, 1);}
+  }; // struct matrix_type
+
+
   /*! \brief returns the determinant of the matrix (p1,p2,p3)
    */
   static scalar det3(const POINT& p1, const POINT& p2, const POINT& p3)
@@ -35,6 +92,9 @@ public:
 	     +p1[l+2]*(p2[l]*p3[l+1] - p2[l+1]*p3[l])
 	     );
     }
+  /*! \brief returns the determinant of the matrix A
+   */
+  static scalar det(matrix_type const& A) { return det3(A.a[0], A.a[1], A.a[2]);}
 
   /*! \brief returns the area of the triangle with corners pi in \f$ \R^3 \f$
    */
@@ -51,6 +111,93 @@ public:
 		    p[lp+3]*q[lq+1]-p[lp+1]*q[lq+3], 
 		    p[lp+1]*q[lq+2]-p[lp+2]*q[lq+1]));
     }
+
+  /*! \brief Return a vector perpendicular to \c p 
+   */
+  static POINT any_perp(POINT const& p) {
+    POINT e1(pt::Origin(3)); pt::x(e1) = 1;
+    POINT e2(pt::Origin(3)); pt::y(e2) = 1;
+    // at least one of e1, e2 is independent of p, the one with smaller scalar product 
+    // is more orthogonal.
+    return( ( fabs(dot(e1,p)) < fabs(dot(e2,p))) 
+	    ? vectorproduct(e1,p) 
+	    : vectorproduct(e2,p));
+    /*
+    int max_i = LowerIndex(p);
+    if(abs(pt::y(p)) > abs(p[max_i])) max_i = 1+LowerIndex(p);
+    if(abs(pt::z(p)) > abs(p[max_i])) max_i = 2+LowerIndex(p);
+    int next_i = (max_i < UpperIndex(p) ? max_i+1  : LowerIndex(p));
+    int zero_i = (next_i< UpperIndex(p) ? next_i+1 : LowerIndex(p));
+    res[max_i ] = -p[next_i];
+    res[next_i] =  p[max_i];
+    res[zero_i] =  0;
+    return res;
+    */
+
+  }
+
+  static std::vector<POINT> basis_completion(std::vector<POINT> const& dirs) {
+    std::vector<POINT> res;
+    if(dirs.size() == 1) {
+      res.resize(2);
+      res[0] = any_perp(dirs[0]);
+      res[1] = vectorproduct(res[0],dirs[0]);
+    }
+    else if(dirs.size() == 2) {
+      res.resize(1);
+      res[0] = perp(dirs.begin(), dirs.end());
+    }
+   else if(dirs.size() == 0) {
+     res.resize(3);
+     res[0] = pt::Origin(3); pt::x(res[0]) = 1;
+     res[1] = pt::Origin(3); pt::y(res[1]) = 1;
+     res[2] = pt::Origin(3); pt::z(res[2]) = 1;
+   }
+   return res;
+  }
+
+  /*! \brief Return normal direction of (2-dimensional) hyperspace spanned by [begin,end[.
+
+      Dimension-independent interface.
+   */
+  template<class IT>
+
+  static POINT perp(IT begin, IT end) { IT p2 = begin; ++p2; return vectorproduct(*begin, *p2);}
+
+  /*! \brief Return normal direction of (2-dimensional) hyperspace spanned by \c dirs
+
+      Dimension-independent interface.
+   */
+  template<class SEQ>
+  static POINT perp(SEQ const& dirs) { 
+    typename SEQ::const_iterator p1 = dirs.begin(); 
+    typename SEQ::const_iterator p2 = p1; ++p2; 
+    return vectorproduct(*p1, *p2);
+  }
+
+
+  /*! \brief Calculate matrix-vector product
+       \f$ c =  A*b  \f$
+  */
+  static void matrix_vector_product(POINT const& a1, POINT const& a2, POINT const& a3,
+				    POINT const& b, 
+				    POINT      & c)
+  {
+    c = pt::x(b)*a1 + pt::y(b) * a2 + pt::z(b) * a3;
+  }
+
+  /*! \brief Calculate matrix product
+       \f$ C =  A*B  \f$
+  */
+  static void matrix_product(POINT const& a1, POINT const& a2, POINT const& a3,
+			     POINT const& b1, POINT const& b2, POINT const& b3,
+			     POINT      & c1, POINT      & c2, POINT      & c3)
+  {
+    matrix_vector_product(a1,a2,a3, b1, c1);
+    matrix_vector_product(a1,a2,a3, b2, c2);
+    matrix_vector_product(a1,a2,a3, b3, c3);
+  }
+
 
   /*! \brief Calculate inverse by Cramer's rule
     
@@ -82,6 +229,15 @@ public:
       i2[li+2] = d_inv * det3(r1,r2,e[1]); 
       i3[li+2] = d_inv * det3(r1,r2,e[2]); 
     }
+  /*! \brief Calculate inverse of \c A by Cramer's rule
+
+  */
+  static matrix_type inverse(matrix_type const& A)
+  {
+    matrix_type res;
+    inverse(A.a[0], A.a[1], A.a[2],  res.a[0], res.a[1], res.a[2]);
+    return res;
+  }
 
   /*! \brief Solve \f$ (A1,A2,A3)x = b \f$ for \f$ x \f$
 
@@ -99,7 +255,28 @@ public:
       x[li+1] = d_inv * det3(A1,b ,A3);
       x[li+2] = d_inv * det3(A1,A2,b );
     }
+  /*! \brief Solve \f$ A x = b \f$ for \f$ x \f$
+      The implementation uses Cramer's rule. 
+  */
+  static void solve(matrix_type const& A, 
+		    POINT            & x,  POINT const& b)
+  { solve(A.a[0], A.a[1], A.a[2], x, b);}
 
+  /*! \brief Solve \f$ A x = b \f$ for \f$ x \f$
+      The implementation uses Cramer's rule. 
+  */
+  static POINT solve(matrix_type const& A, 
+		     POINT const& b)
+  { 
+    POINT x; 
+    pt::ConstructWithDim(pt::Dimension(b), x);
+    solve(A.a[0], A.a[1], A.a[2], x, b);
+    return x;
+  }
+
+  /*!  \brief Calulate the infinity norm of \f$ A = (A_1,A_2,A_3) \f$
+
+  */
   static real matrixnorm_infinity(POINT const& A1, POINT const& A2, POINT const& A3)
     {
       real max_sum = 0;
@@ -109,8 +286,13 @@ public:
       }
       return max_sum;
     }
+  /*!  \brief Calulate the infinity norm of \c A
 
-  /*! Calculate the 1-norm \f$ \|A\|_1 = \max_j \sum_i |a_{ij}| \f$
+  */
+  static real matrixnorm_infinity(matrix_type const& A)
+  { return matrixnorm_infinity(A.a[0], A.a[1], A.a[2]);}
+
+  /*! \brief Calculate the 1-norm \f$ \|A\|_1 = \max_j \sum_i |a_{ij}| \f$
 
    */
   static real matrixnorm_1(POINT const& A1, POINT const& A2, POINT const& A3)
@@ -122,35 +304,55 @@ public:
       max_sum = (max_sum < sum ? sum : max_sum);
       return max_sum;
     }
+  /*! \brief Calculate the 1-norm \f$ \|A\|_1 = \max_j \sum_i |a_{ij}| \f$
+
+   */
+  static real matrixnorm_1(matrix_type const& A)
+  { return matrixnorm_1(A.a[0], A.a[1], A.a[2]);}
+
 
   // the 2-norm is the magnitude of the larges eigenvalue.
   // This is not yet implemented.
+
+  /*! \brief Frobenius norm of \f$ A = (A_1,A_2,A_3) \f$
+   */
   static real matrixnorm_frobenius(POINT const& A1, POINT const& A2, POINT const& A3)
     {
       return sqrt(  squared_norm_2(A1) 
 		  + squared_norm_2(A2)
 		  + squared_norm_2(A3));
     }
+  /*! \brief Frobenius norm of \c A
+   */
+  static real matrixnorm_frobenius(matrix_type const& A)
+  { return matrixnorm_frobenius(A.a[0], A.a[1], A.a[2]);}
 
   struct Norm_frobenius {
     real operator()(POINT const& A1, POINT const& A2, POINT const& A3) const
       { return matrixnorm_frobenius(A1,A2,A3);}
+    real operator()(matrix_type const& A) const { return matrixnorm_frobenius(A);}
   };
   typedef Norm_frobenius Norm_F;
 
   struct Norm_1 {
     real operator()(POINT const& A1, POINT const& A2, POINT const& A3) const
       { return matrixnorm_1(A1,A2,A3);}
+    real operator()(matrix_type const& A) const { return matrixnorm_1(A);}
   };
   typedef Norm_1 Norm_columnsum;
 
   struct Norm_infinity {
     real operator()(POINT const& A1, POINT const& A2, POINT const& A3) const
       { return matrixnorm_infinity(A1,A2,A3);}
+    real operator()(matrix_type const& A) const { return matrixnorm_infinity(A);}
   };
   typedef Norm_infinity Norm_oo;
   typedef Norm_infinity Norm_rowsum;
 
+  /*! \brief Compute condition number of matrix \f$ A = (A_1,A_2,A_3) \f$
+       
+      Condition number is computed with respect to matrix norm \c N.
+  */
   template<class NORM>
   static real condition(POINT const& A1, POINT const& A2, POINT const& A3,
 			NORM const& N)
@@ -168,6 +370,10 @@ public:
       inverse(A1,A2,A3,inv[0],inv[1],inv[2]);
       return N(A1,A2,A3) * N(inv[0],inv[1],inv[2]);
     }
+  template<class NORM>
+  static real condition(matrix_type const& A,
+			NORM const& N)
+  { return condition(A.a[0], A.a[1], A.a[2], N);}
 
 
 };
