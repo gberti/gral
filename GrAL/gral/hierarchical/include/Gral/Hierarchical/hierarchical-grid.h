@@ -312,6 +312,8 @@ namespace hierarchical {
     bool valid() const { return !empty();}
     void cv   () const { REQUIRE(valid(), "", 1);}
     void ce   () const { REQUIRE( (!empty()), "", 1);}
+    void cv_a () const { REQUIRE_ALWAYS(valid(), "", 1);}
+    void ce_a () const { REQUIRE_ALWAYS( (!empty()), "", 1);}
 
     index_type parent_cell_index(index_type ch, level_handle lev) const 
     { cv(lev); cv(lev-1); return quotient(ch,  the_pattern.cell_size());}

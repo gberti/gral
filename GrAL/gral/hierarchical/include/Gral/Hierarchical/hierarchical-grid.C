@@ -78,7 +78,7 @@ namespace hierarchical {
  void
  hgrid_cartesian<Grid,GT>::remove_finest_level() 
  { 
-   ce();
+   ce_a();
    level_handle oldlev = finest_level();
    grids.pop_back(); 
    for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
@@ -90,7 +90,7 @@ namespace hierarchical {
  void
  hgrid_cartesian<Grid,GT>::remove_coarsest_level() 
  { 
-   ce(); 
+   ce_a(); 
    level_handle oldlev = coarsest_level();
    grids.pop_front();
    for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
