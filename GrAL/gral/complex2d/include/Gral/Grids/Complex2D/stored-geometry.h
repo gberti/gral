@@ -35,6 +35,8 @@ public:
   // the grids responsibility
   stored_geometry_complex2D_base(grid_type const& gg) : g((grid_type*) &gg) {}
   void set_grid(grid_type const& gg) { g = (grid_type*) (&gg);}
+  void rebind  (grid_type const& gg) { g = (grid_type*) (&gg);}
+  bool bound() const { return (g != 0);}
 
   const Complex2D& TheGrid() const 
     { REQUIRE((g != 0), "geometry: Grid = 0!\n",1);  return *g;}
