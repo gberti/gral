@@ -371,17 +371,24 @@ namespace cartesiannd {
   int * grid_base<CARTGRID, DIM>::archetype_initialized = 0;
 
 
+
+
   //  template<class CARTGRID, unsigned DIM>
   template<unsigned DIM>
   class subrange : public grid_base<subrange<DIM>, DIM> {
     typedef grid_base<subrange<DIM>, DIM> base;
     typedef subrange<DIM>                 self;
+
   public:
     typedef grid<DIM> grid_type;
     typedef grid<DIM> base_grid_type;
     typedef grid<DIM-1> facet_grid_type;
 
     typedef typename base::vertex_index_type vertex_index_type;
+
+    typedef grid_types_base<grid_type, DIM> bgt;
+    typedef typename bgt::Vertex  BaseVertex;
+    typedef typename bgt::Cell    BaseCell;
   private:
     ref_ptr<grid_type const> g;
   public:
@@ -390,6 +397,17 @@ namespace cartesiannd {
     { init(low,beyond); }
     subrange(ref_ptr<grid_type const> gg, vertex_index_type low, vertex_index_type beyond) : g(gg) 
     { init(low,beyond); }
+
+    subrange(grid_type         const& gg, BaseCell const& clow, BaseCell const& chigh)  : g(gg)
+    { init(clow.index(), chigh.index() + index_type(2));}
+    subrange(ref_ptr<grid_type const> gg, BaseCell const& clow, BaseCell const& chigh)  : g(gg)
+    { init(clow.index(), chigh.index() + index_type(2));}
+
+    subrange(grid_type         const& gg, BaseVertex const& vlow, BaseVertex const& vhigh)  : g(gg)
+    { init(vlow.index(), vhigh.index() + index_type(1));}
+    subrange(ref_ptr<grid_type const> gg, BaseVertex const& vlow, BaseVertex const& vhigh)  : g(gg)
+    { init(vlow.index(), vhigh.index() + index_type(1));}
+
 
     ref_ptr<grid_type const> BaseGrid() const { return g;}
 
@@ -509,6 +527,8 @@ namespace cartesiannd {
     }
     // for having grid functions on archetype ...
     operator CARTGRID const&() const { cg(); return g;}
+
+    CARTGRID const& BaseGrid() const { cg(); return g;}
     unsigned NumOfVertices() const { cg(); return g.NumOfVertices();}
     unsigned NumOfCells()    const { cg(); return g.NumOfFacets();}
 
@@ -657,9 +677,18 @@ namespace cartesiannd {
     typedef typename base::archetype_type archetype_type;
     typedef typename base::Vertex         Vertex;
     typedef typename base::vertex_handle  vertex_handle;
+
     // this is useful only for cells, i.e. K=DIM
     Vertex        V(typename archetype_type::Vertex const& av) const { return Vertex(TheGrid(), index() + av.index());}
     vertex_handle v(typename archetype_type::Vertex const& av) const { return TheGrid().get_vertex_handle(index()+av.index());}
+
+    Vertex        V(typename archetype_type::vertex_handle av) const 
+    { return V(typename archetype_type::Vertex(TheArchetype(), av));}
+    vertex_handle v(typename archetype_type::vertex_handle av) const 
+    { return V(av).handle();}
+    Vertex        V(int av) const { return V(typename archetype_type::vertex_handle(av));}
+    vertex_handle v(int av) const { return v(typename archetype_type::vertex_handle(av));}
+
 
     // relative is the relative coordinates (offset) in the grid coordinates
     Vertex        V(index_type relative) const { return Vertex(TheGrid(), index() + relative);}
@@ -683,7 +712,8 @@ namespace cartesiannd {
 
     ref_ptr<grid_type const> TheAnchor() const { return g;}
     // ref_ptr<grid_type const> TheGrid() const { return g;}
-    grid_type const& TheGrid() const { return *g;}
+    grid_type      const& TheGrid()      const { return *g;}
+    archetype_type const& TheArchetype() const { return TheGrid().ArchetypeOf(*this);}
 
     template<unsigned M>
     typename incidence_iterator_type<CARTGRID,K,M>::type FirstElement() const
@@ -729,7 +759,7 @@ namespace cartesiannd {
 
     // find appropriate m by looking up the correct interval of h in offsets[K];
     void init_m() { m = 0; advance_m(); }
-    void advance_m() { while(!valid_map() && m < g->NumOfDirections(K)) ++m;}
+    void advance_m() { while(m < g->NumOfDirections(K) && !valid_map()) ++m;}
     // is h a handle for the current map m?
     bool valid_map() const { return (unsigned)h.h() < g->offsets[K][m+1];}
 
@@ -1096,9 +1126,11 @@ namespace cartesiannd {
   } 
 
   template<>
+  inline 
   grid<2>::grid(int b1, int b2)         { init(vertex_index_type(0), vertex_index_type(b1,b2)); }
 
   template<>
+  inline 
   grid<3>::grid(int b1, int b2, int b3) { init(vertex_index_type(0), vertex_index_type(b1,b2,b3)); }
 
 } // namespace cartesiannd
