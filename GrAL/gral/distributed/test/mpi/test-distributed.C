@@ -1,5 +1,5 @@
-#include <iostream.h>
-#include <fstream.h>
+#include <iostream>
+#include <fstream>
 #include <vector>
 
 #include <mpi.h>
@@ -38,6 +38,7 @@ int main(int argc, char* argv[]) {
   using std::cerr;
   using std::ifstream;
   using std::ofstream;
+  using std::endl;
 
   MPI_Init(&argc,&argv);
   MPI_Barrier(MPI_COMM_WORLD);
