@@ -1,6 +1,7 @@
 Octree state: Number of levels: 1 ( 0 .. 0 )
               Number of cells:  0
               Number of leafs:  0
+Level 0
 Splitting cell 0 0 1
 Splitting cell 0 0 2
 Splitting cell 0 1 0
@@ -18,8 +19,9 @@ Splitting cell 2 0 0
 Splitting cell 2 0 1
 Splitting cell 2 1 0
 Octree state: Number of levels: 2 ( 0 .. 1 )
-              Number of cells:  144
-              Number of leafs:  128
+              Number of cells:  253
+              Number of leafs:  237
+Level 1
 Splitting cell 0 0 4
 Splitting cell 0 1 4
 Splitting cell 0 2 3
@@ -73,8 +75,9 @@ Splitting cell 4 1 2
 Splitting cell 4 2 0
 Splitting cell 4 2 1
 Octree state: Number of levels: 3 ( 0 .. 2 )
-              Number of cells:  560
-              Number of leafs:  492
+              Number of cells:  669
+              Number of leafs:  601
+Level 2
 Splitting cell 0 0 9
 Splitting cell 0 1 8
 Splitting cell 0 1 9
@@ -272,5 +275,5 @@ Splitting cell 9 0 1
 Splitting cell 9 1 0
 Splitting cell 9 1 1
 Octree state: Number of levels: 4 ( 0 .. 3 )
-              Number of cells:  2128
-              Number of leafs:  1864
+              Number of cells:  2237
+              Number of leafs:  1973
