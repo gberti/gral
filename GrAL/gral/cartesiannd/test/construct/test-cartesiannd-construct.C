@@ -99,12 +99,12 @@ void test_local_vertex_access(G const& g, std::ostream& out)
 int main() {
   using namespace std;
 
-  /*
+  
   cartesiannd::delta_map<2>::init();
   cout << "delta_map<2>::dirs: \n";
   cartesiannd::delta_map<2>::print(cout);
   cartesiannd::delta_map<2>::selfcheck();
-  */
+ 
 
   cartesiannd::delta_map<3>::init();
   cout << "delta_map<3>::dirs: \n";
@@ -181,6 +181,13 @@ int main() {
     // test_face_iterator  (R, cout);
     test_facet_iterator (R, cout);
     test_cell_iterator  (R, cout);
+
+    test_vertex_on_vertex_iterator(R, cout);
+    //test_edge_on_vertex_iterator  (R, cout);
+    test_cell_on_vertex_iterator  (R, cout);
+
+    test_vertex_on_edge_iterator(R, cout);
+    //test_cell_on_edge_iterator  (R, cout);
 
     test_vertex_on_cell_iterator(R, cout);
     test_edge_on_cell_iterator  (R, cout);
