@@ -6,7 +6,7 @@ exec perl -w -x $0 ${1+"$@"} # -*- mode: perl; perl-indent-level: 2; -*-
 $license1 = "
 /* ------------------------------------------------------------
 
-    Copyright (C) 1997-2001 Guntram Berti,
+    Copyright (C) 1997-2002 Guntram Berti,
     NEC C&C Research Laboratories, NEC Europ Ltd.
     Rathausallee 10, D-53757 St. Augustin, Germany.
     Contact: berti\@ccrl-nece.de
