@@ -38,12 +38,12 @@ public:
 
   virtual void attach_to(std::istream& in_new);
   virtual void print_values(std::ostream& out) const;
-  virtual void print_values(std::ostream& out, const std::string& ind) const; 
+  virtual void print_values(std::ostream& out, std::string const& ind) const; 
 
   virtual void read(std::istream& in);
   virtual void print(std::ostream& out) const;
   virtual void print_unrecognized(std::ostream& out) const;
-  virtual void print_unrecognized(std::ostream& out, const std::string& prefix) const;
+  virtual void print_unrecognized(std::ostream& out, std::string const& prefix) const;
 
   friend std::istream& operator>>(std::istream& in,  self& rhs) 
     { rhs.read(in);   return in;}
