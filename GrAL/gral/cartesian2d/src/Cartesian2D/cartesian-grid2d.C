@@ -115,21 +115,13 @@ index_type  RegGrid2D::side_vertex_2_[4] = { index_type(1,0),  // S
 
 
 
-/*
-int  RegGrid2D::offset_dir[3][3] = 
-                        { {Cell::SW,Cell::W,           Cell::NW},
-                          {Cell::S, Cell::invalid_side,Cell::N },
-			  {Cell::SE,Cell::E,           Cell::NE}};
-			  */
 
+
+std::string RegGrid2D::side_name_[4] = { "S", "E", "N", "W"};
+std::string RegGrid2D::corner_name_[4] = { "SW", "SE", "NE", "NW"};
 
 int RegGrid2D::invalid_side()   { return (int)Cell::invalid_side;}
 int RegGrid2D::invalid_corner() { return (int)Cell::invalid_corner;}
-
- 
-std::string RegGrid2D::side_name_[4]   = { "S", "E", "N", "W"};
-std::string RegGrid2D::corner_name_[4] = { "SW", "SE", "NE", "NW"};
-
 
 int  RegGrid2D::get_side(const std::string& nm) 
 {
@@ -159,8 +151,6 @@ int  RegGrid2D::get_corner(const std::string& nm)
   else
     return (int)(Cell::invalid_corner);
 }
- 
-
 
 } // namespace cartesian2d
 
