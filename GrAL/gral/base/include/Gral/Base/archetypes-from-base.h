@@ -40,6 +40,10 @@ public:
 };
 
 
+/*! \brief Helper class to reuse the archetype definitions  of  base grid types
+
+    \ingroup gridarchetypes
+*/
 template<class GT>
 struct archetypes_from_base_grid_types {
   typedef typename GT::archetype_type     archetype_type;

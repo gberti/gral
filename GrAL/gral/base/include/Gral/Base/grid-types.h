@@ -334,7 +334,9 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(PRINT_HAS_MEMBER);
 
 
 /*! \brief Plugin-in base class for grid_types<> specializations
-    
+  
+    \ingroup traits    
+
    \b Usage example (enabling for a \c grid_types<> specialization):
    \code
    class MyGrid { ... };
