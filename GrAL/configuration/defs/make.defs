@@ -125,7 +125,7 @@ include $(COMPILERDIR)/make.defs
 export DEFDIR     :=$(CONFIGURATION)/defs/$(DEFPATH)#  
 #include $(DEFDIR)/make.defs
 
-CCFLAGS += $(ADDCCFLAGS)
+CCFLAGS += $(EXTRA_CCFLAGS)
 
 # if developing code, use include and libraries
 # of other (`peer') modules directly (because of frequent 
