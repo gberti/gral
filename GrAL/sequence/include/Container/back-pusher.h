@@ -5,8 +5,46 @@
 
 namespace GrAL {
 
+  namespace detail {
+    struct reader {
+      template<class T>
+      static void read(std::istream& in, T& t) { in >> t;}
+    };
+  }
 
-template<class CONTAINER>
+  /*! \brief Utility to read items into vector
+    
+  \ingroup helperfunctors
+  This class is particularly useful when reading repeated items from the 
+  commandline into a container.
+
+  \templateparams
+  - CONTAINER: standard container, having \c push_back(T)
+  - READER: configuration hook, having \c read(istream&, T&)
+  
+  Example 1:
+  \code
+  std::vector<int> v;
+  GrAL::back_pusher<std::vector<int> > rv(v);
+  // read 3 integers into v 
+  cin >> rv >> rv >> rv;
+  \endcode
+
+  Example 2:
+  \code
+   GrAL::CtrlDevice Ctrl = ...
+   std::vector<int> seeds;
+   GrAL::back_pusher<std::vector<int> > read_seeds(seeds);
+   GrAL::RegisterAt(Ctrl, "+i", read_seeds);
+  \endcode
+
+  The program can be called with repeated \c +i arguments:
+
+  \code
+   $ myprog +i 2 +i 44 +i 63
+  \endcode
+  */
+template<class CONTAINER, class READER = detail::reader>
 class back_pusher {
 private:
   CONTAINER* cont;
@@ -18,25 +56,25 @@ public:
     { 
       REQUIRE_ALWAYS( cont != 0, "", 1);
       typename CONTAINER::value_type tmp;  
-      in >> tmp;
+      READER::read(in,tmp);
       cont->push_back(tmp);
     }
 };
 
 
-template<class CONTAINER>
+  template<class CONTAINER, class READER>
 inline
 std::istream& operator>>(std::istream& in, 
-			 back_pusher<CONTAINER> & b)
+			 back_pusher<CONTAINER, READER> & b)
 {
   b.read(in);
   return in;
 }
 
-template<class CONTAINER>
+template<class CONTAINER, class READER>
 inline
 std::ostream& operator<<(std::ostream& out, 
-			 back_pusher<CONTAINER> & b)
+			 back_pusher<CONTAINER, READER> & b)
 {
   return out;
 }
