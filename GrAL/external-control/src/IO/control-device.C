@@ -39,7 +39,7 @@ ControlDevice ControlDevice::getSubDevice(std::string const& nm)
   return sub;
 }
 
-ControlDevice ControlDevice::getSubDevice(const char*   name) 
+ControlDevice ControlDevice::getSubDevice(char const*   name) 
 { return getSubDevice(std::string(name));}
 
 

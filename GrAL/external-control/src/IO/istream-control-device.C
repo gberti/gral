@@ -26,7 +26,8 @@ void istream_control_device_impl::attach_to(std::istream& in_new) { in = &in_new
 
 void istream_control_device_impl::print_values(std::ostream& out) const { MV.PrintValues(out);}
 
-void istream_control_device_impl::print_values(std::ostream& out, std::string const& ind) const 
+void istream_control_device_impl::print_values(std::ostream& out, 
+                                               std::string const& ind) const 
 { MV.PrintValues(out, ind, " ");}
 
 
@@ -75,7 +76,7 @@ void istream_control_device_impl::print_unrecognized(std::ostream& out) const
 { print_unrecognized(out,"");}
 
 void istream_control_device_impl::print_unrecognized(std::ostream& out, 
-						     const std::string& prefix) const
+						     std::string const& prefix) const
 {
   std::string nm = ( prefix == "" ? name() : prefix + "::" + name());
   if(MV.HasUnrecognized()) {
