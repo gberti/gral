@@ -8,20 +8,32 @@
 #include "Gral/Base/common-grid-basics.h"
 
 
-template<class GRID, class GT = grid_types<GRID> >
+template<class GT>
 class cell_iterator_int;
 
-template<class GRID, class GT>
-inline bool operator==(cell_iterator_int<GRID,GT> const& lhs, 
-		       cell_iterator_int<GRID,GT> const& rhs);
+template<class GT>
+inline bool operator==(cell_iterator_int<GT> const& lhs, 
+		       cell_iterator_int<GT> const& rhs);
 
-template<class GRID, class GT, unsigned HASVTXONCELL>
+
+// mixin for vertex-on-cell-iteration
+template<class GT, unsigned HASVTXONCELL>
 class cell_iterator_int_voc_aux {};
 
-template<class GRID, class GT>
-class cell_iterator_int_voc_aux<GRID,GT,1>
+// mixin for edge-on-cell-iteration
+template<class GT, unsigned HASVTXONCELL>
+class cell_iterator_int_eoc_aux {};
+
+// mixin for facet-on-cell-iteration
+template<class GT, unsigned HASVTXONCELL>
+class cell_iterator_int_foc_aux {};
+
+
+
+template<class GT>
+class cell_iterator_int_voc_aux<GT,1>
 {
-  typedef cell_iterator_int<GRID,GT> cell_iter_type;
+  typedef cell_iterator_int<GT> cell_iter_type;
   cell_iter_type const& to_derived() const { return static_cast<cell_iter_type const&>(*this);}
 public:
   typedef typename GT::VertexOnCellIterator VertexOnCellIterator;
@@ -30,22 +42,60 @@ public:
 };
 
 
-/*! Generic cell / cell iterator type,
-    based on vertices being numbered consecutively.
+template<class GT>
+class cell_iterator_int_foc_aux<GT,1>
+{
+  typedef cell_iterator_int<GT> cell_iter_type;
+  cell_iter_type const& to_derived() const { return static_cast<cell_iter_type const&>(*this);}
+public:
+  typedef typename GT::FacetOnCellIterator FacetOnCellIterator;
+  FacetOnCellIterator FirstFacet() const { return FacetOnCellIterator(to_derived());}
+  unsigned NumOfFacets() const { return to_derived().TheGrid().NumOfFacets(to_derived());}
+};
 
-    This implementation assumes that Cell is constructible from a CellIterator.
+template<class GT>
+class cell_iterator_int_eoc_aux<GT,1>
+{
+  typedef cell_iterator_int<GT> cell_iter_type;
+  cell_iter_type const& to_derived() const { return static_cast<cell_iter_type const&>(*this);}
+public:
+  typedef typename GT::EdgeOnCellIterator EdgeOnCellIterator;
+  EdgeOnCellIterator FirstEdge() const { return EdgeOnCellIterator(to_derived());}
+  unsigned NumOfEdges() const { return to_derived().TheGrid().NumOfEdges(to_derived());}
+};
+
+
+/*! \brief Generic cell / cell iterator type,
+    based on cells being numbered consecutively starting from 0.
+
     \ingroup iterators
+
+    This implementation assumes that \c GT::Cell is constructible from \c GT::CellIterator.
+    (Often, \c GT::Cell and \c GT::CellIterator will be even the same type, namely \c cell_iterator_int<GT>.)
+
+    It adds support for incidence iteration if the appropriate types are defined in \c GT.
+    For instance, if \c GT defines a type \c VertexOnCellIterator,
+    cell_iterator_int<GT> defines \c FirstVertex() and \c NumOfVertices() members.
+    In this case, the type \c GT::grid_type  must also provide a member NumOfVertices(Cell),
+    where \c GT::Cell is assumed to be constructible from \c cell_iterator_int<GT> 
+    (which in turn should be equal to \c GT::CellIterator).
+
+   \see polygon1d::polygon for a usage of this template.
+
  */
 
-template<class GRID, class GT>
+template<class GT>
 class cell_iterator_int : 
   public GT, 
-  public cell_iterator_int_voc_aux<GRID,GT, has_VertexOnCellIterator<GT>::result>  
+  public cell_iterator_int_voc_aux<GT, has_VertexOnCellIterator<GT>::result>,
+  public cell_iterator_int_eoc_aux<GT, has_EdgeOnCellIterator  <GT>::result>,
+  public cell_iterator_int_foc_aux<GT, has_FacetOnCellIterator <GT>::result> 
+
 {
-  typedef cell_iterator_int<GRID, GT>  self;
-  typedef GT                           gt;
+  typedef cell_iterator_int< GT>  self;
+  typedef GT                      gt;
 public:
-  typedef GRID                      grid_type;
+  typedef typename gt::grid_type    grid_type;
   typedef typename gt::cell_handle  cell_handle;
   typedef typename gt::Cell         Cell;
 protected:
@@ -66,13 +116,8 @@ public:
   bool IsDone()  const { cb(); return (c >= (int)g->NumOfCells());}
   int  handle()  const { cv(); return c;}
 
-  friend bool operator==<>(cell_iterator_int<GRID,GT> const& lhs, 
-			   cell_iterator_int<GRID,GT> const& rhs);
-  /*
-  bool operator==(self const& rhs) const { return (rhs.c == c) && (rhs.g == g);}
-  bool operator!=(self const& rhs) const { return !((*this) == rhs);}
-  bool operator< (self const& rhs) const { return (c < rhs.c);}
-  */
+  friend bool operator==<>(cell_iterator_int<GT> const& lhs, 
+			   cell_iterator_int<GT> const& rhs);
 
   bool bound() const { return g != 0;}
   bool valid() const { return bound() && c < (int)g->NumOfCells();}
@@ -80,12 +125,12 @@ public:
   void cv()    const { REQUIRE(valid(), "c=" << c, 1);}
 };
 
-template<class GRID, class GT>
-inline bool operator==(cell_iterator_int<GRID,GT> const& lhs, 
-		       cell_iterator_int<GRID,GT> const& rhs) { return (rhs.c == lhs.c);}
-template<class GRID, class GT>
-inline bool operator!=(cell_iterator_int<GRID,GT> const& lhs, 
-		       cell_iterator_int<GRID,GT> const& rhs) { return !(lhs == rhs);}
+template<class GT>
+inline bool operator==(cell_iterator_int<GT> const& lhs, 
+		       cell_iterator_int<GT> const& rhs) { return (rhs.c == lhs.c);}
+template<class GT>
+inline bool operator!=(cell_iterator_int<GT> const& lhs, 
+		       cell_iterator_int<GT> const& rhs) { return !(lhs == rhs);}
 
 
 #endif

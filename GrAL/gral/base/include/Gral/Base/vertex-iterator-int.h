@@ -7,12 +7,12 @@
 #include "Utility/ref-ptr.h"
 #include "Gral/Base/common-grid-basics.h"
 
-template<class GRID, class GT = grid_types<GRID> >
+template<class GT>
 class vertex_iterator_int;
 
-template<class GRID, class GT>
-inline bool operator==(vertex_iterator_int<GRID,GT> const& lhs, 
-		       vertex_iterator_int<GRID,GT> const& rhs);
+template<class GT>
+inline bool operator==(vertex_iterator_int<GT> const& lhs, 
+		       vertex_iterator_int<GT> const& rhs);
 
 /*! Generic vertex / vertex iterator type,
     based on vertices being numbered consecutively.
@@ -20,12 +20,12 @@ inline bool operator==(vertex_iterator_int<GRID,GT> const& lhs,
     \ingroup iterators
  */
 
-template<class GRID, class GT>
+template<class GT>
 class vertex_iterator_int : public GT {
-  typedef vertex_iterator_int<GRID, GT> self;
-  typedef GT                        gt;
+  typedef vertex_iterator_int< GT>   self;
+  typedef GT                         gt;
 public:
-  typedef GRID grid_type;
+  typedef typename gt::grid_type     grid_type;
   typedef typename gt::vertex_handle vertex_handle;
 protected:
   ref_ptr<grid_type const> g;
@@ -42,15 +42,10 @@ public:
   grid_type const& TheGrid() const { cb(); return *g;}
   bool IsDone() const { cb(); return (v >= (int)g->NumOfVertices());}
 
-  friend bool operator== <> (vertex_iterator_int<GRID,GT> const& lhs, 
-			     vertex_iterator_int<GRID,GT> const& rhs);
+  friend bool operator== <> (vertex_iterator_int<GT> const& lhs, 
+			     vertex_iterator_int<GT> const& rhs);
 
   vertex_handle handle() const { cv(); return vertex_handle(v);}
-
-  //  friend bool operator==(self const& lhs, self const& rhs) { return (rhs.v == lhs.v) && (rhs.g == lhs.g);}
-  //bool operator!=(self const& rhs) const { return !((*this) == rhs);}
-  //bool operator< (self const& rhs) const { return (v < rhs.v);}
-
 
   bool bound() const { return g != 0;}
   bool valid() const { return bound() && v < (int) g->NumOfVertices();}
@@ -59,11 +54,11 @@ public:
 };
 
   
-template<class GRID, class GT>
-inline bool operator==(vertex_iterator_int<GRID,GT> const& lhs, 
-		       vertex_iterator_int<GRID,GT> const& rhs) { return (rhs.v == lhs.v);}
-template<class GRID, class GT>
-inline bool operator!=(vertex_iterator_int<GRID,GT> const& lhs, 
-		       vertex_iterator_int<GRID,GT> const& rhs) { return !(lhs == rhs);}
+template<class GT>
+inline bool operator==(vertex_iterator_int<GT> const& lhs, 
+		       vertex_iterator_int<GT> const& rhs) { return (rhs.v == lhs.v);}
+template<class GT>
+inline bool operator!=(vertex_iterator_int<GT> const& lhs, 
+		       vertex_iterator_int<GT> const& rhs) { return !(lhs == rhs);}
 
 #endif
