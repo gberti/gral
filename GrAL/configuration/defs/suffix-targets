@@ -86,6 +86,7 @@ RELPATH=../../..#
 ADDRELPATH=.#
 RELROOT=$(RELPATH)/$(ADDRELPATH)#
 
+
 CONCEPTPATH=gral/base/doc/hyperlatex/html#
 GRALCONCEPTS=$(RELROOT)/$(CONCEPTPATH)#
 
@@ -98,7 +99,9 @@ doxy: additional-doxy
         $(DOXYCFG)/doxy.paths.cfg                  > doxy.cfg.tmp
 	echo "@INCLUDE_PATH = $(DOXYCFG)"         >> doxy.cfg.tmp
 	cat doxy.local.cfg                        >> doxy.cfg.tmp
-	$(DOXYCFG)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg.tmp
+	echo "STRIP_FROM_PATH = $(ROOT)/include/"   >> doxy.cfg.tmp
+	cat dependencies dependencies.doxy         > doxy.deps.tmp
+	$(DOXYCFG)/generate-doxycfg.pl -root $(ALLROOT) doxy.deps.tmp   >> doxy.cfg.tmp
 	cp $(DOXYHEADER) .
 	cp $(DOXYFOOTER) .
 	mkdir -p doxygen
@@ -109,10 +112,10 @@ doxy: additional-doxy
 
 installdox: additional-installdox
 	$(DOXYCFG)/generate-installdox.pl -root $(RELROOT) -path $(DOXYPATH)\
-          dependencies > installdox.sh.tmp;
+         doxy.deps.tmp  > installdox.sh.tmp;
 	chmod ugo+x ./installdox.sh.tmp;
 	./installdox.sh.tmp
-	rm -f installdox.sh.tmp
+	rm -f installdox.sh.tmp doxy.deps.tmp
 	$(DOXYCFG)/install-doc.pl\
             -root $(RELROOT) \
             -path $(DOXYPATH) \
