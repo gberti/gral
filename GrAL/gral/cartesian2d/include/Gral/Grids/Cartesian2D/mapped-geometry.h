@@ -40,7 +40,8 @@ class mapped_geometry_reg2d_base
   : public grid_types<RegGrid2D>
 {
 public:
-  typedef typename CoordMap::coord_type  coord_type;
+  //  typedef typename CoordMap::coord_type  coord_type;
+  typedef typename CoordMap::result_type  coord_type;
   typedef RegGrid2D                      grid_type;
   typedef typename RegGrid2D::index_type index_type;
 

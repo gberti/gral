@@ -5,11 +5,8 @@
 
 #include "Gral/Grids/Cartesian3D/cartesian3d.h"
 #include "Gral/Grids/Cartesian3D/grid-functions.h"
+#include "Gral/Grids/Cartesian3D/partial-grid-functions.h"
+#include "Gral/Grids/Cartesian3D/mapped-geometry.h"
 
-//#include "Gral/Grids/Cartesian2D/partial-grid-functions.h"
-//#include "Gral/Grids/Cartesian2D/boundary.h"
-//#include "Gral/Grids/Cartesian2D/subrange.h"
-//#include "Gral/Grids/Cartesian2D/stored-geometry.h"
-//#include "Gral/Grids/Cartesian2D/mapped-geometry.h"
 
 #endif
