@@ -1,7 +1,9 @@
 #ifndef NMWR_GB_GRID_COPY_ALG_H
 #define NMWR_GB_GRID_COPY_ALG_H
 
-#include "Grids/common-grid-basics.h"
+// $LICENSE
+
+#include "Gral/Base/common-grid-basics.h"
 
 // this requires that G1 has been constructed from G2
 // and hence corresponding cells come at the same position
@@ -20,7 +22,7 @@ void ConstructCellCorrespondence(G1     const& g1,    // in
   CellIt2 C2 = g2.FirstCell();
  
   for(; ! C1.IsDone(); ++C1, ++C2)
-    ccorr[g1.handle(*C1)] = g2.handle(*C2);
+    ccorr[C1.handle()] = C2.handle();
 }
 
 
