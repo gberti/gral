@@ -79,10 +79,10 @@ void ConstructGrid(OstreamGMV2DFmt& Out,
   \see \ref test-gmv-output2d.C for an example
  */
 template<class GRID,class GEOM, class GF, class MOREGFS>
-void ConstructGrid(OstreamGMV2DFmt& Out, 
-		   GRID const& G,
-		   GEOM const& GEO,
-		   heterogeneous_list::List<GF,MOREGFS> GFS);
+void ConstructGrid_GF(OstreamGMV2DFmt& Out, 
+		      GRID const& G,
+		      GEOM const& GEO,
+		      heterogeneous_list::List<GF,MOREGFS> GFS);
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/IO/gmv-format-output2d.tt.C"

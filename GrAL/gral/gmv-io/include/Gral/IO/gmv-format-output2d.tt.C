@@ -13,14 +13,14 @@ void ConstructGrid(OstreamGMV2DFmt& Out,
 {
   typedef heterogeneous_list::END END;
   heterogeneous_list::List<END,END> L;
-  ConstructGrid(Out,G,GEO,L);
+  ConstructGrid_GF(Out,G,GEO,L);
 }
 
 template<class GRID,class GEOM, class GF, class MOREGFS>
-void ConstructGrid(OstreamGMV2DFmt& Out, 
-		   GRID const& G,
-		   GEOM const& GEO,
-		   heterogeneous_list::List<GF,MOREGFS> GFS)
+void ConstructGrid_GF(OstreamGMV2DFmt& Out, 
+		      GRID const& G,
+		      GEOM const& GEO,
+		      heterogeneous_list::List<GF,MOREGFS> GFS)
 {
   typedef OstreamGMV2DFmt GMV3D;
   typedef grid_types<GRID> gt;

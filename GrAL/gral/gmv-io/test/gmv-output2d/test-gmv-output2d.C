@@ -53,8 +53,8 @@ int main() {
     // of grid functions to GMV
     namespace hl = heterogeneous_list;
     hl::BEGIN B;
-    ConstructGrid(Out,R,GeomR,
-		  (B, Out.pair("gf1",gf1), Out.pair("gf2",gf2)));
+    ConstructGrid_GF(Out,R,GeomR,
+		     (B, Out.pair("gf1",gf1), Out.pair("gf2",gf2)));
     // the construct (B, Out.pair(name, gf), ...) uses an overloaded
     // operator, (comma-operator) to create a list of (name,grid-function)
     // pairs to pass to GMV.
