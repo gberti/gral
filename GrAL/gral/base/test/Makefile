@@ -27,6 +27,7 @@ SUBDIRS = boundary-grid  \
           partial-grid-morphism \
           polygon1d \
           restricted-component-view \
+	  restricted-grid-view \
           shrunk-grid-view \
           simple-geometry \
           vertex-iterator-of-cell-set  \
