@@ -17,6 +17,6 @@
     I tried to make geometric and algebraic algorithms
     as generic as possible. The main technique for achieving this
     aim is a traits technique giving uniform access to the
-    functionality of geometric point classes via specializations
+    functionality of geometric %point classes via specializations
     of the point_traits template.
 */

@@ -52,14 +52,16 @@
 */
 //----------------------------------------------------------------
 
+template<class E>
+struct element_traits {};
+
+
 struct non_consecutive_tag {};
 
 template<int N>
 struct consecutive_integer_tag 
 { enum { offset = N }; };
 
-template<class E>
-struct element_traits {};
 
 template<class GRID>
 struct element_traits_base 

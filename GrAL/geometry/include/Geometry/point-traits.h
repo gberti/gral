@@ -8,7 +8,10 @@
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 
-// must be specialized
+/*! To be specialized for concrete P
+
+   \see real_point_traits
+ */
 template<class P>
 struct point_traits {};
 
@@ -56,6 +59,10 @@ struct point_traits_fixed_dim
     { REQUIRE(d == DIM, "Cannot construct: d = " << d << "; DIM = " << DIM,1);}
 };
 
+
+/*! \brief Point traits for real numbers
+    
+ */
 template<class REAL>
 struct real_point_traits : public point_traits_base<REAL> { 
   typedef REAL Ptype;
