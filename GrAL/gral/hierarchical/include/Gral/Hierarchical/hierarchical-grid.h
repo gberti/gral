@@ -222,11 +222,12 @@ namespace hierarchical {
     //@}
 
     template<class HG, class flat_handle_type>
-    bool valid(h_element_handle_t<HG,flat_handle_type> h) const 
-    { return valid(h.level()) && FlatGrid(h.level())->valid(h.flat_handle());} 
-    bool valid(hier_cell_handle   h) const { return valid(h.level()) && FlatGrid(h.level())->valid(h.flat_handle());} 
-    bool valid(level_handle lev)   const { return coarsest_level() <= lev && lev <= finest_level();}
-    void cv   (level_handle lev) const { REQUIRE( valid(lev), "lev=" << lev, 1); }
+    bool valid_handle(h_element_handle_t<HG,flat_handle_type> h) const 
+    { return valid_level(h.level()) && FlatGrid(h.level())->valid_handle(h.flat_handle());} 
+    bool valid_handle(hier_cell_handle   h) const 
+    { return valid_level(h.level()) && FlatGrid(h.level())->valid_handle(h.flat_handle());} 
+    bool valid_level(level_handle lev)   const { return coarsest_level() <= lev && lev <= finest_level();}
+    void cv   (level_handle lev) const { REQUIRE( valid_level(lev), "lev=" << lev, 1); }
     bool valid() const { return !empty();}
     void cv   () const { REQUIRE(valid(), "", 1);}
     void ce   () const { REQUIRE( (!empty()), "", 1);}
@@ -342,8 +343,7 @@ namespace hierarchical {
 
     ref_ptr<const hier_grid_type> TheHierGrid() const { return hg;}
     ref_ptr<const flat_grid_type> TheFlatGrid() const { return hg->FlatGrid(lev);}
-    // ref_ptr<const grid_type>      TheGrid() const { return TheHierGrid();}
-    const grid_type&              TheGrid() const { return *TheHierGrid();}
+    ref_ptr<const grid_type>      TheGrid() const { return TheHierGrid();}
 
     // transparent access to different grid types via their types
     // we cannot specialize member function templates of a non-specialized template class,
@@ -425,7 +425,7 @@ namespace hierarchical {
     // inline ChildIterator EndChild  () const;
 
     // checking functions
-    bool valid() const { return bound() && TheHierGrid()->valid(vertex_handle(h,level()));}
+    bool valid() const { return bound() && TheHierGrid()->valid_handle(vertex_handle(h,level()));}
     void cv() const { REQUIRE(valid(), "", 1);}
     
   }; // class h_vertex_t<HGrid>
@@ -471,6 +471,7 @@ namespace hierarchical {
     h_cell_t(grid_type const& gg, flat_cell_handle f, level_handle lev) : base(&gg,lev), h(f) {}
     h_cell_t(ref_ptr<grid_type const> gg, cell_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
     h_cell_t(ref_ptr<grid_type const> gg, flat_cell_type   f, level_handle lev) : base(gg,lev), h(f.handle()) {}
+    h_cell_t(ref_ptr<grid_type const> gg, ref_ptr<flat_cell_type const>  f, level_handle lev) : base(gg,lev), h(f->handle()) {}
     h_cell_t(ref_ptr<grid_type const> gg, flat_cell_handle f, level_handle lev) : base(gg,lev), h(f) {}
  
     // construct from 'sibling' using another ELEMBASE type
@@ -504,8 +505,8 @@ namespace hierarchical {
     inline ChildIterator EndChild  () const;
 
     // checking functions
-    bool valid() const { return bound() && TheHierGrid()->valid(cell_handle(h, level()));}
-    void cv() const { REQUIRE(valid(), "", 1);}
+    bool valid() const { return bound() && TheHierGrid()->valid_handle(cell_handle(h, level()));}
+    void cv() const { REQUIRE(valid(), "h=" << h << " level=" << level(), 1);}
   }; // class h_cell_t<ELEMENTBASE>
 
 
@@ -583,7 +584,7 @@ namespace hierarchical {
   
     vertex_handle   handle() const { cv(); return vertex_handle(vc.handle(), level()); }
   
-    temporary<Cell> TheCell()     const { cb(); return temporary<Cell>(Cell(TheGrid(), vc.TheCell(), level())) ;}
+    temporary<Cell> TheCell()     const { cb(); return temporary<Cell>(Cell(TheGrid(), vc.TheAnchor(), level())) ;}
     temporary<Cell> TheAnchor()   const { cb(); return TheCell(); }
   
     friend bool operator==(self const& lhs, self const& rhs) { lhs.cb(); rhs.cb(); return lhs.vc == rhs.vc;}
