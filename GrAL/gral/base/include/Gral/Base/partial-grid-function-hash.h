@@ -97,9 +97,11 @@ public:
 
    // read access:
   const T&   operator()(const E& e) const {
+    /*
     REQUIRE( (&(e.TheGrid()) == g),
              "gf(e): Grids don't match: e.TheGrid() = "
              << &(e.TheGrid()) << ", this->TheGrid() : " << g << "!\n",1); 
+    */
     typename table_type::const_iterator i = table.find(e);
     return ( (i != table.end()) ?
              (*i).second
@@ -108,9 +110,11 @@ public:
 
   // write access:
   T&  operator[](const E& e)       { 
+    /*
     REQUIRE( (&(e.TheGrid()) == g),
              "gf[e]: Grids don't match: e.TheGrid() = "
              << &(e.TheGrid()) << ", this->TheGrid() : " << g << "!\n",1); 
+    */
     typename table_type::iterator i = table.find(e);
     typedef typename table_type::value_type table_value;
     if(i == table.end()) 
