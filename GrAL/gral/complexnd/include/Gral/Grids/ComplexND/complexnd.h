@@ -675,10 +675,10 @@ namespace complexnd {
   public:
     element_base_t() : g(0) {}
     // use these 2 only with D or CD != ANY
-    element_base_t(grid_type const&         gg, element_handle_type hh = 0) : g(&gg), h(hh) {}
+    element_base_t(grid_type const&         gg, element_handle_type hh = 0) : g(gg), h(hh) {}
     element_base_t(ref_ptr<grid_type const> gg, element_handle_type hh = 0) : g(gg),  h(hh) {}
     // use only for D==CD==ANY
-    element_base_t(grid_type const&         gg, unsigned dim, element_handle_type hh = 0) : mixin(dim), g(&gg), h(hh) { checkdim();}
+    element_base_t(grid_type const&         gg, unsigned dim, element_handle_type hh = 0) : mixin(dim), g(gg), h(hh) { checkdim();}
     element_base_t(ref_ptr<grid_type const> gg, unsigned dim, element_handle_type hh = 0) : mixin(dim), g(gg),  h(hh) { checkdim();}
 
     void checkdim() const    
