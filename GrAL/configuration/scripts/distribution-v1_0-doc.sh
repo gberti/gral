@@ -69,7 +69,7 @@ done;
 cd ${GRALROOT};
 
 
-tar cf gral-doc.tar ./${DOC}
+tar hcf gral-doc.tar ./${DOC}
 gzip -f gral-doc.tar;
 mv gral-doc.tar.gz ..;
 cd ..;

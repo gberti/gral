@@ -50,7 +50,7 @@ find . -name "*.C" -exec ${cvswork}/configuration/scripts/replace-license.pl {} 
 
 
 cd ..;
-tar cf gral-src.tar ${GRALROOT};
+tar hcf gral-src.tar ${GRALROOT};
 gzip -f gral-src.tar;
 rm -rf ${GRALROOT};
 
