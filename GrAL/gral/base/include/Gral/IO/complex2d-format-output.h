@@ -196,9 +196,11 @@ public:
 
 */
 
+template<>
 struct grid_types<OstreamComplex2DFmt>
 {
   typedef  OstreamComplex2DFmt             grid_type;
+  typedef  grid_dim_tag<2>                 dimension_tag;
 
   typedef  grid_type::Vertex               Vertex;
   typedef  grid_type::Cell                 Cell;

@@ -272,9 +272,11 @@ CellIterator_istream_complex2d::FirstVertex() const
     \see Module \ref traits (\c grid_types)
     \see IstreamComplex2DFmt_base
  */
+template<>
 struct grid_types<IstreamComplex2DFmt_base>
 {
-  typedef IstreamComplex2DFmt_base             grid_type;
+  typedef IstreamComplex2DFmt_base       grid_type;
+  typedef grid_dim_tag<2>                dimension_tag;
 
   typedef  grid_type::Vertex               Vertex;
   typedef  grid_type::VertexIterator       VertexIterator;
