@@ -35,6 +35,9 @@ public:
   Cell2D_Iterator(const cell_handle& c, Complex2D const& CC)
     : _pos(c),  _cc(&CC),  _endpos(CC.NumOfCells())
   {}
+  Cell2D_Iterator(Complex2D const& CC, cell_handle c)
+    : _pos(c),  _cc(&CC),  _endpos(CC.NumOfCells())
+  {}
   
   Cell2D_Iterator(const Cell2D& C) 
     : _pos(C._pos), _cc(& C.TheGrid()), _endpos(C.TheGrid().NumOfCells())
@@ -51,7 +54,7 @@ public:
   self& operator++() { ++_pos; return (*this);}
   Cell  operator*() const {return (_cc->cell(_pos));}
   bool IsDone() const { return (_pos == _endpos);}
-  operator bool() const { return !IsDone();}
+  //   operator bool() const { return !IsDone();}
 
 
   //-------------- anchor ---------------------------
@@ -71,6 +74,9 @@ public:
       return ( ls._pos < rs._pos);
     }
 
+  bool bound()    const { return (_cc != 0);}
+  bool in_range() const { return (0 <= _pos && _pos < _endpos);}
+  bool valid()    const { return ( bound() && in_range());}
 };
 
 
