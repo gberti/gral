@@ -334,7 +334,7 @@ public:
 
 
 
-
+template<>
 struct grid_types<Triang2D> : public grid_types_base<grid_types_Triang2D>
 {
 
