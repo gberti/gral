@@ -1,7 +1,8 @@
 #ifndef NMWR_GB_MUTATOR_H
 #define NMWR_GB_MUTATOR_H
 
-
+/*! \file
+ */
 
 // $LICENSE
 
@@ -22,10 +23,14 @@
 //
 //----------------------------------------------------------------
 
-//! The simplest concrete Mutator
-/*! Reads value v from an istream / writes v to an ostream
+/*! \brief  The simplest concrete Mutator
+
+
+    Reads value v from an istream / writes v to an ostream
     This mutator is ok for reading parameter files or command lines,
     or even GUI input if it is converted to a string.
+
+    \see mutatorcreators
  */
 template<class T>
 class TypedMutator : public Mutator {
@@ -70,8 +75,8 @@ private:
 /*! examples: 
  \code
   Ctrl.add("show", new SetTrueOnReadMutator(show));
-  will set show to true if read,
  \endcode
+  will set show to true if read,
 */
 class SetTrueOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
@@ -95,12 +100,13 @@ class SetFalseOnReadMutator : public TypedMutator<bool> {
 };
 
 
-//! toggles the boolean value of v
-/*! examples: 
+/*! \brief  Mutator to toggle the boolean value of v
+
+  Example: 
  \code
   Ctrl.add("toggle-binary", new FlipOnReadMutator(bin_flag));
-  will flip the value of bin_flag if "toggle-binary" is read.
  \endcode
+  will flip the value of bin_flag if "toggle-binary" is read.
 */
 class FlipOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
@@ -113,12 +119,12 @@ class FlipOnReadMutator : public TypedMutator<bool> {
 };
 
 
-//! Set v2 to deflt, if read occurs.
-/*! example: 
+/*! \brief Mutator which sets v2 to deflt, if read occurs.
+  example: 
   \code
   SetOnReadMutator<double,bool>(x,xread,true)
-  will set xread to true if x is read.
   \endcode
+  will set xread to true if x is read.
 */
 template<class T, class Tsec>
 class SetOnReadMutator : public TypedMutator<T> {
@@ -133,7 +139,8 @@ public:
 
 
 
-//! Prints an additional comment when written
+/*! \brief Mutator printing an additional comment when written
+ */
 template<class T>
 class CommentedMutator : public TypedMutator<T> {
   typedef TypedMutator<T> tm;
@@ -146,8 +153,8 @@ public:
   virtual std::string description() const { return comment;}
 };
 
-//! Prints a message to an ostream if read.
-/* 
+/*! \brief Mutator which prints a message to an ostream if read.
+ 
   This is useful for adding help messages to command-line control devices, e.g. :
   \code
   string help = "Usage: foobar -f <file> -n <number> \n";
@@ -174,45 +181,83 @@ public:
 // Mutator-generating Functions
 ////////////////////////////////
 
-// simplest: base to all other Mutators below
+/*! \defgroup mutatorcreators Creator functions for mutators
+
+*/
+
+/*! \brief Creator function for TypedMutator
+    
+    \ingroup mutatorcreators 
+ */
 template<class T>
 inline TypedMutator<T>* GetMutator(T& t) { return new TypedMutator<T>(t);}
 
+//!
+/*! \brief Creator function for CommentedMutator
+    
+    \ingroup mutatorcreators 
+ */
 template<class T>
 inline CommentedMutator<T>* GetMutator(T& t, std::string const& comment) 
 { return new CommentedMutator<T>(t,comment);}
- 
+
+/*! \brief Creator function for CommentedMutator
+    
+    \ingroup mutatorcreators 
+ */
 template<class T>
 inline CommentedMutator<T>* GetMutator(T& t, const char* comment) 
 { return new CommentedMutator<T>(t,comment);}
  
-// notify observ if t is read & changed
+/*! \brief Creator function for NotifyOnChangeMutator
+    
+    \ingroup mutatorcreators 
+ */
 template<class T>
 inline NotifyOnChangeMutator<T>* GetNotifyingMutator(T& t, controlable& observ) 
 { return new NotifyOnChangeMutator<T>(t,observ);}
 
-// t = true if read
+/*! \brief Creator function for SetTrueOnReadMutator
+    
+    \ingroup mutatorcreators 
+ */
 inline SetTrueOnReadMutator* GetTrueOnReadMutator(bool& t)
 { return new SetTrueOnReadMutator(t);}
 
-// t = false if read
+/*! \brief Creator function for SetFalseOnReadMutator
+    
+    \ingroup mutatorcreators 
+ */
 inline SetFalseOnReadMutator* GetFalseOnReadMutator(bool& t)
 { return new SetFalseOnReadMutator(t);}
 
-// t = !t if read
+/*! \brief Creator function for FlipOnReadMutator
+    
+    \ingroup mutatorcreators 
+ */
 inline FlipOnReadMutator* GetFlipOnReadMutator(bool& t)
 { return new FlipOnReadMutator(t);}
 
-// obs = deflt if t is read
+/*! \brief Creator function for SetOnReadMutator
+    
+    \ingroup mutatorcreators 
+ */
 template<class T, class TObs>
 inline SetOnReadMutator<T,TObs>* GetSetOnReadMutator(T& t, TObs& obs, TObs deflt)
 { return new SetOnReadMutator<T,TObs>(t,obs,deflt); }
 
-// write a comment if printed
+/*! \brief Creator function for CommentedMutator
+    
+    \ingroup mutatorcreators 
+ */
 template<class T>
 inline CommentedMutator<T>* GetCommentedMutator(T& t, std::string const& comment)
 { return  new  CommentedMutator<T>(t,comment); }
 
+/*! \brief Creator function for CommentedMutator
+    
+    \ingroup mutatorcreators 
+ */
 template<class T>
 inline CommentedMutator<T>* GetCommentedMutator(T& t, const char* comment)
 { return  new  CommentedMutator<T>(t,std::string(comment)); }

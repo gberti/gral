@@ -1,5 +1,6 @@
-/*! \file Test cases for simplex<> class template
-    
+/*! \file 
+
+   Test cases for simplex<> class template
 */
 
 #include "Geometry/simplex.h"

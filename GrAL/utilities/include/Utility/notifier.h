@@ -9,7 +9,7 @@
 
   \brief  A framework for automatically notifying observers of changes to their notifiers.
 
-  An observers registers at a notifier via a call to connect(notifier const*);
+  An observer registers at a notifier via a call to <tt>connect(notifier const*)</tt>.
   On change, a notifier notifies all its observers by iterating over them and
   telling them about the specific change, for example, it may call notifier_assigned(this) on all of them.
   Normally, an ovserver will have only one notifier, but each notifier will usually have several observers.
@@ -67,7 +67,10 @@ class notifier_table;
 class notifier;
 class observer;
 
+/*! \brief Part of the Notify/Observer pattern
 
+   \ingroup notifyobserve
+ */
 class observer {
 private:
   friend class notifier;
@@ -88,6 +91,7 @@ public:
 
   // derived classes may define more messages specific to particular changes of notifiers
 
+  //!
   unsigned NumOfNotifiers() const { return notifiers.size();}
 
 protected:
@@ -106,11 +110,17 @@ private:
 //--------------------------------------------------------------------
 //--------------------------------------------------------------------
 
+
+/*! \brief Part of the Notify/Observer pattern
+
+   \ingroup notifyobserve
+ */
 class notifier {
 private:
   friend class observer;
   typedef std::vector<observer *>   observer_table;
 public:
+  //! Iterator over sequence of registered observers
   typedef observer_table::iterator observer_iterator;
 private:
   mutable observer_table  observers;
@@ -127,9 +137,11 @@ protected:
 public:  
   notifier& operator=(const notifier& rs);
   virtual ~notifier();
-
+  //!
   unsigned NumOfObservers() const { return observers.size();}
+  //! First registered observer 
   observer_iterator begin_observer() { return observers.begin();}
+  //! Past-the-end observer
   observer_iterator end_observer()   { return observers.end();}
 
 private:

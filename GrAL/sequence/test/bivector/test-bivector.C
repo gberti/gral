@@ -1,3 +1,8 @@
+/*! \file
+
+    Test harness for \c bivector<>
+ */
+
 #include "Container/bivector.h"
 #include "Utility/pre-post-conditions.h"
 

@@ -1,4 +1,8 @@
+/*! \file
+   
+   Test harness for \c algebraic_primitives.
 
+*/
 #include "Geometry/test-primitives.h"
 #include "Geometry/test-primitives2d.h"
 #include "Geometry/test-primitives3d.h"

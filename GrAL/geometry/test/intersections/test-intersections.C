@@ -1,3 +1,6 @@
+/*! \file
+
+ */
 #include "Geometry/intersections.h"
 #include "Geometry/coords.h"
 

@@ -4,7 +4,14 @@
 
 // $LICENSE
 
-//----------------------------------------------------------------
+/*! \brief  Default implementation for \c copy_traits<>
+ */
+template<class T>
+struct copy_traits_base {
+    static T* clone(T const& t) { return (new T(t));}
+    static void destroy(T * t)  { delete t;}
+};
+
 /*!
    \brief Compile-time branch on how to copy pointees.
 
@@ -50,14 +57,6 @@
    void  copy_traits<impl>::destroy(impl      * i) { delete i;}
    \endcode
 */
-//----------------------------------------------------------------
-
-template<class T>
-struct copy_traits_base {
-    static T* clone(T const& t) { return (new T(t));}
-    static void destroy(T * t)  { delete t;}
-};
-
 template<class T>
 struct copy_traits : public copy_traits_base<T> {};
 

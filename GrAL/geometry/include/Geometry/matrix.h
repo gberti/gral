@@ -20,7 +20,19 @@ struct fixed_row_mjr_subcriptor {
   }
 };
 
- // public vector_space_category<matrix<N,M> >, 
+/*! \defgroup matrixalg Simple matrix class and operators
+
+ */
+
+/*! \brief Simple matrix class with compile-time determined dimensions
+
+    \ingroup matrixalg
+
+    The \c OFF parameter determines the indexing base (typically 0 or 1).
+    This class is not tuned towards high performance.    
+
+    Tested in  test-matrix.C
+*/
 template<unsigned M, unsigned N, int OFF = 1>
 class matrix :  public coordN<N*M> {
 public:
@@ -48,22 +60,32 @@ public:
 
 };
 
-
+/*! \brief matrix addition
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 inline matrix<M,N,OFF> operator+(const matrix<M,N,OFF>& ls, const matrix<M,N,OFF> rs)
 { matrix<M,N,OFF> tmp(ls); return (tmp += rs);}
 
  
+/*! \brief matrix subtraction
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 inline matrix<M,N,OFF> operator-(const matrix<M,N,OFF>& ls, const matrix<M,N,OFF> rs)
 { matrix<M,N,OFF> tmp(ls); return (tmp -= rs);}
 
+/*! \brief matrix 
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 inline matrix<M,N,OFF> operator*(const matrix<M,N,OFF>& ls, coord_N_component rs)
 { matrix<M,N,OFF> tmp(ls); return (tmp *= rs);}
 
 
-// commutative multiplication of component required !!!
+/*! \brief matrix-scalar multiplication
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 inline matrix<M,N,OFF> operator*( coord_N_component ls, const matrix<M,N,OFF>& rs)
 { matrix<M,N,OFF> tmp(rs); return (tmp *= ls);}
@@ -71,6 +93,9 @@ inline matrix<M,N,OFF> operator*( coord_N_component ls, const matrix<M,N,OFF>& r
 
 
 
+/*! \brief matrix-matrix multiplication
+    \ingroup matrixalg
+*/
 template<unsigned K, unsigned L, unsigned M, int OFF>
 inline void mul(matrix<K,M, OFF>& res,
 		const matrix<K,L, OFF>& ls, const matrix<L,M, OFF>& rs)
@@ -83,6 +108,9 @@ inline void mul(matrix<K,M, OFF>& res,
     }
 }
 
+/*! \brief matrix-matrix multiplication 
+    \ingroup matrixalg
+*/
 template<unsigned K, unsigned L, unsigned M, int OFF>
 inline matrix<K,M> operator*(const matrix<K,L, OFF>& ls, const matrix<L,M, OFF>& rs)
 { 
@@ -92,6 +120,9 @@ inline matrix<K,M> operator*(const matrix<K,L, OFF>& ls, const matrix<L,M, OFF>&
 }
 
 
+/*! \brief matrix-vector multiplication
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 inline void mul(coordN<M> & res,
 		const matrix<M,N,OFF>& ls, const coordN<N>& rs) 
@@ -103,6 +134,9 @@ inline void mul(coordN<M> & res,
   }
 }
 
+/*! \brief matrix-vector multiplication
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 inline coordN<M> operator*(const matrix<M,N,OFF>& ls, const coordN<N>& rs) 
 {
@@ -112,6 +146,9 @@ inline coordN<M> operator*(const matrix<M,N,OFF>& ls, const coordN<N>& rs)
 }
 
 
+/*! \brief matrix-vector multiplication
+    \ingroup matrixalg
+*/
 template<unsigned N, int OFF, class P>
 inline P operator*(const matrix<N,N,OFF>& ls, P rs)
 { 
@@ -161,6 +198,9 @@ inline matrix<N,N,OFF> operator*(coord_N_component ls, const matrix<N,N,OFF>& rs
 
 //----------------------- IO ------------------------------------
 
+/*! \brief matrix output
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 inline std::ostream& operator<<(std::ostream& out, const matrix<M,N,OFF>& rs)
 {
@@ -172,6 +212,9 @@ inline std::ostream& operator<<(std::ostream& out, const matrix<M,N,OFF>& rs)
   return out;
 }
 
+/*! \brief matrix input
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 inline std::istream& operator>>(std::istream& in, matrix<M,N,OFF>& rs)
 {
@@ -184,6 +227,9 @@ inline std::istream& operator>>(std::istream& in, matrix<M,N,OFF>& rs)
 
 
 
+/*! \brief matrix traits specialization 
+    \ingroup matrixalg
+*/
 template<unsigned N, unsigned M, int OFF>
 struct matrix_traits<matrix<M,N,OFF> >
   : public matrix_traits_fixed_dim_base<M,N, matrix<M,N,OFF> > 

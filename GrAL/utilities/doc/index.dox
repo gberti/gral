@@ -4,28 +4,37 @@
      \section intro Introduction
 
       This  package contains various little utilities used in other 
-      packages.
+      packages. Some of these are now obsolete, as either the standard or 
+      <a TARGET=_paterent HREF="http://www.boost.org">boost</a> offer better alternatives.
 
       \subsection secsafefile Safe file I/O
-      see \ref file_interactive
+      see  <tt>\ref file_interactive</tt>
       
       \subsection secprepost  Macros for Pre- and Postconditions
-      see  pre-post-conditions.h
+      see  \ref pre-post-conditions.h
 
      \subsection sectraits Some general traits classes
-        \ref copy_traits : Make pointers copyable even 
+          <tt>\ref copy_traits</tt> : Make pointers copyable even 
           when its a pointer to a base class. This is needed
           to use a copy-on-write smart pointer with polymorphic types.
 
-         \ref type_name_traits : Get a types name as string. Specialized
+         <tt>\ref type_name_traits</tt> : Get the name of a type as string. Specialized
           for the built-in types.
+     \subsection secoperators Function objects for algebraic and relational operators
+      
+	See module \ref operators
+
+     \subsection secnotifier Notifier / Observer framework
+
+        See module \ref notifyobserve
 
      \subsection secasstring  Conversion of arbitrary types to strings
-        See as-string.h : Uses <tt> strstream  </tt> to achieve that.
+        See <tt> \ref as_string</tt> : Uses <tt> std::sstream </tt> to achieve that.
 
      \subsection secrefcnt   Reference counting smart pointer
-      Borrowed from Scott Meyers book "More Effective C++".
+      Borrowed from Scott Meyers book "More Effective C++". <br>
+      See \ref reference-count.h
 
-       see reference-count.h
-    
+    \subsection secrefptr  Uniform handling of owned and referenced pointees
+       see <tt>\ref ref_ptr<> </tt>
 */

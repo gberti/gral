@@ -10,15 +10,14 @@
 
 #include <boost/limits.hpp>
 
-/*! \defgroup boundingboxfunctions Free functions on bounding boxes 
+/*! \defgroup boundingbox Bounding boxes 
     
-     \see \c box<COORD>
-
- */
+*/
 
 
 /*! \brief An axisparallel box for arbitrary coordinate types.
 
+    \ingroup boundingbox 
     This class is especially useful for representing bounding boxes.
     Union (<tt> operator | </tt>) and intersection (<tt> operator & </tt>) of boxes give
     again boxes (namely bounding boxes of the set-theoretic union
@@ -28,8 +27,8 @@
     hull of its min and max corner <tt> [the_min(), the_max()]</tt>, 
     in the obvious way.
 
-    \see Tested in test-box.C
-    \see Module  boundingboxfunctions
+    \see Tested in \ref test-box.C
+    \see Module  boundingbox
  */
 
 
@@ -193,7 +192,7 @@ public:
 /*! \brief Box intersection.
 
     \see \c box<COORD>
-    \ingroup boundingboxfunctions
+    \ingroup boundingbox
 */
 template<class COORD>
 box<COORD>  operator & (box<COORD> const& b1, box<COORD> const& b2) 
@@ -206,7 +205,7 @@ box<COORD>  operator & (box<COORD> const& b1, box<COORD> const& b2)
 
     Returns the bounding box of the union of two boxes
     \see \c box<COORD>
-    \ingroup boundingboxfunctions
+    \ingroup boundingbox
 */
 template<class COORD>
 box<COORD>  operator | (box<COORD> const& b1, box<COORD> const& b2) 
@@ -221,7 +220,7 @@ box<COORD>  operator | (box<COORD> const& b1, box<COORD> const& b2)
    
     \note This is not the exact Hausdorff distance.
     \see \c box<COORD>
-    \ingroup boundingboxfunctions
+    \ingroup boundingbox
 */
 template<class COORD>
 inline
@@ -235,7 +234,7 @@ typename box<COORD>::scalar_type distance(box<COORD> const& b1, box<COORD> const
 /*! \brief Diameter of a box.
 
     \see \c box<COORD>
-    \ingroup boundingboxfunctions
+    \ingroup boundingbox
  */
 template<class COORD>
 inline

@@ -11,9 +11,22 @@
 //
 //----------------------------------------------------------------
 
-#include <algorithm> // STL: swap
+#include <algorithm> // swap
 
+/*! \brief geometric functions specific to 2D
 
+    \ingroup algebraicprimitives   
+
+   This class can be used to enforce 2D primitives 
+   for point classes with runtime variable dimension:
+   \code
+    template<>
+    struct dimension_dependent_primitives<MyPoint> 
+      : public dimension_dependent_primitives_2d<MyPoint> {};
+   \endcode
+
+  Then \c algebraic_primitives<MyPoint> automatically contains 2D primitives.
+*/
 template<class POINT>
 struct dimension_dependent_primitives_2d 
   : public virtual basic_algebraic_primitives<POINT> 

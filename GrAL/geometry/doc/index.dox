@@ -7,16 +7,15 @@
     algebraic/geometric primitives for operating on them,
     like norms, distances, and intersections.
 
-
-    Please note that things in this package have been developed
+    Please note that most things in this package have been developed
     in an ad-hoc fashion, driven by the needs of the various GrAL
     algorithms, and do not  represent an attempt to provide
     a `complete' set of primitives (whatever this would mean).
-
 
     I tried to make geometric and algebraic algorithms
     as generic as possible. The main technique for achieving this
     aim is a traits technique giving uniform access to the
     functionality of geometric %point classes via specializations
-    of the point_traits template.
+    of the point_traits template. The corresponding template for matrix classes
+    is called matrix_traits.
 */

@@ -196,6 +196,25 @@ struct dimension_dependent_primitives<POINT, variable_dimension_tag>
     public dimension_dependent_primitives_3d<POINT>
   {};
 
+/*! \defgroup algebraicprimitives Primitive algebraic and geometric operations
+ */
+
+/*! \brief Collection of primitive algebraic and geometric operations on point types
+
+    \ingroup algebraicprimitives   
+
+    This class contains various primitive operations as static member functions. 
+    For 2D and 3D points, some more primitives are automatically generated,
+    see \c dimension_dependent_primitives_2d and \c dimension_dependent_primitives_3d
+    for details on these primitives.
+
+    For using these function for your own point class, 
+    specialize the point_traits<> template for this class.
+
+    For examples of how to use algebraic_primitives, see \ref test-primitives.C,
+    \ref test-primitives2d.C, and \ref test-primitives3d.C.
+    
+*/  
 template<class POINT, class PT = point_traits<POINT> >
 struct algebraic_primitives 
   : public dimension_dependent_primitives
@@ -207,16 +226,16 @@ struct algebraic_primitives
 
 
 
-//-------------------------------------------------------------------------
-//
-// calculate centroid and area of a simple polygon, given by the vertices
-// [begin, end).
-// The centroid (or center of inertia) c of a domain D is defined by
-// \int_{D} x_i dx dy / area(D)
-//
-// This is adapted from GraphicsGems IV, centroid.c
-//
-//-------------------------------------------------------------------------
+/*! \brief calculate centroid and area of a simple polygon
+ 
+ The polygon is given by a sequence of vertices \c [begin, end).
+
+ The centroid (or center of inertia) c of a domain D is defined by
+ \f$ \int_{D} x_i dx dy / \mbox{area}(D) \f$
+
+ This is adapted from GraphicsGems IV, centroid.c
+
+*/
 
 template<class PIt, class Q>
 void get_polygon2d_center_and_area(PIt begin, PIt end, // in:  iterator over polygon vertices

@@ -7,18 +7,19 @@
 #include "IO/mutator.h"  // only needed for "special" mutators.
 #include "IO/control-device.h"
 
-//----------------------------------------------------------------
-//
-// Demonstration for nested parameter control via parameter 
-// file ("ctrl.in" in this example) and command line.
-//
-// try something like 
-// $ ./ex1.exe   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 }
-// on the commandline to see what is happening.
-// To see error handling, try:
-// $ ./ex1.exe   this is rubbish   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 }
-//
-//----------------------------------------------------------------
+/*! \file
+
+   Demonstration for nested parameter control via parameter 
+   file ("ctrl.in" in this example) and command line.
+
+   try something like <br>
+   <tt> $ ./ex1.exe   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 } </tt> <br>
+   on the commandline to see what is happening.
+  <br>
+   To see error handling, try: <br>
+  <tt> $ ./ex1.exe   this is rubbish   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 } </tt>
+*/
+
 
 int main(int argc, char* argv[]) {
   using namespace std;

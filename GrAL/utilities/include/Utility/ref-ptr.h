@@ -101,7 +101,6 @@ struct  ref_ptr_base {
    the \c temporary<> template.
 
   \todo Extend the class to be able to hold instances of true reference-counted smart pointers.
-  \todo Introduce extra policy template parameter to 
 */
 
 template<class T>

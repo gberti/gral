@@ -1,3 +1,8 @@
+/*! \file
+
+    Tests for \c tuple<T,N>
+*/
+
 #include "Container/tuple.h"
 #include "Container/tuple-point-traits.h"
 

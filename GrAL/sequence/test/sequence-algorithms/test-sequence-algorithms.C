@@ -1,6 +1,8 @@
-/*! \file Test cases for some sequence algorithms
+/*! \file 
 
+  Test cases for some sequence algorithms
 */
+
 #include "Container/sequence-algorithms.h"
 
 #include "Utility/pre-post-conditions.h"

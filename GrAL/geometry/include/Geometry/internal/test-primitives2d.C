@@ -1,13 +1,22 @@
 #ifndef GRAL_GB_GEOMETRY_TEST_PRIMITIVES2D_C
 #define GRAL_GB_GEOMETRY_TEST_PRIMITIVES2D_C
 
+// $LICENSE
+
+/*! \file
+
+*/
+
 #include "Geometry/test-primitives2d.h"
 #include "Geometry/algebraic-primitives.h"
 #include "Geometry/primitives2d.h"
 
 #include "Utility/pre-post-conditions.h"
 
-
+/*! \brief Test 2D primitives in dimension_dependent_primitives_2d
+  
+    \ingroup algebraicprimitives 
+*/
 template<class POINT>
 void test_algebraic_primitives2d<POINT>::do_tests(std::ostream& out)
 {

@@ -5,11 +5,23 @@
 // $LICENSE
 
 
+/*! \brief Geometric and algebraic primitives specific to 3D
 
-/*! geometric functions specific to 3D
+*/
 
- This can be used to specialize dimension_dependent_primitives<POINT>
- to dimension_dependent_primitives_3d<POINT> for 3D points.
+/*! \brief geometric functions specific to 3D
+
+    \ingroup algebraicprimitives   
+
+   This class can be used to enforce 3D primitives 
+   for point classes with runtime variable dimension:
+   \code
+    template<>
+    struct dimension_dependent_primitives<MyPoint> 
+      : public dimension_dependent_primitives_3d<MyPoint> {};
+   \endcode
+
+  Then \c algebraic_primitives<MyPoint> automatically contains 3D primitives.
 */
 
 

@@ -12,6 +12,6 @@
      Nevertheless, the functionality offered is quite useful.
 
      Documentation is largely missing; for a (tiny) example
-     see test-functions.C .
+     see \ref test-functions.C .
     
 */

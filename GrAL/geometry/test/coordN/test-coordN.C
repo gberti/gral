@@ -1,4 +1,6 @@
-/*! \file Test harness for coordN<N>
+/*! \file 
+  
+   Test harness for coordN.
 
  */
 

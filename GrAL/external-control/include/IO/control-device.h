@@ -28,7 +28,7 @@
 
 
 
-//!  implementation class ("letter")
+//  implementation class ("letter")
 class control_device_impl : public controlable {
 public:
   virtual void update() = 0;
@@ -47,7 +47,11 @@ public:
   virtual ~control_device_impl() {}
 };
 
-//! envelope class
+/*! \brief Abstract interface to parameter control
+
+    \see ControlDeviceCreators for creation
+    \see \ref ex1.C  for examples
+*/
 class ControlDevice  {
 public:
   ControlDevice(control_device_impl* imp = 0) : impl(imp) {}
@@ -86,25 +90,44 @@ inline void RegisterAt(ControlDevice& Ctrl, char const*   name, T& t)
 {  Ctrl.add(name, new TypedMutator<T>(t)); }
 
 
+/*! \defgroup ControlDeviceCreators Creator functions for ControlDevice
 
-//! a simple ControlDevice that reads name-value-pairs from a stream
+    For examples of using these creator functions (or factories), see <tt> \ref ex1.C</tt>.
+*/
+
+/*! \brief Create a  ControlDevice that reads name-value-pairs from a stream
+    
+    \ingroup ControlDeviceCreators 
+ */
 extern ControlDevice GetStreamDevice(std::istream* in, 
                                      std::string const& name = "");
 
 
-//! a simple ControlDevice that reads name-value-pairs from a file
+/*! \brief Create a  ControlDevice that reads name-value-pairs from a file
+ */
 extern ControlDevice GetFileControlDevice(char const*   filename, 
                                           std::string const& name);
 
-//! ControlDevice that first reads from file and then from command line
+/*! \brief Create a ControlDevice that first reads from file and then from command line
+    
+    \ingroup ControlDeviceCreators 
+ */
 extern ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
 							std::string const& filename, 
 							std::string const& name);
 
-//! ControlDevice that reads from given a stream and from a file
+/*! \brief Create a ControlDevice that reads from given a stream and from a file
+    
+    \ingroup ControlDeviceCreators 
+ */
 extern ControlDevice GetDuplexControlDevice(std::istream     & in2,
 					    char        const* filename, 
                                             std::string const& name);
+    
+/*! \brief Create a ControlDevice that reads from given a stream and from a file
+    
+    \ingroup ControlDeviceCreators 
+ */
 extern ControlDevice GetDuplexControlDevice(std::istream     & in2,
 					    std::string const& filename, 
                                             std::string const& name);

@@ -6,22 +6,21 @@
    - common Makefile parts in \c defs 
       - general variables in \c defs/make.defs.
         Variables a user might want to change are
-        - ARCH: architecture, e.g. \c solaris or \c linux
-        - CCNAME: used compiler, e.g. \c kai or \c gcc (Note: CCNAME is
+        - <tt>ARCH</tt>: architecture, e.g. \c solaris or \c linux
+        - <tt>CCNAME</tt>: used compiler, e.g. \c kai or \c gcc (Note: <tt>CCNAME</tt> is
           used in a path and does not have to be the name of the 
           actual c++ compiler)    
-        - DEBUG: choose debug or optimization mode, choices are 
+        - <tt>DEBUG</tt>: choose debug or optimization mode, choices are 
           \c debug or \c opt
       - generic targets in \c defs/suffix-targets
       - recursive targets in \c defs/recursive-targets
-      - architecture dependend stuff in \c defs/<ARCH>/make.defs
-      - compiler dependend stuff in \c defs/<CCNAME>/make.defs,
-        \c defs/<CCNAME>/<DEBUG>/make.defs
-   - doxygen related information in \c doxygen/
-   - compiler configuration  in \c compiler-config.h
-   - utility scripts for maintenance in \c scripts/
-   - configuration information for 3rd party software 
-     - MPI in \c defs/mpi
+      - architecture dependend stuff in <tt> defs/\$(ARCH)/make.defs </tt>
+      - compiler dependend stuff in <tt> defs/\$(CCNAME)/make.defs </tt>,
+        <tt> defs/\$(CCNAME)/\$(DEBUG)/make.defs </tt>
+   - doxygen related information in <tt> doxygen/ </tt>
+   - compiler configuration  in <tt> \ref compiler-config.h </tt> (not used at the moment)
+   - utility scripts for maintenance in <tt> scripts/ </tt>
+   - configuration information for 3rd party software:
+     - MPI in  </tt> defs/mpi </tt>
 
-  \todo could use autoconf or something like that.
 */

@@ -1,7 +1,9 @@
 #ifndef NMWR_GB_AS_STRING_H
 #define NMWR_GB_AS_STRING_H
 
+/*! \file
 
+*/
 
 // $LICENSE
 
@@ -13,6 +15,11 @@
 #include <strstream.h>
 #endif
 
+/*! \brief Convert any type into a string
+   
+    The type T is required to have an output operator <tt> >> </tt>
+    to <tt>std::ostream</tt> defined.
+*/
 template<class T>
 inline std::string as_string(const T& t)
 {

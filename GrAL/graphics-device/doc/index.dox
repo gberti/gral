@@ -16,7 +16,7 @@
 
      Documentation is largely missing.
      For an example of how to use the stuff, 
-     see test-simple-graphics.C. 
+     see \ref test-simple-graphics.C. 
      The user-interface is borrowed from iostreams,
      and therefore quite intuitive (IMO).
      

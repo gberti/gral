@@ -1,8 +1,9 @@
 
 // $LICENSE_NEC_2003
 
-/*! \file Test harness for combinatorial algorithms
+/*! \file
 
+    Test harness for combinatorial algorithms
 */
 
 #include "Container/combinatorial.h"

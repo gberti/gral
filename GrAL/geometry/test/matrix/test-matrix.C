@@ -1,4 +1,6 @@
-/*! \file Test harness for matrix<M,N,OFF>
+/*! \file 
+
+   Test harness for matrix<M,N,OFF>
 
  */
 

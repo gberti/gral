@@ -1,6 +1,6 @@
 /*! \file
-    Test cases for the bubblesort algorithm and permutation sign determination.
 
+    Test cases for the bubblesort algorithm and permutation sign determination.
 */
 
 #include "Container/sequence-algorithms.h"

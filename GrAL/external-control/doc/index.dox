@@ -4,8 +4,8 @@
  
    This packages contains classes for controlling parameters of
    class objects in a transparent way by an external mechanism,
-   for example  a parameter file. See 
-   <A HREF="external-control.html> this intro</A>
-   for the general ideas. 
+   for example  a parameter file or the command line.
+   See <A HREF="external-control.html"> this intro</A>
+   for the general ideas, and <tt> \ref ex1.C </tt> for a demo.
        
 */

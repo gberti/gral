@@ -1,6 +1,12 @@
 #ifndef GRAL_GB_GEOMETRY_TEST_PRIMITIVES3D_C
 #define GRAL_GB_GEOMETRY_TEST_PRIMITIVES3D_C
 
+// $LICENSE
+
+/*! \file
+
+*/
+
 #include "Geometry/test-primitives3d.h"
 #include "Geometry/algebraic-primitives.h"
 #include "Geometry/geometric-primitives.h"
@@ -55,6 +61,10 @@ void check_intersections(P const& s0, P const& s1,
 }
 
 
+/*! \brief Test 3D primitives in dimension_dependent_primitives_3d
+  
+    \ingroup algebraicprimitives 
+*/
 template<class POINT>
 void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
 {

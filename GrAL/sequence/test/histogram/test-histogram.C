@@ -1,4 +1,6 @@
-/*! \file Test harness for histogram_table and compute_histogram
+/*! \file 
+
+    Test harness for histogram_table and compute_histogram
  */
 
 #include "Container/histogram-table.h"

@@ -17,8 +17,18 @@
 
 #include "Geometry/algebraic-primitives.h"
 
-//----------------------------------------------------------------
+
+typedef double coord_N_component;
+
+/*! \defgroup coordNalg Simple vector type and related operations
+
+*/
+
 /*! \brief  A general class template for small geometric points.
+
+   \ingroup coordNalg
+
+ 
   The only template parameter is currently the dimension N.
   This class could as well be parameterized over the type
   of the components, now fixed to double. Default template 
@@ -41,11 +51,11 @@
   They can be disabled by
   #define NO_COORD_SPECIAL 1
 
-  This class template can work together with the matrix<M.N> template.
-*/
-//----------------------------------------------------------------
+  This class template can work together with the matrix<M,N> template.
 
-typedef double coord_N_component;
+  Test in  test-coords.C
+*/
+
 
 template<unsigned N>
 class coordN {
@@ -80,43 +90,69 @@ private:
 };
 
 
-
+/*! \brief equality
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline 
 bool operator==(const coordN<N>& lhs, const coordN<N> rhs)
 { for(unsigned int i=1; i<=N; i++) if (lhs[i]!=rhs[i]) return false;
  return true; }
 
+/*! \brief non-equality
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline bool operator!=(const coordN<N>& lhs, const coordN<N> rhs)
 { return !(lhs == rhs);}
 
+/*! \brief vector addition
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline coordN<N> operator+(const coordN<N>& lhs, const coordN<N>& rhs)
 { coordN<N> tmp(lhs); return (tmp+= rhs);}
 
+/*! \brief vectro subtraction
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline coordN<N> operator-(const coordN<N>& lhs, const coordN<N>& rhs)
 { coordN<N> tmp(lhs); return(tmp-= rhs);}
 
+/*! \brief multiplication with scalar
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline coordN<N> operator*(const coordN<N>& lhs, coord_N_component rhs)
 { coordN<N> tmp(lhs); return (tmp *= rhs);}
 
+/*! \brief multiplication with scalar
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline coordN<N> operator*( const coord_N_component& lhs, const coordN<N>& rhs)
 { return rhs*lhs;}
 
+/*! \brief division by scalar
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline coordN<N> operator/(const coordN<N>& lhs, coord_N_component rhs)
 { coordN<N> tmp(lhs); return (tmp /= rhs); }
 
-// unary -
+
+/*! \brief unary -
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline coordN<N> operator-(const coordN<N>& rhs)
 { coordN<N> tmp(rhs); return(tmp *= -1);}
 
 
+/*! \brief output
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline std::ostream& operator<<(std::ostream& out, const coordN<N>& P)
 {
@@ -127,6 +163,9 @@ inline std::ostream& operator<<(std::ostream& out, const coordN<N>& P)
 }
 
 
+/*! \brief input
+   \ingroup coordNalg
+ */
 template<unsigned N>
 inline std::istream& operator>>(std::istream& in, coordN<N>& P)
 {
