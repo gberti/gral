@@ -25,6 +25,7 @@ while(<>) {
   s|%Metis|$METIS|g;
   s|%METIS|$METIS|g;
   s|%GRALCONCEPTS\"|$GRALCONCEPTS\"|g;
+  s|%GRALCONCEPTS/|$GRALCONCEPTS/|g;
   s|%GRALINDEX\"|$GRALINDEX\"|g;
   s|%GRALCONCEPTSTOP\"|$GRALCONCEPTSTOP\"|g;
   s|%ROOT|$ROOT|g;
