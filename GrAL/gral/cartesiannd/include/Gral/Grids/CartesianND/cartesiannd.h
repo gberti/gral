@@ -664,7 +664,7 @@ namespace cartesiannd {
       if(idx_v != idx_e) 
 	v = Vertex(v.TheGrid(), idx_e);
       else {
-	int d = delta_map<dim+1>::dirs[1][e.direction()][0];
+	int d = delta_map<dim+1>::sd->dirs[1][e.direction()][0];
 	idx_v[d] += 1;
 	v = Vertex(v.TheGrid(), idx_v);
       }
@@ -674,8 +674,8 @@ namespace cartesiannd {
       index_type idx_f = f.index();
       index_type idx_c = c.index();
       int m = c.direction(); // in {0,1}
-      int d_alt = delta_map<dim+1>::dirs[1][m  ][0];
-      int d_new = delta_map<dim+1>::dirs[1][1-m][0];
+      int d_alt = delta_map<dim+1>::sd->dirs[1][m  ][0];
+      int d_new = delta_map<dim+1>::sd->dirs[1][1-m][0];
       m = (1-m); 
       index_type diff_1 = idx_f - idx_c;
       index_type diff_2 = idx_c; // - 0 = index of g.TheCell();
@@ -962,7 +962,7 @@ namespace cartesiannd {
     void cv() const { REQUIRE(valid(), "", 1);}
   private:
     typedef typename delta_map<dim>::inc_descriptor incidences;
-     ::std::vector<incidences> table() const { return delta_map<dim>::incs[K][M][a.direction()];}
+     ::std::vector<incidences> table() const { return delta_map<dim>::sd->incs[K][M][a.direction()];}
   };
 
 
@@ -1033,7 +1033,7 @@ namespace cartesiannd {
 	++loc;
     }
     typedef typename delta_map<dim>::inc_descriptor incidences;
-     ::std::vector<incidences> const& table() const { return delta_map<dim>::incs[K][M][a.direction()];}
+     ::std::vector<incidences> const& table() const { return delta_map<dim>::sd->incs[K][M][a.direction()];}
   };
 
 
@@ -1181,7 +1181,7 @@ namespace cartesiannd {
   inline
   unsigned sequence_iterator_t<CARTGRID,K>::NumOfElements() const {
     if(M < K)
-      return delta_map<griddim>::incs[K][M][direction()].size();
+      return delta_map<griddim>::sd->incs[K][M][direction()].size();
     else {
       typename incidence_iterator_type<CARTGRID,K,M>::type it(FirstElement<M>());
       int cnt = 0;
@@ -1213,9 +1213,9 @@ namespace cartesiannd {
   void grid_base<CARTGRID,DIM>::init(typename grid_base<CARTGRID,DIM>::vertex_index_type low,
 				     typename grid_base<CARTGRID,DIM>::vertex_index_type beyond) 
   {
-    //  ::std::cout << "grid_base<CARTGRID,DIM>::init(" << "[" << low << "], [" << beyond << "[)\n";
+    //std::cout << "grid_base<CARTGRID,DIM>::init(" << "[" << low << "], [" << beyond << "[)\n";
     if(! delta_map<DIM>::initialized()) {
-      //  ::std::cout << "Initializing grid_base<" << DIM << ">" <<  ::std::endl;
+      //std::cout << "Initializing grid_base<" << DIM << ">" <<  std::endl;
       delta_map<DIM>::init();
     }
     // if(archetype_array == 0)
@@ -1232,8 +1232,9 @@ namespace cartesiannd {
 	offsets[k][m] = offsets[k][m-1] + maps[k][m-1].flat_size();
     }
   }
+
   template<class CARTGRID, unsigned DIM>
-  void grid_base<CARTGRID,DIM>::print( ::std::ostream& out) const
+  void grid_base<CARTGRID,DIM>::print(std::ostream& out) const
   {
     //  out << "directions:\n";
     //  delta_map<DIM>::print(out);
