@@ -97,7 +97,7 @@ int main() {
   cout << endl;
   {
     // test empty ranges
-    range_type S2;
+    range_type S2(R);
     cout << "Empty subrange: " 
 	 << S2.NumOfCells()    << " cells, "  << flush
 	 << S2.NumOfVertices() << " vertices" << endl;
