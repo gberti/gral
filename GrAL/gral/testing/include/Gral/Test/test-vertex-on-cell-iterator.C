@@ -26,6 +26,7 @@ bool test_vertex_on_cell_iterator(G const& g, std::ostream & out)
     v = (*c).FirstVertex();
     VertexOnCellIterator w = v;
     for( ; !v.IsDone(); ++v, ++w) {
+      REQUIRE_ALWAYS( &(v.TheGrid()) == &(c.TheGrid()), "",1);
       REQUIRE_ALWAYS( ( v ==  w), "Iterators differ!\n",1);
       REQUIRE_ALWAYS( (*v == *w), "Iterator values differ!\n",1);
     }
