@@ -4,6 +4,7 @@
 
 // $LICENSE
 
+namespace GrAL {
 
 /*! \brief Geometric and algebraic primitives specific to 3D
 
@@ -148,8 +149,8 @@ public:
 
   }
 
-  static std::vector<POINT> basis_completion(std::vector<POINT> const& dirs) {
-    std::vector<POINT> res;
+  static ::std::vector<POINT> basis_completion(::std::vector<POINT> const& dirs) {
+    ::std::vector<POINT> res;
     if(dirs.size() == 1) {
       res.resize(2);
       res[0] = any_perp(dirs[0]);
@@ -390,6 +391,7 @@ public:
 
 };
 
+} // namespace GrAL 
 
 
 #endif

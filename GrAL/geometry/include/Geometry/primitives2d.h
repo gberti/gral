@@ -12,6 +12,11 @@
 //----------------------------------------------------------------
 
 #include <algorithm> // swap
+#include <vector>
+
+#include "Geometry/basic-algebraic-primitives.h"
+
+namespace GrAL {
 
 /*! \brief geometric functions specific to 2D
 
@@ -44,7 +49,7 @@ public:
     typedef dimension_dependent_primitives_2d<POINT> ap;
     typedef typename ap::scalar         scalar;
     
-    POINT a[2];
+    POINT a[2]; // columns
    
     matrix_type() { init();}
     matrix_type(POINT const& a0, POINT const& a1)
@@ -134,7 +139,7 @@ public:
 
 
   static void transpose(POINT & p, POINT & q) {
-    std::swap(y(p),x(q));
+    ::std::swap(y(p),x(q));
   }
 
   static void transpose(matrix_type & A) {
@@ -189,8 +194,8 @@ public:
   }
 
 
-  static std::vector<POINT> basis_completion(std::vector<POINT> const& dirs) {
-    std::vector<POINT> res;
+  static ::std::vector<POINT> basis_completion(::std::vector<POINT> const& dirs) {
+    ::std::vector<POINT> res;
     if(dirs.size() == 1) {
       res.resize(1);
       res[0] = perp(dirs.begin(), dirs.end());
@@ -242,9 +247,9 @@ public:
                      POINT& X , POINT  b)
   {
     if(fabs(x(A1)) < fabs(y(A1))) {
-      std::swap(x(A1),y(A1));
-      std::swap(x(A2),y(A2));
-      std::swap(x(b) ,y(b));
+      ::std::swap(x(A1),y(A1));
+      ::std::swap(x(A2),y(A2));
+      ::std::swap(x(b) ,y(b));
     }
     // Lu = b, l_21 = a21/a11 = y(A1)/x(A1)
     scalar u1 = x(b);
@@ -279,5 +284,8 @@ public:
 
 
 };
+
+} // namespace GrAL 
+
 
 #endif
