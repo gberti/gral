@@ -118,12 +118,12 @@ struct grid_isomorphism_construction {
 	 ||G1.NumOfVertices() != G2.NumOfVertices())
 	return false;
       */
-      typename GT1::CellIterator c1(G1);
-      typename GT2::CellIterator c2(G2);
+      typename GT1::CellIterator c1(G1.FirstCell());
+      typename GT2::CellIterator c2(G2.FirstCell());
       bool success = false;
       while(! success && !c1.IsDone()) {
 	typedef boundary_grid<typename GT1::Cell> bd1;
-	typedef boundary_grid<typename GT1::Cell> bd2;
+	typedef boundary_grid<typename GT2::Cell> bd2;
 	bd1 bdc1(*c1); bd2 bdc2(*c2);
 	success =
 	  construct_isomorphism(bdc1,bdc2,
