@@ -2,9 +2,9 @@ CONFIG=$(shell pwd)/../mk.config
 
 ifdef WITHMETIS
 METISDIR = Metis
+SUBDIRS += $(METISDIR)
 endif
 
-SUBDIRS = $(METISDIR)
 
 
 include  $(CONFIG)
