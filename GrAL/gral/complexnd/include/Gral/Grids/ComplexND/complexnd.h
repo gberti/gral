@@ -433,6 +433,7 @@ namespace complexnd {
 
   private:
     // data structure to hold all possible incidences
+    // TODO: reordered indexing incidences[d1][d2][e1][e2] would be more efficient
     typedef std::vector<unsigned>                 incidence_sequence;       // [0, |I_{k,j}(e)| )
     typedef std::vector<incidence_sequence>       element_incidences;       // index j \in [0,d]
     typedef std::vector<element_incidences>       element_incidences_table; // index e \in [0, n(k)-1]
@@ -464,6 +465,7 @@ namespace complexnd {
 
     // only for 1D
     explicit ComplexND(polygon pn);
+    ComplexND(unsigned a[][2], unsigned N);
     
     element_incidences const& Incidences(typename gt::AnyElement e) const { return incidences[e.dimension()][e.handle().h()];}
     template<int K, int CK>
@@ -504,7 +506,24 @@ namespace complexnd {
     archetype_handle add_archetype() { return add_archetype(archetype_type());}
     archetype_handle add_archetype(archetype_type const& A)
     { archetypes.push_back(A); return (archetypes.size() -1); }
- 
+
+    template<class VIt>
+    cell_handle     add_cell(archetype_handle a, VIt begin, VIt end) 
+    { 
+      ca(a);
+      cell_handle  new_cell(cell_archetype.size());
+      cell_archetype.push_back(a);
+      incidences[dimension()].push_back(element_incidences(dimension()));
+      unsigned nv = std::distance(begin,end);
+      incidences[dimension()][new_cell][0].resize(nv);
+      for(unsigned v = 0; v < nv; ++v, ++begin)
+	incidences[dimension()][new_cell][0][v] = *begin;
+      return new_cell;
+    }
+     
+    void set_num_of_vertices(unsigned nv) 
+    { REQUIRE_ALWAYS(NumOfVertices() == 0, "", 1);  incidences[0].resize(nv);}
+
   public:
     archetype_type      & Archetype(archetype_handle a)       { ca(a); return archetypes[a]; }
     archetype_type const& Archetype(archetype_handle a) const { ca(a); return archetypes[a]; }
@@ -1106,7 +1125,32 @@ namespace complexnd {
     cell_archetype.resize(NumOfCells());
     for(unsigned c = 0; c < NumOfCells(); ++c)
       cell_archetype[c] = a;
+
+    calculate_incidences();
   }
+
+  //  template<unsigned N>
+  inline ComplexND<1>::ComplexND( unsigned edges[][2], unsigned N) : incidences(dimension() +1) 
+  {
+    incidences[0].resize(N);
+    incidences[1].resize(N);
+    //unsigned v = 0, e = 0;
+    for( unsigned e = 0;  e < N; ++e) {
+      incidences[1][e].resize(dimension()+1);
+      incidences[1][e][0].resize(2);
+      incidences[1][e][0][0] = edges[e][0];
+      incidences[1][e][0][1] = edges[e][1];
+    }    
+    archetype_handle a = add_archetype(archetype_type(pointcloud(2)));
+    cell_archetype.resize(NumOfCells());
+    for(unsigned c = 0; c < NumOfCells(); ++c)
+      cell_archetype[c] = a;
+
+    calculate_incidences();
+  }
+
+
+
 
   template<int D>
   template<int K, int CK>
