@@ -1,5 +1,5 @@
-export CONFIG:=$(shell pwd)/mk.config
-unexport PWD
+CONFIG=$(shell pwd)/mk.config
+#unexport PWD
 include $(CONFIG)
 
 
@@ -43,6 +43,11 @@ realclean: tarclean
 test:
 	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
+check: 
+	(cd test; $(MAKE) check)
+
+new-check-clean:
+	(cd test; $(MAKE) new-check-clean)
 
 doc: 
 
