@@ -56,10 +56,16 @@
 #define GRAL_DATE_INFO  ""
 #endif
 
+#ifdef __FUNCTION__
+#define GRAL_FUNCTION_INFO "      FUNCTION " << __FUNCTION__
+#else
+#define GRAL_FUNCTION_INFO ""
+#endif
+
 #define GRAL_ERROR  GRAL_ERRORLOG \
    << "\n" \
    << "GRAL_ERROR in FILE "  << __FILE__ << "\n" \
-   << "      FUNCTION " << __FUNCTION__ \
+   << GRAL_FUNCTION_INFO \
    << ", LINE " << __LINE__\
    << GRAL_DATE_INFO << "\n"
 
