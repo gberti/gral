@@ -56,7 +56,7 @@ public:
 
 
 
- xmjr_indexmap2D(const index_type& UR = index_type(0,0))
+ xmjr_indexmap2D(index_type UR = index_type(0,0))
    : ll_(0,0),ur_(UR), n0_(0) { init();}
  xmjr_indexmap2D(int urx, int ury)
    : ll_(0,0),ur_(urx,ury), n0_(0) { init();}
