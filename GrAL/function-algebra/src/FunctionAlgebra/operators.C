@@ -105,7 +105,7 @@ private:
   RFunction F1,F2;
 
   coord_type derive(const coord_type& x, const coord_type& h) const 
-  { return (F1.derive(x,h)*F2(x) + F1(x)*F2.derive(x,h));}
+  { return coord_type(F1.derive(x,h)*F2(x) + F1(x)*F2.derive(x,h));}
 public:
   function_algebra_multiplication(const RFunction& Fa, const RFunction& Fb) :  F1(Fa), F2(Fb) 
   {
@@ -132,7 +132,7 @@ public:
     if(F2.dIm() == 1)
       return (F1(x)*F2(x)[1]); // operator * (coord_type, double)
     else
-      return (F1(x)*F2(x));    // operator * (coord_type, coord_type)
+      return coord_type(F1(x)*F2(x));    // operator * (coord_type, coord_type)
   }
 
   virtual std::string name() const {return "function_algebra_multiplication";}
@@ -146,7 +146,10 @@ private:
   typedef function_algebra_division self;
   RFunction F1,F2;
   coord_type derive(const coord_type& x, const coord_type& h) const 
-  { coord_type  F2x(F2(x)[1]);  return ((F1.derive(x,h)*F2x - F2.derive(x,h)*F1(x))/ (F2x*F2x));}
+  { 
+    coord_type  F2x(F2(x)[1]);  
+    return coord_type((F1.derive(x,h)*F2x - F2.derive(x,h)*F1(x))/ (F2x*F2x));
+  }
 public:
   function_algebra_division(const RFunction& Fa, const RFunction& Fb) : F1(Fa), F2(Fb) { 
     REQUIRE((Fb.dIm() == 1 ), "fct: Fa/Fb : dim Im(Fb) = " << Fb.dIm() << " != 1!\n",1);
@@ -180,7 +183,7 @@ public:
   }
   virtual self* clone() const { return new self(*this);}
 
-  virtual coord_type eval(const coord_type& x) const {return (1.0/(F(x))[1]);}
+  virtual coord_type eval(const coord_type& x) const {return coord_type(1.0/(F(x))[1]);}
 
   virtual std::string name() const {return "function_algebra_inverse";}
 

@@ -15,7 +15,7 @@
 class function_algebra_constant: public function_algebra_impl {
 private:
   typedef function_algebra_constant self;
-  coord_type  derive(const coord_type& /*x*/, const coord_type& /*h*/) const { return (0.0);}
+  coord_type  derive(const coord_type& /*x*/, const coord_type& /*h*/) const { return coord_type(0.0);}
 protected:
   coord_type c;
 public:
@@ -68,14 +68,14 @@ std::string function_algebra_constant::write_code_derive(std::ostream&, int& /*v
 class function_algebra_coordinate : public function_algebra_impl {
 private: 
   typedef function_algebra_coordinate  self;
-  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return h[i];}
+  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return coord_type(h[i]);}
 protected:
   int i;
 public:
   function_algebra_coordinate(int ii) : i(ii) {is_affine=true;d_Im=1; d_Def=ANYDIM;} 
   virtual self* clone() const { return new self(*this);}
 
-  virtual coord_type eval(const coord_type& x) const {return x[i];}
+  virtual coord_type eval(const coord_type& x) const {return coord_type(x[i]);}
 
   virtual std::string name() const {return "function_algebra_coordinate";}
   virtual std::string  write_code_eval(std::ostream& out, int& vnum, 
@@ -136,7 +136,7 @@ public:
   virtual self* clone() const { return new self(*this);}
 
   virtual coord_type eval(const coord_type& x) const
-  { return hermite(a,b,x[1]);}
+  { return coord_type(hermite(a,b,x[1]));}
 
   virtual std::string name() const {return "function_algebra_hermite";}
   virtual std::string write_code_eval(std::ostream& out, int& vnum, 
@@ -169,9 +169,9 @@ std::string function_algebra_hermite::write_code_derive(std::ostream& out, int& 
 coord_type function_algebra_hermite::derive(const coord_type& x,const coord_type& h) const
 {
   double t = (x[1]-a)/(b-a);
-  if (t <= 0.0) return 0.0;
-  else if (t<= 1.0) return (h*(6.0*t*(1.0-t)/(b-a)) );
-  else return 0.0;
+  if (t <= 0.0) return coord_type(0.0);
+  else if (t<= 1.0) return coord_type(h*(6.0*t*(1.0-t)/(b-a)) );
+  else return coord_type(0.0);
 }
 
 
@@ -227,7 +227,7 @@ function_algebra_polynomial1D::eval(const coord_type& x) const
   for(int k=1;k<=n;k++) {
     bk = x1*bk +coeffs[n+1-k];
   }
-  return bk;
+  return coord_type(bk);
 }
 
 function_algebra_impl::coord_type 
@@ -238,7 +238,7 @@ function_algebra_polynomial1D::derive(const coord_type& x, const coord_type& h) 
   for(int k=1;k<=n-1;k++) {
     bk = x1*bk +(n-k)*coeffs[n+1-k];
   }
-  return bk*h[1];
+  return coord_type(bk*h[1]);
 }
 
 std::string function_algebra_polynomial1D::write_code_deriv(std::ostream& out, int& vnum, 
@@ -265,13 +265,13 @@ std::string function_algebra_polynomial1D::write_code_deriv(std::ostream& out, i
 class function_algebra_norm2: public function_algebra_impl { // works for every dimension!
   typedef function_algebra_norm2 self;
 private:
-  coord_type derive(const coord_type& x,const coord_type& h) const {return 2*(x*h);}
+  coord_type derive(const coord_type& x,const coord_type& h) const {return coord_type(2*(x*h));}
 public:
   function_algebra_norm2(int n) {d_Def = n; d_Im = 1;}
   virtual self* clone() const { return new self(*this);}
 
   virtual coord_type eval(const coord_type& x) const 
-   { return ap::norm2(x); }
+   { return coord_type(ap::norm2(x)); }
 
   virtual std::string name() const {return "function_algebra_norm2";}
 };
@@ -351,12 +351,12 @@ class function_algebra_distance: public function_algebra_impl {  // works for ev
 private:
  coord_type normal;
  double dist;
-  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return(h*normal);}
+  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return coord_type(h*normal);}
 public:
   function_algebra_distance(const coord_type& n, double d) : normal(n), dist(d)
   {is_affine=true;d_Def = normal.dim();d_Im = 1;}
   virtual self* clone() const { return new self(*this);}
-  virtual coord_type eval(const coord_type& x) const { return (x*normal-dist);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(x*normal-dist);}
 
   virtual std::string name() const {return "function_algebra_distance";}
   virtual std::string write_code_eval(std::ostream& out, int& vnum, 
@@ -460,12 +460,12 @@ class function_algebra_circle : public function_algebra_impl {
 private:
   coord_type m;
   double r;
-  coord_type derive(const coord_type& x, const coord_type& h) const { return ((x-m)*h)/(x-m).length();}
+  coord_type derive(const coord_type& x, const coord_type& h) const { return coord_type(((x-m)*h)/(x-m).length());}
 public:
   function_algebra_circle(const coord_type& mm, double rr) : m(mm), r(rr) {d_Def = m.dim();d_Im = 1;}
   virtual self* clone() const { return new self(*this);}
 
-  virtual coord_type eval(const coord_type& x) const {return ((x-m).length() - r);}
+  virtual coord_type eval(const coord_type& x) const {return coord_type((x-m).length() - r);}
 
   virtual std::string name() const {return "function_algebra_circle";}
 };

@@ -32,12 +32,13 @@ public:
 
 class function_algebra_sin : public function_algebra_impl {
 private:
-  coord_type derive(const coord_type& x,const coord_type& h) const {return cos(x[1])*h[1];}
+  coord_type derive(const coord_type& x,const coord_type& h) const 
+  {return coord_type(cos(x[1])*h[1]);}
 public:
   function_algebra_sin() {d_Im=d_Def=1;}
   function_algebra_sin  * clone() const { return new function_algebra_sin(*this);}
 
-  virtual coord_type eval(const coord_type& x) const { return sin(x[1]);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(sin(x[1]));}
 
   virtual std::string name() const {return "function_algebra_sin";}
 
@@ -53,12 +54,12 @@ public:
 
 class function_algebra_cos : public function_algebra_impl {
 private:
-  coord_type derive(const coord_type& x,const coord_type& h) const {return -sin(x[1])*h[1];}
+  coord_type derive(const coord_type& x,const coord_type& h) const {return coord_type(-sin(x[1])*h[1]);}
 public:
   function_algebra_cos() {d_Im=d_Def=1;}
   function_algebra_cos  * clone() const { return new function_algebra_cos(*this);}
 
-  virtual coord_type eval(const coord_type& x) const { return cos(x[1]);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(cos(x[1]));}
 
 
   virtual std::string name() const {return "function_algebra_cos";}
@@ -74,12 +75,14 @@ public:
 
 class function_algebra_atan : public function_algebra_impl {
 private:
-  coord_type derive(const coord_type& x,const coord_type& h) const {return 1.0/(1.0+x*x)*h[1];}
+  coord_type derive(const coord_type& x,const coord_type& h) const {
+    return coord_type(1.0/(1.0+x*x)*h[1]);
+  }
 public:
   function_algebra_atan() {d_Im=d_Def=1;}
   function_algebra_atan  * clone() const { return new function_algebra_atan(*this);}
 
-  virtual coord_type eval(const coord_type& x) const { return atan(x[1]);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(atan(x[1]));}
 
   virtual string name() const {return "function_algebra_atan";}
 
@@ -103,13 +106,13 @@ private:
   coord_type derive(const coord_type& x,const coord_type& h) const 
   {
     double n= x.length2(); 
-    return (coord_type(-x[2]/n,x[1]/n)*h);
+    return coord_type(coord_type(-x[2]/n,x[1]/n)*h);
   }
 public:
   function_algebra_atan2() {d_Im=1;d_Def=2;}
   function_algebra_atan2  * clone() const { return new function_algebra_atan2(*this);}
 
-  virtual coord_type eval(const coord_type& x) const { return atan2(x[2],x[1]);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(atan2(x[2],x[1]));}
 
 
   virtual std::string name() const {return "function_algebra_atan2";}
@@ -137,12 +140,12 @@ public:
 
 class function_algebra_exp : public function_algebra_impl {
 private:
-  coord_type derive(const coord_type& x,const coord_type& h) const {return exp(x[1])*h[1];}
+  coord_type derive(const coord_type& x,const coord_type& h) const {return coord_type(exp(x[1])*h[1]);}
 public:
   function_algebra_exp() {d_Im=d_Def=1;}
   function_algebra_exp  * clone() const { return new  function_algebra_exp(*this);}
 
-  virtual coord_type eval(const coord_type& x) const { return exp(x[1]);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(exp(x[1]));}
 
 
   virtual std::string name() const {return "function_algebra_exp";}
@@ -160,12 +163,12 @@ public:
 
 class function_algebra_log : public function_algebra_impl {
 private:
-  coord_type derive(const coord_type& x,const coord_type& h) const {return 1.0/(x[1])*h[1];}
+  coord_type derive(const coord_type& x,const coord_type& h) const {return coord_type(1.0/(x[1])*h[1]);}
 public:
   function_algebra_log() {d_Im=d_Def=1;}
   function_algebra_log  * clone() const { return  new function_algebra_log(*this);}
 
-  virtual coord_type eval(const coord_type& x) const { return log(x[1]);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(log(x[1]));}
 
   virtual std::string name() const {return "function_algebra_log";}
   virtual  std::string write_code_eval(std::ostream& out, int& vnum, 
@@ -185,12 +188,13 @@ public:
 
 class function_algebra_sqrt : public function_algebra_impl{
 private:
-  coord_type derive(const coord_type& x,const coord_type& h) const {return (h[1] *0.5/(eval(x[1]))[1]);}
+  coord_type derive(const coord_type& x,const coord_type& h) const {
+    return coord_type(h[1] *0.5/(eval(coord_type(x[1])))[1]);}
 public:
   function_algebra_sqrt() {d_Im=d_Def=1;}
   function_algebra_sqrt  * clone() const { return new function_algebra_sqrt(*this);}
 
-  virtual coord_type eval(const coord_type& x) const { return sqrt(x[1]);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(sqrt(x[1]));}
 
   virtual std::string name() const {return "function_algebra_sqrt";}
   virtual std::string write_code_eval(std::ostream& out, int& vnum, 
@@ -210,12 +214,12 @@ public:
 
 class function_algebra_sqr : public function_algebra_impl{
 private:
-  coord_type derive(const coord_type& x,const coord_type& h) const {return (2.0*(x*h));}
+  coord_type derive(const coord_type& x,const coord_type& h) const {return coord_type((2.0*(x*h)));}
 public:
   function_algebra_sqr() {d_Im=d_Def=1;}
   function_algebra_sqr  * clone() const { return new  function_algebra_sqr(*this);}
 
-  virtual coord_type eval(const coord_type& x) const { return (x*x);}
+  virtual coord_type eval(const coord_type& x) const { return coord_type(x*x);}
 
   virtual std::string name() const {return "function_algebra_sqr";}
   virtual std::string write_code_eval(std::ostream& , int& /*vnum*/, 
