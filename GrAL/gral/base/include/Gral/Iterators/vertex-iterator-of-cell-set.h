@@ -19,7 +19,6 @@ namespace GrAL {
      - \c CellIt::grid_type: Has \c Vertex and \c Cell types.
      - \c CellIt::Cell: Model of $GrAL VertexRange
 
-    \test in  test-vertex-iterator-of-cell-set.C  
 
     Example:
     \code
@@ -104,6 +103,10 @@ public:
   friend bool operator==(self const& lhs, self const& rhs) 
   { lhs.cb(); rhs.cb(); return (lhs.major == rhs.major) && (lhs.minor == rhs.minor);}
   friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs==rhs);}
+  friend bool operator< (self const& lhs, self const& rhs) { 
+    lhs.cb(); rhs.cb(); 
+    return (lhs.major < rhs.major) || ((lhs.major == rhs.major) && (lhs.minor < rhs.minor));
+  }
 
   bool bound() const { return major.bound();}
   bool valid() const { return bound() && minor.valid();}
