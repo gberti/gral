@@ -41,7 +41,8 @@ generic:
 # postdoc = install docs (replace dummy links)
 doc: predoc postdoc
 
-predoc:	@set -e; \
+predoc:	
+	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) predoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
