@@ -7,7 +7,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Grids/Triang2D/grid-types.h"
 
-#include "Gral/Iterators/facet-by-cell-it.h"
+#include "Gral/Iterators/facet-iterator-of-cell-set.h"
 #include "Gral/Iterators/vertex-on-edge-iterator.h"
 
 #include <algorithm>
@@ -282,6 +282,7 @@ public:
 	    ||
 	    ((lv2 == rv1) && (lv1 == rv2)));
   }
+  friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
 
   friend bool operator<(self const& lhs, self const& rhs)
   {
@@ -315,9 +316,9 @@ struct grid_types<Triang2D> : public grid_types_Triang2D
 #include "Gral/Grids/Triang2D/partial-grid-functions.h"
 
 class Triang2D_FacetIterator 
-  : public facet_set_of_cells_iterator<Triang2D_Cell>
+  : public facet_iterator_of_cell_set<Triang2D_Cell>
 {
-  typedef facet_set_of_cells_iterator<Triang2D_Cell> base;
+  typedef facet_iterator_of_cell_set<Triang2D_Cell> base;
  public: 
   Triang2D_FacetIterator() : base(CellIterator()) {}
   Triang2D_FacetIterator(CellIterator  const& c) : base(c) {}
