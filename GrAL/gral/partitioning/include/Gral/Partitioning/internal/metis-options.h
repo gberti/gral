@@ -5,7 +5,7 @@
 
 /*! \brief  Data structure for using Metis partitioning routines with 
     different options.
-    \ingroup metispartitioning
+    \ingroup metispartitioninginternal
 
     \see The $Metis homepage.
     \author Holger Kache, Guntram Berti

@@ -7,6 +7,7 @@
 
  
 
+
 /*! \brief Write a grid in Metis graph format, 
     where cells correspond to graph nodes and  facets to graph edges
     \ingroup metispartitioning
@@ -62,14 +63,19 @@ template<class GRID>
 extern int write_metis_mesh(GRID const& G, std::ostream& out);
 
 
+/*! \defgroup metispartitioninginternal Internal functions for Metis Partitioning Module
+    \ingroup   metispartitioning
+ */
+
+
 /*! \brief Calculate the size for Metis vector xadj
-    \ingroup metispartitioning
+    \ingroup metispartitioninginternal
  */
 template<class GRID>
 extern int metis_cell_graph_size_of_xadj(GRID const& G);
 
 /*! \brief Calculate the size for Metis vector adjncy 
-    \ingroup metispartitioning
+    \ingroup metispartitioninginternal
 
     \see metis_cell_graph_format
  */
@@ -79,7 +85,7 @@ extern int metis_cell_graph_size_of_adjncy(GRID const& G);
 
 
 /*! \brief Copy the grid into Metis mesh vectors xadj and adjncy
-    \ingroup metispartitioning
+    \ingroup metispartitioninginternal
 
     Cells correspond to graph vertices, and facets to graph edges.
     \templateparams

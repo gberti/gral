@@ -4,7 +4,7 @@
 // $LICENSE
 
 /*! \brief Wrapper for Metis graph partitioning routines
-    \ingroup metispartitioning_internal
+    \ingroup metispartitioninginternal
 
     \author Holger Kache, Guntram Berti
 */
