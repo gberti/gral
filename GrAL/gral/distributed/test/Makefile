@@ -5,7 +5,7 @@ include  $(CONFIG)
 
 SUBDIRS = composite 
 
-ifdef WITHMPI
+ifeq ($(WITHMPI),true)
 SUBDIRS += mpi
 endif
 
