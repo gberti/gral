@@ -175,7 +175,7 @@ int main(int argc, char* argv[]) {
 
    {
      // use a block: compOut must get destructed such that files get closed!
-     composite_grid_output<coarse_grid_output_t, overlapping_grid_output_t> compOut("compgrid");
+     composite_grid_output<coarse_grid_output_t, overlapping_grid_output_t> compOut("compgrid-out/compgrid");
      
      cell_morphism<coarse_grid_type, coarse_grid_output_t> coarse_corr_c_out(compG  .TheCoarseGrid(),
                                                                              compOut.TheCoarseGrid());
@@ -205,7 +205,7 @@ int main(int argc, char* argv[]) {
        coarse_grid_type,
        overlapping_grid_input_t>  composite_input_t;
 
-     composite_input_t compIn("compgrid");
+     composite_input_t compIn("compgrid-out/compgrid");
      comp_grid_type compG2;
      cell_morphism<composite_input_t::coarse_grid_type, coarse_grid_type> 
        coarse_corr_c_in(compIn.TheCoarseGrid(),
@@ -221,7 +221,7 @@ int main(int argc, char* argv[]) {
 
      // re-output the grid compG2 to see if there is any difference
      {
-       composite_grid_output<coarse_grid_output_t, overlapping_grid_output_t> compOut("compgridB");
+       composite_grid_output<coarse_grid_output_t, overlapping_grid_output_t> compOut("compgrid-out/compgridB");
        cell_morphism<coarse_grid_type, coarse_grid_output_t> coarse_corr_c_out(compG2 .TheCoarseGrid(),
                                                                              compOut.TheCoarseGrid());
        grid_function<CoarseCell, bijective_mapping<int,int> > fine_corr_v_out(compG2.TheCoarseGrid());
