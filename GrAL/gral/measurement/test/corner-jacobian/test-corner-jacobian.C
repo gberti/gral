@@ -23,32 +23,12 @@ struct dimension_dependent_primitives<point, variable_dimension_tag>
   : public dimension_dependent_primitives_3d<point> 
 {};
 
-// move to Container/tuple.h
-/*
-template<class T, unsigned N>
-struct point_traits<tuple<T,N> >
-  : public point_traits_base<tuple<T,N> >
-{
-  typedef tuple<T,N>                    Ptype;
-  typedef typename Ptype::value_type    component_type;  
-  typedef typename dim_tag<N>::dimension_tag dimension_tag; 
-
-  static  int LowerIndex(Ptype const&) { return 0;}
-  static  int UpperIndex(Ptype const&) { return N-1;}
-  static  int Dim(Ptype const&) { return N;}
-
-  static  Ptype Origin(unsigned)   { return Ptype(0);}
-  static  Ptype Origin()           { return Ptype(0);}
-  static  void  ConstructWithDim(unsigned, Ptype&) { }
-};
-*/
-
 
 
 int main(int argc, char* argv[]) {
   using std::cout;
   using cartesian3d::CartesianGrid3D;
-  using cartesian3d::mapped_geometry_cartesian3d;
+  using cartesian3d::mapped_geometry;
 
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"map.in","main");
   double wf = 0.0;// warping factor.
@@ -64,7 +44,7 @@ int main(int argc, char* argv[]) {
 
   typedef CartesianGrid3D                           grid_type;
   typedef warping3d<point>                          mapping_type;
-  typedef mapped_geometry_cartesian3d<mapping_type> geom_type;
+  typedef mapped_geometry<mapping_type>             geom_type;
   typedef grid_types<CartesianGrid3D>               gt;
     
   CartesianGrid3D G(nx,ny,nz);

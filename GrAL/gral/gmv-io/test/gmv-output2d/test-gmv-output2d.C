@@ -23,10 +23,12 @@ struct Id {
 };
 
 int main() {
-  typedef CartesianGrid2D grid_type;
-  typedef grid_types<grid_type> gt;
-  typedef Id<coordN<2> > mapping_type;
-  typedef mapped_geometry_cartesian2d<mapping_type> geometry_type;
+  namespace c2d = cartesian2d;
+
+  typedef c2d::CartesianGrid2D               grid_type;
+  typedef grid_types<grid_type>              gt;
+  typedef Id<coordN<2> >                     mapping_type;
+  typedef c2d::mapped_geometry<mapping_type> geometry_type;
 
   {
     grid_type R(2,2);

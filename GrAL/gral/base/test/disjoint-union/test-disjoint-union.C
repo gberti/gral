@@ -15,12 +15,13 @@
 
 int main() {
   using namespace std;
- 
+  namespace c2d = cartesian2d;
+
   // create Cartesian grid & geometry
-  CartesianGrid2D R(3,3);
+  c2d::CartesianGrid2D R(3,3);
   typedef coordN<2> coord_type;
-  typedef stdext::identity<coord_type>  mapping_type;
-  typedef mapped_geometry_cartesian2d<mapping_type> reg_geom_type;
+  typedef stdext::identity<coord_type>       mapping_type;
+  typedef c2d::mapped_geometry<mapping_type> reg_geom_type;
   mapping_type id; 
   reg_geom_type GeomR(R, id);
 

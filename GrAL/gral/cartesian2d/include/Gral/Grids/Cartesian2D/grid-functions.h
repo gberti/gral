@@ -23,11 +23,11 @@
    \ingroup gridfunctionsreggrid2d
  */
 template<class T>
-class grid_function<RegGrid2D::Vertex,T> 
-  : public grid_function_vector<RegGrid2D::Vertex,T>
+class grid_function<cartesian2d::RegGrid2D::Vertex,T> 
+  : public grid_function_vector<cartesian2d::RegGrid2D::Vertex,T>
 {
-  typedef grid_function<RegGrid2D::Vertex,T>        self;
-  typedef grid_function_vector<RegGrid2D::Vertex,T> base;
+  typedef grid_function<cartesian2d::RegGrid2D::Vertex,T>        self;
+  typedef grid_function_vector<cartesian2d::RegGrid2D::Vertex,T> base;
 public:
   typedef typename base::grid_type grid_type;
 
@@ -43,11 +43,11 @@ public:
   \ingroup gridfunctionsreggrid2d
  */
 template<class T>
-class grid_function<RegGrid2D::Edge,T> 
-  : public grid_function_vector<RegGrid2D::Edge,T>
+class grid_function<cartesian2d::RegGrid2D::Edge,T> 
+  : public grid_function_vector<cartesian2d::RegGrid2D::Edge,T>
 {
-  typedef grid_function<RegGrid2D::Edge,T>        self;
-  typedef grid_function_vector<RegGrid2D::Edge,T> base;
+  typedef grid_function<cartesian2d::RegGrid2D::Edge,T>        self;
+  typedef grid_function_vector<cartesian2d::RegGrid2D::Edge,T> base;
 public:
   typedef typename base::grid_type grid_type;
 
@@ -63,11 +63,11 @@ public:
   \ingroup gridfunctionsreggrid2d
  */
 template<class T>
-class grid_function<RegGrid2D::Cell,T> 
-  : public grid_function_vector<RegGrid2D::Cell,T>
+class grid_function<cartesian2d::RegGrid2D::Cell,T> 
+  : public grid_function_vector<cartesian2d::RegGrid2D::Cell,T>
 {
-  typedef grid_function<RegGrid2D::Cell,T>        self;
-  typedef grid_function_vector<RegGrid2D::Cell,T> base;
+  typedef grid_function<cartesian2d::RegGrid2D::Cell,T>        self;
+  typedef grid_function_vector<cartesian2d::RegGrid2D::Cell,T> base;
 public:
   typedef typename base::grid_type grid_type;
 

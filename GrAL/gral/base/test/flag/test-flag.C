@@ -9,6 +9,8 @@
 
 int main()
 {
+  using namespace cartesian2d;
+
   typedef CartesianGrid2D grid_type;
   typedef grid_types<grid_type> gt;
   grid_type G(2,3);

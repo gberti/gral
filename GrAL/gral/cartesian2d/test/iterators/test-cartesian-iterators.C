@@ -9,6 +9,7 @@
 
 int main() {
   using namespace std;
+  using namespace cartesian2d;
 
   ofstream* out = new ofstream("vertex-iterator.out");
   int NX = 4, NY = 4;

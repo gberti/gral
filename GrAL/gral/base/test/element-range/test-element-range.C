@@ -5,6 +5,7 @@
 
 int main() {
   using namespace std;
+  using namespace cartesian2d;
 
   typedef grid_types<CartesianGrid2D> rgt;
   CartesianGrid2D R(3,3);

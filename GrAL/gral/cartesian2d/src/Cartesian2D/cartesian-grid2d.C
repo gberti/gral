@@ -3,6 +3,8 @@
 
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
+namespace cartesian2d {
+
 typedef RegGrid2D::index_type index_type;
 
 index_type  RegGrid2D::side_offset_[4] = { index_type(0,-1),  // S
@@ -141,3 +143,5 @@ int  RegGrid2D::get_corner(const std::string& nm)
   else
     return (int)(Cell::invalid_corner);
 }
+
+} // namespace cartesian2d

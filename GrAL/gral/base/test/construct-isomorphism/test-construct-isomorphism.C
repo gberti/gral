@@ -53,6 +53,7 @@ void check_identity(GRID const& G, PHI const& phi)
 }
 
 int main() {
+  using namespace cartesian2d;
   using cartesian3d::CartesianGrid3D;
 
   typedef grid_types<CartesianGrid2D> rgt2d;

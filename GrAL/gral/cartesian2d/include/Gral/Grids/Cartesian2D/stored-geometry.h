@@ -12,6 +12,7 @@
 #include "Gral/Grids/Cartesian2D/grid-functions.h"
 
 
+namespace cartesian2d {
 
 template<class Coord2D>
 class stored_geometry_reg2d_base : public grid_types<RegGrid2D>,
@@ -63,16 +64,19 @@ private:
    - specialize to 2D case
    - provide compile-time branching over static dimension of
      Coord2D parameter.
+
+  \todo Use the same mechanism for dimension dependent functionality
+        as in cartesian2d::mapped_geometry
 */
 
 template<class Coord2D>
-class stored_geometry_reg2d 
+class stored_geometry 
   : public  stored_geometry_reg2d_base<Coord2D>
 {
   
 public:
-  typedef stored_geometry_reg2d_base<Coord2D>    base;
-  typedef stored_geometry_reg2d<Coord2D> self;
+  typedef stored_geometry<Coord2D>    base;
+  typedef stored_geometry<Coord2D> self;
 
   typedef point_traits<Coord2D> pt;
   typedef algebraic_primitives<Coord2D> ap;
@@ -91,8 +95,8 @@ public:
   // typedef typename base::EdgeIterator   EdgeIterator;
 
 
-  stored_geometry_reg2d() {}
-  stored_geometry_reg2d(const RegGrid2D& gg) 
+  stored_geometry() {}
+  stored_geometry(const RegGrid2D& gg) 
     : base(gg) {}
 
   friend std::istream& operator>>(std::istream& in, self& rs) { rs.read(in); return in;}
@@ -196,7 +200,7 @@ private:
   const base& basic_geom() const { return *this;}  
 };
 
-
+} // namespace cartesian2d
 
 
 #endif

@@ -5,6 +5,7 @@
 #include "Utility/pre-post-conditions.h"
 
 int main() {
+  using namespace cartesian2d;
 
   typedef RegGrid2D grid_type;
   typedef grid_types<grid_type> gt;

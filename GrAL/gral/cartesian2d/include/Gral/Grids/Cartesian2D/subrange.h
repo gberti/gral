@@ -17,6 +17,7 @@
    of the subrange.
 */
 
+namespace cartesian2d {
 
 class SubrangeReg2D {
 public:
@@ -37,9 +38,9 @@ public:
   SubrangeReg2D(const Grid& gg, const index_type& llv, const index_type& urv)
     : g(&gg), 
       vertex_index_map(llv,urv), 
-      cell_index_map  (llv,index_type(urv.x-1,urv.y-1)),
-      xedge_index_map (llv,index_type(urv.x-1,urv.y  )), 
-      yedge_index_map (llv,index_type(urv.x,  urv.y-1))
+      cell_index_map  (llv,index_type(urv.x()-1,urv.y()-1)),
+      xedge_index_map (llv,index_type(urv.x()-1,urv.y()  )), 
+      yedge_index_map (llv,index_type(urv.x(),  urv.y()-1))
     {}
   SubrangeReg2D(const Grid& gg,int llx, int lly, int urx, int ury) 
     : g(&gg), 
@@ -191,12 +192,12 @@ public:
   int  urx() const { return TheVertexMap().urx();}
   int  ury() const { return TheVertexMap().ury();}
   index_type side_vertex1(int s) const {
-    return index_type(llx()+(NumOfXVertices()-1)* Grid::side_vertex_1_[s-1].x,
-		      lly()+(NumOfYVertices()-1)* Grid::side_vertex_1_[s-1].y);
+    return index_type(llx()+(NumOfXVertices()-1)* Grid::side_vertex_1_[s-1].x(),
+		      lly()+(NumOfYVertices()-1)* Grid::side_vertex_1_[s-1].y());
   }
   index_type side_vertex2(int s) const {
-    return index_type(llx()+(NumOfXVertices()-1)* Grid::side_vertex_2_[s-1].x,
-		      lly()+(NumOfYVertices()-1)* Grid::side_vertex_2_[s-1].y);
+    return index_type(llx()+(NumOfXVertices()-1)* Grid::side_vertex_2_[s-1].x(),
+		      lly()+(NumOfYVertices()-1)* Grid::side_vertex_2_[s-1].y());
   }
   
   const indexmap_type& TheVertexMap() const {return vertex_index_map;}
@@ -249,18 +250,20 @@ private:
   indexmap_type yedge_index_map;
 };
 
+} // namespace cartesian2d
+
 
 /*! \brief specialization of grid_types for SubrangeReg2D
 
  */
-struct grid_types<SubrangeReg2D> {
-  typedef SubrangeReg2D range_type;
+struct grid_types<cartesian2d::SubrangeReg2D> {
+  typedef  cartesian2d::SubrangeReg2D range_type;
   typedef  range_type::VertexIterator VertexIterator;
   typedef  range_type::EdgeIterator   EdgeIterator;
   typedef  range_type::EdgeIterator   FacetIterator;
   typedef  range_type::CellIterator   CellIterator;
 
-  typedef grid_types<RegGrid2D> gt;
+  typedef grid_types<cartesian2d::RegGrid2D> gt;
   typedef  gt::Vertex Vertex;
   typedef  gt::Edge   Edge;
   typedef  gt::Facet  Facet;

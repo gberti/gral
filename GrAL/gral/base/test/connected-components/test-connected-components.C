@@ -13,6 +13,7 @@
 
 int main() {
   using namespace std;
+  using namespace cartesian2d;
 
   //  CartesianGrid2D R0x0(0,0); // empty: core dump.
   CartesianGrid2D R0x0(1,1); // 0 cells

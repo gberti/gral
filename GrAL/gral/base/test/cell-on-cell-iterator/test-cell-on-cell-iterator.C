@@ -21,6 +21,7 @@ public:
 
 int main() {
   using namespace std;
+  using namespace cartesian2d;
   
   CartesianGrid2D R(3,3);
   Complex2D       G; ConstructGrid0(G,R);

@@ -17,12 +17,12 @@
 /*! \ingroup elementtraitsreggrid2d
  */
 template<>
-struct element_traits<RegGrid2D::Vertex> 
-: public element_traits_vertex_base<RegGrid2D>
+struct element_traits<cartesian2d::RegGrid2D::Vertex> 
+: public element_traits_vertex_base<cartesian2d::RegGrid2D>
 {
   struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>     consecutive_tag;
-  static  RegGrid2D::Vertex  handle2element(grid_type const& g, handle_type h)
+  static  cartesian2d::RegGrid2D::Vertex  handle2element(grid_type const& g, handle_type h)
   { return (g.vertex(h));}
 };
 
@@ -30,12 +30,12 @@ struct element_traits<RegGrid2D::Vertex>
 /*! \ingroup elementtraitsreggrid2d
  */
 template<>
-struct element_traits<RegGrid2D::Edge>
-  : public element_traits_edge_base<RegGrid2D>
+struct element_traits<cartesian2d::RegGrid2D::Edge>
+  : public element_traits_edge_base<cartesian2d::RegGrid2D>
 {
   struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>     consecutive_tag;
-  static  RegGrid2D::Edge  handle2element(grid_type const& g, handle_type h)
+  static  cartesian2d::RegGrid2D::Edge  handle2element(grid_type const& g, handle_type h)
   { return (g.edge(h));}
 
 };
@@ -44,12 +44,12 @@ struct element_traits<RegGrid2D::Edge>
 /*! \ingroup elementtraitsreggrid2d
  */
 template<>
-struct element_traits<RegGrid2D::Cell> 
-  : public element_traits_cell_base<RegGrid2D>
+struct element_traits<cartesian2d::RegGrid2D::Cell> 
+  : public element_traits_cell_base<cartesian2d::RegGrid2D>
 {
   struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>     consecutive_tag;
-  static  RegGrid2D::Cell  handle2element(grid_type const& g, handle_type h)
+  static  cartesian2d::RegGrid2D::Cell  handle2element(grid_type const& g, handle_type h)
   { return (g.cell(h));}
 };
 

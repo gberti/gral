@@ -35,6 +35,8 @@
          - int dim_of_image()  (dim. of coord_type, 2D or 3D)
 */
 
+namespace cartesian2d {
+
 template<class CoordMap>
 class mapped_geometry_reg2d_base 
   : public grid_types<RegGrid2D>
@@ -199,14 +201,14 @@ public:
 //----------- general geometry : include dimension dependend parts ----------
 
 template<class CM>
-class mapped_geometry_cartesian2d
+class mapped_geometry
   : 
-  public  dd_mapped_geom_reg2d<CM, mapped_geometry_cartesian2d<CM>,
+  public  dd_mapped_geom_reg2d<CM, mapped_geometry<CM>,
                                typename point_traits<typename CM::result_type>::dimension_tag>
 {
   
 public:
-  typedef dd_mapped_geom_reg2d<CM, mapped_geometry_cartesian2d<CM>,
+  typedef dd_mapped_geom_reg2d<CM, mapped_geometry<CM>,
                                typename point_traits<typename CM::result_type>::dimension_tag>
   base;
 
@@ -228,13 +230,13 @@ public:
   typedef point_traits<coord_type>                         pt;
   typedef mapped_geometry_reg2d_base<CM>                   geom_base;
  
-  mapped_geometry_cartesian2d() {}
+  mapped_geometry() {}
 
-  mapped_geometry_cartesian2d(const RegGrid2D& gg, const CM& ff)
+  mapped_geometry(const RegGrid2D& gg, const CM& ff)
     : base(ff,gg) {}
 
-  mapped_geometry_cartesian2d( const RegGrid2D& gg,  const CM& ff,
-			       const index_type& LL, const index_type& UR) 
+  mapped_geometry( const RegGrid2D& gg,  const CM& ff,
+		   const index_type& LL, const index_type& UR) 
     : base(ff,gg,LL,UR) {}
 
   typedef Segment<Edge,geom_base>   segment_type;
@@ -255,7 +257,7 @@ public:
 
 };
 
-
+} // namespace cartesian2d
 
 
 #endif

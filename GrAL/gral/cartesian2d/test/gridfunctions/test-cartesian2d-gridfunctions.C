@@ -10,6 +10,7 @@
 
 int main() {
   using namespace std;
+  using namespace cartesian2d;
 
   ostream& out = cout; // new ofstream("gridfunctions.out");
 

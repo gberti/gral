@@ -5,7 +5,8 @@
 
 #include <iostream>
 #include "Utility/pre-post-conditions.h"
-#include "Gral/Grids/Cartesian2D/index-type.h"
+//#include "Gral/Grids/Cartesian2D/index-type.h"
+#include "Container/index-map-nd.h"
 
 /*! \brief Mapping between integer intervals and integer rectangles
 
@@ -32,8 +33,9 @@
 
 class xmjr_indexmap2D {
 public:
-  typedef int_index_type index_type;
-
+  //   typedef int_index_type index_type;
+  typedef tuple<int,2>   index_type; 
+ 
   /*! simple range type
    */
   struct range {
@@ -55,31 +57,31 @@ public:
    : ll_(LL), ur_(UR), n0_(off) { init();}
 
   void init() { 
-    nx = ur_.x-ll_.x+1;  
-    ny = ur_.y-ll_.y+1;  
+    nx = ur_.x()-ll_.x()+1;  
+    ny = ur_.y()-ll_.y()+1;  
     rect_size = nx*ny;
   }
   
-  int x0()   const { return ll_.x;}
-  int xmax() const { return ur_.x;}
-  int y0()   const { return ll_.y;}
-  int ymax() const { return ur_.y;}
+  int x0()   const { return ll_.x();}
+  int xmax() const { return ur_.x();}
+  int y0()   const { return ll_.y();}
+  int ymax() const { return ur_.y();}
   int n0()   const { return n0_;}
   int nmax() const { return n0() + range_size() -1;}
 
   const index_type& ll() const {return ll_;}
-  int llx() const {return ll_.x;}
-  int lly() const {return ll_.y;}
+  int llx() const {return ll_.x();}
+  int lly() const {return ll_.y();}
   const index_type& ur() const {return ur_;}
-  int urx() const {return ur_.x;}
-  int ury() const {return ur_.y;}
+  int urx() const {return ur_.x();}
+  int ury() const {return ur_.y();}
 
 
   bool IsInRange(int x, int y) const { 
-    return ((ll_.x <= x) && ( x <= ur_.x) &&(ll_.y <= y) && ( y <= ur_.y));
+    return ((ll_.x() <= x) && ( x <= ur_.x()) &&(ll_.y() <= y) && ( y <= ur_.y()));
   }
   bool IsInRange(const index_type& i) const { 
-    return IsInRange(i.x,i.y);
+    return IsInRange(i.x(),i.y());
   }
   bool IsInRange(int i) const {
     return((n0() <= i) && ( i <= n0() -1 + range_size()));
@@ -88,10 +90,10 @@ public:
   int number(int x, int y) const { 
     REQUIRE(IsInRange(x,y),
 	    "index (x,y) = (" << x << "," << y << ") not in range "
-	    << range(ll_.x,ur_.x) << "x" << range(ll_.y,ur_.y) << "!",1);
+	    << range(ll_.x(),ur_.x()) << "x" << range(ll_.y(),ur_.y()) << "!",1);
     return (n0() + (x-x0())*ny + (y-y0()) );
   }
-  int number(const index_type& idx) const { return number(idx.x,idx.y);}
+  int number(const index_type& idx) const { return number(idx.x(),idx.y());}
   int offset(int x, int y) const { return number(x,y) - n0();}
   int offset(const index_type ij) const { return number(ij) - n0();}
 

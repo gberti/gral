@@ -13,10 +13,10 @@
 /*! \brief Specialization of the BoundaryRange template for RegGrid2D
 
  */
-class BoundaryRange<RegGrid2D> {
+class BoundaryRange<cartesian2d::RegGrid2D> {
 public:
 
-  typedef RegGrid2D                grid_type;
+  typedef cartesian2d::RegGrid2D   grid_type;
   typedef grid_types<grid_type>    gt;
   typedef gt::Edge                 Edge;
   typedef gt::Vertex               Vertex;
@@ -54,10 +54,10 @@ public:
 
 };
 
-struct grid_types<BoundaryRange<RegGrid2D> > 
+struct grid_types<BoundaryRange<cartesian2d::RegGrid2D> > 
 {
-  typedef grid_types<RegGrid2D>     gt;
-  typedef BoundaryRange<RegGrid2D>  BrC;
+  typedef grid_types<cartesian2d::RegGrid2D>     gt;
+  typedef BoundaryRange<cartesian2d::RegGrid2D>  BrC;
 
   typedef  gt::Vertex Vertex;
   typedef  gt::Edge   Edge;

@@ -5,7 +5,8 @@
 #include <iostream>
 
 int main() {
-  typedef RegGrid2D CartesianGrid2D;
+
+  using namespace cartesian2d;
 
   typedef grid_types<CartesianGrid2D> gt;
 
