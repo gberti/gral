@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/grid-types.h"
+#include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
 /*! \defgroup streamgrid Adapter for serial grid representation

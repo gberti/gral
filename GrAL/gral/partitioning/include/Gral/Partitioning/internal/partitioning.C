@@ -9,14 +9,14 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Partitioning/partitioning.h"
+#include "Gral/Partitioning/partitioning.h"
 
 // STD
 #include <string>
 #include <ctype.h> // for isdigit()
 
 #include "Container/partial-mapping.h"
-#include "Grids/Partitioning/collect-element-partitions.h"
+#include "Gral/Partitioning/collect-element-partitions.h"
 
 template<class Grid> 
 void partitioning<Grid>::write_partition(ostream& out)

@@ -1,7 +1,7 @@
 #ifndef NMWR_GB_ENUMERATED_SUBRANGE_C
 #define NMWR_GB_ENUMERATED_SUBRANGE_C
 
-#include "Grids/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-subrange.h"
 
 
 //----------------------------------------------------------------

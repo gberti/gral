@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "algobase.h"
+#include <algobase.h>
 
 
 template<class ElemIter, class F>

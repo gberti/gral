@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Gral/Grids/Algorithms/enlarge-grid.h"
+#include "Gral/Base/enlarge-grid.h"
 #include "Gral/Grids/Complex2D/complex2d.h"
 
 //----------------------------------------------------------------
@@ -74,7 +74,7 @@ EnlargeGridVC(Complex2D        & destG,       // in/out
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "./generic/complex2d-enlarge.C"
+#include "Gral/Grids/Complex2D/internal/complex2d-enlarge.C"
 #endif
 
 

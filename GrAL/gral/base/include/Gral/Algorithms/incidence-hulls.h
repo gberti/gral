@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRID_ALGO_ADJ_HULL_H
-#define NMWR_GB_GRID_ALGO_ADJ_HULL_H
+#ifndef NMWR_GB_GRID_ALGORITHM_INCIDENCE_HULL_H
+#define NMWR_GB_GRID_ALGORITHM_INCIDENCE_HULL_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -73,7 +73,7 @@ void mark_on_vertices(VertexIt    seed,         // in : vertex seed set
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Algorithms/adjacency-hulls.C"
+#include "Gral/Algorithms/internal/incidence-hulls.C"
 #endif
 
 #endif

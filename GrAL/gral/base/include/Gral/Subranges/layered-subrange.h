@@ -10,7 +10,7 @@
 //----------------------------------------------------------------
 
 
-#include "Gral/Base/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-subrange.h"
 
 //----------------------------------------------------------------
 /*! \defgroup layeredsubrange Layered Grid Subrange

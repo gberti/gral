@@ -9,14 +9,14 @@
 //   
 //----------------------------------------------------------------
 
-#include "vector.h"   // STL
+#include <vector.h>   // STL
 
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 
 #include "Gral/Base/mapped-iterators.h"
 #include "Gral/Base/grid-functors.h"
-#include "Gral/Base/Iterators/facet-by-cell-it.h"
+#include "Gral/Iterators/facet-by-cell-it.h"
 
 //----------------------------------------------------------------
 /*! \defgroup enumsubranges Enumerated Grid Subranges
@@ -274,7 +274,6 @@ public:
 template<class E>
 class enumerated_element_range {
   typedef enumerated_element_range<E> self;
-  MAKE_DEFAULT_OPS_SELF
 public:
   //------- referenced types ------------------
   typedef element_traits<E>            et;
@@ -470,7 +469,6 @@ element_range_ref<E,R>:: element_range_ref(const enumerated_element_range<E>& er
 template<class Grid>
 class enumerated_subrange {
   typedef enumerated_subrange<Grid> self;
-  MAKE_DEFAULT_OPS_SELF
 public:
   //------- referenced types ------------------
   typedef Grid grid_type;
@@ -600,7 +598,6 @@ public:
 template<class Grid>
 class enumerated_subrange_ref {
   typedef enumerated_subrange_ref<Grid> self;
-  MAKE_DEFAULT_OPS_SELF
 public:
   //------- referenced types ------------------
   typedef Grid grid_type;
@@ -771,7 +768,7 @@ void ConstructSubrangeFromCells
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Base/enumerated-subrange.C"
+#include "Gral/Subranges/enumerated-subrange.C"
 #endif
 
 

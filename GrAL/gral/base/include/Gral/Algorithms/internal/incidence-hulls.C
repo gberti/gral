@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRID_ALGO_ADJ_HULL_C
-#define NMWR_GB_GRID_ALGO_ADJ_HULL_C
+#ifndef NMWR_GB_GRID_ALGORITHM_INCIDENCE_HULL_C
+#define NMWR_GB_GRID_ALGORITHM_INCIDENCE_HULL_C
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Algorithms/adjacency-hulls.h"
+#include "Gral/Algorithms/incidence-hulls.h"
 
 
 template<class CellIt, class VtxSeq, class EltMarker>
