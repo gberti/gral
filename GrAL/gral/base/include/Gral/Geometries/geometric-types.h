@@ -10,7 +10,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 #include "Geometry/algebraic-primitives.h"
 
 //----------------------------------------------------------------

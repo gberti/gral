@@ -12,7 +12,7 @@
 
 
 #include "Gral/Base/common-grid-basics.h"
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 
 template<class GRID> struct vtuple_2d;
 

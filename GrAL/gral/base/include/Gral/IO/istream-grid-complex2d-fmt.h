@@ -19,7 +19,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Geometry/point3.h"
 #include "Utility/pre-post-conditions.h"
-#include "Gral/Base/Algorithms/write-complex2d.h"
+#include "Gral/IO/write-complex2d.h"
 
 //----------------------------------------------------------------
 /*! \defgroup complex2dformat Complex2D-Format I/O Adapter 

@@ -10,7 +10,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 #include "Gral/Base/common-grid-basics.h"
 
 /*! \brief empty template for total grid functions.
