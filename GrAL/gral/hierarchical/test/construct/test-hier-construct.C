@@ -23,9 +23,6 @@ void test_hier_grid(GRID const& root,
   typedef typename hgt::hier_facet_type                 hier_facet_type;
   typedef typename hgt::hier_vertex_type                hier_vertex_type;
   typedef typename hgt::element_base_type               element_base_type;
-  //  typedef hierarchical::h_vertex_on_cell_iterator_t<element_base_type> HierVertexOnCellIterator;
-  //  typedef hierarchical::h_vertex_on_element_iterator_t<element_base_type, cell_type_tag>  HierVertexOnCellIterator;
-  //   typedef hierarchical::h_vertex_on_element_iterator_t<element_base_type, facet_type_tag> HierVertexOnFacetIterator;
   typedef typename hierarchical::h_incidence_iterator_t<element_base_type, vertex_type_tag, cell_type_tag> 
                                                         HierVertexOnCellIterator;
   typedef typename hgt::index_type                      index_type;
@@ -51,15 +48,25 @@ void test_hier_grid(GRID const& root,
       }
     }
     for(typename cgt::FacetIterator f = H.FlatGrid(lev)->FirstFacet(); !f.IsDone(); ++f) {
-      //h_element_t<h_element_base<hier_grid_type>, typename cgt::Facet> hf(H,*f,lev);
       hier_facet1_type hf(H,*f,lev);
       typename hgt::cart_subrange_type R = H.descendants(hf, H.finest_level());
       
-      out << "Descendant of facet " << (*f).index() << ": " 
+      out << "All descendants of facet " << (*f).index() << ": " 
 	  << R.NumOfFacets()    << " facets: "    << "[" << R.low_cell_index()   << "," << R.high_cell_index()   << "]"
 	  << "  "
 	  << R.NumOfVertices() << " vertices: " << "[" << R.low_vertex_index() << "," << R.high_vertex_index() << "]"
-	  << "\n";
+	  << std::endl;
+      if(lev < H.finest_level()) {
+	out << "Children of facet " << (*f).index() << ": " << std::flush;
+	typename hgt::cart_subrange_type Ch = H.children(hf);
+	out << Ch.NumOfFacets()    << " facets: "    << "[" << Ch.low_cell_index()   << "," << Ch.high_cell_index()   << "]"
+	    << "  " << std::flush
+	    << Ch.NumOfVertices() << " vertices: " << "[" << Ch.low_vertex_index() << "," << Ch.high_vertex_index() << "]"
+	    << std::endl;
+	for(typename hier_facet1_type::ChildIterator chf = hf.FirstChild(); chf != hf.EndChild(); ++chf)
+	  out << (*chf).level() << "," << (*chf).Flat().index() << ";  " << std::flush;
+	out << std::endl;
+      }
     }
   }
   
@@ -113,20 +120,18 @@ namespace hierarchical {
   template class hgrid_cartesian<cartesian2d::CartesianGrid2D>; 
 
   
-  typedef  hgrid_cartesian<cartesian2d::CartesianGrid2D> hier_grid_2d;
+  //  typedef  hgrid_cartesian<cartesian2d::CartesianGrid2D> hier_grid_2d;
+  typedef  hgrid_cartesian<cartesiannd::grid<2> >   hier_grid_2d;
   template h_element_base_t<hier_grid_2d>;
   typedef  h_element_base_t<hier_grid_2d> element_base_type_2d;
   template h_vertex_t<element_base_type_2d>;
   template h_cell_t  <element_base_type_2d>;
-  template h_vertex_on_cell_iterator_t<element_base_type_2d>;
   
   typedef  hgrid_cartesian<cartesiannd::grid<3> > hier_grid_3d;
   template h_element_base_t<hier_grid_3d>;
   typedef  h_element_base_t<hier_grid_3d> element_base_type_3d;
   template h_vertex_t<element_base_type_3d>;
   template h_cell_t  <element_base_type_3d>;
-  template h_vertex_on_cell_iterator_t<element_base_type_3d>;
-
 }
 
 int main() {
@@ -146,8 +151,6 @@ int main() {
 
   cout << "----------------------------" << std::endl;
   {
-    //    namespace cart = cartesian2d;
-    //typedef cart::CartesianGrid2D cart_grid_type;
     typedef cartesiannd::grid<2> cart_grid_type;
     typedef grid_types<cart_grid_type> gt;
     typedef gt::index_type             it;
@@ -160,8 +163,6 @@ int main() {
   
   cout << "----------------------------" << std::endl;
   {
-    //   namespace cart = cartesian2d;
-    //  typedef cart::CartesianGrid2D cart_grid_type;
     typedef cartesiannd::grid<2> cart_grid_type;
     typedef grid_types<cart_grid_type> gt;
     typedef gt::index_type             it;
