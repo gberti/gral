@@ -2,7 +2,7 @@
 # Settings for gcc 2.95, 2.96
 
 CCC      =  g++
-CCFLAGS += -Wall 
+CCFLAGS += -Wall  
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 # 2.96 includes relops.h which define generic comparison operators,
 # and gets confused sometimes when other implementations are provided.
@@ -11,6 +11,11 @@ CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS
 CCFLAGS += -DGRAL_INCLUDES_RELOPS 
 
 CCFLAGS += -ftemplate-depth-35
+
+## CCFLAGS += -D__SGI_STL_INTERNAL_RELOPS
+CCFLAGS += -D__STL_BEGIN_RELOPS_NAMESPACE="namespace {" \
+           -D__STL_END_RELOPS_NAMESPACE="}" \
+           -D__SGI_STL_INTERNAL_RELOPS
 
 DEPEND    = $(CCC)
 DEPFLAGS += -MM $(CCFLAGS)
