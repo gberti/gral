@@ -6,6 +6,7 @@
 // $LICENSE
 
 #include <iostream.h>
+#include <stdlib.h>
 
 //@{
   
