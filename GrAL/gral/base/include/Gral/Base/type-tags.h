@@ -95,30 +95,76 @@ class cell2d_type_tag  : public cell_type_tag {};
 class cell3d_type_tag  : public cell_type_tag {};
 
 
-/*! Combinatorial grid dimension
 
-   \ingroup traits
- */
-template<unsigned N>
-struct grid_dim_tag 
-{   enum {dim = N}; };
+namespace type_tags {
+
+  struct fixed {};
+  struct variable {};
+}
 
 
 /*! Combinatorial element dimension
 
    \ingroup traits
  */
-template<unsigned N>
+template<int N>
 struct element_dim_tag 
-{   enum {dim = N}; };
+{   
+  typedef type_tags::fixed fixity_tag;
+  enum {dim = N}; 
+};
+
+template<>
+struct element_dim_tag<-1> 
+{  
+  typedef type_tags::variable fixity_tag;
+  enum { dim = -1 };
+};
 
 /*! Combinatorial element co-dimension
 
    \ingroup traits
  */
-template<unsigned N>
+template<int N>
 struct element_codim_tag 
-{   enum {dim = N}; };
+{    
+  typedef type_tags::fixed fixity_tag;
+  enum {dim = N}; 
+};
+
+template<>
+struct element_codim_tag<-1>
+{    
+  typedef type_tags::variable fixity_tag;
+  enum {dim = -1}; 
+};
+
+
+/*! Combinatorial grid dimension
+
+   \ingroup traits
+ */
+template<int N>
+struct grid_dim_tag 
+{ 
+  typedef type_tags::fixed fixity_tag;
+  enum {dim = N}; 
+
+  template<int K> struct elem_dim   { typedef element_dim_tag  <K>   tag;};
+  template<int K> struct elem_codim { typedef element_codim_tag<N-K> tag;};
+};
+
+template<>
+struct grid_dim_tag<-1>
+{ 
+  typedef type_tags::variable fixity_tag;
+  enum {dim = -1}; 
+  template<int K> struct elem_dim   { typedef element_dim_tag  <-1>   tag;};
+  template<int K> struct elem_codim { typedef element_codim_tag<-1> tag;};
+
+};
+
+
 
 
 

@@ -96,8 +96,9 @@ struct element_traits_vertex_base
   typedef typename gt::vertex_handle     handle_type;
   typedef vertex_type_tag                element_type_tag;
   typedef typename gt::dimension_tag     grid_dimension_tag;
-  typedef element_codim_tag<grid_dimension_tag::dim> element_codimension_tag;
-  typedef element_dim_tag<0>                         element_dimension_tag;
+  //  typedef element_codim_tag<grid_dimension_tag::dim> element_codimension_tag;
+  typedef typename grid_dimension_tag::elem_codim<0>::tag element_codimension_tag;
+  typedef element_dim_tag<0>                              element_dimension_tag;
 
   typedef element_traits_base<GRID>:: /* template */
     hasher_type_base<GRID, element_type> hasher_type_elem_base;
