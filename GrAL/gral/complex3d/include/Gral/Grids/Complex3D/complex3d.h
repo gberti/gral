@@ -179,6 +179,7 @@ public:
     { return archetypes[cell_archetype[c]];}
   archetype_handle      archetype_of(cell_handle c) const
     { return cell_archetype[c];}
+  archetype_handle      archetype_of(Cell const& c) const;
 
   typedef ::std::vector<archetype_type>::const_iterator archetype_iterator;
   archetype_iterator  BeginArchetype() const { return archetypes.begin();}
@@ -418,8 +419,10 @@ Complex3D::archetype_type const&
 Complex3D::ArchetypeOf(Complex3D::Cell const&  c) const 
 { return ArchetypeOf(c.handle());}
 
-
-
+inline
+Complex3D::archetype_handle
+Complex3D::archetype_of(Complex3D::Cell const& c) const
+{ return archetype_of(c.handle());}
 
 inline
 VertexOnCellIterator_Complex3D
