@@ -7,7 +7,9 @@
 #include <vector> // STL
 
 #include "Utility/pre-post-conditions.h"
+#include "Utility/ref-ptr.h"
 #include "Gral/Base/common-grid-basics.h"
+
 
 //----------------------------------------------------------------
 /*! \brief Implements a grid_function on vector-basis.
@@ -59,16 +61,20 @@ public:
   typedef const_reference result_type;
 protected:
   //--  DATA  -------
-  grid_type  const* g;
+  ref_ptr<grid_type const> g;
   table_type        table;  // basic container
   
 public:
   //--------------------- construction  ------------------
   grid_function_vector() : g((grid_type*)0) , table() {}
   grid_function_vector(const grid_type& gg) 
-    : g(&gg),  table(et::size(gg)) {}
+    : g(gg),  table(et::size(gg)) {}
   grid_function_vector(const grid_type& gg, const T& t) 
-    : g(&gg), table(et::size(gg),t)  {}
+    : g(gg), table(et::size(gg),t)  {}
+  grid_function_vector(ref_ptr<grid_type const> gg) 
+    : g(gg),  table(et::size(gg)) {}
+  grid_function_vector(ref_ptr<grid_type const> gg, const T& t) 
+    : g(gg), table(et::size(gg),t)  {}
 
   // copying
   typedef grid_function_vector<E,T> gfc2dv;
@@ -82,23 +88,26 @@ public:
   */
   void set_value(value_type const& t) { std::fill(table.begin(),table.end(),t); } 
 
-  void init(const grid_type& gg, const T& t) {
+  void init(ref_ptr<grid_type const> gg, const T& t) {
     REQUIRE((g == 0), "grid_function<>::init: grid must be 0!\n",1);
-    g = &gg;
+    g = gg;
     table.resize(et::size(*g),t);
   }
-  void set_grid(const grid_type& gg) {
-    REQUIRE((g == 0), "set grid: grid must be 0!\n",1);
-    g = &gg;
-    table = table_type(et::size(gg));
-  }
+  void init(const grid_type& gg, const T& t) { init(ref_ptr<grid_type const>(gg), t);}
 
-  void rebind(const grid_type& gg) {
-    g = &gg;
+  void set_grid(ref_ptr<grid_type const> gg) {
+    REQUIRE((g == 0), "set grid: grid must be 0!\n",1);
+    g = gg;
+    table = table_type(et::size(*g));
+  }
+  void set_grid(const grid_type& gg) { set_grid(ref_ptr<grid_type const>(gg));}
+
+  void rebind(ref_ptr<grid_type const> gg) {
+    g = gg;
     size_type old_size = table.size();
-    size_type new_size = et::size(gg);
+    size_type new_size = et::size(*g);
     if(old_size > new_size)
-      table.erase(table.begin()+et::size(gg),table.end());
+      table.erase(table.begin()+et::size(*g),table.end());
     else if (old_size < new_size) {
       table.reserve(new_size);
       for(unsigned i = 0; i < new_size - old_size; ++i)
@@ -106,7 +115,7 @@ public:
     }
     ENSURE( (table.size() == et::size(*g)), "", 1);
   }
-
+  void rebind(const grid_type& gg) { rebind(ref_ptr<grid_type const>(gg), t);}
 
   // temporary function to handle enlarge grids 'by hand'
   // (should be automatic by an observer/notifier mechanism)
@@ -114,6 +123,7 @@ public:
 
   //------------------ component access -------------------------
 
+  // should this return ref_ptr<grid_type const> ?
   const grid_type& TheGrid() const {
     REQUIRE((g != 0), "No grid!\n",1);
     return *g;
@@ -128,7 +138,7 @@ public:
   reference        operator[](const E& e)       { cv(e); return table[et::handle(e)]; }
   const_reference  operator[](const E& e) const { cv(e); return table[et::handle(e)]; }
 
-  bool valid(element_handle e) const { return bound() && (0 <= e) && ((unsigned) e < table.size());}
+  bool valid(element_handle e) const { return bound() && (element_handle(0) <= e) && (e < element_handle(table.size()));}
   bool bound()                 const { return g != 0;}
   void cv(const E& e)          const { cv(e.handle());}
   void cv(element_handle e)    const { REQUIRE(valid(e), "grid_function: invalid access: pos = " << e,1); }

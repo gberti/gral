@@ -7,6 +7,7 @@
 #include "Container/my-hash-map.h" // STL adapted
 
 #include "Utility/pre-post-conditions.h"
+#include "Utility/ref-ptr.h"
 #include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
@@ -60,13 +61,15 @@ public:
 
 protected:
   //--- DATA ---------
-  grid_type  const* g;
-  table_type        table;  // base container
+  ref_ptr<grid_type  const> g;
+  table_type                table;  // base container
 
 public:
-  grid_function_hash_base() : g((grid_type*)0) , table() {}
+  grid_function_hash_base() :  table() {}
   grid_function_hash_base(const grid_type& gg) 
-    : g(&gg), table()  {}
+    : g(gg), table()  {}
+  grid_function_hash_base(ref_ptr<grid_type const> gg) 
+    : g(gg), table()  {}
 
   // copying
   typedef grid_function_hash_base<E,T> gfc2dh;
@@ -87,11 +90,12 @@ public:
   }
   */
 
- 
-  void set_grid(const grid_type& gg) {
+  void set_grid(ref_ptr<grid_type const> gg) {
     REQUIRE((g == 0), "set grid: grid must be 0!\n",1);
-    g = &gg;
+    g = gg;
   }
+  void set_grid(const grid_type& gg) { set_grid(ref_ptr<grid_type const>(gg));}
+
 
   const grid_type& TheGrid() const {
     REQUIRE((g != 0), "No grid!\n",1);
@@ -165,11 +169,17 @@ public:
   grid_function_hash() {}
   grid_function_hash(const grid_type& gg) : base_gf(gg) {}
   grid_function_hash(const grid_type& gg, const T& t) 
-    : base_gf(gg) // g(&gg), table(et1::size(gg))  
+    : base_gf(gg) 
     {
-      for(ElementIterator e = et1::FirstElement(TheGrid()); ! e.IsDone(); ++e)
-	table[*e] = t;
+      set_value(t);
     }
+  grid_function_hash(ref_ptr<grid_type const> gg) : base_gf(gg) {}
+  grid_function_hash(ref_ptr<grid_type const> gg, const T& t) 
+    : base_gf(gg) 
+    {
+      set_value(t);
+    }
+
 
   /*! Set all value to \c t.
    */
@@ -178,17 +188,20 @@ public:
       table[*e] = t;    
   }
 
-  void init(const grid_type& gg, const T& t) {
+  void init(ref_ptr<grid_type const> gg, const T& t) {
     set_grid(gg);
     set_value(t);
   }
+  void init(const grid_type& gg, const T& t) { init(ref_ptr<grid_type const>(gg), t);}
 
   //----------------- data access operators -------------------------   
 
   const T&   operator()(const E& e) const {
+    /*
     REQUIRE( (&(e.TheGrid()) == g),
 	     "gf(e): Grids don't match: e.TheGrid() = "
 	     << &(e.TheGrid()) << ", this->TheGrid() : " << g << "!\n",1); 
+    */
     REQUIRE( defined(e), "grid_function not defined for item ",1);
     return (* (table.find(e))).second;
   }
@@ -196,9 +209,11 @@ public:
   // NOTE: if(!defined(e)) => a new entry is created!
   // use operator() for read access.
   T&  operator[](const E& e)       {
+    /*
     REQUIRE( (&(e.TheGrid()) == g),
 	     "gf(e): Grids don't match: e.TheGrid() = "
 	     << &(e.TheGrid()) << ", this->TheGrid() : " << g << "!\n",1); 
+    */
     return (table[e]);
   }
 
