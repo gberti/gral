@@ -73,7 +73,7 @@ $ gmake check [PREFIX=/your/prefix]
 Documentation 
 -------------
 
-Documentation is available separately on the GrAL homepage.
+Documentation is available separately on the GrAL home page.
 If unpacked in GrAL/, the file GrAL/index.html points to the
 right location.
 
