@@ -118,6 +118,7 @@ public:
   // which could inhibit some misuse.
   explicit ref_ptr(T  &     t) : owned_(false) 
   { ptr = &t; } // std::cout << "ref_ptr(T const&     t)" << std::endl;}
+
   // FIXME: This might result in memory leak if called with newly allocated ptr and own=false
   // Perhaps add shared_ptr<T> to data and allow only ref_ptr(shared_ptr<T>) ?
   explicit ref_ptr(T *   tptr, ownership own = not_owned) : owned_( (own == not_owned ? false : true))
@@ -155,8 +156,41 @@ public:
   }
 
   template<class U>
+  void make_own(U * rhs) 
+  {
+    clear();
+    ptr = rhs; // new T(*rhs);
+    owned_ = true;
+  }
+  void make_copy()
+  {
+    if(ptr != 0 && !owned_) {
+      owned_ = true;
+      T * ptr2 = new T(*ptr);
+      ptr = ptr2;
+    }
+  }
+
+  template<class U>
+  void make_ref   (U * rhs)
+  {
+    clear();
+    ptr = rhs;
+    owned = false;
+  }
+  // void make_shared(T * rhs);
+
+
+  template<class U>
   ref_ptr<T> & operator=(U const* tptr) { clear(); owned_ = false; ptr =tptr; return *this;}
 
+  //  template<class U>
+  //  ref_ptr<U> get_ref() const { return ref_ptr<U>(this->operator*());}
+
+  //  ref_ptr<T> get_ref() const { return ref_ptr<T>(this->operator*());}
+
+  //  template<class U = T>
+  // ref_ptr<U> get_copy() {}
 
   ~ref_ptr() { clear();}
 
@@ -171,11 +205,15 @@ public:
 private:
   template<class U>
   void copy(ref_ptr<U> const& rhs) { 
+    owned_ = false;
+    ptr = rhs.get();
+    /*
     owned_ = rhs.owned();
     if(owned_)
       ptr= new T(*rhs);
     else 
       ptr = rhs.get();
+    */
   }
   void clear()  { if(owned_) delete ptr; ptr = 0;}
 public:
