@@ -14,6 +14,35 @@
 template<unsigned N>
 struct grid_isomorphism_construction;
 
+template<class GRID1, class GRID2, 
+         class GT1,   class GT2,
+         class PHI>
+bool construct_isomorphism(GRID1 const& G1,
+			   GRID2 const& G2,
+			   GT1   gt1,                // only type used
+			   GT2   gt2,                //    
+			   PHI        & phi); 
+
+
+template<class GRID1, class GRID2, 
+         class PHI>
+bool construct_isomorphism(GRID1 const& G1,
+			   GRID2 const& G2,
+			   PHI        & phi)   // OUT
+{ 
+  return construct_isomorphism(G1,G2,
+			       grid_types<GRID1>(), 
+			       grid_types<GRID2>(),
+			       phi);
+}
+
+template<class CELL1, class CELL2, class GRID1, class GRID2, class PHI>
+bool extend_isomorphism(CELL1 const& c1,
+			CELL2 const& c2,
+			GRID1 const& G1,
+			GRID2 const& G2,
+			PHI        & phi);
+
 
 // base case: 0-dimensional grid
 template<>

@@ -5,6 +5,12 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Algorithms/internal/construct-isomorphism.C"
+
+#else
+
 /*! \defgroup construct_isomorphism_mod Construct Grid Isomorphisms
 
     \ingroup gridmorphisms
@@ -48,16 +54,10 @@ bool construct_isomorphism(GRID1 const& G1,
  */
 template<class GRID1, class GRID2, 
          class PHI>
-inline
 bool construct_isomorphism(GRID1 const& G1,
 			   GRID2 const& G2,
-			   PHI        & phi)   // OUT
-{ 
-  return construct_isomorphism(G1,G2,
-			       grid_types<GRID1>(), 
-			       grid_types<GRID2>(),
-			       phi);
-}
+			   PHI        & phi);  // OUT
+
 
 /*! \brief Extend a given isomorphism to the whole grid.
     \ingroup construct_isomorphism_mod
@@ -77,8 +77,6 @@ bool extend_isomorphism(CELL1 const& c1,
 			PHI        & phi);
 
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Algorithms/internal/construct-isomorphism.C"
-#endif
+#endif // NMWR_INCLUDE_TEMPLATE_DEFS
 
 #endif
