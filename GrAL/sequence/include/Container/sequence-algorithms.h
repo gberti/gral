@@ -12,6 +12,8 @@
 
 namespace GrAL {
 
+  /*! \brief Sequence-related algorithms and helpers
+   */
 namespace sequence {
 
   /*! \defgroup helperfunctors Helper functors for common tasks 

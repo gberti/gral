@@ -14,10 +14,11 @@
 
     See the paper "A calculus for stencils on arbitrary grids"
     or $DISS.
+    The class \c incidence_hull is the top-level entry point.
 
-   \todo Document the functions
-   \todo Implement test cases and demos
-   \todo Write more user-friendly wrappers to the mark_xxx routines.
+   \todo Better demos (now only \ref test-incidence-hulls.C)
+  
+   \see Test in \ref test-incidence-hulls.C 
  */
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
@@ -120,9 +121,12 @@ void mark_on_cells(CellIt      seed,         //!< in : cell seed set
 		   AdjSeq&     adj_queue,    //!< inout: seq of adjacencies to handle
 		   int&        level,        //!< inout: current level of adj.
 		   CellPred    inside,       //!< in: restrict cell range to cells \c c with <tt>inside(c)==true</tt>
-		   bool &      end);
+		   bool &      end);         //!< inout: true if seed range is empty
 
 
+/*! \brief Calculate incidence hull on cell germ set
+    \ingroup incidence_hull
+ */
 template<class CellIt, 
          class VSeq, 
          class CSeq, 
@@ -163,6 +167,9 @@ void mark_on_vertices(VertexIt    seed,         //!< in : vertex seed set
 		      CellPred    inside,       //!< in: restrict cell range to cells \c c with <tt>inside(c)==true</tt>
 		      bool&       end);         //!< inout: true if seed range is empty
 
+/*!  \brief Calculate incidence hull on vertex germ set
+    \ingroup incidence_hull   
+ */
 template<class VertexIt, 
          class VSeq, 
          class CSeq, 

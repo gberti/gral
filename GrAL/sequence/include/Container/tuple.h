@@ -54,6 +54,7 @@ private:
     tuple<T,N> is a model of STL Random Access Container (except reverse iterators).
  
     \todo Add reverse iterators.
+    \see  \ref tupleoperators
 */
 
 template<class T, unsigned N>
@@ -210,8 +211,24 @@ public:
 template<class T> T tuple<T,0>::tt;
 
 
+  /*! \defgroup tupleoperators Operators for  tuple
+
+  */
+
 //-------- comparison operators  ----------
 
+/*! \defgroup reltupleoperators Componentwise comparison operators for tuple
+  
+     \ingroup tupleoperators
+     \see \c tuple
+*/
+
+/*! \brief Generic comparison operator for tuple
+
+     Apply \c op componentswise, return \c true if \op is satisfied for all components.
+
+    \ingroup reltupleoperators
+*/
 template<class T, unsigned N, class RelOperator>
 inline bool compare(tuple<T,N> const& lhs, tuple<T,N> const& rhs, RelOperator op)
 {
@@ -221,10 +238,19 @@ inline bool compare(tuple<T,N> const& lhs, tuple<T,N> const& rhs, RelOperator op
   return res;
 }
 
+/*! \brief Componentwise equality
+  \ingroup reltupleoperators
+ */
 template<class T, unsigned N>
 inline bool operator==(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 { return compare(lhs,rhs, relational_operators::eq());}
 
+/*!\brief Inequality
+   
+   <tt>t1 != t2</tt>  \f$\Leftrightarrow\f$ <tt>!(t1 == t2) </tt>
+
+  \ingroup reltupleoperators
+ */  
 template<class T, unsigned N>
 inline bool operator!=(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 { return !(lhs == rhs);}
@@ -234,7 +260,9 @@ inline bool operator!=(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
     \note This is \e different from the lexicographical less:
           \f$ a < b \f$ means \f$ a[i] < b[i] \forall i \f$, 
           whereas lexicographical less means
-          \f$ a[i] = b[i], \quad 0 \leq i < k  \quad \wedge \quad a[k] < b[k] \f$
+          \f$ a[i] = b[i], \quad 0 \leq i < k  \quad \wedge \quad a[k] < b[k] \f$ for some \f$ k\f$ 
+
+    \ingroup reltupleoperators
  */
 template<class T, unsigned N>
 inline bool operator< (tuple<T,N> const& lhs, tuple<T,N> const& rhs)
@@ -245,7 +273,9 @@ inline bool operator< (tuple<T,N> const& lhs, tuple<T,N> const& rhs)
     \note This is \e different from the lexicographical greater:
           \f$ a > b \f$ means \f$ a[i] > b[i] \forall i \f$, 
           whereas lexicographical greater means
-          \f$ a[i] = b[i] \quad 0 \leq i < k  \quad \wedge \quad  a[k] > b[k] \f$
+          \f$ a[i] = b[i] \quad 0 \leq i < k  \quad \wedge \quad  a[k] > b[k] \f$ for some \f$ k\f$ 
+
+    \ingroup reltupleoperators
  */
 
 template<class T, unsigned N>
@@ -253,10 +283,29 @@ inline bool operator> (tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 { return compare(lhs,rhs, relational_operators::gt());}
 
 
+/*! \brief Component-wise less-equal.
+
+    \note This is \e different from the lexicographical less-equal:
+          \f$ a \le b \f$ means \f$ a[i] \le b[i] \forall i \f$, 
+          whereas lexicographical less-equal means
+          \f$ a[i] = b[i] \quad 0 \leq i \le k  \quad \wedge \quad  a[k] > b[k] \f$ for some \f$ k\f$ 
+
+    \ingroup reltupleoperators
+ */
+
 template<class T, unsigned N>
 inline bool operator<=(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 { return compare(lhs,rhs, relational_operators::leq());}
 
+/*! \brief Component-wise greater-equal.
+
+    \note This is \e different from the lexicographical greater-equal:
+          \f$ a \ge b \f$ means \f$ a[i] \ge b[i] \forall i \f$, 
+          whereas lexicographical greater-equal would  mean
+          \f$ a[i] = b[i] \quad 0 \leq i < k  \quad \wedge \quad  a[k] \ge b[k] \f$ for some \f$ k\f$ 
+
+    \ingroup reltupleoperators
+ */
 template<class T, unsigned N>
 inline bool operator>=(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 { return compare(lhs,rhs, relational_operators::geq());}
@@ -265,6 +314,15 @@ inline bool operator>=(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
 
 //------  algebraic operators --------------
 
+/*! \defgroup algebraictupleoperations Algebraic operations for \c tuple
+    
+    \ingroup tupleoperators 
+*/
+
+/*! \brief addition
+   
+    \ingroup algebraictupleoperations
+ */
 template<class T, unsigned N>
 inline
 tuple<T,N> operator+(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
@@ -275,6 +333,10 @@ tuple<T,N> operator+(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
   return tmp;
 }
 
+/*! \brief addition
+   
+    \ingroup algebraictupleoperations
+ */
 template<class T, unsigned N>
 inline
 tuple<T,N> operator-(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
@@ -285,6 +347,10 @@ tuple<T,N> operator-(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
   return tmp;
 }
 
+/*! \brief multiplication with scalar
+   
+    \ingroup algebraictupleoperations
+ */
 template<class T, unsigned N>
 inline
 tuple<T,N> operator*(T t, tuple<T,N> const& rhs)
@@ -295,29 +361,46 @@ tuple<T,N> operator*(T t, tuple<T,N> const& rhs)
   return tmp;
 }
 
+/*! \brief multiplication with scalar
+   
+    \ingroup algebraictupleoperations
+ */
 template<class T, unsigned N>
 inline
 tuple<T,N> operator*(tuple<T,N> const& lhs, T t)
 { return t*lhs;}
 
+/*! \brief division by scalar
+   
+    \ingroup algebraictupleoperations
+ */
 template<class T, unsigned N>
 inline
 tuple<T,N> operator/(tuple<T,N> const& lhs, T t)
 { return lhs * (1/t);}
 
 
+//---------------------- I/O ---------------------------
+
+
+/*! \brief output operator
+    \ingroup tupleoperators
+ */
 template<class T, unsigned N>
 inline
-::std::ostream& operator<<(::std::ostream& out, tuple<T,N> const& t)
+std::ostream& operator<<(std::ostream& out, tuple<T,N> const& t)
 {
   for(unsigned i = 0; i < N; ++i)
     out << t[i] << (i < N-1 ? " " : "");
   return out;
 }
 
+/*! \brief input operator
+    \ingroup tupleoperators
+ */
 template<class T, unsigned N>
 inline
-::std::istream& operator>>(::std::istream& in, tuple<T,N> & t)
+std::istream& operator>>(std::istream& in, tuple<T,N> & t)
 {
   for(unsigned i = 0; i < N; ++i)
     in >> t[i];
@@ -327,6 +410,15 @@ inline
 
 //----- component-wise algebraic operations
 
+/*! \defgroup compalgtupleoperators Component-wise algebraic operations
+
+     \ingroup tupleoperators
+ */
+
+/*! \brief Generic component-wise operation
+
+  \ingroup compalgtupleoperators
+*/
 template<class T, class U, unsigned N, class BinaryAlgebraicOp>
 inline 
 tuple<typename numeric_types::promote<T,U>::type, N>
@@ -343,6 +435,8 @@ componentwise(tuple<T,N> const& lhs, tuple<U,N> const& rhs, BinaryAlgebraicOp op
 /*! \brief component-wise product
 
     We do not use \c operator* syntax which could be confused with the dot-product.
+
+    \ingroup compalgtupleoperators
 */
 template<class T, class U, unsigned N>
 inline
@@ -353,6 +447,7 @@ product(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 /*! \brief component-wise quotient.
 
     For consistency with product(), the \c operator/ syntax is not used.
+   \ingroup compalgtupleoperators
 */
 template<class T, class U, unsigned N>
 inline
@@ -363,6 +458,8 @@ quotient(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 /*! \brief component-wise power
 
    \f$ (a_0, \ldots, a_{N-1}) \mapsto (a_0^k, \ldots, a_{N-1}^k) \f$
+
+   \ingroup compalgtupleoperators
 */
 template<class T, class U, unsigned N>
 inline
@@ -380,6 +477,7 @@ power(tuple<T,N> const& a, U k)
 /*! \brief component-wise floor
 
     \f$ (a_0, \ldots, a_{N-1}) \mapsto (\lfloor a_0\rfloor, \ldots, \lfloor a_{N-1}\rfloor) \f$
+    \ingroup compalgtupleoperators
 
 */
 template<class T, unsigned N>
@@ -395,6 +493,7 @@ floor_tuple(tuple<T,N> const& a)
 /*! \brief component-wise ceiling
 
     \f$ (a_0, \ldots, a_{N-1}) \mapsto (\lceil a_0\rceil, \ldots, \lceil a_{N-1}\rceil) \f$
+    \ingroup compalgtupleoperators
 
 */
 template<class T, unsigned N>
@@ -410,6 +509,7 @@ ceil_tuple(tuple<T,N> const& a)
 /*! \brief component-wise rounding to next integer
 
     \f$ (a_0, \ldots, a_{N-1}) \mapsto (\lceil a_0-0.5\rceil, \ldots, \lceil a_{N-1}-0.5\rceil) \f$
+    \ingroup compalgtupleoperators
 
 */
 template<class T, unsigned N>
@@ -433,6 +533,8 @@ round_tuple(tuple<T,N> const& a)
      <tt> does_divide(lhs, rhs) == true </tt>
      \f$ \Leftrightarrow \f$
      \c lhs[i] divides \c rhs[i] \f$ \forall i \f$
+
+    \ingroup compalgtupleoperators
  */
 template<class T, class U, unsigned N>
 inline bool
@@ -445,6 +547,7 @@ does_divide(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 
     \c clamp_tuple(low,high,p) is the point nearest to \c p within \c [low,high].
 
+    \ingroup compalgtupleoperators
 */
 template<class T, unsigned N>
 inline
