@@ -1,53 +1,29 @@
 #ifndef NMWR_GB_STORED_FOR_CARTESIAN2D_H
 #define NMWR_GB_STORED_FOR_CARTESIAN2D_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+// $LICENSE
 
 #include "Geometry/point-traits.h"
 #include "Geometry/algebraic-primitives.h"
-#include "Grids/common-grid-basics.h"
-#include "Grids/geometric-types.h"
-#include "Grids/Reg2D/cartesian-grid2d.h"
-#include "Grids/Reg2D/grid-functions.h"
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Geometries/geometric-types.h"
 
-/**
-  @author Guntram Berti
-  @memo   "Classical" geometry for RegGrid2D with stored coordinate values.
+#include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
+#include "Gral/Grids/Cartesian2D/grid-functions.h"
 
-  This is a straight-line geometric embedding for the grid class
-  RegGrid2D that simply stores the vertex coordinates. The type
-  Coord2D of the coordinates is a template parameter.
-  This uses a grid_function<Vertex,Coord2D> to store the coordinates,
-  so you (yet) have to provide a specialization to these parameters.
-  There is a problem with the provided functionality:
-  If we have a 2D-embedding (which is assumed the normal case)
-  we may provide normal directions to Edges, in the 3D-case 
-  this does not make sense. So there are 2 possibilities:
-  \begin{enumerate}
-   \item specialize to 2D case
-   \item provide compile-time branching over static dimension of
-    Coord2D parameter.
-  \end{enumerate}
-*/
 
 
 template<class Coord2D>
-class stored_geometry_for_reg2d_base : public grid_types<RegGrid2D>,
-				       public algebraic_primitives<Coord2D>
+class stored_geometry_reg2d_base : public grid_types<RegGrid2D>,
+                                   public algebraic_primitives<Coord2D>
 {
 public:
   typedef Coord2D   coord_type;
   typedef RegGrid2D grid_type;
 
-  stored_geometry_for_reg2d_base() :  g(0) {} 
+  stored_geometry_reg2d_base() :  g(0) {} 
 
-  stored_geometry_for_reg2d_base(const RegGrid2D& gg) 
+  stored_geometry_reg2d_base(const RegGrid2D& gg) 
     : g(&gg), coords_(gg) {}
 
   void set_grid(const RegGrid2D& gg) { g = &gg; coords_.set_grid(gg);}
@@ -72,20 +48,37 @@ private:
 
 
 
+/*! \brief "Classical" geometry for RegGrid2D with stored coordinate values
+
+  This is a straight-line geometric embedding for the grid class
+  RegGrid2D that simply stores the vertex coordinates. The type
+  Coord2D of the coordinates is a template parameter.
+  This uses a grid_function<Vertex,Coord2D> to store the coordinates,
+  so you (yet) have to provide a specialization to these parameters.
+
+  There is a problem with the provided functionality:
+  If we have a 2D-embedding (which is assumed the normal case)
+  we may provide normal directions to Edges, in the 3D-case 
+  this does not make sense. So there are 2 possibilities:
+   - specialize to 2D case
+   - provide compile-time branching over static dimension of
+     Coord2D parameter.
+*/
+
 template<class Coord2D>
-class general_stored_geometry_for_reg2d 
-  : public  stored_geometry_for_reg2d_base<Coord2D>
+class stored_geometry_reg2d 
+  : public  stored_geometry_reg2d_base<Coord2D>
 {
   
 public:
-  typedef stored_geometry_for_reg2d_base<Coord2D>    geom_base;
-  typedef general_stored_geometry_for_reg2d<Coord2D> self;
+  typedef stored_geometry_reg2d_base<Coord2D>    geom_base;
+  typedef stored_geometry_reg2d<Coord2D> self;
 
   typedef point_traits<Coord2D> pt;
   typedef algebraic_primitives<Coord2D> ap;
 
-  general_stored_geometry_for_reg2d() {}
-  general_stored_geometry_for_reg2d(const RegGrid2D& gg) 
+  stored_geometry_reg2d() {}
+  stored_geometry_reg2d(const RegGrid2D& gg) 
     : geom_base(gg) {}
 
   friend istream& operator>>(istream& in, self& rs) { rs.read(in); return in;}

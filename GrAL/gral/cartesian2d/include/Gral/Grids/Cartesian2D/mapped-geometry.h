@@ -1,52 +1,42 @@
 #ifndef NMWR_GB_GEOM_PRIMITIVES_FOR_CARTESIAN2D_H
 #define NMWR_GB_GEOM_PRIMITIVES_FOR_CARTESIAN2D_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
 
-/**  
-      @author Guntram Berti
-      @memo   geometry for RegGrid2D with explicit mapping.
+// $LICENSE
+
+#include "Config/compiler-config.h"
+#include "Geometry/algebraic-primitives.h"
+
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Geometries/geometric-types.h"
+#include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
+
+/*!  \brief  geometry for RegGrid2D with explicit mapping.
 
       This class implements a straight-line geometry for the
       grid class RegGrid2D. The coordinates of the vertices
       are given by a mapping from the unit-square [0,1]x[0,1]
       to R^2 (or R^3, in principle. There are some problems,
       however. See below).
+
       To this end, the given underlying grid G of type RegGrid2D
       is thought to be mapped onto the unit square, by default
       G.ll() -> (0.0,0.0)  and G.ur() -> (1.0,1.0).
       A rectangle other than G.ll(),G.ur() may be specified that is mapped
       to [0,1]^2. This is useful e.g. for grids with overlaps or that
       are components of a larger grid, occupying only a part of the logical
-      entier grid.
+      entire grid.
 
-
-  */
-
-#include "compiler-config.h"
-#include "Geometry/algebraic-primitives.h"
-#include "Grids/common-grid-basics.h"
-#include "Grids/geometric-types.h"
-#include "Grids/Reg2D/cartesian-grid2d.h"
-
-/**  
-       CoordMap:
-      \begin{itemize}
-      \item typedef coord_type ( type of result)
-      \item typedef argument_type 
-      \item coord_type operator()(argument_type, 2D)
-      \item int dim_of_image()  (dim. of coord_type, 2D or 3D)
-      \end{itemize}
+       \templateparams
+        + CoordMap:
+         - typedef coord_type ( type of result)
+         - typedef argument_type 
+         - coord_type operator()(argument_type, 2D)
+         - int dim_of_image()  (dim. of coord_type, 2D or 3D)
 */
 
 template<class CoordMap>
-class mapped_geometry_for_reg2d_base 
+class mapped_geometry_reg2d_base 
   : public grid_types<RegGrid2D>
 {
 public:
@@ -54,10 +44,10 @@ public:
   typedef RegGrid2D                      grid_type;
   typedef typename RegGrid2D::index_type index_type;
 
-  mapped_geometry_for_reg2d_base() :  g(0) {} 
+  mapped_geometry_reg2d_base() :  g(0) {} 
 
-  /// Constructor
-  mapped_geometry_for_reg2d_base(const CoordMap& ff, const RegGrid2D& gg) 
+  //@{ @name Constructor
+  mapped_geometry_reg2d_base(const CoordMap& ff, const RegGrid2D& gg) 
     : f(ff), g(&gg), ll(gg.ll()), ur(gg.ur())
     { 
       dx = (ur.x - ll.x != 0 ? 1.0 / (ur.x -ll.x) 
@@ -65,7 +55,7 @@ public:
       dy = (ur.y - ll.y != 0 ? 1.0 / (ur.y -ll.y) 
 	    : 0.0);
     }
-  mapped_geometry_for_reg2d_base(const CoordMap& ff, const RegGrid2D& gg,
+  mapped_geometry_reg2d_base(const CoordMap& ff, const RegGrid2D& gg,
 				 const index_type& LL, const index_type& UR) 
     : f(ff), g(&gg), ll(LL), ur(UR) {
       dx = (ur.x - ll.x != 0 ? 1.0 / (ur.x -ll.x) 
@@ -73,7 +63,7 @@ public:
       dy = (ur.y - ll.y != 0 ? 1.0 / (ur.y -ll.y) 
 	    : 0.0);
   }
-  
+  //@}
 
   const grid_type& TheGrid()    const { 
     REQUIRE((g != 0) , "no grid!\n",1);
@@ -106,40 +96,33 @@ private:
 
 //--------------------- dimension dependend geometry parts --------------
 
-#ifndef __xlC__
-
 template<class CM, class GEOM, class DIM>
 class dd_mapped_geom_reg2d 
-  : public mapped_geometry_for_reg2d_base<CM> 
+  : public mapped_geometry_reg2d_base<CM> 
 {
 public:
   dd_mapped_geom_reg2d() {} 
 
   dd_mapped_geom_reg2d(const CM& ff, const RegGrid2D& gg) 
-    : mapped_geometry_for_reg2d_base<CM>(ff,gg) {}
+    : mapped_geometry_reg2d_base<CM>(ff,gg) {}
 
   dd_mapped_geom_reg2d(const CM& ff, const RegGrid2D& gg,
 		       const index_type& LL, const index_type& UR) 
-    : mapped_geometry_for_reg2d_base<CM>(ff,gg,LL,UR) {}
+    : mapped_geometry_reg2d_base<CM>(ff,gg,LL,UR) {}
 };
 
 
 template<class CM, class GEOM>
 class dd_mapped_geom_reg2d<CM, GEOM, tag2D>
-  : public mapped_geometry_for_reg2d_base<CM> { // typename GEOM::mapping_type>  {
+  : public mapped_geometry_reg2d_base<CM> { 
   //   only useful if dim(coord_type) == 2 !
 
-#else
-template<class CM, class GEOM, class DIM>
-class dd_mapped_geom_reg2d 
-  : public mapped_geometry_for_reg2d_base<CM> {
-#endif
 
 protected:
-  GEOM      * _sub()       { return STATIC_CAST(GEOM      *, (this));}
-  GEOM const* _sub() const { return STATIC_CAST(GEOM const*, (this));}
+  GEOM      * _sub()       { return static_cast<GEOM      *>(this);}
+  GEOM const* _sub() const { return static_cast<GEOM const*>(this);}
 
-  typedef mapped_geometry_for_reg2d_base<CM> base_geo;
+  typedef mapped_geometry_reg2d_base<CM> base_geo;
   base_geo       & basic_geom()       { return *this;}
   base_geo  const& basic_geom() const { return *this;}
 public:
@@ -200,9 +183,9 @@ public:
 //----------- general geometry : include dimension dependend parts ----------
 
 template<class CM>
-class general_mapped_geometry_for_reg2d 
+class mapped_geometry_reg2d 
   : 
-  public  dd_mapped_geom_reg2d<CM, general_mapped_geometry_for_reg2d<CM>,
+  public  dd_mapped_geom_reg2d<CM, mapped_geometry_reg2d<CM>,
                                typename point_traits<typename CM::result_type>::dimension_tag>
 {
   
@@ -210,18 +193,18 @@ public:
   typedef CM mapping_type;
 
   typedef point_traits<coord_type>                         pt;
-  typedef mapped_geometry_for_reg2d_base<CM>               geom_base;
+  typedef mapped_geometry_reg2d_base<CM>                   geom_base;
   typedef dd_mapped_geom_reg2d<CM, 
-                               general_mapped_geometry_for_reg2d<CM>,
+                               mapped_geometry_reg2d<CM>,
                                typename pt::dimension_tag> base;
  
-  general_mapped_geometry_for_reg2d() {}
+  mapped_geometry_reg2d() {}
 
-  general_mapped_geometry_for_reg2d(const CM& ff, const RegGrid2D& gg) 
+  mapped_geometry_reg2d(const CM& ff, const RegGrid2D& gg) 
     : base(ff,gg) {}
 
-  general_mapped_geometry_for_reg2d(const CM& ff, const RegGrid2D& gg,
-				    const index_type& LL, const index_type& UR) 
+  mapped_geometry_reg2d(const CM& ff, const RegGrid2D& gg,
+                        const index_type& LL, const index_type& UR) 
     : base(ff,gg,LL,UR) {}
 
   typedef Segment<Edge,geom_base>   segment_type;
