@@ -64,6 +64,7 @@ public:
 
 /*! \brief specialization of copy_traits for connector_impl
  */
+template<>
 struct copy_traits<connector_impl> : public copy_traits_base<connector_impl> {
   static connector_impl* clone(connector_impl const& c) { return c.clone();}
 };
@@ -222,6 +223,10 @@ template<class SenderIt, class ReceiverIt>
 class copy_range_connector : public range_connector<SenderIt,ReceiverIt> 
 {
   typedef range_connector<SenderIt,ReceiverIt>  conn_base;
+  using conn_base::src_b;
+  using conn_base::src_e;
+  using conn_base::dest_b;
+  using conn_base::dest_e;
 public:
   copy_range_connector() {}
   copy_range_connector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt re)
@@ -240,6 +245,10 @@ template<class SenderIt, class ReceiverIt>
 class add_to_range_connector : public range_connector<SenderIt,ReceiverIt> 
 {
   typedef range_connector<SenderIt,ReceiverIt>  conn_base;
+  using conn_base::src_b;
+  using conn_base::src_e;
+  using conn_base::dest_b;
+  using conn_base::dest_e;
 public:
   add_to_range_connector() {}
   add_to_range_connector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt re)
@@ -268,6 +277,10 @@ private:
   std::vector<sender_value_type>  buffer;
 
   typedef range_connector<SenderIt,ReceiverIt>  conn_base;
+  using conn_base::src_b;
+  using conn_base::src_e;
+  using conn_base::dest_b;
+  using conn_base::dest_e;
 public:
   buffered_copy_range_connector() {}
   buffered_copy_range_connector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt re)
@@ -296,9 +309,13 @@ private:
   std::vector<sender_value_type>  buffer;
 
   typedef range_connector<SenderIt,ReceiverIt>  conn_base;
+  using conn_base::src_b;
+  using conn_base::src_e;
+  using conn_base::dest_b;
+  using conn_base::dest_e;
 public:
   buffered_add_to_range_connector() {}
-  buffered_add_to_range_connector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt rs)
+  buffered_add_to_range_connector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt re)
     : conn_base(sb,se,rb,re) {}
   virtual connector_impl* clone() const { return new buffered_add_to_range_connector(*this);}
 
@@ -316,7 +333,7 @@ inline Connector
 CopyConnector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt rs)
 { 
   return Connector
-    (new copy_range_connector<SenderIt,ReceiverIt>(sb,se,rb,re));
+    (new copy_range_connector<SenderIt,ReceiverIt>(sb,se,rb,rs));
 }
 
 /*! Creator function for copy_range_connector
@@ -340,7 +357,7 @@ CopyConnector(SenderRge s, ReceiverRge r)
  */
 template<class SenderIt, class ReceiverIt>
 inline Connector
-AddingConnector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt rs)
+AddingConnector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt re)
 { 
   return Connector
     (new add_to_range_connector<SenderIt,ReceiverIt>(sb,se,rb,re));
