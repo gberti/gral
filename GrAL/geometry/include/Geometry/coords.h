@@ -18,32 +18,31 @@
 #include "Geometry/algebraic-primitives.h"
 
 //----------------------------------------------------------------
-//
-//  class coord<N>;
-//
-//  A general class template for small geometric points.
-//  The only template parameter is currently the dimension N.
-//  This class could as well be parameterized over the type
-//  of the components, now fixed to double. Default template 
-//  parameters offer a clean way to add this generality later
-//  without having to change code elsewhere.
-//
-//  Features:
-//   * 1-based indexing with [] and ()
-//   * all algebraic operators: 
-//      R^N x R^N -> R^N :+=, -=, +, - 
-//      R^N       -> R^N : unary -
-//      R^N x R   -> R^N
-//      R   x R^N -> R^N : *=, /=, *, /
-//  There is NO operator* for the dot-product due to non-associativity!!
-//   
-//
-//  There exist specializations for N=2 and N=3.
-//  They can be disabled by
-//  #define NO_COORD_SPECIAL 1
-//
-//  This class template can work together with the matrix<M.N> template.
-//
+/*! \brief  A general class template for small geometric points.
+  The only template parameter is currently the dimension N.
+  This class could as well be parameterized over the type
+  of the components, now fixed to double. Default template 
+  parameters offer a clean way to add this generality later
+  without having to change code elsewhere.
+
+  Features:
+   * 1-based indexing with [] and ()
+   * all algebraic operators: 
+      - \f$ \R^N \times \R^N \mapsto \R^N \f$ :+=, -=, +, - 
+      - \f$ \R^N   \mapsto \R^N \f$ : unary -
+      - \f$ \R^N \times \R   \mapsto \R^N,
+            \R \times \R^N   \mapsto \R^N \f$ : *=, /=, *, /
+   * There is \e NO operator* for the dot-product 
+     due to non-associativity!! 
+     (\f$ (x*y)*z is different from x*(y*z)\f$ for \f$ x,y,z \in \R^N \f$)
+   
+
+  Specializations exist for N=2 and N=3.
+  They can be disabled by
+  #define NO_COORD_SPECIAL 1
+
+  This class template can work together with the matrix<M.N> template.
+*/
 //----------------------------------------------------------------
 
 typedef double coord_N_component;
@@ -130,8 +129,12 @@ inline istream& operator>>(istream& in, coordN<N>& P)
 
 
 template<unsigned N>
-struct point_traits_for_coordN {
-  typedef coordN<N> Ptype;
+struct point_traits_for_coordN 
+  : public point_traits_base<coordN<N> > {
+
+
+  typedef typename dim_tag<N>::dimension_tag dimension_tag;
+  typedef coordN<N>                      Ptype;
   typedef typename Ptype::component      component_type;
   typedef component_type                 value_type;
 
@@ -160,11 +163,12 @@ struct point_traits_for_coordN {
 };
 
 // specialization for N=2 ( no reference for z() - functional)
-struct point_traits_for_coordN_2 {
-  typedef coordN<2> Ptype;
-  typedef Ptype::component       component_type;
-  typedef component_type                  value_type;
-  typedef tag2D                           dimension_tag;
+struct point_traits_for_coordN_2
+  : public point_traits_base<coordN<2> > {
+  typedef coordN<2>                 Ptype;
+  typedef Ptype::component          component_type;
+  typedef component_type            value_type;
+  typedef tag2D                     dimension_tag;
 
   static int LowerIndex(const Ptype&) { return 1;}
   static int UpperIndex(const Ptype&) { return 2;}
@@ -191,8 +195,10 @@ struct point_traits_for_coordN_2 {
 template<unsigned N>
 struct point_traits<coordN<N> > :  public point_traits_for_coordN<N> {};
 
-/*
+template<>
 struct point_traits<coordN<2> > : public point_traits_for_coordN_2  {};
+
+/*
 struct point_traits<coordN<3> > : public point_traits_for_coordN<3> {};
 struct point_traits<coordN<4> > : public point_traits_for_coordN<4> {};
 struct point_traits<coordN<5> > : public point_traits_for_coordN<5> {};
@@ -203,12 +209,14 @@ struct point_traits<coordN<5> > : public point_traits_for_coordN<5> {};
 // algebraic-primitives.
 // these should really be elsewhere, because not everyone
 // wants to use them.
+
+/*
 struct dimension_dependent_primitives<coordN<3> >
   : public dimension_dependent_primitives_3d<coordN<3> > {};
 
 template<>
 struct dimension_dependent_primitives<coordN<2> >
   : public dimension_dependent_primitives_2d<coordN<2> > {};
-
+*/
 
 #endif
