@@ -12,7 +12,7 @@
 #include "Gral/Base/mapped-iterators.h"
 #include "Gral/Base/map-element-iter-names.h"
 #include "Gral/Base/grid-functors.h"
-#include "Gral/Iterators/facet-by-cell-it.h"
+#include "Gral/Iterators/facet-iterator-of-cell-set.h"
 
 //----------------------------------------------------------------
 /*! \defgroup enumsubranges Enumerated Grid Subranges
@@ -617,7 +617,7 @@ public:
                                       handle2element_map<Vertex> > VertexIterator;
   typedef mapped_element_ra_seq_iterator<cell_sequence,   
                                       handle2element_map<Cell> >   CellIterator;
-  typedef facet_set_of_cells_iterator<CellIterator>                FacetIterator;
+  typedef facet_iterator_of_cell_set<CellIterator>                 FacetIterator;
 
   //                                    handle2element_map<Cell> >   CellIterator;
   // 2D only!
@@ -744,8 +744,8 @@ public:
   //-------------------- iteration  ----------------------------
 
   typedef typename vertex_range_ref_t::VertexIterator  VertexIterator;
-  typedef typename cell_range_ref_t  ::CellIterator   CellIterator;
-  typedef facet_set_of_cells_iterator<CellIterator>   FacetIterator;
+  typedef typename cell_range_ref_t  ::CellIterator    CellIterator;
+  typedef facet_iterator_of_cell_set<CellIterator>     FacetIterator;
   // 2D only!
   typedef FacetIterator                                EdgeIterator;
 
