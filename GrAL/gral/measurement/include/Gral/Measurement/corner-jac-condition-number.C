@@ -19,17 +19,30 @@ corner_jacobian<GRID,GEOM>::set_vertex_stars
 }
 
 template<class GRID, class GEOM>
-typename corner_jacobian<GRID,GEOM>::real
-corner_jacobian<GRID,GEOM>
-::condition(typename corner_jacobian<GRID,GEOM>::VertexOnCellIterator 
-	    const& corner)
+void 
+corner_jacobian<GRID,GEOM>::set_ideal_corner
+(typename corner_jacobian<GRID,GEOM>::VertexOnCellIterator const& ideal_corner_, 
+ typename corner_jacobian<GRID,GEOM>::geom_type            const& ideal_geom_)
 {
-  archetype_type const& A(corner.TheCell().TheArchetype());
+  ideal_geom = & ideal_geom_;
+  matrix_type edges;
+  get_edges(ideal_corner_, ideal_geom_, edges);
+  inv_ideal_corner = ap::inverse(edges);
+}
+
+template<class GRID, class GEOM>
+void 
+corner_jacobian<GRID,GEOM>::get_edges
+(typename corner_jacobian<GRID,GEOM>::VertexOnCellIterator const& corner_, 
+ typename corner_jacobian<GRID,GEOM>::geom_type            const& geom_,
+ typename corner_jacobian<GRID,GEOM>::matrix_type               & edges)
+{
+  archetype_type const& A(corner_.TheCell().TheArchetype());
   if(! vertex_stars.defined(&A))
      set_vertex_stars(A);
 
-  cell_archetype_map<grid_type>  cXa(corner.TheCell());
-  Vertex v0 = *corner;
+  cell_archetype_map<grid_type>  cXa(corner_.TheCell());
+  Vertex v0 = *corner_;
   ArchVertex v0_a(cXa(v0));
   flag<archetype_type>   star = vertex_stars(&A)(v0_a);
   
@@ -41,12 +54,25 @@ corner_jacobian<GRID,GEOM>
   star.switch_edge();
   Vertex v3 = cXa(star.switched_vertex()); 
 
-  typedef algebraic_primitives<typename geom_type::coord_type> ap;
-  // typename ap::Norm_frobenius N;
-  double  q = ap::condition(TheGeom().coord(v0)- TheGeom().coord(v1),
-			    TheGeom().coord(v0)- TheGeom().coord(v2),
-			    TheGeom().coord(v0)- TheGeom().coord(v3),
-			    typename ap::Norm_frobenius());
+  edges = matrix_type(geom_.coord(v0) - geom_.coord(v1),
+		      geom_.coord(v0) - geom_.coord(v2),
+		      geom_.coord(v0) - geom_.coord(v3));
+}
+
+
+
+template<class GRID, class GEOM>
+typename corner_jacobian<GRID,GEOM>::real
+corner_jacobian<GRID,GEOM>
+::condition(typename corner_jacobian<GRID,GEOM>::VertexOnCellIterator 
+	    const& corner)
+{
+  matrix_type edges;
+  get_edges(corner, *geom, edges);
+
+  matrix_type weighted_edges = edges * inv_ideal_corner;
+  double q = ap::condition(weighted_edges,
+			   typename ap::Norm_frobenius());
   return q;
 }
 

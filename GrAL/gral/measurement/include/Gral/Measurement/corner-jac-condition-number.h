@@ -27,6 +27,7 @@ public:
   typedef point_traits<coord_type>          pt;
   typedef algebraic_primitives<coord_type>  ap;
   typedef typename ap::real                 real;
+  typedef typename ap::matrix_type          matrix_type;
 
   typedef typename gt::Cell                 Cell;
   typedef typename gt::Vertex               Vertex;
@@ -44,12 +45,23 @@ private:
   // Cell -> (ArchVertex -> star) 
   partial_mapping<archetype_type const*, vertex_star_map> vertex_stars;
 
+  geom_type const* ideal_geom;
+  matrix_type      inv_ideal_corner;
 
 public: 
   corner_jacobian(grid_type const& gg, geom_type const& ggeom)
-    : g(&gg), geom(&ggeom) {}
+    : g(&gg), geom(&ggeom), ideal_geom(0), inv_ideal_corner(matrix_type::UnitMatrix())
+  { }
 
   real condition(VertexOnCellIterator const& corner);
+
+  void set_ideal_corner(VertexOnCellIterator const& ideal_corner_, 
+			geom_type            const& ideal_geom_);
+
+  void get_edges(VertexOnCellIterator const& corner_, 
+		 geom_type            const& geom_,
+		 matrix_type               & edges);
+
   void set_vertex_stars(archetype_type const& A);
   // real worst_corner_condition(Cell const& c);
 
