@@ -38,7 +38,7 @@ realclean: clean
 	rm -rf lib/$(ARCH)/
 
 
-docs:
+doc:
 	mkdir -p doxygen
 	doxygen doxy.cfg;
 
@@ -49,3 +49,4 @@ tar:
          cvs -d /home/nmwr/CVS export -r HEAD $(PACKAGE); \
          tar -cf $(PACKAGE).tar $(PACKAGE); \
          rm -rf $(PACKAGE)/;)
+

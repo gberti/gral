@@ -10,7 +10,7 @@
       see \ref file_interactive
       
       \subsection secprepost  Macros for Pre- and Postconditions
-      see \ref file pre-post-conditions.h
+      see  pre-post-conditions.h
 
      \subsection sectraits Some general traits classes
         \ref copy_traits : Make pointers copyable even 
@@ -21,11 +21,11 @@
           for the built-in types.
 
      \subsection secasstring  Conversion of arbitrary types to strings
-        \ref file as-string.h : Uses <tt> strstream  </tt> to achieve that.
+        See as-string.h : Uses <tt> strstream  </tt> to achieve that.
 
      \subsection secrefcnt   Reference counting smart pointer
       Borrowed from Scott Meyers book "More Effective C++".
 
-       see \ref file reference-count.h
+       see reference-count.h
     
 */
