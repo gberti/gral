@@ -48,6 +48,7 @@ namespace hierarchical {
   template<class HGRID, class GE>
   class hier_grid_table  : public HGRID::observer_type { 
     typedef typename HGRID::observer_type base;
+  protected:
     typedef typename base::notifier_base  notifier_base;
     typedef typename base::notifier_type  notifier_type;
   public:
@@ -108,8 +109,13 @@ namespace hierarchical {
     template<class T>
     void init(hier_grid_type const& gg, T const& t);
   public:
-    level_handle add_coarser_level();
-    level_handle add_finer_level();
+    virtual level_handle add_coarser_level();
+    virtual level_handle add_finer_level();
+    template<class T>
+    level_handle add_coarser_level(T const& initializer);
+    template<class T>
+    level_handle add_finer_level  (T const& initializer);
+
     void         remove_coarsest_level();
     void         remove_finest_level();
 
