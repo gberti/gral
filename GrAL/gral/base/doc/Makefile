@@ -44,7 +44,7 @@ make-links:
 
 clean: stdclean
 	rm -f *.dvi *.log *.aux *~ 
-	rm -f hyperlatex/paths.tex
+	(cd hyperlatex; gmake clean)
 
 realclean: clean
 	rm -rf hyperlatex/html
