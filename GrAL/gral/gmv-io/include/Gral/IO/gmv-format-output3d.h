@@ -33,7 +33,7 @@ template<class T>
 
     The <A HREF= "http://www-xdiv.lanl.gov/XCM/gmv/"> 
     General Mesh Viewer </A> (GMV) is a versatile tool
-    for viewing 3D meshes and fields defined on them.
+    for viewing 3D (and 2D) meshes and fields defined on them.
 
     Usage:
     \code
@@ -41,9 +41,14 @@ template<class T>
     ConstructGrid(Out,MyGrid, MyGeom); 
     \endcode
 
+    See also test/gmv-output3d/test-gmv-output.C
+
+    The support for the output of arbitrary grid functions is still
+    experimental.
+
+
    \todo support GMV's general cell type 
    (currently only tet, hex, prism and pyramid)
-   \todo support output of grid functions.
  */
 
 class OstreamGMV3DFmt : public OstreamGMVFmt_base {

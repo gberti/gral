@@ -23,6 +23,10 @@
     ConstructGrid(Out,MyGrid, MyGeom); 
     \endcode
 
+    See also test/gmv-output2d/test-gmv-output2d.C
+
+    The support for the output of arbitrary grid functions is still
+    experimental.
 
  */
 class OstreamGMV2DFmt : public OstreamGMVFmt_base {
