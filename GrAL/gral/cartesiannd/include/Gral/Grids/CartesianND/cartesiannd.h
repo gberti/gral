@@ -212,6 +212,7 @@ namespace cartesiannd {
     typedef typename archetype_of_grid_aux<CARTGRID,DIM>::type archetype_type;
     typedef unsigned                                   archetype_handle;
     typedef archetype_type const*                      archetype_iterator;
+    typedef grid_types<archetype_type>                 archgt;
   }; // struct grid_types_base<unsigned DIM>
  
 
