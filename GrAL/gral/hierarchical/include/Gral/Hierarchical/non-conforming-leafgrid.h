@@ -40,12 +40,12 @@ namespace octree {
     typedef typename flatgt::vertex_handle                 flat_vertex_handle;
     typedef typename flatgt::cell_handle                   flat_cell_handle;
 
+    enum { dim = flat_grid_type::dim };
 
     typedef nc_leafgrid_element_base_t<self>               element_base_type;
 
     // cannot use h_vertex_t: must use special functionality to fuse
     // vertices of different level which map to the same leaf vertex.
-    //    typedef hierarchical::h_vertex_t<element_base_type>      Vertex;
     typedef nc_leafgrid_vertex_t    <element_base_type>      Vertex;
     typedef hierarchical::h_cell_t  <element_base_type>      Cell;
   
@@ -55,9 +55,9 @@ namespace octree {
     //typedef typename hgt::vertex_handle vertex_handle;
     //typedef typename hgt::cell_handle   cell_handle;
     
-    typedef hierarchical::h_vertex_on_cell_iterator_t<element_base_type>  
-                                                           VertexOnCellIterator;
-     
+    typedef hierarchical::h_incidence_iterator_t<element_base_type, vertex_type_tag, cell_type_tag > 
+                                                             VertexOnCellIterator;
+
     // from octree
     typedef leaf_cell_iterator_t<element_base_type>          CellIterator;
 
@@ -297,7 +297,7 @@ struct element_traits<hierarchical::h_cell_t
 
 template<class OCTREE>
 struct grid_types<octree::non_conforming_leafgrid<OCTREE> > 
-  : public  octree::nc_leafgrid_grid_types_base<OCTREE> 
+  : public  grid_types_base<octree::nc_leafgrid_grid_types_base<OCTREE> >
 {
 
 };
