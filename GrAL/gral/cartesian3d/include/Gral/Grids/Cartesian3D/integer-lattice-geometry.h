@@ -3,16 +3,18 @@
 
 // $LICENSE
 
-/*! A geometry living in the integer lattice \f$ \Z^3 \f$
+/*! \brief A geometry for CartesianGrid3D 
+    living on the integer lattice \f$ \Z^3 \f$
 
-
+    Model of $GrAL VertexGridGeometry (immutable).
  */
+
 class lattice_geometry_cartesian3d {
 
 public:
   typedef CartesianGrid3D             grid_type;
   typedef grid_types<CartesianGrid3D> gt;
-  typedef gt::Vertex              Vertex; 
+  typedef gt::Vertex                  Vertex; 
 
   typedef grid_type::index_type   coord_type;
   typedef int                     real;
@@ -28,6 +30,8 @@ public:
   coord_type const& coord(gt::Vertex const& v) const { return v.index();}
   
   real volume(gt::Cell const&) const { return 1;}
+  //real volume(gt::Edge const&) const { return 1;}
+  //real volume(gt::Face const&) const { return 1;}
 };
 
 #endif
