@@ -1,167 +1,109 @@
-#ifndef REFERENCE_COUNTING_TEMPLATES_H
-#define REFERENCE_COUNTING_TEMPLATES_H
+#ifndef NMWR_GB_COPY_ON_WRITE_PTR_H
+#define NMWR_GB_COPY_ON_WRITE_PTR_H
 
-// from Scott Meyers "More Effective C++"
+
+
+/*! \class copy_on_write_ptr 
+    \brief A smart copy-on-write pointer.
+
+   This class has been adapted from Scott Meyers "More Effective C++".
+   The class can be used also for pointers to abstract classes,
+   due to replacement of `new T' by copy_traits<T>::clone(T*).
+*/
 
 #include "Utility/copy-traits.h"
 
-/******************************************************************************
-*                       Class RCObject                                        *
-******************************************************************************/
 
+/*! \brief base class for reference counted objects
 
-class RCObject {                       // base class for reference-
-public:                                // counted objects
-  void addReference()      { ++refCount;}
-  void removeReference()   { if (--refCount == 0) delete this;} 
-  // ruft den destruktor der abgeleiteten        ----^
-  // Klasse auf (wegen des virtuellen destruktors !)
-  void markUnshareable()   {  shareable = false;}
-  bool isShareable() const {  return shareable;}
-  bool isShared()    const {  return (refCount > 1);}
-
-protected:
-  RCObject()                    : refCount(0), shareable(true) {}
-  RCObject(const RCObject&) : refCount(0), shareable(true) {}
-  RCObject& operator=(const RCObject&) { return *this;}  
-  virtual ~RCObject() {} // virtual ist essentiell !
-
-private:
-  int  refCount;
-  bool shareable;
-};
-
-
-
-/******************************************************************************
-*                 Template Class RCPtr                                        *
-******************************************************************************/
-
-template<class T>                      // template class for smart
-class RCPtr {                          // pointers-to-T objects; T
-                                       // must support the RCObject interface
-public:                             
-  RCPtr(T* realPtr = 0)   : pointee(realPtr)     { init(); }
-  RCPtr(const RCPtr& rhs) : pointee(rhs.pointee) { init(); }
-
-  ~RCPtr() {  if (pointee) pointee->removeReference();}
-  RCPtr& operator=(const RCPtr& rhs);                     
-  T* operator->() const {  return  pointee;}
-  T& operator*()  const {  return *pointee;}
-
-private:
-  T *pointee;
-  void init();
-};
-
-template<class T>
-inline void RCPtr<T>::init()
-{
-  if (pointee == 0) return;
-  
-  if (pointee->isShareable() == false) {
-    //   pointee = new T(*pointee);
-    pointee = copy_traits<T>::clone(*pointee);
-  }
-  pointee->addReference();
-}
-
-
-template<class T>
-inline RCPtr<T>& RCPtr<T>::operator=(const RCPtr<T>& rhs)
-{
-  if (pointee != rhs.pointee) {                   
-    if (pointee) 
-      pointee->removeReference();                
-    pointee = rhs.pointee;
-    init(); 
-  }
-  return *this;
-}
-
-
-// macht eine Kopie bei nicht-const-Zugriff (moegliche Veraenderung)
-
-template<class T>
-class RCIPtr {
-public:
-  RCIPtr(T* realPtr = 0);
-  // RCIPtr<T>& operator=(T* realPtr); // G. Berti
-  RCIPtr(const RCIPtr<T>& rhs) : counter(rhs.counter) {init();}
-  ~RCIPtr()                 { counter->removeReference();}
-  RCIPtr<T>& operator=(const RCIPtr<T>& rhs);
-
-        T* operator->()        { makeCopy();  return  (counter->pointee);}
-  const T* operator->() const  {              return  (counter->pointee);}
-        T& operator*()         { makeCopy();  return *(counter->pointee);}       
-  const T& operator*()  const  {              return *(counter->pointee);}
-
-private:
-  struct CountHolder: public RCObject {
-    ~CountHolder() { delete pointee; }
-    T *pointee;
-  };
-  
-  CountHolder *counter;
-  void init();
-  void makeCopy();                          
-};
-
-template<class T>
-inline void RCIPtr<T>::init()                      
-{                                           
-  if (counter->isShareable() == false) { // wie sollte dies eintreten ??
-    T *oldValue = counter->pointee;         
-    counter = new CountHolder;
-    //counter->pointee = new T(*oldValue);    
-    counter->pointee = copy_traits<T>::clone(*oldValue);
-  }
-  counter->addReference();
-}
-
-template<class T>
-inline RCIPtr<T>::RCIPtr(T* realPtr)
-: counter(new CountHolder)
-{ 
-  counter->pointee = realPtr;
-  init();
-}
-
-
-/* THIS CRASHES!
-template<class T>
-inline RCIPtr<T>&  RCIPtr<T>::operator=(T* realPtr)
-{ 
-  cerr << "RCIPtr<T>::operator=(T* realPtr)\n";
-  counter->removeReference(); // deletes when refcount hits 0, but counter is still used!!
-  counter->pointee = realPtr;
-  init();
-  return *this;
-}
+     \see copy_on_write_ptr
 */
 
+class  counted_obj {                      
+public:                               
+  void operator++() { ++count;}
+  void operator--() {
+    if (--count == 0) 
+      delete this; // calls d'tor of derived class (virtual d'tor!)
+  } 
+  bool is_shared() const { return (count > 1);}
+
+protected:
+  counted_obj() : count(0) {}
+  virtual ~counted_obj() {} // virtual is essential, see op-- above!
+
+private:
+  unsigned  count;
+
+  // Forbidden
+  counted_obj(counted_obj const&);
+  counted_obj& operator=(counted_obj const&);
+};
+
+
+
+/*!
+ \todo: Should the non-const operator* / operator-> get different names,
+ as to inhibit unneeded copying?
+
+ */
+
 template<class T>
-inline RCIPtr<T>& RCIPtr<T>::operator=(const RCIPtr<T>& rhs)
+class copy_on_write_ptr {
+public:
+  copy_on_write_ptr(T* pt = 0);
+  copy_on_write_ptr(const copy_on_write_ptr<T>& rhs) 
+    : counter(rhs.counter) {init();}
+  copy_on_write_ptr<T>& operator=(const copy_on_write_ptr<T>& rhs);
+  ~copy_on_write_ptr() { --(*counter); }
+
+  const T* operator->() const  {          return  (counter->T_ptr);}
+  const T& operator*()  const  {          return *(counter->T_ptr);}
+
+        T& operator*()         { copy();  return *(counter->T_ptr);}       
+        T* operator->()        { copy();  return  (counter->T_ptr);}
+
+private:
+  struct holder: public  counted_obj {
+    ~holder() { delete T_ptr; }
+    T *T_ptr;
+  };
+  
+  holder *counter;
+  void init() { ++(*counter);}
+  void copy();                          
+};
+
+
+template<class T>
+inline copy_on_write_ptr<T>::copy_on_write_ptr(T* pt)
+: counter(new holder)
+{ 
+  counter->T_ptr = pt;
+  init();
+}
+
+template<class T>
+inline copy_on_write_ptr<T>& 
+copy_on_write_ptr<T>::operator=(const copy_on_write_ptr<T>& rhs)
 {
   if (counter != rhs.counter) {                   
-    counter->removeReference();            
+    --(*counter);
     counter = rhs.counter;
     init();
   }
-  
   return *this;
 }
 
 template<class T>                             
-inline void RCIPtr<T>::makeCopy()                    
-{                                             
-  if (counter->isShared()) {                  
-    T *oldValue = counter->pointee;           
-    counter->removeReference();               
-    counter = new CountHolder;
-    //    counter->pointee = new T(*oldValue);
-    counter->pointee = copy_traits<T>::clone(*oldValue);
-    counter->addReference();
+inline void copy_on_write_ptr<T>::copy()                    
+{ 
+  if(counter->is_shared()) {                                            
+    T * old_T_ptr = counter->T_ptr;           
+    --(*counter);
+    counter = new holder;
+    counter->T_ptr = copy_traits<T>::clone(*old_T_ptr);
+    ++(*counter);
   }
 }
 
