@@ -9,17 +9,20 @@
 //   
 //----------------------------------------------------------------
 
+// STD
 #include <iostream.h>
 #include <fstream.h>
+#include <string.h>
 // STL
-#include "iterator.h"
-#include "vector.h"
+#include <iterator.h>
+#include <vector.h>
 
-#include "mystring.h"
+// GrAL Base
 #include "Gral/Base/common-grid-basics.h"
-#include "Geometry/point3.h"
-#include "Utility/pre-post-conditions.h"
 #include "Gral/IO/write-complex2d.h"
+
+#include "Geometry/coords.h"
+#include "Utility/pre-post-conditions.h"
 
 //----------------------------------------------------------------
 /*! \defgroup complex2dformat Complex2D-Format I/O Adapter 
@@ -136,7 +139,7 @@ class IstreamComplex2DFmt
   typedef IstreamComplex2DFmt self;
 
 public:
-  typedef point2                                 coord_type;
+  typedef coordN<2>                              coord_type;
 
   typedef int                                    vertex_handle;
   typedef int                                    cell_handle;
