@@ -30,12 +30,20 @@ class geom_word;
 class geom_circle;
 class geom_polygon;
 
+
+#include "Utility/copy-traits.h"
 /*! \defgroup renderers Interfaces to rendering engines
 
  */
 
 class rlang_internals;
 
+template<>
+struct copy_traits<rlang_internals> 
+{
+    static rlang_internals* clone  (rlang_internals const& t);
+    static void             destroy(rlang_internals      * t);
+};
 
 /*! \brief Abstract base class for renderers
   \ingroup renderers
@@ -122,7 +130,7 @@ public:
 };
 
 template<>
-struct copy_traits<rendering_language> {
+struct copy_traits<rendering_language> : public  copy_traits_base<rendering_language> {
   static rendering_language * clone(rendering_language const& r) 
   { return r.clone();}
 };

@@ -15,6 +15,11 @@ public:
   rlang_internals(ostream* o) : out(o), todo_trafo() {}
 };
 
+rlang_internals*  copy_traits<rlang_internals>::clone(rlang_internals const& t)
+{ return new rlang_internals(t); }
+void  copy_traits<rlang_internals>::destroy(rlang_internals      * t)
+{ delete t;}
+
 
 rendering_language::rendering_language(ostream* out) : state(new rlang_internals(out)) {}
 rendering_language::~rendering_language() {}
