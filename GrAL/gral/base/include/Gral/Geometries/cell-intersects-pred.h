@@ -24,6 +24,44 @@
 template<class VOLUME, 
          class GRIDGEOMETRY, 
          class GT = grid_types<typename GRIDGEOMETRY::grid_type > >
+class cell_is_contained {
+  typedef GRIDGEOMETRY  grid_geom_type;
+  typedef VOLUME        volume_type;
+  typedef typename GT::grid_type grid_type;
+  typedef typename GT::Cell      Cell;
+  typedef typename GT::VertexOnCellIterator VertexOnCellIterator;
+
+
+  grid_geom_type const* geom;
+  volume_type           volume;
+
+public:
+
+  cell_is_contained(volume_type           vol,
+		    grid_geom_type const& geo)
+	      
+    : geom(&geo), volume(vol) {}
+
+  bool operator()(Cell const& c) const
+    {
+      bool inside = false;
+      //      cerr << "Testing cell " << c.handle() << " ";
+      for(VertexOnCellIterator vc(c); ! vc.IsDone(); ++vc) {
+	// cerr << "v (" << geom->coord(*vc) << ") ";
+	inside = inside || volume.is_inside(geom->coord(*vc));
+	if(inside) break;
+      }
+      // cerr << "\n";
+      return inside;
+    }
+};
+
+/*!
+
+*/
+template<class VOLUME, 
+         class GRIDGEOMETRY, 
+         class GT = grid_types<typename GRIDGEOMETRY::grid_type > >
 class cell_intersects {
   typedef GRIDGEOMETRY  grid_geom_type;
   typedef VOLUME        volume_type;
@@ -38,21 +76,17 @@ class cell_intersects {
 public:
 
   cell_intersects(volume_type           vol,
-	      grid_geom_type const& geo)
+		  grid_geom_type const& geo)
 	      
     : geom(&geo), volume(vol) {}
 
   bool operator()(Cell const& c) const
     {
-      bool inside = false;
+      bool intersects = false;
       //      cerr << "Testing cell " << c.handle() << " ";
-      for(VertexOnCellIterator vc(c); ! vc.IsDone(); ++vc) {
-	// cerr << "v (" << geom->coord(*vc) << ") ";
-	inside = inside || volume.inside(geom->coord(*vc));
-	if(inside) break;
-      }
-      // cerr << "\n";
-      return inside;
+      typename volume_type::intersection_result res = volume.intersection_check(c, *geom);
+      intersects = intersects || (res == volume_type::intersection || res == volume_type::inside);
+      return intersects;
     }
 };
 
