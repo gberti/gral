@@ -42,7 +42,6 @@
   in the \ref layeredsubrange  module,
   but without explicit naming the layers (exposed, shared etc.). 
 
-  \todo rename file to overlap_ranges.h
   \todo add support for formally owned elements, i.e.  further
   refine the shared parts.
 */
