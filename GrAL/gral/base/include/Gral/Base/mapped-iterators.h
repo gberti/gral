@@ -50,7 +50,8 @@ public:
   handle_type handle() const { return f(*(container->begin() + b)).handle();}
   grid_type const& TheGrid() const { return f.TheGrid();}
 
-    
+  bool bound() const { return f.bound();}
+  bool valid() const { return bound() && !IsDone();}
  
   //friend 
   bool operator==(const self& rs) const { return (b == rs.b);}
