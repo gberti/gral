@@ -2,7 +2,9 @@
     Test harness for cartesiannd::grid<DIM> grid functions
 */
 
-#include "Gral/Grids/CartesianND/cartesiannd.h"
+#include "Gral/Grids/CartesianND/grid-functions.h"
+#include "Gral/Grids/CartesianND/partial-grid-functions.h"
+
 #include "Gral/Test/test-grid-functions.h"
 #include "Gral/Test/test-partial-grid-functions.h"
 #include <iostream>

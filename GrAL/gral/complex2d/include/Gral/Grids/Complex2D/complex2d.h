@@ -394,6 +394,8 @@ public:
   /*@{*/
   archetype_iterator BeginArchetype() const { return archetypes.begin();}
   archetype_iterator EndArchetype()   const { return archetypes.end();}
+  archetype_handle    handle(archetype_iterator it) const { return it - BeginArchetype();}
+
   archetype_type const& Archetype(archetype_handle a) const { return archetypes[a];}
   archetype_type const& ArchetypeOf (Cell const& c) const 
   { return Archetype(archetype_of(c));}
