@@ -22,6 +22,8 @@ public:
   Vertex2D() : _pos(-1), _cc(0) {}
   Vertex2D(vertex_handle  pos, Complex2D const& cc) 
     : _pos(pos), _cc(&cc) {}
+  Vertex2D(Complex2D const& cc, vertex_handle  pos)
+    : _pos(pos), _cc(&cc) {}
 
 
   ~Vertex2D() {}
