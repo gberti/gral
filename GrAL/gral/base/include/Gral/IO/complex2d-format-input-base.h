@@ -51,8 +51,9 @@ private:
   mutable checked_istream   checked_in;       
   bool              is_in_owned;
 
-  int   nv; // number of vertices
-  int   nc; // number of cells
+  mutable int   nv; // number of vertices
+  mutable int   nc; // number of cells
+  mutable bool  nv_nc_read;
 public:
   IstreamComplex2DFmt_base();
   IstreamComplex2DFmt_base(std::string const& file, int off = 0);
@@ -64,17 +65,16 @@ public:
   virtual ~IstreamComplex2DFmt_base();
 
 
-  void init(std::string const& file); 
+  virtual void init(std::string const& file); 
 protected:
   void copy(self const& rhs);
-private:
-  void init();
+  virtual void init()        const;
+  virtual bool initialized() const;
 
-protected:
   checked_istream & In() const { return checked_in;}
 public:
-  unsigned NumOfVertices() const { return nv;}
-  unsigned NumOfCells()    const { return nc;}
+  unsigned NumOfVertices() const { self::init(); return nv;}
+  unsigned NumOfCells()    const { self::init(); return nc;}
 
   VertexIterator FirstVertex() const;
   CellIterator   FirstCell()   const;
@@ -85,7 +85,7 @@ public:
 };
 
 /*! \brief Vertex iterator for IstreamComplex2DFmt_base
-    \ingroup complex2dformat
+7    \ingroup complex2dformat
 
     Model of $GrAL GridVertexIterator
 
@@ -104,10 +104,10 @@ public:
   VertexIterator_istream_complex2d() : g(0), v(-1) {}
   VertexIterator_istream_complex2d(grid_type const& gg) 
     : g(&gg), v(0) 
-    { }
+    { g->init(); }
   VertexIterator_istream_complex2d(grid_type const& gg, int vv)
     : g(&gg), v(vv) 
-    { } 
+    { g->init(); } 
   
 
   self& operator++() {
@@ -150,6 +150,7 @@ public:
   CellIterator_istream_complex2d(grid_type const& gg) 
     : g(&gg), c(0)
     {
+      g->init();
       if(!IsDone())
 	g->In() >> nv;
     }
@@ -238,24 +239,17 @@ IstreamComplex2DFmt_base::coord(VertexIterator_istream_complex2d const& v) const
 inline 
 VertexIterator_istream_complex2d
 IstreamComplex2DFmt_base::FirstVertex() const
-{ return VertexIterator( (self&)*this);}
+{ return VertexIterator(*this);}
 
 inline 
 CellIterator_istream_complex2d
 IstreamComplex2DFmt_base::FirstCell()  const
-{ return CellIterator( (self &)*this);}
+{ return CellIterator(*this);}
 
 inline 
 IstreamComplex2DFmt_base::Vertex
 IstreamComplex2DFmt_base::vertex(IstreamComplex2DFmt_base::vertex_handle v) const
-{ return Vertex( (self&)*this, v);}
-
-/*
-inline 
-IstreamComplex2DFmt_base::Cell
-IstreamComplex2DFmt_base::cell(IstreamComplex2DFmt_base::cell_handle c) const
-{ return Cell( (self&)*this, c);}
-*/
+{ return Vertex(*this, v);}
 
 
 inline 
