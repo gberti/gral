@@ -13,5 +13,9 @@ while(<>) {
    <A HREF="$STL/Assignable.html">Assignable</A>|g;
   s|Default Constructible|
    <A HREF="$STL/DefaultConstructible.html">Default Constructible</A>|g;
+  s|Random Access Container|
+    <A HREF="$STL/RandomAccessContainer.html">Random Access Container</A>|g;
+  s|SGI iota|
+    <A HREF="$STL/iota.html">SGI iota</A>|g;
   print;
 }

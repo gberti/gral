@@ -3,15 +3,45 @@
    This package contains components related to sequences (in the STL  sense),
    such as containers, algorithms, or adapters.
 
+  \b Note:
+   This package is by no means complete or sophisticated. 
+   Its purpose is simply to satisfy the
+   needs of other packages in an admittedly rather ad hoc way.   
+   Some problems addressed here are now solved much more generally
+   by other, dedicated libraries, for example
+   <A HREF="http://www.zib.de/weiser/vtl/"> VTL </A> (View Template Library).
+
+   This documentation is still incomplete.
+
+   
 */
 
-/*! \defgroup sequences  The Set of Sequence Components
 
-    This module contains some sub modules related to sequences.
+/*! \defgroup sequences  The Set of All Sequence Components
+
+    This module contains all sub modules contained in the package.
 */
 
 
-/*! \defgroup mappings Components for mappings
+/*! \defgroup containers  Components for Containers
+    \ingroup sequences
+
+   This module contains classes and sub-modules implementing 
+   STL conforming container data structures
+*/
+
+
+
+/*! \defgroup algorithms  Algorithms on Sequences
+    \ingroup sequences    
+
+   This module contains algorithms on sequences, 
+   mostly slight variations on STL algorithms for convenience.
+*/
+
+
+
+/*! \defgroup mappings Components for Mappings
     \ingroup sequences 
 
     This module contains some sub-modules related to the 
@@ -19,36 +49,15 @@
 */
 
 
-/*
-   \section bijectivemapping  Bijective mapping
-    A set of class templates related to representation of
-   bijective mappings: 
-   - class \ref bijective_mapping<T1,T2> : A one-to-one mapping
-   - class \ref inverse_mapping<T1,T2> : Inverse of a bijective_mapping
-   - class \ref domain_of_bijective_mapping<T1,T2>: 
-     domain of definition of  a  bijective mapping
-   - class \ref range_of_bijective_mapping<T1,T2>: 
-       range (image) of a bijective mapping.
 
-   \see bijective-mapping.h
+/*! \defgroup accessors Accessors, Function Objects and Iterator Adaptors
+    \ingroup sequences
+
+    This module defines custom function objects and iterators.
+    - get_first, get_second: Get first/second element of a pair.
+    - mapped_value_const_iterator<F,It>, mapped_value_iterator<F,It>:
+    Compose the value (dereference operator*) 
+    of an iterator It with a function F.
+ */
 
 
-  \section partialmapping Partial mapping
-
-  - class partial_mapping<T1,T2>: Mapping with a default value,
-     thus defined on all item of type T1.
-
-
-  \section Mapped iterators
-
-  Some iterator adaptors:
-   - class \ref mapped_value_const_iterator<F,It>:
-         Applies F to value of <TT> It::operator* </TT>
-        (const version)
-   - class \ref mapped_value_iterator<F,It>:
-         Applies F to value of <TT> It::operator* </TT> 
-        (non-const version)
-    
-
-     
-*/
