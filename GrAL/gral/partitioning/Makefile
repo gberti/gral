@@ -19,7 +19,7 @@ install-headers:
 	cp include/Gral/Partitioning/internal/*.C \
            $(INSTALLHEADERS)/Gral/Partitioning/internal
 
-install: install-headers 
+install: install-headers  install-libs
 
 clean: stdclean
 	find . -name "*~" -exec rm {} \; -print
