@@ -3,7 +3,7 @@
 TMP=${1-${HOME}/tmp}
 GRAL=GrAL-for-Simbio
 GRALINSTALL=gral-for-simbio
-GCC95=/usr/local/bin/g++
+GCC95=/usr/bin/g++
 cd ${TMP}
 rm -rf $GRAL ${GRALINSTALL}
 
