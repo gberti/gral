@@ -15,8 +15,10 @@
 \psset{unit=1cm}
 \LARGE\sf
 \begin{pspicture}(-1,0)(7,5)
-\rput(5.2,2.5){\rnode{stops}{\includegraphics[scale=0.5]{stop-sign.eps}}}
+%\rput(5.2,2.5){\rnode{stops}{\includegraphics[scale=0.5]{stop-sign.eps}}}
+\rput(5.2,2.5){\rnode{stops}{STOP}}
 %\rput(5.2,2.5){\includegraphics[scale=0.5]{stop-sign.eps}}
+
 
 %\rput(1,1.25){
 \cnode*(1,2){0.05}{A}
@@ -47,7 +49,8 @@
 \naput*[npos=0.85]{1}
 \nccurve[angleA=45,angleB=160,ncurv=1,nodesepB=0.1]{->}{Cell}{NbC}
 \naput*[npos=0.7]{3}
-\nccurve[angleA=30,angleB=135,ncurv=1,nodesepB=0.0]{->}{Cell}{stops}
+
+\nccurve[angleA=30,angleB=135,ncurv=1,nodesepB=0.1]{->}{Cell}{stops}
 \naput*[npos=0.75]{4}
 %} %rput
 \end{pspicture}

@@ -14,11 +14,10 @@ CONVERT = convert
 .tex.eps:
 	latex $<  && dvips -Pamz -Pcmz -E ${<:%.tex=%.dvi} -o $@
 
-.tex.ps:
-	latex $<  && dvips -Pamz -Pcmz -E ${<:%.tex=%.dvi} -o $@
-
 #.eps.gif:
 #	$(CONVERT) $< $@
+
+# convert 5.2.6 on sun makes {gif|jpeg}.{0|1} ?!
 
 .eps.gif:
 	$(CONVERT) $< $@
@@ -27,16 +26,16 @@ CONVERT = convert
 
 .eps.jpeg:
 	$(CONVERT) $< $@
-	mv ${@}.0 $@
-	rm -r ${@}.1
+	mv ${@}.0 $@ || echo " (OK) "
+	rm -f ${@}.1
 
 # ?????
-cell-on-cell.jpeg: cell-on-cell.ps
-	pstogif  cell-on-cell.ps cell-on-cell.gif
-	convert  cell-on-cell.gif cell-on-cell.jpeg
+#cell-on-cell.jpeg: cell-on-cell.ps
+#	pstogif  cell-on-cell.ps cell-on-cell.gif
+#	convert  cell-on-cell.gif cell-on-cell.jpeg
 
-cell-on-cell.eps: stop-sign.eps
-cell-on-cell.ps: stop-sign.eps
+#cell-on-cell.eps: stop-sign.eps
+#cell-on-cell.ps: stop-sign.eps
 
 all: stop-sign.eps $(JPGFILES)
 
