@@ -6,7 +6,7 @@ SUBDIRS = cell-on-cell-iterator connected-components element-range enumerated-su
           boundary-grid  construct-isomorphism  flag partial-grid-morphism \
           disjoint-union vertex-stars shrunk-grid-view \
           vertex-iterator-of-cell-set  edge-iterator-of-cell-set facet-iterator-of-cell-set \
-          extend-grid-types
+          extend-grid-types polygon1d
 
 
 include  $(CONFIG)

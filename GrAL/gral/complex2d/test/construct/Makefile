@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-
+EXTRA_DEPMODULES += gral/testing
 LOCALSOURCES =  test-construct-main.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)

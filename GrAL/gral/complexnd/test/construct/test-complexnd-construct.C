@@ -3,6 +3,9 @@
 #include "Gral/Grids/ComplexND/construct.C"
 
 #include "Gral/Grids/Cartesian2D/all.h"
+#include "Gral/Grids/Cartesian3D/all.h"
+#include "Gral/Grids/Complex2D/all.h"
+
 
 #include "Gral/Base/grid-morphism.h"
 
@@ -112,14 +115,21 @@ int main() {
   using namespace complexnd;
   using namespace std;
 
-  typedef cartesian2d::CartesianGrid2D  src_grid_type;
-  typedef ComplexND<2>                  dest_grid_type;
-  dest_grid_type C;
-  src_grid_type  R(3,3);
+
+  /*
+  ComplexND<3> C3;
+  cartesian3d::CartesianGrid3D  R3(3,3,3);
+  vertex_morphism<cartesian3d::CartesianGrid3D, ComplexND<3> >  Phi3D(R3, C3);
+   ConstructGrid0(C3, R3, Phi3D);
+  cout << "ComplexND<3> incidences:" << endl;
+  print_incidences(C3, cout);
+  */
+  ComplexND<2> C;
+  cartesian2d::CartesianGrid2D  R(3,3);
 
 
-  vertex_morphism<src_grid_type, dest_grid_type>  Phi(R, C);
-  ConstructGrid0(C, R, Phi);
+  vertex_morphism<cartesian2d::CartesianGrid2D, ComplexND<2> >  Phi2D(R, C);
+  ConstructGrid0(C, R, Phi2D);
 
   cout << "ComplexND<2> incidences:" << endl;
   print_incidences(C, cout);
@@ -127,6 +137,11 @@ int main() {
   test_vertex_iterator        (C, std::cout);
   test_cell_iterator          (C, std::cout);
   test_vertex_on_cell_iterator(C, std::cout);
+
+  unsigned tri[3][2] = { {0, 1}, {1,2}, {2,0}};
+  ComplexND<1> triangle(tri, 3);
+  cout << "ComplexND<1> triangle incidences:" << endl;
+  print_incidences(triangle, cout);
 
   ComplexND<ANY> C_any(2);
   vertex_morphism<ComplexND<2>, ComplexND<ANY> > Phi_any(C,C_any);
@@ -154,17 +169,16 @@ int main() {
   vertex_morphism<ComplexND<0>, ComplexND<0> > Phi0(pts1,pts2);
   ConstructGrid0(pts2, pts1, Phi0);
   
-  cout << "pts1.NumOfVertices(): " << pts1.NumOfVertices() << endl
-       << "pts2.NumOfVertices(): " << pts2.NumOfVertices() << endl;
-
   ComplexND<1> polygon1(complexnd::polygon(5));
   ComplexND<1> polygon2;
 
   vertex_morphism<ComplexND<1>, ComplexND<1> > Phi1(polygon1, polygon2);
   ConstructGrid0(polygon2, polygon1, Phi1);  
-  cout << "polygon1.NumOfVertices(): " << polygon1.NumOfVertices() << endl
-       << "polygon2.NumOfVertices(): " << polygon2.NumOfVertices() << endl;
+
+  cout << "Incidences of polygon1:" << endl;
   print_incidences(polygon1, cout);
+
+  cout << "Incidences of polygon2:" << endl;
   print_incidences(polygon2, cout);
 
 
@@ -173,11 +187,14 @@ int main() {
   test_vertex_on_cell_iterator(polygon1, std::cout);
   test_edge_on_cell_iterator  (polygon1, std::cout);
 
+  // test function not implemented
+  // test_cell_on_vertex_iterator(polygon1, std::cout);
   test_vertex_iterator        (polygon2, std::cout);
   test_cell_iterator          (polygon2, std::cout);
   test_vertex_on_cell_iterator(polygon2, std::cout);
+  //  This is not yet defined!
   //  test_edge_on_cell_iterator  (polygon2, std::cout);
 
 
-  // test_cell_on_vertex_iterator(polygon, std::cout);
+
 }
