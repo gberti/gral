@@ -197,7 +197,7 @@ public:
   inner_facet_selector(const GridPredicate& gp) : pred(gp) {}
   
   // precondition: F is not on boundary
-  Cell operator()(const Facet) const 
+  Cell operator()(Facet const& F) const 
     { return ( pred(F.C1()) ? F.C1() : F.C2()); }
 };
 
