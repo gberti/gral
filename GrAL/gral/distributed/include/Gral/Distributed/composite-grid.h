@@ -30,6 +30,7 @@
  */
 template<class CoarseG, class FineG>
 class CompositeGrid {
+  typedef CompositeGrid<CoarseG,FineG>     self;
 public:
   typedef FineG                            fine_grid_type;
   typedef CoarseG                          coarse_grid_type;
@@ -40,10 +41,11 @@ public:
   typedef grid_types<  fine_grid_type> fgt;
 
   typedef typename   cgt::Cell                         CoarseCell;
+  typedef typename   cgt::CellIterator                 CoarseCellIterator;
   typedef typename   ovrlp_grid_type::overlap_type     overlap_type;
   typedef typename   overlap_type::CellNbIterator      CellNbIterator;
   typedef typename   overlap_type::VertexNbIterator    VertexNbIterator;
-  typedef typename  overlap_type::NbIterator           NeighbourIterator;
+  typedef typename   overlap_type::NbIterator          NeighbourIterator;
 
   //  typedef ExtendedCellOnCellIterator<coarse_grid_type> NeighbourIterator;
   typedef typename ovrlp_grid_type::range_type_ref   range_type;
@@ -51,12 +53,22 @@ private:
   coarse_grid_type                           the_coarse;
   grid_function<CoarseCell,ovrlp_grid_type>  local_grids;
 
+  // FORBIDDEN (for the moment)
+  CompositeGrid  (self const& rhs);
+  self& operator=(self const& rhs);
 public:
+
   //------------------- construction -------------------------------
 
   CompositeGrid() {}
 
-  void update() { local_grids.set_grid(TheCoarseGrid());}
+  void coarse_grid_complete() { 
+    local_grids.set_grid(TheCoarseGrid());
+    for(CoarseCellIterator C(TheCoarseGrid()); ! C.IsDone(); ++C)
+      local_grids[*C].init(TheCoarseGrid());
+  }
+
+  void calc_dependent_information() { /*  none */ }
 
   //-------------------- component access ----------------------------
 
