@@ -2,7 +2,7 @@ CONFIG=../mk.config
 
 include $(CONFIG)
 
-all: hmtl dvi
+all: html dvi
 
 html:
 	hyperlatex external-control.tex
