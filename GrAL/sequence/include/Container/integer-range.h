@@ -38,7 +38,7 @@ namespace GrAL {  namespace sequence {
     void clear()       { intervals.clear();}
 
     //! STL-compliant iterator
-    typedef std::vector<interval_type>::const_iterator const_iterator;
+    typedef typename std::vector<interval_type>::const_iterator const_iterator;
     //! First interval
     const_iterator begin() const { return intervals.begin();}
     //! Past-the-end interval
