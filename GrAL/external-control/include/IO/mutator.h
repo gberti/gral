@@ -142,7 +142,7 @@ public:
 template<class T>
 class CommentedMutator : public TypedMutator<T> {
   typedef TypedMutator<T> tm;
-  string comment;
+  std::string comment;
 public:
   CommentedMutator(T& t, const std::string& c) 
     //: tm(t), comment(c) {}
@@ -162,8 +162,8 @@ public:
 
 class MessageOnReadMutator : public Mutator {
 private:
-  ostream* out;
-  string   text;
+  std::ostream* out;
+  std::string   text;
 public:
   MessageOnReadMutator(std::ostream & ou, std::string const& txt) 
     : out(&ou), text(txt) {}
@@ -171,7 +171,7 @@ public:
   virtual void print(std::ostream&   ) const {}
   virtual void print(std::ostream& , std::string const& ) const {}
 
-  virtual string vartypename() const { return "";}
+  virtual std::string vartypename() const { return "";}
 
 }; 
 

@@ -64,7 +64,7 @@ public:
 
   void register_at(ControlDevice&, std::string const& prefix);
 
-  string name() const;
+  std::string name() const;
 
   ControlDevice getSubDevice(std::string const& name);
   ControlDevice getSubDevice(char        const* name);

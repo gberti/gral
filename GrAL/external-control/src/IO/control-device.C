@@ -10,7 +10,7 @@
  
 #include "Utility/pre-post-conditions.h" 
 
-string Mutator::description() const { return std::string("");}
+std::string Mutator::description() const { return std::string("");}
 
 
 void ControlDevice::update() { impl->update(); print_unrecognized(cerr);}
@@ -25,7 +25,7 @@ void ControlDevice::add(const std::string& name,Mutator* value_ref)
 { impl->add(name,value_ref);}
 
 void ControlDevice::add(const char*   nm,Mutator* value_ref)
-{ add(string(nm),value_ref);}
+{ add(std::string(nm),value_ref);}
 
 void ControlDevice::register_at(ControlDevice& Ctrl, const std::string& prefix)
 { impl->register_at(Ctrl,prefix);}
@@ -40,7 +40,7 @@ ControlDevice ControlDevice::getSubDevice(const std::string& nm)
 }
 
 ControlDevice ControlDevice::getSubDevice(const char*   name) 
-{ return getSubDevice(string(name));}
+{ return getSubDevice(std::string(name));}
 
 
 

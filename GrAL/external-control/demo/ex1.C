@@ -39,8 +39,8 @@ int main(int argc, char* argv[]) {
   int n  = 5;
   int m = 7;
   double x = 1.0, y = 2.0;
-  string name1_1 = "1_1", name1_2 = "1_2";
-  string name2_1 = "2_1", name2_2 = "2_2";
+  std::string name1_1 = "1_1", name1_2 = "1_2";
+  std::string name2_1 = "2_1", name2_2 = "2_2";
 
   bool flag = true;
   bool print_variables = true;

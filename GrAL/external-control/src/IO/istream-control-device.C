@@ -2,10 +2,12 @@
 #include "IO/skip-comments.h"
 
 
-istream_control_device_impl::istream_control_device_impl                                        (std::istream* i, const std::string& nm, const std::string& ind = "")
+istream_control_device_impl::istream_control_device_impl(std::istream* i, 
+							 std::string const& nm, 
+							 std::string const& ind /* = "" */)
   : in(i), name_(nm), indent_(ind) {}
 
-string istream_control_device_impl::name() const { return name_ ;}
+std::string istream_control_device_impl::name() const { return name_ ;}
 
 void istream_control_device_impl::update()        {  MV.ReadValues(*in);}
 
@@ -24,7 +26,7 @@ void istream_control_device_impl::attach_to(std::istream& in_new) { in = &in_new
 
 void istream_control_device_impl::print_values(std::ostream& out) const { MV.PrintValues(out);}
 
-void istream_control_device_impl::print_values(std::ostream& out, const string& ind) const 
+void istream_control_device_impl::print_values(std::ostream& out, std::string const& ind) const 
 { MV.PrintValues(out, ind, " ");}
 
 

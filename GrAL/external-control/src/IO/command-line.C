@@ -9,7 +9,7 @@ Commandline::Commandline(int argc, char* argv[]) : commands("") {
   int n = strlen(cmds.str());
   char* copy = new char[n+1];
   strcpy(copy,cmds.str());
-  commands = string(copy);
+  commands = std::string(copy);
 }
 
 //istringstream Commandline::get() const { return istringstream(commands);}

@@ -32,7 +32,7 @@ void MutableVars::AddVariable(const std::string& name, Mutator* m)
   { (*table)[name]=m; }
 
 void MutableVars::AddVariable(const char*  name, Mutator* m)
-  { (*table)[string(name)]=m; }
+  { (*table)[std::string(name)]=m; }
 
 
 // read values as long as there are any, 
