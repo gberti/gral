@@ -2,6 +2,7 @@
 
 
 #include "Gral/Grids/Cartesian2D/all.h"
+#include "Gral/Test/test-archetypes.h"
 
 #include <iostream>
 
@@ -19,6 +20,7 @@ int main() {
   range_type S(R, R);
   cout << " done." << endl;
 
+  test_archetypes(S, cout);
   {
     // test construction of ranges
     cout << "Subrange S: " 
