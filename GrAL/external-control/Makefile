@@ -2,11 +2,11 @@ CONFIG:=$(PWD)/mk.config
 
 export DEBUG
 export CCC
-export CCFLAGS
+#export CCFLAGS
 export IOLIB:=control-device#
 export LIBDIR
 export CONFIG
-export IFLAGS
+#export IFLAGS
 
 TARGET=all
 
@@ -36,3 +36,11 @@ demos:
 
 docs:
 	(cd doc; $(MAKE) $(TARGET))
+
+
+tar:
+	(cd $(HOME)/tmp;\
+	rm -rf external-control/;\
+         cvs -d /home/nmwr/CVS export -r HEAD external-control; \
+         tar -cf external-control.tar external-control; \
+         rm -rf external-control/;)
