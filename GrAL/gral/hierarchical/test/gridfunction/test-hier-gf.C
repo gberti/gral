@@ -92,10 +92,12 @@ namespace hierarchical {
 
   template class hier_grid_function_base<hier_grid_type,         grid_function<cgt::Cell, int> >;
   template class hier_grid_function_base<hier_grid_type, partial_grid_function<cgt::Cell, int> >;
-
+  
   template class hier_grid_function_base<hier_grid_type,         multi_grid_function<cart_grid_type, int> >;
   template class hier_grid_function_base<hier_grid_type, partial_multi_grid_function<cart_grid_type, int> >;
+ 
 }
+
 
 
 namespace hierarchical { 
@@ -116,6 +118,7 @@ namespace hierarchical {
 
 
 int main() {
+
   using namespace std;
   cout << "\n------------- 2D --------------\n";
   {
@@ -134,4 +137,5 @@ int main() {
     cart_grid_type ref_pattern(it(3,2,2)); // 2x1x1 cells!
     test_hier_gf(root,ref_pattern, cout);
   }
+  
 }
