@@ -1,13 +1,14 @@
 #ifndef NMWR_GB_MPI_DISTRIBUTED_GRID_C
 #define NMWR_GB_MPI_DISTRIBUTED_GRID_C
 
-
 // $LICENSE
+
 #include "Gral/Distributed/mpi-distributed-grid.h"
+#include "Gral/Distributed/grid-to-mpi-graph.h"
 
 #include "Container/operators.h"
-#include "Gral/Algorithms/output.h"
-#include "IO/iomgr.h"
+
+// #include "IO/iomgr.h"
 
 template<class CoarseG, class FineG>
 MPIDistributedGrid<CoarseG,FineG>::MPIDistributedGrid()
@@ -56,8 +57,9 @@ void  MPIDistributedGrid<CoarseG,FineG>::init_unstructured()
   int size;
   MPI_Comm_size(MPI_COMM_WORLD, &size);
   if (size != (int)CG.NumOfCells()) {
-    IOMgr::Error() << "size " << size 
-		   <<" != num of cells of coarse grid = " << CG.NumOfCells() << " !\n" ;
+    // IOMgr::Error()
+      std::cerr << "size " << size 
+		<<" != num of cells of coarse grid = " << CG.NumOfCells() << " !\n" ;
     exit(1);
   }
 
@@ -102,8 +104,9 @@ void  MPIDistributedGrid<CoarseG,FineG>::init_unstructured()
   */
 
   if(isMaster())
-    IOMgr::Info() << "initialized processor grid ( "
-		  << CG.NumOfCells() << " processes)\n";
+    // IOMgr::Info()
+      std::cerr << "initialized processor grid ( "
+		<< CG.NumOfCells() << " processes)\n";
 
   the_local_range = the_ovrlp_grid.LocalRange();
 }

@@ -11,7 +11,7 @@
 #include "Gral/Base/grid-functors.h"
 
 #include "Gral/Algorithms/sequence-copy.h"
-#include "Gral/Subranges/element-sequence-references.h"
+#include "Gral/Base/element-sequence-references.h"
 
 
 template<class Grid>
@@ -50,7 +50,7 @@ void mpi_graph_format(const Grid& G,
   int i = 0;
   int e = 0;
   for(C = G.FirstCell(); ! C.IsDone(); ++C,++i) {
-    for(CellOnCellIterator Nb = (*C).FirstNeighbour(); !Nb.IsDone(); ++Nb) {
+    for(CellOnCellIterator Nb = (*C).FirstCell(); !Nb.IsDone(); ++Nb) {
       edges[e] = numbers(*Nb);
       ++e;
     }

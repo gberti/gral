@@ -10,9 +10,9 @@
 #include "Container/bijective-mapping.h"
 
 #include "Gral/Geometries/transformed-geometry.h"
-#include "Gral/Algorithms/coarse-grid-from-partitioning.h"
-#include "Gral/Algorithms/enlarge-grid.h"
-#include "Gral/Algorithms/construct-grid.h"
+#include "Gral/Partitioning/coarse-grid-from-partitioning.h"
+#include "Gral/Base/enlarge-grid.h"
+#include "Gral/Base/construct-grid.h"
 
 #include "Gral/Distributed/dyn-overlap.h"
 #include "Gral/Distributed/construct-overlap.h"
@@ -158,9 +158,9 @@ void ConstructComposite_per(CompositeG     & CG,
   map_unique map_partition;
   typedef typename enumerated_cell_range<fine_grid_type>::ElementIterator RgeCellIterator;
   for(RgeCellIterator C = per_ovlp_cells_1.FirstCell(); ! C.IsDone(); ++C)
-    Prtng.set_partition(G.cell(c_corr_per(G.handle(*C))), map_partition(Prtng.partition(*C)));
+    Prtng.set_partition(G.cell(c_corr_per(C.handle())), map_partition(Prtng.partition(*C)));
   for(RgeCellIterator CC = per_ovlp_cells_2.FirstCell(); ! CC.IsDone(); ++CC)
-    Prtng.set_partition(G.cell(c_corr_per(G.handle(*CC))), map_partition(Prtng.partition(*CC)));
+    Prtng.set_partition(G.cell(c_corr_per(CC.handle())), map_partition(Prtng.partition(*CC)));
 
 
 
@@ -169,7 +169,7 @@ void ConstructComposite_per(CompositeG     & CG,
   grid_function<CoarseCell,int> cell2part(CG.TheCoarseGrid());
   bijective_mapping<int, CoarseCell> part2cell;
   for(CoarseCellIterator P = CrsG.FirstCell(); ! P.IsDone(); ++P) {
-    cell2part[*P] = CoarseCellCorr(CrsG.handle(*P));
+    cell2part[*P] = CoarseCellCorr(P.handle());
     part2cell[cell2part(*P)] = *P;
     part2cell[map_partition(cell2part(*P))] = *P;  // "virtual" partition
   }

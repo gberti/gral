@@ -87,12 +87,12 @@ void CopyOverlap(overlap<CG1,FG1>       &  dest,            // out
   typedef typename Ovlp2::VertexNbIterator  srcVertexNbIterator;
 
   for(srcCellNbIterator sCNb = src.FirstCellNeighbour(); ! sCNb.IsDone(); ++sCNb) {
-    destCoarseCell dNb = cg_dest.cell(crs_src2dest_c(src.TheCoarseGrid().handle(*sCNb)));
+    destCoarseCell dNb = cg_dest.cell(crs_src2dest_c(sCNb.handle()));
     copy_overlap_ranges(src.cells   (*sCNb),dest.cells   (dNb),src2dest_c);
     
   }
   for(srcVertexNbIterator sVNb = src.FirstVertexNeighbour(); ! sVNb.IsDone(); ++sVNb) {
-    destCoarseCell dNb = cg_dest.cell(crs_src2dest_c(src.TheCoarseGrid().handle(*sVNb)));
+    destCoarseCell dNb = cg_dest.cell(crs_src2dest_c(sVNb.handle()));
     copy_overlap_ranges(src.vertices(*sVNb),dest.vertices(dNb),src2dest_v);
   }
 

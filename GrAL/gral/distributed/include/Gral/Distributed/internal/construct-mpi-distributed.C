@@ -9,16 +9,16 @@
 #include "vector.h"
 
 
-#include "Container/algorithms.h"
+//#include "Container/some-algorithms.h"
 
 #include "Gral/Algorithms/grid-copy.h"
-#include "Gral/Algorithms/write-complex2d.h"
+//#include "Gral/Algorithms/write-complex2d.h"
 #include "Gral/Base/type-tags.h"
-#include "Gral/partitioning.h"
+#include "Gral/Partitioning/partitioning.h"
 
-#undef NMWR_INCLUDE_TEMPLATE_DEFS
+//#undef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/construct-composite-periodic.h"
-#define NMWR_INCLUDE_TEMPLATE_DEFS
+//#define NMWR_INCLUDE_TEMPLATE_DEFS
 
 #include "Gral/Distributed/composite-grid.h"
 #include "Gral/Distributed/composite-grid-function.h"
@@ -76,15 +76,23 @@ ConstructMPIDistributedFromMaster
   DistrG.set_coarse_grid(compG.TheCoarseGrid());
 
   cell_corr_map distr2coarse;
-  ConstructCellCorrespondence(DistrG.TheCoarseGrid(),compG.TheCoarseGrid(),distr2coarse);
+  ConstructCellCorrespondence(DistrG.TheCoarseGrid(),
+			      compG.TheCoarseGrid(),
+			      distr2coarse);
   
   CoarseCell mMyC = DistrG.MyCell();
-  CoarseCell cMyC = compG.TheCoarseGrid().cell(distr2coarse(DistrG.TheCoarseGrid().handle(mMyC)));
+  CoarseCell cMyC = compG.TheCoarseGrid().cell(distr2coarse(mMyC.handle()));
 
   cell_corr_map   part2distr_v;
   vertex_corr_map part2distr_c;
-  ConstructGridVC(DistrG.TheGrid(),    compG.Grid(cMyC), compGeom(cMyC),
-		  part2distr_v, part2distr_c);
+
+  // this should be done outside,
+  // using the master2distr mappings.
+  DistrGeom.set_grid(DistrG.TheGrid());
+  
+  ConstructGridVC(DistrG.TheGrid(),  DistrGeom,
+		   compG.Grid(cMyC), compGeom(cMyC),
+		   part2distr_v, part2distr_c);
 
   inverse_mapping<cell_handle,   cell_handle> coarse2distr(distr2coarse.inverse());
   CopyOverlap(DistrG.TheOverlap(),  compG.Overlap(cMyC),
@@ -108,7 +116,7 @@ ConstructMPIDistributedFromMaster
   for(dom_iter_c c = master2part_c[cMyC].domain().begin(); c != master2part_c[cMyC].domain().end(); ++c)
     master2distr_c[*c] = part2distr_c(master2part_c[cMyC](*c));
 
-  DistrGeom.set_grid(DistrG.TheGrid()); // let it point to THE local grid.
+
 }
 
 #endif

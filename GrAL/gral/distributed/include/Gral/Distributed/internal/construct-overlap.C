@@ -31,7 +31,9 @@ void ConstructOverlap(Overlap          & Ovlp,         // out
   typedef typename cgt::CellIterator            CoarseCellIterator;
   
   typedef typename Partition::grid_type         fine_grid_type;
-  typedef grid_types<fine_grid_type>            fgt;
+  //  typedef grid_types<fine_grid_type>            fgt;
+  // WORKAROUND: gcc 2.95 does not understand the above defn for fgt!
+  typedef typename Partition::gt                fgt;
   typedef typename fgt::Vertex                  Vertex;
   typedef typename fgt::Facet                   Facet;
   typedef typename fgt::Cell                    Cell;

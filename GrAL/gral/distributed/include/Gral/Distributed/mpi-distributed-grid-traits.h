@@ -33,7 +33,7 @@ struct distr_grid_traits_mpidg {
  */
 template<class CG, class FG>
 struct distr_grid_traits<MPIDistributedGrid<CG,FG> >
-  : public distr_grid_traits_mpidg<MPIDistributedGrid<CG,FG> >
+  : public distr_grid_traits_mpidg<CG,FG> 
 {};
 
 /*! \brief partial specialization of distr_grid_function<E,T,DG>
