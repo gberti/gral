@@ -37,7 +37,7 @@ namespace GrAL {
 
 // after execution, vertex_seq contains all vertices
 // not marked as visited (visited[v] != 0) that are
-// adjacent to cells in range(seed), 
+// incident to cells in range(seed), 
 // and visited(v) == level for these vertices.
 
 template<class GT, class CellIt, class VtxSeq, class EltMarker>
@@ -113,13 +113,13 @@ template<class GT,
          class EltMarker, 
          class AdjSeq, 
          class CellPred> 
-void mark_on_cells(CellIt      seed,         // in : cell seed set
-		   VSeq&       vertex_seq,   // out: visited vertices
-		   CSeq&       cell_seq,     // out: visited cells
-		   EltMarker&  visited,      // inout: already visited elements
-		   AdjSeq&     adj_queue,    // inout: seq of adjacencies to handle
-		   int&        level,        // inout: current level of adj.
-		   CellPred    inside,
+void mark_on_cells(CellIt      seed,         //!< in : cell seed set
+		   VSeq&       vertex_seq,   //!< out: visited vertices
+		   CSeq&       cell_seq,     //!< out: visited cells
+		   EltMarker&  visited,      //!< inout: already visited elements
+		   AdjSeq&     adj_queue,    //!< inout: seq of adjacencies to handle
+		   int&        level,        //!< inout: current level of adj.
+		   CellPred    inside,       //!< in: restrict cell range to cells \c c with <tt>inside(c)==true</tt>
 		   bool &      end);
 
 
@@ -129,14 +129,14 @@ template<class CellIt,
          class EltMarker, 
          class AdjSeq, 
          class CellPred>
-void mark_on_cells(CellIt      seed,         // in : cell seed set
-		   VSeq&       vertex_seq,   // out: visited vertices
-		   CSeq&       cell_seq,     // out: visited cells
-		   EltMarker&  visited,      // inout: already visited elements
-		   AdjSeq&     adj_queue,    // inout: seq of adjacencies to handle
-		   int&        level,        // inout: current level of adj.
-		   CellPred    inside,
-		   bool&       end)
+void mark_on_cells(CellIt      seed,         //!< in : cell seed set
+		   VSeq&       vertex_seq,   //!< out: visited vertices
+		   CSeq&       cell_seq,     //!< out: visited cells
+		   EltMarker&  visited,      //!< inout: already visited elements
+		   AdjSeq&     adj_queue,    //!< inout: seq of adjacencies to handle
+		   int&        level,        //!< inout: current level of adj.
+		   CellPred    inside,       //!< in: restrict cell range to cells \c c with <tt>inside(c)==true</tt>
+		   bool&       end)          //!< inout: true if seed range is empty
 {
  typedef grid_types<typename CellIt::grid_type> gt;
  mark_on_cells<gt>(seed, vertex_seq, cell_seq, visited, adj_queue, level, inside, end);
@@ -154,14 +154,14 @@ template<class GT,
          class EltMarker, 
          class AdjSeq, 
          class CellPred>
-void mark_on_vertices(VertexIt    seed,         // in : vertex seed set
-		      VSeq&       vertex_seq,   // out: visited vertices
-		      CSeq&       cell_seq,     // out: visited cells
-		      EltMarker&  visited,      // inout: already visited elements
-		      AdjSeq&     adj_queue,    // inout: seq of adjacencies to handle
-		      int&        level,        // inout: current level of adj.
-		      CellPred    inside,
-		      bool&       end);
+void mark_on_vertices(VertexIt    seed,         //!< in : vertex seed set
+		      VSeq&       vertex_seq,   //!< out: visited vertices
+		      CSeq&       cell_seq,     //!< out: visited cells
+		      EltMarker&  visited,      //!< inout: already visited elements
+		      AdjSeq&     adj_queue,    //!< inout: seq of adjacencies to handle
+		      int&        level,        //!< inout: current level of adj.
+		      CellPred    inside,       //!< in: restrict cell range to cells \c c with <tt>inside(c)==true</tt>
+		      bool&       end);         //!< inout: true if seed range is empty
 
 template<class VertexIt, 
          class VSeq, 
@@ -169,14 +169,14 @@ template<class VertexIt,
          class EltMarker, 
          class AdjSeq, 
          class CellPred>
-void mark_on_vertices(VertexIt    seed,         // in : vertex seed set
-		      VSeq&       vertex_seq,   // out: visited vertices
-		      CSeq&       cell_seq,     // out: visited cells
-		      EltMarker&  visited,      // inout: already visited elements
-		      AdjSeq&     adj_queue,    // inout: seq of adjacencies to handle
-		      int&        level,        // inout: current level of adj.
-		      CellPred    inside,
-		      bool&       end)
+void mark_on_vertices(VertexIt    seed,         //!< in : vertex seed set
+		      VSeq&       vertex_seq,   //!< out: visited vertices
+		      CSeq&       cell_seq,     //!< out: visited cells
+		      EltMarker&  visited,      //!< inout: already visited elements
+		      AdjSeq&     adj_queue,    //!< inout: seq of adjacencies to handle
+		      int&        level,        //!< inout: current level of adj.
+		      CellPred    inside,       //!< in: restrict cell range to cells \c c with <tt>inside(c)==true</tt>
+		      bool&       end)          //!< inout: true if seed range is empty
 {
  typedef grid_types<typename VertexIt::grid_type> gt;
  mark_on_vertices<gt>(seed, vertex_seq, cell_seq, visited, adj_queue, level, inside, end);
@@ -231,14 +231,23 @@ public:
   vertex_range const& vertices() const { return v_layers;}
   cell_range   const& cells   () const { return c_layers;}
 
-  //! This is not the layer number, because vertex and cell layers are counts are interleaved.
+  /*! \name Element levels
+      \brief Level the element is in.
+      This is the level number in the \e total set of layers for \e all elements,
+      which are typically interleaved. For instance, a stencil VCVCVC... 
+      will generate level numbers 0,2,4,... for the vertices and 1,3,5,... for the cells.
+      \note This is \e not the layer number to use eg. in \c vertices()
+      \todo Implement <tt>int layer(Element e)</tt> such that \c e \f$\in\f$ <tt>element(layer(e))</tt>
+  */
+  //@{
   int level(Vertex const& v) const { return visited(v);}
   int level(Cell   const& c) const { return visited(c);}
+  //@}
 
   temporary<vertex_layer_type> vertices(int i) const { return temporary<vertex_layer_type>(v_layers.Layer(i));}
   temporary<cell_layer_type  > cells   (int i) const { return temporary<cell_layer_type  >(c_layers.Layer(i));}
 
-};
+}; // class incidence_hull
 
 
 template<class RANGE, class STENCIL, class GT>
@@ -315,9 +324,7 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
       visited[*v] = level;
     }
     while(!end && cnt > 0) { 
-    //while (v_layers.LastLayer().NumOfVertices() > 0 && cnt > 0) {
       stencil_type s2 = s;
-      //std::cout << "VLayer: last layer " << v_layers.LastLayer().NumOfVertices() << " " << std::flush;
       mark_on_vertices<GT>(v_layers.LastLayer().FirstVertex(),
 			   v_layers, c_layers,
 			   visited,
@@ -325,7 +332,6 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
 			   level,
 			   pred,
 			   end);
-      //std::cout << "VLayer " << level << std::endl;
       if(p_flag == non_periodic)
 	--cnt;
     }
@@ -337,20 +343,8 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
       c_layers.append(*c);
       visited[*c] = level;
     }
-    // int num_v_last = 1; // TMP
     while( ! end && cnt > 0) { 
-    //while (c_layers.LastLayer().NumOfCells() > 0 && cnt > 0) {
       stencil_type s2 = s;
-      /* 
-     std::cout << "CLayer: last layer " << c_layers.LastLayer().NumOfCells() << "cells,  "
-		<< "c=" << c_layers.LastLayer().FirstCell().handle() << " " << std::flush;
-      if(c_layers.LastLayer().NumOfCells() < 10) {
-	std::cout << "cells = [";
-	for(rgeCellIterator cc(c_layers.LastLayer().FirstCell()); !cc.IsDone(); ++cc)
-	  std::cout << cc.handle() << " ";
-	std::cout << "] " << std::flush;
-      }
-      */
       mark_on_cells<GT>(c_layers.LastLayer().FirstCell(),
 			v_layers, c_layers,
 			visited,
@@ -358,15 +352,14 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
 			level,
 			pred,
 			end);
-      // std::cout << "CLayer level=" << level << std::endl;
       if(p_flag == non_periodic)
 	--cnt;
-      // num_v_last = v_layers.LastLayer().NumOfVertices(); // TMP
     }
   } // if cell_tag
   else {
      std::cerr << "Incidence hull: Unsupported element type: " << s.front() <<  ::std::endl;
   }
+  // remove possible empty layers
   if(p_flag == periodic) {
     if(v_layers.LastLayer().NumOfVertices() == 0)
       v_layers.remove_layer();

@@ -17,7 +17,6 @@ void mark_vertices_on_cells(CellIt      seed,
 			    int         level)
 {
   typedef typename CellIt::grid_type        grid_type;
-  //  typedef grid_types<grid_type>             gt;
   typedef GT                                gt;
   typedef typename gt::Cell                 Cell;
   typedef typename gt::Vertex               Vertex;
@@ -48,7 +47,6 @@ void mark_cells_on_cells(CellIt     seed,
 			 CellPred   inside)
 {
   typedef typename CellIt::grid_type        grid_type;
-  //  typedef grid_types<grid_type>             gt;
   typedef GT                                gt;
   typedef typename gt::Cell                 Cell;
   typedef typename gt::CellOnCellIterator   CellOnCellIterator;
@@ -75,7 +73,6 @@ void mark_cells_on_vertices(VertexIt   seed,
 			    CellPred   inside)
 {
   typedef typename VertexIt::grid_type       grid_type;
-  //typedef grid_types<grid_type>              gt;
   typedef GT                                 gt;
   typedef typename gt::Cell                  Cell;
   typedef typename gt::Vertex                Vertex;
@@ -118,10 +115,7 @@ void mark_on_cells(CellIt      seed,         // in : cell seed set
 		   CellPred    inside,
 		   bool&       end)
 {
-  typedef grid_types<VSeq> vgt;
-  typedef grid_types<CSeq> cgt;
-
-  if( adj_seq.empty())
+  if(adj_seq.empty())
     return;
   if(seed.IsDone()) {
     end = true;
@@ -136,15 +130,6 @@ void mark_on_cells(CellIt      seed,         // in : cell seed set
     vertex_seq.append_layer();
     mark_vertices_on_cells<GT>(seed,vertex_seq,visited,level);
     ++level;
-    /*
-    std::cout << "mark_on_vertices: v=" << vertex_seq.LastLayer().FirstVertex().handle() << " ";
-    if(vertex_seq.LastLayer().NumOfVertices() < 20) {
-      std::cout << " vertices = [";
-      for(typename VSeq::VertexIterator vv(vertex_seq.LastLayer().FirstVertex()); !vv.IsDone(); ++vv)
-	std::cout << vv.handle() << " ";
-      std::cout << "] " << std::flush;
-    }
-    */
     mark_on_vertices<GT>(vertex_seq.LastLayer().FirstVertex(),
 			 vertex_seq,cell_seq,visited,adj_seq,level, inside, end);
     break;
@@ -152,15 +137,6 @@ void mark_on_cells(CellIt      seed,         // in : cell seed set
     cell_seq.append_layer();
     mark_cells_on_cells<GT>(seed,cell_seq,visited,level, inside);
     ++level;
-    /*
-    std::cout << "mark_on_cells: c= " << cell_seq.LastLayer().FirstCell().handle() << " ";
-      if(cell_seq.LastLayer().NumOfCells() < 10) {
-	std::cout << "cells = [";
-	for(typename CSeq::CellIterator cc(cell_seq.LastLayer().FirstCell()); !cc.IsDone(); ++cc)
-	  std::cout << cc.handle() << " ";
-	std::cout << "] " << std::flush;
-      }
-    */
     mark_on_cells<GT>(cell_seq.LastLayer().FirstCell(),
 		  vertex_seq,cell_seq,visited,adj_seq,level, inside, end);
     break;
@@ -184,7 +160,6 @@ void mark_on_vertices(VertexIt    seed,         // in : cell seed set
   if( adj_seq.empty())
     return;
   if(seed.IsDone()) {
-    // std::cout << "mark on vertices: Empty seed." << std::endl;
     end = true;
     return;
   }
