@@ -2,14 +2,63 @@ Seed cell: 0 0
 Cell layer 1: [0 0] 
 Cell layer 2: [1 0] [1 1] [0 1] 
 Vertex layer 1: [0 0] [1 0] [1 1] [0 1] 
+Single seed 0 0, periodic:
+3 cell layers:
 Cell layer 1: [0 0] 
 Cell layer 2: [1 0] [1 1] [0 1] 
 Cell layer 3: [2 0] [2 1] [2 2] [1 2] [0 2] 
-Vertex layer 1: [0 0] [1 0] [1 1] [0 1] 
-Vertex layer 2: [2 0] [2 1] [2 2] [1 2] [0 2] 
-Cell layer 1: [0 0] 
-Cell layer 2: [1 0] [1 1] [0 1] 
-Cell layer 3: [2 0] [2 1] [2 2] [1 2] [0 2] 
+3 vertex layers:
 Vertex layer 1: [0 0] [1 0] [1 1] [0 1] 
 Vertex layer 2: [2 0] [2 1] [2 2] [1 2] [0 2] 
 Vertex layer 3: [3 0] [3 1] [3 2] [3 3] [2 3] [1 3] [0 3] 
+Single seed 0 0, not periodic:
+3 cell layers:
+Cell layer 1: [0 0] 
+Cell layer 2: [1 0] [1 1] [0 1] 
+Cell layer 3: [2 0] [2 1] [2 2] [1 2] [0 2] 
+2 vertex layers:
+Vertex layer 1: [0 0] [1 0] [1 1] [0 1] 
+Vertex layer 2: [2 0] [2 1] [2 2] [1 2] [0 2] 
+Re-adding seed range, non-periodic:
+3 cell layers:
+Cell layer 1: [0 0] 
+Cell layer 2: [1 0] [1 1] [0 1] 
+Cell layer 3: [2 0] [2 1] [2 2] [1 2] [0 2] 
+2 vertex layers:
+Vertex layer 1: [0 0] [1 0] [1 1] [0 1] 
+Vertex layer 2: [2 0] [2 1] [2 2] [1 2] [0 2] 
+Adding cell 0 2 to seed range:
+3 cell layers:
+Cell layer 1: [0 0] [0 2] 
+Cell layer 2: [1 0] [1 1] [0 1] [1 2] 
+Cell layer 3: [2 0] [2 1] [2 2] 
+2 vertex layers:
+Vertex layer 1: [0 0] [1 0] [1 1] [0 1] [0 2] [1 2] [1 3] [0 3] 
+Vertex layer 2: [2 0] [2 1] [2 2] [2 3] 
+Removing 0 2 from seed range:
+3 cell layers:
+Cell layer 1: [0 0] 
+Cell layer 2: [1 0] [1 1] [0 1] 
+Cell layer 3: [2 0] [2 1] [2 2] [1 2] [0 2] 
+2 vertex layers:
+Vertex layer 1: [0 0] [1 0] [1 1] [0 1] 
+Vertex layer 2: [2 0] [2 1] [2 2] [1 2] [0 2] 
+Removing 0 0 from seed range:
+0 cell layers:
+0 vertex layers:
+Adding 0 0:
+3 cell layers:
+Cell layer 1: [0 0] 
+Cell layer 2: [1 0] [1 1] [0 1] 
+Cell layer 3: [2 0] [2 1] [2 2] [1 2] [0 2] 
+2 vertex layers:
+Vertex layer 1: [0 0] [1 0] [1 1] [0 1] 
+Vertex layer 2: [2 0] [2 1] [2 2] [1 2] [0 2] 
+Testing large stencil:
+3 cell layers:
+Cell layer 1: [0 0] 
+Cell layer 2: [1 0] [1 1] [0 1] 
+Cell layer 3: [2 0] [2 1] [2 2] [1 2] [0 2] 
+2 vertex layers:
+Vertex layer 1: [0 0] [1 0] [1 1] [0 1] 
+Vertex layer 2: [2 0] [2 1] [2 2] [1 2] [0 2] 
