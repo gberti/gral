@@ -152,6 +152,7 @@ public:
   grid_type const& TheGrid() const { return *g;}
   size_type size() const { return et::size(*g);}
 
+  ElementIterator FirstElement() const { return et::FirstElement(*g);}
 
 
   value_proxy operator[](element_type const& v) 
