@@ -219,7 +219,7 @@ struct complex2d_types {
   typedef polygon1d::polygon                 archetype_type;
   typedef std::vector<archetype_type>        archetype_sequence;
   typedef archetype_sequence::const_iterator archetype_iterator;
-  typedef unsigned                           archetype_handle;
+  typedef int                                archetype_handle;
 
 };
 
@@ -278,7 +278,7 @@ public: // for benchmark only
 
   mutable int                    num_of_edges_cache;
   archetype_sequence             archetypes;
-  std::vector<unsigned>          arch_for_n_vertices;
+  std::vector<archetype_handle>  arch_for_n_vertices;
 public:
   //--------- types --------------------
 
@@ -397,6 +397,7 @@ public:
   archetype_handle    handle(archetype_iterator it) const { return it - BeginArchetype();}
 
   archetype_type const& Archetype(archetype_handle a) const { return archetypes[a];}
+  archetype_type      & Archetype(archetype_handle a)       { return archetypes[a];}
   archetype_type const& ArchetypeOf (Cell const& c) const 
   { return Archetype(archetype_of(c));}
   archetype_type   const& ArchetypeOf (cell_handle c) const 
@@ -406,6 +407,8 @@ public:
   archetype_handle        archetype_of(Cell const& c) const 
     { return arch_for_n_vertices[c.NumOfVertices()];}
   unsigned NumOfArchetypes() const { return archetypes.size(); }
+
+  archetype_handle add_archetype(archetype_type const& A, int nv);
   /*@}*/
   
 private:
@@ -505,7 +508,8 @@ public:
 
   cell_handle   _new_cell(int i)                                { return _cc._new_cell(i);}
   vertex_handle _new_vertex(const CoordType& coo = CoordType()) { return _cc._new_vertex(coo);}
-
+  Complex2D::archetype_handle add_archetype(Complex2D::archetype_type const& A, int nv) { return _cc.add_archetype(A, nv);}
+  
   CoordType& coord(const Vertex2D& V) { return _cc.Coord(V);}
 
   void set_neighbour(const EdgeOnCell2D_Iterator& n1_it, const Cell2D& n2)
