@@ -407,6 +407,8 @@ public:
   public:
     friend class RegGrid2D;
     typedef Cell self;
+    typedef grid_types<Grid::archetype_type> archgt;
+
     enum side   { S  = 1, E  = 2, N  = 3, W  = 4, invalid_side   = 5};
     enum corner { SW = 1, SE = 2, NE = 3, NW = 4, invalid_corner = 5};
 
@@ -458,6 +460,8 @@ public:
     cell_handle handle      ()    const { return TheGrid().cell_num(llv);}
     Vertex V(corner i) const { return vertex(i);}
     Vertex V(int i)    const { return vertex(corner(i));}
+    Vertex V       (archgt::Vertex const& lV) const { return V(lV.handle());}
+    vertex_handle v(archgt::Vertex const& lV) const { return V(lV).handle();}
 
     /// information for these calculations could go into
     /// some static tables of RegGrid2D
