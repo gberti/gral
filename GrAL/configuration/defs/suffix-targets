@@ -30,6 +30,9 @@ standard-test:
 standard-check: module-check
 	(cd test; $(MAKE) check DEPS='')
 
+standard-check-force: module-check
+	(cd test; $(MAKE) check-force DEPS='')
+
 # hook for modules extra checks
 module-check:
 
@@ -37,6 +40,9 @@ module-check:
 # Useful for many modules & limited disk space.
 standard-test-check-clean:
 	(cd test; $(MAKE) new-check-clean)
+
+standard-test-check-clean-force:
+	(cd test; $(MAKE) new-check-clean-force)
 
 
 #####################################################################
@@ -86,7 +92,7 @@ install: install-headers
 #
 # Targets to generate documentation using doxygen.   
 #
-# Documentation generation (doc:) is broken into
+# Documentation generation (doc:) is broken down into
 # predoc: and postdoc: phases.
 # predoc: does generate the documentation, and
 # postdoc: does perform some replacement of paths and
@@ -129,13 +135,15 @@ GRALCONCEPTS=$(RELROOT)/$(CONCEPTPATH)#
 additional-doxy:
 additional-installdox:
 
-doxy: additional-doxy
+doxy: local-doxy additional-doxy
+
+local-doxy:
 	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(GRALROOT) -binpath $(LOCALBINPATH) \
         $(DOXYCFG)/doxy.paths.cfg                  > doxy.cfg.tmp
 	echo "@INCLUDE_PATH = $(DOXYCFG)"         >> doxy.cfg.tmp
 	cat doxy.local.cfg                        >> doxy.cfg.tmp
 	echo "STRIP_FROM_PATH = $(ROOT)/include/ $(ROOT)/"   >> doxy.cfg.tmp
-	cat dependencies*                            > doxy.deps.tmp
+	cat dependencies*                            > doxy.deps.tmp || echo 'no dependencies found'
 	$(DOXYCFG)/generate-doxycfg.pl -root $(GRALROOT) doxy.deps.tmp   >> doxy.cfg.tmp
 	cp $(DOXYHEADER) .
 	cp $(DOXYFOOTER) .
@@ -145,8 +153,10 @@ doxy: additional-doxy
 	rm -f footer.html header.html
 	rm -f doxy.cfg.tmp 
 
-installdox: additional-installdox
-	cat dependencies*                            > doxy.deps.tmp
+installdox: local-installdox additional-installdox
+
+local-installdox:
+	cat dependencies*                            > doxy.deps.tmp || echo 'no dependencies found'
 	$(DOXYCFG)/generate-installdox.pl \
           -root $(RELROOT) \
           -path $(DOXYPATH)\
