@@ -56,16 +56,12 @@ public:
   double& operator [] ( int i);		        // indexing, assignment poss.
   const double& operator [] ( int i) const;     // indexing (const)
 
-// special functions
+  // special functions
 
-double length() const;			// length of a point
-double length2() const;			// squared length of a point
-point normalize() const;			// normalize a point
+  double length() const;			// length of a point
+  double length2() const;			// squared length of a point
+  point normalize() const;			// normalize a point
 
-  // friends (not  necessary!!)
-  operator double() const;
-  // confusing g++ sometimes!
-  //  friend point operator , (const point& a, const point& b);	    // (a,b)
   friend point combine(const point& a, const point& b); // workaround
 
   friend point operator - (const point& a);			    // -a
@@ -80,13 +76,6 @@ point normalize() const;			// normalize a point
   friend void swap(point& a, point& b);			    // interchange a and b
 };
 
-
-inline point::operator double()  const
-{
-  REQUIRE((n>1),
-	  "cannot convert point to double: point has > 1 components!!\n",1);
-  return x[0];
-}
 
 inline double& point::operator [] ( int i) {
   REQUIRE((i >= 1 && i <= n),
