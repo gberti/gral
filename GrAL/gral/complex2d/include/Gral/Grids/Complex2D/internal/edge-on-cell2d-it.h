@@ -88,11 +88,20 @@ public:
 
   //----------------- comparison  -----------------------
 
-  friend bool operator==(const self& ls, const self& rs) {
-    return ((ls.C == rs.C) && (ls.lf == rs.lf));
+  // note this is different from *lhs == *rhs !
+  // *lhs != *rhs => lhs != rhs, but not the other way around.
+  friend bool operator==(const self& lhs, const self& rhs) {
+    return ((lhs.C == rhs.C) && (lhs.lf == rhs.lf));
   }
   friend bool operator!=(const self& lhs, const self& rhs)
     { return !(lhs == rhs);}
+
+  // note this is different from *lhs < *rhs !
+  // Comparison of edges is based on vertices
+  friend bool operator< (const self& lhs, const self& rhs) {
+    return ( (lhs.C < rhs.C) || ((lhs.C == rhs.C) && (lhs.lf < rhs.lf)));
+  }
+
 
   void print(std::ostream& out)  const;
   friend std::ostream& operator<<(std::ostream& out, const EdgeOnCell2D_Iterator& it)
