@@ -53,22 +53,32 @@ run-check:
          rm -f *.out; \
          if ! ./$(EXEC)  > $$out 2>&1 ; \
          then \
-         $$echo "ERROR running $(EXEC) "; \
-         echo "Output was:"; \
-         cat $$out; \
-         $$echo " End output "; \
+           $$echo "ERROR running $(EXEC) "; \
+           echo "Output was:"; \
+           cat $$out; \
+           $$echo " End output "; \
          else \
-         $(CHECKER) ./$(EXEC) > $$out.valgrind 2>&1 ; \
-         $$echo "\n"; \
-         for i in  *.out; \
-         do \
-         $(FILTER) $$i > $$i.filtered.out; \
-         if diff $$i.filtered.out $$i.exp; \
-         then  $$echo "\t\t\t" $$i OK; \
-         else  $$echo "\t\t\t" ERROR in $$i; \
-         fi ;\
-         done ;\
-         $$echo "\n"; \
+           $(CHECKER) ./$(EXEC) > $$out.valgrind 2>&1 ; \
+             if  grep "ERROR SUMMARY: [1-9]" $$out.valgrind > /dev/null ; \
+             then \
+                echo "Valgrind ERROR in $(EXEC):" ; \
+                cat $$out.valgrind; \
+             fi ;\
+             if  grep "definitely lost: [1-9]" $$out.valgrind > /dev/null ; \
+             then \
+               echo "Valgrind memory leak error detected in $(EXEC):" ; \
+               grep "definitely lost: [1-9]" $$out.valgrind ; \
+             fi ;\
+           $$echo "\n"; \
+           for i in  *.out; \
+           do \
+             $(FILTER) $$i > $$i.filtered.out; \
+             if diff $$i.filtered.out $$i.exp; \
+             then  $$echo "\t\t\t" $$i OK; \
+             else  $$echo "\t\t\t" ERROR in $$i; \
+             fi ;\
+           done ;\
+           $$echo "\n"; \
          fi)
 
 #####################################################################
