@@ -4,6 +4,6 @@
 # on which the collective scripts are going to be executed
 
 MODULES='configuration utilities external-control sequence geometry 
-         function-algebra graphics-device gral';
+         gral';
 
 echo $MODULES;
