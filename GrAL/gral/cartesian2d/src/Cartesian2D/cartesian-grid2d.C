@@ -15,7 +15,7 @@ RegGrid2D::SD RegGrid2D::sd;
 RegGrid2D::SD::SD()
 {
   // this works as long as we use a cyclic order for VertexOnCell iteration
-  the_archetype[0] = archetype_type(complexnd::polygon(4));
+  the_archetype[0] = archetype_type(polygon1d::polygon(4));
 }
 
 index_type  RegGrid2D::side_offset_[4] = { index_type(0,-1),  // S
