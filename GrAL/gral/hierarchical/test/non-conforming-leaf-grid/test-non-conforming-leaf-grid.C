@@ -94,7 +94,7 @@ double f2(tuple<double,2> X) {
 
 int main() {
    
- 
+  using namespace std; 
   {
     /*
     namespace cart = cartesian2d;
@@ -138,12 +138,11 @@ int main() {
 
     int maxlevels = 2;
     hgt::level_handle coarse = Oct.TheHierGrid()->coarsest_level();
-    hgt::level_handle finest = Oct.TheHierGrid()->finest_level();
 
     for(hgt::level_handle lev = coarse; lev <= coarse + maxlevels; ++lev) {
       for(cgt::CellIterator c(* Oct.TheHierGrid()->FlatGrid(lev)); ! c.IsDone(); ++c) {
 	hgt::Cell hc(* Oct.TheHierGrid(), *c, lev);
-	int cnt_plus = 0;
+	unsigned cnt_plus = 0;
 
 	for(cgt::VertexOnCellIterator vc(*c); ! vc.IsDone(); ++vc) {
 	  if( f3d(Geom.coord(hgt::Vertex(* Oct.TheHierGrid(),*vc, lev))) >= 0) 
@@ -155,10 +154,6 @@ int main() {
 	  if(Oct.isLeaf(hc)) {
 	    cout << "Splitting cell " << hc.Flat().index() << "\n";
 	    Oct.split_cell(hc);
-	    if(finest < Oct.TheHierGrid()->finest_level()) {
-	      Geom.add_finer_level();
-	      ++finest;
-	    }
 	  }
 	}
       }

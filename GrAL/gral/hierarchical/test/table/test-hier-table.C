@@ -35,11 +35,14 @@ void test_hier_grid_table(GRID const& root,
   typedef hier_grid_type                                hgt;
   typedef typename hgt::level_handle                    level_handle;
   typedef hierarchical::hier_grid_table<hier_grid_type, flat_geom_type> hier_geom_type;
+  typedef typename flat_geom_type::mapping_type         mapping_type;
+  
+  mapping_type M;
 
   hier_grid_type H(root,pattern);
   H.add_finer_level();
   H.add_coarser_level();
-  hier_geom_type Hgeom(H);    
+  hier_geom_type Hgeom(H, M);    
 
   hier_grid_type H2(H);
   H = H2;

@@ -30,7 +30,7 @@ bool test_archetypes(G const& g, std::ostream & out, GT)
 
   for(typename GT::CellIterator c(g.FirstCell()); ! c.IsDone(); ++c) {
     archetype_type   A  = g.ArchetypeOf(*c);
-    REQUIRE_ALWAYS(A.NumOfVertices() == (*c).NumOfVertices(), 
+    REQUIRE_ALWAYS((unsigned)A.NumOfVertices() == (unsigned)(*c).NumOfVertices(), 
 		   "A.NumOfVertices()=" << A.NumOfVertices() << "  (*c).NumOfVertices()="   << (*c).NumOfVertices(), 1);
     archetype_handle a  = g.archetype_of(*c);
     archetype_type   A1 = g.Archetype(a);

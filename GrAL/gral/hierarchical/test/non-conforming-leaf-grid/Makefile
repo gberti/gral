@@ -17,7 +17,7 @@ include $(DEPS)
 
 
 
-LIBS = -lgral-geomview-io -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base -lgral-gmv-io
+LIBS = -lgral-geomview-io -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base -lgral-gmv-io -lutilities
 
 
 

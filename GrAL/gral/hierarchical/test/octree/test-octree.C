@@ -1,3 +1,6 @@
+/*! \file Test harness for octree::Octree
+
+*/
 #include "Gral/Hierarchical/octree.h"
 
 #include "Gral/Grids/Cartesian2D/all.h"

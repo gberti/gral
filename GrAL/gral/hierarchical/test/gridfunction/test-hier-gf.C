@@ -22,14 +22,17 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
   hierarchical::hier_grid_function        <hier_cell_type, int> Hgf (H, 77);
   hierarchical::hier_partial_grid_function<hier_cell_type, int> Hpgf(H, 77);
 
+  REQUIRE_ALWAYS(Hgf .valid(), "", 1);
+  REQUIRE_ALWAYS(Hpgf.valid(), "", 1);
   
   H   .add_finer_level();
-  //  Hgf .add_finer_level(1);
-  //  Hpgf.add_finer_level(1);
+  REQUIRE_ALWAYS(Hgf .valid(), "", 1);
+  REQUIRE_ALWAYS(Hpgf.valid(), "", 1);
 
   H   .add_coarser_level();
-  // Hgf .add_coarser_level(-1);
-  // Hpgf.add_coarser_level(-1);
+  REQUIRE_ALWAYS(Hgf .valid(), "", 1);
+  REQUIRE_ALWAYS(Hpgf.valid(), "", 1);
+
 
   hierarchical::hier_grid_function        <hier_cell_type, int> Hgf2 (Hgf);
   hierarchical::hier_partial_grid_function<hier_cell_type, int> Hpgf2(Hpgf);
@@ -57,6 +60,16 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
     }
   }
 
+  while(! H.empty()) {
+    H.remove_finest_level();
+    REQUIRE_ALWAYS(Hgf  .valid(), "", 1);
+    REQUIRE_ALWAYS(Hpgf .valid(), "", 1);
+    REQUIRE_ALWAYS(Hgf2 .valid(), "", 1);
+    REQUIRE_ALWAYS(Hpgf2.valid(), "", 1);
+    REQUIRE_ALWAYS(Hgf3 .valid(), "", 1);
+    REQUIRE_ALWAYS(Hpgf3.valid(), "", 1);
+
+  }
   
 }
 
