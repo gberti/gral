@@ -2,7 +2,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 include $(CONFIG)
 
-LIBS =  -lutilities -lcontrol-device
+LIBS =  -lcontrol-device -lutilities
 
 
 ex1: ex1.o
