@@ -1,0 +1,56 @@
+Test grid 1x1 cells 
+v=0 0 @ 0 0
+v=0 1 @ 0 1
+v=1 0 @ 1 0
+v=1 1 @ 1 1
+e=[0 0 -> 1 0]  length(e)=1 center(e)=0.5 0 normal(e)=-0 1
+e=[0 1 -> 1 1]  length(e)=1 center(e)=0.5 1 normal(e)=-0 1
+e=[0 0 -> 0 1]  length(e)=1 center(e)=0 0.5 normal(e)=-1 0
+e=[1 0 -> 1 1]  length(e)=1 center(e)=1 0.5 normal(e)=-1 0
+c=0 0 volume(c)=1 center(c)=0.5 0.5
+fc=[0 0 -> 1 0]  outer_area_normal(fc)=-0 -1 outer_normal(fc)=-0 -1
+fc=[1 0 -> 1 1]  outer_area_normal(fc)=1 0 outer_normal(fc)=1 0
+fc=[1 1 -> 0 1]  outer_area_normal(fc)=-0 1 outer_normal(fc)=-0 1
+fc=[0 1 -> 0 0]  outer_area_normal(fc)=-1 0 outer_normal(fc)=-1 0
+Test grid 2x2 cells 
+v=0 0 @ 0 0
+v=0 1 @ 0 0.5
+v=0 2 @ 0 1
+v=1 0 @ 0.5 0
+v=1 1 @ 0.5 0.5
+v=1 2 @ 0.5 1
+v=2 0 @ 1 0
+v=2 1 @ 1 0.5
+v=2 2 @ 1 1
+e=[0 0 -> 1 0]  length(e)=0.5 center(e)=0.25 0 normal(e)=-0 1
+e=[0 1 -> 1 1]  length(e)=0.5 center(e)=0.25 0.5 normal(e)=-0 1
+e=[0 2 -> 1 2]  length(e)=0.5 center(e)=0.25 1 normal(e)=-0 1
+e=[1 0 -> 2 0]  length(e)=0.5 center(e)=0.75 0 normal(e)=-0 1
+e=[1 1 -> 2 1]  length(e)=0.5 center(e)=0.75 0.5 normal(e)=-0 1
+e=[1 2 -> 2 2]  length(e)=0.5 center(e)=0.75 1 normal(e)=-0 1
+e=[0 0 -> 0 1]  length(e)=0.5 center(e)=0 0.25 normal(e)=-1 0
+e=[0 1 -> 0 2]  length(e)=0.5 center(e)=0 0.75 normal(e)=-1 0
+e=[1 0 -> 1 1]  length(e)=0.5 center(e)=0.5 0.25 normal(e)=-1 0
+e=[1 1 -> 1 2]  length(e)=0.5 center(e)=0.5 0.75 normal(e)=-1 0
+e=[2 0 -> 2 1]  length(e)=0.5 center(e)=1 0.25 normal(e)=-1 0
+e=[2 1 -> 2 2]  length(e)=0.5 center(e)=1 0.75 normal(e)=-1 0
+c=0 0 volume(c)=0.25 center(c)=0.25 0.25
+fc=[0 0 -> 1 0]  outer_area_normal(fc)=-0 -0.5 outer_normal(fc)=-0 -1
+fc=[1 0 -> 1 1]  outer_area_normal(fc)=0.5 0 outer_normal(fc)=1 0
+fc=[1 1 -> 0 1]  outer_area_normal(fc)=-0 0.5 outer_normal(fc)=-0 1
+fc=[0 1 -> 0 0]  outer_area_normal(fc)=-0.5 0 outer_normal(fc)=-1 0
+c=0 1 volume(c)=0.25 center(c)=0.25 0.75
+fc=[0 1 -> 1 1]  outer_area_normal(fc)=-0 -0.5 outer_normal(fc)=-0 -1
+fc=[1 1 -> 1 2]  outer_area_normal(fc)=0.5 0 outer_normal(fc)=1 0
+fc=[1 2 -> 0 2]  outer_area_normal(fc)=-0 0.5 outer_normal(fc)=-0 1
+fc=[0 2 -> 0 1]  outer_area_normal(fc)=-0.5 0 outer_normal(fc)=-1 0
+c=1 0 volume(c)=0.25 center(c)=0.75 0.25
+fc=[1 0 -> 2 0]  outer_area_normal(fc)=-0 -0.5 outer_normal(fc)=-0 -1
+fc=[2 0 -> 2 1]  outer_area_normal(fc)=0.5 0 outer_normal(fc)=1 0
+fc=[2 1 -> 1 1]  outer_area_normal(fc)=-0 0.5 outer_normal(fc)=-0 1
+fc=[1 1 -> 1 0]  outer_area_normal(fc)=-0.5 0 outer_normal(fc)=-1 0
+c=1 1 volume(c)=0.25 center(c)=0.75 0.75
+fc=[1 1 -> 2 1]  outer_area_normal(fc)=-0 -0.5 outer_normal(fc)=-0 -1
+fc=[2 1 -> 2 2]  outer_area_normal(fc)=0.5 0 outer_normal(fc)=1 0
+fc=[2 2 -> 1 2]  outer_area_normal(fc)=-0 0.5 outer_normal(fc)=-0 1
+fc=[1 2 -> 1 1]  outer_area_normal(fc)=-0.5 0 outer_normal(fc)=-1 0
