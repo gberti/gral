@@ -84,6 +84,7 @@ public:
   }
   */
 
+ 
   void set_grid(const grid_type& gg) {
     REQUIRE((g == 0), "set grid: grid must be 0!\n",1);
     g = &gg;
@@ -167,6 +168,12 @@ public:
       for(ElementIterator e = et1::FirstElement(TheGrid()); ! e.IsDone(); ++e)
 	table[*e] = t;
     }
+
+  void init(const grid_type& gg, const T& t) {
+    set_grid(gg);
+    for(ElementIterator e = et1::FirstElement(TheGrid()); ! e.IsDone(); ++e)
+	table[*e] = t;
+  }
 
   //----------------- data access operators -------------------------   
 
