@@ -1,4 +1,5 @@
 # gcc/make.defs
+# Settings for gcc 2.95, 2.96
 
 CCC      =  g++
 CCFLAGS += -Wall 
