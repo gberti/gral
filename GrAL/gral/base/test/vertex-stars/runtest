@@ -1,7 +1,7 @@
 #!/bin/bash
 
 out=out
-EXEC=test-vertex-stars
+EXEC=./test-vertex-stars
 
 if ! $EXEC  > $out 2>&1
 then
