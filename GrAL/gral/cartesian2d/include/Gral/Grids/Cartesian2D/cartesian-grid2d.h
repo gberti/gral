@@ -15,8 +15,7 @@
 #include "Gral/Iterators/vertex-on-edge-iterator.h"
 
 #include "Gral/Grids/Cartesian2D/index-map.h"
-
-#include "Gral/Grids/ComplexND/complexnd.h"
+#include "Gral/Base/polygon.h"
 
 
 namespace cartesian2d {
@@ -136,7 +135,7 @@ private:
   static std::string  corner_name_[4];
 
 public:
-  typedef complexnd::ComplexND<1> archetype_type;
+  typedef polygon1d::polygon      archetype_type;
   typedef archetype_type const*   archetype_iterator;
   typedef unsigned                archetype_handle;
 private:
