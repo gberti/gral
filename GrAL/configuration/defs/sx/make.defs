@@ -1,16 +1,17 @@
-# Settings for SX C++
+# Settings for SX C++ cross compilation
 
 CCC      = /SX/opt/sxc++/inst/bin/sxc++
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += -DGRAL_HAS_SSTREAM
 CCFLAGS += -DSXCPP
-CCFLAGS += -DGRAL_NO__FUNCTION__
+CCFLAGS += -DGRAL_NO__FUNCTION__   # does not define the __FUNCTION__ macro used in Utility/pre-post-conditions.h
 
 CCFLAGS += -wall 
-CCFLAGS += -woff=186  # 
-CCFLAGS += -woff=997  # hiding function
-CCFLAGS += -pvctl nomsg  # vectorization messages
-CCFLAGS += -Tlocal -Kexceptions,rtti
+CCFLAGS += -woff=186     # 
+CCFLAGS += -woff=997     # no warning about 'hiding function'
+CCFLAGS += -pvctl nomsg  # hide vectorization messages
+CCFLAGS += -Tlocal
+CCFLAGS += -Kexceptions,rtti
 
 LDFLAGS += -lC++_eh  #-prelink
 
