@@ -1,7 +1,7 @@
 
 GRALROOT=$(shell pwd)
 SUBDIRS= configuration utilities external-control sequence geometry \
-         graphics-device function-algebra gral
+         gral
 
 
 new:

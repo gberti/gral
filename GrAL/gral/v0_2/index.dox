@@ -23,12 +23,6 @@
       Controling runtime parameters in a uniform and hierarchical way.
      <LI>  $gral-geometry         Geometry module:
            some geometric primitives
-     <LI>  $gral-graphics-device GraphicsDevice module: An abstract graphics
-   	output device. Currently supported: OOGL (used by 
-	<A HREF="http://www.geomview.org"> geomview</A>)
-     <LI>  $gral-function-algebra FunctionAlgebra module: A simple
-        function algebra (\c +, \c - , \c *, \c / 
-        and composition via \c operator() )
 
      <H2> Proper GrAL Modules </H2> 
       <LI> $GRALCONCEPTSTOP 'Intro and concepts documentation'
