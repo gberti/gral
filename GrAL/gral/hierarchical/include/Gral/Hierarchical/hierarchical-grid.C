@@ -118,7 +118,8 @@ namespace hierarchical {
  }
 
   template<class Grid, class GT>
-  temporary<typename hgrid_cartesian<Grid,GT>::cart_subrange_type>
+  //  temporary<typename hgrid_cartesian<Grid,GT>::cart_subrange_type>
+  ref_ptr<typename hgrid_cartesian<Grid,GT>::cart_subrange_type>
   hgrid_cartesian<Grid,GT>::descendants(typename hgrid_cartesian<Grid,GT>::hier_cell_type const& p, 
 					typename hgrid_cartesian<Grid,GT>::level_handle lev) const 
   {
@@ -127,12 +128,15 @@ namespace hierarchical {
     cell_index_type sz = power(the_pattern.cell_size(), level_diff);
     cell_index_type offset = product(p.Flat().index(), sz);
     // assume vertex based arguments to subrange
-    return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), offset, offset+sz+cell_index_type(1))); 
+    //return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), offset, offset+sz+cell_index_type(1))); 
+    return ref_ptr<cart_subrange_type>(new cart_subrange_type(*FlatGrid(lev), offset, offset+sz+cell_index_type(1)),
+				       ref_ptr_base::shared); 
   }
 
   template<class Grid, class GT>
   template<class ELEMENTBASE, class FLATELEM>
-  temporary<typename hgrid_cartesian<Grid,GT>::cart_subrange_type>
+  //  temporary<typename hgrid_cartesian<Grid,GT>::cart_subrange_type>
+  ref_ptr<typename hgrid_cartesian<Grid,GT>::cart_subrange_type>
   hgrid_cartesian<Grid,GT>::descendants(h_element_t<ELEMENTBASE, FLATELEM> const& p,
 					typename hgrid_cartesian<Grid,GT>::level_handle lev) const 
   {
@@ -142,7 +146,9 @@ namespace hierarchical {
     vertex_index_type low    = product(p.Flat().low_vertex_index(), sz);
     vertex_index_type beyond = product(p.Flat().high_vertex_index(), sz) + vertex_index_type(1);
     // assume vertex based arguments to subrange
-    return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), low, beyond));
+    //return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), low, beyond));
+    return ref_ptr<cart_subrange_type>(new cart_subrange_type(*FlatGrid(lev), low, beyond),
+				       ref_ptr_base::shared);
   }
 
 

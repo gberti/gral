@@ -148,6 +148,7 @@ namespace hierarchical {
     typedef grid_types<archetype_type>          archgt;               
 
     typedef typename flatgt::cartesian_subrange_type cart_subrange_type;
+    typedef cart_subrange_type                       flat_subrange_type;
 
     typedef h_element_base_t<self>                        element_base_type;
     typedef h_element_handle_t<self, flat_vertex_handle>  hier_vertex_handle;
@@ -247,10 +248,13 @@ namespace hierarchical {
     size_type     num_of_levels() const { return grids.size();}
     //@}
 
+    //! Get the refinement pattern
     ref_ptr<pattern_grid_type const> ThePatternGrid() const 
     {  return ref_ptr<pattern_grid_type const>(the_pattern);}
 
+    //! Shortcut for \c FlatGrid(lev)
     ref_ptr<flat_grid_type const> operator()(level_handle lev) const { return FlatGrid(lev);}
+    //! Get the flat grid of level \c lev
     ref_ptr<flat_grid_type const> FlatGrid(level_handle lev) const   
     { cv(lev); return  ref_ptr<flat_grid_type const>(grids(lev));}
 
@@ -312,11 +316,23 @@ namespace hierarchical {
     index_type parent_cell_index(index_type ch, level_handle lev) const 
     { cv(lev); cv(lev-1); return quotient(ch,  the_pattern.cell_size());}
 
+    index_type parent_cell_index(index_type ch, level_handle lev, level_handle parent_lev) const 
+    { 
+      cv(lev); cv(parent_lev); 
+      REQUIRE(parent_lev <= lev, "parent_lev=" << parent_lev << " lev=" << lev, 1);
+      return quotient(ch,  power(the_pattern.cell_size(), lev-parent_lev));
+    }
+
     hier_cell_type  Parent(hier_cell_type const& ch) const 
     {
       cv(ch.level()); 
       level_handle pl = next_coarser_level(ch.level());
       return hier_cell_type(*this,flat_cell_type(* FlatGrid(pl), parent_cell_index(ch.Flat().index(), ch.level())), pl); 
+    }
+
+    hier_cell_type  Parent(hier_cell_type const& ch, level_handle pl) const 
+    {
+      return hier_cell_type(*this,flat_cell_type(* FlatGrid(pl), parent_cell_index(ch.Flat().index(), ch.level(), pl)), pl); 
     }
 
     index_type child_cell_index(index_type parent, pattern_index_type loc_ch, level_handle parent_lev) const
@@ -361,16 +377,19 @@ namespace hierarchical {
     /*! \brief Descendant on level \c h of the cell \p 
       If <tt> h == p.level() +1 </tt>, this are just  the children
     */
-    temporary<cart_subrange_type>  descendants(hier_cell_type const& p, level_handle h) const;
+    //temporary<cart_subrange_type>  descendants(hier_cell_type const& p, level_handle h) const;
+    ref_ptr<cart_subrange_type>  descendants(hier_cell_type const& p, level_handle h) const;
 
     // hier_cell_handle parent(hier_cell_type const& c) const { return quotient(c.Flat().index(), the_pattern.size());}
     // hier_cell_handle child(HCell const& c, pattern_cell_handle h) const;
 
     template<class ELEMENTBASE, class FLATELEM>
-    temporary<cart_subrange_type> descendants(h_element_t<ELEMENTBASE,FLATELEM> const& p, level_handle h) const;
+    ref_ptr<cart_subrange_type> descendants(h_element_t<ELEMENTBASE,FLATELEM> const& p, level_handle h) const;
+    // temporary<cart_subrange_type> descendants(h_element_t<ELEMENTBASE,FLATELEM> const& p, level_handle h) const;
 
     template<class ELEMENTBASE, class FLATELEM>
-    temporary<cart_subrange_type> children   (h_element_t<ELEMENTBASE,FLATELEM> const& p) const 
+    //  temporary<cart_subrange_type> children   (h_element_t<ELEMENTBASE,FLATELEM> const& p) const 
+    ref_ptr<cart_subrange_type> children   (h_element_t<ELEMENTBASE,FLATELEM> const& p) const 
     { return descendants(p, p.level()+1);}
 
 
@@ -864,6 +883,10 @@ namespace hierarchical {
     // hack: must pass subrange ... 
     h_element_child_iterator_t(element_type         const& pp, 
 			       cart_subrange_type   const& children_,
+			       RangeElementIterator const& child) 
+      : p(pp), children(children_), ch(child) {}
+    h_element_child_iterator_t(element_type         const& pp, 
+			       ref_ptr<cart_subrange_type const> children_,
 			       RangeElementIterator const& child) 
       : p(pp), children(children_), ch(child) {}
 
