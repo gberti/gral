@@ -38,6 +38,7 @@ public:
   //----------- iterator operations --------------------------
 
   Cell operator*() const { return (_f.OtherCell()); }
+  cell_handle handle() const { return _f.other_cell();}
 
   self& operator++()   { 
     ++_f;

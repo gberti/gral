@@ -30,6 +30,7 @@ public:
   //----------------- iteration --------------------
 
   Vertex operator*() const { return ( ve == 1 ? e.V1() : e.V2());}
+  vertex_handle handle() const { return (ve == 1? e.v1() : e.v2());}
   self& operator++()       { ++ve; return *this;}
   bool  IsDone()     const { return (ve > 2);}
   operator bool()    const { return !IsDone();}
