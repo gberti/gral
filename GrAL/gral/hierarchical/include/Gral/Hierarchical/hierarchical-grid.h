@@ -5,8 +5,10 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Container/bivector.h"
+
 #include "Utility/pre-post-conditions.h"
 #include "Utility/ref-ptr.h"
+#include "Utility/notifier.h"
 
 /*! \brief Support for hierarchical grids
 
@@ -61,7 +63,7 @@ namespace hierarchical {
       which can share a common interface.
   */
   template<class Grid, class GT = grid_types<Grid> >
-  class hgrid_cartesian {
+  class hgrid_cartesian : public notifier {
     typedef hgrid_cartesian<Grid,GT> self;
   public:
     typedef  Grid  flat_grid_type;
@@ -115,8 +117,24 @@ namespace hierarchical {
     // typedef  bivector<flat_grid_type> table_type;
     typedef typename table_type::size_type size_type;
 
+
     // type for dependent classes (like grid functions) to inherit from
-    // typedef  xxx   observer_type;
+    class observer_type : public observer {
+      typedef observer                   base;
+    public:
+      typedef hgrid_cartesian<Grid, GT>  notifier_type;      
+      typedef notifier                   notifier_base;
+
+      observer_type() {}
+      observer_type(notifier_type const* n) // : base(n) {} // static_cast<notifier_base const*>(n)) {}
+      { connect(n); }
+ 
+      virtual void set_grid(notifier_type const* n) { connect(n);}
+      virtual void notifier_assigned(notifier_base const* n) = 0;
+      virtual void hgrid_level_added  (notifier_type const* n, level_handle added)   = 0;
+      virtual void hgrid_level_removed(notifier_type const* n, level_handle removed) = 0;
+    };
+
   private:
     pattern_grid_type      the_pattern;
     table_type             grids;
@@ -132,6 +150,17 @@ namespace hierarchical {
     {
       grids.push_back(root);
       the_pattern = pat;
+      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
+	dynamic_cast<observer_type*>(*ob)->notifier_assigned(this);
+
+    }
+    self& operator=(self const& rhs) {
+      if(this != &rhs) {
+	before_assignment();
+	grids = rhs.grids;
+	after_assignment();
+      }
+      return *this;
     }
 
     /*! \name Level navigation
@@ -176,7 +205,9 @@ namespace hierarchical {
     level_handle add_finer_level  () {
       REQUIRE_ALWAYS( (! empty()), "",1);
       grids.push_back(flat_grid_type(index_type(1) + product(grids.back().cell_size(), the_pattern.cell_size())));
-      return grids.back_index();
+      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
+	dynamic_cast<observer_type*>(*ob)->hgrid_level_added(this,finest_level());
+      return finest_level();
     }
 
     /*! \brief add a coarser level
@@ -190,18 +221,33 @@ namespace hierarchical {
       REQUIRE_ALWAYS( (! empty()), "",1);
       REQUIRE_ALWAYS( does_divide(the_pattern.cell_size(), grids.front().cell_size()), "",1); 
       grids.push_front(flat_grid_type(index_type(1) + quotient(grids.front().cell_size(), the_pattern.cell_size())));
-      return grids.begin_index();
+      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
+	dynamic_cast<observer_type*>(*ob)->hgrid_level_added(this,coarsest_level());
+      return coarsest_level();
     }
     
     /*! 
       \pre <tt> num_of_levels() > 0 </tt>
     */
-    void remove_finest_level()   { ce(); grids.pop_back();}
+    void remove_finest_level()   { 
+      ce();
+      level_handle oldlev = finest_level();
+      grids.pop_back(); 
+      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
+	dynamic_cast<observer_type*>(*ob)->hgrid_level_removed(this,oldlev);
+    }
     
     /*! 
       \pre <tt> num_of_levels() > 0 </tt>
     */
-    void remove_coarsest_level() { ce(); grids.pop_front();}
+    void remove_coarsest_level() { 
+      ce(); 
+      level_handle oldlev = coarsest_level();
+      grids.pop_front();
+      for(observer_iterator ob = begin_observer(); ob != end_observer(); ++ob)
+	dynamic_cast<observer_type*>(*ob)->hgrid_level_removed(this,oldlev);
+
+    }
     //@}
 
     template<class HG, class flat_handle_type>

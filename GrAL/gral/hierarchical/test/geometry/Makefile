@@ -14,7 +14,7 @@ EXEC =  $(LOCALSOURCES:%.C=%.exe)
 include $(DEPS)
 
 
-LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base
+LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base -lutilities
 
 
 

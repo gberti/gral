@@ -40,11 +40,8 @@ void test_hier_geom(GRID const& root,
   hier_grid_type H(root,pattern);
   hier_geom_type HGeom(H /*, root_geom */);
 
-  H    .add_finer_level();
-  HGeom.add_finer_level();
-
-  H    .add_finer_level();
-  HGeom.add_finer_level();
+  H.add_finer_level();
+  H.add_finer_level();
 
   //  H    .add_coarser_level();
   // HGeom.add_coarser_level();

@@ -19,33 +19,45 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
   typedef typename hgt::hier_cell_type                        hier_cell_type; 
 
   hier_grid_type H(root,pattern);
-  hierarchical::hier_grid_function        <hier_cell_type, int> Hgf (H, 0);
-  hierarchical::hier_partial_grid_function<hier_cell_type, int> Hpgf(H, 0);
+  hierarchical::hier_grid_function        <hier_cell_type, int> Hgf (H, 77);
+  hierarchical::hier_partial_grid_function<hier_cell_type, int> Hpgf(H, 77);
 
   
   H   .add_finer_level();
-  Hgf .add_finer_level(1);
-  Hpgf.add_finer_level(1);
+  //  Hgf .add_finer_level(1);
+  //  Hpgf.add_finer_level(1);
 
   H   .add_coarser_level();
-  Hgf .add_coarser_level(-1);
-  Hpgf.add_coarser_level(-1);
+  // Hgf .add_coarser_level(-1);
+  // Hpgf.add_coarser_level(-1);
 
   hierarchical::hier_grid_function        <hier_cell_type, int> Hgf2 (Hgf);
   hierarchical::hier_partial_grid_function<hier_cell_type, int> Hpgf2(Hpgf);
+
+  hierarchical::hier_grid_function        <hier_cell_type, int> Hgf3;  Hgf3  = Hgf;
+  hierarchical::hier_partial_grid_function<hier_cell_type, int> Hpgf3; Hpgf3 = Hpgf;
+
 
   for(level_handle lev = H.coarsest_level(); lev <= H.finest_level(); ++lev) {
     out << "Level " << lev << ":\n";
     for(typename cgt::CellIterator c(* H.FlatGrid(lev)); !c.IsDone(); ++c) {
       out << (*c).index() << ": " << Hgf(lev)(*c) << " = ";
       hier_cell_type hc(H,*c,lev);
-      out << Hgf(hc) << " = "
-	  << Hpgf(hc) << " = "
-	  << Hgf2(hc) << " = "
-	  << Hpgf2(hc) 
+      out << Hgf  (hc) << " = "
+	  << Hpgf (hc) << " = "
+	  << Hgf2 (hc) << " = "
+	  << Hpgf2(hc) << " = "
+	  << Hgf3 (hc) << " = "
+	  << Hpgf3(hc) 
 	  << "\n";
+      Hpgf[hc] = Hgf[hc];
+      REQUIRE_ALWAYS( Hpgf.defined(hc), "",1);
+      Hpgf.undefine(hc);
+      REQUIRE_ALWAYS(!Hpgf.defined(hc), "",1);
     }
   }
+
+  
 }
 
 

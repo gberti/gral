@@ -41,8 +41,13 @@ void test_hier_grid_table(GRID const& root,
   H.add_coarser_level();
   hier_geom_type Hgeom(H);    
 
+  hier_grid_type H2(H);
+  H = H2;
+  hier_geom_type Hgeom2(H);
+
   for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev))
     out << "Level " << lev << ": " << H.FlatGrid(lev)->cell_size() << " cells\n";
+  REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
 
   {
     level_handle lev = H.finest_level();
@@ -50,16 +55,17 @@ void test_hier_grid_table(GRID const& root,
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
   {
-    H    .add_finer_level();
-    Hgeom.add_finer_level();
+    H.add_finer_level();
+    REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
+
     level_handle lev = H.finest_level();
     out << "Level " << lev << ":\n";
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
 
   {
-    H    .remove_finest_level();
-    Hgeom.remove_finest_level();
+    H.remove_finest_level();
+    REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
     level_handle lev = H.finest_level();
     out << "Level " << lev << ":\n";
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
@@ -67,14 +73,14 @@ void test_hier_grid_table(GRID const& root,
 
   {
     H    .remove_coarsest_level();
-    Hgeom.remove_coarsest_level();
+    REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
     level_handle lev = H.coarsest_level();
     out << "Level " << lev << ":\n";
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
   {
     H    .add_coarser_level();
-    Hgeom.add_coarser_level();
+    REQUIRE_ALWAYS( (Hgeom.coarsest_level() == Hgeom2.coarsest_level() && Hgeom.finest_level() == Hgeom2.finest_level()), "",1);
     level_handle lev = H.coarsest_level();
     out << "Level " << lev << ":\n";
     test_level(* H.FlatGrid(lev), Hgeom(lev), out);
@@ -90,7 +96,6 @@ void test_hier_grid_table(GRID const& root,
 
   while(! H.empty()) {
     H    .remove_coarsest_level();
-    Hgeom.remove_coarsest_level();
   }
 
 

@@ -31,6 +31,8 @@ namespace hierarchical {
       for(typename base::level_handle lev = TheGrid()->coarsest_level(); lev <= TheGrid()->finest_level(); ++lev)
 	(*this)[lev].set_default(t);
     }
+    void undefine(typename base::element_type const& e) { gfs[e.level()].undefine(e.Flat());}
+    bool defined (typename base::element_type const& e) const { return gfs(e.level()).defined(e.Flat());}
   };
 
 } // namespace hierarchical

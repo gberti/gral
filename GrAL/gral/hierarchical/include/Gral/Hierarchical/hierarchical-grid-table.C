@@ -13,14 +13,14 @@ namespace hierarchical {
 
   template<class HGRID, class GE>
   hier_grid_table<HGRID,GE>::hier_grid_table(typename hier_grid_table<HGRID,GE>::hier_grid_type const& gg) 
-    : g(&gg)
+    : base(&gg),  g(&gg)
   {
     init(*g);
   }
 
   template<class HGRID, class GE>
   hier_grid_table<HGRID,GE>::hier_grid_table(ref_ptr<typename hier_grid_table<HGRID,GE>::hier_grid_type const> gg) 
-    : g(gg)
+    : base(&(*gg)), g(gg)
   {
     init(*g);
   }
@@ -31,7 +31,8 @@ namespace hierarchical {
     if(g != 0)
       clear();
     g = &gg;
-    init(gg);
+    base::set_grid(&gg);
+    init(*g);
   }
 
   template<class HGRID, class GE>
@@ -55,15 +56,20 @@ namespace hierarchical {
   template<class HGRID, class GE>
   void hier_grid_table<HGRID,GE>::update()
   {
-    while(coarsest_level() > g->coarsest_level())
-      add_coarser_level();
-    while(coarsest_level() < g->coarsest_level())
-      remove_coarsest_level();
-    while(finest_level()   < g->finest_level())
-      add_finer_level();
-    while(finest_level()   > g->finest_level())
-      remove_finest_level();
-
+    if(g->empty())
+      entities.clear();
+    else if(entities.empty())
+      init(*g);
+    else {
+      while(coarsest_level() > g->coarsest_level())
+	add_coarser_level();
+      while(coarsest_level() < g->coarsest_level())
+	remove_coarsest_level();
+      while(finest_level()   < g->finest_level())
+	add_finer_level();
+      while(finest_level()   > g->finest_level())
+	remove_finest_level();
+    }
   }
 
   template<class HGRID, class GE>
@@ -118,6 +124,27 @@ namespace hierarchical {
     entities.pop_front();
   }
 
+  template<class HGRID, class GE>
+  void hier_grid_table<HGRID,GE>::notifier_assigned  (hier_grid_table<HGRID,GE>::notifier_base const* n)
+  {
+    REQUIRE_ALWAYS((n == &(*g)), "", 1);
+    entities.clear();
+    update();
+  }
+  template<class HGRID, class GE>
+  void hier_grid_table<HGRID,GE>::hgrid_level_added  (hier_grid_table<HGRID,GE>::notifier_type const* n, 
+						      level_handle added)
+  {
+    REQUIRE_ALWAYS((n == &(*g)), "", 1);
+    update();
+  }
+  template<class HGRID, class GE>
+  void hier_grid_table<HGRID,GE>::hgrid_level_removed(hier_grid_table<HGRID,GE>::notifier_type const* n, 
+						      level_handle removed)
+  {
+    REQUIRE_ALWAYS((n == &(*g)), "", 1);
+    update();
+  }
 
 
 } // namespace hierarchical

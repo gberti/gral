@@ -19,7 +19,7 @@ namespace hierarchical {
   class hier_grid_function : public hier_grid_function_base<E,T, grid_function>
   {
     typedef hier_grid_function_base<E,T, grid_function> base;
-    typedef hier_grid_function<E,T>                             self;
+    typedef hier_grid_function<E,T>                     self;
   public:
     hier_grid_function() {}
     hier_grid_function(typename base::hier_grid_type const& gg) : base(gg) {} 

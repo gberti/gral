@@ -22,8 +22,12 @@ namespace hierarchical {
       flat grid functions.
   */
   template<class E, class T, template<class EE, class TT> class GF>
-  class hier_grid_function_base {
+  class hier_grid_function_base : public E::hier_grid_type::observer_type {
     typedef hier_grid_function_base<E,T, GF>              self;
+    typedef typename E::hier_grid_type::observer_type base;
+    typedef typename base::notifier_base              notifier_base;
+    typedef typename base::notifier_type              notifier_type;
+
   public:
     typedef E                                             element_type;
     typedef T                                             value_type;
@@ -40,8 +44,12 @@ namespace hierarchical {
     // value_type default_val;
   public:
     hier_grid_function_base() {}
-    hier_grid_function_base(hier_grid_type const& gg) : gfs(gg) {}
-    hier_grid_function_base(hier_grid_type const& gg, value_type t) : gfs(gg) { set_value(t);}
+    hier_grid_function_base(hier_grid_type const& gg) : gfs(gg) { connect(&gg);}
+    hier_grid_function_base(hier_grid_type const& gg, value_type t) : gfs(gg) 
+    { 
+      set_value(t);
+      connect(&gg);
+    }
 
     void init(hier_grid_type const& gg, value_type const& t); 
     void set_grid(hier_grid_type const& gg);
@@ -72,6 +80,10 @@ namespace hierarchical {
 			   &&   (gfs.finest_level() == TheGrid()->finest_level());}
     bool valid(level_handle lev) const { return (lev >= gfs.coarsest_level()) && (lev <= gfs.finest_level());}
     void cv(level_handle lev) const { REQUIRE(valid(lev), "lev=" << lev, 1); }
+
+    virtual void notifier_assigned  (notifier_base const* n);
+    virtual void hgrid_level_added  (notifier_type const* n, level_handle added);
+    virtual void hgrid_level_removed(notifier_type const* n, level_handle removed);
   private:
   }; // class hier_grid_function_base
 

@@ -20,7 +20,10 @@ namespace hierarchical {
 
   */
   template<class HGRID, class FLATGEOM>
-  class hier_geometry /* : public HGRID::observer_type<hier_grid_table<HGRID, GE> > */ {
+  class hier_geometry : public HGRID::observer_type {
+    typedef typename HGRID::observer_type base;
+    typedef typename base::notifier_base  notifier_base;
+    typedef typename base::notifier_type  notifier_type;
   public:
     typedef HGRID          hier_grid_type;
     typedef hier_grid_type grid_type;
@@ -69,6 +72,12 @@ namespace hierarchical {
     level_handle  finest_level()   const { return geoms.finest_level();}
 
     ref_ptr<const hier_grid_type> TheGrid() const { return geoms.TheGrid();}
+
+
+    virtual void notifier_assigned  (notifier_base const* n);
+    virtual void hgrid_level_added  (notifier_type const* n, level_handle added);
+    virtual void hgrid_level_removed(notifier_type const* n, level_handle removed);
+
   private:
     //    void init(hier_grid_type const& gg);
   public:

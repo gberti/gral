@@ -87,6 +87,24 @@ namespace hierarchical {
    return gfs.remove_finest_level();
  }
 
+  // Work done by hier_grid_table ...
+ template<class E, class T, template<class EE, class TT> class GF>
+ void 
+ hier_grid_function_base<E,T,GF>::notifier_assigned(hier_grid_function_base<E,T,GF>::notifier_base const* n)
+ {}
+
+
+ template<class E, class T, template<class EE, class TT> class GF>
+ void 
+ hier_grid_function_base<E,T,GF>::hgrid_level_added  
+ (hier_grid_function_base<E,T,GF>::notifier_type const* n, level_handle added) 
+ {}
+
+ template<class E, class T, template<class EE, class TT> class GF>
+ void 
+ hier_grid_function_base<E,T,GF>::hgrid_level_removed
+ (hier_grid_function_base<E,T,GF>::notifier_type const* n, level_handle added) 
+ {}
 
 
 } //  namespace hierarchical
