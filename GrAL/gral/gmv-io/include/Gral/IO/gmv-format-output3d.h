@@ -49,6 +49,11 @@ template<class T>
 
    \todo support GMV's general cell type 
    (currently only tet, hex, prism and pyramid)
+   \todo  Support output of vector variables. Currently,
+   all variables are assumed scalar. As GMV supports only 
+   one vector field (velocity), other fields (forces) will
+   have to be written as set of scalar fields (force-x etc).
+   Perhaps the branch could be made depending on point_traits<>?
  */
 
 class OstreamGMV3DFmt : public OstreamGMVFmt_base {
@@ -125,10 +130,10 @@ void ConstructGrid(OstreamGMV3DFmt& Out,
   \see \ref test-gmv-output.C for an example
  */
 template<class GRID,class GEOM, class GF, class MOREGFS>
-void ConstructGrid(OstreamGMV3DFmt& Out, 
-		   GRID const& G,
-		   GEOM const& GEO,
-		   heterogeneous_list::List<GF,MOREGFS> GFS);
+void ConstructGrid_GF(OstreamGMV3DFmt& Out, 
+		      GRID const& G,
+		      GEOM const& GEO,
+		      heterogeneous_list::List<GF,MOREGFS> GFS);
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/IO/gmv-format-output3d.tt.C"
