@@ -23,6 +23,7 @@
  */
 template<class GF, class DistributedG>
 class distributed_grid_function_adapter {
+  typedef distributed_grid_function_adapter<GF,DistributedG> self;
   typedef DistributedG                            distributed_grid_type;
   typedef DistributedG                            grid_type;
 
@@ -66,19 +67,23 @@ private:
 
   bool added_on_shared;
   bool sync_on_shared;
+  bool initialized;
 public:
   //--------------------------- construction -------------------------------
-  distributed_grid_function_adapter() : added_on_shared(false), sync_on_shared(false) {}
+  distributed_grid_function_adapter();
 
   distributed_grid_function_adapter(ovrlp_grid_function   const& ogf,
 				    distributed_grid_type const& cg);
-
+  distributed_grid_function_adapter(self const& rhs);
+  self& operator=(self const& rhs);
+  void clear();
+  void init(self const& rhs);
   void set_grid(const distributed_grid_type& cg);
 
   void set_added_on_shared(); 
   void set_no_sync_on_shared();
 
-  void do_shared_ranges();
+  void do_shared_ranges  ();
   void do_exported_ranges();
 
   //--------------------------- data access --------------------------------

@@ -12,35 +12,93 @@
 #include "Gral/Base/restricted-grid-function-adapter.h"
 
 
-/*
+
 template<class GF, class DistributedG>
-distributed_grid_function_adapter<GF,DistributedG>::distributed_grid_function_adapter(const DistributedG&  cg)
-  : the_distributed(&cg),
-    the_local_gf(cg.TheOvrlpGrid()),
-    added_on_shared(false),
-    sync_on_shared(false)
-{
-  // default: connectors only between copied and exposed.
-  do_exported_ranges();
-  do_shared_ranges();
-}
-*/
+distributed_grid_function_adapter<GF,DistributedG>
+::distributed_grid_function_adapter() : 
+  added_on_shared(false), 
+  sync_on_shared(false), 
+  initialized(false)
+{}
+
 
 template<class GF, class DistributedG>
 distributed_grid_function_adapter<GF,DistributedG>
 ::distributed_grid_function_adapter(GF const& ogf,
 				    const DistributedG&  cg)
-
   : the_distributed(&cg),
     the_local_gf(ogf),
     added_on_shared(false),
     sync_on_shared(false)
-
 {
   // default: connectors only between copied and exposed.
   do_exported_ranges();
   do_shared_ranges();
+  initialized = true;
 }
+
+template<class GF, class DistributedG>
+distributed_grid_function_adapter<GF,DistributedG>
+::distributed_grid_function_adapter
+(distributed_grid_function_adapter<GF,DistributedG> const& rhs)
+{
+  if(rhs.initialized) {
+    init(rhs);
+  }
+  else {
+    initialized     = false;
+    added_on_shared = false;
+    sync_on_shared  = false;
+  }
+}
+
+template<class GF, class DistributedG>
+distributed_grid_function_adapter<GF,DistributedG> &
+distributed_grid_function_adapter<GF,DistributedG>::
+operator=
+(distributed_grid_function_adapter<GF,DistributedG> const& rhs)
+{
+  if(this != &rhs) {
+    init(rhs);
+  }
+  return *this;
+}
+
+template<class GF, class DistributedG>
+void
+distributed_grid_function_adapter<GF,DistributedG>
+::init(distributed_grid_function_adapter<GF,DistributedG> const& rhs)
+{
+  if(rhs.initialized) {
+    clear();
+    the_distributed = rhs.the_distributed;
+    the_local_gf    = rhs.the_local_gf;
+    added_on_shared = rhs.added_on_shared;
+    sync_on_shared  = rhs.sync_on_shared;
+    
+    // default: connectors only between copied and exposed.
+    do_exported_ranges();
+    do_shared_ranges();
+
+    initialized = true;
+  }
+}
+
+template<class CONT>
+inline void erase_list(CONT & c) 
+{ c.clear();}
+ 
+template<class GF, class DistributedG>
+void distributed_grid_function_adapter<GF,DistributedG>::clear()
+{
+  if(initialized) {
+    erase_list(shared_senders);
+    erase_list(shared_receivers);
+    erase_list(exposed_senders);
+    erase_list(copied_receivers);
+  }
+}
+
 
 template<class GF, class DistributedG>
 void distributed_grid_function_adapter<GF,DistributedG>::set_grid(const DistributedG & cg) 
