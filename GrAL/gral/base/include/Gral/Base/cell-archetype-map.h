@@ -47,6 +47,8 @@ public:
       // not found? Error!
       ENSURE(false, "Vertex " << v 
 	     << " not incident to cell " << c.handle() << '\n',1); 
+      // keep compilers quiet
+      return typename agt::vertex_handle(-1);
     }
   typename agt::Vertex operator()(typename gt::Vertex const& v) const
     { 
