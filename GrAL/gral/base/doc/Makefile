@@ -31,8 +31,9 @@ concepts: gen-paths
           \n -s Vertex-On-CellIterator.html FacetOnCellIterator.html; \
           ))
 
-clean:
+clean: stdclean
 	rm -f *.dvi *.log *.aux *~ 
+	rm -r hyperlatex/paths.tex
 
 realclean: clean
 	rm -rf hyperlatex/html

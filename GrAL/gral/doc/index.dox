@@ -4,6 +4,11 @@
      it is partitioned from the beginning
      into more manageable units. 
      Thus, one does not have to ``buy everything''.
+
+    The recommended way of browsing the documentation 
+    is by (sub-) module hierarchy.
+
+    Here are the separate packages of GrAL:
    <UL>
      <H2> Basic, non-grid related modules </H2>
      <LI>  $gral-configuration Configuration module:

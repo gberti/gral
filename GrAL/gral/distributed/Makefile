@@ -42,7 +42,7 @@ ADDRELPATH=..
 
 additional-postdoc: 
 	(../bin/install-doc.pl -root $(RELROOT) \
-                               -path doxygen/html \
+                               -path $(DOXYPATH) \
                                -stl $(STLURL) \
                                -gral $(RELROOT)/gral/base/doc/hyperlatex/html\
          doxygen/html/*.html)
