@@ -10,9 +10,11 @@
 #include "Geometry/matrix.h"
 
 
+#include <string>
+
 int main(int argc, char* argv[]) {
   using namespace GrAL;
-
+  using namespace std;
 
   //  typedef grid_types<cartesiannd::grid<2> > gt;
   //typedef cartesiannd::grid<2>              grid_type;

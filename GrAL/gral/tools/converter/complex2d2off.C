@@ -3,7 +3,10 @@
 
 #include "IO/control-device.h"
 
+#include <string>
+
 int main(int argc, char* argv[]) {
+  using namespace std;
   using namespace GrAL;
 
   ControlDevice Ctrl = 

@@ -2,8 +2,11 @@
 
 #include "IO/control-device.h"
 
+#include <string>
+
 int main(int argc, char* argv[]) {
   using namespace GrAL;
+  using namespace std;
 
   ControlDevice Ctrl = 
     GetCommandlineAndFileControlDevice(argc,argv,"complex2d2complex2d.in","main");
