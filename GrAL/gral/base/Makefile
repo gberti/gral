@@ -26,19 +26,14 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-
-
-DIRS = Base Geometries IO Iterators Subranges Algorithms Algorithms/internal
-#SHELL=/bin/bash
-
 install-headers:
-	for i in $(DIRS);\
-        do mkdir -p $(INSTALLHEADERS)/Gral/$$i; \
-	cp  include/Gral/$$i/*.h $(INSTALLHEADERS)/Gral/$$i || echo "no .h files in dir"; \
-	cp  include/Gral/$$i/*.C $(INSTALLHEADERS)/Gral/$$i || echo "no .C files in dir"; \
-        done;
-
+	(cd include/Gral; \
+          mkdir -p $(INSTALLHEADERS)/Gral/;\
+         find . -name "*.h" -exec cp -P {} $(INSTALLHEADERS)/Gral \; ; \
+         find . -name "*.C" -exec cp -P {} $(INSTALLHEADERS)/Gral \; ; \
+        )
 install: install-headers install-libs
+
 
 
 clean: stdclean
