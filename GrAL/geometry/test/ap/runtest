@@ -1,13 +1,14 @@
-#!/bin/csh
+#!/bin/sh
 ./test-primitives  >& out
-foreach i ( out )
+for i in out 
+do
 /bin/echo "\n"
 diff -w $i $i.exp
 if ($status) then 
 /bin/echo "\t\t\t" ERROR in $i
 else
 /bin/echo "\t\t\t" $i OK
-endif
-end
+fi
+done
 /bin/echo "\n"
 
