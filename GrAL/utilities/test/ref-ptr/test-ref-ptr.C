@@ -122,4 +122,55 @@ int main() {
   Y y2(* g1.TheYOwned());
   Y y3(g1.AnY());
   Y y4(* g1.TheYExclOwned());
+
+  {
+    int i;
+    ref_ptr<int> ri(i);
+    ref_ptr<int> ri1(ri); //.get_ref());
+    ref_ptr<const int> rci (ri); //.get_ref<const int>());
+    ref_ptr<const int> rci2(ri);
+
+    cout << "ri:   " << (ri  .owned() ? "" : "not") << " owned" << endl;
+    cout << "ri2:  " << (ri1 .owned() ? "" : "not") << " owned" << endl;
+    cout << "rci:  " << (rci .owned() ? "" : "not") << " owned" << endl;
+    cout << "rci2: " << (rci2.owned() ? "" : "not") << " owned" << endl;
+  }
+  {
+    int i;
+    ref_ptr<int> ri(i);
+    ri.make_copy();
+    ref_ptr<int> ri1(ri); //.get_ref());
+    ref_ptr<const int> rci (ri); //.get_ref<const int>());
+    ref_ptr<int>       ri2(ri);
+    ref_ptr<const int> rci2(ri);
+
+    cout << "ri:   " << (ri  .owned() ? "" : "not") << " owned" << endl;
+    cout << "ri1:  " << (ri1 .owned() ? "" : "not") << " owned" << endl;
+    cout << "ri2:  " << (ri2 .owned() ? "" : "not") << " owned" << endl;
+    cout << "rci:  " << (rci .owned() ? "" : "not") << " owned" << endl;
+    cout << "rci2: " << (rci2.owned() ? "" : "not") << " owned" << endl;
+
+    ri1.make_copy();
+    ri2.make_copy();
+    rci2.make_copy();
+    rci.make_copy();
+
+    cout << "ri:   " << (ri  .owned() ? "" : "not") << " owned" << endl;
+    cout << "ri1:  " << (ri1 .owned() ? "" : "not") << " owned" << endl;
+    cout << "ri2:  " << (ri2 .owned() ? "" : "not") << " owned" << endl;
+    cout << "rci:  " << (rci .owned() ? "" : "not") << " owned" << endl;
+    cout << "rci2: " << (rci2.owned() ? "" : "not") << " owned" << endl;
+
+    ri = ri1;
+    rci = ri;
+    rci2 = rci;
+    cout << "ri:   " << (ri  .owned() ? "" : "not") << " owned" << endl;
+    cout << "ri1:  " << (ri1 .owned() ? "" : "not") << " owned" << endl;
+    cout << "ri2:  " << (ri2 .owned() ? "" : "not") << " owned" << endl;
+    cout << "rci:  " << (rci .owned() ? "" : "not") << " owned" << endl;
+    cout << "rci2: " << (rci2.owned() ? "" : "not") << " owned" << endl;
+
+  }
+
+
 }
