@@ -37,8 +37,9 @@ public:
   // Constructors
   enum { no_init = 0, zero_init = 1}; 
   point() : n(0) { x = 0;}
-  
-  point(int n1, int init)  // generate point of dim. n1, if init == zero_init : initialize with zero
+ 
+  explicit
+  point(int n1, int init = zero_init)  // generate point of dim. n1, if init == zero_init : initialize with zero
     : n(n1) 
   {
     if(n > 0) {
@@ -50,7 +51,7 @@ public:
     else
       x = 0;
   }
-  explicit point(int n1) : n(n1) { if(n > 0)  x = new double[n]; else x = 0;}
+  // explicit point(int n1) : n(n1) { if(n > 0)  x = new double[n]; else x = 0;}
 
   explicit point(const double x1);
   point(const double x, const double y);
@@ -149,7 +150,7 @@ struct point_traits<point>
   static int      LowerIndex(const Ptype&)   {return 1;}
   static int      UpperIndex(const Ptype& p) {return Dim(p);}
   static void     ConstructWithDim(int dim, Ptype& p) 
-     { p = Ptype(dim,Ptype::no_init);}
+     { p = Ptype(dim);}
   static Ptype    Origin(unsigned d) { return Ptype((int)d,Ptype::zero_init);}
 
   static component_type x(const Ptype& p)  { return p[1];}
