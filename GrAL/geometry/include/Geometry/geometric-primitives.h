@@ -7,7 +7,7 @@
 #include "Utility/pre-post-conditions.h"
 
 // should use C++ <limits>
-#include <limits.h>
+//#include <limits.h>
 
 template<class Geom>
 struct geom_traits {};
@@ -195,19 +195,23 @@ public:
     : R(R_), T(T_), t_defined(false) 
     {}
 
-  real eps() const { /* return numeric_limits<real>::epsilon();*/
-    return FLT_EPSILON;}
+  real eps() const { 
+    // FIXME! return numeric_limits<real>::epsilon();
+    //  return FLT_EPSILON;
+    return 1.0e-6;
+  }
 
-  bool line_intersects_plane() {
+  bool ray_intersects_plane() {
     coord_type n = plane_normal(T);
 
     // if direction of ray points away from plane, no intersection
     if(ap::dot(n, rt::dir(R)) * ap::dot(n, rt::p0(R) -tt::p0(T)) > 0)
       return false;
-    // not correct: ray migth lie in plane.
 
-    real       d = ap::dot(ap::normalization(n), ap::normalization(rt::dir(R)));
-    //  is eps the correct quantity?
+    real       d = ap::dot(ap::normalization(n),
+			   ap::normalization(rt::dir(R)));
+    // is eps the correct quantity?
+    // case fabs(d) < eps is considered parallel to plane
     return ( fabs(d) >= eps());
   }
 
@@ -216,7 +220,7 @@ public:
 
     // solve p0(T) + r*(p1(T)-p0(T)) + s*(p2(T)-p0(T)) 
     //    =  p0(R) + t* dir(R)   for (r,s,t)
-    if(! line_intersects_plane())
+    if(! ray_intersects_plane())
       return false;
     coord_type rst; pt::ConstructWithDim(3,rst);
     ap::solve(tt::p1(T) - tt::p0(T),
