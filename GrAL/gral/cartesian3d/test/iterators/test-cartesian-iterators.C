@@ -2,6 +2,7 @@
 
 
 #include <iostream>
+#include <iomanip>
 #include <fstream>
 #include <vector>
 
@@ -70,6 +71,8 @@ int main() {
 	test_vertex_on_facet_iterator(R,*out);
 	test_edge_on_facet_iterator(R,*out);
 
+	test_vertex_on_edge_iterator(R,*out);
+
 	*out << endl;
       }
     }
@@ -77,13 +80,19 @@ int main() {
 
   CartesianGrid3D R(2,2,2); // 1 cell
   gt::Cell c(R.FirstCell());
+  out->width(2);
   *out << "Grid 2x2x2\n"
       << "Vertices:" << endl;
   for(gt::VertexOnCellIterator v(c); !v.IsDone(); ++v)
-    *out << v.handle() << " @ " << v.index() << endl;
+    *out << setw(2) << v.handle() << " @ " << v.index() << endl;
   *out << "Edges:" << endl;
-  for(gt::EdgeOnCellIterator e(c); ! e.IsDone(); ++e)
-    *out << e.handle() << " dir=" << e.dir() << " index=" << e.index() << endl;
+  for(gt::EdgeOnCellIterator e(c); ! e.IsDone(); ++e) {
+    *out << setw(2) << e.handle() << " dir=" << e.dir() << " index=" << e.index()
+	 << " Vertices: ";
+    for(gt::VertexOnEdgeIterator ve(*e); ! ve.IsDone(); ++ve)
+      *out << setw(2) << ve.local_handle() << ": " << setw(2)  <<  ve.handle() << "@" << ve.index() << "  ";
+    *out << endl;
+  }
   *out << "Facets:" << endl;
   for(gt::FacetOnCellIterator f(c); ! f.IsDone(); ++f) {
     *out << f.handle() << " dir=" << f.dir() << " index=" << f.index() << endl;
