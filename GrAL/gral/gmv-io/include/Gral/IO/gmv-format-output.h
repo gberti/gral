@@ -43,10 +43,11 @@ public:
   std::ostream& Out() { return *out;}
 
   template<int N>
-  int element_tag(vertex_type_tag, grid_dim_tag<N>) const { return 1;}
-  int element_tag(cell_type_tag,   grid_dim_tag<3>) const { return 0;} 
-  int element_tag(cell_type_tag,   grid_dim_tag<2>) const { return 2;} 
-  int element_tag(facet_type_tag,  grid_dim_tag<3>) const { return 2;}
+  std::string element_tag(vertex_type_tag, grid_dim_tag<N>) const { return "1";}
+  std::string element_tag(cell_type_tag,   grid_dim_tag<3>) const { return "0";}
+  // surface variables don't take an element tag. 
+  std::string element_tag(cell_type_tag,   grid_dim_tag<2>) const { return "";} 
+  std::string element_tag(facet_type_tag,  grid_dim_tag<3>) const { return "2";}
 
 
   template<class GF>
@@ -72,9 +73,9 @@ private:
       typedef typename et::element_type_tag   element_type_tag;
       typedef typename et::grid_dimension_tag grid_dimension_tag;
 
-      *out << varname << " " 
-	   << element_tag(element_type_tag(), grid_dimension_tag()) 
-	   << '\n';;
+      *out << varname << " ";
+      *out << element_tag(element_type_tag(), grid_dimension_tag());
+      *out << '\n';;
       for(typename et::ElementIterator e(gf.TheGrid()); ! e.IsDone(); ++e) {
 	// we assume  numbering in gf.TheGrid() 
 	// is the same as numbering in GMV file.
