@@ -1,4 +1,4 @@
-#! /bin/bash
+#! /bin/sh
 
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
