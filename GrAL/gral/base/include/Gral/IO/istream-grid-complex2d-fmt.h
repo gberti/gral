@@ -91,7 +91,7 @@ template<class GRID>
 void ConstructGrid0(OstreamComplex2DFmt& Out, 
 		    GRID const& G)
 {
-  write_complex2d(G, Out.Out());
+  write_complex2d(G, Out.Out(), 0);
 }
 /*! \brief ConstructGrid overload for OstreamComplex2DFmt
   \ingroup complex2dformat
@@ -105,7 +105,7 @@ template<class GRID, class GEOM>
 void ConstructGrid(OstreamComplex2DFmt& Out, 
                    GRID const& G, GEOM const& Geom)
 {
-  write_complex2d(G, Geom, Out.Out());
+  write_complex2d(G, Geom, Out.Out(), 0);
 }
 
 /*! \brief ConstructGrid overload for OstreamComplex2DFmt
@@ -122,7 +122,7 @@ void ConstructGrid(OstreamComplex2DFmt& Out,
                    OstreamComplex2DFmt&, // dummy output geom
                    GRID const& G, GEOM const& Geom)
 {
-  write_complex2d(G, Geom, Out.Out());
+  write_complex2d(G, Geom, Out.Out(), 0);
 }
 
 

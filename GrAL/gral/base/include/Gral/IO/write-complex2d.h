@@ -22,17 +22,17 @@
 
 
 /*! \ingroup writecomplex2d
-    Sets offset to 1. <BR>
+    Sets offset to 0. <BR>
     Does not write any vertex coordinates
 
     \see Module \ref  writecomplex2d
 */
 template<class GRID>
-void write_complex2d(GRID const& G,  ostream& out, int offset = 1);
+void write_complex2d(GRID const& G,  ostream& out, int offset = 0);
 
 /*! \ingroup writecomplex2d
     
-  Sets offset to 1.
+  Sets offset to 0.
     \see Module \ref writecomplex2d
 */
 template<class GRID, class GEOM>
