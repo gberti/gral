@@ -1,16 +1,22 @@
 \documentclass{article}
 \usepackage{hyperlatex}
 
+\input{paths}
+
+\newcommand{\gralclasslink}[2]{\xlink{#1}{\GRALINC{class#1}{#2}}}
+\newcommand{\gralmodulelink}[1]{\xlink{{\tt #1}}{\GRALINC{index}{#1}}}
+\newcommand{\gralfilelink}[3]{\xlink{{\tt #1.#2}}{\GRALINC{#1\_8#2}{#3}}}
+
 \title{Control Device: External Parameter Control}
 \htmltitle{Control Device: External Parameter Control}
 \author{Guntram Berti}
-\htmladdress{\xlink{Guntram Berti}{mailto:berti@math.tu-cottbus.de}}
+\htmladdress{\xlink{Guntram Berti}{mailto:berti@ccrl-nece.de}}
 \htmlattributes{TABLE}{BORDER}
 \htmldepth{0}
 \htmldirectory{html_dir}
 
 
-\input{paths}
+
 
 \begin{document}
  \section{Control Device: External Parameter Control}
@@ -21,7 +27,8 @@
  be modifiable at startup or at runtime, e.g. the size of a data structure,
  filename for input and output etc. All these classes play the role of a
  {\tt  controlable }, that is, they have some parameters to be 
- controled by some {\tt  \classlink{ControlDevice}} which is the counterpart.
+ controled by some {\tt  \gralclasslink{ControlDevice}{external-control}}
+ which is the counterpart.
  A {\tt  ControlDevice } could be, for example,
 
  \begin{itemize}
@@ -50,7 +57,7 @@ A controlable could be for example a simple class like
 \end{verbatim}
 
 \subsection{The interfaces}
-The basic interface  for {\tt \classlink{controlable}} looks like this:
+The basic interface  for {\tt \gralclasslink{controlable}{external-control}} looks like this:
 
 \begin{verbatim}
 class controlable {
@@ -62,7 +69,7 @@ public:
 };
 \end{verbatim}
     
-The ``other'' side ({\tt \classlink{ControlDevice}}) 
+The ``other'' side ({\tt \gralclasslink{ControlDevice}{external-control}}) 
 which abstracts from the paramater input mechanism
 has the following outlook:
 
@@ -100,7 +107,7 @@ private:
    This is a name-value-pair ({\tt nm,value\_ref }). The name is used
     to reference the right variable from the outside (e.g. in a file or as
     label in a window), the value reference is used to change the underlying
-    variable. The interface of class {\tt  \classlink{Mutator} } follows:
+    variable. The interface of class {\tt  \gralclasslink{Mutator}{external-control} } follows:
     
 \begin{verbatim}
 class Mutator {
@@ -123,7 +130,7 @@ class TypedMutator : public Mutator {
 protected:
   T& v;
 public:
-  \classlink{TypedMutator}(T& vv) : v(vv) {}
+  \gralclasslink{TypedMutator}{external-control}(T& vv) : v(vv) {}
   T value() {return v;}
   vir1tual void read(istream& in)   { in >> v;}
   virtual void print(ostream& out) const 
@@ -133,7 +140,7 @@ public:
 };
 \end{example}
 
-There are other {\tt  Mutators}, see  the \classlink{Mutator} documentation. 
+There are other {\tt  Mutators}, see  the \gralclasslink{Mutator}{external-control} documentation. 
 You can attach a (simple) Mutator
 to  a variable like this:
 
@@ -149,9 +156,9 @@ The file {\tt  myparameters.in } could then contain the name-value-pair
 {\tt  x 0.43 }, and on {\tt  Ctrl.update() } the variable {\tt  x } 
 would be set
 to {\tt  0.43} . This example also shows how to create a {\tt  ControlDevice }
-More examples of how this works are found in an 
-\xlink{example program}{\doxyfile{ex1\_C}}
-with a  sample input file.
+More examples of how this works are found in 
+\gralfilelink{ex1}{C}{external-control}
+together with a sample input file.
 It shows also how to use other types of Mutators and how
 to build hierarchical (i.e. nested) name-value-structures.
 
