@@ -83,6 +83,7 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
 
   static real norm_2(const POINT& p) { return sqrt(squared_norm_2(p));}
   static POINT normalization(const POINT& p) { return(p/norm_2(p));}
+  static void  normalize(POINT & p) { p = normalization(p);}
 
   static real norm_1(POINT const& p) {
     real sum = 0;
