@@ -1,0 +1,4 @@
+# common options for optimized compilation
+
+CCOPTFLAGS += -DNDEBUG
+
