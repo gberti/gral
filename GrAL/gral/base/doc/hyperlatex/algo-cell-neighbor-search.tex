@@ -42,7 +42,7 @@ equivalent to the successive calls with cell sets $C_1, \ldots, C_n$.
 
 \algosubsection{Definition}
 \function{CalculateNeighborRange} is defined in 
-\nmwrcodelink{cell-neighbor-search.h}{Grids/Algorithms}
+\gralcodelink{cell-neighbor-search.h}{base}
 
 \algosubsection{Requirements on types}
 \begin{itemize}
@@ -162,11 +162,11 @@ for(gt::CellIterator c(t); ! c.IsDone(); ++c) {
 \end{example}
 The mapping from \code{gt::FacetOnCellIterator} to \code{gt::cell\_handle}
 can of course be done much more efficiently than with a hash table, see
-the example in  \xlink{{\tt main-triang2d.C}}{\NMWRROOT/test/Grids/triang2d/main-triang2d.C}.
+the example in  \xlink{{\tt main-triang2d.C}}{\GRALROOT/test/Grids/triang2d/main-triang2d.C}.
 
 \algosubsection{Known Uses}
 
-Used in \xlink{test}{\NMWRROOT/test/Grids/triang2d/main-triang2d.C}
+Used in \xlink{test}{\GRALROOT/test/Grids/triang2d/main-triang2d.C}
 of \sectionlinkUNDEF{\type{Triang2D}}{Triang2D}.
 
 \algosubsection{Notes}

@@ -71,13 +71,13 @@ This algorithm is in some sense the analogue to the STL
 \stllink{\type{copy}}{copy} algorithm for sequences,
 only that it cannot be fully generic on the destination argument.
 \algosubsection{Definition}
-Declared in \nmwrcodelink{construct-grid.h}{Grids/Algorithms}.
+Declared in \gralcodelink{construct-grid.h}{base}.
 \\
 Specialized in 
-\nmwrcodelink{complex2d-construct.C}{Grids/Complex2D/generic}
+\gralcodelink{complex2d-construct.C}{complex2d}
 for \sectionlink{\type{Complex2D}}{Complex2D}
 and
-\nmwrcodelink{construct.C}{Grids/Triang2D/generic}
+\gralcodelink{construct.C}{triang2d}
 
 \algosubsection{Template parameters}
 
@@ -131,7 +131,7 @@ The operation of copying is so fundamental that
 it is used virtually everywhere a grid has to be created.
 For example, the algorithm is used for implementing 
 the member function \code{Complex2D::read(istream\&)}, 
-defined in \link{complex.io.C}{\NMWRROOT/src/Grids/Complex2D/complex2d.io.C}.
+defined in \link{complex.io.C}{\GRALROOT/src/Grids/Complex2D/complex2d.io.C}.
 Here an adapter \sectionlink{\type{IstreamComplex2DFmt}}{istream-complex2d-fmt}
 for a grid stored in a file is used.
 \algosubsection{Notes}
