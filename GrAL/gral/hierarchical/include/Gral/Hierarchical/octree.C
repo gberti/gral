@@ -48,8 +48,8 @@ namespace octree {
  template<class Grid, class GT>
  void Octree<Grid, GT>::init(typename Octree<Grid, GT>::flat_grid_type const& C0,
 			     typename Octree<Grid, GT>::pattern_grid_type   const& refpat)
- {
-   TheHierGrid()->init(C0,refpat);
+ { 
+   levels.make_shared(new hier_grid_type(C0, refpat));
    active_cell_range.init(*TheHierGrid(),false);
    active_cell_range.set_default(false);
 
