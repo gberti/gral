@@ -7,6 +7,8 @@
 inline Vertex2D::Vertex2D(Complex2D const& cc)
   { *this = *(cc.FirstVertex());} 
 
+inline bool Vertex2D::valid() const { return (0 <= _pos && _pos < TheGrid().NumOfVertices());}
+
 inline
 vertex_base const&
 Vertex2D::base() const  { return (_cc->_vertices[_pos]);}

@@ -56,6 +56,7 @@ public:
   friend ::std::ostream& operator <<(::std::ostream& out, self const& rs)
     { return (out << rs._pos << ' ' << rs._cc); }
 
+  inline bool valid() const; 
 private:
   friend class Complex2D;
   friend class CellOnVertex2D_Iterator;
