@@ -5,7 +5,7 @@
 // $LICENSE
 
 
-#include <iostream.h>
+#include <iostream>
 #include "Geometry/point-traits.h"
 
 #ifndef NO_COORD_SPECIAL

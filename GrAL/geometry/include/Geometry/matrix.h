@@ -25,6 +25,7 @@ class matrix :  public coordN<N*M> {
 public:
   typedef coordN<N*M> base_vec;
   typedef fixed_row_mjr_subcriptor<M,N,1> subscriptor;
+  typedef typename base_vec::component component;
   
   matrix() {}
   matrix(component c) : base_vec(c) {}

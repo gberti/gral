@@ -7,7 +7,7 @@
 #include "Container/bijective-mapping.h"
 
 template<class T1, class T2>
-void write_bm(bijective_mapping<T1,T2> const& m, ostream& out)
+void write_bm(bijective_mapping<T1,T2> const& m, std::ostream& out)
 {
   typedef typename bijective_mapping<T1,T2>::domain_type dt;
   typedef typename dt::const_iterator                    d_iter;
@@ -16,7 +16,7 @@ void write_bm(bijective_mapping<T1,T2> const& m, ostream& out)
 }
 
 template<class T1, class T2>
-void read_bm(bijective_mapping<T1,T2> & m, istream& in)
+void read_bm(bijective_mapping<T1,T2> & m, std::istream& in)
 {
   T1 x;
   T2 mx;

@@ -1,7 +1,7 @@
 
 // $LICENSE
 
-#include <fstream.h>
+#include <fstream>
 #include <string>
 #include <strstream.h> 
 
@@ -16,7 +16,7 @@
 std::string Mutator::description() const { return std::string("");}
 
 
-void ControlDevice::update() { impl->update(); print_unrecognized(cerr);}
+void ControlDevice::update() { impl->update(); print_unrecognized(std::cerr);}
 
 void ControlDevice::print_values(std::ostream& out) const { impl->print_values(out);}
 

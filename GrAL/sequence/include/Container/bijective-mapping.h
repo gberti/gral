@@ -4,14 +4,8 @@
 
 // $LICENSE
 
-// namespace sgistl {
+
 #include "Container/my-hash-map.h" // STL
-//}
-//using namespace std;
-// using sgistl::hash;
-// using sgistl::hash_map;
-
-
 #include "Container/mapped-value-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
@@ -95,13 +89,13 @@ class range_of_bijective_mapping;
     \ingroup bijectivemapping 
  */
 template<class T1, class T2>
-void write_bm(bijective_mapping<T1,T2> const& m, ostream& out);
+void write_bm(bijective_mapping<T1,T2> const& m, std::ostream& out);
 
 /*! \brief read a bijective map from istream
     \ingroup bijectivemapping 
  */
 template<class T1, class T2>
-void read_bm(bijective_mapping<T1,T2>       & m, istream& in);
+void read_bm(bijective_mapping<T1,T2>       & m, std::istream& in);
 
 /*! \brief helper class for custom output of  a bijective map 
     \ingroup bijectivemapping 
@@ -113,7 +107,7 @@ private:
 public:
   printer_of_bij_mapping(bijective_mapping<T1,T2> const& m) : mp(&m) {}
 
-  friend ostream& operator<<(ostream& out, printer_of_bij_mapping<T1,T2> const& p)
+  friend std::ostream& operator<<(std::ostream& out, printer_of_bij_mapping<T1,T2> const& p)
     { write_bm(*(p.mp),out); return out;}
 
 };
@@ -159,8 +153,9 @@ public:
   typedef T2                         result_type;
 
 private:
-  typedef std::hash_map<T1,T2, std::hash<T1>,std::equal_to<T1> >  map_table_type;
-  typedef std::hash_map<T2,T1, std::hash<T2>,std::equal_to<T2> >  inv_table_type; 
+  // hash_map not yet in std::
+  typedef hash_map<T1,T2>  map_table_type;
+  typedef hash_map<T2,T1>  inv_table_type; 
   //--------------- DATA -------------------------
 
   map_table_type         the_map;
@@ -391,12 +386,12 @@ range_of_bijective_mapping<T1,T2> bijective_mapping<T1,T2>::range() const
 template<class T1, class T2>
 inline
 //domain_of_bijective_mapping<T1,T2>
-inverse_mapping<T1,T2>::range_type
+typename inverse_mapping<T1,T2>::range_type
 inverse_mapping<T1,T2>::range() const { return bmap->domain();}
 
 template<class T1, class T2>
 inline
-inverse_mapping<T1,T2>::domain_type //range_of_bijective_mapping<T1,T2>
+typename inverse_mapping<T1,T2>::domain_type //range_of_bijective_mapping<T1,T2>
 inverse_mapping<T1,T2>::domain() const { return bmap->range();}
 
 

@@ -15,6 +15,7 @@ struct geom_traits {};
    
 template<class P>
 class segment {
+public:
   typedef P coord_type;
   typedef coord_type const& const_ref;
   //   coord_type const& p_0, p_1;
@@ -29,6 +30,7 @@ public:
 
 template<class P>
 class triangle {
+public:
   typedef P coord_type;
   typedef coord_type const& const_ref;
   // coord_type const& p_0, p_1, p_2;

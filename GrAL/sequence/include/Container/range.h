@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-#include <iostream.h>
+#include <iostream>
 
 /*! \defgroup iteratorrange Iterator ranges
     \ingroup accessors
@@ -41,7 +41,7 @@ iter_range<It> range(It bb, It ee)
 */
 template<class It>
 inline
-ostream& operator<<(ostream& out, iter_range<It> r)
+std::ostream& operator<<(std::ostream& out, iter_range<It> r)
 {
   while(r.b != r.e) {
     out << *(r.b) << ' ';
@@ -55,7 +55,7 @@ ostream& operator<<(ostream& out, iter_range<It> r)
 */
 template<class It>
 inline
-istream& operator>>(istream& in, iter_range<It> r)
+std::istream& operator>>(std::istream& in, iter_range<It> r)
 {
   while(r.b != r.e) {
     in  >> *(r.b);

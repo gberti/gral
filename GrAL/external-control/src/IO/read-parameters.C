@@ -2,7 +2,7 @@
 // $LICENSE
 
 #include <list> // STL
-#include <iostream.h>
+#include <iostream>
 
 #include "IO/skip-comments.h"
 #include "IO/read-parameters.h"
@@ -47,7 +47,7 @@ static inline char comment_end()   { return '\n';}
 
 void MutableVars::ReadVariable(std::istream& is)
 {
-  is >> ws;
+  is >> std::ws;
   //  skip_comments_istream in(is,comment_start(),comment_end());
   if(is) {
     std::string s; 

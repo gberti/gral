@@ -6,7 +6,7 @@
 // $LICENSE
 
 
-#include <iostream.h>
+#include <iostream>
 #include <limits.h>
 #include <string>
 
@@ -19,13 +19,13 @@ public:
       comment_begin_(comment_begin), 
       comment_end_(comment_end) {}
  
-  istream& the_istream() { return skip_comments(*in_);} 
+  std::istream& the_istream() { return skip_comments(*in_);} 
   char begin_comment() const {return comment_begin_;}
 
-  istream& skip_comments(std::istream& in) 
+  std::istream& skip_comments(std::istream& in) 
   {
     while(true) {
-      in >> ws;
+      in >> std::ws;
       if (in.peek() != comment_begin_)
 	break;
       in.get();
@@ -65,7 +65,7 @@ inline skip_comments_istream& operator>>(skip_comments_istream& in, T& t)
 // it would be read as one string.
 
 template<>
-inline skip_comments_istream& operator>>(skip_comments_istream& in, std::string& s);
+skip_comments_istream& operator>>(skip_comments_istream& in, std::string& s);
 
 
 

@@ -164,14 +164,14 @@ double operator * (const point& a, const point& b)
   return sum;
 }
 
-ostream& operator << (ostream& s, const point& v)
+std::ostream& operator << (std::ostream& s, const point& v)
 { 
   for(int i=1;i<=v.n;i++)
     s << v[i] << " ";
   return s;
 }
 
-istream& operator >> (istream& s, point& v) {
+std::istream& operator >> (std::istream& s, point& v) {
   for(int i =1;i<=v.n;i++)
     s >> v[i];
   return s;

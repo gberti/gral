@@ -6,7 +6,7 @@
 // $LICENSE
 
 
-#include <iostream.h>
+#include <iostream>
 #include <string> 
 
 #include "IO/mutator.h"
@@ -88,7 +88,7 @@ inline void RegisterAt(ControlDevice& Ctrl, char const*   name, T& t)
 
 
 //! a simple ControlDevice that reads name-value-pairs from a stream
-extern ControlDevice GetStreamDevice(istream* in, 
+extern ControlDevice GetStreamDevice(std::istream* in, 
                                      std::string const& name = "");
 
 

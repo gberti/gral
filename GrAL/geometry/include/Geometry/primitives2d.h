@@ -18,6 +18,12 @@ template<class POINT>
 struct dimension_dependent_primitives_2d 
   : public virtual basic_algebraic_primitives<POINT> 
 {
+private:
+  typedef basic_algebraic_primitives<POINT> base;
+public:
+  typedef typename base::scalar scalar;
+  typedef typename base::real   real;
+
 
   static double det2(const POINT& p1, const POINT& p2)
     {

@@ -52,20 +52,20 @@ void istream_control_device_impl::read(std::istream& in) {
   in >> c;
   REQUIRE( (c == '{'),"control-device " << name()  << "no leading {!\n",1);
   //  if( c == '{') {
-    (in >> ws).get(c);
+    (in >> std::ws).get(c);
     while( c != '}') {
       in.putback(c);
     
       skip_comment(in);
-      (in >> ws).get(c); 
+      (in >> std::ws).get(c); 
       if( c== '}') return;
       in.putback(c);
 
       MV.ReadVariable(in);
-      (in >> ws).get(c); 
+      (in >> std::ws).get(c); 
      }
     //  }
-    print_unrecognized(cerr);
+    print_unrecognized(std::cerr);
    
 }
 

@@ -56,7 +56,7 @@ void rendering_language::filter(const RenderableGeom& Obj)
   if( Obj.HasTrafo()) end_transformation();
   if( Obj.HasAttr())  end_attribute();
 
-  the_stream() << endl;
+  the_stream() << std::endl;
 }
 
 

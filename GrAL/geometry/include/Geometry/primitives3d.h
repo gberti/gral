@@ -17,6 +17,11 @@
 template<class POINT>
 struct dimension_dependent_primitives_3d 
   : public virtual basic_algebraic_primitives<POINT> {
+private:
+  typedef basic_algebraic_primitives<POINT> base;
+public:
+  typedef typename base::scalar scalar;
+  typedef typename base::real   real;
 
   /*! \brief returns the determinant of the matrix (p1,p2,p3)
    */

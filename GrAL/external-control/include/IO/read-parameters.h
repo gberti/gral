@@ -55,7 +55,7 @@
 ///////////////////////////////////////////////////////////////////
 
 #include <string>
-#include <iostream.h>
+#include <iostream>
 #include <map>  // STL
 
 #include "IO/mutator.h"

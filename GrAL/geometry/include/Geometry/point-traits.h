@@ -52,6 +52,7 @@ template<class POINT, unsigned DIM>
 struct point_traits_fixed_dim 
   : public point_traits_base<POINT>
 {
+  typedef POINT Ptype;
   typedef dim_tag<N>                dimension_tag; 
   static unsigned Dim()             { return DIM;}
   static unsigned Dim(Ptype const&) { return DIM;}
@@ -99,7 +100,7 @@ struct point_traits_fixed_size_array :
   typedef ARRAY          Ptype;
   typedef COMPONENT      component_type;
   typedef component_type value_type;
-  typedef dim_tag<DIM>::dimension_tag dimension_tag;
+  typedef typename dim_tag<DIM>::dimension_tag dimension_tag;
 
   static void ConstructWithDim(unsigned d, Ptype&)
     { REQUIRE(d == DIM, "Cannot construct! d = " << d 

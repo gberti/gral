@@ -41,7 +41,7 @@ protected:
   T X[N];
 private:
   void check_range(unsigned i) const {
-    REQUIRE( ((0 <= i ) && (i < N)), 
+    REQUIRE( (i < N), 
 	     " i = " << i << " must be in [0," << N << "]\n",1);
   }
 };
@@ -55,6 +55,7 @@ class tuple : public tuple_base<T,N> {
   // should not be necessary ... but problems with gcc 2.96
   typedef typename base::iterator       iterator;
   typedef typename base::const_iterator const_iterator;
+  typedef typename base::c_array        c_array;
 
   tuple() {}
   tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
@@ -82,6 +83,7 @@ class tuple<T,3> : public tuple_base<T,3> {
   // should not be necessary ... but problems with gcc 2.96
   typedef typename base::iterator       iterator;
   typedef typename base::const_iterator const_iterator;
+  typedef typename base::c_array        c_array;
 
   tuple() {}
   tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}

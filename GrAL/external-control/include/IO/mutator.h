@@ -6,7 +6,7 @@
 // $LICENSE
 
 
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
 
 #include "Config/compiler-config.h"
