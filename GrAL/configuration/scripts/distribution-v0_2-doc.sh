@@ -7,9 +7,10 @@ perl -v;
 
 TAG=${1-HEAD}
 cvswork=${CVSWORK-${HOME}/CVS-work}
-MODULES=`$cvswork/configuration/scripts/modules-v0_2.sh`;
-EXCLUDED=`$cvswork/configuration/scripts/excluded-v0_2.sh`;
-TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel-v0_2.sh`;
+scripts=${cvswork}/configuration/scripts;
+MODULES=`$scripts/modules-v0_2.sh`;
+EXCLUDED=`$scripts/excluded-v0_2.sh`;
+TOPLEVELMODULES=`$scripts/modules-toplevel-v0_2.sh`;
 CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
 
@@ -55,6 +56,7 @@ do
  gmake postdoc GRALROOT=${GRALROOT} DOCROOT=../ 
 done;
 
+find ./gral/base/doc -name "*.html" -exec $scripts/reduce-underscores.pl {} \; 
 
 mkdir ${GRALROOT}/${DOC};
 cd ${GRALROOT}/${DOC};

@@ -26,7 +26,7 @@ mv gral/v0_2/README  .
 mv gral/v0_2/LICENSE .
 mv gral/v0_2/MODULES .
 mv gral/v0_2/INSTALL .
-mv gral/NEWS         .
+mv gral/v0_2/NEWS    .
 mv gral/v0_2/Makefile ./Makefile
 cp gral/v0_2/Makefile.gral gral/Makefile
 mv gral/v0_2/index.dox gral/doc
