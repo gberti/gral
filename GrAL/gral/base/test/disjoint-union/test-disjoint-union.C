@@ -33,7 +33,7 @@ int main() {
   ConstructGrid(G,GeomG, R, GeomR);
 
   // create disjoint union view of above grids and geometries
-  typedef   disjoint_union_view::grid_view<Complex2D, CartesianGrid2D> union_type;
+  typedef   disjoint_union_view::grid_view<Complex2D, c2d::CartesianGrid2D> union_type;
   union_type U(G,R);
   typedef disjoint_union_view::geom_view<us_geom_type, reg_geom_type> union_geom_type;
   union_geom_type GeomU(U,GeomG, GeomR);
