@@ -40,6 +40,17 @@ namespace sequence {
     return max_iter;
   }
 
+
+ template <typename InputIterator, typename Predicate>
+  inline bool exists(InputIterator first, InputIterator last, Predicate p) {
+    while(first != last) {
+      if(p(*first))
+	return true;
+      ++first;
+    }
+    return false; 
+  }
+
 } // namespace sequence
 
 #endif
