@@ -109,7 +109,8 @@ public:
   int urx() const { return ur_.x();}
   int ury() const { return ur_.y();}
 
-  index_type cell_size() const { return ur_ - ll_;}
+  index_type vertex_size() const { return ur_ - ll_ + index_type(1);}
+  index_type cell_size()   const { return ur_ - ll_;}
   //@}
 
 private:
@@ -1002,6 +1003,9 @@ public:
   cell_handle   handle(const Cell& C)   const { return cell_num(C);}
 
   // vertex_handle  <-> Vertex
+  vertex_handle get_vertex_handle(index_type I) const { return vertex_num(I);}
+  index_type    get_index        (vertex_handle h) const { return get_vertex(h);}
+
   vertex_handle vertex_num(int x, int y)     const { return TheVertexMap().number(x,y);}
   vertex_handle vertex_num(const vertex_base& V) const { return vertex_num(V.x(),V.y());} 
   vertex_handle vertex_num(const Vertex& V) const { return vertex_num(V.x(),V.y());}
@@ -1019,6 +1023,9 @@ public:
 
   // cell_handle <-> Cell
   // (x,y) == lower left corner == int-coordinates of box center
+  cell_handle get_cell_handle(index_type  I) const { return cell_num(I);}
+  index_type  get_index      (cell_handle h) const { return get_cell_llv(h);}
+
   cell_handle cell_num(int llx, int lly) const { return TheCellMap().number(llx,lly);}
   cell_handle cell_num(const vertex_base& llv) const {return cell_num(llv.x(),llv.y());}
   cell_handle cell_num(const Cell& C) const { return cell_num(C.ll());}

@@ -209,7 +209,8 @@ public:
 
   bool empty() const { return (NumOfVertices() == 0);}
 
-  index_type cell_size() const { return cell_map.max_tuple() + index_type(1);}
+  index_type vertex_size() const { return vertex_map.max_tuple() + index_type(1);}
+  index_type cell_size()   const { return cell_map  .max_tuple() + index_type(1);}
   /*! \name Element size functions */
   /*@{*/ 
   unsigned NumOfVertices() const { return vertex_map.max_flat_index()+1;}
@@ -278,6 +279,12 @@ public:
   /*! \name direction extraction from handles and vice versa
    */
   /*@{*/ 
+  vertex_handle get_vertex_handle(index_type const& I) const { return VertexMap()(I);}
+  index_type    get_index        (vertex_handle h)     const { return VertexMap()(h);}  
+
+  cell_handle   get_cell_handle  (index_type const& I) const { return CellMap()(I);}
+  index_type    get_index        (cell_handle h)       const { return CellMap()(h);}  
+
   edge_handle get_edge_handle(edge_direction::dir d, index_type const& I) const
   { return edge_handle( EdgeMap(d)(I) + edge_handle_offset[d]); }
 
