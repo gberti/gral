@@ -61,12 +61,12 @@ struct grid_types<BoundaryRange<cartesian2d::RegGrid2D> >
 
   typedef  gt::Vertex Vertex;
   typedef  gt::Edge   Edge;
- // typedef  gt::Facet  Facet;
+  typedef  gt::Facet  Facet;
  // typedef  gt::Cell   Cell;
 
   typedef  BrC::VertexIterator VertexIterator;
   typedef  BrC::EdgeIterator   EdgeIterator;
- // typedef  BrC::FacetIterator  FacetIterator;
+  typedef  BrC::FacetIterator  FacetIterator;
   //  typedef  BrC::CellIterator   CellIterator;
 
  // typedef  gt::VertexOnCellIterator VertexOnCellIterator;
