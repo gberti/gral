@@ -77,8 +77,8 @@ class stored_geometry
 {
   
 public:
-  typedef stored_geometry<Coord2D>    base;
-  typedef stored_geometry<Coord2D> self;
+  typedef stored_geometry_reg2d_base<Coord2D>  base;
+  typedef stored_geometry<Coord2D>             self;
 
   typedef point_traits<Coord2D> pt;
   typedef algebraic_primitives<Coord2D> ap;
