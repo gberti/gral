@@ -162,6 +162,7 @@ struct point_traits<point>
 
 #include "Geometry/algebraic-primitives.h"
 
+template<>
 struct dimension_dependent_primitives<point> 
   :  public basic_algebraic_primitives<point> 
 {

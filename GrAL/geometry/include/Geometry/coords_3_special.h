@@ -14,6 +14,7 @@
 
 template<unsigned N> class coordN;
 
+template<>
 class coordN<3> {
 public:
   typedef double   component;
