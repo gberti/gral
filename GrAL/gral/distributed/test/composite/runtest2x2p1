@@ -1,0 +1,29 @@
+#!/bin/bash
+
+out=out2x2p1
+rm -f grid.complex2d grid.part $out
+cp    grid2x2.complex2d grid.complex2d
+cp    grid2x2.part.1    grid.part
+
+if ! ./test-composite  > $out 2>&1
+then
+echo "ERROR running test-composite for 2x2, 1 partition,
+Output was:
+"
+cat $out
+echo "
+End output
+"
+else
+/bin/echo "\n"
+for i in  $out
+do
+if diff $i $i.exp
+then 
+/bin/echo "\t\t\t" $i OK
+else
+/bin/echo "\t\t\t" ERROR in $i
+fi
+done
+/bin/echo "\n"
+fi

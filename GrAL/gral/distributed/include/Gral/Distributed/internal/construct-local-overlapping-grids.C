@@ -13,6 +13,7 @@
 
 #include "Gral/Distributed/mark-ranges.h"
 
+
 //----------------------------------------------------------------
 //
 // semantics:
@@ -35,6 +36,7 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid,
 
   enumerated_subrange<grid_type> owned;
   ConstructSubrangeFromCells(owned,owned_c.FirstElement());
+
   // Fixme!!
   Geometry dummy(ovlp_grid.TheGrid());
   ConstructGridVC(ovlp_grid.TheGrid(),
