@@ -35,7 +35,7 @@ public:
   typedef  Grid::Edge Edge;
 
   SubrangeReg2D() : g(0) {}
-  // what should be the behavior if  llv ! <= urv ? 
+  // what should be the behavior if  !(llv  <= urv) ? 
   SubrangeReg2D(const Grid& gg, const index_type& llv, const index_type& urv)
     : g(&gg), 
       vertex_index_map(llv,urv), 
@@ -206,6 +206,7 @@ public:
   }
   
   const indexmap_type& TheVertexMap() const {return vertex_index_map;}
+
   VertexIterator FirstVertex() const { return VertexIterator(TheGrid(),*this);}
   VertexIterator EndVertex()   const { return VertexIterator(MaxVertexNum() +1,TheGrid(),*this);}
   vertex_handle handle(Vertex const& V) const { return TheGrid().handle(V);}
@@ -215,6 +216,13 @@ public:
   unsigned NumOfVertices() const { return TheVertexMap().range_size();}
   int NumOfXVertices() const { return (urx()-llx()+1);}
   int NumOfYVertices() const { return (ury()-lly()+1);}
+
+  index_type low_vertex_index()    const { return TheVertexMap().ll();}
+  index_type high_vertex_index()   const { return TheVertexMap().ur();}
+  index_type beyond_vertex_index() const { return TheVertexMap().ur()+index_type(1);}
+  index_type low_cell_index()      const { return TheCellMap().ll();}
+  index_type high_cell_index()     const { return TheCellMap().ur();}
+  index_type beyond_cell_index()   const { return TheCellMap().ur()+index_type(1);}
 
   const indexmap_type& TheCellMap() const {return cell_index_map;}
   CellIterator FirstCell() const { return CellIterator(TheGrid(),*this);}
