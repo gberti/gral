@@ -97,11 +97,13 @@ void ConstructGridVC(Triang2D       & G,
   // construct combinatorial grid
  ConstructGrid0(G,srcG,VertexCorr,CellCorr);
 
+
  // copy geometry
+ destGeom.set_grid(G);
  typedef typename grid_types<G2>::VertexIterator   src_vertex_it;
  typedef typename grid_types<Triang2D>::Vertex     Vertex;
  for(src_vertex_it src_v = srcG.FirstVertex(); ! src_v.IsDone(); ++src_v) {
-   Vertex V = G.vertex(VertexCorr(src_v.handle()));
+   Vertex V(G,VertexCorr(src_v.handle()));
    assign_point(destGeom.coord(V) , srcGeom.coord(*src_v));
  }
 }
