@@ -124,39 +124,17 @@ public:
 
   //--------------  data access operators -----------------------
 
-  const_reference  operator()(const E& e) const {
-    REQUIRE((0 <= et::handle(e) && et::handle(e) < (int)table.size()), 
-	    "grid_function: invalid access: pos = " << et::handle(e),1);
-    return table[et::handle(e)];
-  }
-  
-  reference  operator[](const E& e)  {
-    REQUIRE( (&(e.TheGrid()) == g),
-	     "gf(e): Grids don't match: e.TheGrid() = "
-	     << &(e.TheGrid()) << ", this->TheGrid() : " << g << "!\n",1); 
-    REQUIRE(((0 <= et::handle(e)) && et::handle(e) < (int)table.size()), 
-	    "grid_function: invalid access: pos = " << et::handle(e),1);
-    return table[et::handle(e)];
-  }
-  const T&  operator[](const E& e) const  {
-    REQUIRE( (&(e.TheGrid()) == g),
-	     "gf(e): Grids don't match: e.TheGrid() = "
-	     << &(e.TheGrid()) << ", this->TheGrid() : " << g << "!\n",1); 
-    REQUIRE(((0 <= et::handle(e)) && et::handle(e) < (int)table.size()), 
-	    "grid_function: invalid access: pos = " << et::handle(e),1);
-    return table[et::handle(e)];
-  }
+  const_reference  operator()(const E& e) const { cv(e); return table[et::handle(e)]; }
+  reference        operator[](const E& e)       { cv(e); return table[et::handle(e)]; }
+  const_reference  operator[](const E& e) const { cv(e); return table[et::handle(e)]; }
 
-  /*
-  T& operator[](const ElementIterator& e)  { 
-    REQUIRE( (&(e.TheGrid()) == g),
-	     "gf(e): Grids don't match: e.TheGrid() = "
-	     << &(e.TheGrid()) << ", this->TheGrid() : " << g << "!\n",1); 
-    REQUIRE(((0 <= et::handle(e)) && et::handle(e) < (int)table.size()), 
-	    "grid_function: invalid access: pos = " << et::handle(e),1);
-    return table[et::handle(e)];
-  }
-  */
+  bool valid(element_handle e) const { return bound() && (0 <= e) && ((unsigned) e < table.size());}
+  bool bound()                 const { return g != 0;}
+  void cv(const E& e)          const { cv(e.handle());}
+  void cv(element_handle e)    const { REQUIRE(valid(e), "grid_function: invalid access: pos = " << e,1); }
+  void cb()                    const { REQUIRE(bound(), "", 1);}
+
+  // T& operator[](const ElementIterator& e)  { cv(e);  return table[et::handle(e)];}
 
   //-------- not for public use - more efficient access ----
 
@@ -164,17 +142,8 @@ public:
   // components, e.g. restricted_grid_function
   // (should be friends, but problems with templates)
 
-  const T&   operator()(const element_handle& e) const {
-    REQUIRE(( 0 <= e  && e < (int)table.size()), 
-	    "grid_function: invalid access: pos = " << e,1);
-    return table[e];
-  }
-  
-  T&  operator[](const element_handle& e)       {
-    REQUIRE(( 0 <= e  && e < (int)table.size()), 
-	    "grid_function: invalid access: pos = " << e,1);
-    return table[e];
-  }
+  const_reference  operator()(const element_handle& e) const { cv(e); return table[e]; }
+  reference        operator[](const element_handle& e)       { cv(e); return table[e]; }
 
 
   //--------------- Container interface ----------
