@@ -2,7 +2,7 @@ export CONFIG:=$(shell pwd)/mk.config
 #unexport PWD
 include $(CONFIG)
 
-SUBDIRS =  base complex2d distributed partitioning
+SUBDIRS =  base complex2d distributed partitioning cartesian2d testing
 
 #include $(ALLROOT)/configuration/defs/recursive-targets
 

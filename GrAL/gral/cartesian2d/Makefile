@@ -21,9 +21,6 @@ module-check: test-new-check-clean
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Cartesian2D
 	cp include/Gral/Grids/Cartesian2D/*.h  $(INSTALLHEADERS)/Gral/Grids/Cartesian2D
-	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Cartesian2D/internal
-	cp include/Gral/Grids/Cartesian2D/internal/*.h  $(INSTALLHEADERS)/Gral/Grids/Cartesian2D/internal
-	cp include/Gral/Grids/Cartesian2D/internal/*.C  $(INSTALLHEADERS)/Gral/Grids/Cartesian2D/internal
 
 install: install-headers  install-libs
 
