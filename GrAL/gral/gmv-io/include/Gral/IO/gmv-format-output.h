@@ -6,70 +6,48 @@
 #include <vector>
 #include <string>
 
-#include "Gral/Grids/Complex2D/all.h"
-#include "Container/bijective-mapping.h"
-
-#include "Gral/Base/element-numbering.h"
-#include "Gral/Base/partial-grid-morphism.h"
-#include "Gral/Algorithms/construct-isomorphism.h"
+#include "Gral/Base/common-grid-basics.h"
 
 #include "Container/heterogeneous-list.h"
 #include "Utility/as-string.h"
 
 
-namespace std {
 
-template<class T>
-  struct hash<T*> {
-    unsigned operator()(T* p) const { T* p0 = 0; return p - p0;}
-  };
-
-}
-
-/*! \brief Output adapter for the GMV format.
-
-    The <A HREF= "http://www-xdiv.lanl.gov/XCM/gmv/"> 
-    General Mesh Viewer </A> (GMV) is a versatile tool
-    for viewing 3D meshes and fields defined on them.
-
-    Usage:
-    \code
-    OstreamGMV3DFmt Out("grid.gmv");
-    ConstructGrid(Out,MyGrid, MyGeom); 
-    \endcode
-
-   \todo support GMV's general cell type 
-   (currently only tet, hex, prism and pyramid)
-   \todo support output of grid functions.
+/*! \brief Output adapter for the GMV format base class.
+   
+    Not intended for public use. 
+    See OstreamGMVFmt2D and OstreamGMVFmt3D.
  */
-class OstreamGMV3DFmt {
-  typedef OstreamGMV3DFmt self;
-public:
-  typedef Complex2D archetype_type;
+class OstreamGMVFmt_base {
+  typedef OstreamGMVFmt_base self;
+
 protected:
   std::ostream * out;
   bool           owned;
-  int num_vars;
-private:
+  int            num_vars;
+
   void copy(self const& rhs);
 
 public: 
-  OstreamGMV3DFmt();
-  OstreamGMV3DFmt(std::ostream& ot);
-  OstreamGMV3DFmt(std::string const& nm);
+  OstreamGMVFmt_base();
+  OstreamGMVFmt_base(std::ostream& ot);
+  OstreamGMVFmt_base(std::string const& nm);
 
-  OstreamGMV3DFmt(self const& rhs) { copy(rhs);}
+  OstreamGMVFmt_base(self const& rhs) { copy(rhs);}
   self & operator=   (self const& rhs) { if(this != &rhs) copy(rhs); return *this; }
 
-  ~OstreamGMV3DFmt();
+  virtual ~OstreamGMVFmt_base();
 
   void init(std::string const& nm);
 
   std::ostream& Out() { return *out;}
 
-  int element_tag(vertex_type_tag) const { return 1;}
-  int element_tag(cell_type_tag)   const { return 0;}
-  // extend to faces
+  template<unsigned N>
+  int element_tag(vertex_type_tag, grid_dim_tag<N>) const { return 1;}
+  int element_tag(cell_type_tag,   grid_dim_tag<3>) const { return 0;} 
+  int element_tag(cell_type_tag,   grid_dim_tag<2>) const { return 2;} 
+  int element_tag(facet_type_tag,  grid_dim_tag<3>) const { return 2;}
+
 
   template<class GF>
   struct gf_name_pair {
@@ -83,16 +61,19 @@ public:
   static gf_name_pair<GF> pair(std::string const& nm, GF const& gf)
     { return gf_name_pair<GF>(nm,gf);}
 
+protected:
+  virtual void begin_variable() = 0;
+  virtual void end_variable()   = 0;
 private:
   template<class GF>
   void copy_gf(GF const& gf, std::string const& varname) 
     {
       typedef element_traits<typename GF::element_type> et;
-      // std::string varname = "testvar" + as_string(num_vars); // FIXME!
+      typedef typename et::element_type_tag   element_type_tag;
+      typedef typename et::grid_dimension_tag grid_dimension_tag;
 
-      typedef typename et::element_type_tag element_type_tag;
       *out << varname << " " 
-	   << element_tag(element_type_tag()) 
+	   << element_tag(element_type_tag(), grid_dimension_tag()) 
 	   << '\n';;
       for(typename et::ElementIterator e(gf.TheGrid()); ! e.IsDone(); ++e) {
 	// we assume  numbering in gf.TheGrid() 
@@ -121,57 +102,14 @@ public:
   template<class GF, class TAIL>
   void copy_grid_functions(heterogeneous_list::List<GF,TAIL> gfs)
     {
-      *out << "variable" << '\n';
+      begin_variable();
       copy_grid_functions_rec(gfs);
-      *out << "\n" << "endvars" << "\n";
+      end_variable(); 
     }
   
-private:
-  class StaticData {
-  public:
-    typedef std::vector<archetype_type>  archetype_table;
-    typedef bijective_mapping<int, std::string> archetype_name_map;
-
-    archetype_table   * archetypes;
-    archetype_name_map* names;
-
-    StaticData();
-    ~StaticData();
-  };
-  static StaticData data;
-public:
-  std::string const& name(int a) const
-    { return (*(data.names))(a); }
-  typedef StaticData::archetype_table::const_iterator ArchetypeIterator;
-  ArchetypeIterator BeginArchetype() const { return data.archetypes->begin();}
-  ArchetypeIterator EndArchetype()   const { return data.archetypes->end();}
-
 };
 
 
-
-/*! \brief ConstructGrid overload for OstreamGMV3DFmt
-
-  \relates OstreamGMV3DFmt
-  
-  \see Module \ref GMV3Dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
- */
-template<class GRID,class GEOM>
-void ConstructGrid(OstreamGMV3DFmt& Out, 
-		   GRID const& G,
-		   GEOM const& GEO);
-
-template<class GRID,class GEOM, class GF, class MOREGFS>
-void ConstructGrid(OstreamGMV3DFmt& Out, 
-		   GRID const& G,
-		   GEOM const& GEO,
-		   heterogeneous_list::List<GF,MOREGFS> GFS);
-
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/IO/gmv-format-output.tt.C"
-#endif
 
 
 #endif
