@@ -17,7 +17,7 @@ test:
 # perform checks with test programs
 check:
 
-new: libclean
+# new: libclean
 
 #####################################################################
 # This is the central place of specifying which files to clean
