@@ -4,21 +4,16 @@
 
 // $LICENSE
 
-#include <fstream.h>
 
 #include <vector>
 
 
-//#include "Container/some-algorithms.h"
 
 #include "Gral/Algorithms/grid-copy.h"
-//#include "Gral/Algorithms/write-complex2d.h"
 #include "Gral/Base/type-tags.h"
 #include "Gral/Partitioning/partitioning.h"
 
-//#undef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Distributed/construct-composite-periodic.h"
-//#define NMWR_INCLUDE_TEMPLATE_DEFS
 
 #include "Gral/Distributed/composite-grid.h"
 #include "Gral/Distributed/composite-grid-function.h"
