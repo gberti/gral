@@ -41,23 +41,23 @@ namespace cartesian3d {
     int vy_1 = (vy > 0 ? vy-1 : 0);
     int vz_1 = (vz > 0 ? vz-1 : 0);
     int v[3] = {vx,vy,vz};
-    vertex_map = index_map_type(v);
+    vertex_map = index_map_type(index_type(v));
     int c[3] = {vx_1,vy_1,vz_1};
-    cell_map   = index_map_type(c); 
+    cell_map   = index_map_type(index_type(c)); 
     
     int ex[3] = {vx_1,vy  ,vz  };
-    edge_maps[edge_direction::x] = index_map_type(ex);
+    edge_maps[edge_direction::x] = index_map_type(index_type(ex));
     int ey[3] = {vx  ,vy_1,vz  };
-    edge_maps[edge_direction::y] = index_map_type(ey);
+    edge_maps[edge_direction::y] = index_map_type(index_type(ey));
     int ez[3] = {vx  ,vy  ,vz_1};
-    edge_maps[edge_direction::z] = index_map_type(ez);
+    edge_maps[edge_direction::z] = index_map_type(index_type(ez));
     
     int fxy[3] = {vx_1,vy_1,vz  };
-    facet_maps[facet_direction::xy] = index_map_type(fxy);
+    facet_maps[facet_direction::xy] = index_map_type(index_type(fxy));
     int fxz[3] = {vx_1,vy  ,vz_1};
-    facet_maps[facet_direction::xz] = index_map_type(fxz);
+    facet_maps[facet_direction::xz] = index_map_type(index_type(fxz));
     int fyz[3] = {vx  ,vy_1,vz_1};
-    facet_maps[facet_direction::yz] = index_map_type(fyz);
+    facet_maps[facet_direction::yz] = index_map_type(index_type(fyz));
 
     edge_handle_offset[edge_direction::x] = 0;
     edge_handle_offset[edge_direction::y] = NumOfXDirEdges();

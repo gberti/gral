@@ -39,4 +39,5 @@ public:
 };
 
 }; // namespace cartesian3d
+
 #endif

@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-EXTRA_DEPMODULES += gral/testing
+EXTRA_DEPMODULES += gral/testing geometry
 LOCALSOURCES =  test-cartesiannd-construct.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
@@ -12,13 +12,6 @@ EXEC = $(LOCALSOURCES:%.C=%.exe)
 TARGETS = $(EXEC)
 
 include $(DEPS)
-
-
-
-
-#LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base -lutilities
-
-
 
 
 
