@@ -29,7 +29,7 @@ class cell_archetype_map
   typedef typename gt::vertex_handle vertex_handle;
   */
 private:
-  typename gt::Cell const& c;
+  typename gt::Cell c;
 public:
   cell_archetype_map(typename gt::Cell const& cc) : c(cc) {}
 
