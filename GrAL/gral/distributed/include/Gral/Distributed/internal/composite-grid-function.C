@@ -1,12 +1,12 @@
 #ifndef NMWR_GB_COMPOSITE_GRID_FUNCTION_C
 #define NMWR_GB_COMPOSITE_GRID_FUNCTION_C
 
-#include "algorithm"  // STL
+#include <algorithm>  // STL
 
 #include "Utility/pre-post-conditions.h"
 
-#include "Grids/restricted-grid-function.h"
-#include "Grids/Distributed/composite-grid-function.h"
+#include "Gral/Base/restricted-grid-function.h"
+#include "Gral/Distributed/composite-grid-function.h"
 
 
 template<class E, class T, class CompositeG>

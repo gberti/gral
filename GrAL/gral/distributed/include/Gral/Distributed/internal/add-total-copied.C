@@ -9,13 +9,15 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/generic/add-total-copied.h"
+#include "Gral/Distributed/internal/add-total-copied.h"
 
-#include "iterator.h"  // STL
-#include "Container/algorithms.h"
 
-#include "Grids/grid-functors.h"
-#include "Grids/Distributed/mark-ranges.h"
+#include <iterator.h>  // STL
+
+#include "Container/some-algorithms.h"
+
+#include "Gral/Base/grid-functors.h"
+#include "Gral/Distributed/mark-ranges.h"
 
 //----------------------------------------------------------------
 //

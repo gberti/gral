@@ -4,8 +4,8 @@
 #include "algorithm"  // STL
 
 #include "Container/operators.h"
-#include "Grids/restricted-grid-function.h"
-#include "Grids/Distributed/mpi-distributed-grid-function.h"
+#include "Gral/restricted-grid-function.h"
+#include "Gral/Distributed/mpi-distributed-grid-function.h"
 
 
 template<class E, class T, class DistributedG>

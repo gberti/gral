@@ -1,7 +1,7 @@
 #ifndef NMWR_GB_RANGE_CONNECTOR_C
 #define NMWR_GB_RANGE_CONNECTOR_C
 
-#include "Grids/Distributed/connector.h"
+#include "Gral/Distributed/connector.h"
 
 #include "algorithm" // STL
 

@@ -11,9 +11,9 @@
 
 #include <mpi.h>
 
-#include "Grids/grid-functions.h"
-#include "Grids/Distributed/overlapping-grid.h"
-#include "connector.h"
+#include "Gral/Base/grid-functions.h"
+#include "Gral/Distributed/overlapping-grid.h"
+#include "Gral/Distributed/connector.h"
 
 
 struct mpi_proc {
@@ -160,7 +160,7 @@ inline Connector GetRecvConnector(const Range& R, unsigned sz,
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "generic/mpi-distributed-grid.C"
+#include "Gral/Distributed/internal/mpi-distributed-grid.C"
 #endif
 
 

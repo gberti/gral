@@ -16,26 +16,19 @@
 
 
 #include "Container/algorithms.h"
-//#include "coordinate-mappings/linear2d.h"
 
-#include "Grids/Algorithms/grid-copy.h"
-#include "Grids/Algorithms/write-complex2d.h"
-#include "Grids/type-tags.h"
-#include "Grids/partitioning.h"
+#include "Gral/Algorithms/grid-copy.h"
+#include "Gral/Algorithms/write-complex2d.h"
+#include "Gral/Base/type-tags.h"
+#include "Gral/partitioning.h"
 
 #undef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/construct-composite-periodic.h"
+#include "Gral/Distributed/construct-composite-periodic.h"
 #define NMWR_INCLUDE_TEMPLATE_DEFS
 
-#include "Grids/Distributed/composite-grid.h"
-#include "Grids/Distributed/composite-grid-function.h"
-#include "Grids/Distributed/overlap-pattern.h"
-
-//#include "Grids/Complex2D/construct.h"
-
-//#include "domain/us-domain-parallel.h"
-
-//#include "domain/specializations-construct-distributed.h"
+#include "Gral/Distributed/composite-grid.h"
+#include "Gral/Distributed/composite-grid-function.h"
+#include "Gral/Distributed/overlap-pattern.h"
 
 
 template<class CG, class FG, class FGEOM, class MG, class GEOM, class TRAFO>

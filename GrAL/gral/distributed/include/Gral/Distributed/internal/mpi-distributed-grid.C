@@ -8,10 +8,10 @@
 //   http://math-s.math.tu-cottbus.de/NMWR
 //   
 //----------------------------------------------------------------
-#include "Grids/Distributed/mpi-distributed-grid.h"
+#include "Gral/Distributed/mpi-distributed-grid.h"
 
 #include "Container/operators.h"
-#include "Grids/Algorithms/output.h"
+#include "Gral/Algorithms/output.h"
 #include "IO/iomgr.h"
 
 template<class CoarseG, class FineG>

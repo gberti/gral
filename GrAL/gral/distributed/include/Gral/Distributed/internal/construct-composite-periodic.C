@@ -10,19 +10,19 @@
 //----------------------------------------------------------------
 
 
-#include "Grids/Distributed/construct-composite-periodic.h"
+#include "Gral/Distributed/construct-composite-periodic.h"
 
 #include "Container/bijective-mapping.h"
 
-#include "Grids/transformed-geometry.h"
-#include "Grids/Algorithms/coarse-grid-from-partitioning.h"
-#include "Grids/Algorithms/enlarge-grid.h"
-#include "Grids/Algorithms/construct-grid.h"
+#include "Gral/Geometries/transformed-geometry.h"
+#include "Gral/Algorithms/coarse-grid-from-partitioning.h"
+#include "Gral/Algorithms/enlarge-grid.h"
+#include "Gral/Algorithms/construct-grid.h"
 
-#include "Grids/Distributed/dyn-overlap.h"
-#include "Grids/Distributed/construct-overlap.h"
-#include "Grids/Distributed/construct-local-overlapping-grids.h"
-#include "Grids/Distributed/generic/grid-self-map.h"
+#include "Gral/Distributed/dyn-overlap.h"
+#include "Gral/Distributed/construct-overlap.h"
+#include "Gral/Distributed/construct-local-overlapping-grids.h"
+#include "Gral/Distributed/internal/grid-self-map.h"
 
 // ad-hoc mapping for partition numbers
 struct map_unique {

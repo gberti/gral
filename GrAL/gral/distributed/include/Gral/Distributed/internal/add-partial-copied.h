@@ -33,7 +33,7 @@ void AddPartialRanges(Overlap          &    ovrlp,     // out
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/add-partial-copied.C"
+#include "Gral/Distributed/internal/add-partial-copied.C"
 #endif
 
 #endif

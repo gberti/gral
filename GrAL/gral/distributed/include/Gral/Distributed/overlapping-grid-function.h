@@ -9,9 +9,10 @@
 //   
 //----------------------------------------------------------------
 
-#include "compiler-config.h"
-#include "vector.h"
-#include "Grids/grid-functions.h"
+#include <vector.h>
+
+#include "Config/compiler-config.h"
+#include "Gral/Base/grid-functions.h"
 
 //----------------------------------------------------------------
 //

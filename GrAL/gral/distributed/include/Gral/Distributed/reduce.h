@@ -11,7 +11,7 @@
 //----------------------------------------------------------------
 
 #include <mpi.h>
-#include "Grids/Distributed/mpi-types.h"
+#include "Gral/Distributed/mpi-types.h"
 
 ///////////////////////////////////////////
 //

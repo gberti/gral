@@ -10,8 +10,8 @@
 //----------------------------------------------------------------
 
 #include "list"  // STL
-#include "Grids/Distributed/connector.h"
-#include "Grids/Distributed/overlapping-grid-function.h"
+#include "Gral/Distributed/connector.h"
+#include "Gral/Distributed/overlapping-grid-function.h"
 
 
 template<class E, class T, class CompositeG>
@@ -79,7 +79,7 @@ public:
 };
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/composite-grid-function.C"
+#include "Gral/Distributed/internal/composite-grid-function.C"
 #endif
 
 

@@ -11,9 +11,9 @@
 //----------------------------------------------------------------
 
 #include "Container/bijective-mapping.h"
-#include "Grids/partitioning.h"
-#include "Grids/Distributed/overlap-pattern.h"
-#include "Grids/Distributed/mpi-distributed-grid.h"
+#include "Gral/partitioning.h"
+#include "Gral/Distributed/overlap-pattern.h"
+#include "Gral/Distributed/mpi-distributed-grid.h"
 
 //----------------------------------------------------------------
 // ConstructMPIDistributedFromMaster -- build a mpi-distributed grid
@@ -41,7 +41,7 @@ ConstructMPIDistributedFromMaster
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/construct-mpi-distributed.C"
+#include "Gral/Distributed/internal/construct-mpi-distributed.C"
 #endif
 
 #endif

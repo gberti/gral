@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/common-grid-basics.h"
+#include "Gral/Base/common-grid-basics.h"
 #include "Container/bijective-mapping.h"
 
 //----------------------------------------------------------------

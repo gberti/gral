@@ -9,13 +9,13 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/mark-ranges.h"
+#include "Gral/Distributed/mark-ranges.h"
 
 
-#include "Grids/multi-grid-functions.h"
-#include "Grids/layered-subrange.h"
-#include "Grids/Algorithms/adjacency-hulls.h"
-#include "Grids/Algorithms/reduction.h"
+#include "Gral/Base/multi-grid-functions.h"
+#include "Gral/Subranges/layered-subrange.h"
+#include "Gral/Algorithms/adjacency-hulls.h"
+#include "Gral/Algorithms/reduction.h"
 
 //----------------------------------------------------------------
 // 

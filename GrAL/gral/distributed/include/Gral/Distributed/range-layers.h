@@ -9,8 +9,8 @@
 //   
 //----------------------------------------------------------------
 
-#include "compiler-config.h"
-#include "Grids/enumerated-subrange.h"
+#include "Config/compiler-config.h"
+#include "Gral/Subranges/enumerated-subrange.h"
 
 //----------------------------------------------------------------
 // 
@@ -203,7 +203,7 @@ void write_ovrge(OVRange const& rnge, ostream& out);
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/range-layers.C"
+#include "Gral/Distributed/internal/range-layers.C"
 #endif
 
 

@@ -29,7 +29,7 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid,
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/construct-local-overlapping-grids.C"
+#include "Gral/Distributed/internal/construct-local-overlapping-grids.C"
 #endif
 
 #endif

@@ -8,10 +8,11 @@
 //   http://math-s.math.tu-cottbus.de/NMWR
 //   
 //----------------------------------------------------------------
-#include "compiler-config.h"
-#include "Grids/Distributed/distr-grid-traits.h"
-#include "Grids/Distributed/mpi-distributed-grid.h"
-#include "Grids/Distributed/mpi-distributed-grid-function.h"
+
+#include "Config/compiler-config.h"
+#include "Gral/Distributed/distr-grid-traits.h"
+#include "Gral/Distributed/mpi-distributed-grid.h"
+#include "Gral/Distributed/mpi-distributed-grid-function.h"
 
 
 template<class CG, class FG>
@@ -67,7 +68,7 @@ T global_reduce(distr_grid_function<E,T, MPIDistributedGrid<CG,FG> > & gf, OP co
 */
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "generic/mpi-global-reduce.C"
+#include "Gral/Distributed/internal/mpi-global-reduce.C"
 #endif
 
 #endif

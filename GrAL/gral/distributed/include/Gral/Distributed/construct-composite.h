@@ -34,7 +34,7 @@ ConstructComposite(CompositeG& CG,          // out
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/construct-composite.C"
+#include "Gral/Distributed/internal/construct-composite.C"
 #endif
 
 #endif

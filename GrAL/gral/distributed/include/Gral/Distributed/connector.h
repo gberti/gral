@@ -309,7 +309,7 @@ AddingConnector(SenderRge s, ReceiverRge r)
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/range-connector.C"
+#include "Gral/Distributed/internal/range-connector.C"
 #endif
 
 #endif

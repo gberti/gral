@@ -10,7 +10,7 @@
 //----------------------------------------------------------------
 
 #include "Container/algorithms.h"
-#include "Grids/Distributed/overlap.h"
+#include "Gral/Distributed/overlap.h"
 
 template<class CoarseGrid, class FineGrid>
 void overlap<CoarseGrid, FineGrid>::set_neighbours()

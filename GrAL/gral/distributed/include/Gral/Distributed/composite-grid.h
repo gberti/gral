@@ -2,8 +2,8 @@
 #define NMWR_GB_COMPOSITE_GRID_H
 
 
-#include "Grids/common-grid-basics.h"
-#include "Grids/Distributed/overlapping-grid.h"
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Distributed/overlapping-grid.h"
 
 template<class CoarseG, class FineG>
 class CompositeGrid {
@@ -68,7 +68,7 @@ template<class CoarseG, class FineG>
 void check_composite_grid(const CompositeGrid<CoarseG,FineG>& CG);
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/composite-grid.C"
+#include "Gral/Distributed/internal/composite-grid.C"
 #endif
 
 #endif

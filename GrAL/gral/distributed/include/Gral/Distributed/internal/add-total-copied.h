@@ -36,7 +36,7 @@ void AddTotalRanges(Overlap          &  ovrlp,   // out
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/add-total-copied.C"
+#include "Gral/Distributed/internal/add-total-copied.C"
 #endif
 
 #endif

@@ -30,7 +30,7 @@ void ConstructComposite_per(CompositeG     & CG,          // out
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/construct-composite-periodic.C"
+#include "Gral/Distributed/internal/construct-composite-periodic.C"
 #endif
 
 

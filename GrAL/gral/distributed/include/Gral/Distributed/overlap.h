@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/range-layers.h"
+#include "Gral/Distributed/range-layers.h"
 
 //----------------------------------------------------------------
 // class overlap<CoarseG,FineG>;
@@ -240,7 +240,7 @@ void write_ovlp(Overlap const& ovlp, ostream & out);
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/overlap.C"
+#include "Gral/Distributed/internal/overlap.C"
 #endif
 
 

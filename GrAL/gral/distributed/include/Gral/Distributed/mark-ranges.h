@@ -78,7 +78,7 @@ void mark_private_range(ERange& priv,
 			const ERange& copied);
 
 #ifdef  NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/mark-ranges.C"
+#include "Gral/Distributed/internal/mark-ranges.C"
 #endif
 
 #endif

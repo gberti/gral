@@ -9,16 +9,16 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/construct-composite.h"
+#include "Gral/Distributed/construct-composite.h"
 
 #include "Container/bijective-mapping.h"
 
-#include "Grids/Algorithms/coarse-grid-from-partitioning.h"
+#include "Gral/Algorithms/coarse-grid-from-partitioning.h"
 
-#include "Grids/Distributed/dyn-overlap.h"
-#include "Grids/Distributed/construct-overlap.h"
-#include "Grids/Distributed/construct-local-overlapping-grids.h"
-#include "Grids/Distributed/generic/grid-self-map.h"
+#include "Gral/Distributed/dyn-overlap.h"
+#include "Gral/Distributed/construct-overlap.h"
+#include "Gral/Distributed/construct-local-overlapping-grids.h"
+#include "Gral/Distributed/internal/grid-self-map.h"
 
 template<class CompositeG, class Partition, class Geometry, 
          class OVPattern, class VCorr, class CCorr>

@@ -2,12 +2,12 @@
 #define NMWR_GB_CONSTRUCT_OVERLAP_C
 
 
-#include "Grids/Distributed/construct-overlap.h"
+#include "Gral/Distributed/construct-overlap.h"
 
-#include "Grids/Distributed/generic/add-total-shared.h"
-#include "Grids/Distributed/generic/add-partial-shared.h"
-#include "Grids/Distributed/generic/add-total-copied.h"
-#include "Grids/Distributed/generic/add-partial-copied.h"
+#include "Gral/Distributed/internal/add-total-shared.h"
+#include "Gral/Distributed/internal/add-partial-shared.h"
+#include "Gral/Distributed/internal/add-total-copied.h"
+#include "Gral/Distributed/internal/add-partial-copied.h"
 
 
 template<class Overlap, class CoarseGrid, 

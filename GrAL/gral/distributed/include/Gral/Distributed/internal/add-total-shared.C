@@ -9,8 +9,8 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/generic/add-total-shared.h"
-#include "Grids/element-sequence-references.h"
+#include "Gral/Distributed/internal/add-total-shared.h"
+#include "Gral/element-sequence-references.h"
 
 //----------------------------------------------------------------
 //

@@ -9,12 +9,12 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/mpi-distributed-grid-traits.h"
+#include "Gral/Distributed/mpi-distributed-grid-traits.h"
 
 #include <mpi.h>
 #include "algorithm"
 
-#include "Grids/Distributed/mpi-reduce.h"
+#include "Gral/Distributed/mpi-reduce.h"
 
 //----------------------------------------------------------------
 //

@@ -9,14 +9,14 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/construct-local-overlapping-grids.h"
+#include "Gral/Distributed/construct-local-overlapping-grids.h"
 #include "Container/functions.h"
-#include "Grids/enumerated-subrange.h"
+#include "Gral/Base/enumerated-subrange.h"
 
-#include "Grids/Algorithms/enlarge-grid.h"
-#include "Grids/Algorithms/construct-grid.h"
+#include "Gral/Algorithms/enlarge-grid.h"
+#include "Gral/Algorithms/construct-grid.h"
 
-#include "Grids/Distributed/mark-ranges.h"
+#include "Gral/Distributed/mark-ranges.h"
 
 //----------------------------------------------------------------
 //

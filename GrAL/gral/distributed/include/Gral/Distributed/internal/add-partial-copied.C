@@ -9,8 +9,8 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/generic/add-partial-copied.h"
-#include "Grids/partitioning.h"
+#include "Gral/Distributed/internal/add-partial-copied.h"
+#include "Gral/partitioning.h"
 
 template<class Overlap,     class Partition, 
          class Part2Cell,

@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Distributed/range-layers.h"
+#include "Gral/Distributed/range-layers.h"
 
 template<class EltRange>
 void write_rge(EltRange const& rge, ostream & out)

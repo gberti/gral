@@ -38,7 +38,7 @@ void AddTotalSharedRanges(VertexRange       & shared_v, // out
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/add-total-shared.C"
+#include "Gral/Distributed/internal/add-total-shared.C"
 #endif
 
 #endif

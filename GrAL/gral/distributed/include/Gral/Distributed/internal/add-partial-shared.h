@@ -48,7 +48,7 @@ void AddPartialSharedRanges(Overlap          &  ovrlp,    // out: {coarse cell} 
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/add-partial-shared.C"
+#include "Gral/Distributed/internal/add-partial-shared.C"
 #endif
 
 #endif

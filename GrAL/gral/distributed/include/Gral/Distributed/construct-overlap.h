@@ -23,7 +23,7 @@ void ConstructOverlap(Overlap          & Ovlp,         // out
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Distributed/generic/construct-overlap.C"
+#include "Gral/Distributed/internal/construct-overlap.C"
 #endif
 
 #endif
