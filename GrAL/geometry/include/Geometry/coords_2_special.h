@@ -34,11 +34,14 @@ public:
 
   ~coordN() {}
   
-  component  operator[](index i) const { return X[--i];}
-  component& operator[](index i)       { return X[--i];}
-  component  operator()(index i) const { return X[--i];}
-  component& operator()(index i)       { return X[--i];}
+  component  operator[](index i) const { _c(i); return X[--i];}
+  component& operator[](index i)       { _c(i); return X[--i];}
+  component  operator()(index i) const { _c(i); return X[--i];}
+  component& operator()(index i)       { _c(i); return X[--i];}
 
+  void _c(index i) const { REQUIRE ( (1 <= i && i <= 2), "i = " << i << '\n',1);}
+
+ 
   self& operator+=(const self& rhs) { X[0] += rhs.X[0];X[1] += rhs.X[1]; return *this; }
   self& operator-=(const self& rhs) { X[0] -= rhs.X[0];X[1] -= rhs.X[1]; return *this; }
   self& operator*=(const component& rhs) { X[0] *= rhs;X[1] *= rhs; return *this; }

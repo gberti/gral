@@ -60,10 +60,12 @@ public:
   coordN(const self& rhs)     { for(index i=0; i<N; i++) X[i] = rhs.X[i];}
   ~coordN() {}
 
-  const component& operator[](index i) const { return X[--i];}
-        component& operator[](index i)       { return X[--i];}
-  const component& operator()(index i) const { return X[--i];}
-        component& operator()(index i)       { return X[--i];}
+  const component& operator[](index i) const { _c(i); return X[--i];}
+        component& operator[](index i)       { _c(i); return X[--i];}
+  const component& operator()(index i) const { _c(i); return X[--i];}
+        component& operator()(index i)       { _c(i); return X[--i];}
+
+  void _c(index i) const { REQUIRE ( (1 <= i && i <= N), "i = " << i << '\n',1);}
 
   self& operator+=(const self& rhs) { for(index i=0; i<N; i++) X[i] += rhs.X[i]; return *this; }
   self& operator-=(const self& rhs) { for(index i=0; i<N; i++) X[i] -= rhs.X[i]; return *this; }
