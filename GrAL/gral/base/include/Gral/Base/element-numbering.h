@@ -88,9 +88,10 @@ class element_numbering :
   public element_numbering_aux<E, GT, typename element_traits<E>::consecutive_tag>
 {
   typedef element_numbering_aux<E, GT, typename element_traits<E>::consecutive_tag> base;
+  typedef typename base::grid_type grid_type;
 public:
   //! \brief Construct with offset. Typical choices are 0 (default) and 1.
-  element_numbering(typename base::grid_type const& g,
+  element_numbering(grid_type const& g,
 		    int offset = 0) : base(g, offset) {}
 
   /* The following is repeated for documentation purposes */
