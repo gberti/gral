@@ -78,6 +78,7 @@ void distributed_grid_function_adapter<GF,DistributedG>::set_added_on_shared()
 { 
   if (!added_on_shared) { 
     added_on_shared =true;
+    sync_on_shared  =true;
     do_shared_ranges();
   }
 }
