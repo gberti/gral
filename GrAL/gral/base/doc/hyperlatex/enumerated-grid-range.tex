@@ -56,7 +56,7 @@ None.
    \par defined as {\gralclasslink{vertex\_range\_ref}{base}<G,R>} \\
    {\tt cell\_range\_ref } 
    & reference to cell range, 
-   \par defined as {\tt \sectionlinkfoot{cell\_range\_ref}{CellRangeRef}<G,R>} \\
+   \par defined as {\tt \gralclasslink{cell\_range\_ref}{base}<G,R>} \\
    \hline
    \multicolumn{2}{c}{\bf\em Functions} \\
    \hline
@@ -77,8 +77,7 @@ None.
     if(predicate(*c)) // some predicate on cells
       r.append_cell(c.handle());
   // determine vertex set of r.cells()
-  \sectionlinkfoot{GetCellRangeVertices}{GetCellRangeVertices}(r.cells(),%
-\sectionlinkfoot{vertex\_back\_inserter}{VertexBackInserter}(r));
+  \gralfunctionlink{ConstructSubrangeFromCells}{base}(r,r.cells());
   
 \end{example}
 \datasubsection{Notes}
@@ -96,7 +95,8 @@ None.
 
   Note, however, that there are components that can help in ensuring
   this property in a subrange, for example the 
-  \sectionlinkshort{\type{GetCellRangeVertices}}{GetCellRangeVertices} algorithm.
+  \gralfunctionlink{ConstructSubrangeFromCells}{base}  algorithm.
+
 
 \item \notelabel{note-edgerange-in-2d-only}
   The  \sectionlinkshort{\concept{Edge Grid Range}}{EdgeRange} concept
@@ -116,6 +116,6 @@ None.
 
 \datasubsection{See also}
 
-\sectionlinkshort{\type{enumerated\_element\_range}}{EnumeratedElementRange} ~
-\sectionlinkshort{\type{enumerated\_element\_range\_ref}}{EnumeratedElementRangeRef} ~
+\gralclasslink{enumerated\_element\_range}{base} ~
+\gralclasslink{enumerated\_element\_range\_ref}{base} ~
 \sectionlinkshort{\concept{Grid Range}}{GridRange}

@@ -48,7 +48,7 @@ make-links:
           ln -s Vertex-On-CellIterator.html EdgeOnCellIterator.html; \
           ln -s Vertex-On-CellIterator.html VertexOnFacetIterator.html; \
           ln -s Vertex-On-CellIterator.html FacetOnCellIterator.html; \
-          ))
+          )) || echo "(ignored)"
 
 
 clean: stdclean

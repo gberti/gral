@@ -2,6 +2,8 @@
 
 source ${HOME}/.bashrc
 echo `which convert`
+echo `which perl`
+perl -v;
 
 TAG=${1-HEAD}
 cvswork=${CVSWORK-${HOME}/CVS-work}
