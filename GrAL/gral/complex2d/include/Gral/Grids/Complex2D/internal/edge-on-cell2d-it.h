@@ -38,6 +38,12 @@ public:
     REQUIRE( (0 <= cnt), 
 	    "EdgeOnCell2DIterator: invalid cnt = " << cnt << " specified!\n",1);
   }
+  EdgeOnCell2D_Iterator(const Cell& CC, int cnt)
+    : C(CC), lf(cnt) 
+  {
+    REQUIRE( (0 <= cnt), 
+	    "EdgeOnCell2DIterator: invalid cnt = " << cnt << " specified!\n",1);
+  }
   /*
   EdgeOnCell2D_Iterator(cell_handle c, int cnt, const Complex2D& cc)
     : _cc(&cc), _c(c), lf(cnt) {
@@ -65,8 +71,14 @@ public:
   bool IsDone() const {return ((lf < 0) || (lf >= TheCell().NumOfEdges()));}
   operator bool() const { return !IsDone();}
   int LocalNumber() const { return (lf+1);}
-  Cell const& TheCell()  const;
-  Cell        OtherCell() const;
+
+  inline vertex_handle v1() const;
+  inline vertex_handle v2() const;
+
+  inline cell_handle   the_cell()   const;
+  inline cell_handle   other_cell() const;
+  inline Cell const&   TheCell()   const;
+  inline Cell          OtherCell() const;
 
   //---------------- anchor access ------------------
 
@@ -82,6 +94,9 @@ public:
   void print(ostream& out)  const;
   friend ostream& operator<<(ostream& out, const EdgeOnCell2D_Iterator& it)
     { it.print(out); return out; }
+
+  bool bound() const { return C.valid();}
+  bool valid() const { return C.valid() && (0 <= lf) && (lf < C.NumOfEdges());}
 };
 
 
