@@ -4,10 +4,11 @@ for i in out
 do
 /bin/echo "\n"
 diff -w $i $i.exp
-if ($status) then 
-/bin/echo "\t\t\t" ERROR in $i
-else
+if diff -w $i $i.exp
+then 
 /bin/echo "\t\t\t" $i OK
+else
+/bin/echo "\t\t\t" ERROR in $i
 fi
 done
 /bin/echo "\n"
