@@ -33,5 +33,5 @@ int main() {
 		  "R.NumOfEdges()=" << R.NumOfEdges() << " nv=" << nv, 1);
 
   typedef xgt<gt, override_EdgeIterator<markedEdgeIterator> > mygt;
-  test_edge_iterator(R,cout, mygt());
+  test_edge_iterator(R, std::cout, mygt());
 }

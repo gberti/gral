@@ -32,5 +32,5 @@ int main() {
 		  "R.NumOfVertices()=" << R.NumOfVertices() << " nv=" << nv, 1);
 
   typedef xgt<gt, override_VertexIterator<markedVertexIterator> > mygt;
-  test_vertex_iterator(R,cout, mygt());
+  test_vertex_iterator(R, std::cout, mygt());
 }

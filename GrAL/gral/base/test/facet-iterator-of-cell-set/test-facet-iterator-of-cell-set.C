@@ -33,5 +33,5 @@ int main() {
 
 
    typedef xgt<gt, override_FacetIterator<markedFacetIterator> > mygt;
-   test_facet_iterator(R,cout, mygt());
+   test_facet_iterator(R,std::cout, mygt());
 }
