@@ -1,4 +1,4 @@
-MPIPATH=/usr/lib/mpich
+MPIPATH=/usr/local/mpich
 
 MPIRUN=$(MPIPATH)/bin/mpirun
 MPI_INCLUDES= -I$(MPIPATH)/include
