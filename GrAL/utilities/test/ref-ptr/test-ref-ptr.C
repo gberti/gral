@@ -4,11 +4,11 @@
 #include <iostream>
 
 
-class A {
+class A_ {
 public:
   int i;
 
-  A() : i(1) {}
+  A_() : i(1) {}
 
   int&           f1() { return i;}
   int const&     f2() { return i;}
@@ -35,7 +35,7 @@ class G {
   ref_ptr<Y const> y1;
   Y       y_owned;
 public:
-  G() {}
+  G() : x(new X(88)), y1(new Y(99)) {}
   G(ref_ptr<X const> xx) : x(xx) {}
   G(ref_ptr<Y const> yy) : y1(yy), y_owned(*yy) {}
 
@@ -50,7 +50,7 @@ public:
 int main() {
   using namespace std;
 
-  A a;
+  A_ a;
 
   ref_ptr<int> pi1(a.f1()); REQUIRE_ALWAYS( !pi1.owned(), "", 1);
 #ifdef COMPILE_FAIL
