@@ -13,12 +13,15 @@
       see \ref file pre-post-conditions.h
 
      \subsection sectraits Some general traits classes
-        see \ref copy_traits
+        \ref copy_traits : Make pointers copyable even 
+          when its a pointer to a base class. This is needed
+          to use a copy-on-write smart pointer with polymorphic types.
 
-        see \ref type_name_traits
+         \ref type_name_traits : Get a types name as string. Specialized
+          for the built-in types.
 
-     \subsection secasstring  Conversion of arbitrary types in strings
-        see \ref file as-string.h
+     \subsection secasstring  Conversion of arbitrary types to strings
+        \ref file as-string.h : Uses <tt> strstream  </tt> to achieve that.
 
      \subsection secrefcnt   Reference counting smart pointer
       Borrowed from Scott Meyers book "More Effective C++".

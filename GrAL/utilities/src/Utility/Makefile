@@ -2,18 +2,16 @@ include  $(CONFIG)
 
 
 LOCALSOURCES= safe-file.C
-
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
 
 OBJDIR=obj
-TARGETS = local
 
 new: partial-clean all
 
 # use generic makefile for building objects
 makefile:
-	cp $(NMWRROOT)/defs/Makefile.obj $(OBJDIR)/Makefile 
+	cp $(CONFIGURATION)/defs/Makefile.obj $(OBJDIR)/Makefile 
 
 all: compile lib
 
@@ -23,7 +21,7 @@ compile: makefile
 
 lib: makefile
 	(cd $(OBJDIR); \
-         gmake lib SRC="$(LOCALSOURCES)" LIB="$(LIBDIR)/lib$(LIBNAME).a")
+         gmake lib SRC="$(LOCALSOURCES)" IBDIR="$(LIBDIR)" LIB="lib$(LIBNAME).a")
 
 partial-clean: makefile
 	(cd $(OBJDIR); gmake clean DEPS="")

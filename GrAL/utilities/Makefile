@@ -1,6 +1,10 @@
 export CONFIG:=$(PWD)/mk.config
 
+include $(CONFIG)
+unexport PWD
+
 export PACKAGE:=utilities#
+
 export DEBUG
 export CCC
 #export CCFLAGS
@@ -23,21 +27,27 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
+install:
+	mkdir -p $(INSTALLHEADERS)/Utility
+	mkdir -p $(INSTALLHEADERS)/Forward
+	mkdir -p $(INSTALLLIBRARIES)
+	cp include/Utility/*.h $(INSTALLHEADERS)/Utility
+	cp include/Forward/*.h $(INSTALLHEADERS)/Forward
+	cp $(LIBDIR)/*.a $(INSTALLLIBRARIES)
+
 clean:
 	(cd src;  $(MAKE) clean DEPS="")
-#	(cd demo; $(MAKE) clean DEPS="")
 	(cd doc;  $(MAKE) clean DEPS="")
 	rm -rf doxygen/*;
 	rm -f *~ include/*~ include/*/*~
 
 
 realclean: clean
-	rm -f lib/*.a
+	rm -f lib/*.a lib/*/*.a lib/*/*/*.a lib/*/*/*/*.a
 
-#demos:
-#	(cd demo; $(MAKE) $(TARGET))
 
 docs:
+	mkdir -p doxygen
 	doxygen doxy.cfg;
 
 
