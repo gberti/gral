@@ -12,10 +12,10 @@
 // use generic version for total grid functions
 
 template<class T>
-class grid_function<Vertex_Cartesian3D, T>
-  : public grid_function_vector<Vertex_Cartesian3D,T>
+class grid_function<cartesian3d::Vertex_Cartesian3D, T>
+  : public grid_function_vector<cartesian3d::Vertex_Cartesian3D,T>
 {
-  typedef grid_function_vector<Vertex_Cartesian3D,T> base;
+  typedef grid_function_vector<cartesian3d::Vertex_Cartesian3D,T> base;
  public:
   typedef typename base::grid_type grid_type;
 
@@ -27,10 +27,10 @@ class grid_function<Vertex_Cartesian3D, T>
 
 
 template<class T>
-class grid_function<Cell_Cartesian3D, T>
-  : public grid_function_vector<Cell_Cartesian3D,T>
+class grid_function<cartesian3d::Edge_Cartesian3D, T>
+  : public grid_function_vector<cartesian3d::Edge_Cartesian3D,T>
 {
-  typedef grid_function_vector<Cell_Cartesian3D,T> base;
+  typedef grid_function_vector<cartesian3d::Edge_Cartesian3D,T> base;
  public:
   typedef typename base::grid_type grid_type;
 
@@ -39,6 +39,36 @@ class grid_function<Cell_Cartesian3D, T>
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
 
 };
+
+template<class T>
+class grid_function<cartesian3d::Facet_Cartesian3D, T>
+  : public grid_function_vector<cartesian3d::Facet_Cartesian3D,T>
+{
+  typedef grid_function_vector<cartesian3d::Facet_Cartesian3D,T> base;
+ public:
+  typedef typename base::grid_type grid_type;
+
+  grid_function() {}
+  grid_function(grid_type const& gg) : base(gg) {}
+  grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
+
+};
+
+
+template<class T>
+class grid_function<cartesian3d::Cell_Cartesian3D, T>
+  : public grid_function_vector<cartesian3d::Cell_Cartesian3D,T>
+{
+  typedef grid_function_vector<cartesian3d::Cell_Cartesian3D,T> base;
+ public:
+  typedef typename base::grid_type grid_type;
+
+  grid_function() {}
+  grid_function(grid_type const& gg) : base(gg) {}
+  grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
+
+};
+
 
 
 #endif

@@ -5,6 +5,7 @@
 
 #include "Gral/Grids/Cartesian3D/cartesian3d.h"
 
+namespace cartesian3d {
 
 template<class CoordMap>
 class mapped_geometry_cartesian3d {
@@ -55,5 +56,7 @@ private:
       dz = 1.0 / g->NumOfZCells();
     } 
 };
+
+}; // namespace cartesian3d
 
 #endif

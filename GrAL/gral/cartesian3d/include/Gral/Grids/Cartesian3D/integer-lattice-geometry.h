@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+
+namespace cartesian3d {
+
 /*! \brief A geometry for CartesianGrid3D 
     living on the integer lattice \f$ \Z^3 \f$
 
@@ -34,4 +37,5 @@ public:
   //real volume(gt::Face const&) const { return 1;}
 };
 
+}; // namespace cartesian3d
 #endif
