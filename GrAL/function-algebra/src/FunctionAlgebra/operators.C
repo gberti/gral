@@ -488,10 +488,10 @@ RFunction operator *  (const RFunction& f, const RFunction& g)
   { RFunction ff(new function_algebra_multiplication(f,g));
   return ff;}
 
-RFunction operator * (const coord_type& p, const RFunction& f)
+RFunction operator * (const RFunction::coord_type& p, const RFunction& f)
 { return (f*Constant(p,f.dDef()));}
 
-RFunction operator * (const RFunction& f, const coord_type& p)
+RFunction operator * (const RFunction& f, const RFunction::coord_type& p)
 { return (f*Constant(p,f.dDef()));}
 
 RFunction operator /  (const RFunction& f, const RFunction& g) // f/g

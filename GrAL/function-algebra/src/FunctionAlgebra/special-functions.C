@@ -166,7 +166,9 @@ std::string function_algebra_hermite::write_code_derive(std::ostream& out, int& 
 }
 
 
-coord_type function_algebra_hermite::derive(const coord_type& x,const coord_type& h) const
+RFunction::coord_type 
+function_algebra_hermite::derive(const RFunction::coord_type& x,
+				 const RFunction::coord_type& h) const
 {
   double t = (x[1]-a)/(b-a);
   if (t <= 0.0) return coord_type(0.0);
@@ -395,7 +397,7 @@ std::string function_algebra_distance::write_code_derive(std::ostream& out, int&
 template<class T>
 inline  T mymin(T i, T k) { return (i<k?i:k);}
 
-static int min_index(const coord_type& p) // index with |p[i]| = min p.dim() = 3
+static int min_index(const RFunction::coord_type& p) // index with |p[i]| = min p.dim() = 3
 {
   double p1 =fabs(p[1]), p2 = fabs(p[2]), p3 = fabs(p[3]);
   if(p1 <= mymin(p2,p3))
@@ -418,7 +420,8 @@ private:
   double cosa;
   double sina;
   
-  coord_type derive(const coord_type& /*x*/, const coord_type& h) const { return eval(h);}
+  coord_type derive(const RFunction::coord_type& /*x*/, 
+		    const RFunction::coord_type& h) const { return eval(h);}
   //  typedef algebraic_primitives<coord_type> algebra;
   typedef dimension_dependent_primitives_3d<coord_type> ap3d;
 public:

@@ -155,9 +155,8 @@ public:
 inline Derivative d(const RFunction& F, const RFunction::coord_type& x) { return F.derive(x);}
 
 
-typedef RFunction::coord_type coord_type;
-extern RFunction operator * (const coord_type& p, const RFunction& f);
-extern RFunction operator * (const RFunction& f,  const coord_type& p);
+extern RFunction operator * (const  RFunction::coord_type& p, const RFunction& f);
+extern RFunction operator * (const RFunction& f,  const  RFunction::coord_type& p);
 
 //  Piecewise(F0,Fneg,Fpos) = ( F0 < 0 ? Fneg : Fpos)
 extern RFunction Piecewise(const RFunction& F0, 
@@ -204,23 +203,24 @@ extern const RFunction Log;
 // affine functions
 extern RFunction NullFct(int dD=1,int dI = 1);
 // extern RFunction Constant(double c, int dDef);
-extern RFunction Constant(const coord_type& p, int dDef);
+extern RFunction Constant(const  RFunction::coord_type& p, int dDef);
 extern RFunction X(int i);
 extern RFunction X(int i,int dim);
-extern RFunction Scale(const coord_type& diag);
-inline RFunction Scale2D(double s) { return Scale(coord_type(s,s));}
-inline RFunction Scale3D(double s) { return Scale(coord_type(s,s,s));}
-extern RFunction Translate(const coord_type& t);
-inline RFunction Translate(double x, double y, double z) { return Translate(coord_type(x,y,z));}
-extern RFunction ProjectToHyperplane(const coord_type& normal, double dist =0.0); 
-extern RFunction DistanceToHyperplane(const coord_type& normal, double dist =0.0);
+extern RFunction Scale(const  RFunction::coord_type& diag);
+inline RFunction Scale2D(double s) { return Scale( RFunction::coord_type(s,s));}
+inline RFunction Scale3D(double s) { return Scale( RFunction::coord_type(s,s,s));}
+extern RFunction Translate(const  RFunction::coord_type& t);
+inline RFunction Translate(double x, double y, double z) { return Translate( RFunction::coord_type(x,y,z));}
+inline RFunction Translation(const  RFunction::coord_type& t) { return Translate(t);}
+extern RFunction ProjectToHyperplane(const  RFunction::coord_type& normal, double dist =0.0); 
+extern RFunction DistanceToHyperplane(const  RFunction::coord_type& normal, double dist =0.0);
 extern RFunction Rotation2D(double a);
-extern RFunction Rotation3D(const coord_type& axis, double a);
+extern RFunction Rotation3D(const  RFunction::coord_type& axis, double a);
 
 // some other useful functions
 extern RFunction Norm2(int dim); // || x ||^2  where x in R^dim
-extern RFunction Circle(const coord_type& m, double r); // ||x-m|| - sqrt(r)
-extern RFunction Polynome1D(const coord_type& c); // c[1] + x*c[2] + x^2*c[3] + ....
+extern RFunction Circle(const  RFunction::coord_type& m, double r); // ||x-m|| - sqrt(r)
+extern RFunction Polynome1D(const  RFunction::coord_type& c); // c[1] + x*c[2] + x^2*c[3] + ....
 extern RFunction S3(const double& a, const double& b); // an S-shaped pw cubic polynome, 
 // S3ab(a) = 0, S3ab(b) = 1, S3ab globally C^1 and constant outside [a,b].
 // it is NOT required that a < b !
