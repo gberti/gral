@@ -5,6 +5,7 @@
 
 // FIXME: replace with <limits> when gcc 2.9x does not need to be supported any more
 #include <boost/limits.hpp>
+#include <algorithm> // swap
 
 /*! Representation of real interval
 
