@@ -1,5 +1,5 @@
 #!/bin/sh
-./test-primitives  >& out
+./test-primitives  > out 2>&1
 for i in out 
 do
 /bin/echo "\n"
