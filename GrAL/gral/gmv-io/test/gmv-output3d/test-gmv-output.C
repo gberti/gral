@@ -46,8 +46,8 @@ int main() {
     OstreamGMV3DFmt Out("3x3x3.out");
     namespace hl = heterogeneous_list;
     hl::BEGIN B;
-    ConstructGrid(Out,R,GeomR,
-		  (B, Out.pair("gf1",gf1), Out.pair("gf2",gf2)));
+    ConstructGrid_GF(Out,R,GeomR,
+		     (B, Out.pair("gf1",gf1), Out.pair("gf2",gf2)));
     // ConstructGrid(Out,R,GeomR, (heterogeneous_list::BEGIN, gf1, gf2));
   } 
 
