@@ -1,3 +1,4 @@
+#include <fstream>
 
 #include "Gral/Grids/Cartesian3D/cartesian3d.h"
 #include "Gral/Grids/Cartesian3D/grid-functions.h"
@@ -8,6 +9,8 @@ int main() {
 
   typedef CartesianGrid3D grid_type;
   typedef grid_types<grid_type> gt;
+ 
+  std::ofstream* out = new std::ofstream("grid-functions.out");
 
   grid_type EmptyG; 
   REQUIRE_ALWAYS(EmptyG.NumOfVertices() == 0,
@@ -23,8 +26,19 @@ int main() {
   for(gt::VertexIterator v(G); ! v.IsDone(); ++v)
     gfv[*v] = v.handle();
 
+  typedef grid_function<gt::Vertex,gt::vertex_handle>::const_iterator gfv_iter;
+  for(gfv_iter vi = gfv.begin(); vi != gfv.end(); ++vi)
+    *out << *vi << '\n';
+  *out << endl;
+
   for(gt::CellIterator   c(G); ! c.IsDone(); ++c)
     gfc[*c] = c.handle();
+  typedef grid_function<gt::Cell,gt::cell_handle>::const_iterator gfc_iter;
+  for(gfc_iter ci = gfc.begin(); ci != gfc.end(); ++ci)
+    *out << *ci << '\n';
+  *out << endl;
+
+
 
   grid_function<gt::Vertex,gt::vertex_handle> gfv_copy1(gfv);
   REQUIRE_ALWAYS(gfv_copy1.size() == gfv_copy1.TheGrid().NumOfVertices(), 
@@ -83,4 +97,5 @@ int main() {
   } 
 
 
+  delete out;
 }
