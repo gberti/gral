@@ -81,12 +81,8 @@ DOCROOT=$(ALLROOT)
 DOXYPATH=doxygen/html
 DOXYCFG=$(CONFIGURATION)/doxycfg/
 RELPATH=../../..#
-#ADDRELPATH=#
-ifdef $(ADDRELPATH)
-RELROOT=$(RELPATH)/$(ADDRELPATH)
-else
-RELROOT=$(RELPATH)
-endif
+ADDRELPATH=.#
+RELROOT=$(RELPATH)/$(ADDRELPATH)#
 
 doxy:
 	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(ALLROOT) -binpath $(LOCALBINPATH) \
@@ -108,6 +104,9 @@ installdox:
 	chmod ugo+x ./installdox.sh.tmp;
 	./installdox.sh.tmp
 	rm -f installdox.sh.tmp
+	$(DOXYCFG)/install-doc.pl -root $(RELROOT) -path $(DOXYPATH) -stl $(STLURL) \
+        -gralconcepts $(RELROOT)/gral/base/doc/hyperlatex/html \
+        $(DOXYPATH)/*.html
 
 DOCDEST=/dev/null
 copy-doxy: 

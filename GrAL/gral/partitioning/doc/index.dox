@@ -1,0 +1,12 @@
+/*! \mainpage Index of the GrAL Partitioning Module
+
+   This module contains data structures and algorithms for grid partitioning.
+  
+   It is still very incomplete.
+
+   The most interesting modules are
+    - \ref metispartitioning (interface to $Metis)
+    - \ref partitioningds 
+    - \ref partitioningpostproc
+    - \ref quotientgrid
+*/

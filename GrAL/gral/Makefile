@@ -85,20 +85,5 @@ postdoc-recursive:
 	rm -f *.o *~ *.flc core;
 
 
-additional-postdoc: install-doc
 
-install-doc:
-	(./bin/install-doc.pl -root $(RELROOT) \
-                             -path  $(DOXYPATH) \
-                             -stl $(STLURL) \
-                             -gral $(RELROOT)/gral/base/doc/hyperlatex/html \
-        doxygen/html/*.html)
-
-
-# assumes that RELPATH=../../..
-
-additional-copydoc:
-
-#	cp $(DOXYPATH)/index.html $(DOCDEST)
-#	perl -p -i -e "s|\.\./\.\./\.\.|\.|g" $(DOCDEST)/index.html
 

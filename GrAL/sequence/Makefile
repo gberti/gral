@@ -34,6 +34,6 @@ realclean: clean
 test:
 	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
-doc: doxy
+
 
 

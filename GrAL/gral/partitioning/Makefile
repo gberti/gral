@@ -34,7 +34,8 @@ test:
 module-check: test-new-check-clean
 
 # depth + 1
-ADDRELPATH :=..
+ADDRELPATH :=..#
+#RELROOT +=/..#
 
 additional-postdoc: 
 	(../bin/install-doc.pl -root $(RELROOT) \

@@ -20,7 +20,7 @@
            Contains some stuff for handling containers,
            sequences and algorithms.
      <LI>  $gral-external-control External Control module:
-      Controling runtime parameters in a uniform way and hierarchical way.
+      Controling runtime parameters in a uniform and hierarchical way.
      <LI>  $gral-geometry         Geometry module:
            some geometric primitives
      <H2> Proper GrAL Modules </H2> 
