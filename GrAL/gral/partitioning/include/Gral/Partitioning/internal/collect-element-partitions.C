@@ -61,16 +61,16 @@ void collect_facet_partitions(const Partition& P,                   // in
   typedef grid_types<grid_type>           gt;
   typedef typename gt::BdFacetIterator    BdFacetIterator;
 
-  // add mark for vertices on grid boundary
+  // add mark for facets on grid boundary
   if(mark_on_boundary) {
     for(BdFacetIterator bf = P.TheGrid().FirstBdFacet(); ! bf.IsDone(); ++bf)
-      partitions_of_vertex[*bf].push_back(-1);
+      partitions_of_facet[*bf].push_back(-1);
   }
 
-  // add mark for vertices on boundary of partitions
+  // add mark for facets on boundary of partitions
   for(int pt = 0; pt < P.NumOfPartitions(); ++pt) {
     for(PartBdFacetIterator pbf = P.FirstPartBdFacet(pt); ! pbf.IsDone(); ++pbf)
-      partitions_of_vertex[*pbf].push_back(pt);
+      partitions_of_facet[*pbf].push_back(pt);
   }
 }
 
