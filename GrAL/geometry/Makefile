@@ -24,17 +24,11 @@ install-headers:
 	cp include/Geometry/*.h $(INSTALLHEADERS)/Geometry
 	cp include/Geometry/*.C $(INSTALLHEADERS)/Geometry
 
-clean:
+clean: stdclean
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
 	rm -f doxy.tags doxy.log
 
-tarclean: clean
-	rm -rf lib/
-
-realclean: tarclean
-	rm -rf doxygen/
-
-doxy:
+realclean: clean
+	rm -rf doxygen
 
 
-.PHONY: demo test doc

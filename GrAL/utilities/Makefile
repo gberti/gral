@@ -33,7 +33,7 @@ clean: stdclean
 
 
 realclean: clean
-	rm -rf doxygen/*;
+	rm -rf doxygen
 	rm -rf lib/
 
 

@@ -24,7 +24,7 @@ compile: makefile
 lib: makefile
 	mkdir -p $(LIBDIR)
 	(cd $(OBJDIR); \
-         $(MAKE) lib SRC="$(LOCALSOURCES)" LIBDIR="$(LIBDIR)" LIB="lib$(IOLIB).a")
+         $(MAKE) lib SRC="$(LOCALSOURCES)" LIBDIR="$(LIBDIR)" LIB="lib$(LIBNAME).a")
 
 partial-clean: makefile
 	(cd $(OBJDIR); $(MAKE) clean DEPS="")

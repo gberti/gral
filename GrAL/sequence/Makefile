@@ -20,7 +20,7 @@ install-headers:
 	cp include/Container/*.h $(INSTALLHEADERS)/Container
 	cp include/Container/*.C $(INSTALLHEADERS)/Container
 
-clean:
+clean: stdclean
 	(cd test; $(MAKE) clean DEPS="")
 	(cd doc;  $(MAKE) clean DEPS="")
 	rm -f *~ include/*~ include/*/*~
@@ -32,22 +32,6 @@ realclean: clean
 test:
 	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
-doc: doxy tex
+doc: doxy
 
-doxy:
-	mkdir -p doxygen
-	(TEXINPUTS=$(TEXINPUTS):$(PWD); export TEXINPUTS; doxygen doxy.cfg;)
 
-tex:
-	(cd doc; $(MAKE) $(TARGET))
-	rm -f $(ROOT)/doxygen/html/external-control.html
-	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html
-
-tar:
-	(cd $(HOME)/tmp;\
-	rm -rf external-control/;\
-         cvs -d /home/nmwr/CVS export -r HEAD external-control; \
-         tar -cf external-control.tar external-control; \
-         rm -rf external-control/;)
-
-.PHONY: demo test doc

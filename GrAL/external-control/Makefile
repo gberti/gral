@@ -32,6 +32,7 @@ clean: stdclean
 
 realclean: clean
 	rm -rf lib/$(ARCH)/
+	rm -rf doxygen
 
 test:
 
