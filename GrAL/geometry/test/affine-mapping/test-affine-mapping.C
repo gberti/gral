@@ -34,10 +34,10 @@ void test_mapping2d(std::ostream& out)
   mapping_t M6 = S2(T2);
   mapping_t M7 = M6(M5);
   mapping_t M8 = M5(M6);
-  
+  mapping_t M9 = mapping_t::inverse(M5);  
   
   coord_t x[] = { coord_t(0,0), coord_t(1,2)};
-  mapping_t M[] = { M0, M1, M2, M3, M4, M5, M6, M7, M8};
+  mapping_t M[] = { M0, M1, M2, M3, M4, M5, M6, M7, M8, M9};
   
   for(int i = 0; i < (int)(sizeof(x)/sizeof(coord_t)); ++i)
     for(int m = 0; m < (int)(sizeof(M)/sizeof(mapping_t)); ++m)
