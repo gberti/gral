@@ -98,6 +98,8 @@ namespace generic_facet {
 	  : c(cc), lf(c.TheArchetype().FirstCell()) {}
 	facet_on_cell_iterator(Cell const& cc, archCellIterator const& llf) 
 	  : c(cc), lf(llf) {}
+	facet_on_cell_iterator(grid_type const& g, facet_handle const& h)
+	  : c(g,h.c), lf(c.TheArchetype(),h.lh) {}
 	
 	self& operator++() { c_(); ++lf; return *this;}
 	bool  IsDone()  const { return lf.IsDone();}
@@ -134,7 +136,7 @@ namespace generic_facet {
       facet_on_cell_iterator<gt> fc;
     public:
       facet() {}
-      facet(grid_type const&, facet_handle const& h);
+      facet(grid_type const& g, facet_handle const& h) : fc(g,h) {}
       facet(facet_on_cell_iterator<gt> const& ffc) : fc(ffc) {}
       
       VertexOnFacetIterator FirstVertex() const;
