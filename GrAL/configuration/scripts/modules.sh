@@ -4,6 +4,6 @@
 # on which the collective scripts are going to be executed
 
 MODULES='configuration utilities external-control sequence geometry 
-         gral/base gral/complex2d gral/distributed gral/partitioning';
+         gral gral/base gral/complex2d gral/distributed gral/partitioning';
 
 echo $MODULES;

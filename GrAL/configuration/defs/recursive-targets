@@ -1,8 +1,28 @@
-# default recursive targets,
-# to be included by Makefiles doing recursive make over subdirs
+# -*- makefile -*-
+
+#####################################################################
+# Default recursive targets,
+# to be included by Makefiles doing recursive make over subdirs,
+# defined in the variable SUBDIRS.
+# If there are no (as yet) any subdirs, SUBDIR must be left
+# undefined.
+#####################################################################
 
 
 
+
+# Some special cases
+
+# ifndef SUBDIRS
+generic:
+new-check-clean:
+new:
+all:
+compile:
+lib:
+clean:
+
+#else
 
 TARGET=dummy # must be called with "gmake generic TARGET=<target>"
 
@@ -13,13 +33,11 @@ generic:
 	echo "LEAVING  directory" $$i;cd ..; done
 
 
-# Some special cases
-
 new-check-clean:
 	@set -e; \
 	for i in $(SUBDIRS); \
 	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new-check-clean;\
-	echo "LEAVING  directory" $$i;cd ..; done
+	echo "LEAVING  directory" $$i;cd ..; done 
 
 new:
 	@set -e; \
@@ -52,5 +70,7 @@ clean:
 	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) clean;\
 	echo "LEAVING  directory" $$i;cd ..; done
 	rm -f *.o *~ *.flc core;
+
+#endif
 
 

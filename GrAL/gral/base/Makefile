@@ -7,7 +7,7 @@ TARGET=all
 
 all:
 
-new: clean
+new:
 
 
 compile:
@@ -35,7 +35,8 @@ realclean: tarclean
 	(cd doc; gmake realclean)
 
 test:
-	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
+
+#	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 
 # depth + 1

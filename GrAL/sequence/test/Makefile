@@ -1,7 +1,7 @@
+SUBDIRS = bijective-mapping
 
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
 
-SUBDIRS = bijective-mapping
 
 

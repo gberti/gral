@@ -15,7 +15,7 @@ include $(DEPS)
 
 
 
-LIBS += -lgral-distributed -lgral-complex2d  -lcontrol-device -lutilities 
+LIBS += -lgral-distributed -lgral-complex2d  -lexternal-control -lutilities 
 
 
 

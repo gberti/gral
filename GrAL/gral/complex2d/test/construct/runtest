@@ -1,13 +1,14 @@
-#!/bin/csh
-./test-construct |& sed -e '/nan/s//NaN/g' >& out.out
+#!/bin/bash
+./test-construct 2>&1 | sed -e '/nan/s//NaN/g' > out.out
 /bin/echo "\n"
-foreach i ( out.out case*.grid.out )
-diff $i `basename $i .out`.exp
-if ($status) then 
-/bin/echo "\t\t\t" ERROR in $i
-else
+for i in out.out case*.grid.out 
+do
+if diff $i `basename $i .out`.exp
+then
 /bin/echo "\t\t\t" $i OK
-endif
-end
+else
+/bin/echo "\t\t\t" ERROR in $i
+fi
+done
 /bin/echo "\n"
 

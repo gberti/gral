@@ -1,17 +1,29 @@
 # -*- makefile -*-
 
-# Some targets used in leaf makefiles 
+##############################################
+#
+# This file contains common some targets used 
+# in package makefiles.
+#
+##############################################
 
 # some aliases for standard targets
 distclean: realclean
 clobber:   realclean
 
+# build test programs
+test:
 
+# perform checks with test programs
+check:
+
+new: libclean
+
+#####################################################################
 # This is the central place of specifying which files to clean
 # As every C++ compiler leaves different stuff behind when dealing
 # with templates, it is wise to concentrate this information.
-# Intended usage is 
-# clean: stdclean
+#####################################################################
 
 stdclean: moduleclean
 	rm -f *~ *.o  *.d *.ti *.ii
@@ -21,34 +33,49 @@ stdclean: moduleclean
 	rm -f *.tmp
 	rm -f doxy.log 
 
+clean: stdclean
+
+libclean:
+	rm -rf lib/$(LIBPATH)/*.a
+
+############################
+##  Installation targets ###
+############################
+
 install-libs:
 	mkdir -p $(PREFIX)/lib/$(LIBPATH)
 	cp $(ROOT)/lib/$(LIBPATH)/lib*  $(PREFIX)/lib/$(LIBPATH)
 
 install: install-headers 
 
+########################################################
+#
+# Targets to generate documentation using doxygen.   
+#
+# Documentation generation (doc:) is broken into
+# predoc: and postdoc: phases.
+# predoc: does generate the documentation, and
+# postdoc: does perform some replacement of paths and
+# links.
+# By default, only doxygen documentation is generated.
+# Packages can add more by adding dependencies to
+#  additional-predoc: and additional-postdoc: targets.
+#########################################################
 
-# targets to generate documentation using doxygen
-
-doc: predoc postdoc
 
 predoc:  doxy additional-predoc
 postdoc: installdox additional-postdoc
-
-DOCDEST=/dev/null
-copy-doxy: 
-	mkdir -p $(DOCDEST)/$(DOXYPATH)
-	cp -r $(DOXYPATH)/* $(DOCDEST)/$(DOXYPATH)
-
+doc: predoc postdoc
 copydoc: copy-doxy additional-copydoc
 
-additional-doc: additional-predoc additional-postdoc
 
 # hooks for module-specific additional docs
 additional-predoc:
 additional-postdoc:
 additional-copydoc:
+additional-doc: additional-predoc additional-postdoc
 
+# doxygen specific targets
 
 DOCROOT=$(ALLROOT)
 DOXYPATH=doxygen/html
@@ -75,7 +102,14 @@ installdox:
 	./installdox.sh.tmp
 	rm -f installdox.sh.tmp
 
-# suffix rules
+DOCDEST=/dev/null
+copy-doxy: 
+	mkdir -p $(DOCDEST)/$(DOXYPATH)
+	cp -r $(DOXYPATH)/* $(DOCDEST)/$(DOXYPATH)
+
+###########################
+##  Standard suffix rule ##
+###########################
 
 .PHONY: doc test demo
 

@@ -33,7 +33,7 @@ concepts: gen-paths
 
 clean: stdclean
 	rm -f *.dvi *.log *.aux *~ 
-	rm -r hyperlatex/paths.tex
+	rm -f hyperlatex/paths.tex
 
 realclean: clean
 	rm -rf hyperlatex/html

@@ -7,7 +7,7 @@ TARGET=all
 
 all:
 
-new: clean
+new:
 
 
 compile:
