@@ -57,6 +57,7 @@ public:
   inline self  CyclicPred() const;
 
   bool IsDone()      const { return _f.IsDone();}
+  operator    bool() const { return !IsDone();}
   int  LocalNumber() const { return _f.LocalNumber(); }
 
   Cell             TheCell()  const { return(_f.TheCell());}

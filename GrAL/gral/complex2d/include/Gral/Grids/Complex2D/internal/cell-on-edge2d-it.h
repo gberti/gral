@@ -29,6 +29,7 @@ public:
   Cell operator*() const { return cell();}
   self& operator++()       { ++ce; make_valid(); return *this;}
   bool  IsDone()     const { return (ce > 2);}
+  operator bool()    const { return !IsDone();}
 
   //--------------- anchor access -------------------
 

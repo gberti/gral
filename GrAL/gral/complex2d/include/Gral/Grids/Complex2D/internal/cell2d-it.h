@@ -56,6 +56,7 @@ public:
   self& operator++() { ++_pos; return (*this);}
   Cell  operator*() const {return (_cc->cell(_pos));}
   bool IsDone() const { return (_pos == _endpos);}
+  operator bool() const { return !IsDone();}
 
 
   //-------------- anchor ---------------------------

@@ -68,6 +68,7 @@ public:
   // inline operator Cell2D_Iterator() const;
  
   bool IsDone() const {return ((lf < 0) || (lf >= TheCell().NumOfEdges()));}
+  operator bool() const { return !IsDone();}
   int LocalNumber() const { return (lf+1);}
   Cell const& TheCell()  const;
   Cell        OtherCell() const;

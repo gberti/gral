@@ -49,6 +49,7 @@ public:
   //  inline self  CyclicSucc() const;
  
   bool IsDone()      const { return (lc >= V.NumOfCells());}
+  operator bool()    const { return !IsDone();}
   int  LocalNumber() const { return (lc+1);}
 
   //----------------- anchor access ---------------------

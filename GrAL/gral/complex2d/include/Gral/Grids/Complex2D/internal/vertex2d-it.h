@@ -45,6 +45,7 @@ public:
   self& operator++()  {++_pos; return (*this);} 
   Vertex operator*() const { return Vertex2D(_pos,*_cc);}
   bool IsDone() const {return (_pos == _endpos);}
+  operator bool() const { return !IsDone();}
 
   vertex_handle handle() const { return _pos;}
 

@@ -52,6 +52,7 @@ public:
   { return self((lv == 0 ? TheCell().NumOfVertices()-1   : lv-1), C);}
 
   bool IsDone() const { return (lv == C.NumOfVertices());}
+  operator bool() const { return !IsDone();}
 
   int LocalNumber() const { return (lv+1);}
 

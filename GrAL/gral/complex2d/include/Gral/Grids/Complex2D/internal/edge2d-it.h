@@ -44,6 +44,7 @@ public:
   inline self& operator++();
   Edge operator*() const {return (Edge(_fc));} 
   bool  IsDone() const {return (_c.IsDone());}
+  operator bool() const { return !IsDone();}
 
   handle_type    handle()  const { return TheGrid().handle(this->operator*());}
   Complex const& TheGrid() const {return (_c.TheGrid());}
