@@ -15,7 +15,9 @@
     \author Guntram Berti    
     \ingroup  octreealgorithms
 
-
+    \todo Add argument to balance only sub-octrees
+    \todo Inbalance across edges in 3D do not get considered.
+       Should this be an additional option? What should be considered a neighbor of a cell?
 */
 
 template<class OCTREE>
