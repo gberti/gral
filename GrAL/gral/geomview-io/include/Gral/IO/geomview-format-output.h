@@ -53,41 +53,6 @@ public:
 };
 
 
-/*! \brief ConstructGrid overload for OstreamOFF2DFmt
-  \ingroup complex2dformat
-  \relates OstreamOFF2DFmt
-  
-  \see Module \ref complex2dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
- */
-template<class GRID, class GEOM>
-extern 
-void ConstructGrid(OstreamOFF2DFmt& Out, 
-                   GRID const& G, GEOM const& Geom);
-
-
-/*! \brief ConstructGrid overload for OstreamOFF2DFmt
-  \ingroup complex2dformat
-  \relates OstreamOFF2DFmt
-  
-  Dummy output geometry variable.
-  \see Module \ref complex2dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
- */
-template<class GRID, class GEOM>
-inline void 
-ConstructGrid(OstreamOFF2DFmt& Out, 
-	      OstreamOFF2DFmt&, // dummy output geom
-	      GRID const& G, GEOM const& Geom)
-{
-  ConstructGrid(Out,G,Geom);
-}
-
-
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/IO/geomview-format-output.tt.C"
-#endif
+#include "Gral/IO/geomview-format-output-construct.h"
 
 #endif

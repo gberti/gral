@@ -23,7 +23,7 @@ void ConstructGrid(OstreamOFF2DFmt& Out,
       << G.NumOfCells()    << " "
       << "-1" << "\n\n"; // number of edges: not checked in OFF format.
 
-  // if GRID is a subrange type, we cannot initialized grid-functions
+  // if GRID is a subrange type, we cannot initialize grid-functions
   // directly with G, but must get hold of the underlying grid.
   // This solution is not optimal. There could be a c-t branch
   // with an additional grid-type parameter for grid-functions.
