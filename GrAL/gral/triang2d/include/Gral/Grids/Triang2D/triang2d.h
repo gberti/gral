@@ -51,6 +51,9 @@ private:
   int  ncells;
   int  nvertices;
 public:
+  enum { dim = 2};
+  unsigned dimension() const { return dim;}
+
   Triang2D() 
     : cells(0), owned(false), ncells(0), nvertices(0) {}
   Triang2D(int* c, int nc) 
@@ -135,12 +138,19 @@ public:
   unsigned NumOfEdges()    const { return 3;}
   unsigned NumOfFacets()   const { return 3;}
 
+  vertex_handle v(int lv) const;
+  Vertex        V(int lv) const;
+
   // checking functions
   bool bound() const { return g != 0;}
   bool valid() const { return (bound() &&  (0 <= c) && (c < g->ncells));}
   void cb()    const { REQUIRE (bound(), "",1);}
   void cv()    const { REQUIRE (valid(), "",1);}
+
+  friend bool operator==(self const& lhs, self const& rhs) { return lhs.c == rhs.c;}
+  friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
 };
+
 
 
 //----------- Vertex / VertexIterator ----------------
@@ -172,15 +182,10 @@ public:
     { return (bound() &&  (0 <= v) && (v < TheGrid().NumOfVertices()));}
   void cb()    const { REQUIRE (bound(), "",1);}
   void cv()    const { REQUIRE (valid(), "",1);}
+
+  friend bool operator==(self const& lhs, self const& rhs) { return lhs.v == rhs.v;}
+  friend bool operator!=(self const& lhs, self const& rhs) { return lhs.v != rhs.v;}
 };
-
-inline bool
-operator==(Triang2D_Vertex const& lhs, Triang2D_Vertex const& rhs)
-{ return lhs.handle() == rhs.handle();}
-
-inline bool
-operator!=(Triang2D_Vertex const& lhs, Triang2D_Vertex const& rhs)
-{ return !(lhs==rhs);}
 
 
 
@@ -215,6 +220,8 @@ public:
   void cb()    const { REQUIRE (bound(), "",1);}
   void cv()    const { REQUIRE (valid(), "",1);}
 
+  friend bool operator==(self const& lhs, self const& rhs) { return lhs.vc == rhs.vc;}
+  friend bool operator!=(self const& lhs, self const& rhs) { return lhs.vc != rhs.vc;}
 };
 
 
@@ -266,6 +273,8 @@ public:
   bool valid() const { return (c.valid() && (0 <= fc) && (fc < 3));}
   void cv() const { REQUIRE(valid(), "", 1);}
   void cb() const { REQUIRE(bound(), "", 1);}
+
+  friend bool operator==(self const& lhs, self const& rhs) { return lhs.c == rhs.c && lhs.fc == rhs.fc;}
 };
 
 
@@ -321,6 +330,7 @@ public:
   }
 
 };
+
 
 
 
@@ -410,6 +420,15 @@ Triang2D_Cell::FirstFacet() const { return FacetOnCellIterator(*this);}
 inline
 Triang2D_FacetOnCellIterator
 Triang2D_Cell::FirstEdge() const { return FacetOnCellIterator(*this);}
+
+
+inline 
+Triang2D::vertex_handle 
+Triang2D_Cell::v(int lv) const { return vertex_handle(g->cells[3*c+lv]);}
+
+inline 
+Triang2D_Vertex
+Triang2D_Cell::V(int lv) const { return Vertex(TheGrid(), v(lv));}
 
 inline
 Triang2D_Edge 
