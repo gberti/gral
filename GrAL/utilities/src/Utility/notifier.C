@@ -127,7 +127,7 @@ void notifier::add_observer(observer* obs) const {
 
 void notifier::remove_observer(observer* obs) const
 {
-  observer_table::iterator it = find(observers.begin(),observers.end(),obs);
+  observer_table::iterator it = std::find(observers.begin(),observers.end(),obs);
   if (it != observers.end())
     observers.erase(it);
 }
