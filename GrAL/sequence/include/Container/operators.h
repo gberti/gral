@@ -6,7 +6,7 @@
 
 
 
-/*!  \defgroup operators
+/*!  \defgroup operators Operator classes
      \ingroup accessors
 */
 
