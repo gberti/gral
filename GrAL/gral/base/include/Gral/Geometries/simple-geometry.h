@@ -28,6 +28,13 @@ class simple_geometry : public grid_types<GRID> {
 public:
   simple_geometry() {}
   simple_geometry(GRID const& g) : coords(g) {}
+  template<class It>
+  simple_geometry(GRID const& g, It begin_coord, It end_coord) : coords(g)
+  { 
+    for(typename gt::VertexIterator v(TheGrid()); ! v.IsDone(); ++v, ++begin_coord)
+      coords[*v] = convert_point<coord_type>(*begin_coord);
+  }
+
   grid_type  const& TheGrid() const { cb(); return coords.TheGrid();}
   void set_grid(grid_type const& g) { coords.set_grid(g);}
   void rebind  (grid_type const& g) { coords.rebind(g);}
