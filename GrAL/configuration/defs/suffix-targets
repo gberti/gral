@@ -1,3 +1,4 @@
+# -*- makefile -*-
 # Some targets used in leaf makefiles 
 
 # some aliases
@@ -13,6 +14,13 @@ clobber:   realclean
 stdclean: moduleclean
 	rm -f *~ *.o *.rpo *.d *.ti *.ii
 	rm -rf ti_files # KCC template DB
+
+
+install-libs:
+	mkdir -p $(PREFIX)/lib/$(LIBPATH)
+	cp $(ROOT)/lib/$(LIBPATH)/lib*  $(PREFIX)/lib/$(LIBPATH)
+
+install: install-headers 
 
 .SUFFIXES: .C .cc .d .f
 
