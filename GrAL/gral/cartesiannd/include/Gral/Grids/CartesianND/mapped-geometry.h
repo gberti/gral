@@ -50,6 +50,17 @@ namespace cartesiannd {
       delta = coord_type(1.0);
       delta = quotient(delta, high_ - low_);
     }
+    void rebind(grid_type const& gg) {
+      g = ref_ptr<grid_type const>(gg);
+      low_  = g->low_vertex_index();
+      high_ = g->high_vertex_index();
+      init();
+    }
+    void rebind(grid_type const& gg, mapping_type const& ff) {
+      f = ff;
+      rebind(g);
+    }
+
     coord_type unit_coord(index_type idx) const { 
       coord_type r(idx - low_);
       return quotient(r, high_);
