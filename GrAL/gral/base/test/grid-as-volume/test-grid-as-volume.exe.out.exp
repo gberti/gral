@@ -1,0 +1,19 @@
+point = 0 0 is     inside grid
+point = 0.5 0.5 is     inside grid
+point = 1 1.5 is  not inside grid
+point = 1 1 is     inside grid
+point = 1 0.333 is     inside grid
+point = 0 0 is     inside grid
+point = 0.5 0.5 is     inside grid
+point = 1 1.5 is  not inside grid
+point = 1 1 is     inside grid
+point = 0.333333 0.333333 is     inside grid
+Cell 0 0 intersection with grid: intersections
+Cell 1 1 intersection with grid: inside
+Cell 1 0 intersection with grid: intersections
+Triangle  intersection with grid: intersections
+Triangle  intersection with grid: inside
+Triangle  intersection with grid: intersections
+Triangle  intersection with grid: outside
+Triangle  intersection with grid: intersections
+Triangle  intersection with grid: intersections
