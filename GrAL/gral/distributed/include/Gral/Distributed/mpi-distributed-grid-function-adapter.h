@@ -24,6 +24,8 @@
 template<class GF, class DistributedG>
 class distributed_grid_function_adapter {
   typedef distributed_grid_function_adapter<GF,DistributedG> self;
+
+public:
   typedef DistributedG                            distributed_grid_type;
   typedef DistributedG                            grid_type;
 
@@ -43,7 +45,6 @@ class distributed_grid_function_adapter {
   typedef typename ovrlp_grid_function::overlap_type        overlap_type;
   typedef typename ovrlp_grid_function::local_grid_function base_grid_function;
 
-public:
   typedef typename  ovrlp_grid_function::element_type   element_type;
   typedef typename  ovrlp_grid_function::value_type     value_type;
   typedef typename  ovrlp_grid_function::element_type   E;
@@ -70,14 +71,26 @@ private:
   bool initialized;
 public:
   //--------------------------- construction -------------------------------
+
   distributed_grid_function_adapter();
 
+  // constructors for the value-semantics case 
+  distributed_grid_function_adapter(distributed_grid_type const& cg);
+  distributed_grid_function_adapter(distributed_grid_type const& cg,
+				    T                     const& t);
+  // constructor for the reference-semantics case
   distributed_grid_function_adapter(ovrlp_grid_function   const& ogf,
 				    distributed_grid_type const& cg);
+
   distributed_grid_function_adapter(self const& rhs);
   self& operator=(self const& rhs);
+
+private:
   void clear();
+  void init();
   void init(self const& rhs);
+
+public:
   void set_grid(const distributed_grid_type& cg);
 
   void set_added_on_shared(); 
@@ -89,7 +102,7 @@ public:
   //--------------------------- data access --------------------------------
 
   T      & operator[](const E& e)       { return the_local_gf[e];}
-  T const& operator()(const E& e) const { return the_local_gf[e];}
+  T const& operator()(const E& e) const { return the_local_gf(e);}
 
   //--------------------------- container ----------------------------------
  

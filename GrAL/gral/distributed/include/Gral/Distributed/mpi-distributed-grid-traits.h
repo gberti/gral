@@ -40,13 +40,13 @@ struct distr_grid_traits<MPIDistributedGrid<CG,FG> >
     \ingroup mpidistributedgrids
        
 */
-template<class E, class T, class CG, class FG>
-class distr_grid_function<E,T,MPIDistributedGrid<CG,FG> >
-: public distributed_grid_function<E,T, MPIDistributedGrid<CG,FG> >
+template<class E1, class T1, class CG, class FG>
+class distr_grid_function<E1,T1,MPIDistributedGrid<CG,FG> >
+: public distributed_grid_function<E1,T1, MPIDistributedGrid<CG,FG> >
 {
  private:
-  typedef distributed_grid_function<E,T, MPIDistributedGrid<CG,FG> > base;
-  typedef distr_grid_function      <E,T, MPIDistributedGrid<CG,FG> > self;
+  typedef distributed_grid_function<E1,T1, MPIDistributedGrid<CG,FG> > base;
+  typedef distr_grid_function      <E1,T1, MPIDistributedGrid<CG,FG> > self;
  public:
   distr_grid_function()  {}
   distr_grid_function(MPIDistributedGrid<CG,FG> const& DG)

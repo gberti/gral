@@ -45,7 +45,7 @@ private:
   //------- DATA  -------
   ovrlp_grid_type const* the_ovrlp_grid; // referenced
   overlap_type    const* the_overlap;    // referenced
-  local_grid_function    data;
+  local_grid_function    data;           // owned
 
   /*
   vector<combine_type_tag>  combine_types;
@@ -59,6 +59,21 @@ public:
 
   overlapping_grid_function_adapter() :  the_ovrlp_grid(0), the_overlap(0) {}
 
+  // constructor for case that local_grid_function has value semantics.
+  overlapping_grid_function_adapter(ovrlp_grid_type     const& og)
+    : the_ovrlp_grid(& og), 
+      the_overlap   (& og.TheOverlap()),
+      data          (og.TheGrid())
+    {}
+  // constructor for case that local_grid_function has value semantics.
+  overlapping_grid_function_adapter(ovrlp_grid_type     const& og,
+				    T                   const& t)
+    : the_ovrlp_grid(& og), 
+      the_overlap   (& og.TheOverlap()),
+      data          (og.TheGrid(),t)
+    {}
+
+  // constructor for case that local_grid_function has reference semantics.
   overlapping_grid_function_adapter(local_grid_function const& lgf, 
                                     ovrlp_grid_type     const& og)
     : the_ovrlp_grid(& og), 
@@ -68,9 +83,8 @@ public:
 
   //-----------------  data access  ------------------------
 
-  T& operator[](const E& e) { return data[e];}
-  // const T& operator[](const E& e) const { return data(e);}
-  const T& operator()(const E& e) const { return data(e);}
+  T      & operator[](const E& e)       { return data[e];  }
+  T const& operator()(const E& e) const { return data(e);  }
 
   //---------------- component access ----------------------
 
