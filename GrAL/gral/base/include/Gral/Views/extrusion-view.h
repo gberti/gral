@@ -44,6 +44,8 @@ namespace extrusion_view {
   struct grid_types_base {
     typedef grid<GRID2D> grid_type;
     typedef grid_types<GRID2D> bgt;
+    typedef grid_dim_tag<3> dimension_tag;
+
     // OK only if base grid has (0-base) consecutive integer vertex handle
     // typedef vertex_handle_int<grid_type> vertex_handle;
     // we should really branch on consecutive_tag of base element handles
@@ -391,7 +393,6 @@ template<class GRID2D>
 struct grid_types<extrusion_view::grid<GRID2D> > 
   : public grid_types_base<extrusion_view::grid_types_base<GRID2D> >
 {
-  typedef grid_dim_tag<3> dimension_tag;
 };
 
 
