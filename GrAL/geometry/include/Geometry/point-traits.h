@@ -53,8 +53,8 @@ struct point_traits_fixed_dim
   : public point_traits_base<POINT>
 {
   typedef POINT Ptype;
-  typedef dim_tag<N>                dimension_tag; 
-  enum    { dimension = N};
+  typedef dim_tag<DIM>                dimension_tag; 
+  enum    { dimension = DIM};
   static unsigned Dim()             { return DIM;}
   static unsigned Dim(Ptype const&) { return DIM;}
   static void     ConstructWithDim(unsigned d, Ptype&)
