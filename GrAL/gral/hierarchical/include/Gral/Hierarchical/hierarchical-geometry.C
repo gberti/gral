@@ -14,30 +14,30 @@ namespace hierarchical {
   hier_geometry<HGRID, FLATGEOM>::hier_geometry(typename hier_geometry<HGRID, FLATGEOM>::grid_type const& g)
     : geoms(g) 
   {
-    connect(&g);
+    base::connect(&g);
   }
 
  template<class HGRID, class FLATGEOM>
   hier_geometry<HGRID, FLATGEOM>::hier_geometry(ref_ptr<typename hier_geometry<HGRID, FLATGEOM>::grid_type const> g)
     : geoms(g) 
  {
-   connect(&(*g));
+   base::connect(&(*g));
  }
 
   template<class HGRID, class FLATGEOM>
   void hier_geometry<HGRID, FLATGEOM>::set_grid(typename hier_geometry<HGRID, FLATGEOM>::grid_type const& g)
   {
-    disconnect();
+    base::disconnect();
     geoms.set_grid(g);
-    connect(&g);
+    base::connect(&g);
   }
 
   template<class HGRID, class FLATGEOM>
   void hier_geometry<HGRID, FLATGEOM>::set_grid(ref_ptr<typename hier_geometry<HGRID, FLATGEOM>::grid_type const> g)
   {
-    disconnect();
+    base::disconnect();
     geoms.set_grid(g);
-    connect(& (*g));
+    base::connect(& (*g));
   }
 
   /*
@@ -52,7 +52,7 @@ namespace hierarchical {
   void hier_geometry<HGRID, FLATGEOM>::clear() 
   { 
     geoms.clear();
-    disconnect();
+    base::disconnect();
   }
   
   template<class HGRID, class FLATGEOM>
