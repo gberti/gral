@@ -44,7 +44,7 @@ public:
 
   void set_grid(const RegGrid2D& gg) { g = &gg; coords_.set_grid(gg);}
   void rebind  (const RegGrid2D& gg) { g = &gg; coords_.rebind  (gg);}
-  void bound() const { return (g != 0);}
+  bool bound() const { return (g != 0);}
 
   const grid_type& TheGrid() const { return *g;}
 
@@ -54,7 +54,7 @@ public:
   const coord_type& coord(const Vertex& v) const { return coords_(v); }
         coord_type& coord(const Vertex& v)       { return coords_[v]; }
 
-  void read(::std::istream& in) {
+  void read(std::istream& in) {
     for(typename grid_function<Vertex,coord_type>::iterator ii = coords_.begin(); ii != coords_.end(); ++ii)
       in >> *ii;
   }
@@ -118,7 +118,7 @@ public:
     { base::init(gg); }
   //@}
 
-  friend ::std::istream& operator>>(::std::istream& in, self& rs) { rs.read(in); return in;}
+  friend std::istream& operator>>(std::istream& in, self& rs) { rs.read(in); return in;}
 
   /*! \brief geometric representation of edges
    */
