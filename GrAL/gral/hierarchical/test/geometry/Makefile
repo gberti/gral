@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-EXTRA_DEPMODULES += gral/complex2d  gral/cartesian3d gral/cartesian2d
+EXTRA_DEPMODULES += gral/complex2d  gral/cartesiannd 
 LOCALSOURCES =  test-hier-geometry.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
@@ -15,7 +15,7 @@ TARGETS = $(EXEC)
 include $(DEPS)
 
 
-LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base -lutilities
+LIBS =  -lgral-complex2d -lgral-base -lutilities
 
 
 

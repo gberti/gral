@@ -100,7 +100,7 @@ inline coordN<N> operator-(const coordN<N>& lhs, const coordN<N>& rhs)
 { coordN<N> tmp(lhs); return(tmp-= rhs);}
 
 template<unsigned N>
-inline coordN<N> operator*(const coordN<N>& lhs, const coord_N_component& rhs)
+inline coordN<N> operator*(const coordN<N>& lhs, coord_N_component rhs)
 { coordN<N> tmp(lhs); return (tmp *= rhs);}
 
 template<unsigned N>
@@ -108,7 +108,7 @@ inline coordN<N> operator*( const coord_N_component& lhs, const coordN<N>& rhs)
 { return rhs*lhs;}
 
 template<unsigned N>
-inline coordN<N> operator/(const coordN<N>& lhs, const coord_N_component& rhs)
+inline coordN<N> operator/(const coordN<N>& lhs, coord_N_component rhs)
 { coordN<N> tmp(lhs); return (tmp /= rhs); }
 
 // unary -

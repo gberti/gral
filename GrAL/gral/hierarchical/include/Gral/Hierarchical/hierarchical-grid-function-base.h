@@ -42,7 +42,7 @@ namespace hierarchical {
     bool       default_val_set;
     value_type default_val;
   public:
-    hier_grid_function_base() {}
+    hier_grid_function_base() : default_val_set(false) {}
     hier_grid_function_base(hier_grid_type const& gg) : gfs(gg), default_val_set(false) { connect(&gg);}
     hier_grid_function_base(hier_grid_type const& gg, value_type t) 
       : gfs(gg), default_val_set(true), default_val(t)

@@ -18,7 +18,7 @@ struct grid_types_Triang2D :
 {
   typedef vertex_on_edge_iterator<Triang2D, grid_types_Triang2D>
   VertexOnEdgeIterator;
-  typedef VertexOnEdgeIterator VertexOnFacetIterator;;
+  typedef VertexOnEdgeIterator VertexOnFacetIterator;
 };
 
 #ifdef NMWR_DEBUG
