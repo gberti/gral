@@ -43,13 +43,14 @@ public:
   facet_on_cell_function(grid_type const& g, T const& t) :  gf(g) 
     {
       for(typename gt::CellIterator c(gf.TheGrid()); ! c.IsDone(); ++c)
-	gf[*c] = grid_function<ArchCell,T>((*c).TheArchetype(),t);
+	gf[*c] = grid_function<ArchCell,T>(TheGrid().ArchetypeOf(*c),t);
     }
 
   T const& operator()(FacetOnCellIterator const& fc) const
-    { return gf(fc.TheCell())(fc.ArchetypeCell());}
+  { return gf(fc.TheCell())(fc.ArchetypeCell());}
+
   T      & operator[](FacetOnCellIterator const& fc) 
-    { return gf[fc.TheCell()][fc.ArchetypeCell()];}
+  { return gf[fc.TheCell()][fc.ArchetypeCell()];}
 
   grid_type const& TheGrid() const { return gf.TheGrid();}
 };
