@@ -45,7 +45,7 @@ namespace gf_array_adapter {
 
     value_proxy<T,N> & operator=(value_proxy<T,N>  const&);
   public:
-    value_proxy(T* ff) : f(ff) {}
+    explicit value_proxy(T* ff) : f(ff) {}
     inline void operator=(value_type<T,N> const& frc);
     
     T const& operator()(int i) const { check_range(i);  return f[i]; }
@@ -53,7 +53,7 @@ namespace gf_array_adapter {
     T      & operator[](int i)       { check_range(i);  return f[i]; }
 
     void check_range(int i) const {
-      REQUIRE( 0 <= i && i < N, "i = " << i << " out of range!\n",1);
+      REQUIRE( 0 <= i && i < (int)N, "i = " << i << " out of range!\n",1);
     }
   };
 
@@ -116,7 +116,7 @@ namespace gf_array_adapter {
 
   template<class T, unsigned N>
   inline
-   ::std::ostream& operator<<( ::std::ostream& out, value_type<T,N> const&v)
+  std::ostream& operator<<(std::ostream& out, value_type<T,N> const&v)
   {
     for(unsigned i = 0; i < N; ++i)
       out << v(i) << ' ';
@@ -129,6 +129,15 @@ namespace gf_array_adapter {
 template<class T, unsigned N>
 struct point_traits<gf_array_adapter::value_type<T,N> > 
   : public point_traits_fixed_size_array<gf_array_adapter::value_type<T,N>, T, N>
+{};
+
+  /*! specialization of point_traits<>
+      \note This promises more than can be kept, for example
+      construction.
+   */
+template<class T, unsigned N>
+struct point_traits<gf_array_adapter::value_proxy<T,N> > 
+  : public point_traits_fixed_size_array<gf_array_adapter::value_proxy<T,N>, T, N>
 {};
         
 
@@ -150,7 +159,8 @@ struct point_traits<gf_array_adapter::value_type<T,N> >
     grid_function_array_adapter Geo<Grid,double,2>(g,geo);
     \endcode
 
-    \todo types \c iterator, \c const_iterator 
+    \see Tested in \ref test-grid-function-array-adapter.C
+
 */
 template<class ELEMENT, class T, unsigned N = 1>
 class grid_function_array_adapter 
@@ -197,6 +207,42 @@ public:
     { return value_proxy(f + N*v.handle());}
   const value_type operator()(element_type const& v) const 
     { return value_type(f + N*v.handle());}
+
+  template<class TT, class VALUETYPE, class VALUETYPE_RET>
+  class iterator_t {
+    typedef iterator_t<TT,VALUETYPE,VALUETYPE_RET>  self;
+    // typedef grid_function_array_adapter<ELEMENT,T,N> gfaa_type;
+    typedef VALUETYPE_RET reference_type;
+
+    T    * f;
+    int    i;
+  public:
+    explicit iterator_t(T * ff = 0, int ii = 0) : f(ff), i(ii) {}
+    
+    self& operator++() { ++i; return *this; }
+    self  operator++(int) { self tmp(*this); ++i; return tmp;}
+
+    typedef VALUETYPE     value_type;
+    reference_type  operator*() const { return reference_type(f+N*i);} 
+    bool operator==(self const& rhs) const { 
+      REQUIRE(f == rhs.f, "", 1);
+      return (i == rhs.i);
+    }
+    bool operator!=(self const& rhs) const { return ! (rhs  == *this);}
+    bool operator< (self const& rhs) const { 
+      REQUIRE(f == rhs.f, "", 1);
+      return (i <  rhs.i);
+    }
+  };
+
+  typedef iterator_t<T const, value_type, value_type const&>  const_iterator;
+  typedef iterator_t<T,       value_type, value_proxy>        iterator;
+
+  const_iterator begin() const { return const_iterator(f,0);}
+  const_iterator end  () const { return const_iterator(f,size());}
+  iterator       begin()       { return       iterator(f,0);}
+  iterator       end  ()       { return       iterator(f,size());}
+
 
 };
 
