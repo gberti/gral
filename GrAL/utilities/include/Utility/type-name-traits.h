@@ -10,24 +10,30 @@
 //----------------------------------------------------------------
 
 
-#include "Forward/string.h"
+#include "Forward/string_fwd.h"
 
 //----------------------------------------------------------------
-//
-// Deduce a string with the type name from the type.
-// This allows a generic implementation of some routines 
-// where the typename must be written out.
-//
-// This is specialized for basic types, and must be
-// specialized for other types if needed.
-//
-//----------------------------------------------------------------
 
+/*! \file
+
+ \brief Deduce a string with the type name from the type.
+
+ This allows a generic implementation of some routines 
+ where the typename must be written out.
+
+ This is specialized for basic types, and must be
+ specialized for other types if needed.
+
+*///--------------------------------------------------------------
+
+//@{
+/*!   \brief The general case: Name not known, return empty string. */
 template<class T>
 struct type_name_traits {
   static const char* name() { return "";}
 };
 
+/*! \brief specialization for bool */
 struct type_name_traits<bool> {
   static const char* name() { return "bool";}
 };
@@ -66,5 +72,5 @@ struct type_name_traits<string> {
   static const char* name() { return "string";}
 };
 
-
+//@}
 #endif
