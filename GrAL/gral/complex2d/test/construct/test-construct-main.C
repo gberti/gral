@@ -134,5 +134,16 @@ int main(int argc, char* argv[]) {
   for(pgfCellIterator c = pgfc.FirstCell(); ! c.IsDone(); ++c)
     pgfc[*c] = - pgfc(*c);
   
+
+  typedef gt::sequence_iterator<vertex_type_tag> seqVertexIterator;
+  typedef gt::sequence_iterator<edge_type_tag>   seqEdgeIterator;
+  typedef gt::sequence_iterator<facet_type_tag>  seqFacetIterator;
+  typedef gt::sequence_iterator<cell_type_tag>   seqCellIterator;
+
+  typedef gt::incidence_iterator<vertex_type_tag, cell_type_tag> incVertexOnCellIterator;
+
+
   return 0;
+
+
 }
