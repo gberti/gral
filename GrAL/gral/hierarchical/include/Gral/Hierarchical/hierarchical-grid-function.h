@@ -16,9 +16,11 @@ namespace hierarchical {
 
   */
   template<class E, class T>
-  class hier_grid_function : public hier_grid_function_base<E,T, grid_function>
+  class hier_grid_function : public hier_grid_function_base<typename E::hier_grid_type, 
+							    grid_function<typename E::flat_element_type,T> >
   {
-    typedef hier_grid_function_base<E,T, grid_function> base;
+    typedef hier_grid_function_base<typename E::hier_grid_type, 
+				    grid_function<typename E::flat_element_type,T> > base;
     typedef hier_grid_function<E,T>                     self;
   public:
     hier_grid_function() {}

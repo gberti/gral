@@ -16,9 +16,11 @@ namespace hierarchical {
 
   */
   template<class E, class T>
-  class hier_partial_grid_function : public hier_grid_function_base<E,T, partial_grid_function>
+  class hier_partial_grid_function : public hier_grid_function_base<typename E::hier_grid_type, 
+								    partial_grid_function<typename E::flat_element_type,T> >
   {
-    typedef hier_grid_function_base<E,T, partial_grid_function> base;
+    typedef hier_grid_function_base<typename E::hier_grid_type, 
+				    partial_grid_function<typename E::flat_element_type,T> > base;
     typedef hier_partial_grid_function<E,T>                     self;
   public:
     hier_partial_grid_function() {}
@@ -31,8 +33,11 @@ namespace hierarchical {
       for(typename base::level_handle lev = TheGrid()->coarsest_level(); lev <= TheGrid()->finest_level(); ++lev)
 	(*this)[lev].set_default(t);
     }
-    void undefine(typename base::element_type const& e) { gfs[e.level()].undefine(e.Flat());}
-    bool defined (typename base::element_type const& e) const { return gfs(e.level()).defined(e.Flat());}
+
+    template<class ELEM>
+    void undefine(ELEM const& e) { gfs[e.level()].undefine(e.Flat());}
+    template<class ELEM>
+    bool defined (ELEM const& e) const { return gfs(e.level()).defined(e.Flat());}
   };
 
 } // namespace hierarchical
