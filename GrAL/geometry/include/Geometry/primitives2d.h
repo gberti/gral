@@ -57,6 +57,7 @@ public:
       return (q/norm_2(q));
     }
 
+
   static void transpose(POINT & p, POINT & q) {
     std::swap(y(p),x(q));
   }
@@ -77,8 +78,31 @@ public:
     x(p) = -y(p);
     y(p) =  xp;
   }
+  static POINT any_perp(POINT const& p) {
+    return POINT(-y(p), x(p));
+  }
+ 
+    /*! \brief Return normal direction of (1-dimensional) hyperspace spanned by [begin,end[.
+
+      Dimension-independent interface.
+   */
+  template<class IT>
+  static POINT perp(IT begin, IT end) { return normal_with_same_length(*begin);}
 
 
+  static std::vector<POINT> basis_completion(std::vector<POINT> const& dirs) {
+    std::vector<POINT> res;
+    if(dirs.size() == 1) {
+      res.resize(1);
+      res[0] = perp(dirs.begin(), dirs.end());
+    }
+    else if(dirs.size() == 0) {
+      res.resize(2);
+      res[0] = pt::Origin(2); pt::x(res[0]) = 1;
+      res[1] = pt::Origin(2); pt::y(res[1]) = 1;
+    }
+    return res;
+  }
 
   // solve (A1,A2)*X = b
   static void solve2(POINT const& A1, POINT const& A2,
