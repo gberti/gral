@@ -15,13 +15,26 @@ namespace octree {
   Octree<Grid, GT>::Octree(typename Octree<Grid, GT>::flat_grid_type const& C0,
 			   typename Octree<Grid, GT>::pattern_grid_type   const& refpat)
   { init(C0,refpat);}
+  template<class Grid, class GT>
+  Octree<Grid, GT>::Octree(ref_ptr<typename Octree<Grid, GT>::flat_grid_type const> C0,
+			   typename Octree<Grid, GT>::pattern_grid_type   const& refpat)
+  { init(*C0,refpat);}
+
+  template<class Grid, class GT>
+  Octree<Grid, GT>::Octree(typename Octree<Grid, GT>::hier_grid_type const& H)
+    : levels(H)
+  {
+   active_range.init(levels,false);
+   active_range.set_default(false);
+  }
 
  template<class Grid, class GT>
  void Octree<Grid, GT>::init(typename Octree<Grid, GT>::flat_grid_type const& C0,
 			     typename Octree<Grid, GT>::pattern_grid_type   const& refpat)
  {
    levels.init(C0,refpat);
-   active_range.init(levels,true);
+   active_range.init(levels,false);
+   active_range.set_default(false);
  }
 
   template<class Grid, class GT>
@@ -33,7 +46,7 @@ namespace octree {
 
     while(empty(finest_level())) {
       levels      .remove_finest_level();
-      active_range.remove_finest_level();
+      // active_range.remove_finest_level();
     }
   }
 
@@ -55,7 +68,8 @@ namespace octree {
       make_branch(oldLeaf);
       if(level(oldLeaf) == finest_level()) {
 	levels      .add_finer_level();
-	active_range.add_finer_level(false); // by default, all cells are deactivated
+	// active_range.add_finer_level(false); // by default, all cells are deactivated
+	active_range[levels.finest_level()].set_default(false);
       }
       // use the more general H<XXX>ChildIterator, because there are no octree children yet
       for(HierCellChildIterator ch(oldLeaf.FirstChild()); !ch.IsDone(); ++ch) {
@@ -69,7 +83,8 @@ namespace octree {
     REQUIRE_ALWAYS( ! empty(), "", 1);
     levels.add_coarser_level();
     // all coarse cells deactivated by default
-    active_range.add_coarser_level(false);
+    // active_range.add_coarser_level(false);
+    active_range[levels.coarsest_level()].set_default(false);
     // activate all cells having at least one active child
     for(flat_cell_iterator c(*LevelGrid(coarsest_level())); !c.IsDone(); ++c) {
       hier_cell_type hc(*TheHierGrid(), *c, coarsest_level());
