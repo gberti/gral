@@ -2,13 +2,15 @@
 #define GRAL_GB_GMV_FMT_OUTPUT2D_TT
 
 #include "Gral/IO/gmv-format-output2d.h"
+#include "Gral/Base/element-numbering.h"
 
 template<class GRID,class GEOM>
 void ConstructGrid(OstreamGMV2DFmt& Out, 
 		   GRID const& G,
 		   GEOM const& GEO)
 {
-  List<END,END> L;
+  typedef heterogeneous_list::END END;
+  heterogeneous_list::List<END,END> L;
   ConstructGrid(Out,G,GEO,L);
 }
 
@@ -16,7 +18,7 @@ template<class GRID,class GEOM, class GF, class MOREGFS>
 void ConstructGrid(OstreamGMV2DFmt& Out, 
 		   GRID const& G,
 		   GEOM const& GEO,
-		   List<GF,MOREGFS> GFS)
+		   heterogeneous_list::List<GF,MOREGFS> GFS)
 {
   typedef OstreamGMV2DFmt GMV3D;
   ostream& out = Out.Out();
