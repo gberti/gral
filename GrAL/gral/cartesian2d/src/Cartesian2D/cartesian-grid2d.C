@@ -122,13 +122,16 @@ int  RegGrid2D::offset_dir[3][3] =
 			  {Cell::SE,Cell::E,           Cell::NE}};
 			  */
 
-::std::string RegGrid2D::side_name_[4] = { "S", "E", "N", "W"};
-::std::string RegGrid2D::corner_name_[4] = { "SW", "SE", "NE", "NW"};
 
 int RegGrid2D::invalid_side()   { return (int)Cell::invalid_side;}
 int RegGrid2D::invalid_corner() { return (int)Cell::invalid_corner;}
 
-int  RegGrid2D::get_side(const ::std::string& nm) 
+ 
+std::string RegGrid2D::side_name_[4]   = { "S", "E", "N", "W"};
+std::string RegGrid2D::corner_name_[4] = { "SW", "SE", "NE", "NW"};
+
+
+int  RegGrid2D::get_side(const std::string& nm) 
 {
   if(nm == "S" || nm == "s" || nm == "South" || nm == "south")
     return (int)(Cell::S);
@@ -143,7 +146,7 @@ int  RegGrid2D::get_side(const ::std::string& nm)
 }
 
 
-int  RegGrid2D::get_corner(const ::std::string& nm) 
+int  RegGrid2D::get_corner(const std::string& nm) 
 {
   if(nm == "SE" || nm == "se" || nm == "South-East" || nm == "south-east" || nm == "SouthEast" || nm == "southeast")
     return (int)(Cell::SE);
@@ -156,6 +159,8 @@ int  RegGrid2D::get_corner(const ::std::string& nm)
   else
     return (int)(Cell::invalid_corner);
 }
+ 
+
 
 } // namespace cartesian2d
 

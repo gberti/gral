@@ -164,11 +164,11 @@ private:
   static index_type direction_    [4];  
   static index_type side_vertex_1_[4];
   static index_type side_vertex_2_[4];
-
+  
   // names for I/O
-  static ::std::string  side_name_  [4];
-  static ::std::string  corner_name_[4];
-
+  static std::string  side_name_  [4];
+  static std::string  corner_name_[4];
+ 
 public:
   typedef polygon1d::polygon      archetype_type;
   typedef archetype_type const*   archetype_iterator;
@@ -185,13 +185,14 @@ private:
   };
   static SD sd;
 public:
-
+  
   // map strings to side-/corner-enum and vice versa
   // this recognises different spellings, e.g. "S", "s", "South", "south".
-  static int get_side(const ::std::string& nm);
-  static int get_corner(const ::std::string& nm);
-  static ::std::string side_name(int side) { return side_name_[side-1];} // returns "S", "N" etc.
-  static ::std::string corner_name(int corner) { return corner_name_[corner-1];} // returns "SW", "NW" etc.
+  static int get_side(const std::string& nm);
+  static int get_corner(const std::string& nm);
+  static std::string side_name  (int side)   { cv_e(side);   return side_name_[side];} // returns "S", "N" etc.
+  static std::string corner_name(int corner) { cv_v(corner); return corner_name_[corner];} // returns "SW", "NW" etc.
+  
 
   static int invalid_side();
   static int invalid_corner();
@@ -1083,7 +1084,6 @@ public:
   inline bool IsOnBoundary(const Edge&   E) const;
   inline bool IsOnBoundary(const EdgeOnCellIterator& Nb) const;
 
-  bool IsInside(const CellIterator& C) const;
   bool IsInside(const Cell& C)    const;
 
   int NumOfBoundaryVertices() const { return (2*(xpoints   + ypoints) -4);}
@@ -1549,6 +1549,7 @@ inline bool RegGrid2D::IsInside(const RegGrid2D::Cell& C) const
   vertex_base bv = C.ll();
   return ( TheCellMap().IsInRange(bv.x(),bv.y()));
 }
+
 
 inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 {
