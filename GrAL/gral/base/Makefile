@@ -49,9 +49,10 @@ tar:
          rm -rf gral/base;\
          cvs -d /home/nmwr/CVS export -r HEAD gral/base; \
          (cd gral/base;\
-          gmake doc ROOT=$(HOME)/tmp/gral/base;\
-          gmake tarclean;); \
+          gmake doc 'ROOT=$(HOME)/tmp/gral/base';\
+          gmake tarclean 'ROOT=$(HOME)/tmp/gral/base';); \
          tar cf gral-base.tar gral/base;\
+         cvs -d /home/nmwr/CVS releas gral/base;
         )
 
 dist: doc  tarclean tar
