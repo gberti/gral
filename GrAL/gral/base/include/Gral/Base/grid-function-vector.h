@@ -88,6 +88,16 @@ public:
   */
   void set_value(value_type const& t) { std::fill(table.begin(),table.end(),t); } 
 
+  /*! \brief Copy sequence <tt> [t_begin, t_end[ </tt>
+
+      \post <tt> std::equal(begin(), end(), t_begin(), t_end()) </tt>
+  */
+  template<class ForwardIterator>
+  void set_values(ForwardIterator t_begin, ForwardIterator t_end)
+  {
+    std::copy(t_begin, t_end, table.begin());
+  }
+
   void init(ref_ptr<grid_type const> gg, const T& t) {
     REQUIRE((g == 0), "grid_function<>::init: grid must be 0!\n",1);
     g = gg;
