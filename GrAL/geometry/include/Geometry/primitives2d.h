@@ -23,7 +23,7 @@ private:
 public:
   typedef typename base::scalar scalar;
   typedef typename base::real   real;
-
+  typedef point_traits<POINT>   pt;
 
 
   struct matrix_type {
@@ -34,7 +34,7 @@ public:
     POINT a[2];
    
     matrix_type() { init();}
-    explicit matrix_type(POINT const& a0, POINT const& a1)
+    matrix_type(POINT const& a0, POINT const& a1)
     { 
       a[0] = a0; a[1] = a1;
     }      
@@ -122,6 +122,10 @@ public:
 
   static void transpose(POINT & p, POINT & q) {
     std::swap(y(p),x(q));
+  }
+
+  static void transpose(matrix_type & A) {
+    transpose(A.a[0], A.a[1]);
   }
 
   static POINT left_perp(POINT const& p) {
