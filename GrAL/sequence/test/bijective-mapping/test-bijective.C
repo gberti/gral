@@ -1,8 +1,7 @@
 
 #include <iostream.h>
 #include <fstream.h>
-#include "mystring.h"
-#include "IO/safe-file.h"
+#include <string>
 
 #include "Utility/pre-post-conditions.h"
 #include "Container/bijective-mapping.h"
@@ -16,20 +15,18 @@ int main(int argc, char* argv[]) {
   typedef  domain_type::const_iterator domain_iter;
   typedef   range_type::const_iterator  range_iter;
 
-  string mapfilename1  = "map.dat";
-  string mapfilename2 = "map2.dat";
+  std::string mapfilename1  = "map.dat";
+  std::string mapfilename2 = "map2.dat";
 
   int N = 10;
   bijective_mapping<int,int> m1;
 
-  ifstream mapfile1;
-  file_interactive::open(mapfile1,mapfilename1);
+  ifstream mapfile1(mapfilename1.c_str());
   bijective_mapping<int,int> mf1;
   read_bm(mf1,mapfile1);
   mapfile1.close();
 
-  ifstream mapfile2;
-  file_interactive::open(mapfile2,mapfilename2);
+  ifstream mapfile2(mapfilename2.c_str());
   bijective_mapping<int,int> mf2;
   read_bm(mf2,mapfile2);
   mapfile2.close();
