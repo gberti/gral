@@ -9,12 +9,11 @@
 
 #include "Gral/Iterators/facet-by-cell-it.h"
 #include "Gral/Iterators/vertex-on-edge-iterator.h"
-#include "Gral/Iterators/generic-edge-iterators.h"
 
 #include <algorithm>
 
 
-class grid_types_Triang2D :
+struct grid_types_Triang2D :
   public grid_types_base_Triang2D 
 {
   typedef vertex_on_edge_iterator<Triang2D, grid_types_Triang2D>
@@ -39,12 +38,6 @@ class grid_types_Triang2D :
  value-semantics on the copied-to side, i.e. make a full copy.
 
 */
-
-/*
-class grid_types_Triang2D :
-  public generic_edge::grid_types_edge<grid_types_base_Triang2D> {};
-*/
-
 
 
 class Triang2D : public grid_types_Triang2D {
@@ -99,19 +92,6 @@ public:
 
 //------------ Cell / CellIterator ----------------
 
-/*
-class Triang2D_Cell : public grid_types_Triang2D::cell_base_type
-{
-  typedef grid_types_Triang2D::cell_base_type base;
-public:
-  Triang2D_Cell() {};
-  Triang2D_Cell(grid_type const& g) : base(g) {}  
-  Triang2D_Cell(grid_type const& g, cell_handle h) : base(g,h) {}
-
-  VertexOnCellIterator FirstVertex() const;
-  unsigned NumOfVertices() const { return 3;}
-};
-*/
 
 class Triang2D_Cell : public grid_types_Triang2D  {
   typedef Triang2D_Cell     self;
