@@ -27,7 +27,7 @@ A  {\em Grid Vertex\/} represents the mathematical concept of a vertex
 \noindent
 {\em NOTE:\/} The types and expression involving 
 \sectionlink{\concept{ Incidence Iterators}}{GridIncidenceIterator} are given below for the
-case of \sectionlink{cell-on-vertex iteration}{Cell-On-VertexIterator}.
+case of \sectionlink{cell-on-vertex iteration}{CellOnVertexIterator}.
 Analogous types and expressions can be defined for the other element types,
 like edge, facet, or cell. 
 The tables are to be understood in the following sense:
@@ -133,9 +133,12 @@ All operations are amortized constant time\noteref{note-vtx-amort}.
 
 \conceptsubsection{Models}
 
-\sectionlink{{\tt Complex2D::Vertex}}{Complex2DVertex} 
-defined in
-\gralcodelink{vertex2d.h}{complex2d}
+Vertex classes of 
+\gralmodulelink{complex2d} (see \gralclasslink{Vertex2D}{complex2d}),
+\gralmodulelink{complex3d},  
+\gralmodulelink{cartesian2d},
+\gralmodulelink{cartesian3d}, or
+\gralmodulelink{triang2d}.
 
 \conceptsubsection{Notes}
 \begin{enumerate}

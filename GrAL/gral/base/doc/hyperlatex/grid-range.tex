@@ -32,7 +32,7 @@
     
     A Grid is a special case of a Grid 
     Range \noteref{note-reference} %\link*{\ref{note-reference}}[~(see note \Ref)~]{note-reference}.
-
+    \W\\
     {\em  NOTE:} A grid range as such does offer almost no functionality at all.
     Any useful model will be a specialization of one or more 
     element ranges 
@@ -52,7 +52,7 @@
     \\
     {\tt G} is {\tt R::grid\_type}
 
-    \conceptsubsection{Associated types}\noteref{note-gridtypes}
+    \conceptsubsection{Associated types} %\noteref{note-gridtypes}
 
     \begin{tabular}{lll} \\
       \hline
@@ -60,7 +60,7 @@
       \hline
       base grid &
       {\tt  R::grid\_type}  &
-      type of the  ranges' base grid 
+      type of the  ranges' base grid \noteref{note-gridtypes}
       \\ 
       \hline
       \\
@@ -113,11 +113,11 @@
     \W\\
     
     \conceptsubsection{Models }
-    \link{{\tt enumerated\_grid\_range} }[~(\Ref)~]{EnumeratedGridRange} ~
+    \gralclasslink{enumerated\_subrange}{base} ~
     \W\\
-    \link{{\tt Complex2D}}[~(\Ref)~]{Complex2D} ~
+    \gralclasslink{Complex2D}{complex2d} ~
     \W\\
-    \link{{\tt  Complex2DInput}}[~(\Ref)~]{Complex2DInput} ~
+    \gralclasslink{IstreamComplex2DFmt}{base}
 
     \conceptsubsection{Notes}
     \begin{enumerate}
@@ -156,15 +156,15 @@
         \notelabel{note-element-types}
         It is not necessary to require all possible element types to be defined.
       Useful examples are Input Grids, 
-      such as \link{ {\tt  Complex2DInput} }[~(\Ref )~]{Complex2DInput}
+      such as   \gralclasslink{IstreamComplex2DFmt}{base}
       which are used just to read a grid from
       a specific file format.
     \end{enumerate}
 
     \conceptsubsection{See also }
-    \link{Grid }[~(\Ref )~]{Grid} ~
-    \link{Grid Element }[~(\Ref )~]{GridElement} ~
-    \link{Sequence Iterator }[~(\Ref )~]{SequenceIterator} ~
-    \link{Incidence Iterator }[~(\Ref )~]{IncidenceIterator} 
+    \sectionlink{\concept{Grid}}{Grid} ~
+    \sectionlink{\concept{Grid Element}}{GridElement} ~
+    \sectionlink{\concept{Sequence Iterator}}{GridSequenceIterator} ~
+    \sectionlink{\concept{Incidence Iterator}}{GridIncidenceIterator} 
 
 
