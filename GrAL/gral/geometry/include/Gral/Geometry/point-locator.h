@@ -68,6 +68,8 @@ private:
 public:
   point_locator() {}
   point_locator(grid_type const& g, geom_type const& geo) : the_grid(g), the_geom(geo), edge_length(-1.0) {}
+  point_locator(ref_ptr<grid_type const> g, 
+		ref_ptr<geom_type const> geo) : the_grid(g), the_geom(geo), edge_length(-1.0) {}
   void init();
 
   ref_ptr<grid_type const> TheGrid()     const { return the_grid;}
@@ -203,10 +205,11 @@ void point_locator<GRID,GEOM,GT>::init()
   // scaling + translation
   // Ax + T = y  => x = A^-1(y-T) = A^-1 y - A^-1 T
   int li = pt::LowerIndex(bbox.the_min());
+  int lt = point_traits<cart_coord_type>::LowerIndex(T);
   for(int i = 0; i < spacedim; ++i) {
     A(i,i) = (bbox.the_max() - bbox.the_min())[i+li];
     A_inv(i,i) = 1.0 / A(i,i);
-    T_inv[i+li] = - A_inv(i,i)*T[i+li]; 
+    T_inv[i+lt] = - A_inv(i,i)*T[i+lt]; 
   }
 
   mapping_type mapping        (A,     T);
