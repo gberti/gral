@@ -2,18 +2,21 @@
 #define GRAL_GB_BASE_POLYGON1D_H
 
 // $LICENSE_NEC
+
 #include "Gral/Base/element-handle.h"
 #include "Gral/Base/vertex-iterator-int.h"
 #include "Gral/Base/cell-iterator-int.h"
 #include "Gral/Base/archetype-0D.h"
 #include "Gral/Base/construct-grid.h"
 
+#include "Geometry/point-traits.h"
+#include "Utility/ref-ptr.h"
+
 
 namespace polygon1d  { 
   
-  //class VertexIterator1d;
-  //class CellIterator1d;
   class VertexOnCellIterator1d;
+  class CellOnVertexIterator1d;
   class polygon;
 
   struct grid_types_p1d {
@@ -30,6 +33,7 @@ namespace polygon1d  {
 
    
     typedef VertexOnCellIterator1d     VertexOnCellIterator;
+    typedef CellOnVertexIterator1d     CellOnVertexIterator;
 
     // Cell <-> Edge, Facet <-> Vertex
     typedef vertex_handle              facet_handle;
@@ -38,9 +42,12 @@ namespace polygon1d  {
     typedef Cell                       Edge;
     typedef VertexIterator             FacetIterator;
     typedef CellIterator               EdgeIterator;
+
     typedef VertexOnCellIterator       FacetOnCellIterator;
     typedef VertexOnCellIterator       VertexOnEdgeIterator;
 
+    typedef CellOnVertexIterator       EdgeOnVertexIterator;
+    typedef CellOnVertexIterator       CellOnFacetIterator;
   };
 
   /*! A 1D grid class
@@ -102,6 +109,7 @@ namespace polygon1d  {
     bool IsDone() const { cb(); return h >= 2;}
 
     Cell      const& TheCell()   const { cb(); return c;}
+    Cell      const& TheEdge()   const { cb(); return c;}
     Cell      const& TheAnchor() const { cb(); return c;}
     grid_type const& TheGrid()   const { cb(); return c.TheGrid();}
 
@@ -109,6 +117,39 @@ namespace polygon1d  {
     friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
 
     bool bound() const { return c.valid();}
+    bool valid() const { return bound() && h < 2;}
+    void cb() const { REQUIRE(bound(), "", 1);}
+    void cv() const { REQUIRE(valid(), "h=" << h, 1);}
+  };
+
+
+
+  class CellOnVertexIterator1d : public grid_types_p1d {
+    typedef CellOnVertexIterator1d self;
+  private:
+    Vertex    v;
+    unsigned  h;
+  public:
+    CellOnVertexIterator1d() {}
+    CellOnVertexIterator1d(Vertex const& vv) : v(vv), h(0) {}
+
+    self& operator++() { cv(); ++h; return *this;}
+    Cell  operator*() const { cv(); return Cell(TheGrid(),handle());} 
+    cell_handle handle() const { 
+      cv(); 
+      unsigned c = v.handle();
+      return (h == 0 ? cell_handle(c) : cell_handle(c == 0 ? TheGrid().NumOfVertices()-1 : c-1));
+    }
+    bool IsDone() const { cb(); return h >= 2;}
+
+    Vertex    const& TheVertex() const { cb(); return v;}
+    Vertex    const& TheAnchor() const { cb(); return v;}
+    grid_type const& TheGrid()   const { cb(); return v.TheGrid();}
+
+    friend bool operator==(self const& lhs, self const& rhs) { lhs.cb(); rhs.cb(); return (lhs.h == rhs.h);}
+    friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
+
+    bool bound() const { return v.valid();}
     bool valid() const { return bound() && h < 2;}
     void cb() const { REQUIRE(bound(), "", 1);}
     void cv() const { REQUIRE(valid(), "h=" << h, 1);}
@@ -269,6 +310,47 @@ namespace polygon1d {
 
   inline  polygon::Cell   polygon::switched_cell  (polygon::Vertex const& v, polygon::Cell const& c) const
   { Cell   res(c); switch_cell  (v,res); return res;}
+
+
+  /*! \brief Geometry for polygon1d
+    
+   */
+  template<class COORD, class GT = grid_types<polygon> >
+  class geometry {
+  public:
+    typedef COORD coord_type;
+    typedef polygon grid_type;
+    typedef point_traits<coord_type> pt;
+    typedef typename GT::Vertex Vertex;
+    typedef typename GT::vertex_handle  vertex_handle;
+
+  private:
+    grid_function<Vertex, coord_type> coo;
+  public:
+    geometry() {}
+    geometry(grid_type const& g) : coo(g) {}
+    template<class IT>
+    geometry(grid_type const& g, IT b, IT e)
+      : coo(g)
+    { 
+      typename GT::VertexIterator v(g);
+      for( ; ! v.IsDone() && b != e; ++v, ++b)
+	coo[*v] = *b;
+      REQUIRE(b==e && v.IsDone(), "", 1);
+    }
+
+    coord_type const& operator()(Vertex const& v) const { return coo(v);}
+    coord_type      & operator()(Vertex const& v)       { return coo[v];}
+    coord_type const& coord     (Vertex const& v) const { return coo(v);}
+    coord_type      & coord     (Vertex const& v)       { return coo[v];}
+    coord_type const& operator()(vertex_handle const& v) const { return coo(v);}
+    coord_type      & operator()(vertex_handle const& v)       { return coo[v];}
+    coord_type const& coord     (vertex_handle const& v) const { return coo(v);}
+    coord_type      & coord     (vertex_handle const& v)       { return coo[v];}
+    
+    ref_ptr<grid_type const> TheGrid() const { return ref_ptr<grid_type const>(coo.TheGrid());}
+    unsigned space_dimension() const { return pt::Dim(coord(*TheGrid()->FirstVertex()));}
+  };
 
 } // namespace polygon1d
 
