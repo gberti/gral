@@ -23,6 +23,19 @@ namespace sequence {
       ++begin;
     }
   }
+ /*!
+      \ingroup algorithms
+
+      \see histogram_table
+  */
+  template<class ForwardIterator, class Map, class F>
+  void compute_histogram(ForwardIterator begin, ForwardIterator end, Map & hist, F f)
+  {
+    while(begin != end) {
+      hist[f(*begin)]++;
+      ++begin;
+    }
+  }
 
   /*! \brief helper predicate for comparing pairs
   
