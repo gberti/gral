@@ -17,6 +17,7 @@ cat out4x2
 End output
 ";
 else
+ sleep 10  # wait for nfs to actually write the files
  mv distributed-output/dg.0.coarse distributed-output/dg.coarse 
  rm -f distributed-output/dg.*.coarse
  for i in `ls distributed-output/`
