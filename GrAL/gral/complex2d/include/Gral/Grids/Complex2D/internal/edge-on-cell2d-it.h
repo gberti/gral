@@ -59,6 +59,7 @@ public:
   //----------- iterator operations --------------------------
 
   inline Edge operator*() const;
+  edge_handle handle() const { return edge_handle(C.handle(), lf);}
 
   self& operator++()      { ++lf;   return (*this);}
   self& operator--()      { --lf;   return (*this);}
