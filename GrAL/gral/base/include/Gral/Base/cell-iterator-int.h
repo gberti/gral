@@ -103,14 +103,14 @@ public:
   typedef typename gt::cell_handle  cell_handle;
   typedef typename gt::Cell         Cell;
 protected:
-  grid_type const* g;
+  ref_ptr<grid_type const> g;
   int c;
 public:
   cell_iterator_int() : g(0), c(-1) {}
   explicit
-  cell_iterator_int(grid_type const&         gg, int cc = 0) : g(&gg), c(cc) {}
+  cell_iterator_int(grid_type const&         gg, int cc = 0) : g(gg), c(cc) {}
   explicit
-  cell_iterator_int(ref_ptr<grid_type const> gg, int cc = 0) : g( gg), c(cc) {}
+  cell_iterator_int(ref_ptr<grid_type const> gg, int cc = 0) : g(gg), c(cc) {}
 
   self      & operator++()      { cv();  ++c; return *this;}
   self        operator*() const { cv(); return Cell(*this);}
