@@ -1,0 +1,92 @@
+#include "Gral/Grids/Complex2D/complex2d.h"
+
+#include <map> // STL
+#include <algorithm> // STL
+
+#include "Gral/Base/vtuple2d.h"
+#include "Gral/Grids/Complex2D/stored-geometry.h"
+#include "Gral/Grids/Complex2D/internal/complex2d-construct.C"
+
+#include "Gral/Grids/Complex2D/internal/adjacency.h"
+
+//---------------  construction & destruction  ----------------------
+
+// in the special case of vectors of integers, this could be done
+// more efficiently by just copying the vectors.
+Complex2D::Complex2D(const Complex2D& rhs)
+{ Construct(*this,rhs,stored_geometry_complex2D(rhs)); }
+
+Complex2D& Complex2D::operator=(const Complex2D& rhs)
+{ 
+  if(this != &rhs) {
+    clear();
+    Construct(*this,rhs,stored_geometry_complex2D(rhs)); 
+  }
+  return (*this);
+}
+
+Complex2D::~Complex2D() { clear();}
+
+void Complex2D::clear()
+{ 
+  _cells.erase   (_cells.begin(),   _cells.end());
+  _vertices.erase(_vertices.begin(),_vertices.end());
+  _boundary.erase(_boundary.begin(), _boundary.end());
+}
+
+//----------------- Adjacency calculations --------------------------
+
+//--------------------- cells on vertices ---------------------------
+
+// calculates for each vertex the (unordered) list of adjacent cells.
+// Precondition: 
+//  the vertex information in cells is set, i.e. VertexOnCellIterator works.  
+void Complex2D::calculate_vertex_cells() 
+{
+  for(CellIterator c=FirstCell(); ! c.IsDone(); ++c)
+    for(VertexOnCell2D_Iterator v(*c); ! v.IsDone(); ++v) {
+        _vertices[handle(*v)]._cells.push_back(handle(c));
+    }
+}
+
+
+//----------------------- cells on cells ----------------------------
+
+
+//-------------------------------------------------------------------
+//  calculate cell neighbor information.
+//  PRE:
+//   + local cell vertex lists are correct.
+//   + local cell neighbor lists contain space for the 
+//     correct number of neighbors; the content is not used, but should
+//     be  set to boundary.
+//   + this->_boundary should be empty (results will be appended)
+//  POST:
+//  + for each cell the ordered list of neighbor cells is filled,
+//    using the vertex-information of the cells.
+//  + local cell neighbor list entries for facets on the boundary 
+//    remain unchanged. (this is correct if they have been set to boundary before.)
+//  + the unordered list of boundary facets (this->_boundary) is filled.
+//
+//  ALGORITHM:
+//   c1 is a neighbour to c2
+//   <=> c1 and c2 have a common facet == vertex-pair == vtuple
+//   so we loop trough all facets and see if we already have 
+//   visited its vtuple (and the corr. cell) from the other side.
+//  This algorithm generalizes to 3D (only function get_vertices has to
+//  be rewritten)
+//-------------------------------------------------------------------
+
+void Complex2D::calculate_neighbour_cells()
+{
+  typedef vtuple_2d<Complex2D> vtuple;
+  typedef map<vtuple, FacetOnCellIterator, less<vtuple> > FacetTable;
+  FacetTable Facets;
+  CalculateNeighbourCells(*this,*this,Facets);
+
+  typedef FacetTable::iterator MapIt;
+  MapIt bfacet; 
+  for(bfacet = Facets.begin(); bfacet != Facets.end(); ++bfacet){
+    _boundary.push_back((*bfacet).second);
+  }
+}
