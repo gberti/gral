@@ -38,7 +38,7 @@ public:
   typedef point_location_result<gt, coord_type> location_result_type;
 
   enum { dim = grid_type::dim, spacedim = pt::dimension };
-private:
+
   typedef cartesiannd::grid<spacedim>             cart_grid_type;
   typedef matrix<spacedim, spacedim, 0>           matrix_type;
   typedef typename cartesiannd::default_coord<cart_grid_type>::type cart_coord_type;
@@ -49,10 +49,11 @@ private:
   typedef typename cgt::index_type   index_type;
   typedef typename cgt::Cell         bucket_cell;
   typedef typename cgt::Vertex       bucket_vertex;
+  typedef typename cgt::CellIterator bucket_cell_iterator;
 
   typedef cell_as_volume<geom_type, Cell> cell_volume_type;
 
-
+private:
   ref_ptr<grid_type const> the_grid;
   ref_ptr<geom_type const> the_geom;
 
@@ -79,6 +80,7 @@ public:
   ref_ptr<cart_geom_type const> TheBucketGeometry() const { return bucket_geometry;}
   ref_ptr<bucket_type const>    TheBuckets()        const { return ref_ptr<bucket_type const>(intersecting);}
 
+
   void set_edge_length(double el) { edge_length = el;}
 
   /*! \brief Find a cell containing \c p
@@ -98,6 +100,8 @@ public:
   location_result_type
   project(COORD const& p, bucket_cell const& loc) const;
  
+
+ 
 };
 
 
@@ -110,22 +114,27 @@ point_locator<GRID,GEOM,GT>::locate(COORD const& p) const
   //  typedef point_location_result<gt, COORD> location_result_type;
   typedef typename cart_geom_type::location_result_type cart_result_type;
   cart_result_type loc = bucket_geometry->locate(p);
+  // FIXME: cart_geom_type always returns either inside or projection
   if(loc.tag() == cart_result_type::outside_tag)
     return location_result_type();
-  else {
-    if(intersecting(* loc.TheCell()).empty())
-      return  project(p,* loc.TheCell());
+  else if(loc.tag() == cart_result_type::projection_tag) {
+    location_result_type res = project(loc.TheCoord(), loc.TheCell());
+    return location_result_type(res.TheCell(), res.TheCoord(),  location_result_type::projection_tag);
+  }
+  else { // loc.tag() == cart_result_type::inside_tag  => inside bucket grid
+    if(intersecting(loc.TheCell()).empty())
+      return  project(p,loc.TheCell());
     else {
-      // test all cells in 
-      for(typename cell_set_type::const_iterator c = intersecting(* loc.TheCell()).begin(); 
-	  c !=  intersecting(* loc.TheCell()).end(); ++c) {
+      // test all cells intersecting the bucket of p
+      for(typename cell_set_type::const_iterator c = intersecting(loc.TheCell()).begin(); 
+	  c !=  intersecting(loc.TheCell()).end(); ++c) {
 	cell_volume_type vol_c(*TheGeometry(), Cell(*TheGrid(), *c));
 	if(vol_c.is_inside(p)) {
 	  return location_result_type(Cell(*TheGrid(), *c), p, location_result_type::inside_tag);
 	}
       }
       // still here? => not found
-      return project(p,* loc.TheCell());
+      return project(p,loc.TheCell());
     }
   }
 }
@@ -143,15 +152,15 @@ point_locator<GRID,GEOM,GT>::project(COORD const& p, typename point_locator<GRID
 
   // consider a neighborhood of loc
   index_type low  = loc.low_vertex_index()  - index_type(1);
-  index_type high = loc.high_vertex_index();
-  low  = clamp_tuple(TheBucketGrid()->low_cell_index(), TheBucketGrid()->high_cell_index(), low);
-  high = clamp_tuple(TheBucketGrid()->low_cell_index(), TheBucketGrid()->high_cell_index(), high);
+  index_type high = loc.high_vertex_index() + index_type(1);
+  low  = clamp_tuple(TheBucketGrid()->low_vertex_index(), TheBucketGrid()->high_vertex_index(), low);
+  high = clamp_tuple(TheBucketGrid()->low_vertex_index(), TheBucketGrid()->high_vertex_index(), high);
   
   typename cgt::cartesian_subrange_type R(TheBucketGrid(), low, high+index_type(1));
   typedef grid_types<typename cgt::cartesian_subrange_type> rgt;
   // diameter of R is larger than maximal possible distance of cell in R to point p
-  double diamR = apcart::distance(TheBucketGeometry()->coord(bucket_vertex(TheBucketGrid(), TheBucketGrid()->low_vertex_index())),
-				  TheBucketGeometry()->coord(bucket_vertex(TheBucketGrid(), TheBucketGrid()->high_vertex_index())));
+  double diamR = apcart::distance(TheBucketGeometry()->coord(bucket_vertex(TheBucketGrid(), R.low_vertex_index())),
+				  TheBucketGeometry()->coord(bucket_vertex(TheBucketGrid(), R.high_vertex_index())));
   double mindist = diamR;
   Cell   mincell;
   coord_type proj;
@@ -181,6 +190,7 @@ point_locator<GRID,GEOM,GT>::project(COORD const& p, typename point_locator<GRID
 template<class GRID, class GEOM, class GT>
 void point_locator<GRID,GEOM,GT>::init()
 {
+  // create a Cartesian bucket grid
   box<coord_type> bbox = get_grid_bounding_box(*TheGrid(), *TheGeometry());
   index_type size(0);
   cart_coord_type boxmin = convert_point<cart_coord_type>(bbox.the_min());
@@ -197,6 +207,7 @@ void point_locator<GRID,GEOM,GT>::init()
 
   buckets = ref_ptr<cart_grid_type>(new cart_grid_type(size));
 
+  // create corresponding Cartesian geometry (scaling & translation)
   matrix_type A    (0.0);
   matrix_type A_inv(0.0);
   cart_coord_type T; assign_point(T, bbox.the_min());
@@ -217,14 +228,19 @@ void point_locator<GRID,GEOM,GT>::init()
   bucket_geometry = ref_ptr<cart_geom_type>(new cart_geom_type(*buckets, mapping));
   bucket_geometry->set_inverse_mapping(inverse_mapping);
 
+  // intersect each cell of the target mesh with the bucket grid
+  // this is very heuristic
   for(typename gt::CellIterator c(*TheGrid()); !c.IsDone(); ++c) {
     // find one cartesian cell 'loc' intersecting c
-
-    typename cgt::Cell loc_c = bucket_geometry->locate(TheGeometry()->center(*c)).TheCell();
+    typename cgt::Cell loc_c = bucket_geometry->locate(TheGeometry()->barycenter(*c)).TheCell();
     intersecting[loc_c].push_back(c.handle());
+  }
+
+  for(typename gt::CellIterator c(*TheGrid()); !c.IsDone(); ++c) {
+    // find the bucket cells containing the vertices of c
     for(typename gt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc) {
       typename cgt::Cell loc = bucket_geometry->locate(TheGeometry()->coord(*vc)).TheCell();
-      if(intersecting[loc].empty() || intersecting[loc].back() != c.handle())
+      if(intersecting[loc].empty()) // || intersecting[loc].back() != c.handle())
 	intersecting[loc].push_back(c.handle());
     }
     // find all Cartesian cells intersecting c
