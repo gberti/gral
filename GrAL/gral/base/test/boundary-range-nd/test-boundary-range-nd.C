@@ -12,7 +12,7 @@
 
 namespace GrAL {
   //  template boundary_range_nd<cartesiannd::grid<2> >;
-  template boundary_range_nd<cartesian2d::CartesianGrid2D>;
+  template class boundary_range_nd<cartesian2d::CartesianGrid2D>;
 }
 
 int main() {
