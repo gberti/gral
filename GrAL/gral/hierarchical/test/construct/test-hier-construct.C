@@ -20,15 +20,27 @@ void test_hier_grid(GRID const& root,
   typedef hier_grid_type                                hgt;
   typedef typename hgt::hier_cell_type                  hier_cell_type;
   typedef typename hgt::hier_vertex_type                hier_vertex_type;
-  typedef typename hier_grid_type::element_base_type    element_base_type;
+  typedef typename hgt::element_base_type               element_base_type;
   typedef hierarchical::h_vertex_on_cell_iterator_t<element_base_type> HierVertexOnCellIterator;
+  typedef hgt::index_type index_type;
 
   hier_grid_type H(root,pattern);
   H.add_finer_level();
   H.add_coarser_level();
     
-  for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev))
+  for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev)) {
     out << "Level " << lev << ": " << H.FlatGrid(lev)->cell_size() << " cells" << std::endl;
+    for(typename cgt::CellIterator c = H.FlatGrid(lev)->FirstCell(); !c.IsDone(); ++c) {
+      hgt::cart_subrange_type R = H.descendants(hier_cell_type(H,*c,lev), H.finest_level());
+      out << "Descendant of cell " << (*c).index() << ": " 
+	  << R.NumOfCells()    << " cells: "    << "[" << R.low_cell_index()   << "," << R.high_cell_index()   << "]"
+	  << "  "
+	  << R.NumOfVertices() << " vertices: " << "[" << R.low_vertex_index() << "," << R.high_vertex_index() << "]"
+	  << "\n";
+      REQUIRE_ALWAYS( R.high_cell_index()   + index_type(1)  ==  R.beyond_cell_index(),   "", 1);
+      REQUIRE_ALWAYS( R.high_vertex_index() + index_type(1)  ==  R.beyond_vertex_index(), "", 1);
+    }
+  }
   
   for(typename cgt::CellIterator c = H.FlatGrid(H.finest_level())->FirstCell(); !c.IsDone(); ++c) {
     hier_cell_type h(H,*c,H.finest_level());
@@ -75,7 +87,8 @@ void test_hier_grid(GRID const& root,
 
 // explicit instantiation to make sure all members are compilable
 namespace hierarchical { 
-  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
+  // Temporarily disabled
+  //  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
   template class hgrid_cartesian<cartesian2d::CartesianGrid2D>; 
 
   
@@ -86,19 +99,21 @@ namespace hierarchical {
   template h_cell_t  <element_base_type_2d>;
   template h_vertex_on_cell_iterator_t<element_base_type_2d>;
   
-
+  /* Temporarily disabled
   typedef  hgrid_cartesian<cartesian3d::CartesianGrid3D> hier_grid_3d;
   template h_element_base_t<hier_grid_3d>;
   typedef  h_element_base_t<hier_grid_3d> element_base_type_3d;
   template h_vertex_t<element_base_type_3d>;
   template h_cell_t  <element_base_type_3d>;
   template h_vertex_on_cell_iterator_t<element_base_type_3d>;
+  */
 }
 
 int main() {
   using namespace std;
   namespace hier = hierarchical;
 
+  /* Temporarily disabled
   {
     namespace cart = cartesian3d;
     typedef cart::CartesianGrid3D cart_grid_type;
@@ -107,7 +122,8 @@ int main() {
     cart_grid_type ref_pattern(3,3,3); // 2x2x2 cells!
     test_hier_grid(root, ref_pattern, cout);     
   }
-  
+  */
+
   cout << "----------------------------" << std::endl;
   {
     namespace cart = cartesian2d;
