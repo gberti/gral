@@ -77,9 +77,10 @@ namespace hierarchical {
   {
     if(g->empty())
       entities.clear();
-    else if(entities.empty())
-      init(*g);
     else {
+      if(entities.empty()) {
+	add_root_level();
+      } 
       while(coarsest_level() > g->coarsest_level())
 	add_coarser_level();
       while(coarsest_level() < g->coarsest_level())
@@ -139,6 +140,26 @@ namespace hierarchical {
     entities.push_front(grid_entity_type(* g->FlatGrid(newlev)));
     return newlev;
   }
+
+  template<class HGRID, class GE>
+  typename  hier_grid_table<HGRID,GE>::level_handle
+  hier_grid_table<HGRID,GE>::add_root_level()
+  {
+    REQUIRE_ALWAYS( empty(), "",1);
+    entities.push_front(grid_entity_type(* g->FlatGrid(0)));
+    return 0;
+  }
+
+  template<class HGRID, class GE>
+  template<class T>
+  typename  hier_grid_table<HGRID,GE>::level_handle
+  hier_grid_table<HGRID,GE>::add_root_level(T const& initializer)
+  {
+    REQUIRE_ALWAYS( empty(), "",1);
+    entities.push_front(grid_entity_type(* g->FlatGrid(0), initializer));
+    return 0;
+  }
+
 
   template<class HGRID, class GE>
   template<class T>
