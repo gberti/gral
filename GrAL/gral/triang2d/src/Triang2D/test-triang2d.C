@@ -134,7 +134,19 @@ void TestTriang2D::test_iterators(const Triang2D& CC,
 	out << '\n';
       } 
 
+ 
+      for(gt::EdgeOnCellIterator ec(*c); ! ec.IsDone(); ++ec)
+	for(gt::VertexOnEdgeIterator vec(*ec); ! vec.IsDone(); ++vec) {
+	  gt::Vertex sv  = CC.switched_vertex(*vec,*ec);
+	  gt::Vertex sv1 = CC.switched_vertex(sv,*ec);
+	  REQUIRE_ALWAYS( sv1 == *vec, "sv1= " << sv1.handle() << " vec=" << vec.handle(), 1);
+	  gt::Edge se  = CC.switched_edge(*vec, *ec, *c);
+	  gt::Edge se1 = CC.switched_edge(*vec, se,  *c);
+	  REQUIRE_ALWAYS( se1 == *ec, "se1= " << se1.handle() << " ec=" << ec.handle(), 1);
+	}
+
     } // for ( gt::CellIterator c=CC.FirstCell(); ...
+    
   } // if (test_cells)
   
   
