@@ -1,0 +1,12 @@
+#!/bin/csh
+./test-triang2d -nx 3 -ny 3 >& out
+/bin/echo "\n"
+foreach i ( out )
+diff $i $i.exp
+if ($status) then 
+/bin/echo "\t\t\t" ERROR in $i
+else
+/bin/echo "\t\t\t" $i OK
+endif
+end
+/bin/echo "\n"
