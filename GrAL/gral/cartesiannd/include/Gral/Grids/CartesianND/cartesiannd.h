@@ -149,36 +149,31 @@ namespace cartesiannd {
     enum { dim = DIM};
     typedef grid_dim_tag<dim> dimension_tag;
 
-    //  typedef element_handle_t   <CARTGRID, 0>                vertex_handle;
-    typedef typename element_handle_type<CARTGRID, 0>::type vertex_handle;
-    typedef sequence_iterator_t<CARTGRID, 0>                VertexIterator;
-    typedef typename element_type<CARTGRID, 0, DIM>::type   Vertex;
+    typedef typename element_handle_type<CARTGRID, 0>       ::type vertex_handle;
+    typedef          sequence_iterator_t<CARTGRID, 0>              VertexIterator;
+    typedef typename element_type       <CARTGRID, 0, DIM>  ::type Vertex;
 
-    //    typedef element_handle_t   <CARTGRID, 1>                edge_handle;
-    typedef typename element_handle_type<CARTGRID, 1>::type edge_handle;
-    typedef sequence_iterator_t<CARTGRID, 1>                EdgeIterator;
-    typedef typename element_type<CARTGRID, 1, DIM-1>::type Edge;
+    typedef typename element_handle_type<CARTGRID, 1>       ::type edge_handle;
+    typedef          sequence_iterator_t<CARTGRID, 1>              EdgeIterator;
+    typedef typename element_type       <CARTGRID, 1, DIM-1>::type Edge;
 
-    // typedef element_handle_t   <CARTGRID, 2>                face_handle;
-    typedef typename element_handle_type<CARTGRID, 2>::type face_handle;
-    typedef sequence_iterator_t<CARTGRID, 2>                FaceIterator;
-    typedef typename element_type<CARTGRID, 2, DIM-2>::type Face;
+    typedef typename element_handle_type<CARTGRID, 2>       ::type face_handle;
+    typedef          sequence_iterator_t<CARTGRID, 2>              FaceIterator;
+    typedef typename element_type       <CARTGRID, 2, DIM-2>::type Face;
 
-    // typedef element_handle_t   <CARTGRID, DIM-1>            facet_handle;
-    typedef typename element_handle_type<CARTGRID, DIM-1>::type facet_handle;
-    typedef sequence_iterator_t<CARTGRID, DIM-1>            FacetIterator;
-    typedef typename element_type<CARTGRID, DIM-1, 1>::type Facet;
+    typedef typename element_handle_type<CARTGRID, DIM-1>   ::type facet_handle;
+    typedef          sequence_iterator_t<CARTGRID, DIM-1>          FacetIterator;
+    typedef typename element_type       <CARTGRID, DIM-1, 1>::type Facet;
 
-    // typedef element_handle_t   <CARTGRID, DIM>              cell_handle;
-    typedef typename element_handle_type<CARTGRID, DIM>::type cell_handle;
-    typedef sequence_iterator_t<CARTGRID, DIM>              CellIterator;
-    typedef typename element_type<CARTGRID, DIM, 0>::type   Cell;
+    typedef typename element_handle_type<CARTGRID, DIM>     ::type cell_handle;
+    typedef          sequence_iterator_t<CARTGRID, DIM>            CellIterator;
+    typedef typename element_type       <CARTGRID, DIM, 0>  ::type Cell;
 
-    typedef typename incidence_iterator_type<CARTGRID, DIM, 0>    ::type VertexOnCellIterator;
-    typedef typename incidence_iterator_type<CARTGRID, DIM, 1>    ::type EdgeOnCellIterator;
-    typedef typename incidence_iterator_type<CARTGRID, DIM, 2>    ::type FaceOnCellIterator;
-    typedef typename incidence_iterator_type<CARTGRID, DIM, DIM-1>::type FacetOnCellIterator;
-    typedef typename incidence_iterator_type<CARTGRID, DIM, DIM>  ::type CellOnCellIterator;
+    typedef typename incidence_iterator_type<CARTGRID, 0, 0>      ::type VertexOnVertexIterator;
+    typedef typename incidence_iterator_type<CARTGRID, 0, 1>      ::type EdgeOnVertexIterator;
+    typedef typename incidence_iterator_type<CARTGRID, 0, 2>      ::type FaceOnVertexIterator;
+    typedef typename incidence_iterator_type<CARTGRID, 0, DIM-1>  ::type FacetOnVertexIterator;
+    typedef typename incidence_iterator_type<CARTGRID, 0, DIM>    ::type CellOnVertexIterator;
 
     typedef typename incidence_iterator_type<CARTGRID, 1, 0>      ::type VertexOnEdgeIterator;
     typedef typename incidence_iterator_type<CARTGRID, 1, 2>      ::type FaceOnEdgeIterator;
@@ -422,7 +417,7 @@ namespace cartesiannd {
     bool valid_dim(unsigned k) const { return k <= DIM;}
     void cvdim    (unsigned k) const { REQUIRE(valid_dim(k), "k=" << k << " DIM=" << DIM, 1);}
 
-    void print( ::std::ostream& out) const;
+    void print(std::ostream& out) const;
 
 
     //@{
@@ -737,7 +732,7 @@ namespace cartesiannd {
     unsigned                 m; // index into the choice of basis vectors, \in [0, \choice{D, K}[
 
   public:
-    sequence_iterator_t() {}
+    sequence_iterator_t() {} 
     explicit sequence_iterator_t(grid_type         const& gg) : g(gg), h(0) { init_m();} 
     explicit sequence_iterator_t(ref_ptr<grid_type const> gg) : g(gg), h(0) { init_m();} 
     sequence_iterator_t(grid_type         const& gg, local_element_handle hh) : g(gg), h(hh) { init_m();}
@@ -1034,7 +1029,7 @@ namespace cartesiannd {
     void cv() const { REQUIRE(valid(), "", 1);}
   private:
     void advance_till_valid() {
-      while(! IsDone() && ! TheGrid().template valid_index<K>(table()[loc].dir, a.index()+table()[loc].offset))
+      while(! IsDone() && ! TheGrid().template valid_index<M>(table()[loc].dir, a.index()+table()[loc].offset))
 	++loc;
     }
     typedef typename delta_map<dim>::inc_descriptor incidences;
