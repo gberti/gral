@@ -100,7 +100,7 @@ doxy: additional-doxy
 	echo "@INCLUDE_PATH = $(DOXYCFG)"         >> doxy.cfg.tmp
 	cat doxy.local.cfg                        >> doxy.cfg.tmp
 	echo "STRIP_FROM_PATH = $(ROOT)/include/"   >> doxy.cfg.tmp
-	cat dependencies dependencies.doxy         > doxy.deps.tmp
+	cat dependencies*                            > doxy.deps.tmp
 	$(DOXYCFG)/generate-doxycfg.pl -root $(ALLROOT) doxy.deps.tmp   >> doxy.cfg.tmp
 	cp $(DOXYHEADER) .
 	cp $(DOXYFOOTER) .
