@@ -23,6 +23,7 @@ public:
   // range-checking possible
   T& operator[](unsigned i)       {check_range(i); return X[i];}
   T  operator[](unsigned i) const {check_range(i); return X[i];}
+  T  operator()(unsigned i) const {check_range(i); return X[i];}
 
   iterator       begin() { return &(X[0]);}
   iterator       end()   { return (begin() + N);}
@@ -75,7 +76,11 @@ class tuple : public tuple_base<T,N> {
       *it = *b; 
     REQUIRE( (b == e), "invalid range in constructor!\n",1);
   }
- 
+  template<class U>
+  tuple(tuple<U,N> const& rhs) 
+   { for(int i = 0; i < N; ++i) X[i] = rhs[i];}
+
+
 };
 
 template<class T>
@@ -103,6 +108,9 @@ class tuple<T,2> : public tuple_base<T,2> {
   }
 
   tuple(T const& t1, T const& t2) { X[0] = t1; X[1] = t2;}
+
+  template<class U>
+  tuple(tuple<U,2> const& rhs) { X[0] = rhs[0]; X[1] = rhs[1];}
 
   T  x() const { return X[0];}
   T  y() const { return X[1];}
@@ -135,6 +143,9 @@ class tuple<T,3> : public tuple_base<T,3> {
   }
 
   tuple(T const& t1, T const& t2, T const& t3) { X[0] = t1; X[1] = t2; X[2] = t3;}
+
+  template<class U>
+  tuple(tuple<U,3> const& rhs) { X[0] = rhs[0]; X[1] = rhs[1]; X[2] = rhs[2];}
 
 
   T  x() const { return X[0];}
@@ -296,6 +307,22 @@ inline
 tuple<typename numeric_types::promote<T,U>::type, N>
 quotient(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 { return componentwise(lhs,rhs, algebraic_operators::divide()); }
+
+/*! \brief component-wise power
+
+   \f$ (a_0, \ldots, a_{N-1}) \mapsto (a_0^k, \ldots, a_{N-1}^k) \f$
+*/
+template<class T, class U, unsigned N>
+inline
+tuple<T,N>
+power(tuple<T,N> const& a, U k)
+{ 
+  tuple<T,N> res(1);
+  for(unsigned i = 0; i < N; ++i)
+    for(unsigned kk = 0; kk < k; ++kk)
+      res[i] *= a(i);
+  return res;
+}
 
 
 /*!  \brief Test for component-wise divisibility
