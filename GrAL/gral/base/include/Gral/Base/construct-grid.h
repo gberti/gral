@@ -91,4 +91,20 @@ ConstructGrid0(G1      & destG,
 }
 
 
+template<class G1, class G2, class V_CORR>
+inline void 
+ConstructGrid0(G1      & destG, 
+	       G2 const&  srcG,
+	       V_CORR  & VertexCorr)
+{
+  typedef grid_types<G2>                         gt2;
+  typedef typename gt2::cell_handle              cell_handle_2;
+  typedef typename grid_types<G1>::cell_handle   cell_handle_1;
+
+  // here we are not interested in a cell correspondance
+  dummy_mapping<cell_handle_2,cell_handle_1>       CellCorr;
+  ConstructGrid0(destG,srcG,VertexCorr,CellCorr);
+}
+
+
 #endif
