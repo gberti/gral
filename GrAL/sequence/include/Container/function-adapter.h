@@ -5,6 +5,7 @@
 // $LICENSE
 
 #include "Utility/pre-post-conditions.h"
+#include "Utility/ref-ptr.h"
 
 namespace GrAL {
 
@@ -116,6 +117,7 @@ compose_map( M1 const& m1, M2 const& m2)
  
 /*! \brief Constant function
 
+    \ingroup accessors
 */
 
 template<class ARG, class RES> 
@@ -130,6 +132,10 @@ public:
 
 
 
+/*! \brief Predicate for testing equality of mapped arg to constant.
+
+    \ingroup accessors
+*/
 template<class F, class ARG = typename F::argument_type, class RES = typename F::result_type>
 class map_is_equal {
 public:
@@ -142,8 +148,12 @@ private:
   ref_ptr<mapping_type const> f;
   map_result_type             res;
 public:
+  //! Default constructor creates uninitialized object
   map_is_equal() {}
+  //! Initialize such that <tt> (*this)(a) </tt> returns true iff <tt> ff(a) == r </tt>
   map_is_equal(mapping_type const& ff, map_result_type r) : f(ff), res(r) {}
+
+  //! Returns true iff <tt> ff(a) == r </tt>
   bool operator()(argument_type const& a) const { return (*f)(a) == res;}
 };
 
