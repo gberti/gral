@@ -27,7 +27,9 @@ latex:
 make-links:
 	(cd hyperlatex;\
           cp *.xbm html/;\
-          (cd html; rm -f bilder; ln -s ../bilder ./; \
+          (cd html; \
+           ln -s ../gralconcepts.css .; \
+           rm -f bilder; ln -s ../bilder ./; \
           ln -s top.html index.html;\
           ln -s GridVertex.html  Vertex.html;\
           ln -s GridEdge.html    Edge.html;\
@@ -50,6 +52,8 @@ make-links:
           ln -s Vertex-On-CellIterator.html VertexOnFacetIterator.html; \
           ln -s Vertex-On-CellIterator.html FacetOnCellIterator.html; \
           ln -s Cell-On-CellIterator.html   CellOnCellIterator.html; \
+          ln -s GridIncidenceIterator.html  IncidenceIterator.html; \
+          ln -s GridSequenceIterator.html   SequenceIterator.html; \
           )) || echo "(ignored)"
 
 

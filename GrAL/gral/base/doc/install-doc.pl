@@ -58,6 +58,8 @@ while(<>) {
   # replace dummies set by gen-tex-paths.pl
   s|STLURL|$STL|g;
   s|GRALROOT|$GRALPATH|g;
-
+  # insert style sheet
+  s|<HEAD>|<HEAD> <link  type="text/css" rel="stylesheet" href="gralconcepts.css">|;
+  s|<head>|<head> <link  type="text/css" rel="stylesheet" href="gralconcepts.css">|;
   print;
 }
