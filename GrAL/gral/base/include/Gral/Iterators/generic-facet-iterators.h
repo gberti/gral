@@ -106,8 +106,11 @@ namespace generic_facet {
 	  : c(cc), lh(llh) {}
 
         bool operator==(self const& rhs) const { return (c == rhs.c && lh == rhs.lh);}
+	// f1 != f2 does not imply that Facet(grid,f1) != Facet(grid,f2)
 	bool operator!=(self const& rhs) const 
 	  { return !((*this) == rhs);}
+	// f1 < f2 does not imply that Facet(grid,f1) != Facet(grid,f2)
+        bool operator< (self const& rhs) const { return ((c < rhs.c) || (c == rhs.c && lh < rhs.lh));}
       };
     template<class gt>
     std::ostream& operator<<(std::ostream& out, facet_handle_t<gt> const& h)
@@ -351,7 +354,7 @@ namespace generic_facet {
       CellIterator               c;
       facet_on_cell_iterator<gt> e;
       // hash_map not in std::
-      hash_map<facet<gt>, bool, hasher_facet<gt> > visited;
+      STDHASH::hash_map<facet<gt>, bool, hasher_facet<gt> > visited;
     public:
       facet_iterator() {}
       explicit 
