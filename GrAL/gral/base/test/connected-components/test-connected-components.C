@@ -72,8 +72,6 @@ int main() {
     for(rgt::CellIterator c(R2x2); ! c.IsDone(); ++c)
       if( ((*c).ll().x() + (*c).ll().y()) % 2 == 0)
 	SR.append_cell(c.handle());
-    // should be done automatically!
-    SR.init();
 
     // using SR directly would not have the desired effect, as the CellOnCelliterator
     // used for finding connected components would reach beyond the subrange cells!
