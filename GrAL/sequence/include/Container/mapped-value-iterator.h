@@ -11,17 +11,38 @@
 
 
 //----------------------------------------------------------------
-//
-//  The class templates define iterator adaptors working on the
-//  output of operator*() of an iterator, that is, they provide
-//  a map of the iterators value_type.
-//  Examples: select a field, as in get_first / get_second below
-//
+/*! \file
+  The class templates define iterator adaptors working on the
+  output of operator*() of an iterator, that is, they provide
+  a map of the iterators value_type.
+  Examples: select a field, as in get_first / get_second below
+*/
 //----------------------------------------------------------------
 
-// simple function objects to select fields of pairs.
-// target is P = pair<T1,T2>
+/*! \defgroup accessors Accessors, Function Objects and Iterator Adaptors
+    \ingroup sequences
 
+    This module defines custom function objects and iterators.
+    - get_first, get_second: Get first/second element of a pair.
+    - mapped_value_const_iterator<F,It>, mapped_value_iterator<F,It>:
+    Compose the value (dereference operator*) 
+    of an iterator It with a function F.
+ */
+
+
+
+/*! \brief Get first element of pair
+    \ingroup  accessors 
+
+   <TT> get_first </TT>, <TT> get_second </TT> are
+    simple function objects to select fields of pairs.
+
+    Target type for parameter P is  <TT> pair<T1,T2> </TT>.
+   
+    <TT> get_first </TT>, <TT> get_second </TT> are models of 
+    Adaptable Unary Function.
+
+*/
 template<class P>
 struct get_first {
   typedef P                       argument_type;
@@ -30,22 +51,40 @@ struct get_first {
 
   // this does not work if pair<const T1, T2> (used in hash_map)
   //  static       value_type& value(      P& p) { return p.first;}
-  static const value_type& value(const P& p) { return p.first;}
+  static 
+  value_type const& value(const P& p)            { return p.first;}
+  value_type const& operator()(P const& p) const { return p.first;}
 };
 
+/*! \brief get second element of P. 
+
+   \see get_first
+   \ingroup  accessors
+*/
 template<class P>
 struct get_second {
   typedef P                       argument_type;
   typedef typename P::second_type result_type;
   typedef typename P::second_type value_type;
 
-  //  static       value_type& value(      P& p) { return p.first;}
-  static const value_type& value(const P& p) { return p.second;}
+  static 
+  value_type const& value(const P& p)            { return p.second;}
+  value_type const& operator()(P const& p) const { return p.second;}
 };
 
 
 
-// F o It::op*
+/*! \brief Forward iterator mapping the value of <TT>It::op*</TT> with F
+    (const version).
+  \ingroup accessors
+
+  Semantics:
+  - <TT>op*</TT> = F o <TT>It::op*</TT>, 
+
+   Parameters:
+   - <TT> It </TT> A model of Forward Iterator
+   - <TT> F  </TT> A model of  Unary Function
+ */
 template<class It, class F>
 class mapped_value_const_iterator {
 public:
@@ -82,8 +121,18 @@ get2nd_c(It i) {
   return mapped_value_const_iterator<It,get_second<v_type> >(i);
 }
 
-// F o It::op*
-// F::value() must return value_type&
+/*! \brief Forward iterator mapping the value of T>It::op*</TT> with <TT> F </TT>
+  (non-const version).
+  \ingroup accessors
+
+  Semantics:
+  - <TT>op*</TT> = F o <TT>It::op*</TT>, 
+ 
+   Parameters:
+   - <TT> It </TT> A model of Forward Iterator
+   - <TT> F  </TT> A model of  Unary Function
+        - <TT> F::value() </TT> must return <TT> value_type& </TT>
+*/
 template<class It, class F>
 class mapped_value_iterator {
 private:

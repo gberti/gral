@@ -14,36 +14,41 @@
 #include "Container/proxies.h"
 #include "Utility/pre-post-conditions.h"
 
+
 //----------------------------------------------------------------
-//
-//  A representation of a partial mapping T1 --> T2.
-// 
-//  Contents:
-//  ---------
-//  [1] class partial_mapping<T1,T2>;
-//
-//  Description:
-//  ------------
-//  [1] The values of the mapping must be set element-wise.
-//  If pm is of type partial_mapping<T1,T2>, t1 of type T1 and t2 of type T2, then
-//  -  pm[t1] = t2  => t2 == pm(t1)
-//  -  pm(t1) may be evaluated for every t1 of type T1.
-//  -  pm.defined(t1)   == true  <=> the value of t1 has been set explicitely before.
-//  -  pm.undefined(t1) == true  <=> pm(t1) == pm.default_value()
-//
-//  Note: statement of the form: t2 =  pm[t1] would mean that the value of
-//  pm(t1) gets undefined if pm.undefined(t1) == true before!
-//  This is prohibited by returning a  proxy in operator[] which only 
-//  can be assigned to (i.e. occur only on the left side of an assignment).
-//
-// Constraints on template parameters:
-//  - T1 has hasher<T1> defined.
-//
-// ToDo:
-// -----
-// There should also be a corresponding domain-class and 
-// perhaps an inverse-mapping class : T2 --> P(T1)
-//
+/*!  
+   \brief A representation of a partial mapping T1 --> T2, using a default
+    value for items not explicitely set.
+
+    \ingroup mappings
+ 
+  partial_mapping<T1,T2> is a model of Adaptable Unary Function.
+
+ \b Template parameters:
+  - T1 is Hashable, that is,  <TT> hash<T1> </TT> is defined.
+  - T1 is Equality Comparable, that is, <TT> equal_to<T1> </TT> is defined.
+  - T2 is Assignable and Default Constructible.
+
+  \b Invariants:
+
+  If pm is of type partial_mapping<T1,T2>, t1 of type T1 and t2 of type T2, then
+    -  pm[t1] = t2  => t2 == pm(t1)
+    -  pm(t1) may be evaluated for every t1 of type T1.
+    -  pm.defined(t1)   == true  <=> the value of t1 has been set explicitely before.
+    -  pm.undefined(t1) == true  <=> pm(t1) == pm.default_value()
+
+  \b Note:
+
+  statement of the form: t2 =  pm[t1] would mean that the value of
+  pm(t1) gets undefined if pm.undefined(t1) == true before!
+  This is prohibited by returning a  proxy in operator[] which only 
+  can be assigned to (i.e. occur only on the left side of an assignment).
+
+
+ \todo
+ There should also be a corresponding domain-class and 
+ perhaps an inverse-mapping class : T2 --> P(T1)
+*/
 //----------------------------------------------------------------
 
 

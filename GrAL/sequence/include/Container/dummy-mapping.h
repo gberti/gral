@@ -9,12 +9,11 @@
 //   
 //----------------------------------------------------------------
 
-//----------------------------------------------------------------
-//
-// dummy mapping to substitute for an unneeded mapping parameter.
-// sample use: see Grids/Complex2D/generic/complex2d-construct.C
-//
-//----------------------------------------------------------------
+/*! \brief dummy mapping to substitute for an unneeded mapping parameter.
+    \ingroup mappings
+
+    sample use: see Grids/Complex2D/generic/complex2d-construct.C
+*/
 
 template<class T1, class T2>
 class dummy_mapping {

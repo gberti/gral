@@ -9,12 +9,10 @@
 //   
 //----------------------------------------------------------------
 
-//----------------------------------------------------------------
-//
-// dummy mapping to substitute for an unneeded container parameter.
-// sample use: see Grids/Algorithms/find-boundary-components.h
-//
-//----------------------------------------------------------------
+/*! \brief dummy mapping to substitute for an unneeded container parameter.
+ 
+  sample use: see Grids/Algorithms/find-boundary-components.h
+*/
 
 template<class T>
 class dummy_container {
