@@ -5,7 +5,7 @@
 
 // $LICENSE
 
-#include <iostream.h>
+#include <iostream>
 #include <stdlib.h>
 
 //@{
@@ -32,7 +32,7 @@
 //----------------------------------------------------------------
 
 
-#define _ERRORLOG cerr
+#define _ERRORLOG std::cerr
 
 #define _PRECONDITION_ERROR  _ERRORLOG << "\nERROR in FILE "  << __FILE__ << ", LINE " << __LINE__\
    << "\n(compiled on " << __DATE__ << " at " __TIME__  << " )\n"\
@@ -43,18 +43,18 @@
                                        << ": postcondition violated:\n"
 
 #define REQUIRE_ALWAYS(condition, error_msg, severity)\
- if(! (condition))  { _PRECONDITION_ERROR << #condition << ' ' << error_msg << endl; abort();}
+ if(! (condition))  { _PRECONDITION_ERROR << #condition << ' ' << error_msg << std::endl; abort();}
 
 #define ENSURE_ALWAYS(condition, error_msg, severity)\
- if(! (condition)) { _POSTCONDITION_ERROR << #condition << ' ' << error_msg << endl; abort();}
+ if(! (condition)) { _POSTCONDITION_ERROR << #condition << ' ' << error_msg << std::endl; abort();}
 
 #ifdef NMWR_DEBUG
 
 #define REQUIRE(condition, error_msg, severity)\
- if(! (condition))  { _PRECONDITION_ERROR << #condition << ' ' << error_msg << endl; abort();}
+ if(! (condition))  { _PRECONDITION_ERROR << #condition << ' ' << error_msg << std::endl; abort();}
 
 #define ENSURE(condition, error_msg, severity)\
- if(! (condition)) { _POSTCONDITION_ERROR << #condition << ' '  << error_msg << endl; abort();}
+ if(! (condition)) { _POSTCONDITION_ERROR << #condition << ' '  << error_msg << std::endl; abort();}
 
 #else
 #define REQUIRE(condition, error_msg, severity) 

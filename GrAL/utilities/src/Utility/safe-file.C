@@ -10,7 +10,7 @@
 #include <stdlib.h>
 
  
-int file_interactive::open(ifstream& in, std::string const& filename)
+int file_interactive::open(std::ifstream& in, std::string const& filename)
   {
     if(in.is_open()) {
       in.close();
