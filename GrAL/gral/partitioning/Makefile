@@ -7,6 +7,7 @@ TARGET=all
 all:
 
 new:
+	(cd src; gmake new)
 
 compile:
 

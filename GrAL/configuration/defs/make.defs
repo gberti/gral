@@ -106,3 +106,5 @@ else # use installed versions
 IFLAGS  += -I$(PREFIX)/include
 LDFLAGS += -L$(PREFIX)/lib/$(LIBPATH)
 endif
+
+IFLAGS += $(LOCAL_IFLAGS)
