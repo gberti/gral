@@ -24,6 +24,16 @@ namespace cartesian3d {
     else  
       init(vx,vy,vz);
   }
+
+  CartesianGrid3D::CartesianGrid3D(CartesianGrid3D::index_type v)
+  { 
+    if(v[0] <=0 || v[1] <= 0 || v[2] <= 0)
+      // empty grid
+      init(0,0,0);
+    else  
+      init(v[0],v[1],v[2]);
+  }
+
   
   void CartesianGrid3D::init(int vx, int vy, int vz)
   {
