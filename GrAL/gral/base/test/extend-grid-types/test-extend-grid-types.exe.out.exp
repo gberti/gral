@@ -1,7 +1,7 @@
 grid_types<CartesianGrid2D>:
 has    type vertex_handle
 has    type edge_handle
-has no type face_handle
+has    type face_handle
 has    type facet_handle
 has    type cell_handle
 has    type Vertex
@@ -11,20 +11,20 @@ has    type Facet
 has    type Cell
 has    type VertexIterator
 has    type EdgeIterator
-has no type FaceIterator
+has    type FaceIterator
 has    type FacetIterator
 has    type CellIterator
 has    type VertexOnVertexIterator
 has no type EdgeOnVertexIterator
-has no type FaceOnVertexIterator
+has    type FaceOnVertexIterator
 has no type FacetOnVertexIterator
 has    type CellOnVertexIterator
 has    type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
 has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
-has no type VertexOnFaceIterator
-has no type EdgeOnFaceIterator
+has    type VertexOnFaceIterator
+has    type EdgeOnFaceIterator
 has no type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
@@ -34,6 +34,9 @@ has    type EdgeOnCellIterator
 has no type FaceOnCellIterator
 has    type FacetOnCellIterator
 has    type CellOnCellIterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator
 
 grid_types<CartesianGrid3D>:
 has    type vertex_handle
@@ -71,11 +74,14 @@ has    type EdgeOnCellIterator
 has    type FaceOnCellIterator
 has    type FacetOnCellIterator
 has no type CellOnCellIterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator
 
 grid_types<Complex2D>:
 has    type vertex_handle
 has    type edge_handle
-has no type face_handle
+has    type face_handle
 has    type facet_handle
 has    type cell_handle
 has    type Vertex
@@ -85,20 +91,20 @@ has    type Facet
 has    type Cell
 has    type VertexIterator
 has    type EdgeIterator
-has no type FaceIterator
+has    type FaceIterator
 has    type FacetIterator
 has    type CellIterator
 has no type VertexOnVertexIterator
 has no type EdgeOnVertexIterator
-has no type FaceOnVertexIterator
+has    type FaceOnVertexIterator
 has no type FacetOnVertexIterator
 has    type CellOnVertexIterator
 has    type VertexOnEdgeIterator
-has no type FaceOnEdgeIterator
+has    type FaceOnEdgeIterator
 has no type FacetOnEdgeIterator
 has    type CellOnEdgeIterator
-has no type VertexOnFaceIterator
-has no type EdgeOnFaceIterator
+has    type VertexOnFaceIterator
+has    type EdgeOnFaceIterator
 has no type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
@@ -108,21 +114,24 @@ has    type EdgeOnCellIterator
 has no type FaceOnCellIterator
 has    type FacetOnCellIterator
 has    type CellOnCellIterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator
 
 grid_types<Complex3D>:
 has    type vertex_handle
 has    type edge_handle
-has no type face_handle
+has    type face_handle
 has    type facet_handle
 has    type cell_handle
 has    type Vertex
 has    type Edge
-has no type Face
+has    type Face
 has    type Facet
 has    type Cell
 has    type VertexIterator
 has    type EdgeIterator
-has no type FaceIterator
+has    type FaceIterator
 has    type FacetIterator
 has    type CellIterator
 has no type VertexOnVertexIterator
@@ -134,7 +143,7 @@ has no type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
 has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
-has no type VertexOnFaceIterator
+has    type VertexOnFaceIterator
 has no type EdgeOnFaceIterator
 has no type CellOnFaceIterator
 has    type VertexOnFacetIterator
@@ -142,14 +151,17 @@ has no type EdgeOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
-has no type FaceOnCellIterator
+has    type FaceOnCellIterator
 has    type FacetOnCellIterator
 has no type CellOnCellIterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator
 
 xgt<origgt, override_facet_handle<my_facet_handle> >:
 has    type vertex_handle
 has    type edge_handle
-has no type face_handle
+has    type face_handle
 has    type facet_handle
 has    type cell_handle
 has    type Vertex
@@ -159,20 +171,20 @@ has    type Facet
 has    type Cell
 has    type VertexIterator
 has    type EdgeIterator
-has no type FaceIterator
+has    type FaceIterator
 has    type FacetIterator
 has    type CellIterator
 has    type VertexOnVertexIterator
 has no type EdgeOnVertexIterator
-has no type FaceOnVertexIterator
+has    type FaceOnVertexIterator
 has no type FacetOnVertexIterator
 has    type CellOnVertexIterator
 has    type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
 has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
-has no type VertexOnFaceIterator
-has no type EdgeOnFaceIterator
+has    type VertexOnFaceIterator
+has    type EdgeOnFaceIterator
 has no type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
@@ -182,6 +194,9 @@ has    type EdgeOnCellIterator
 has no type FaceOnCellIterator
 has    type FacetOnCellIterator
 has    type CellOnCellIterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator
 
 override_facet_handle<my_facet_handle>:
 has no type vertex_handle
@@ -219,3 +234,6 @@ has no type EdgeOnCellIterator
 has no type FaceOnCellIterator
 has no type FacetOnCellIterator
 has no type CellOnCellIterator
+has no type archetype_type
+has no type archetype_handle
+has no type archetype_iterator
