@@ -65,44 +65,38 @@ public:
   /*! @name Constructors  */
   //@{ 
   RegGrid2D(int pts = 2) // default: 1 cell, 4 vertices
-    :ll_(0,0), ur_(pts-1,pts-1),
-     xpoints(pts), ypoints(pts)
-    { init_maps(ll_,ur_);}
+    :ll_(0,0), ur_(pts-1,pts-1)
+  { init(); }
  
   RegGrid2D(int nv_x, int nv_y) 
-    : ll_(0,0), ur_(nv_x-1,nv_y-1),
-      xpoints(nv_x), ypoints(nv_y)
-    {init_maps(ll_,ur_);}
+    : ll_(0,0), ur_(nv_x-1,nv_y-1)
+  { init(); }
+
+  RegGrid2D(const index_type& nv)
+    : ll_(0,0), ur_(nv-index_type(1,1))
+  { init(); }
 
   RegGrid2D(int llx, int lly,int urx, int ury)
-    : ll_(llx,lly), ur_(urx,ury),
-      xpoints(urx - llx +1), 
-      ypoints(ury - lly +1)
-    { init_maps(ll_,ur_);}
+    : ll_(llx,lly), ur_(urx,ury)
+  { init(); }
 
   RegGrid2D(const index_type& LL, const index_type& UR)
-    :  ll_(LL), ur_(UR),
-       xpoints(UR.x() - LL.x() +1), 
-       ypoints(UR.y() - LL.y() +1)
-    { init_maps(ll_,ur_);}
+    :  ll_(LL), ur_(UR)
+  { init(); }
 
-  // not consistent!
-  RegGrid2D(const index_type& nv)
-    : ll_(0,0), ur_(UR-index_type(1,1)),
-      xpoints(ur_.x() - ll_.x() +1), 
-      ypoints(ur_.y() - ll_.y() +1)
-    { init_maps(ll_,ur_);}
+
  
   //@}
 
 private:
-  void init_maps(const index_type& ll,
-		 const index_type& ur)
+  void init()
     { 
-      vertex_index_map = indexmap_type(ll,ur);
-      cell_index_map   = indexmap_type(ll,index_type(ur.x()-1,ur.y()-1)); 
-      xedge_index_map  = indexmap_type(ll,index_type(ur.x()-1,ur.y()  )); 
-      yedge_index_map  = indexmap_type(ll,index_type(ur.x(),  ur.y()-1)); 
+      xpoints = ur_.x() - ll_.x() +1;
+      ypoints = ur_.y() - ll_.y() +1;
+      vertex_index_map = indexmap_type(ll_,ur_);
+      cell_index_map   = indexmap_type(ll_,index_type(ur_.x()-1,ur_.y()-1)); 
+      xedge_index_map  = indexmap_type(ll_,index_type(ur_.x()-1,ur_.y()  )); 
+      yedge_index_map  = indexmap_type(ll_,index_type(ur_.x(),  ur_.y()-1)); 
     }
 
 public:
@@ -185,6 +179,17 @@ public:
   class VertexOnCellIterator;
   class EdgeOnCellIterator;
   class CellOnCellIterator;
+
+
+  /*! \name Checking functions */
+ /*@{*/ 
+  void cv(vertex_handle e) const { REQUIRE(valid(e), "",1);}
+  bool valid(vertex_handle e) const { return (0 <= e && e < (int)NumOfVertices()); }
+  void cv(edge_handle e) const { REQUIRE(valid(e), "",1);}
+  bool valid(edge_handle e) const { return (0 <= e && e < (int)NumOfEdges()); }
+  void cv(cell_handle e) const { REQUIRE(valid(e), "",1);}
+  bool valid(cell_handle e) const { return (0 <= e && e < (int)NumOfCells()); }
+  /*@}*/
 
 
   //-----------------------------------------------------------
@@ -506,11 +511,11 @@ public:
     seq_iterator_base(const grid_type* g) : _g(g) {}
     seq_iterator_base(const grid_type& g) : _g(&g) {}
 
-     grid_type const& TheGrid() const {
-      REQUIRE((_g != 0),"No Grid!\n",1);
-      return (*_g);
-    }
+    grid_type const& TheGrid()   const { cb(); return (*_g); }
     grid_type const& TheAnchor() const { return TheGrid();}
+
+    bool bound() const { return _g != 0;}
+    void cb()    const { REQUIRE(bound(), "", 1);} 
   protected:
     const grid_type* _g;
   };
@@ -530,32 +535,35 @@ public:
       ++v;
       return (*this);
     }
-    self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
+    self  operator++(int)    { cv(); self tmp(*this); ++(*this); return tmp;}
     self& operator +=(const index_type& ij) {
-      v+= TheGrid().TheVertexMap().offset(ij);
+      cv(); v+= TheGrid().TheVertexMap().offset(ij);
       return *this;
     }
 
-    Vertex   operator*() const { return TheGrid().vertex(v);} 
+    Vertex   operator*() const { cv(); return TheGrid().vertex(v);} 
     // random access
     /* Vertex operator()(int i, int j) const { 
       // vertex_handle + int is not defined!
       return TheGrid().vertex(v + TheGrid().TheVertexMap().offset(i,j));
     }
     */
-    bool     IsDone()    const { return  (v > TheGrid().MaxVertexNum());}
-    operator bool() const { return !IsDone();} 
-    vertex_handle GlobalNumber() const { return v;}
-    vertex_handle handle      () const { return v;}
+    bool     IsDone()    const { cb();  return  (v > TheGrid().MaxVertexNum());}
+    // operator bool() const { return !IsDone();} 
+    vertex_handle GlobalNumber() const { cv(); return v;}
+    vertex_handle handle      () const { cv(); return v;}
 
     friend bool operator==(self const& lhs, self const& rhs)
     {
+      lhs.cb(); rhs.cb();
       REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing vertices with different grids!\n",1);
       return (lhs.v == rhs.v);
     }
     friend bool operator!=(const self& lhs, const self& rhs) 
       { return !(lhs == rhs);}
 
+    bool valid() const { return bound() && TheGrid().valid(v);}
+    void cv()    const { REQUIRE(valid(), "handle= " << v, 1);}
   private:
     vertex_handle v;
   };
@@ -572,10 +580,9 @@ public:
     EdgeIterator(int ee,const Grid* g) 
       : base(g), e(ee)  {}
 
-    self& operator++() { ++e; return(*this);}
-    self operator++(int) { self tmp(*this); ++(*this); return tmp;}
-    Edge operator*() const { return TheGrid().get_edge(e);}
-    bool IsDone()    const { return ( e >= TheGrid().NumOfEdges());}
+    self& operator++() { cv(); ++e; return(*this);}
+    Edge operator*() const { cv(); return TheGrid().get_edge(e);}
+    bool IsDone()    const { cb(); return ( e >= TheGrid().NumOfEdges());}
 
     //  operator Edge()  const { return (this->operator*());}
     //  operator bool() const { return !IsDone();} 
@@ -584,11 +591,15 @@ public:
 
     friend bool operator==(self const& lhs, self const& rhs)
     {
+      lhs.cb(); rhs.cb(); 
       REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing edges with different grids!\n",1);
       return (lhs.e == rhs.e);
     }
     friend bool operator!=(const self& lhs, const self& rhs) 
       { return !(lhs == rhs);}
+
+    bool valid() const { return bound() && TheGrid().valid(e);}
+    void cv()    const { REQUIRE(valid(), "handle= " << e, 1);}
   private:
     edge_handle e;
   };
@@ -605,23 +616,25 @@ public:
     CellIterator(int cc, const Grid* g) : base(g), c(cc) {} 
     CellIterator(const Grid& g, int cc) : base(&g), c(cc) {} 
  
-    self& operator++() { ++c; return (*this);}
-    self  operator++(int)  { self tmp(*this); ++(*this); return tmp;}
-    Cell  operator*() const { return TheGrid().cell(c);}
+    self& operator++() { cv(); ++c; return (*this);}
+    Cell  operator*() const { cv(); return TheGrid().cell(c);}
     // operator Cell()   const { return TheGrid().cell(c);}
-    bool  IsDone()    const { return (c > TheGrid().MaxCellNum());}
+    bool  IsDone()    const { cb(); return (c > TheGrid().MaxCellNum());}
     // operator bool() const { return !IsDone();} 
     // cell_handle GlobalNumber() const { return c;}
-    cell_handle handle      () const { return c;}
+    cell_handle handle      () const { cv(); return c;}
 
     friend bool operator==(self const& lhs, self const& rhs)
     {
+      lhs.cb(); rhs.cb();
       REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing cells with different grids!\n",1);
       return (lhs.c == rhs.c);
     }
     friend bool operator!=(const self& lhs, const self& rhs) 
       { return !(lhs == rhs);}
 
+    bool valid() const { return bound() && TheGrid().valid(c);}
+    void cv()    const { REQUIRE(valid(), "handle= " << c, 1);}
   private:
     cell_handle c;
   };
