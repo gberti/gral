@@ -21,6 +21,14 @@
 #include "Gral/Grids/Complex2D/partial-grid-functions.h"
 
 
+/*! \file 
+
+  Tests:
+    - 2x2p1: OK
+    - 2x2  : OK
+    - 4x1  : Wrong (First grid to small, nodes 2 <-> 3)
+    - 4x1p1: Wrong (nodes 2 <-> 3)
+ */
 
 
 int main(int argc, char* argv[]) {
