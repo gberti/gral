@@ -126,10 +126,32 @@ void Complex2D::calculate_archetypes()
 
 void Complex2D::add_archetype_of(Complex2D::Cell const& c) 
 {
-  if(arch_for_n_vertices.size() < c.NumOfVertices()+1) {
+  if(arch_for_n_vertices.size() < (unsigned)c.NumOfVertices()+1) {
     // add new archetype, and link c.NumOfVertices() to this new archetype.
     archetypes.push_back(archetype_type(c.NumOfVertices()));
     arch_for_n_vertices.resize(c.NumOfVertices()+1);
     arch_for_n_vertices[c.NumOfVertices()] = archetypes.size() - 1;
   }
+}
+
+
+Complex2D::archetype_handle
+Complex2D::add_archetype(Complex2D::archetype_type const& A, int nv)  
+{
+  REQUIRE(nv >= 0, " nv=" << nv ,1);
+  // A must not be already present
+  REQUIRE( ((int)arch_for_n_vertices.size() < nv + 1 || arch_for_n_vertices[nv] == -1), "",1);
+
+  archetypes.push_back(A);
+  archetype_handle a = archetypes.size()-1;
+
+  // enlarge mapping (#cell vertices) -> archetype
+  int old_sz = arch_for_n_vertices.size();
+  if(old_sz < nv +1) {
+    arch_for_n_vertices.resize(nv+1);
+    for(unsigned i = old_sz; i < arch_for_n_vertices.size(); ++i)
+      arch_for_n_vertices[i] = -1;
+  }
+  arch_for_n_vertices[nv] = a;
+  return a;
 }

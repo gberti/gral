@@ -27,18 +27,35 @@
 
 
 
+
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Grids/Complex2D/internal/copy.C"
-
-#else
-
-template<class Conn, class VtxCorr, class CellCorr>
-void copy_cells(Complex2D& G, 
-		const Conn& G_src,
-		/* const */ VtxCorr&  vtx_corr,
-		CellCorr&       cell_corr);
-
-
 #endif
+
+
+template<int WITHARCH>
+struct dispatch_complex2d_copy {
+  
+  template<class GSRC, class VtxCorr, class CellCorr>
+  static void copy_cells(Complex2D      & G_dst, 
+		  GSRC      const& G_src,
+		  VtxCorr&         vtx_corr,
+		  CellCorr&        cell_corr)
+  { copy_cells_archetypes(G_dst, G_src, vtx_corr, cell_corr);}
+};
+
+
+template<>
+struct dispatch_complex2d_copy<0> {
+  
+  template<class GSRC, class VtxCorr, class CellCorr>
+  static void copy_cells(Complex2D      & G_dst, 
+		  GSRC      const& G_src,
+		  VtxCorr&         vtx_corr,
+		  CellCorr&        cell_corr)
+  { copy_cells_no_archetypes(G_dst, G_src, vtx_corr, cell_corr);}
+};
+
+
 
 #endif
