@@ -88,9 +88,9 @@ namespace restricted_grid_component_view {
     
     typedef enumerated_subrange<GRID> range_type;
   private:
-    grid_type const*   g;
-    pred_type          inside;
-    baseCell           germ;
+    ref_ptr<grid_type const>  g;
+    pred_type                 inside;
+    baseCell                  germ;
     
     mutable range_type range;
     mutable bool       cells_initialized;
@@ -104,9 +104,10 @@ namespace restricted_grid_component_view {
 	cells_initialized(false),
 	vertices_initialized(false) 
     {}
-
-    void init_cells()    const;
-    void init_vertices() const;
+    void init(grid_type const& gg,
+	      pred_type        ins,
+	      baseCell  const& grm);
+    void clear();
 
     friend class restricted_grid_component_view::vertex_iterator<GRID,INSIDE_PRED, GT>;
     friend class restricted_grid_component_view::cell_iterator  <GRID,INSIDE_PRED, GT>;
@@ -115,13 +116,19 @@ namespace restricted_grid_component_view {
     typedef  vertex_iterator<GRID,INSIDE_PRED, GT>  VertexIterator;
     typedef  cell_iterator<GRID,INSIDE_PRED, GT>    Cell;
     typedef  cell_iterator<GRID,INSIDE_PRED, GT>    CellIterator;
+    friend class  vertex<GRID,INSIDE_PRED, GT>;
 
     VertexIterator FirstVertex()   const { return VertexIterator(*this);}
     unsigned       NumOfVertices() const { init_vertices(); return range.NumOfVertices();}
     CellIterator   FirstCell()     const { return CellIterator(*this);}
     unsigned       NumOfCells()    const { init_cells(); return range.NumOfCells();}
 
+
     grid_type const& BaseGrid() const { return *g;}
+    grid_type const& TheGrid()  const { return *g;}
+  private:
+    void init_cells()    const;
+    void init_vertices() const;
   };
 
   template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
