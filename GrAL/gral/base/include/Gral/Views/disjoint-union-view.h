@@ -197,9 +197,9 @@ namespace disjoint_union_view {
     to algorithms expecting a single grid, for example for 
     output of several grids in one file.
 
-    The view is restricted to be a model of $GrAL CellVertexInputGrid
+    The view is restricted to be a model of $GrAL Cell-VertexInputGridRange
     regardless of the capabilities of the template parameters
-    (which must support at least the $GrAL CellVertexInputGrid functionality).
+    (which must support at least the $GrAL Cell-VertexInputGridRange functionality).
 
     \todo support archetypes.
  */
