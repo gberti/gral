@@ -428,7 +428,6 @@ namespace complexnd {
     typedef typename gt::archetype_type     archetype_type;
     typedef typename gt::archetype_iterator archetype_iterator;
 
-  private:
     // data structure to hold all possible incidences
     // TODO: reordered indexing incidences[d1][d2][e1][e2] would be more efficient
     typedef std::vector<unsigned>                 incidence_sequence;       // [0, |I_{k,j}(e)| )
