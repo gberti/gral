@@ -95,6 +95,40 @@ class cell2d_type_tag  : public cell_type_tag {};
 class cell3d_type_tag  : public cell_type_tag {};
 
 
+template<int GD, int D, int CD>
+struct int2element_tag {};
+
+template<int GD, int CD>
+struct int2element_tag<GD,0, CD> { typedef vertex_type_tag tag;};
+
+template<int GD, int CD>
+struct int2element_tag<GD,1, CD> { typedef edge_type_tag tag;};
+template<int GD, int CD>
+struct int2element_tag<GD,2, CD> { typedef face_type_tag tag;};
+
+template<int GD, int D>
+struct int2element_tag<GD,D,1> { typedef facet_type_tag tag;};
+
+template<int GD, int D>
+struct int2element_tag<GD,D,0> { typedef cell_type_tag tag;};
+
+template<>
+struct int2element_tag<3,2,1> { typedef facet_type_tag tag;};
+
+template<>
+struct int2element_tag<2,1,1> { typedef edge_type_tag tag;};
+
+template<>
+struct int2element_tag<2,2,0> { typedef cell_type_tag tag;};
+
+template<>
+struct int2element_tag<1,1,0> { typedef edge_type_tag tag;};
+
+template<>
+struct int2element_tag<1,0,1> { typedef vertex_type_tag tag;};
+
+
+
 
 namespace type_tags {
 
@@ -159,7 +193,7 @@ struct grid_dim_tag<-1>
 { 
   typedef type_tags::variable fixity_tag;
   enum {dim = -1}; 
-  template<int K> struct elem_dim   { typedef element_dim_tag  <-1>   tag;};
+  template<int K> struct elem_dim   { typedef element_dim_tag  <-1> tag;};
   template<int K> struct elem_codim { typedef element_codim_tag<-1> tag;};
 
 };
