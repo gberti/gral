@@ -8,7 +8,7 @@
 #include "Geometry/algebraic-primitives.h"
 
 #include "Gral/Base/common-grid-basics.h"
-#include "Gral/Geometries/geometric-types.h"
+#include "Gral/Geometries/geometric-types-2d.h"
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
 #include "Utility/pre-post-conditions.h"

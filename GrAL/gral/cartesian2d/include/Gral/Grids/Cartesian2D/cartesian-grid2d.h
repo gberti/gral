@@ -44,6 +44,8 @@ public:
   // replacing this with ymjr_... would yield a regular grid
   // in which iteration is done in x-direction.
   typedef  indexmap_type::index_type index_type; // 2D-integer index
+  typedef index_type                 vertex_index_type;
+  typedef index_type                 cell_index_type;
 
 private:
   // DATA 
@@ -384,6 +386,10 @@ public:
     }
     VertexOnEdgeIterator FirstVertex() const; //{ return VertexOnEdgeIterator(*this);}
     VertexOnEdgeIterator EndVertex()   const; //{ return VertexOnEdgeIterator(*this,2);}
+
+    index_type index() const { return v1_;}
+    index_type vertex_index_low() const { return index();}
+    index_type vertex_index_high() const { return index() + (dir == x_dir ? index_type(1,0) : index_type(0,1));}
 
     inline void FlipCell(Cell& C) const;
     inline Cell FlippedCell(Cell& C) const;
@@ -1137,6 +1143,8 @@ struct grid_types_cart2d {
   typedef cartesian2d::RegGrid2D  Grid;
   typedef cartesian2d::RegGrid2D  grid_type;
   typedef Grid::index_type        index_type;
+  typedef Grid::vertex_index_type vertex_index_type;
+  typedef Grid::cell_index_type   cell_index_type;
 
   typedef  Grid::Vertex Vertex;
   typedef  Grid::Edge   Edge;

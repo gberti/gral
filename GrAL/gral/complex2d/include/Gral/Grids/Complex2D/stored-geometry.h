@@ -10,7 +10,7 @@
 #include "Geometry/algebraic-primitives.h"
 
 #include "Gral/Base/common-grid-basics.h"
-#include "Gral/Geometries/geometric-types.h" 
+#include "Gral/Geometries/geometric-types-2d.h" 
 #include "Gral/Grids/Complex2D/complex2d.h"
 
 
@@ -87,13 +87,8 @@ public:
   double volume(const Edge& e) const { return (segment_type(e,basic_geom()).length());}
   double volume(const EdgeIterator& e) const {return volume(*e);}
   double volume(const Cell& c) const { 
-    // IOMgr::Info() << "stored_geom::volume(Cell) " << endl;
-    // IOMgr::Info() << "Volume(): " << (void*) &(TheGrid()) << endl;
-    //    base const& bs (basic_geom());
-    // IOMgr::Info() << "bs.g: " << (void*) bs.g << endl;
     polygon_type poly(c,basic_geom());
     return (poly.area());
-    //  return (polygon_type(c,basic_geom()).area());
   }
 
   double diameter(Cell const& c)  const {
