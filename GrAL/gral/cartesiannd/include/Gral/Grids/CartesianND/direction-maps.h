@@ -117,20 +117,24 @@ namespace cartesiannd {
 
     static unsigned num_of_directions(unsigned k) { return dirs[k].size();}
 
-    static vector_system num2vec(unsigned k, unsigned m)
+    static vector_system const& num2vec(unsigned k, unsigned m)
     { REQUIRE( m < dirs[k].size(), "", 1); return dirs[k][m];}
 
-    static unsigned  vec2num    (unsigned k, vector_system i)    { return vec2num_rec(k,i,DIM);}
-    static unsigned  vec2num_rec(unsigned k, vector_system i, unsigned d);
+    static unsigned  vec2num    (unsigned k, vector_system const& i)    { return vec2num_rec(k,i,DIM);}
+    static unsigned  vec2num_rec(unsigned k, vector_system const& i, unsigned d);
 
     template<class INDEXTYPE>
-    static INDEXTYPE delta2index(vector_system i) { 
+    static INDEXTYPE delta2index(vector_system const& i) { 
       INDEXTYPE x(0);
       for(unsigned j = 0; j < i.size(); ++j)
 	x[i[j]] = 1;
       return x;
     }
-
+    /*! \brief Offset of direction \c m in dimension \c k
+       
+        The returned index is the offset of the high vertex of the vertex range
+        of an element of dimension \c k with direction \c m.
+    */
     template<class INDEXTYPE>
     static INDEXTYPE num2index(unsigned k, unsigned m) { 
       return delta2index<INDEXTYPE>(num2vec(k, m));
@@ -355,7 +359,7 @@ namespace cartesiannd {
   }
 
   template<unsigned DIM>
-  unsigned delta_map<DIM>::vec2num_rec(unsigned k, delta_map<DIM>::vector_system i, unsigned d)
+  unsigned delta_map<DIM>::vec2num_rec(unsigned k, delta_map<DIM>::vector_system const& i, unsigned d)
   {
     if(i.size() == 0)
       return 0;
