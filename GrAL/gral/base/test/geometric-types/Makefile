@@ -10,7 +10,7 @@ DEPS = $(LOCALSOURCES:%.C=%.d)
 EXEC =  $(LOCALSOURCES:%.C=%.exe)
 
 TARGETS = $(EXEC)
-EXTRA_DEPMODULES += geometry gral/cartesian2d gral/cartesian3d
+EXTRA_DEPMODULES += geometry gral/cartesian2d gral/cartesian3d gral/complex2d
 
 include $(DEPS)
 

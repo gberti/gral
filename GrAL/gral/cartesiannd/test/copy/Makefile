@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-EXTRA_DEPMODULES += gral/testing gral/complexnd gral/complex2d gral/complex3d gral/gmv-io
+EXTRA_DEPMODULES += geometry gral/testing gral/complexnd gral/complex2d gral/complex3d gral/gmv-io
 LOCALSOURCES =  test-cartesiannd-copy.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
