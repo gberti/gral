@@ -82,6 +82,11 @@ Cell 0 0 0 center @ 0.5 0.25 0.25
 Cell 0 0 1 center @ 0.5 0.25 0.75
 Cell 0 1 0 center @ 0.5 0.75 0.25
 Cell 0 1 1 center @ 0.5 0.75 0.75
+Copy: Level -1:
+Cell 0 0 0 center @ 0.5 0.25 0.25
+Cell 0 0 1 center @ 0.5 0.25 0.75
+Cell 0 1 0 center @ 0.5 0.75 0.25
+Cell 0 1 1 center @ 0.5 0.75 0.75
 Level -1: 1 2 cells
 Level 0: 2 2 cells
 Level 1: 4 2 cells
@@ -126,5 +131,8 @@ Cell 0 1 center @ 0.25 0.75
 Cell 1 0 center @ 0.75 0.25
 Cell 1 1 center @ 0.75 0.75
 Level -1:
+Cell 0 0 center @ 0.5 0.25
+Cell 0 1 center @ 0.5 0.75
+Copy: Level -1:
 Cell 0 0 center @ 0.5 0.25
 Cell 0 1 center @ 0.5 0.75

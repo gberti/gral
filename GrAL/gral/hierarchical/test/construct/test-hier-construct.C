@@ -28,7 +28,7 @@ void test_hier_grid(GRID const& root,
   H.add_coarser_level();
     
   for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev))
-    out << "Level " << lev << ": " << H.FlatGrid(lev)->cell_size() << " cells" << endl;
+    out << "Level " << lev << ": " << H.FlatGrid(lev)->cell_size() << " cells" << std::endl;
   
   for(typename cgt::CellIterator c = H.FlatGrid(H.finest_level())->FirstCell(); !c.IsDone(); ++c) {
     HierCell h(H,*c,H.finest_level());
@@ -42,7 +42,7 @@ void test_hier_grid(GRID const& root,
       out << ch.Flat().index() << ", ";
     }
     out << "\b\b) "
-	<< "grandp: " << pp.Flat().index() << endl;
+	<< "grandp: " << pp.Flat().index() << std::endl;
 
     for(HierVertexOnCellIterator vc(h); !vc.IsDone(); ++vc) {
       HierVertex v = *vc;
@@ -51,26 +51,26 @@ void test_hier_grid(GRID const& root,
     }
   }
   out << "\n"
-      << "Vertices & Coarsest Parents:" << endl;
+      << "Vertices & Coarsest Parents:" << std::endl;
   for(typename cgt::VertexIterator v = H.FlatGrid(H.finest_level())->FirstVertex(); !v.IsDone(); ++v) {
     HierVertex hv(H,*v, H.finest_level());
     HierVertex cv = H.CoarsestParent(hv);
-    out << hv.Flat().index() << " -> " << cv.Flat().index() << ", level " << cv.level() << endl; 
+    out << hv.Flat().index() << " -> " << cv.Flat().index() << ", level " << cv.level() << std::endl; 
   }
   
   H.remove_coarsest_level();
-  out << "# levels: " << H.num_of_levels() << endl;
+  out << "# levels: " << H.num_of_levels() << std::endl;
   H.remove_coarsest_level();
-  out << "# levels: " << H.num_of_levels() << endl;
+  out << "# levels: " << H.num_of_levels() << std::endl;
   H.remove_coarsest_level();
-  out << "# levels: " << H.num_of_levels() << endl;
+  out << "# levels: " << H.num_of_levels() << std::endl;
   try{
     H.remove_coarsest_level();
   }
   catch(...) {
     out << " Continuing. " << std::endl; 
   }
-  out << "# levels: " << H.num_of_levels() << endl;
+  out << "# levels: " << H.num_of_levels() << std::endl;
 }
 
 // explicit instantiation to make sure all members are compilable
@@ -108,7 +108,7 @@ int main() {
     test_hier_grid(root, ref_pattern, cout);     
   }
   
-  cout << "----------------------------" << endl;
+  cout << "----------------------------" << std::endl;
   {
     namespace cart = cartesian2d;
     typedef cart::CartesianGrid2D cart_grid_type;
@@ -120,7 +120,7 @@ int main() {
     test_hier_grid(root, ref_pattern, cout);   
   }
   
-  cout << "----------------------------" << endl;
+  cout << "----------------------------" << std::endl;
   {
     namespace cart = cartesian2d;
     typedef cart::CartesianGrid2D cart_grid_type;

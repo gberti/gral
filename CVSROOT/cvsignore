@@ -1,1 +1,2 @@
-*.exe.out  *.out
+*.exe.out  *.out *.tmp
+

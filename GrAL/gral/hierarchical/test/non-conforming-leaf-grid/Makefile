@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-ALLDEPMODULES += gral/complex2d  gral/cartesian3d gral/cartesian2d
+EXTRA_DEPMODULES += gral/complex2d  gral/cartesian3d gral/cartesian2d gral/geomview-io gral/testing gral/gmv-io
 LOCALSOURCES =  test-non-conforming-leaf-grid.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
@@ -16,7 +16,7 @@ include $(DEPS)
 
 
 
-LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base
+LIBS = -lgral-geomview-io -lgral-cartesian3d -lgral-cartesian2d -lgral-complex2d -lgral-base -lgral-gmv-io
 
 
 

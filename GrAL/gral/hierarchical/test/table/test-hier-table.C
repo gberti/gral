@@ -34,26 +34,27 @@ void test_hier_grid_table(GRID const& root,
   typedef hierarchical::hgrid_cartesian<flat_grid_type> hier_grid_type;
   typedef hier_grid_type                                hgt;
   typedef typename hgt::level_handle                    level_handle;
+  typedef hierarchical::hier_grid_table<hier_grid_type, flat_geom_type> hier_geom_type;
 
   hier_grid_type H(root,pattern);
   H.add_finer_level();
   H.add_coarser_level();
-  hierarchical::hier_grid_table<hier_grid_type, flat_geom_type> Hgeom(H);    
+  hier_geom_type Hgeom(H);    
 
   for(typename hgt::level_handle lev = H.coarsest_level(); lev <= H.finest_level(); lev = H.next_finer_level(lev))
-    out << "Level " << lev << ": " << H.FlatGrid(lev).cell_size() << " cells\n";
+    out << "Level " << lev << ": " << H.FlatGrid(lev)->cell_size() << " cells\n";
 
   {
     level_handle lev = H.finest_level();
     out << "Level " << lev << ":\n";
-    test_level(H.FlatGrid(lev), Hgeom(lev), out);
+    test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
   {
     H    .add_finer_level();
     Hgeom.add_finer_level();
     level_handle lev = H.finest_level();
     out << "Level " << lev << ":\n";
-    test_level(H.FlatGrid(lev), Hgeom(lev), out);
+    test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
 
   {
@@ -61,7 +62,7 @@ void test_hier_grid_table(GRID const& root,
     Hgeom.remove_finest_level();
     level_handle lev = H.finest_level();
     out << "Level " << lev << ":\n";
-    test_level(H.FlatGrid(lev), Hgeom(lev), out);
+    test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
 
   {
@@ -69,14 +70,22 @@ void test_hier_grid_table(GRID const& root,
     Hgeom.remove_coarsest_level();
     level_handle lev = H.coarsest_level();
     out << "Level " << lev << ":\n";
-    test_level(H.FlatGrid(lev), Hgeom(lev), out);
+    test_level(* H.FlatGrid(lev), Hgeom(lev), out);
   }
   {
     H    .add_coarser_level();
     Hgeom.add_coarser_level();
     level_handle lev = H.coarsest_level();
     out << "Level " << lev << ":\n";
-    test_level(H.FlatGrid(lev), Hgeom(lev), out);
+    test_level(* H.FlatGrid(lev), Hgeom(lev), out);
+  }
+
+  // test copying
+  {
+    hier_geom_type Hgeom2 = Hgeom;
+    level_handle lev = H.coarsest_level();
+    out << "Copy: Level " << lev << ":\n";
+    test_level(* H.FlatGrid(lev), Hgeom2(lev), out);
   }
 
   while(! H.empty()) {

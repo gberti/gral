@@ -197,7 +197,7 @@ Vertices & Coarsest Parents:
 # levels: 0
 
 GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/gral/hierarchical/include/Gral/Hierarchical/hierarchical-grid.h
-      FUNCTION ce, LINE 208
+      FUNCTION ce, LINE 209
       precondition violated: (!empty()) 
  Continuing. 
 # levels: 0
@@ -393,7 +393,7 @@ Vertices & Coarsest Parents:
 # levels: 0
 
 GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/gral/hierarchical/include/Gral/Hierarchical/hierarchical-grid.h
-      FUNCTION ce, LINE 208
+      FUNCTION ce, LINE 209
       precondition violated: (!empty()) 
  Continuing. 
 # levels: 0
@@ -449,7 +449,7 @@ Vertices & Coarsest Parents:
 # levels: 0
 
 GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/gral/hierarchical/include/Gral/Hierarchical/hierarchical-grid.h
-      FUNCTION ce, LINE 208
+      FUNCTION ce, LINE 209
       precondition violated: (!empty()) 
  Continuing. 
 # levels: 0

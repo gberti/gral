@@ -36,7 +36,7 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
 
   for(level_handle lev = H.coarsest_level(); lev <= H.finest_level(); ++lev) {
     out << "Level " << lev << ":\n";
-    for(typename cgt::CellIterator c(H.FlatGrid(lev)); !c.IsDone(); ++c) {
+    for(typename cgt::CellIterator c(* H.FlatGrid(lev)); !c.IsDone(); ++c) {
       out << (*c).index() << ": " << Hgf(lev)(*c) << " = ";
       HierCell hc(H,*c,lev);
       out << Hgf(hc) << " = "

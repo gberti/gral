@@ -72,7 +72,7 @@ namespace octree {
     active_range.add_coarser_level(false);
     // activate all cells having at least one active child
     for(FlatCellIterator c(*LevelGrid(coarsest_level())); !c.IsDone(); ++c) {
-      HierCell hc(*TheHGrid(), *c, coarsest_level());
+      HierCell hc(*TheHierGrid(), *c, coarsest_level());
       if(sequence::exists(hc.FirstChild(), hc.EndChild(), isActivePred(*this)))
 	activate(hc);
     }
@@ -87,9 +87,34 @@ namespace octree {
       REQUIRE(level(c) > coarsest_level(), "", 1);
       c = c.Parent();
     }
-    ENSURE( isLeaf(c), "c=" << c.Flat().index() << " subLeaf=" << subLeaf.Flat().index(), 1);
+    // This need not be the case, cf. definition of isLeaf()
+    // ENSURE( isLeaf(c), "c=" << c.Flat().index() << " subLeaf=" << subLeaf.Flat().index(), 1);
     return c;
   }
+
+  template<class Grid, class GT>
+  typename Octree<Grid,GT>::size_type
+  Octree<Grid,GT>::NumOfCells() const 
+  {
+    size_type n = 0;
+    for(level_handle lev = coarsest_level(); lev <= finest_level(); ++lev)
+      n += ActiveRange(lev)->NumOfCells();
+    return n;
+  }
+
+  template<class Grid, class GT>
+  typename Octree<Grid,GT>::size_type
+  Octree<Grid,GT>::NumOfLeafCells() const 
+  {
+    size_type n = 0;
+    LeafCellIterator c(*this);
+    while(! c.IsDone()) {
+      ++c;
+      ++n;
+    }
+    return n;
+  }
+
 
 
 } // namespace octree

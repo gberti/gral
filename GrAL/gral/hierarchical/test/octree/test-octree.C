@@ -15,6 +15,15 @@ template<class T, unsigned N>
 struct point_traits<tuple<T,N> > : public point_traits_fixed_size_array<tuple<T,N>, T, N> {};
 
 
+template<class OCTREE>
+void print_state(OCTREE const& oct, std::ostream& out) 
+{
+  out << "Octree state: Number of levels: " << oct.num_of_levels()  
+      << " ( " << oct.coarsest_level() << " .. " << oct.finest_level() << " )" << "\n"
+      << "              Number of cells:  " << oct.NumOfCells()     << "\n"
+      << "              Number of leafs:  " << oct.NumOfLeafCells() << "\n";
+}
+
 namespace octree {
   template class Octree<cartesian2d::CartesianGrid2D>;
   template class Octree<cartesian3d::CartesianGrid3D>;
@@ -34,12 +43,13 @@ int main() {
     cart_grid_type root(3,3);
     cart_grid_type ref_pattern(3,3); // 2x1 cells!
     octree::Octree<cartesian2d::CartesianGrid2D>  oct(root,ref_pattern);
-    hierarchical::hier_partial_grid_function<OctCell, int> material(* (oct.TheHGrid()), 0);
+    hierarchical::hier_partial_grid_function<OctCell, int> material(* (oct.TheHierGrid()), 0);
 
-    cout << "Number of levels: " << oct.num_of_levels() << "\n";
+    print_state(oct, cout);
+
     int lev = oct.finest_level();
     for(cgt::CellIterator c(* oct.LevelGrid(lev)); ! c.IsDone(); ++c) {
-      OctCell oc(* (oct.TheHGrid()), *c, lev);
+      OctCell oc(* (oct.TheHierGrid()), *c, lev);
       if(oct.isLeaf(oc)) {
 	cout << "Splitting cell " << (*c).index() << " => ";
 	oct.split_cell(oc);
@@ -47,28 +57,29 @@ int main() {
 	for(OctCellChildIterator ch(oc); ! ch.IsDone(); ++ch)
 	  material[*ch] = material(oc);
 	cout << "active range on level " << lev+1 << " is: ";
-	for(octgt::ActiveRangeCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
+	for(octgt::ActiveLevelCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
 	  cout << (*ac).index() << ", ";
 	cout << "\n";
       }
     }
-    cout << "Number of levels: " << oct.num_of_levels() << "\n";
+
+    print_state(oct, cout);
+
     lev = oct.finest_level() -1;
     for(cgt::CellIterator c(* oct.LevelGrid(lev)); ! c.IsDone(); ++c) {
-      OctCell oc(* (oct.TheHGrid()), *c, lev);
+      OctCell oc(* (oct.TheHierGrid()), *c, lev);
       if(oct.isBranch(oc)) {
 	cout << "Joining cell " << (*c).index() << " => ";
 	oct.join_cells(oc); 
 	cout << "active range on level " << lev+1 << " is: ";
 	if(oct.valid(lev+1)) {
-	  for(octgt::ActiveRangeCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
+	  for(octgt::ActiveLevelCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
 	    cout << (*ac).index() << ", ";
 	}
 	cout << "\n";
       }
     }
-    cout << "Number of levels: " << oct.num_of_levels() << "\n";
-
+    print_state(oct, cout);
 
     enumerated_subrange<cart_grid_type> FL(*oct.LevelGrid(oct.finest_level()), 
 					   *oct.ActiveRange(oct.finest_level()));
@@ -83,20 +94,30 @@ int main() {
 
     lev = oct.coarsest_level();
     for(cgt::CellIterator c(* oct.LevelGrid(lev)); ! c.IsDone(); ++c) {
-      OctCell oc(* (oct.TheHGrid()), *c, lev);
+      OctCell oc(* (oct.TheHierGrid()), *c, lev);
       if(oct.isBranch(oc)) {
 	cout << "Joining cell " << (*c).index() << " => ";
 	oct.join_cells(oc); 
 	cout << "active range on level " << lev+1 << " is: ";
 	if(oct.valid(lev+1)) {
-	  for(octgt::ActiveRangeCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
+	  for(octgt::ActiveLevelCellIterator ac= oct.ActiveRange(lev+1)->FirstCell(); ! ac.IsDone(); ++ac)
 	    cout << (*ac).index() << ", ";
 	}
 	cout << "\n";
       }
     }
-    cout << "Number of levels: " << oct.num_of_levels() << "\n";
+    print_state(oct, cout);
+
    
+    typedef octree_type::LeafCellIterator LeafCellIterator;
+    // gcc2.96 does not get this
+    // LeafCellIterator  lc(ref_ptr<const octree_type>(oct));
+    LeafCellIterator  lc = ref_ptr<const octree_type>(oct);
+    cout << "Leafs:\n";
+    for(; !lc.IsDone(); ++lc)
+      cout << lc.Flat().index() << "\n";
+
+    
 
     // problems: 
     // (a) must manually add layers to material,
