@@ -85,9 +85,11 @@ public:
 
   int NumOfCells   () const { return ncells   ;}
   int NumOfVertices() const { return nvertices;}
+  int NumOfFaces()    const { return NumOfCells();}
 
   inline VertexIterator FirstVertex() const;
   inline EdgeIterator   FirstEdge()   const;
+  inline FaceIterator   FirstFace()   const;
   inline FacetIterator  FirstFacet()  const;
   inline CellIterator   FirstCell()   const;
 
@@ -387,6 +389,10 @@ Triang2D::Edge
 Triang2D::switched_edge(Triang2D::Vertex const& v, Triang2D::Edge const& e, Triang2D::Cell const& c) const
 { Edge e1(e); switch_edge(v,e1,c); return e1; }
 
+
+inline
+Triang2D::FaceIterator
+Triang2D::FirstFace() const { return FaceIterator(*this);}
 
 inline
 Triang2D::CellIterator

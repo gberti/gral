@@ -39,6 +39,12 @@ struct grid_types_base_Triang2D {
   typedef edge_handle_Triang2D          edge_handle;
   typedef edge_handle                   facet_handle;
 
+  typedef Cell                 Face;
+  typedef cell_handle          face_handle;
+  typedef CellIterator         FaceIterator;
+  typedef VertexOnCellIterator VertexOnFaceIterator;
+  typedef EdgeOnCellIterator   EdgeOnFaceIterator;
+
   typedef grid_dim_tag<2>               dimension_tag;
 };
 
