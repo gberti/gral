@@ -1,7 +1,8 @@
 # -*- makefile -*-
+
 # Some targets used in leaf makefiles 
 
-# some aliases
+# some aliases for standard targets
 distclean: realclean
 clobber:   realclean
 
@@ -13,15 +14,40 @@ clobber:   realclean
 # clean: stdclean
 
 stdclean: moduleclean
-	rm -f *~ *.o *.rpo *.d *.ti *.ii
+	rm -f *~ *.o  *.d *.ti *.ii
+	rm -f *.rpo     # Gnu template repositories
 	rm -rf ti_files # KCC template DB
-	rm -f .nfs*
+	rm -f .nfs*     # NFS garbage
+	rm -f *.tmp
+	rm -f doxy.log 
 
 install-libs:
 	mkdir -p $(PREFIX)/lib/$(LIBPATH)
 	cp $(ROOT)/lib/$(LIBPATH)/lib*  $(PREFIX)/lib/$(LIBPATH)
 
 install: install-headers 
+
+
+# targets to generate documentation using doxygen
+
+doxy:  doxy1 installdox
+	rm -f doxy.cfg installdox.sh.tmp
+
+doxy1:
+	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxygen/"         > doxy.cfg
+	cat doxy.local.cfg                                      >> doxy.cfg
+	$(SCRIPTS)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg
+	mkdir -p doxygen
+	(TEXINPUTS=$(TEXINPUTS):$(ROOT); export TEXINPUTS; doxygen doxy.cfg;)
+
+installdox:
+	$(SCRIPTS)/generate-installdox.pl -root $(ALLROOT) dependencies > installdox.sh.tmp;
+	chmod ugo+x ./installdox.sh.tmp;
+	./installdox.sh.tmp
+
+# suffix rules
+
+.PHONY: doc test demo
 
 .SUFFIXES: .C .cc .d .f
 

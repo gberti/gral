@@ -24,7 +24,7 @@ install-headers:
 install: install-headers install-libs
 
 
-clean:
+clean: stdclean
 	(cd src;  $(MAKE) clean DEPS="")
 	(cd demo; $(MAKE) clean DEPS="")
 	(cd doc;  $(MAKE) clean DEPS="")
@@ -41,21 +41,8 @@ demo:
 
 doc: doxy tex
 
-doxy:
-	mkdir -p doxygen
-	doxygen doxy.cfg;
-
-
 tex:
-	(cd doc; $(MAKE) $(TARGET))
+	(cd doc; $(MAKE) html)
 	rm -f $(ROOT)/doxygen/html/external-control.html
 	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html
 
-tar:
-	(cd $(HOME)/tmp;\
-	rm -rf external-control/;\
-         cvs -d /home/nmwr/CVS export -r HEAD external-control; \
-         tar -cf external-control.tar external-control; \
-         rm -rf external-control/;)
-
-.PHONY: demo test doc

@@ -17,7 +17,6 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
-#install-libs generic
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Utility
@@ -27,26 +26,17 @@ install-headers:
 
 install: install-headers install-libs
 
-clean:
+clean: stdclean
 	(cd src;  $(MAKE) clean DEPS="")
 	(cd doc;  $(MAKE) clean DEPS="")
-	rm -rf doxygen/*;
 	rm -f *~ include/*~ include/*/*~
 
 
 realclean: clean
-	rm -rf lib/$(ARCH)/
+	rm -rf doxygen/*;
+	rm -rf lib/
 
 
-doc:
-	mkdir -p doxygen
-	doxygen doxy.cfg;
+doc: doxy
 
-
-tar:
-	(cd $(HOME)/tmp;\
-	rm -rf $(PACKAGE)/;\
-         cvs -d /home/nmwr/CVS export -r HEAD $(PACKAGE); \
-         tar -cf $(PACKAGE).tar $(PACKAGE); \
-         rm -rf $(PACKAGE)/;)
 

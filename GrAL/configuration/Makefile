@@ -14,7 +14,11 @@ new:
 test:
 
 doc:
+	mkdir -p doxygen/html
+	echo "# dummy file" > doxygen/configuration.tags
 
 demo:
 
 clean: stdclean
+
+realclean: clean

@@ -1,0 +1,91 @@
+# -*- makefile -*-
+
+##################################
+# Included by all mk.config files
+# in the module directories
+##################################
+
+# configuration parameters
+# may be overrun in mk.config files
+ifndef  ARCH
+export ARCH   =solaris#  # solaris, linux
+endif
+ifndef CCNAME
+export CCNAME =gcc#      # kai, gcc
+endif
+ifndef DEBUG
+export DEBUG  =debug#    # opt, debug
+endif
+ifndef DEVELOP
+export DEVELOP=develop# # develop, user
+endif
+
+# here some utility scripts can be found,
+# typically for collective operations on all modules
+export SCRIPTS=$(ALLROOT)/maintenance/scripts
+
+# targets for tree makefiles (directory makefiles calling subdir makefiles) 
+export RECURSIVETARGETS=$(CONFIGURATION)/defs/recursive-targets
+
+# Path for installation 
+export PREFIX=$(HOME)/lib/gral#
+
+# Modulse required by current module
+export DEPMODULES= $(shell cat $(ROOT)/dependencies)
+
+
+# exporting PDW could give trouble in subdir Makefiles
+# which try to give default values to other variables such as CONFIG
+# in order to enable direct make invocation in the subdirectory
+unexport PWD
+
+# rules .C.o, .C.d, some standard targets
+include $(CONFIGURATION)/defs/suffix-targets
+
+# installation
+export INSTALLHEADERS=$(PREFIX)/include#
+export INSTALLLIBRARIES=$(PREFIX)/lib#
+
+
+# Relative paths for finding specific make definitions
+# or for specifying places to put library  version
+# built with different parameters
+export DEFPATH:=$(ARCH)/$(CCNAME)/$(DEBUG)#
+export LIBPATH:=$(DEFPATH)#
+
+
+# if developing code, use include and libraries
+# of other (`peer') modules directly (because of frequent 
+# mutual change requirements)
+ifeq ($(DEVELOP),develop)
+IFLAGS  += $(addsuffix /include,$(addprefix -I$(ALLROOT)/,$(DEPMODULES)))
+LDFLAGS += $(addsuffix /lib/$(LIBPATH),$(addprefix -L$(ALLROOT)/,$(DEPMODULES)))
+else # use installed versions
+IFLAGS  += $(PREFIX)/include
+LDFLAGS += $(PREFIX)/lib/$(LIBPATH)
+endif
+
+# The includes and libs of the current module
+export INCDIR   =$(ROOT)/include#
+export LIBDIR   =$(ROOT)/lib/$(LIBPATH)#
+
+LDFLAGS += -L$(LIBDIR)
+IFLAGS  += -I$(INCDIR)
+
+export CC      = $(CCC)
+
+# location of architecture dep. def's,  defines AR
+export ARCHDIR    :=$(CONFIGURATION)/defs/$(ARCH)#    
+include $(ARCHDIR)/make.defs
+
+# location of compiler dep. def's.
+# defines CCC, CCFLAGS, DEPEND, maybe AR
+export COMPILERDIR:=$(CONFIGURATION)/defs/$(CCNAME)/$(DEBUG)# 
+include $(COMPILERDIR)/make.defs
+
+
+# compiler & architecture dependent definitions
+# TODO: test if this exists.
+# momentarily not used
+export DEFDIR     :=$(CONFIGURATION)/defs/$(DEFPATH)#  
+#include $(DEFDIR)/make.defs
