@@ -6,6 +6,7 @@
 #include "Config/compiler-config.h"
 #include "Gral/Base/common-grid-basics.h"
 
+#include "Utility/pre-post-conditions.h"
 
 namespace GrAL {
 
@@ -31,12 +32,19 @@ namespace detail {
     partial_multi_gf_aux() {}
     partial_multi_gf_aux(Grid const& g) : base(g), f(g) {}
     partial_multi_gf_aux(Grid const& g, T const& t) : base(g,t), f(g,t) {}
+    void clear() { base::clear(); f.clear();}
+    bool empty() const { return base::empty() && f.empty();}
+    unsigned size() const { return base::size() + f.size();}
 
     using base::operator();
     using base::operator[];
     //  using base::ElementFunction_();
     const_reference  operator()(element_type const& e) const { return f(e);}
     reference        operator[](element_type const& e)       { return f[e];}
+    using base::defined;
+    using base::undefine;
+    bool defined (element_type const& e) const { return f.defined(e);}
+    void undefine(element_type const& e)       { f.undefine(e);}
 
     grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
     grid_type const& TheGrid() const { return f.TheGrid();} 
@@ -66,10 +74,14 @@ namespace detail {
     partial_multi_gf_aux() {}
     partial_multi_gf_aux(Grid const& g) : f(g) {}
     partial_multi_gf_aux(Grid const& g, T const& t) :  f(g,t) {}
-
+    void clear() { f.clear();}
+    bool empty()    const { return f.empty();}
+    unsigned size() const { return f.size();}
 
     const_reference  operator()(element_type const& e) const { return f(e);}
     reference        operator[](element_type const& e)       { return f[e];}
+    bool defined (element_type const& e) const { return f.defined(e);}
+    void undefine(element_type const& e)       { f.undefine(e);}
 
     grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
     grid_type const& TheGrid() const { return f.TheGrid();} 
@@ -89,16 +101,16 @@ namespace detail {
 
 
 
-/*! \brief Total grid function defined on all element types of <Grid>.
+/*! \brief Partial grid function defined on all element types of <Grid>.
     \ingroup gridfunctions
 
    partial_multi_grid_function<Grid,T> defines a mapping
    \f$ V(G) \cup E(G) \cup C(G) \mapsto T \f$ ( in the 2d case)
 
    These classes are  fully generic and do not need any further
-   specialization, because they build on \c grid_function \c<Elt,T>.
+   specialization, because they build on \c partial_grid_function \c<Elt,T>.
 
-   \see partial_partial_multi_grid_function<Grid,T>
+   \see \ref \c multi_grid_function\c <Grid,T>
    \see Module \ref gridfunctions
 */
 //----------------------------------------------------------------
@@ -131,6 +143,7 @@ public:
   void set_grid(grid_type const& g)   { set_grid_(g);}
   void set_grid(grid_type const& g, value_type const& t) { set_grid_(g); set_value(t); }
 
+  void clear() { base::clear(); ENSURE_ALWAYS(empty(), "", 1);}
 };
 
 
