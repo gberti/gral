@@ -72,8 +72,14 @@ Anchor dimension: 2
 ComplexND<1> triangle incidences:
 Anchor dimension: 0
   Value dimension: 0
+    0: 2 incidences of dim 0: 1 2 
+    1: 2 incidences of dim 0: 0 2 
+    2: 2 incidences of dim 0: 1 0 
   --------------------------
   Value dimension: 1
+    0: 2 incidences of dim 1: 0 2 
+    1: 2 incidences of dim 1: 0 1 
+    2: 2 incidences of dim 1: 1 2 
   --------------------------
 =================================
 Anchor dimension: 1
@@ -83,6 +89,28 @@ Anchor dimension: 1
     2: 2 incidences of dim 0: 2 0 
   --------------------------
   Value dimension: 1
+    0: 2 incidences of dim 1: 2 1 
+    1: 2 incidences of dim 1: 0 2 
+    2: 2 incidences of dim 1: 1 0 
+  --------------------------
+=================================
+ComplexND<1> single edge incidences:
+Anchor dimension: 0
+  Value dimension: 0
+    0: 1 incidences of dim 0: 1 
+    1: 1 incidences of dim 0: 0 
+  --------------------------
+  Value dimension: 1
+    0: 1 incidences of dim 1: 0 
+    1: 1 incidences of dim 1: 0 
+  --------------------------
+=================================
+Anchor dimension: 1
+  Value dimension: 0
+    0: 2 incidences of dim 0: 0 1 
+  --------------------------
+  Value dimension: 1
+    0: 2 incidences of dim 1: -1 -1 
   --------------------------
 =================================
 ComplexND<ANY> incidences:
