@@ -22,7 +22,13 @@ new:
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) new ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
-	rm -f *.o *~ *.flc core;
+
+install:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) install ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
 
 
 TARGET=new
@@ -35,7 +41,6 @@ generic:
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) $(TARGET) ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
-	rm -f *.o *~ *.flc core;
 
 # predoc  = generate docs
 # postdoc = install docs (replace dummy links)
@@ -47,7 +52,6 @@ predoc:
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) predoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
-	rm -f *.o *~ *.flc core;
 
 postdoc:
 	@set -e; \
@@ -55,4 +59,3 @@ postdoc:
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) postdoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
-	rm -f *.o *~ *.flc core;

@@ -79,16 +79,17 @@ additional-doc: additional-predoc additional-postdoc
 
 DOCROOT=$(ALLROOT)
 DOXYPATH=doxygen/html
+DOXYCFG=$(CONFIGURATION)/doxycfg/
 RELPATH=../../..#
 ADDRELPATH=#
 RELROOT=$(RELPATH)/$(ADDRELPATH)
 
 doxy:
-	$(CONFIGURATION)/doxycfg/filter-doxy-cfg.pl -root $(ALLROOT) -binpath $(LOCALBINPATH) \
-        $(CONFIGURATION)/doxycfg/doxy.paths.cfg                  > doxy.cfg.tmp
-	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxycfg/"        >> doxy.cfg.tmp
-	cat doxy.local.cfg                                      >> doxy.cfg.tmp
-	$(SCRIPTS)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg.tmp
+	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(ALLROOT) -binpath $(LOCALBINPATH) \
+        $(DOXYCFG)/doxy.paths.cfg                  > doxy.cfg.tmp
+	echo "@INCLUDE_PATH = $(DOXYCFG)"         >> doxy.cfg.tmp
+	cat doxy.local.cfg                        >> doxy.cfg.tmp
+	$(DOXYCFG)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg.tmp
 	cp $(CONFIGURATION)/doxycfg/footer.html .
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
@@ -97,7 +98,7 @@ doxy:
 	rm -f doxy.cfg.tmp 
 
 installdox:
-	$(SCRIPTS)/generate-installdox.pl -root $(RELROOT) -path $(DOXYPATH)\
+	$(DOXYCFG)/generate-installdox.pl -root $(RELROOT) -path $(DOXYPATH)\
           dependencies > installdox.sh.tmp;
 	chmod ugo+x ./installdox.sh.tmp;
 	./installdox.sh.tmp
