@@ -6,10 +6,20 @@
 #include "Gral/Test/test-vertex-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+template<class G, class GT>
+bool test_vertex_iterator(G const& g, std::ostream & out, GT);
+
 template<class G>
 bool test_vertex_iterator(G const& g, std::ostream & out)
 {
-  typedef grid_types<G> gt;
+  return test_vertex_iterator(g,out, grid_types<G>());
+} 
+
+template<class G, class GT>
+bool test_vertex_iterator(G const& g, std::ostream & out, GT)
+{
+  //  typedef grid_types<G> gt;
+  typedef GT                          gt;
   typedef typename gt::VertexIterator VertexIterator;
   typedef typename gt::vertex_handle  vertex_handle;
   typedef typename gt::Vertex         Vertex;
@@ -27,7 +37,7 @@ bool test_vertex_iterator(G const& g, std::ostream & out)
 
 
   VertexIterator v;
-  v = g.FirstVertex();
+  v =  VertexIterator(g); //g.FirstVertex();
   VertexIterator w = v;
   for( ; !v.IsDone(); ++v, ++w) {
     REQUIRE_ALWAYS( ( v ==  w), "Iterators differ!\n",1);
@@ -37,7 +47,7 @@ bool test_vertex_iterator(G const& g, std::ostream & out)
   REQUIRE_ALWAYS( (v == w), "Past-the-end iterators differ!\n", 1);
 
   if(g.NumOfVertices() > 0) {
-    v = g.FirstVertex();
+    v = VertexIterator(g); // g.FirstVertex();
     w = v;
     ++v;
     for( ; !v.IsDone(); ++v, ++w) 

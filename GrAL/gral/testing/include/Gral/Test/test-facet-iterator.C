@@ -6,10 +6,19 @@
 #include "Gral/Test/test-facet-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+template<class G, class GT>
+bool test_facet_iterator(G const& g, std::ostream & out, GT);
+
 template<class G>
 bool test_facet_iterator(G const& g, std::ostream & out)
 {
-  typedef grid_types<G> gt;
+  return test_facet_iterator(g, out, grid_types<G>());
+}
+
+template<class G, class GT>
+bool test_facet_iterator(G const& g, std::ostream & out, GT)
+{
+  typedef GT       gt;
   typedef typename gt::FacetIterator FacetIterator;
 
   int v_cnt = 0;
@@ -21,7 +30,7 @@ bool test_facet_iterator(G const& g, std::ostream & out)
                  "v_cnt = " << v_cnt << " != g.NumOfFacets() = " << g.NumOfFacets() << '\n',1);
   */
   FacetIterator v;
-  v = g.FirstFacet();
+  v = FacetIterator(g); // g.FirstFacet();
   FacetIterator w = v;
   for( ; !v.IsDone(); ++v, ++w) {
     REQUIRE_ALWAYS( ( v ==  w), "Iterators differ!\n",1);
@@ -30,7 +39,7 @@ bool test_facet_iterator(G const& g, std::ostream & out)
   REQUIRE_ALWAYS( (w.IsDone()), "", 1);
   REQUIRE_ALWAYS( (v == w), "Past-the-end iterators differ!\n", 1);
 
-  v = g.FirstFacet();
+  v = FacetIterator(g); // g.FirstFacet();
   w = v;
   if (! v.IsDone()) {
     ++v;

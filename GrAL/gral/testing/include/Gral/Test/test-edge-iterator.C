@@ -6,10 +6,20 @@
 #include "Gral/Test/test-edge-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+template<class G, class GT>
+bool test_edge_iterator(G const& g, std::ostream & out, GT);
+
+
 template<class G>
 bool test_edge_iterator(G const& g, std::ostream & out)
 {
-  typedef grid_types<G> gt;
+  return test_edge_iterator(g,out, grid_types<G>());
+}
+
+template<class G, class GT>
+bool test_edge_iterator(G const& g, std::ostream & out, GT)
+{
+  typedef GT       gt;
   typedef typename gt::EdgeIterator EdgeIterator;
 
   int v_cnt = 0;
@@ -21,7 +31,7 @@ bool test_edge_iterator(G const& g, std::ostream & out)
                  "v_cnt = " << v_cnt << " != g.NumOfEdges() = " << g.NumOfEdges() << '\n',1);
   */
   EdgeIterator v;
-  v = g.FirstEdge();
+  v = EdgeIterator(g); // g.FirstEdge();
   EdgeIterator w = v;
   for( ; !v.IsDone(); ++v, ++w) {
     REQUIRE_ALWAYS( ( v ==  w), "Iterators differ!\n",1);
@@ -30,7 +40,7 @@ bool test_edge_iterator(G const& g, std::ostream & out)
   REQUIRE_ALWAYS( (w.IsDone()), "", 1);
   REQUIRE_ALWAYS( (v == w), "Past-the-end iterators differ!\n", 1);
 
-  v = g.FirstEdge();
+  v = EdgeIterator(g); // g.FirstEdge();
   w = v;
   if( ! v.IsDone()) {
     ++v;

@@ -5,12 +5,18 @@
 
 #include <iostream>
 
-template<class G>
-bool test_edge_iterator(G const& g, std::ostream & out);
-
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Test/test-edge-iterator.C"
+
+#else
+
+template<class G>
+bool test_edge_iterator(G const& g, std::ostream & out);
+
+template<class G, class GT>
+bool test_edge_iterator(G const& g, std::ostream & out, GT);
+
 #endif
 
 #endif
