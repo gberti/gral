@@ -61,6 +61,25 @@ public:
     std::swap(y(p),x(q));
   }
 
+  static POINT left_perp(POINT const& p) {
+    return POINT(-y(p), x(p));
+  }
+  static void left_rotate(POINT & p) {
+    scalar xp = x(p);
+    x(p) = y(p);
+    y(p) = -xp;
+  }
+  static POINT right_perp(POINT const& p) {
+    return POINT(y(p), -x(p));
+  }
+  static void right_rotate(POINT & p) {
+    scalar xp = x(p);
+    x(p) = -y(p);
+    y(p) =  xp;
+  }
+
+
+
   // solve (A1,A2)*X = b
   static void solve2(POINT const& A1, POINT const& A2,
                      POINT      & X,  POINT const& b)
