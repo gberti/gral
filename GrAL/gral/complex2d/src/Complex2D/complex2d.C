@@ -15,10 +15,14 @@
 
 //---------------  construction & destruction  ----------------------
 
+Complex2D::Complex2D() : num_of_edges_cache(-1) {}
+
+
 // in the special case of vectors of integers, this could be done
 // more efficiently by just copying the vectors.
 Complex2D::Complex2D(const Complex2D& rhs)
 { 
+  num_of_edges_cache = rhs.num_of_edges_cache;
   stored_geometry_complex2D dummy(*this);
   ConstructGrid(*this,dummy,
                 rhs,stored_geometry_complex2D(rhs)); }
@@ -29,6 +33,7 @@ Complex2D& Complex2D::operator=(const Complex2D& rhs)
     clear();
     stored_geometry_complex2D dummy(*this);
     ConstructGrid(*this,dummy, rhs,stored_geometry_complex2D(rhs)); 
+    num_of_edges_cache = rhs.num_of_edges_cache;
   }
   return (*this);
 }
@@ -37,6 +42,7 @@ Complex2D::~Complex2D() { clear();}
 
 void Complex2D::clear()
 { 
+  num_of_edges_cache = -1;
   _cells.erase   (_cells.begin(),   _cells.end());
   _vertices.erase(_vertices.begin(),_vertices.end());
   _boundary.erase(_boundary.begin(), _boundary.end());
@@ -96,5 +102,31 @@ void Complex2D::calculate_neighbour_cells()
   MapIt bfacet; 
   for(bfacet = Facets.begin(); bfacet != Facets.end(); ++bfacet){
     _boundary.push_back((*bfacet).second);
+  }
+}
+
+void Complex2D::calculate_num_of_edges() const 
+{
+  unsigned n = 0;
+  for(EdgeIterator e(FirstEdge()); ! e.IsDone(); ++e)
+    ++n;
+  num_of_edges_cache = n;
+}
+
+void Complex2D::calculate_archetypes() 
+{
+  archetypes.clear();
+  arch_for_n_vertices.clear();
+  for(CellIterator c(*this); ! c.IsDone(); ++c)
+    add_archetype_of(*c);
+}
+
+void Complex2D::add_archetype_of(Complex2D::Cell const& c) 
+{
+  if(arch_for_n_vertices.size() < c.NumOfVertices()+1) {
+    // add new archetype, and link c.NumOfVertices() to this new archetype.
+    archetypes.push_back(archetype_type(c.NumOfVertices()));
+    arch_for_n_vertices.resize(c.NumOfVertices()+1);
+    arch_for_n_vertices[c.NumOfVertices()] = archetypes.size() - 1;
   }
 }
