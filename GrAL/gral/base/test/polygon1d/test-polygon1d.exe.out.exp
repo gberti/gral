@@ -14,10 +14,10 @@ has no type FaceIterator
 has    type FacetIterator
 has    type CellIterator
 has no type VertexOnVertexIterator
-has no type EdgeOnVertexIterator
+has    type EdgeOnVertexIterator
 has no type FaceOnVertexIterator
 has no type FacetOnVertexIterator
-has no type CellOnVertexIterator
+has    type CellOnVertexIterator
 has    type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
 has no type FacetOnEdgeIterator
@@ -27,7 +27,7 @@ has no type EdgeOnFaceIterator
 has no type CellOnFaceIterator
 has no type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
-has no type CellOnFacetIterator
+has    type CellOnFacetIterator
 has    type VertexOnCellIterator
 has no type EdgeOnCellIterator
 has no type FaceOnCellIterator
