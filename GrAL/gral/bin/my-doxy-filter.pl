@@ -13,6 +13,7 @@ while(<>) {
   s|\$GrAL[ ]+([a-z\-_A-Z0-9]+)|<A HREF="%GRALCONCEPTS/$1.html">$1</A>|g;
   s|\$GRALCONCEPTSTOP[ ]+'([^']+)'|<A HREF="%GRALCONCEPTSTOP">$1</A>|g;
   s|\$GRALCONCEPTSTOP[ ]+([^ ]+)|<A HREF="%GRALCONCEPTSTOP">$1</A>|g;
+  s|\$DISS|<A HREF="http://www.math.tu-cottbus.de/~berti/diss"> [Berti00] </A>|g;
   s|Adaptable Unary Function|<A HREF="%STL/AdaptableUnaryFunction.html"> Adaptable Unary Function</A>|g;
   s|Forward Iterator|<A HREF="%STL/ForwardIterator.html">Forward Iterator</A>|g;
   s|Equality Comparable|<A HREF="%STL/EqualityComparable.html">Equality Comparable</A>|g;
