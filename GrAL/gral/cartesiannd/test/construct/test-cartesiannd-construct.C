@@ -356,5 +356,24 @@ int main() {
     test_local_vertex_access(RR, cout);
   }
 
-  
+ {
+    cartesiannd::grid<3> R(it3(3,3,3));
+    typedef grid_types<cartesiannd::grid<3> > gt; 
+    cartesiannd::subrange<3> RR(R, 
+				gt::Cell(R,gt::index_type(0,0,0)), 
+				gt::Cell(R,gt::index_type(1,1,1)));
+    cout << "Subrange 2x2x2 cells:\n";
+    RR.print(cout);
+    print_grid(RR, cout);
+    cout << endl;
+
+    test_vertex_iterator(RR, cout);
+    test_edge_iterator  (RR, cout);
+    // test_face_iterator  (R, cout);
+    test_facet_iterator (RR, cout);
+    test_cell_iterator  (RR, cout);
+
+    test_local_vertex_access(RR, cout);
+
+ }  
 }
