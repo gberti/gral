@@ -47,7 +47,9 @@ struct element_traits_vertex_base {
   typedef typename gt::VertexIterator    ElementIterator;
   typedef typename gt::vertex_handle     handle_type;
   typedef vertex_type_tag                element_type_tag;
-
+  typedef typename gt::dimension_tag     grid_dimension_tag;
+  typedef element_codim_tag<grid_dimension_tag::dim> element_codimension_tag;
+  typedef element_dim_tag<0>                         element_dimension_tag;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstVertex();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfVertices();}
@@ -72,6 +74,9 @@ struct element_traits_edge_base {
   typedef typename gt::EdgeIterator      ElementIterator;
   typedef typename gt::edge_handle       handle_type;
   typedef edge_type_tag                  element_type_tag;
+  typedef typename gt::dimension_tag     grid_dimension_tag;
+  typedef element_codim_tag<grid_dimension_tag::dim-1> element_codimension_tag;
+  typedef element_dim_tag<1>                           element_dimension_tag;
 
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstEdge();}
@@ -111,6 +116,9 @@ struct element_traits_facet_base {
   typedef typename gt::FacetIterator      ElementIterator;
   typedef typename gt::facet_handle       handle_type;
   typedef facet_type_tag                  element_type_tag;
+  typedef typename gt::dimension_tag                 grid_dimension_tag;
+  typedef element_dim_tag<grid_dimension_tag::dim-1> element_dimension_tag;
+  typedef element_codim_tag<1>                       element_codimension_tag;
 
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFacet();}
@@ -136,7 +144,9 @@ struct element_traits_cell_base {
   typedef typename gt::CellIterator      ElementIterator;
   typedef typename gt::cell_handle       handle_type;
   typedef cell_type_tag                  element_type_tag;
-
+  typedef typename gt::dimension_tag     grid_dimension_tag;
+  typedef element_dim_tag<grid_dimension_tag::dim> element_dimension_tag;
+  typedef element_codim_tag<0>                     element_codimension_tag;
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstCell();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfCells();}
