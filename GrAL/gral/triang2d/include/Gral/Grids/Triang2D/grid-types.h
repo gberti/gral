@@ -4,7 +4,6 @@
 // $LICENSE 
 
 #include "Gral/Base/element-handle.h"
-#include "Gral/Iterators/cell-iterator-consecutive.h"
 
 class Triang2D;
 class Triang2D_Vertex;
@@ -34,10 +33,6 @@ struct grid_types_base_Triang2D {
   typedef Triang2D_FacetOnCellIterator  FacetOnCellIterator;
   typedef FacetOnCellIterator           EdgeOnCellIterator;
 
-  /*
-  typedef cell_iterator_consecutive<grid_type,grid_types_base_Triang2D> 
-   cell_base_type;
-  */
 
   typedef vertex_handle_int<grid_type>  vertex_handle;
   typedef cell_handle_int  <grid_type>  cell_handle;

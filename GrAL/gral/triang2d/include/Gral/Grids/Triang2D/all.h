@@ -6,5 +6,6 @@
 #include "Gral/Grids/Triang2D/partial-grid-functions.h"
 #include "Gral/Grids/Triang2D/element-traits.h"
 #include "Gral/Grids/Triang2D/construct.h"
+#include "Gral/Grids/Triang2D/stored-geometry.h"
 
 #endif
