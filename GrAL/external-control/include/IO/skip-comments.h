@@ -13,11 +13,11 @@
 
 #include <iostream.h>
 #include <limits.h>
-#include "mystring.h"
+#include <string>
 
 class skip_comments_istream {
 public:
-  skip_comments_istream(istream& in, 
+  skip_comments_istream(std::istream& in, 
 			char comment_begin = '#',
 			char comment_end   = '\n') 
     : in_(&in),
@@ -27,7 +27,7 @@ public:
   istream& the_istream() { return skip_comments(*in_);} 
   char begin_comment() const {return comment_begin_;}
 
-  istream& skip_comments(istream& in) 
+  istream& skip_comments(std::istream& in) 
   {
     while(true) {
       in >> ws;
@@ -40,11 +40,11 @@ public:
   } 
 
 private:
- istream* in_;
+  std::istream* in_;
   char comment_begin_, comment_end_;
 };
 
-inline istream& skip_comment(istream& in) {
+inline std::istream& skip_comment(std::istream& in) {
   if(in) {
     skip_comments_istream sk(in);
     sk.skip_comments(in);
@@ -57,7 +57,7 @@ inline istream& skip_comment(istream& in) {
 // und nicht als:  xyz ( #Kommentar wird ueberlesen).
 // scheint soweit zu klappen.
 
-inline skip_comments_istream& operator>>(skip_comments_istream& in, string& s)
+inline skip_comments_istream& operator>>(skip_comments_istream& in, std::string& s)
 {
   istream& in1(in.the_istream());
   int max_len = 256;
@@ -90,6 +90,12 @@ inline skip_comments_istream& operator>>(skip_comments_istream& in, T& t)
   return in;
 }
 
+// special case for strings:
+// if we had e.g. blurb#comment in an input,
+// it would be read as one string.
+
+template<>
+inline skip_comments_istream& operator>>(skip_comments_istream& in, std::string& s);
 
 
 

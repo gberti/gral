@@ -16,7 +16,6 @@
 //     read-parameters.h -- a simple class for reading some
 //     parameter values from a stream
 //
-//     (C) Guntram Berti, date: 1.09.96
 //
 //     purpose: say you have a number of numerical parameters
 //     declared in your program, i.e. an instance of a class for which you want 
@@ -60,20 +59,20 @@
 //
 ///////////////////////////////////////////////////////////////////
 
-#include "forward/string.h"
-#include "forward/iostream.h"
+#include <string>
+#include <iostream.h>
+#include <map>  // STL
 
 #include "IO/mutator.h"
-#include "Utility/reference-count.h"
 
-#include "map.h"  // STL
 
 // this is basically a dictionary that maps strings
 // to placeholders for a variable reference.
 // pointers to the abstract base class are used in order to profit
 // from polymorphism (derived classes are automatically
 // generated via templates in class TypedMutator).
-class string_table_1: public map<string, Mutator*, less<string> > {
+
+class string_table_1: public std::map<std::string, Mutator*, std::less<std::string> > {
 public:
   string_table_1() {}
 };
@@ -84,15 +83,12 @@ class Mutator;
 
 class MutableVars {
 private:
-  //  typedef map<string, Mutator*, less<string> > table_type;
-  //table_type table;
-  typedef string_table_1                      table_type;
+  typedef string_table_1             table_type;
   typedef table_type::const_iterator const_iterator;
 
-  // RCIPtr<table_type>  table;
-  // RCIPtr<string_list> unrecognized;
-  table_type* table;
+  table_type*  table;
   string_list* unrecognized;
+
   // FORBIDDEN
   MutableVars(MutableVars const&);
   MutableVars& operator=(MutableVars const&);
@@ -100,19 +96,19 @@ public:
   MutableVars();
   ~MutableVars();
 
-  void AddVariable(const string& name, Mutator* m);
-  void AddVariable(const char*   name, Mutator* m);
-  void ReadVariable(istream& is);
-  void ReadValues(istream& in);
-  void PrintValues(ostream& out,
-		   const string& prefix = "",
-		   const string& sep = " ") const;
+  void AddVariable(std::string const& name, Mutator* m);
+  void AddVariable(char        const* name, Mutator* m);
+  void ReadVariable(std::istream& is);
+  void ReadValues  (std::istream& in);
+  void PrintValues (std::ostream& out,
+                    std::string const& prefix = "",
+                    std::string const& sep = " ") const;
   bool HasUnrecognized() const;
-  void PrintUnrecognized(ostream& out) const;
+  void PrintUnrecognized(std::ostream& out) const;
  
   unsigned size() const;
-  bool     defined   (string const& nm) const;
-  Mutator* getMutator(string const& nm);
+  bool     defined   (std::string const& nm) const;
+  Mutator* getMutator(std::string const& nm);
   
   const_iterator begin() const { return table->begin();}
   const_iterator end()   const { return table->end();}
@@ -125,7 +121,7 @@ public:
 // (as a member function) is not (yet) allowed to be a template function
 
 template<class T> 
-inline void AddVar(MutableVars& MV, const string& name, T& v)
+inline void AddVar(MutableVars& MV, const std::string& name, T& v)
 { MV.AddVariable(name,GetMutator(v));}
 
 

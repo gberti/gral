@@ -2,29 +2,29 @@
 #include "IO/skip-comments.h"
 
 
-istream_control_device_impl::istream_control_device_impl                                        (istream* i, const string& nm, const string& ind = "")
+istream_control_device_impl::istream_control_device_impl                                        (std::istream* i, const std::string& nm, const std::string& ind = "")
   : in(i), name_(nm), indent_(ind) {}
 
 string istream_control_device_impl::name() const { return name_ ;}
 
 void istream_control_device_impl::update()        {  MV.ReadValues(*in);}
 
-void istream_control_device_impl::add(const string& name,Mutator* value) 
+void istream_control_device_impl::add(const std::string& name,Mutator* value) 
 { MV.AddVariable(name,value);}
 
 void istream_control_device_impl::register_at(ControlDevice& Ctrl) { register_at(Ctrl,"");}
 
 void istream_control_device_impl::register_at(ControlDevice& Ctrl, 
-                                              const string& prefix) {
+                                              const std::string& prefix) {
   Ctrl.add( ( (prefix == "") || (name() == "") ? prefix : prefix + "-") +name(), 
             GetMutator(*this));
 }
 
-void istream_control_device_impl::attach_to(istream& in_new) { in = &in_new;}
+void istream_control_device_impl::attach_to(std::istream& in_new) { in = &in_new;}
 
-void istream_control_device_impl::print_values(ostream& out) const { MV.PrintValues(out);}
+void istream_control_device_impl::print_values(std::ostream& out) const { MV.PrintValues(out);}
 
-void istream_control_device_impl::print_values(ostream& out, const string& ind) const 
+void istream_control_device_impl::print_values(std::ostream& out, const string& ind) const 
 { MV.PrintValues(out, ind, " ");}
 
 
@@ -32,7 +32,7 @@ void istream_control_device_impl::print_values(ostream& out, const string& ind) 
 
 //istream_control_device_impl* 
 control_device_impl* 
-istream_control_device_impl::get_sub_device(const string& nm) 
+istream_control_device_impl::get_sub_device(const std::string& nm) 
 { 
   self* sub = new istream_control_device_impl(in,nm, indent_+" "); 
   add(nm,GetMutator(*sub));
@@ -40,7 +40,7 @@ istream_control_device_impl::get_sub_device(const string& nm)
   return sub;
 }
 
-void istream_control_device_impl::read(istream& in) {
+void istream_control_device_impl::read(std::istream& in) {
   skip_comment(in);
   char c;
   in >> c;
@@ -63,26 +63,26 @@ void istream_control_device_impl::read(istream& in) {
    
 }
 
-void istream_control_device_impl::print(ostream& out) const {
+void istream_control_device_impl::print(std::ostream& out) const {
   out <<  '\n' << indent_ << "{\n";
   print_values(out, indent_);
   out << indent_ << "}";
 }
 
-void istream_control_device_impl::print_unrecognized(ostream& out) const
+void istream_control_device_impl::print_unrecognized(std::ostream& out) const
 { print_unrecognized(out,"");}
 
-void istream_control_device_impl::print_unrecognized(ostream& out, 
-						     const string& prefix) const
+void istream_control_device_impl::print_unrecognized(std::ostream& out, 
+						     const std::string& prefix) const
 {
-  string nm = ( prefix == "" ? name() : prefix + "::" + name());
+  std::string nm = ( prefix == "" ? name() : prefix + "::" + name());
   if(MV.HasUnrecognized()) {
     out << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 	<< "WARNING: Unrecognized Values in ControlDevice " << nm << ":\n";
     MV.PrintUnrecognized(out);
     out << "END Unrecognized Values in ControlDevice " << nm << '\n';
   }
-   list<self*>::const_iterator subs;
+  std::list<self*>::const_iterator subs;
   for(subs = sub_devices_.begin(); subs != sub_devices_.end(); ++subs)
     (*subs)->print_unrecognized(out,nm);
 }

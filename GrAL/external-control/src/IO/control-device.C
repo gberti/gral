@@ -1,39 +1,38 @@
 #include <fstream.h>
-#include "mystring.h"
-
-/* #include "Iso-std/sstream" */
+#include <string>
 #include <strstream.h> 
 
-#include "IO/safe-file.h"
+#include "Utility/safe-file.h"
 #include "IO/control-device.h"
 #include "IO/istream-control-device.h"
 #include "IO/multi-istream-control-device.h"
+#include "IO/command-line.h"
  
 #include "Utility/pre-post-conditions.h" 
 
-string Mutator::description() const { return string("");}
+string Mutator::description() const { return std::string("");}
 
 
 void ControlDevice::update() { impl->update(); print_unrecognized(cerr);}
 
-void ControlDevice::print_values(ostream& out) const { impl->print_values(out);}
+void ControlDevice::print_values(std::ostream& out) const { impl->print_values(out);}
 
-void ControlDevice::print_unrecognized(ostream& out) const { impl->print_unrecognized(out);}
+void ControlDevice::print_unrecognized(std::ostream& out) const { impl->print_unrecognized(out);}
 
-void ControlDevice::attach_to(istream& in) { impl->attach_to(in);}
+void ControlDevice::attach_to(std::istream& in) { impl->attach_to(in);}
 
-void ControlDevice::add(const string& name,Mutator* value_ref) 
+void ControlDevice::add(const std::string& name,Mutator* value_ref) 
 { impl->add(name,value_ref);}
 
 void ControlDevice::add(const char*   nm,Mutator* value_ref)
 { add(string(nm),value_ref);}
 
-void ControlDevice::register_at(ControlDevice& Ctrl, const string& prefix)
+void ControlDevice::register_at(ControlDevice& Ctrl, const std::string& prefix)
 { impl->register_at(Ctrl,prefix);}
 
-string ControlDevice::name() const { return impl->name();}
+std::string ControlDevice::name() const { return impl->name();}
 
-ControlDevice ControlDevice::getSubDevice(const string& nm) 
+ControlDevice ControlDevice::getSubDevice(const std::string& nm) 
 { 
   ControlDevice sub(impl->get_sub_device(nm));
   // sub.register_at(*this,"");
@@ -47,46 +46,45 @@ ControlDevice ControlDevice::getSubDevice(const char*   name)
 
 
 
-ControlDevice GetStreamDevice(istream* in, const string& name)
+ControlDevice GetStreamDevice(std::istream* in, const std::string& name)
 { return ControlDevice( new istream_control_device_impl(in,name));}
 
-ControlDevice GetFileControlDevice(const string& filename, const string& name) 
+ControlDevice GetFileControlDevice(const std::string& filename, const std::string& name) 
 { return GetFileControlDevice(filename.c_str(),name);} 
 
-ControlDevice GetFileControlDevice(const char* filename, const string& name) {
- ifstream * infile = new ifstream;
+ControlDevice GetFileControlDevice(const char* filename, const std::string& name) {
+ std::ifstream * infile = new std::ifstream;
  file_interactive::open(*infile,filename);
  return ControlDevice(new istream_control_device_impl(infile, name));
 }
 
 
-#include "IO/command-line.h"
 
 
-ControlDevice GetDuplexControlDevice(istream& in2,
-				     const char* filename, const string& name) {
- ifstream * in1 = new ifstream(filename);
+ControlDevice GetDuplexControlDevice(std::istream& in2,
+				     const char* filename, const std::string& name) {
+ std::ifstream * in1 = new std::ifstream(filename);
   return ControlDevice(new multi_istream_control_device(in1,&in2,name));
 }
 
-ControlDevice GetDuplexControlDevice(istream* in2,
-				     const char* filename, const string& name) {
- ifstream * in1 = new ifstream(filename);
+ControlDevice GetDuplexControlDevice(std::istream* in2,
+				     const char* filename, const std::string& name) {
+ std::ifstream * in1 = new std::ifstream(filename);
   return ControlDevice(new multi_istream_control_device(in1,in2,name));
 }
 
-ControlDevice GetDuplexControlDevice(istream& in2,
-				     const string& filename, const string& name) {
+ControlDevice GetDuplexControlDevice(std::istream& in2,
+				     const std::string& filename, const std::string& name) {
   return GetDuplexControlDevice(in2,filename.c_str(),name);
 }
 
 ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
-						 const string& filename, 
-						 const string& name) 
+						 const std::string& filename, 
+						 const std::string& name) 
 {
   Commandline cmd(argc,argv);
   //  istringstream* in = new istringstream(cmd.get().str());
-  istrstream* in = new istrstream(cmd.c_str());
+  std::istrstream* in = new std::istrstream(cmd.c_str());
   return GetDuplexControlDevice(in,
 				filename.c_str(),
 				name);

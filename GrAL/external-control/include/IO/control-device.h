@@ -11,8 +11,8 @@
 //----------------------------------------------------------------
 
 
-#include "forward/iostream.h"
-#include "forward/string.h"
+#include <iostream.h>
+#include <string> 
 
 #include "IO/mutator.h"
 
@@ -33,21 +33,18 @@
 class control_device_impl : public controlable {
 public:
   virtual void update() = 0;
-  virtual void add(const string&, Mutator*) = 0;
+  virtual void add(std::string const&, Mutator*) = 0;
 
-  // virtual void set(const string&, Mutator*) = 0;
-  // virtual void remove(const string&, Mutator*) = 0;
-
-  virtual void print_values(ostream&) const = 0;
+  virtual void print_values(std::ostream&) const = 0;
 
 
-  virtual void print_unrecognized(ostream&) const = 0;
-  virtual void print_unrecognized(ostream&, const string&) const = 0;
+  virtual void print_unrecognized(std::ostream&) const = 0;
+  virtual void print_unrecognized(std::ostream&, std::string const&) const = 0;
 
-  virtual void attach_to(istream& in) = 0;
-  virtual control_device_impl* get_sub_device(const string& nm) = 0;
+  virtual void attach_to(std::istream& in) = 0;
+  virtual control_device_impl* get_sub_device(std::string const& nm) = 0;
 
-  virtual string name() const = 0;
+  virtual std::string name() const = 0;
   virtual ~control_device_impl() {}
 };
 
@@ -56,53 +53,53 @@ class ControlDevice  {
 public:
   ControlDevice(control_device_impl* imp = 0) : impl(imp) {}
 
-  void add(const string& nm,Mutator* value_ref);
-  void add(const char*   nm,Mutator* value_ref);
-  //  void remove(const string& name);
-  //  void set(const string& name,Mutator* value_ref);
+  void add(std::string const& nm, Mutator* value_ref);
+  void add(char        const* nm, Mutator* value_ref);
 
   void update();
-  void print_values(ostream&) const;
-  void print_unrecognized(ostream&) const;
-  void attach_to(istream& in);
+  void print_values      (std::ostream&) const;
+  void print_unrecognized(std::ostream&) const;
+  void attach_to         (std::istream& in);
 
 
-  void register_at(ControlDevice&, const string& prefix);
+  void register_at(ControlDevice&, std::string const& prefix);
 
   string name() const;
 
-  ControlDevice getSubDevice(const string& name);
-  ControlDevice getSubDevice(const char*   name);
+  ControlDevice getSubDevice(std::string const& name);
+  ControlDevice getSubDevice(char        const* name);
 private:
   control_device_impl* impl;
 };
 
 
 template<class T>
-inline void RegisterAt(ControlDevice& Ctrl, const string& name, T& t)
+inline void RegisterAt(ControlDevice& Ctrl, std::string const& name, T& t)
 { 
   TypedMutator<T>* p = new TypedMutator<T>(t);
   Ctrl.add(name, p); 
 }
 
 template<class T>
-inline void RegisterAt(ControlDevice& Ctrl, const char*   name, T& t)
+inline void RegisterAt(ControlDevice& Ctrl, char const*   name, T& t)
 {  Ctrl.add(name, new TypedMutator<T>(t)); }
 
 
 
 // a simple ControlDevice that reads name-value-pairs from a file
-extern ControlDevice GetStreamDevice(istream* in, const string& name = "");
+extern ControlDevice GetStreamDevice(istream* in, std::string const& name = "");
 //extern ControlDevice GetFileControlDevice(const string& filename, const string& name);
-extern ControlDevice GetFileControlDevice(const char*   filename, const string& name);
+extern ControlDevice GetFileControlDevice(char const*   filename, std::string const& name);
 
 extern ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
-							const string& filename, 
-							const string& name);
+							std::string const& filename, 
+							std::string const& name);
 
 
-extern ControlDevice GetDuplexControlDevice(istream& in2,
-					    const char* filename, const string& name);
-extern ControlDevice GetDuplexControlDevice(istream& in2,
-					    const string& filename, const string& name);
+extern ControlDevice GetDuplexControlDevice(std::istream     & in2,
+					    char        const* filename, 
+                                            std::string const& name);
+extern ControlDevice GetDuplexControlDevice(std::istream     & in2,
+					    std::string const& filename, 
+                                            std::string const& name);
 #endif

@@ -1,11 +1,11 @@
-#include "list.h" // STL
+#include <list> // STL
 #include <iostream.h>
 
 #include "IO/skip-comments.h"
 #include "IO/read-parameters.h"
 
 
-class string_list : public list<string> {
+class string_list : public std::list<std::string> {
 public:
   string_list() {}
 };
@@ -15,11 +15,11 @@ MutableVars::MutableVars()
     unrecognized(new string_list)  {}
 
 unsigned MutableVars::size() const { return table->size();}
-bool     MutableVars::defined(string const& nm) const { 
+bool     MutableVars::defined(std::string const& nm) const { 
   return (table->find(nm) != table->end());
 }
 
-Mutator* MutableVars::getMutator(string const& nm)
+Mutator* MutableVars::getMutator(std::string const& nm)
 {
   return (table->find(nm) != table->end() ? 
 	  (*(table->find(nm))).second : 0);
@@ -28,7 +28,7 @@ Mutator* MutableVars::getMutator(string const& nm)
 //MutableVars::~MutableVars() { delete(table); delete(unrecognized);}
 MutableVars::~MutableVars() {}
 
-void MutableVars::AddVariable(const string& name, Mutator* m)
+void MutableVars::AddVariable(const std::string& name, Mutator* m)
   { (*table)[name]=m; }
 
 void MutableVars::AddVariable(const char*  name, Mutator* m)
@@ -47,10 +47,10 @@ void MutableVars::ReadVariable(istream& is)
   is >> ws;
   //  skip_comments_istream in(is,comment_start(),comment_end());
   if(is) {
-    string s; 
+    std::string s; 
     is >> s;
 
-     map<string, Mutator*, less<string> >::iterator it;
+     std::map<std::string, Mutator*, std::less<std::string> >::iterator it;
     if( (it = table->find(s)) != table->end()) {
       //  cerr << "found: " << s << endl;
       // (*table)[s]->read(is);//.the_istream()); // hier nur istream-Funktionalitaet!
@@ -61,7 +61,7 @@ void MutableVars::ReadVariable(istream& is)
   }
 }
 
-void MutableVars::ReadValues(istream& is)
+void MutableVars::ReadValues(std::istream& is)
 { 
   while (is) { 
     skip_comment(is);
@@ -69,9 +69,9 @@ void MutableVars::ReadValues(istream& is)
   }
 }
 
-void MutableVars::PrintValues(ostream& out, 
-			      const string& pre, 
-			      const string& sep) const
+void MutableVars::PrintValues(std::ostream& out, 
+			      const std::string& pre, 
+			      const std::string& sep) const
 {
    table_type::const_iterator item(table->begin());
   for(; item != table->end(); item++) {
@@ -87,9 +87,9 @@ void MutableVars::PrintValues(ostream& out,
 
 bool MutableVars::HasUnrecognized() const { return (unrecognized->size() != 0);} 
 
-void MutableVars::PrintUnrecognized(ostream& out) const
+void MutableVars::PrintUnrecognized(std::ostream& out) const
 {
-   string_list::const_iterator item(unrecognized->begin());
+  string_list::const_iterator item(unrecognized->begin());
   for(; item != unrecognized->end(); ++item)
     out << *item << '\n';
 }
