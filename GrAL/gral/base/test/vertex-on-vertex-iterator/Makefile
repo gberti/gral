@@ -16,7 +16,7 @@ TARGETS = $(EXEC)
 include $(DEPS)
 
 EXTRA_DEPMODULES+= gral/cartesian2d gral/cartesian3d \
-                   gral/testing 
+                   gral/complex2d   gral/testing 
 
 LIBS = -lgral-cartesian2d \
        -lgral-cartesian3d \
