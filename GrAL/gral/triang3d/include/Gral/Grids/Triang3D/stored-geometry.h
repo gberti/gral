@@ -8,6 +8,7 @@
 #include "Utility/pre-post-conditions.h"
 
 #include <iostream>
+#include <algorithm>
 
 /*! \brief Geometry wrapper class for Triang3D
 
@@ -21,6 +22,8 @@ public:
   typedef Triang3D              grid_type; 
   typedef grid_types<grid_type> gt;
   typedef gt::Vertex            Vertex;
+  typedef gt::Cell              Cell;
+  typedef gt::VertexOnCellIterator VertexOnCellIterator;
 private:
   grid_type const* g;
   double         * xyz;
@@ -38,6 +41,8 @@ public:
     : g(&g_), xyz(xyz_), owned(false) {}
 
   ~stored_geometry_triang3d() { clear();}
+
+  unsigned space_dimension() const { return 3;}
 
   //! change to value semantics
   void set_grid(grid_type const& g_) {
@@ -69,7 +74,9 @@ public:
   public:
     coord_proxy(double* xyz_v_) : xyz_v(xyz_v_) {}
     inline void operator=(coord_type const& coo);
-    
+    template<class COORD>
+    void operator=(COORD const& coo);
+   
     double  operator[](int i) const { cr(i); return xyz_v[i]; }
     double& operator[](int i)       { cr(i); return xyz_v[i]; }
 
@@ -83,8 +90,10 @@ public:
     double xyz[3];
   public:
     coord_type() {}
-    coord_type(coord_proxy p)            { init(p.xyz_v);}
-    coord_type(double const* xyz_)       { init(xyz_);}
+    coord_type(coord_proxy p)               { init(p.xyz_v);}
+    explicit coord_type(double const* xyz_) { init(xyz_);}
+    explicit coord_type(double d) { xyz[0] = xyz[1] =xyz[2] = d;}
+    coord_type(double x, double y, double z) { xyz[0] = x; xyz[1] = y; xyz[2] = z;}
     coord_type& operator=(coord_proxy p) { init(p.xyz_v); return *this;}
 
 
@@ -106,6 +115,23 @@ public:
     { return coord_proxy(xyz + 3*v.handle());}
   coord_type  coord(Vertex const& v) const 
     { return coord_type (xyz + 3*v.handle());}
+
+  //! Center of intertia of \c c
+  coord_type center(Cell const& c) const 
+    { return (coord(c.V(0)) + coord(c.V(1)) + coord(c.V(2)) + coord(c.V(3)))/4.0;}
+
+  //! Barycenter (average of vertices) of cell \c c
+  coord_type barycenter(Cell const& c) const { return center(c);}
+
+  //! solid angle of the wedge of vertex \c vc, in steradians (3D)   
+  double solid_angle(VertexOnCellIterator const& vc) const;
+
+  /*! ratio of solid angle of wedge \c vc to complete solid angle
+
+      The ratios of the wedges of an internal regular vertex sum up to 1.
+   */
+  double solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(4*M_PI);}
+
 };
 
 
@@ -122,6 +148,17 @@ inline void
 stored_geometry_triang3d::coord_proxy::operator=
 (stored_geometry_triang3d::coord_type const& p)
 {  xyz_v[0] = p[0]; xyz_v[1] = p[1]; xyz_v[2] = p[2];  }
+template<class COORD>
+
+inline void
+stored_geometry_triang3d::coord_proxy::operator=
+(COORD const& p)
+{ 
+  typedef point_traits<COORD> pt;
+  xyz_v[0] = pt::x(p);
+  xyz_v[1] = pt::y(p);
+  xyz_v[2] = pt::z(p);
+}
 
 template<>
 struct point_traits<stored_geometry_triang3d::coord_type> 
@@ -156,5 +193,25 @@ inline void assign_point(stored_geometry_triang3d::coord_proxy p,
    p[ip] = q[iq]; 
 }  
 
+
+
+
+inline double 
+stored_geometry_triang3d::solid_angle
+(stored_geometry_triang3d::VertexOnCellIterator const& vc) const
+{
+  typedef algebraic_primitives<coord_type> ap;
+  Cell c(vc.TheCell());
+  int v[4] = {0,1,2,3};
+  std::swap(v[0], v[vc.local_handle()]);
+
+  coord_type d1 = ap::normalization(coord(c.V(v[1])) - coord(c.V(v[0])));
+  coord_type d2 = ap::normalization(coord(c.V(v[2])) - coord(c.V(v[0])));
+  coord_type d3 = ap::normalization(coord(c.V(v[3])) - coord(c.V(v[0])));
+
+  // Euler-Eriksson-Formula, see R\o{a}de/Westergren, BETA Mathematics Handbook for Science and 
+  // Engineering, Studentlitteratur
+  return 2*atan( fabs(ap::det3(d1,d2,d3)) / (1 + ap::dot(d1,d2) + ap::dot(d2,d3) + ap::dot(d1,d3)));
+}
 
 #endif
