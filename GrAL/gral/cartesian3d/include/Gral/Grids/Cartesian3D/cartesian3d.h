@@ -209,6 +209,7 @@ public:
 
   bool empty() const { return (NumOfVertices() == 0);}
 
+  unsigned dimension() const { return 3;}
   index_type vertex_size() const { return vertex_map.max_tuple() + index_type(1);}
   index_type cell_size()   const { return cell_map  .max_tuple() + index_type(1);}
   /*! \name Element size functions */
@@ -450,13 +451,14 @@ public:
 
     unsigned NumOfVertices() const { return 2;}
     inline VertexOnEdgeIterator FirstVertex() const;
+    inline VertexOnEdgeIterator EndVertex()   const;
     /*!\brief  Vertex of edge with logical coordinate \c i
        \c V(0) is the start vertex, \c V(1) is the end vertex, 
         for other values of \c i  a vertex outside the edge is obtained.
      */
     Vertex V(int i) const { cv(); return Vertex(TheGrid(), index() + i*index_offset());}
-    Vertex V0() const { return V(0);}
-    Vertex V1() const { return V(1);}
+    Vertex V1() const { return V(0);}
+    Vertex V2() const { return V(1);}
 
     index_type const& index_offset() const { return grid_type::sd.edge_index_offset[dir()];}
     
@@ -506,7 +508,9 @@ public:
   unsigned NumOfVertices() const { return 4;}
   unsigned NumOfEdges   () const { return 4;}
   inline VertexOnFacetIterator FirstVertex() const;
+  inline VertexOnFacetIterator EndVertex()   const;
   inline EdgeOnFacetIterator   FirstEdge  () const;
+  inline EdgeOnFacetIterator   EndEdge  ()   const;
 
   friend bool operator==(self const& lhs, self const& rhs)
   { lhs.cb(); rhs.cb(); return (lhs.h == rhs.h);}
@@ -557,6 +561,7 @@ public:
   grid_type::index_type const& index () const { cv(); return I;}
 
   inline VertexOnCellIterator FirstVertex() const;
+  inline VertexOnCellIterator EndVertex() const;
   unsigned NumOfVertices() const { return 8;}
 
   Vertex V(archgt::vertex_handle lh) const { // local2global
@@ -569,10 +574,17 @@ public:
   Vertex V(int i, int j, int k) const { cv(); return Vertex(TheGrid(), index() + grid_type::index_type(i,j,k));}
 
   inline EdgeOnCellIterator FirstEdge() const;
+  inline EdgeOnCellIterator EndEdge() const;
   unsigned NumOfEdges() const { return 12;}
 
   inline FacetOnCellIterator FirstFacet() const;
+  inline FacetOnCellIterator EndFacet() const;
   unsigned NumOfFacets() const { return 6;}
+
+  inline FacetOnCellIterator FirstFace() const;
+  inline FacetOnCellIterator EndFace() const;
+  unsigned NumOfFaces() const { return 6;}
+
 
   archetype_type const& TheArchetype() const { return TheGrid().ArchetypeOf(*this);}
 
@@ -870,27 +882,44 @@ CartesianGrid3D::EndCell()   const { return Cell(*this,cell_handle(NumOfCells())
 
 inline VertexOnCellIterator_Cartesian3D
 Cell_Cartesian3D::FirstVertex() const { return VertexOnCellIterator(*this);}
+inline VertexOnCellIterator_Cartesian3D
+Cell_Cartesian3D::EndVertex()   const { return VertexOnCellIterator(*this,NumOfVertices());}
 
 inline EdgeOnCellIterator_Cartesian3D
 Cell_Cartesian3D::FirstEdge() const { return EdgeOnCellIterator(*this);}
+inline EdgeOnCellIterator_Cartesian3D
+Cell_Cartesian3D::EndEdge()   const { return EdgeOnCellIterator(*this, NumOfEdges());}
 
 
 inline FacetOnCellIterator_Cartesian3D
+Cell_Cartesian3D::FirstFace()  const { return FacetOnCellIterator(*this);}
+inline FacetOnCellIterator_Cartesian3D
+Cell_Cartesian3D::EndFace()    const { return FacetOnCellIterator(*this, NumOfFaces());}
+
+inline FacetOnCellIterator_Cartesian3D
 Cell_Cartesian3D::FirstFacet() const { return FacetOnCellIterator(*this);}
+inline FacetOnCellIterator_Cartesian3D
+Cell_Cartesian3D::EndFacet()   const { return FacetOnCellIterator(*this, NumOfFacets());}
 
 // inline functions of Facet_Cartesian3D
 
 inline VertexOnFacetIterator_Cartesian3D
 Facet_Cartesian3D::FirstVertex() const { return VertexOnFacetIterator(*this);}
+inline VertexOnFacetIterator_Cartesian3D
+Facet_Cartesian3D::EndVertex()   const { return VertexOnFacetIterator(*this, NumOfVertices());}
 
 inline EdgeOnFacetIterator_Cartesian3D
 Facet_Cartesian3D::FirstEdge() const { return EdgeOnFacetIterator(*this);}
+inline EdgeOnFacetIterator_Cartesian3D
+Facet_Cartesian3D::EndEdge()   const { return EdgeOnFacetIterator(*this, NumOfEdges());}
 
 
 // inline functions of Edge_Cartesian3D
 
 inline VertexOnEdgeIterator_Cartesian3D
 Edge_Cartesian3D::FirstVertex() const  { return VertexOnEdgeIterator(*this);}
+inline VertexOnEdgeIterator_Cartesian3D
+Edge_Cartesian3D::EndVertex()   const  { return VertexOnEdgeIterator(*this, NumOfVertices());}
 
 }; // namespace cartesian3d
 
@@ -900,7 +929,7 @@ Edge_Cartesian3D::FirstVertex() const  { return VertexOnEdgeIterator(*this);}
 
 template<>
 struct grid_types<cartesian3d::CartesianGrid3D> 
-  : public cartesian3d::grid_types_Cartesian3D
+  : public grid_types_base<cartesian3d::grid_types_Cartesian3D>
 {
   typedef grid_type::archetype_type      archetype_type;
   //typedef grid_type::archetype_handle  archetype_handle;
