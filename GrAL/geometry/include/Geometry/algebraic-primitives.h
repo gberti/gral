@@ -42,7 +42,10 @@
 template<class POINT>
 struct basic_algebraic_primitives : public point_traits<POINT> {
 
-  typedef typename point_traits<POINT>::component_type scalar;
+  typedef point_traits<POINT> pt;
+  typedef typename pt::component_type scalar;
+  typedef scalar   real; // should use scalar_traits<scalar>::real
+  // anayway, some of the below are not correct for scalar = complex.
 
   static scalar sqr(scalar x) { return (x*x);}
 
@@ -69,7 +72,7 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
   static scalar  distance(const POINT& p1, const POINT& p2)
     { return sqrt(distance2(p1,p2));}
 
-  static scalar norm2(const POINT& p)
+  static scalar squared_norm_2(const POINT& p)
     {
       scalar sum = 0;
       typedef point_traits<POINT> traits;
@@ -78,16 +81,38 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
       return sum;
     }
 
-  static scalar norm(const POINT& p) { return sqrt(norm2(p));}
-  static POINT normalization(const POINT& p) { return(p/norm(p));}
+  static real norm_2(const POINT& p) { return sqrt(squared_norm_2(p));}
+  static POINT normalization(const POINT& p) { return(p/norm_2(p));}
+
+  static real norm_1(POINT const& p) {
+    real sum = 0;
+    for(int i = pt::LowerIndex(p); i <= pt::UpperIndex(p); ++i)
+      sum += fabs(p[i]);
+    return sum;
+  }
+
+  static real norm_infinity(POINT const& p) {
+   real max_comp = 0;
+   for(int i = pt::LowerIndex(p); i < pt::UpperIndex(p); ++i)
+      max_comp = ( max_comp < fabs(p[i]) ? fabs(p[i]): max_comp);
+   return max_comp;
+  }
   // better: ?
   // static void normalize(POINT& p) { p *= 1.0/norm(p);}
 
-  // calculate the angle a in radians between p and q; so that 
-  // a rotation about a with axis p x q will map p to q.
-  static  scalar cos_of_angle(const POINT& p, const POINT& q)
-    {return (dot(p,q)/(norm(p)*norm(q)));}
+  /*! \brief calculate the cosine of the angle \f$\alpha\f$ in radians between p and q
 
+     The result is oriented such that a rotation about \f$\arccos \alpha\f$ 
+     with axis p x q will map p to q.
+  */
+  static  scalar cos_of_angle(const POINT& p, const POINT& q)
+    {return (dot(p,q)/(norm_2(p)*norm_2(q)));}
+
+  /*! \brief calculate the angle \f$\alpha\f$ in radians between p and q
+
+     The result is oriented such that a rotation about \f$ \alpha\f$ 
+     with axis p x q will map p to q.
+  */
   static  scalar angle(const POINT& p, const POINT& q)
     {return acos(cos_of_angle(p,q));}
 
