@@ -10,6 +10,8 @@
 
 #include <boost/limits.hpp>
 
+#include <iostream>
+
 namespace GrAL {
 
 /*! \defgroup boundingbox Bounding boxes 
@@ -39,6 +41,7 @@ template<class coord>
 class box {
   typedef box<coord>          self;
 public:
+  typedef coord                       coord_type;
   typedef point_traits<coord>         pt;
   typedef typename pt::component_type scalar_type;
 private:
@@ -171,7 +174,7 @@ public:
   }
 
 
-  //! intersection
+  //! intersection (which is the bounding box of the intersection)
   self& operator &=(self const& rhs) {
     for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
       minc[i] = std::max(minc[i], rhs.minc[i]);
@@ -194,6 +197,22 @@ public:
     }
 
 };
+
+  //! Read box (format: low high)
+  template<class COORD>
+  inline std::istream& operator>>(std::istream & in, box<COORD> & b) {
+    COORD b1, b2;
+    in >> b1 >> b2;
+    b = box<COORD>(b1,b2);
+    return in;
+  }
+ 
+  //! Write box (format: the_min()  the_max())
+ template<class COORD>
+ inline std::ostream& operator<<(std::ostream & out, box<COORD> const& b) {
+   return (out << b.the_min() << "  " << b.the_max());
+ }
+
 
 
 /*! \brief Box intersection.
@@ -250,6 +269,8 @@ typename box<COORD>::scalar_type diameter(box<COORD> const& b)
   typedef algebraic_primitives<COORD> ap;
   return ap::distance(b.the_min(), b.the_max());
 }
+
+
 
 
 /*
