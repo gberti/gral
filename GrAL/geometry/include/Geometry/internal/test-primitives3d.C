@@ -117,25 +117,47 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
   //	   triangle3(q[0], q[1], q[2]));
   intersection_t  I(S,T);
   out << "S does" 
-      << (I.segment_does_intersect_plane() ? " " : " not ")
+      << (I.segment_intersects_plane() ? " " : " not ")
       << "intersect plane\n"
       << "S does" 
-      << (I.segment_does_intersect_triangle() ? " " : " not ")
+      << (I.segment_intersects_triangle() ? " " : " not ")
       << "intersect triangle\n";
-  if(I.segment_does_intersect_plane())
+  if(I.segment_intersects_plane())
     out << "intersection: " << I.intersection() << '\n'; // (0.25,0.25,0)
   
   pt::z(p[0]) = 1; 
   out << "S does" 
-      << (I.segment_does_intersect_plane() ? " " : " not ")
+      << (I.segment_intersects_plane() ? " " : " not ")
       << "intersect plane\n"
       << "S does" 
-      << (I.segment_does_intersect_triangle() ? " " : " not ")
+      << (I.segment_intersects_triangle() ? " " : " not ")
       << "intersect triangle\n";
-  if(I.segment_does_intersect_plane())
+  if(I.segment_intersects_plane())
     out << "intersection: " << I.intersection() << '\n'; // (0.25,0.25,0)
  
-}
+  pt::x(p[0]) = pt::x(p[1]) = pt::y(p[0]) = pt::y(p[1]) =  0.5;
+  pt::z(p[0]) = 0; pt::z(p[1]) = 1;
+  pt::x(q[0]) = pt::x(q[1]) = pt::x(q[2]) = -0.5;
+  pt::y(q[1]) = 0.5;
+  pt::y(q[0]) = pt::y(q[2]) = -0.5;
+  pt::z(q[0]) = 0;
+  pt::z(q[1]) = pt::z(q[2]) = 1;
+
+  segment3 S2(p[0],p[1]);
+  triangle3 T2(q[0], q[1], q[2]);
+  intersection_t  I2(S2,T2);
+
+  out << "Segment:  [" << p[0] << "," << p[1] << "]\n"
+      << "Triangle: [" << q[0] << "," << q[1] << "," << q[2] << "]\n";
+  out << "S does" 
+      << (I2.segment_intersects_plane() ? " " : " not ")
+      << "intersect plane\n"
+      << "S does" 
+      << (I2.segment_intersects_triangle() ? " " : " not ")
+      << "intersect triangle\n";
+  if(I2.segment_intersects_plane())
+    out << "intersection: " << I2.intersection() << '\n'; // (0.25,0.25,0)
+ }
 
 
 #endif
