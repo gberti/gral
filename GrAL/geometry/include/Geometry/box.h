@@ -1,19 +1,26 @@
-#ifndef NMWR_GB_GEOMETRIC_BOX_H
-#define NMWR_GB_GEOMETRIC_BOX_H
+#ifndef NMWR_GB_GEOMETRY_BOX_H
+#define NMWR_GB_GEOMETRY_BOX_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+// $LICENSE
 
-//----------------------------------------------------------------
-//
-// A rectangular box for arbitrary coordinate types.
-//
-//----------------------------------------------------------------
+
+#include <algorithm>
+#include "Geometry/point-traits.h"
+
+/*! \brief An axisparallel box for arbitrary coordinate types.
+
+    This class is especially useful for representing bounding boxes.
+    Union (operator |) and intersection (operator &) of boxes give
+    again boxes (namely bounding boxes of the set-theoretic union
+    and intersection, resp.)
+
+    A box can be used as a function, mapping [0,1]^d to the convex
+    hull of its min and max corner, in the obvious way.
+
+    \todo add default constructor with proper initialization 
+ */
+
+
 
 template<class coord>
 class box {
@@ -22,27 +29,62 @@ class box {
 private:
   coord minc, maxc;
 public:
-  box(const coord& cmin, const coord& cmax) : minc(cmin), maxc(cmax) {}
+  // box() // empty box: minc[] = + \infty, maxc[i] = -\infty
+    // => |= works correctly
+  box(const coord& cmin) : minc(cmin), maxc(cmin) {}
+  box(const coord& cmin, const coord& cmax) : minc(cmin), maxc(cmin) 
+    { *this |= cmax; }
 
   const coord& the_min() const { return minc;}
   const coord& the_max() const { return maxc;}
 
+  // dangerous - cannot check consistency
+  coord& the_min()  { return minc;}
+  coord& the_max()  { return maxc;}
+
   // (0,..,0) -> minc , (1,...,1) -> max
-  coord global_coords(const coord& local) {
+  coord global_coords(const coord& local) const {
     coord res = minc;
     for(int i = pt::LowerIndex(res); i <= pt::UpperIndex(res); ++i) {
       res[i] = (1-local[i]) * minc[i] + local[i] * maxc[i];
     }
     return res;
   }
+  // function interface
+  typedef coord argument_type;
+  typedef coord result_type;
+  coord operator()(const coord& local) const
+    { return global_coords(local); }
+
+  bool contains(coord const& p) const {
+    bool res = true;
+    for(int i = pt::LowerIndex(p); i <= pt::UpperIndex(p); ++i) {
+      res = res && (p[i] >= minc[i]) && (p[i] <= maxc[i]);
+    }
+    return res;
+  }
+  
   // bool element(const coord& p) const;
   // bool empty() const;
 
   // intersection
+  // self& operator &=(self const&);
   //  self operator & (const self& ls, const self& rs)
   // closure of union
+  self & operator |= (self const& rs)
+    {
+      for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
+          minc[i] = std::min(minc[i],rs.minc[i]);
+          maxc[i] = std::max(maxc[i],rs.maxc[i]);
+      }
+      return *this;
+    }
   friend self operator | (const self& ls, const self& rs)
     { 
+      self res(ls);
+      return res |= rs;
+    }
+  /*
       coord new_min(ls.minc), new_max(ls.maxc);
       for(int i = pt::LowerIndex(new_min); i <= pt::UpperIndex(new_min); ++i) {
           new_min[i] = min(new_min[i],rs.minc[i]);
@@ -50,6 +92,9 @@ public:
       }
       return self(new_min,new_max);
     }
+  */
 };
 
 #endif
+
+
