@@ -4,14 +4,16 @@
 \end{Label}
 
 
-If you want to use GrAL, you typically want to use it's generic
-components and less it's concrete grid data structure
+If you want to use GrAL, you typically want to use its generic
+components, but not necessarily its concrete grid data structures
 -- at least that's how it is intended.
 Therefore, you will need to create an interface layer 
 satisfiying the syntax specified in the \Sectionlink{Concepts} section.
+Actual working code along the lines of this section 
+can be found in the \gralmodulelink{triang2d} module.
 
 For sake of simplicity, let us assume that your grid data structure
-is a plain  good ole C one:
+is a plain  good old C (or Fortran) one:
 Cell-vertex incidences are stored in a plain array \texttt{cells},
 such that \texttt{cells[3*c +v]} gives the index of the \texttt{v}'th vertex
 of cell \texttt{c}. 
@@ -23,29 +25,58 @@ at indices \texttt{2*v} and \texttt{2*v+1}.
 \introsubsection{Defining the Combinatorial Layer}
 \end{Label}
 
-Let's call our grid class \texttt{triang2d}:
+Let's call our grid wrapper class \texttt{Triang2D}:
 \begin{example}
-class triang2d \{
+class Triang2D \{
   int * cells;
 
   // to be continued ...
 \};
 \end{example}
-From the information present in the array \texttt{cells},
+We are going to implement as much of the GrAL interface for \code{Triang2D}
+as possible.
+From the incidence information present in the array \texttt{cells},
 we can define  the following types more or less directly:
 \texttt{Vertex, VertexIterator, Cell, CellIterator, VertexOnCellIterator}.
-We will implement them as nested classes of \texttt{triang2d}.
+We will implement them as nested classes of \texttt{Triang2D}
+(note: the actual code used separate classes).
 Also, in order to save some work, we will implement the
-\Conceptlink{Vertex} and \Conceptlink{VertexIterator} by the same class
-\texttt{triang2d::Vertex},
-and the same goes for \Conceptlink{Cell}.
-Finally, element handles are just integers in this case.
+\Conceptlink{Vertex} and \Conceptlink{VertexIterator} by one and the same class
+\texttt{Triang2D::Vertex},
+and the similarly for \Conceptlink{Cell}.
 
+
+Moreover, as show below, we can also implement edges and related iterators.
+So, in sum, we can support the following concepts,
+without adding any new data structure
+(only the EdgeIterator will have an internal table to keep track of visited edges):
+
+\begin{center}
+  \begin{tabular}{lll}
+    \Conceptlink{Vertex}      & \Conceptlink{VertexIterator} & \Conceptlink{VertexOnCellIterator} \\
+    \Conceptlink{Edge} 
+    (= \Conceptlink{Facet}) &   \Conceptlink{EdgeIterator} & \Conceptlink{EdgeOnCellIterator} \\
+    \Conceptlink{Cell} &  \Conceptlink{CellIterator} & \\
+    & & \Conceptlink{VertexOnFacetIterator} 
+  \end{tabular}
+\end{center}
+
+
+\begin{Label}{triang2d-cellvertexinput}
+\introsubsubsection{Implementing the basic layer: Vertices and Cells}
+\end{Label}
+
+
+Element handles could be simply integers in this case;
+however, we chose to make them distinguishable types,
+which makes it easier to catch misuse errors, e.g.
+taking vertex handles for cell handles mistakingly.
 \begin{example}
-class triang2d \{
+class Triang2D \{
 
-  typedef int vertex_handle;
-  typedef int cell_handle;
+  // typedef int vertex_handle; // simplest possibility
+  typedef vertex_handle_int<Triang2D> vertex_handle;
+  typedef vrll_handle_int  <Triang2D> cell_handle;
 
   class Vertex \{
      // to be continued ...
@@ -62,18 +93,19 @@ class triang2d \{
   \};
 \};
 \end{example}
-We first show the definition of \texttt{triang2d::Cell},
-and then \texttt{triang2d::VertexOnCellIterator}.
+We first show the definition of \texttt{Triang2D::Cell},
+and then \texttt{Triang2D::VertexOnCellIterator}.
 
 \begin{example}
-class triang2d \{
+class Triang2D \{
    class Cell \{
      typedef Cell     self;
-     typedef triang2d grid_type;
+     typedef Triang2D grid_type;
    private:
       cell_handle      c;
       grid_type const* g;
    public:
+      Cell() : g(0) \{\}
       Cell(grid_type const& gg, cell_handle cc = 0) : g(&gg), c(cc) \{\}  
    
       self      & operator++() \{ ++c; return *this;\}
@@ -91,13 +123,16 @@ class triang2d \{
 \};
 \end{example}
 (In pactice, we would have to define \texttt{FirstVertex()} outside
-of \texttt{triang2d::Cell}.)
-The class \texttt{triang2d::Vertex} is of course very similar and 
+of \texttt{Triang2D::Cell}.)
+The class \texttt{Triang2D::Vertex} is of course very similar and 
 not shown here. 
-Now for the incidence iterator which models \Conceptlink{VertexOnCellIterator}:
+
+Now for the incidence iterator
+\code{Triang2D::VertexOnCellIterator} 
+which models \Conceptlink{VertexOnCellIterator}:
 
 \begin{example}
-class triang2d \{
+class Triang2D \{
  
   class VertexOnCellIterator \{
     // typedefs omitted ...
@@ -112,42 +147,371 @@ class triang2d \{
     Vertex operator*() const \{ return Vertex(*g, handle());\}
     bool   IsDone() const \{ return (lv >= 3);\}
     
-    vertex_handle handle()  const \{ return g->cells[3*c+lv];\}
-    Cell          TheCell() const \{ return Cell(*g,c);\}
-    grid_type     TheGrid() const \{ return *g;\}
+    vertex_handle       handle()  const \{ return g->cells[3*c+lv];\}
+    Cell                TheCell() const \{ return Cell(*g,c);\}
+    grid_type const&    TheGrid() const \{ return *g;\}
   \};
 
 \}
 \end{example}
 Now we have defined enough types to satisfy the 
 \Conceptlink{Cell-VertexInputGridRange} model.
+It suffices to serve a argument for a generic copy 
+operation, see the  \Sectionlink{ConstructGrid} operation.
+
 It remains to fill in the \texttt{grid\_types<>} template:
 \begin{example}
 template<>
-struct grid_types<triang2d> \{
-  typedef triang2d grid_type;
+struct grid_types<Triang2D> \{
+  typedef Triang2D grid_type;
 
-  typedef triang2d::vertex_handle vertex_handle;
+  typedef Triang2D::vertex_handle vertex_handle;
   
   //  etc.
 \};
 \end{example}
 
+\begin{Label}{triang2d-edge}
+\introsubsubsection{Going further: Edge, EdgeIterator and EdgeOnCellIterator}
+\end{Label}
+
+We can, however, support a larger portion of the GrAL interface.
+Even if we do not store edges, they are implicitely present
+as sides of triangles, and we can define an \Conceptlink{Edge}
+type for \code{Triang2D}, as well as \Conceptlink{EdgeIterator}
+and {EdgeOnCellIterator}. The types \Conceptlink{Facet}
+etc. will be just typedefs to the corresponding edge concepts.
+
+First, we note that we have two possibilities of representing 
+an edge: First, by its two vertices, 
+and second, by an incident cell and the local edge number
+in that cell, much like in \code{Triang2D::VertexOnCellIterator}.
+
+Now, the second representation gives readily access 
+to the two vertices of the edge, given our data structure,
+but not the other way around. 
+So, we choose to represent edges (and edge-on-cell-iterators)
+by (cell, local edge number) pairs.
+If we have to compare two edges for equality,
+we must compare the vertex sets, as our primary
+representation is not unique (each interior edge
+is visited from both sides).
+
+As the internal representations for 
+\code{Triang2D::Edge}
+and \code{Triang2D::EdgeOnCellIterator} are identical,
+we will implement the first in terms of the latter.
+Starting with \code{Triang2D::EdgeOnCellIterator}, we see
+that it is very similar to  \code{Triang2D::VertexOnCellIterator}:
+
+\begin{example}
+class Triang2D \{
+ 
+  class EdgeOnCellIterator \{
+    typedef  EdgeOnCellIterator self;
+    // other typedefs omitted ...
+  private:
+    cell_handle c;
+    int         le;
+    grid_type   g;
+  public:
+    EdgeOnCellIterator(Cell const& cc) : c(CC.c), le(0), g(CC.g) \{\}
+     
+    self&  operator++() \{ ++le; return *this; \}
+    Edge   operator*() const \{ return Edge(*this);\}
+    bool   IsDone() const \{ return (le >= 3);\}
+
+    Vertex V1() const \{ return Vertex(*g,g->cells[3*c+le]);\}
+    Vertex V2() const \{ return Vertex(*g,g->cells[3*c+(le+1)\%3]);\}
+    
+
+    edge_handle         handle()  const \{ return edge_handle(c,le);\}
+    Cell                TheCell() const \{ return Cell(*g,c);\}
+    grid_type const&    TheGrid() const \{ return *g;\}
+
+    friend bool operator==(self a, self b)
+    \{ return (a.c == b.c && a.le == b.le);\}
+  \};
+
+\}
+\end{example}
+The type \code{Triang2D::edge\_handle} is 
+a simple struct containing cell handle and local number.
+
+The class \code{Triang2D::Edge} 
+just contains an object of type 
+\code{Triang2D::EdgeOnCellIterator}.
+The only major difference is the comparison operator
+\code{==}:
+
+\begin{example}
+class Triang2D \{
+  
+  class Edge \{
+    EdgeOnCellIterator e;
+  public:
+    Edge(EdgeOnCellIterator ee) : e(ee) \{\}
+    // ... most things forwarded to e
+
+    friend bool operator==(Edge a, Edge b)
+     \{ return (  (a.V1() == b.V1() && a.V2() == b.V2())
+               || (a.V1() == b.V2() && a.V2() == b.V1())); \}
+  \};
+\};
+\end{example}
+
+So far, so good. Now, how can we iterate over all
+edges of \code{Triang2D} grids?
+We can do so be iterating over all cells and iteration over
+all edges incident to those cells.
+As every internal edge is visited twice,
+we must keep track of already visited ones.
+This can be done with an hash table, taking edges as keys
+(for the definition of  a hash function on edges, see below).
+So, \code{Triang2D::EdgeIterator} contains 
+\code{Triang2D::EdgeOnCellIterator} and this hash table.
+As this strategy is often employed, it has been
+implemented in a generic component:
+
+\begin{example}
+class Triang2D \{
+
+   class EdgeIterator 
+    : public facet_set_of_cells_iterator<Triang2D::Cell>
+   \{
+     typedef facet_set_of_cells_iterator<Triang2D::Cell> base;
+    public: 
+     EdgeIterator() : base(CellIterator()) \{\}
+     EdgeIterator(CellIterator  const& c) : base(c) \{\}
+     EdgeIterator(grid_type const& g)  : base(CellIterator(g)) \{\}
+  \};
+\};
+\end{example}
+BTW, the class \gralclasslink{facet\_set\_of\_cells\_iterator}{base}
+can also be used for finding the facets of (the closure of)
+an arbitrary subset of the cells of any grid.
+
+
+Now, our combinatorial layer is complete, 
+the iterators that are missing cannot be supported efficiently
+with the given data.
+If we want to use algorithms which require more (e.g. cell-cell 
+adjacencies), we have to calculate the additional information.
+Probably, the most comfortable thing to do would be
+to use a view on \code{Triang2D} which supports the 
+required functionality, reusing what is already there.
+At present, there is no view in GrAL 
+for adding cell-cell adjacencies, but it would certainly be 
+a useful addition.
 
 \begin{Label}{triang2d-geom}
 \introsubsection{Defining the Geometrical Layer}
 \end{Label}
 
-To be written.
+
+If we want to use geometric algorithms,
+we need to define a geometry for \texttt{Triang2D}.
+At first sight, this looks rather simple,
+but there is a subtle problem, 
+relating to the fact that vertex coordinates are stored 
+in a plain array of doubles:
+
+\begin{example}
+class geom_Triang2D_base {
+   double* coords;
+   typedef ... coord_type;  // 2D point type
+
+   ??? const& coord(Vertex v) const;
+   ???      & coord(Vertex v);
+};
+\end{example}
+
+What should we return from 
+the non-const \texttt{coord(Vertex v)}?
+On the one hand, we want allow code like
+\texttt{coord\_type p = geom.coord(v)},
+on the other hand, an assignment like
+\texttt{geom.coord(v) = coord\_type(1,0)} should change the
+array \texttt{coords}.
+Thus, we cannot return \texttt{coord\_type \&}.
+
+The solution is to define a proxy type:
+
+\begin{example}
+class geom_Triang2D_base {
+
+   class coord_proxy {
+     double * coo;
+     void operator=(coord_type const& p) 
+     {  coo[0] = p[0]; coo[1] = p[1]; }
+   };
+
+   coord_proxy        coord(Vertex v) 
+   { return coord_proxy(coords[2*v.handle()]);}
+};
+\end{example}
+
+
+For the `real' \texttt{coord\_type}, 
+we are free to choose any suitable implementation
+of a 2D geometric point.
+In order to get a bunch of useful geometric functionality
+(like volumes or centers), 
+we can use a generic 2D geometry:
+
+\begin{example}
+ typedef geometry2d<geom_Triang2D_base>  geom_Triang2D;
+\end{example}
+
+The efficiency of this generic implementation will depend
+on how well the compiler can optimize out the overhead.
+If it turns out to be too inefficient, 
+parts have to be specialized for \texttt{Triang2D}
+using direct  access to its data. 
+This does not break the generic paradigm,
+as grid geometries are part of the kernel.
+
 
 \begin{Label}{triang2d-gf}
 \introsubsection{Defining the Grid Function Layer}
 \end{Label}
 
-To be written.
+This part is actually quite easy, as predefined components
+for the common cases exist.
+In the case of vertices and cells, which are
+numbered consecutively, we take the class
+template \gralclasslink{grid_function_vector}{base}
+as our implementation:
 
-\begin{Label}{triang2d-gf}
+\begin{example}
+template<class T>
+class grid_function<Triang2D::Vertex, T>
+ : public grid_function_vector<Triang2D::Vertex, T> 
+{
+ // repeat constructors here.
+};
+\end{example}
+The same is done for \code{Triang2D::Vertex}.
+The actual code can be found in 
+\gralfilelink{grid-functions}{h}{triang2d}.
+
+For edges, there is no consecutive numbering we can exploit.
+Thus, we have to use a different approach for grid functions
+on edges. One viable way is to use hash tables. 
+This is so common (it is also used for partial grid functions),
+that we can again use a generic component:
+\begin{example}
+template<class T>
+class grid_function<Triang2D::Edge, T> 
+  : public grid_function_hash<Triang2D::Edge, T> 
+{
+  // repeat constructors here.
+};
+\end{example}
+In order to make it work this way, we have to somehow
+pass a hash function to the \code{grid_\function\_hash<>}
+template. This is done by specializing the traits class
+\code{element\_traits<>} for \code{Triang2D::Edge}
+and providing a \code{hasher\_type}:
+\begin{example}
+template<>
+struct element_traits<Triang2D::Edge> 
+  : public \gralstructlink{element_traits_edge_base}{base}<Triang2D> 
+{
+  struct hasher_type : public grid_types_Triang2D {
+    enum { p= 17}; // somewhat arbitrary
+    size_t operator()(Triang2D::Edge const& e) const { 
+      vertex_handle v1 = e.V1().handle();
+      vertex_handle v2 = e.V2().handle();
+      return (v1 > v2 ? p*v1 + (v2\%p) : p*v2 + (v1\%p));
+    }
+  };
+};
+\end{example}
+The actual code is found in 
+\gralfilelink{element-traits}{h}{triang2d}.
+We do the same for \code{Triang2D::Vertex} and \code{Triang2D::Cell}.
+Here the hash function just returns the handle.
+
+For defining partial grid function, there effectively does not remain
+anything to do (given the provision of a \code{hasher_type} by
+\code{element\_traits} above), because they are already defined in a generic
+way. Thus, in \gralfilelink{partial-grid-functions}{h}{triang2d},
+we just include the generic \gralfilelink{partial-grid-function-hash}{h}{base}.
+
+\begin{Label}{triang2d-mutating}
 \introsubsection{Defining the Mutating primitives}
+\end{Label}
+
+If we just need a wrapper for read-only access to an existing
+dat structure, we are fine with what we have achieved so far.
+With the interface created above, we are able to use all generic
+algorithms on \code{Triang2D} which do not change the grid.
+Provided, of course, the incidence information supplied by 
+\code{Triang2D} is sufficient for the algorithm.
+If not, we would have to create additional data structures
+-- the interface we have defined gives access to all information
+inherent in the data structure.
+
+Now, we might for example want to read from a file format
+for which there is a GrAL input adapter:
+
+\begin{example}
+Triang2D t;
+InputWeirdFileFmt In("mygrid.weird");
+ConstructGrid0(t, In);
+\end{example}
+
+This will copy the connectivity information from the file
+\code{mygrid.weird} to the triangulation \code{t}.
+In order for this to work, 
+we need to specialize the 
+\code{ConstructGrid0} primitive for \code{Triang2D}.
+(Suffixes like 0 at the end of \code{ConstructGrid0}  
+are just technical hacks
+for distinguishing different overloaded versions.)
+
+\begin{example}
+template<class GRID>
+void ConstructGrid0(Triang2D     & t,
+                    GRID    const& g_src);
+\end{example}
+In the general case, we need some relationship between
+\code{g\_src} and \code{t} (associative copy),
+so we use that version as a master implementation
+which all other versions of the \code{ConstructGrid} family use:
+
+\begin{example}
+template<class GRID, class VTX_CORR, class CELL_CORR>
+void ConstructGrid0(Triang2D     & t,
+                    GRID    const& g_src,
+                    VTX_CORR     & src2t_v,
+                    CELL_COOR    & src2t_c);
+\end{example}
+Afterwards, \code{src2t\_v} will map the vertices of \code{g\_src}
+to those of \code{t} in a 1:1 fashion, and \code{src2t\_c}
+will do the same for cells.
+
+The actual implementation is rather simple in our case:
+\begin{enumerate}
+\item The vertices of \code{g\_src} are mapped to those of
+\code{t}, i.e., numbered consecutively from 0 to nv-1,
+where nv = \code{g\_src.NumOfVertices()}.
+This creates the mapping \code{src2t\_v}.
+\item Next, storage is allocated for the \code{cells} array,
+using \code{g\_src.NumOfCells()}.
+\item Finally, the cells of \code{t} are created, by using
+the cell and the vertex-on-cell iterator types of \code{GRID},
+and the vertex correspondence of \code{src2t\_v}.
+ At the same time, the mapping \code{src2t\_c} is filled in.
+\end{enumerate}
+
+The complete code can be found in 
+\gralfilelink{construct}{C}{triang2d}
+and \gralfilelink{copy}{C}{triang2d}.
+
+\begin{Label}{triang2d-enlarge}
+\introsubsubsection{Defining the \code{EnlargeGrid} primitive}
 \end{Label}
 
 To be written.
