@@ -1,0 +1,24 @@
+Cell 0
+  local cubature point: 0.333333 0.333333  weight= 0.5  global cubature point: 0.333333 0.333333
+  global: 0 0  local: 0 0  local->global: 0 0  jacobian: 1
+  global: 1 0  local: 1 0  local->global: 1 0  jacobian: 1
+  global: 0 1  local: 0 1  local->global: 0 1  jacobian: 1
+Volume=integrate_global(1): 0.5
+integrate_global(coord): 0.166667 0.166667
+Center: 0.333333 0.333333
+Cell 1
+  local cubature point: 0.333333 0.333333  weight= 0.5  global cubature point: 0.666667 0.666667
+  global: 1 0  local: 0 0  local->global: 1 0  jacobian: 1
+  global: 1 1  local: 1 0  local->global: 1 1  jacobian: 1
+  global: 0 1  local: 0 1  local->global: 0 1  jacobian: 1
+Volume=integrate_global(1): 0.5
+integrate_global(coord): 0.333333 0.333333
+Center: 0.666667 0.666667
+Cell 2
+  local cubature point: 0.333333 0.333333  weight= 0.5  global cubature point: 1.16667 0.333333
+  global: 1 0  local: 0 0  local->global: 1 0  jacobian: 0.5
+  global: 1.5 0  local: 1 0  local->global: 1.5 0  jacobian: 0.5
+  global: 1 1  local: 0 1  local->global: 1 1  jacobian: 0.5
+Volume=integrate_global(1): 0.25
+integrate_global(coord): 0.291667 0.0833333
+Center: 1.16667 0.333333
