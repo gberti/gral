@@ -31,13 +31,13 @@ public:
   typedef typename gt::Cell        Cell;
   typedef typename gt::cell_handle cell_handle;
 private:
-  typedef grid_function<Vertex,  ::std::vector<cell_handle> > cov_table;
+  typedef grid_function<Vertex, std::vector<cell_handle> > cov_table;
   
   ref_ptr<cov_table const> inc;
   Vertex                   v;
   int                      lc;  
 
-  static  ::std::map<grid_type const*, cov_table*> ctxt;
+  static  std::map<grid_type const*, ref_ptr<cov_table> > ctxt;
 
 
 public:
@@ -46,7 +46,7 @@ public:
   {
     REQUIRE( (ctxt.find(&v.TheGrid()) != ctxt.end()), 
 	    "No CellOnVertex incidence information registered for grid!\n",1);
-    inc = ctxt[&v.TheGrid()];
+    inc = ref_ptr<cov_table const>(ctxt[&v.TheGrid()]);
   } 
 
   self& operator++() { cv(); ++lc; return *this;}
@@ -65,7 +65,7 @@ public:
 
 
   static void init(grid_type const& g) { 
-    cov_table* t = new cov_table(g);
+    ref_ptr<cov_table> t(new cov_table(g), ref_ptr_base::shared);
     for(typename gt::CellIterator c(g); ! c.IsDone(); ++c)
       for(typename gt::VertexOnCellIterator vc(*c); ! vc.IsDone(); ++vc)
 	(*t)[*vc].push_back(c.handle());
@@ -75,7 +75,7 @@ public:
   static void remove(grid_type const& g) {
     typename cov_table::iterator it = ctxt.find(&g);
     if(it != ctxt.end()) {
-      delete it->second;
+      it->second.clear();
       ctxt.erase(it);
     }
 

@@ -8,7 +8,7 @@
 namespace GrAL {
 
 template<class G, class GT>
-::std::map<G const*, typename  cell_on_vertex_iterator<G,GT>::cov_table *>
+std::map<G const*, ref_ptr<typename  cell_on_vertex_iterator<G,GT>::cov_table> >
 cell_on_vertex_iterator<G,GT>::ctxt;
 
 } // namespace GrAL 
