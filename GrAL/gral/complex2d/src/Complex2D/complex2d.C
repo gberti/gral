@@ -25,7 +25,8 @@ Complex2D::Complex2D(const Complex2D& rhs)
   num_of_edges_cache = rhs.num_of_edges_cache;
   stored_geometry_complex2D dummy(*this);
   ConstructGrid(*this,dummy,
-                rhs,stored_geometry_complex2D(rhs)); }
+                rhs,stored_geometry_complex2D(rhs)); 
+}
 
 Complex2D& Complex2D::operator=(const Complex2D& rhs)
 { 
@@ -43,9 +44,11 @@ Complex2D::~Complex2D() { clear();}
 void Complex2D::clear()
 { 
   num_of_edges_cache = -1;
-  _cells.erase   (_cells.begin(),   _cells.end());
-  _vertices.erase(_vertices.begin(),_vertices.end());
-  _boundary.erase(_boundary.begin(), _boundary.end());
+  _cells.clear(); 
+  _vertices.clear();
+  _boundary.clear(); 
+  archetypes.clear();
+  arch_for_n_vertices.clear();
 }
 
 //----------------- Adjacency calculations --------------------------
