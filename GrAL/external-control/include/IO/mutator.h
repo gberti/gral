@@ -8,7 +8,8 @@
 
 
 #include <iostream>
-#include <stdlib.h>
+
+//#include <stdlib.h>
 
 #include "Config/compiler-config.h"
 #include "IO/mutator-base.h"
@@ -42,17 +43,17 @@ public:
 public:
   TypedMutator(T& vv) : v(vv) {}
   //  T value() {return v;}
-  virtual void read(::std::istream& in)   { 
+  virtual void read(std::istream& in)   { 
     REQUIRE_ALWAYS((in.good()), "Stream not good! v = " << v << '\n',1);
     in >> v;
     ENSURE_ALWAYS((in.eof() || in.good()), "Input failed! v = " << v << '\n',1);
   }
-  virtual void print(::std::ostream& out) const 
+  virtual void print(std::ostream& out) const 
     { out << v;}
-  virtual void print(::std::ostream& out, const ::std::string& prefix = "") const 
+  virtual void print(std::ostream& out, const std::string& prefix = "") const 
     { out << prefix << v;}
 
-  virtual ::std::string vartypename() const { return ::std::string(type_name_traits<T>::name());}
+  virtual std::string vartypename() const { return std::string(type_name_traits<T>::name());}
 };
 
  
