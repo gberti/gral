@@ -3,7 +3,7 @@
 
 CVSREPO=/home/nmwr/CVS;
 cvswork=${CVSWORK-${HOME}/CVS-work}
-MODULES=`$cvswork/configuration/scripts/modules.sh`;
+MODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
 
 ALLROOT=GrAL
 cd ${HOME}/tmp;

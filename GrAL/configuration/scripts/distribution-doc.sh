@@ -4,6 +4,7 @@
 CVSREPO=/home/nmwr/CVS;
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules.sh`;
+TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
 #MODULES="configuration configuration utilities"
 
 TMP=${HOME}/tmp;
