@@ -84,8 +84,8 @@ ConstructMPIDistributedFromMaster
   CoarseCell mMyC = DistrG.MyCell();
   CoarseCell cMyC = compG.TheCoarseGrid().cell(distr2coarse(mMyC.handle()));
 
-  cell_corr_map   part2distr_v;
-  vertex_corr_map part2distr_c;
+  cell_corr_map   part2distr_c;
+  vertex_corr_map part2distr_v;
 
   // this should be done outside,
   // using the master2distr mappings.
