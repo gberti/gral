@@ -1,0 +1,70 @@
+#ifndef NMWR_GB_COORDS_2_SPECIALIZATION_H
+#define NMWR_GB_COORDS_2_SPECIALIZATION_H
+
+//----------------------------------------------------------------
+//   (c) Guntram Berti, 1997
+//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
+//   TU Cottbus - Germany
+//   http://math-s.math.tu-cottbus.de/NMWR
+//   
+//----------------------------------------------------------------
+
+
+//----------------------------------------------------------------
+// 
+// to be included by coord.h
+// specialization of coordN<N> for N = 2
+//
+//----------------------------------------------------------------
+
+class coordN<2> {
+public:
+  typedef unsigned index;
+  typedef coordN<2> self;
+  typedef double   component;
+
+  coordN() {}
+  coordN(const component& x) { X[0] = X[1] = x;}
+  coordN(const component x1, const component x2) { X[0] = x1; X[1] = x2;}
+  coordN(const self& rhs)    { X[0] = rhs.X[0]; X[1] = rhs.X[1];}
+  self& operator=(const self& rhs)
+  { 
+    //if(this != & rhs){
+    X[0] = rhs.X[0]; X[1] = rhs.X[1];
+    //}   
+    return *this;
+  }
+
+  ~coordN() {}
+  
+  component  operator[](index i) const { return X[--i];}
+  component& operator[](index i)       { return X[--i];}
+  component  operator()(index i) const { return X[--i];}
+  component& operator()(index i)       { return X[--i];}
+
+  self& operator+=(const self& rhs) { X[0] += rhs.X[0];X[1] += rhs.X[1]; return *this; }
+  self& operator-=(const self& rhs) { X[0] -= rhs.X[0];X[1] -= rhs.X[1]; return *this; }
+  self& operator*=(const component& rhs) { X[0] *= rhs;X[1] *= rhs; return *this; }
+  self& operator/=(const component& rhs) { X[0] /= rhs;X[1] /= rhs; return *this; }
+  
+  friend inline self operator+(const self& ls, const self& rs)
+  {  return self(ls.X[0]+rs.X[0], ls.X[1]+rs.X[1]);}
+  friend inline self operator-(const self& ls, const self& rs)
+  {  return self(ls.X[0]-rs.X[0], ls.X[1]-rs.X[1]);}
+
+  static self origin() { return self(component(0));}
+  static self Origin() { return self(component(0));}
+  static index dim()   { return 2;}
+private:
+  component X[2];
+};
+
+#include "is-specialized.h"
+#include "compiler-config.h" // bool-type
+
+struct is_specialized<coordN<2> > {
+  static bool specialized() { return true;}
+  static const char* name() { return "coordN<2>";}
+};
+
+#endif
