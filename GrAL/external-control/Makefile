@@ -1,14 +1,15 @@
 export CONFIG:=$(PWD)/mk.config
-
-unexport PWD
 include $(CONFIG)
-export DEBUG
-export CCC
-#export CCFLAGS
-export IOLIB:=control-device#
+
+# exporting PDW could give trouble in subdir Makefiles
+# which try to give default values to other  variables such as CONFIG
+# in order to enable direct make invocation in the subdirectory
+unexport PWD 
+
 export LIBDIR
-#export CONFIG
-#export IFLAGS
+
+# The name of the library to be generated
+export IOLIB:=control-device#
 
 TARGET=all
 
@@ -38,7 +39,7 @@ clean:
 	rm -f *~ include/*~ include/*/*~
 
 realclean: clean
-	rm -f lib/*.a lib/*/*.a lib/*/*/*.a lib/*/*/*/*.a
+	rm -f lib/*/
 
 demo:
 	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
