@@ -76,8 +76,11 @@ int main(int argc, char* argv[]) {
   ConstructGridVC(T,GeomT, Gsrc, Gsrc, vcorr,ccorr);
 
   test_vertex_iterator(T, cout);
+  test_edge_iterator  (T, cout);
   test_cell_iterator  (T, cout);
   test_vertex_on_cell_iterator(T, cout);
+  test_facet_on_cell_iterator (T, cout);
+  test_archetypes(T, cout);
 
   OstreamComplex2DFmt Gout(gridfile_nm +".out");
   ConstructGrid(Gout, T, GeomT);
