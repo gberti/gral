@@ -75,7 +75,7 @@ run-check:
 
 stdclean: moduleclean
 	@rm -f $(EXEC)
-	@rm -f *~ *.o  *.d *.ti *.ii core core.* out
+	@rm -f *~ *.flc *.o  *.d *.ti *.ii core core.* out *.out
 	@find . -name "*~" -exec rm {} \; -print
 	@rm -rf ti_files # KCC template DB
 	@rm -rf *.tmp
