@@ -1,16 +1,20 @@
-Cell 0 has neighbors 
+Cell 0 has 2 neighbors 
 Contents of nbs:  -1  2  1  -1 
-With generic iterator: [2] [1] 
-With native  iterator: [2] [1] 
-Cell 1 has neighbors 
+With generic iterator #1: [2] [1] 
+With generic iterator #2: [2] [1] 
+With native  iterator:    [2] [1] 
+Cell 1 has 2 neighbors 
 Contents of nbs:  0  3  -1  -1 
-With generic iterator: [0] [3] 
-With native  iterator: [0] [3] 
-Cell 2 has neighbors 
+With generic iterator #1: [0] [3] 
+With generic iterator #2: [0] [3] 
+With native  iterator:    [0] [3] 
+Cell 2 has 2 neighbors 
 Contents of nbs:  -1  -1  3  0 
-With generic iterator: [3] [0] 
-With native  iterator: [3] [0] 
-Cell 3 has neighbors 
+With generic iterator #1: [3] [0] 
+With generic iterator #2: [3] [0] 
+With native  iterator:    [3] [0] 
+Cell 3 has 2 neighbors 
 Contents of nbs:  2  -1  -1  1 
-With generic iterator: [2] [1] 
-With native  iterator: [2] [1] 
+With generic iterator #1: [2] [1] 
+With generic iterator #2: [2] [1] 
+With native  iterator:    [2] [1] 

@@ -1,6 +1,6 @@
 
 #include "Gral/Iterators/cell-on-cell-iterator.h"
-// #include "Gral/Base/facet-on-cell-function.h"
+#include "Gral/Base/facet-on-cell-function.h"
 #include "Container/my-hash-map.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Grids/Complex2D/all.h"
@@ -26,20 +26,26 @@ int main() {
   CartesianGrid2D R(3,3);
   Complex2D       G; 
   ConstructGrid0(G,R);
+ 
 
+  // Possibility #1: Explicit calculation of neighbor table
   typedef STDHASH::hash_map<cgt::FacetOnCellIterator, cgt::cell_handle,
                             hasher_facet_on_cell>   nb_table_type;
   nb_table_type nbs;
   CalculateNeighborCells(nbs,G);
+  typedef cell_on_cell_iterator<Complex2D, nb_table_type> c_o_c_iter_1;
+  c_o_c_iter_1::map_nb_table(G,nbs);
 
-  typedef cell_on_cell_iterator<Complex2D, nb_table_type> c_o_c_iter;
+  // Possibility #2: Let cell_on_cell_iterator do the work
+  typedef cell_on_cell_iterator<Complex2D> c_o_c_iter_2;
+  c_o_c_iter_2::init(G);
 
   // compare result with native CellOnCellIterator
 
   //  test_cell_on_cell_iterator(R, cit);
 
   for(cgt::CellIterator c(G); ! c.IsDone(); ++c) {
-    cout << "Cell " << (*c).handle() << " has neighbors " << endl;
+    cout << "Cell " << (*c).handle() << " has " << (*c).NumOfCells() <<  " neighbors " << endl;
     cout << "Contents of nbs: " << flush;
     for(cgt::FacetOnCellIterator fc(*c); !fc.IsDone(); ++fc) {
       cout << " ";
@@ -49,13 +55,20 @@ int main() {
 	cout << nbs[fc] << " ";
     }
     cout << endl;
-    cout << "With generic iterator: " << flush;
-    for( c_o_c_iter cc(*c,nbs); ! cc.IsDone(); ++cc) {
+    cout << "With generic iterator #1: " << flush;
+    for( c_o_c_iter_1 cc(*c); ! cc.IsDone(); ++cc) {
       cgt::Cell nb = *cc;
       cout << "[" << nb.handle() << "] " << flush;
     }
     cout << endl;
-    cout << "With native  iterator: " << flush;
+    cout << "With generic iterator #2: " << flush;
+    for( c_o_c_iter_2 cc(*c); ! cc.IsDone(); ++cc) {
+      cgt::Cell nb = *cc;
+      cout << "[" << nb.handle() << "] " << flush;
+    }
+    cout << endl;
+
+    cout << "With native  iterator:    " << flush;
     for(cgt::CellOnCellIterator cc(*c); ! cc.IsDone(); ++cc) {
       cgt::Cell nb = *cc;
       cout << "[" << nb.handle() << "] " << flush;
