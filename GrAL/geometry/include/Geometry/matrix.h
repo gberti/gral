@@ -7,6 +7,7 @@
 #include <iostream>
 #include "Utility/pre-post-conditions.h"
 #include "Geometry/coords.h"
+#include "Geometry/matrix-traits.h"
 
 template<unsigned M, unsigned N, int offset>
 struct fixed_row_mjr_subcriptor {
@@ -61,6 +62,7 @@ template<unsigned N, unsigned M, int OFF>
 inline matrix<M,N,OFF> operator*(const matrix<M,N,OFF>& ls, coord_N_component rs)
 { matrix<M,N,OFF> tmp(ls); return (tmp *= rs);}
 
+
 // commutative multiplication of component required !!!
 template<unsigned N, unsigned M, int OFF>
 inline matrix<M,N,OFF> operator*( coord_N_component ls, const matrix<M,N,OFF>& rs)
@@ -73,10 +75,10 @@ template<unsigned K, unsigned L, unsigned M, int OFF>
 inline void mul(matrix<K,M, OFF>& res,
 		const matrix<K,L, OFF>& ls, const matrix<L,M, OFF>& rs)
 {
-  for(unsigned k = 1; k <= K; k++)
-    for(unsigned m = 1; m <= M; m++) {
+  for(unsigned k = OFF; k < K+OFF; k++)
+    for(unsigned m = OFF; m < M+OFF; m++) {
       res(k,m) = 0.0;
-      for(unsigned l = 1; l <= L; l++)
+      for(unsigned l = OFF; l < L+OFF; l++)
 	res(k,m) += ls(k,l) * rs(l,m);
     }
 }
@@ -91,13 +93,13 @@ inline matrix<K,M> operator*(const matrix<K,L, OFF>& ls, const matrix<L,M, OFF>&
 
 
 template<unsigned N, unsigned M, int OFF>
-inline void mul(coordN<N> & res,
+inline void mul(coordN<M> & res,
 		const matrix<M,N,OFF>& ls, const coordN<N>& rs) 
 {
-  for(unsigned i = 1; i <= M; i++) {
-    res[i] = 0.0;
-    for(unsigned j = 1; j <= M; j++)
-      res[i] += ls(i,j) * rs[j];
+  for(unsigned i = OFF; i < M+OFF; i++) {
+    res[i-OFF+1] = 0.0;
+    for(unsigned j = OFF; j < N+OFF; j++)
+      res[i-OFF+1] += ls(i,j) * rs[j-OFF+1];
   }
 }
 
@@ -110,13 +112,60 @@ inline coordN<M> operator*(const matrix<M,N,OFF>& ls, const coordN<N>& rs)
 }
 
 
+template<unsigned N, int OFF, class P>
+inline P operator*(const matrix<N,N,OFF>& ls, P rs)
+{ 
+  typedef point_traits<P> pt;
+  P res(pt::Origin(N));
+  for(unsigned m = OFF; m < N+OFF; ++m)
+    for(unsigned n = OFF; n < N+OFF; ++n)
+      res[m-OFF+pt::LowerIndex(rs)] += ls(m,n) * rs[n-OFF+pt::LowerIndex(rs)];
+  return res;
+}
+
+
+// disambuigate
+template<unsigned N, int OFF>
+inline coordN<N> operator*(const matrix<N,N,OFF>& ls,const coordN<N>& rs) 
+{ 
+  coordN<N> res;
+  mul(res,ls,rs);
+  return res;
+}
+// disambuigate
+template<unsigned N, int OFF>
+inline matrix<N,N,OFF> operator*(const matrix<N,N,OFF>& ls, const matrix<N,N,OFF>& rs)
+{ 
+  matrix<N,N,OFF> res;
+  mul(res,ls,rs);
+  return res;
+}
+
+// disambuigate
+template<unsigned N, int OFF>
+inline matrix<N,N,OFF> operator*(const matrix<N,N,OFF>& ls, coord_N_component rs)
+{ 
+  matrix<N,N,OFF> res = ls;
+  return res *= rs;
+}
+
+// disambuigate
+template<unsigned N, int OFF>
+inline matrix<N,N,OFF> operator*(coord_N_component ls, const matrix<N,N,OFF>& rs)
+{ 
+  matrix<N,N,OFF> res = rs;
+  return res *= ls;
+}
+
+
+
 //----------------------- IO ------------------------------------
 
 template<unsigned N, unsigned M, int OFF>
 inline std::ostream& operator<<(std::ostream& out, const matrix<M,N,OFF>& rs)
 {
-  for(unsigned i = 1; i<= M; i++) {
-    for(unsigned j = 1; j <= N; j++)
+  for(unsigned i = OFF; i< M+OFF; i++) {
+    for(unsigned j = OFF; j < N+OFF; j++)
       out << rs(i,j) << ' ';
     out << '\n';
   }
@@ -126,14 +175,35 @@ inline std::ostream& operator<<(std::ostream& out, const matrix<M,N,OFF>& rs)
 template<unsigned N, unsigned M, int OFF>
 inline std::istream& operator>>(std::istream& in, matrix<M,N,OFF>& rs)
 {
-  for(unsigned i = 1; i<= M; i++) {
-    for(unsigned j = 1; j <= N; j++)
+  for(unsigned i = OFF; i< M+OFF; i++) {
+    for(unsigned j = OFF; j < N+OFF; j++)
       in >> rs(i,j);
   }
   return in;
 }
 
 
+
+template<unsigned N, unsigned M, int OFF>
+struct matrix_traits<matrix<M,N,OFF> >
+  : public matrix_traits_fixed_dim_base<M,N, matrix<M,N,OFF> > 
+{
+  typedef matrix<M,N,OFF> matrix_type;
+  typedef double component_type;
+  
+  static int LowerRowIndex()  { return OFF;}
+  static int UpperRowIndex()  { return OFF+M;}
+  static int LowerColIndex()  { return OFF;}
+  static int UpperColIndex()  { return OFF+N;}
+  static int LowerRowIndex(matrix_type const&)  { return OFF;}
+  static int UpperRowIndex(matrix_type const&)  { return OFF+M;}
+  static int LowerColIndex(matrix_type const&)  { return OFF;}
+  static int UpperColIndex(matrix_type const&)  { return OFF+N;}
+
+  // matrix_type identity();
+  // template<class P>
+  // matrix_type scaling(P s);
+};
 
 
 #endif
