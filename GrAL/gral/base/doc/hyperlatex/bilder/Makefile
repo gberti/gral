@@ -3,12 +3,13 @@
 PSTRICKS=$(shell ls *.tex)
 EPSFIGS:=$(PSTRICKS:%.tex=%.ps)
 GIFFILES=$(PSTRICKS:%.tex=%.gif)
+JPGFILES=$(PSTRICKS:%.tex=%.jpeg)
 
 
-#CONVERT = convert
-CONVERT = pstogif
+CONVERT = convert
+#CONVERT = pstogif
 
-.SUFFIXES: .gif .eps .ps .tex
+.SUFFIXES: .gif .eps .ps .tex .jpeg
 
 .tex.eps:
 	latex $<  && dvips -Pamz -Pcmz -E ${<:%.tex=%.dvi} -o $@
@@ -19,14 +20,28 @@ CONVERT = pstogif
 #.eps.gif:
 #	$(CONVERT) $< $@
 
-.ps.gif:
+.eps.gif:
 	$(CONVERT) $< $@
+	mv ${@}.0 $@
+	rm -r ${@}.1
 
+.eps.jpeg:
+	$(CONVERT) $< $@
+	mv ${@}.0 $@
+	rm -r ${@}.1
 
-all: stop-sign.eps $(GIFFILES)
+# ?????
+cell-on-cell.jpeg: cell-on-cell.ps
+	pstogif  cell-on-cell.ps cell-on-cell.gif
+	convert  cell-on-cell.gif cell-on-cell.jpeg
+
+cell-on-cell.eps: stop-sign.eps
+cell-on-cell.ps: stop-sign.eps
+
+all: stop-sign.eps $(JPGFILES)
 
 clean:
 	rm -f *.eps *.ps *.aux *.log *.dvi
 
 realclean: clean
-	rm -f *.gif
+	rm -f $(JPGFILES) $(GIFFILES)
