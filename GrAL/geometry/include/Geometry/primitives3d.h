@@ -152,6 +152,13 @@ struct dimension_dependent_primitives_3d
       POINT inv[3];
       for(int i = 0; i<3; ++i)
 	pt::ConstructWithDim(3,inv[i]);
+      // FIXME: should be
+      // if (det3(inv[0],inv[1],inv[2]) <= numeric_traits<real>::epsilon()*max(|Ai|)
+      //   return numeric_traits<real>::infinity();
+      double eps = 1.0/1.e10;
+      if(fabs(det3(A1,A2,A3)) <= (eps*(norm_2(A1) + norm_2(A2) + norm_2(A3))))
+	return 1.0e100;
+     
       inverse(A1,A2,A3,inv[0],inv[1],inv[2]);
       return N(A1,A2,A3) * N(inv[0],inv[1],inv[2]);
     }
