@@ -189,12 +189,12 @@ point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::componenent_type const
 point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::zero = 0;
 */
 
-template<class ARRAY, unsigned N>
+template<class ARRAY, class V, unsigned N>
 struct array_operators 
 {
   ARRAY      & to_derived()       { return static_cast<ARRAY&>(*this);}
   ARRAY const& to_derived() const { return static_cast<ARRAY const&>(*this);}
-
+  typedef V value_type;
 
   ARRAY& operator-=(ARRAY const& rhs) {
     for(unsigned i  = 0; i < N; ++i) 
@@ -215,6 +215,27 @@ struct array_operators
     return lhs += rhs;
   }
 
+  ARRAY& operator*=(value_type v) {
+    for(unsigned i  = 0; i < N; ++i) 
+      to_derived()[i] *= v;
+    return to_derived(); 
+  }  
+  
+  ARRAY& operator/=(value_type v) {
+    for(unsigned i  = 0; i < N; ++i) 
+      to_derived()[i] /= v;
+    return to_derived(); 
+  }
+
+  ARRAY operator*(value_type v) const {
+    ARRAY lhs(to_derived());
+    return lhs *= v;
+  } 
+
+  ARRAY operator/(value_type v) const {
+    ARRAY lhs(to_derived());
+    return lhs /= v;
+  }
 };
 
 
@@ -282,5 +303,18 @@ inline void assign_point(float& p, P const& q)
 { p = point_traits<P>::x(q);}
 
 inline void assign_point(float& p, float q) { p = q;}
+
+
+template<class P, class Q>
+P convert_point(Q const& q)
+{
+  P p;
+  assign_point(p,q);
+  return p;
+}
+
+template<class P>
+P convert_point(P const& p) { return p;}
+
 
 #endif
