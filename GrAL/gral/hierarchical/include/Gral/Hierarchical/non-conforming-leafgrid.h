@@ -161,9 +161,13 @@ namespace octree {
     void set(level_handle newlev) { lev = newlev;}
   public:
     nc_leafgrid_element_base_t() {}
-    nc_leafgrid_element_base_t(grid_type const& g, level_handle l = g.TheOctree()->finest_level())
+    nc_leafgrid_element_base_t(grid_type const& g)
+      : the_grid(g), lev(g.TheOctree()->finest_level()) {}
+    nc_leafgrid_element_base_t(ref_ptr<const grid_type> g)
+      : the_grid(g), lev(g->TheOctree()->finest_level()) {}
+    nc_leafgrid_element_base_t(grid_type const& g, level_handle l)
       : the_grid(g), lev(l) {}
-    nc_leafgrid_element_base_t(ref_ptr<const grid_type> g, level_handle l = g->TheOctree()->finest_level())
+    nc_leafgrid_element_base_t(ref_ptr<const grid_type> g, level_handle l)
       : the_grid(g), lev(l) {}
 
     bool bound() const { return the_grid != 0;}
@@ -226,8 +230,8 @@ namespace octree {
     void set(flat_vertex_handle newfh, level_handle newlev) { base::set(newfh, newlev);}
   private:
     void normalize() { 
-      vertex_handle cv = TheHierGrid()->coarsest_parent(*this);
-      if (cv.level() < level())
+      vertex_handle cv = this->TheHierGrid()->coarsest_parent(*this);
+      if (cv.level() < this->level())
 	set(cv.flat_handle(), cv.level());
     }
 
