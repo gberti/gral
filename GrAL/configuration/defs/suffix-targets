@@ -1,9 +1,14 @@
 # Some targets used in leaf makefiles 
 
+# some aliases
+distclean: realclean
+clobber:   realclean
 
 # This is the central place of specifying which files to clean
 # As every C++ compiler leaves different stuff behind when dealing
 # with templates, it is wise to concentrate this information.
+# Intended usage is 
+# clean: stdclean
 stdclean: moduleclean
 	rm -f *.rpo *.d *.ti *.ii
 
