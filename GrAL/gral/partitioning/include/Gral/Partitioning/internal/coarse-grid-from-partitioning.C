@@ -38,6 +38,9 @@ class vector_map : public std::vector<T>
 {
   typedef std::vector<T> base;
 public:
+  using base::begin;
+  using base::end;
+
   vector_map() {}
   vector_map(const std::vector<T>& v) : base(v) {}
   vector_map(size_t sz)          : base(sz) {}

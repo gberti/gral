@@ -23,6 +23,8 @@ namespace hierarchical {
 				    partial_grid_function<typename E::flat_element_type,T> > base;
     typedef hier_partial_grid_function<E,T>                     self;
   public:
+    using base::TheGrid;
+
     hier_partial_grid_function() {}
     hier_partial_grid_function(typename base::hier_grid_type const& gg) : base(gg) {} 
     hier_partial_grid_function(typename base::hier_grid_type const& gg,
@@ -35,9 +37,9 @@ namespace hierarchical {
     }
 
     template<class ELEM>
-    void undefine(ELEM const& e) { gfs[e.level()].undefine(e.Flat());}
+    void undefine(ELEM const& e) { base::gfs[e.level()].undefine(e.Flat());}
     template<class ELEM>
-    bool defined (ELEM const& e) const { return gfs(e.level()).defined(e.Flat());}
+    bool defined (ELEM const& e) const { return base::gfs(e.level()).defined(e.Flat());}
   };
 
 } // namespace hierarchical

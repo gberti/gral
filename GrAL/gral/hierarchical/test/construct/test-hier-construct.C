@@ -122,16 +122,16 @@ namespace hierarchical {
   
   //  typedef  hgrid_cartesian<cartesian2d::CartesianGrid2D> hier_grid_2d;
   typedef  hgrid_cartesian<cartesiannd::grid<2> >   hier_grid_2d;
-  template h_element_base_t<hier_grid_2d>;
+  template class h_element_base_t<hier_grid_2d>;
   typedef  h_element_base_t<hier_grid_2d> element_base_type_2d;
-  template h_vertex_t<element_base_type_2d>;
-  template h_cell_t  <element_base_type_2d>;
+  template class h_vertex_t<element_base_type_2d>;
+  template class h_cell_t  <element_base_type_2d>;
   
   typedef  hgrid_cartesian<cartesiannd::grid<3> > hier_grid_3d;
-  template h_element_base_t<hier_grid_3d>;
+  template class h_element_base_t<hier_grid_3d>;
   typedef  h_element_base_t<hier_grid_3d> element_base_type_3d;
-  template h_vertex_t<element_base_type_3d>;
-  template h_cell_t  <element_base_type_3d>;
+  template class h_vertex_t<element_base_type_3d>;
+  template class h_cell_t  <element_base_type_3d>;
 }
 
 int main() {
