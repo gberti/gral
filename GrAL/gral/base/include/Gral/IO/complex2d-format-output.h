@@ -12,49 +12,12 @@
 // GrAL Base
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/grid-function-vector.h"
+#include "Gral/Base/vertex-iterator-int.h"
+#include "Gral/Base/cell-iterator-int.h"
+
 #include "Gral/IO/write-complex2d.h"
 
 
-template<class GRID>
-class int_vertex_iterator {
-  typedef int_vertex_iterator<GRID> self;
-public:
-  typedef GRID grid_type;
-protected:
-  grid_type const* g;
-  int v;
-public:
-  int_vertex_iterator() : g(0), v(-1) {}
-  int_vertex_iterator(grid_type const& gg, int vv = 0) : g(&gg), v(vv) {}
-
-  self      & operator++() { ++v; return *this;}
-  self const& operator*() const { return *this;}
-  grid_type const& TheGrid() const { return *g;}
-  bool IsDone() const { return (v >= g->NumOfVertices());}
-
-  int handle() const { return v;}
-  bool operator==(self const& rhs) const { return (rhs.v == v) && (rhs.g == g);}
-};
-
-template<class GRID>
-class int_cell_iterator {
-  typedef int_cell_iterator<GRID> self;
-public:
-  typedef GRID grid_type;
-protected:
-  grid_type const* g;
-  int c;
-public:
-  int_cell_iterator() : g(0), c(-1) {}
-  int_cell_iterator(grid_type const& gg, int cc = 0) : g(&gg), c(cc) {}
-
-  self      & operator++() { ++c; return *this;}
-  self const& operator*() const { return *this;}
-  grid_type const& TheGrid() const { return *g;}
-  bool IsDone() const { return (c >= g->NumOfCells());}
-  int  handle()  const { return c;}
-  bool operator==(self const& rhs) const { return (rhs.c == c) && (rhs.g == g);}
-};
 
 
 /*! \brief Output adapter for Complex2D file format
