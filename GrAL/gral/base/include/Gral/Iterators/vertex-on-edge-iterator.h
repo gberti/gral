@@ -32,6 +32,7 @@ public:
   grid_type const& TheGrid  () const { return e.TheGrid();}
 
   bool operator==(self const& rhs) const { return (lv == rhs.lv);}
+  bool operator!=(self const& rhs) const { return (lv != rhs.lv);}
 
   bool bound() const { return e.valid();}
   bool valid() const { return bound() && 0 <= lv && lv <= 1;}
