@@ -76,7 +76,8 @@ public:
 
   //---------------------- queries -------------------------------
 
-  int  size_of_dom() const { return mapping.size();}
+  unsigned size()        const { return mapping.size();}
+  unsigned size_of_dom() const { return mapping.size();}
   bool defined  (const T1& t1) const { return (mapping.find(t1) != mapping.end());}
   bool undefined(const T1& t1) const { return (mapping.find(t1) == mapping.end());}
 
