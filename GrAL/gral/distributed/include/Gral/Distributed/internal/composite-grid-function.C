@@ -8,7 +8,7 @@
 
 #include "Utility/pre-post-conditions.h"
 
-#include "Gral/Base/restricted-grid-function.h"
+#include "Gral/Base/restricted-grid-function-adapter.h"
 #include "Gral/Distributed/composite-grid-function.h"
 
 
