@@ -12,8 +12,7 @@
 
 namespace GrAL {
 
-//----------------------------------------------------------------
-//
+
 /*! \defgroup geometrictypes2d   Geometric types for 2D (obsolete)
 
     \ingroup gridgeometries
@@ -21,9 +20,6 @@ namespace GrAL {
 
     Generic geometric types for combinatorial grid elements in 2D.
 
-   \b Contents:
-    - template<class Edge, class geom> class Segment;
-    - template<class Face, class geom> class Polygon2d;
 
    These geometric types assume a linear geometry, segments
    are straight lines.
@@ -31,13 +27,13 @@ namespace GrAL {
    The classes can be specialized to concrete grid elements, 
    in order to remove layers of indirection or use  additional
    knowledge. <BR>
-   They MUST be specialized if the underlying assumptions (linearity)
+   They \e must be specialized if the underlying assumptions (linearity)
    are violated.
 
+   \note The classes in this module will be replaced by the \ref geometrictypes module
    \see Module \ref geometries
    \see Module \ref geometricfunctors
 */
-//----------------------------------------------------------------
 
 
 /*! \brief  Geometric segment corresponding to combinatorial edge
@@ -45,23 +41,24 @@ namespace GrAL {
 
     
    \templateparams
-    - Edge: $GrAL GridEdge
-    - geom: $GrAL VertexGridGeometry
+    - Edge: model of $GrAL GridEdge
+    - geom: model of $GrAL VertexGridGeometry
 
    \see Module \ref geometrictypes2d
 */
 template<class Edge, class geom>
 class Segment {
-  typedef typename geom::coord_type coord_type;
-  typedef algebraic_primitives<coord_type> algebra;
+  typedef typename geom::coord_type        coord_type;
+  typedef algebraic_primitives<coord_type> ap;
+  typedef typename ap::real                real_type;
 public:
   Segment(const Edge& e, const geom& gg) : _e(e), g(gg) {}
   coord_type Start()  const { return g.coord(_e.V1());}
   coord_type End()    const { return g.coord(_e.V2());}
   coord_type center() const { return (0.5*(Start()+End()));}
-  double     length() const { return( algebra::norm_2(Start()-End()));} 
+  double     length() const { return( ap::norm_2(Start()-End()));} 
 
-  coord_type operator()(double t) const { return ((1-t)*Start() + t*End());}
+  coord_type operator()(real_type t) const { return ((1-t)*Start() + t*End());}
 private:
   Edge _e;
   const geom& g;
@@ -82,7 +79,8 @@ inline bool operator<(vertex_iterator_Polygon2d<Face,geom> const&,
 
 template<class Face, class geom> class Polygon2d;
 
-/*! \brief Iterator over vertices of Polygon2d
+/*! \internal
+   \brief Iterator over vertices of Polygon2d
    \ingroup geometrictypes2d
 
    \templateparams
@@ -120,8 +118,8 @@ public:
 
    \templateparams
    (same as for vertex_iterator_Polygon2d<Face,geom>)
-   - Face $GrAL GridFace
-   - geom $GrAL VertexGridGeometry
+   - \c Face: model of $GrAL GridFace
+   - \c geom: model of $GrAL VertexGridGeometry
 
    \see vertex_iterator_Polygon2d<Face,geom>
    \see Module \ref geometrictypes2d
@@ -130,9 +128,10 @@ template<class Face, class geom>
 class Polygon2d {
 public:
   typedef typename geom::coord_type        coord_type;
-  typedef algebraic_primitives<coord_type> algebra;
+  typedef algebraic_primitives<coord_type> ap;
 
-  typedef point_traits<coord_type> pt;
+  typedef point_traits<coord_type>    pt;
+  typedef typename ap::real           real_type;
 
   typedef typename geom::grid_type grid_type;
   typedef grid_types<grid_type>    gt;
@@ -147,18 +146,22 @@ public:
 
   //------------------- iteration ----------- ------------------------
 
+  //! \brief forward iterator over vertices
   typedef vertex_iterator_Polygon2d<Face,geom>  vertex_iterator;
+  //! \brief beginning of vertex sequence
   vertex_iterator FirstVertex() const { return vertex_iterator(0,*this);}
+  //! \brief past-the-end of vertex sequence
   vertex_iterator EndVertex()   const { return vertex_iterator(NumOfVertices(),*this);}
 
+  //! number of vertices (size of vertex sequence)
   int               NumOfVertices() const {return _f.NumOfVertices();}
-  coord_type /*const&*/ V(int i) const {
-    Vtx v = _f.V(i);
-    coord_type vv = TheGeometry().coord(v);
-    return vv;
-  }
-  coord_type /*const&*/ Vertex(int i) const {return V(i);} 
 
+  //! \name Vertex coordinates
+  //@{
+  coord_type  V(int i)      const { return TheGeometry().coord(_f.V(i)); }
+  coord_type  Vertex(int i) const { return V(i);} 
+  coord_type  coord(Vtx v)  const { return TheGeometry().coord(v);}
+  //@}
 
   //--------------------- geometric functions ------------------------
 
@@ -180,16 +183,50 @@ public:
      return c;
     }
 
-  //! Area calculation works for general simple polygons
-  double    area() const {
-    double a = 0.0;
+  /*! \brief polygon area 
+   
+     Works for general simple polygons, in space dimension 2.
+  */
+  real_type    area() const {
+    real_type a = 0.0;
     for(int i = 2; i< NumOfVertices(); ++i) {
       coord_type v1(V(0));
       coord_type vi_1(V(i-1));
       coord_type vi(V(i));
-      a += algebra::signed_triangle_area(v1,vi_1,vi);
+      a += ap::signed_triangle_area(v1,vi_1,vi);
     }
     return (a > 0 ? a : -a);
+  }
+
+  /*! \brief  polygon area
+
+      Works for convex polygons in any space dimension
+  */
+  real_type    convex_area() const {
+    real_type a = 0.0;
+    for(int i = 2; i< NumOfVertices(); ++i) {
+      coord_type v1(V(0));
+      coord_type vi_1(V(i-1));
+      coord_type vi(V(i));
+      a += ap::triangle_area(v1,vi_1,vi);
+    }
+    return a;
+  }
+
+  /*! \brief Angle at vertex \c v
+   */
+  real_type solid_angle(Vtx v) const {
+    typename gt::Edge e1;
+    for(typename gt::EdgeOnFaceIterator e(_f); !e.IsDone(); ++e) {
+      if(v == (*e).V1() || v == (*e).V2()) {
+	e1 = *e;
+	break;
+      }
+    }
+    typename gt::Edge e2 = _f.TheGrid().switched_edge(v, e1, _f);
+    coord_type dir_e1 = (coord( _f.TheGrid().switched_vertex(v,e1)) - coord(v));
+    coord_type dir_e2 = (coord( _f.TheGrid().switched_vertex(v,e2)) - coord(v));
+    return ap::angle(dir_e1, dir_e2);
   }
 
 private:
@@ -215,6 +252,9 @@ bool operator==  (vertex_iterator_Polygon2d<Face,geom> const& lhs,
   return (lhs.i == rhs.i);
 }
 
+/*! \ingroup geometrictypes2d
+    \relates  vertex_iterator_Polygon2d
+ */
 template<class Face, class geom>
 inline 
 bool operator!=  (vertex_iterator_Polygon2d<Face,geom> const& lhs, 
