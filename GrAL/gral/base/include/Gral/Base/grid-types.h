@@ -153,7 +153,7 @@ struct incidence_iterator_aux {};
    \todo This is not yet used in all grid_types<> specializations!
 */
 template<class GTBASE>
-class grid_types_base : public GTBASE
+struct grid_types_base : public GTBASE
 {
   template<class ETAG>
   struct sequence_iterator : public grid_types_detail::sequence_iterator_aux<GTBASE,ETAG> {};
