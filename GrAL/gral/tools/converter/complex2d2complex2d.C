@@ -8,8 +8,8 @@ int main(int argc, char* argv[]) {
     GetCommandlineAndFileControlDevice(argc,argv,"complex2d2complex2d.in","main");
 
   string h; 
-  h += "complex2doff -g <grid>   [-gd <spacedim=2> -goff <offset=0>]\n";
-  h += "             -o <output> [-od <spacedim=2> -ooff <offset=0>]\n";
+  h += "complex2d2complex2d -g <grid>   [-gd <spacedim=2> -goff <offset=0>]\n";
+  h += "                    -o <output> [-od <spacedim=2> -ooff <offset=0>]\n";
   string grid_in;
   RegisterAt(Ctrl, "-g", grid_in);
 
