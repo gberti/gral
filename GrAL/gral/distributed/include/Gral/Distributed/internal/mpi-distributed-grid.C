@@ -1,0 +1,244 @@
+#ifndef NMWR_GB_MPI_DISTRIBUTED_GRID_C
+#define NMWR_GB_MPI_DISTRIBUTED_GRID_C
+
+//----------------------------------------------------------------
+//   (c) Guntram Berti, 1998
+//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
+//   TU Cottbus - Germany
+//   http://math-s.math.tu-cottbus.de/NMWR
+//   
+//----------------------------------------------------------------
+#include "Grids/Distributed/mpi-distributed-grid.h"
+
+#include "Container/operators.h"
+#include "Grids/Algorithms/output.h"
+#include "IO/iomgr.h"
+
+template<class CoarseG, class FineG>
+MPIDistributedGrid<CoarseG,FineG>::MPIDistributedGrid()
+ : initialized(false)
+{}
+
+template<class CoarseG, class FineG>
+MPIDistributedGrid<CoarseG,FineG>::MPIDistributedGrid(CoarseG const& cg)
+  : the_coarse(cg), 
+    cell2rank(the_coarse),  
+    rank2cell(the_coarse.NumOfCells()),
+    initialized(false)
+{ 
+   init(); 
+}
+
+template<class CoarseG, class FineG>
+void  MPIDistributedGrid<CoarseG,FineG>::set_coarse_grid(CoarseG const& cg)
+{
+  REQUIRE( (! initialized), "topology changes not possible!\n",1);
+  the_coarse = cg;
+  cell2rank.set_grid(the_coarse);
+  rank2cell = vector<CoarseCell>(the_coarse.NumOfCells());
+
+  init();
+}
+
+template<class CoarseG, class FineG>
+void  MPIDistributedGrid<CoarseG,FineG>::init_cartesian() {}
+
+template<class CoarseG, class FineG>
+void  MPIDistributedGrid<CoarseG,FineG>::init() 
+{ 
+  // this way it always works. There should be a compile time branch
+  // on the type of CoarseG to init_cartesian.
+  REQUIRE( (! initialized), "double initialization!\n",1);
+  init_unstructured();
+  initialized = true;
+}
+
+template<class CoarseG, class FineG>
+void  MPIDistributedGrid<CoarseG,FineG>::init_unstructured()
+{
+  coarse_grid_type& CG = TheCoarseGrid();
+
+  int size;
+  MPI_Comm_size(MPI_COMM_WORLD, &size);
+  if (size != (int)CG.NumOfCells()) {
+    IOMgr::Error() << "size " << size 
+		   <<" != num of cells of coarse grid = " << CG.NumOfCells() << " !\n" ;
+    exit(1);
+  }
+
+
+  // create processor topology from coarse grid
+  if(CG.NumOfCells() > 1) {
+    int ni = mpi_graph_size_of_index_array(CG);
+    int* index = new int[ni];
+    int ne = mpi_graph_size_of_edges_array(CG);
+    int* edges = new int[ne];
+    mpi_graph_format(CG,index, index+ni,edges, edges+ne);
+    MPI_Graph_create(MPI_COMM_WORLD,
+		     CG.NumOfCells(),index,edges, 0,  &the_communicator);
+    
+    delete [] index;
+    delete [] edges;
+  }
+  else
+   MPI_Comm_dup(MPI_COMM_WORLD, &the_communicator);
+
+  // create mapping cell <-> ranks
+  // stimmt diese Zuordnung?
+  int r = 0;
+  for(CoarseCellIterator C = CG.FirstCell(); ! C.IsDone(); ++C, ++r) {
+    cell2rank[*C] = r;
+    rank2cell[r] = *C;
+  }  
+  my_rank = 0;
+  MPI_Comm_rank(the_communicator,&my_rank);
+  my_cell = rank2cell[my_rank];
+
+
+  MPI_Barrier(MPI_COMM_WORLD);
+
+  //  check
+  /*
+  int r1;
+  MPI_Graph_neighbors_count(the_communicator, my_rank,&r1);
+  REQUIRE((r1 == my_cell.NumOfNeighbours()), 
+	  "neighbour count does match: MPI = " << r1 
+	  << ", Grid = " << my_cell.NumOfNeighbours() << "!\n",1);
+  */
+
+  if(isMaster())
+    IOMgr::Info() << "initialized processor grid ( "
+		  << CG.NumOfCells() << " processes)\n";
+
+  the_local_range = the_ovrlp_grid.LocalRange();
+}
+
+
+
+
+template<class SenderIt>
+class mpi_send_connector : public connector_impl {
+  typedef typename SenderIt::value_type T;
+private:
+  //------ DATA --------
+  SenderIt  src_b, src_e;
+  mpi_proc  p;
+  T*        buffer;
+  int       sz;
+  int       tag;
+
+
+  MPI_Request curr_request;
+  MPI_Status  curr_stat;
+  //----- END DATA ------
+
+  typedef mpi_send_connector<SenderIt> self;
+  mpi_send_connector(self const&) { ENSURE(false, "mpi_send_connector: copy ctor called!\n",1);}
+public:
+  mpi_send_connector(SenderIt sb, SenderIt se, unsigned n, const mpi_proc& P) 
+    : src_b(sb), src_e(se), p(P), sz(n), tag(0)
+    { 
+      buffer = new T[sz];
+    }
+
+  ~mpi_send_connector() { delete [] buffer;}
+  virtual connector_impl* clone() const { return new mpi_send_connector<SenderIt>(*this);}
+
+  void send_data_begin() 
+    {
+      my_copy(src_b,src_e,buffer);
+      MPI_Isend(buffer, sz*sizeof(T),MPI_BYTE, 
+		p.the_rank, ++tag, p.the_communicator, &curr_request);
+    }
+  void send_data_end() {
+    MPI_Wait(&curr_request,&curr_stat); 
+  }
+  void send_data()     { send_data_begin(); send_data_end();}
+  void recv_data() {}
+};
+
+
+template<class SenderIt>
+Connector GetSendConnector(SenderIt sb, SenderIt se, unsigned sz, const mpi_proc& Receiver)
+{
+  return Connector(new mpi_send_connector<SenderIt>(sb, se, sz, Receiver));
+}
+
+
+template<class ReceiverIt,class AssignOp>
+class mpi_receive_connector : public connector_impl {
+  typedef typename ReceiverIt::value_type T;
+private:
+  ReceiverIt  dest_b, dest_e;
+  mpi_proc    p;
+  T*          buffer;
+  int         sz;
+
+  MPI_Request curr_request;
+  MPI_Status  curr_stat;
+
+  AssignOp    assign_op;
+
+  typedef mpi_receive_connector<ReceiverIt,AssignOp> self;
+  mpi_receive_connector(self const& ) { ENSURE(false, "mpi_receive_connector: copy ctor called!\n",1);}
+public:
+  mpi_receive_connector(ReceiverIt sb, ReceiverIt se, unsigned n,
+			const mpi_proc& P, const AssignOp& op) 
+    : dest_b(sb), dest_e(se), p(P), sz(n), assign_op(op)
+    { 
+      //      sz = dest_e - dest_b;
+      buffer = new T[sz];
+    }
+
+  ~mpi_receive_connector() { delete [] buffer;}
+  virtual connector_impl* clone() const { return new mpi_receive_connector<ReceiverIt,AssignOp>(*this);}
+
+  void recv_data_begin() 
+    {
+       MPI_Irecv(buffer, sz*sizeof(T),MPI_BYTE, 
+		 p.the_rank, MPI_ANY_TAG, p.the_communicator, &curr_request);
+    }
+
+  void recv_data_end() 
+    { 
+      MPI_Wait(&curr_request,&curr_stat); 
+      my_copy_op(buffer,buffer+sz,dest_b, assign_op);
+    }
+
+  void recv_data() { recv_data_begin(); recv_data_end();}
+  void send_data() {}
+};
+
+
+
+
+
+
+template<class ReceiverIt>
+Connector GetRecvConnector(ReceiverIt rb, ReceiverIt re, unsigned sz, const mpi_proc& Sender)
+{ 
+  typedef typename ReceiverIt::value_type T;
+  return Connector(new mpi_receive_connector<ReceiverIt,assign<T> >
+		   (rb,re,sz,Sender, assign<T>())); 
+}
+
+template<class ReceiverIt, class AssignOp>
+Connector GetRecvConnector(ReceiverIt rb, ReceiverIt re, unsigned sz,
+			      const mpi_proc& Sender, const AssignOp& op)
+{ 
+  return Connector(new mpi_receive_connector<ReceiverIt,AssignOp>(rb,re,sz,Sender, op)); 
+}
+
+/*
+template<class CG1, class FG1, class CG2, class FG2>
+void ConstructDistributed(MPIDistributedGrid<CG1,FG1>     &  MpiG,         // out
+			  CG2                        const&  src_coarse,   // in
+			  FG2                        const&  src_fine,     // in
+			  CellCorr                        &  src2dest_c)   // out
+{
+
+}
+*/
+
+#endif
+

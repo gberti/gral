@@ -1,0 +1,80 @@
+#ifndef NMWR_GB_CONSTRUCT_OVERLAP_C
+#define NMWR_GB_CONSTRUCT_OVERLAP_C
+
+
+#include "Grids/Distributed/construct-overlap.h"
+
+#include "Grids/Distributed/generic/add-total-shared.h"
+#include "Grids/Distributed/generic/add-partial-shared.h"
+#include "Grids/Distributed/generic/add-total-copied.h"
+#include "Grids/Distributed/generic/add-partial-copied.h"
+
+
+template<class Overlap, class CoarseGrid, 
+         class Partition, class OVPattern,
+         class Part2Cell, class Cell2Part,
+         class GridMap>
+void ConstructOverlap(Overlap          & Ovlp,         // out
+		      CoarseGrid  const& CrsG,         
+		      Partition   const& Prtng,
+		      OVPattern   const& ovlp_pattern,
+		      Part2Cell   const& part2cell,
+		      Cell2Part   const& cell2part,
+		      GridMap     const& grid_map)
+
+{
+  //  typedef typename Partition::coarse_grid_type  CoarseGrid;
+  
+  typedef grid_types<CoarseGrid>                cgt;
+  typedef typename cgt::Cell                    CoarseCell;
+  typedef typename cgt::CellIterator            CoarseCellIterator;
+  
+  typedef typename Partition::grid_type         fine_grid_type;
+  typedef grid_types<fine_grid_type>            fgt;
+  typedef typename fgt::Vertex                  Vertex;
+  typedef typename fgt::Facet                   Facet;
+  typedef typename fgt::Cell                    Cell;
+
+  for(CoarseCellIterator P = CrsG.FirstCell(); ! P.IsDone(); ++P) {
+    AddTotalSharedRanges(Ovlp[*P].vertices().shared(),
+			 Ovlp[*P].facets  ().shared(),
+			 Prtng, cell2part(*P), Prtng.TheGrid());
+  }
+
+  for(CoarseCellIterator P0 = CrsG.FirstCell(); ! P0.IsDone(); ++P0) {
+    AddPartialSharedRanges(Ovlp, 
+			   Prtng, cell2part(*P0),
+			   part2cell,  
+			   Ovlp[*P0].vertices().shared(), 
+			   Ovlp[*P0].facets  ().shared(), 
+			   grid_map,
+			   grid_map);
+    //			   identity<Vertex>(),
+    //		   identity<Facet>());
+  }
+ 
+  for(CoarseCellIterator P1 = CrsG.FirstCell(); ! P1.IsDone(); ++P1) {
+    AddTotalRanges(Ovlp[*P1], 
+		   Prtng, InPartition(cell2part(*P1),Prtng),
+		   ovlp_pattern,
+		   Ovlp[*P1].vertices().shared(), 
+		   Ovlp[*P1].facets  ().shared());
+  }
+
+
+  for(CoarseCellIterator P2 = CrsG.FirstCell(); ! P2.IsDone(); ++P2) {
+    AddPartialRanges(Ovlp,
+		     Prtng, cell2part(*P2),
+		     part2cell,
+		     Ovlp[*P2].vertices().copied(),
+		     Ovlp[*P2].cells   ().copied(),
+		     grid_map,
+		     grid_map);
+    //	     identity<Vertex>(),
+    //	     identity<Cell>());
+  }
+  
+}
+
+
+#endif

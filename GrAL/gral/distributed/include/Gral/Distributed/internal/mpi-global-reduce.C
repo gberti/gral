@@ -1,0 +1,45 @@
+#ifndef NMWR_GB_MPI_GLOBAL_REDUCE_C
+#define NMWR_GB_MPI_GLOBAL_REDUCE_C
+
+//----------------------------------------------------------------
+//   (c) Guntram Berti, 1999
+//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
+//   TU Cottbus - Germany
+//   http://math-s.math.tu-cottbus.de/NMWR
+//   
+//----------------------------------------------------------------
+
+#include "Grids/Distributed/mpi-distributed-grid-traits.h"
+
+#include <mpi.h>
+#include "algorithm"
+
+#include "Grids/Distributed/mpi-reduce.h"
+
+//----------------------------------------------------------------
+//
+// global reduce methods for mpi-distributed grid functions.
+// currently, only max is implemented.
+//
+//----------------------------------------------------------------
+
+template<class R, class E, class T, class CG, class FG, class F>
+typename F::result_type
+global_max(R const&  range, 
+	   distr_grid_function<E,T, MPIDistributedGrid<CG,FG> > const& gf, F const& f)
+{
+  // local_max = global_max(r,gf.TheGridFunction(),f);
+  typedef typename F::result_type res_type;
+    res_type res = f(*(range.FirstElement()), gf);
+  typedef typename R::ElementIterator eiter;
+  for(typename R::ElementIterator e = range.FirstElement(); ! e.IsDone(); ++e)
+    res = max(res,f(*e,gf));
+  
+  return mpi_global_max(res, gf.TheDistributedGrid());
+}
+
+template<class T, class CG, class FG>
+T global_max(T const& t, MPIDistributedGrid<CG,FG> const& MG)
+{ return  mpi_global_max(t,MG); }
+ 
+#endif

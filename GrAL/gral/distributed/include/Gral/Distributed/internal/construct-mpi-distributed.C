@@ -1,0 +1,127 @@
+#ifndef NMWR_GB_CONSTRUCT_MPI_DISTRIBUTED_C
+#define NMWR_GB_CONSTRUCT_MPI_DISTRIBUTED_C
+
+//----------------------------------------------------------------
+//
+//   (c) Guntram Berti, 1999
+//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
+//   TU Cottbus - Germany
+//   http://math-s.math.tu-cottbus.de/NMWR
+//   
+//----------------------------------------------------------------
+
+#include <fstream.h>
+
+#include "vector.h"
+
+
+#include "Container/algorithms.h"
+//#include "coordinate-mappings/linear2d.h"
+
+#include "Grids/Algorithms/grid-copy.h"
+#include "Grids/Algorithms/write-complex2d.h"
+#include "Grids/type-tags.h"
+#include "Grids/partitioning.h"
+
+#undef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Grids/Distributed/construct-composite-periodic.h"
+#define NMWR_INCLUDE_TEMPLATE_DEFS
+
+#include "Grids/Distributed/composite-grid.h"
+#include "Grids/Distributed/composite-grid-function.h"
+#include "Grids/Distributed/overlap-pattern.h"
+
+//#include "Grids/Complex2D/construct.h"
+
+//#include "domain/us-domain-parallel.h"
+
+//#include "domain/specializations-construct-distributed.h"
+
+
+template<class CG, class FG, class FGEOM, class MG, class GEOM, class TRAFO>
+void
+ConstructMPIDistributedFromMaster
+(
+ MPIDistributedGrid<CG,FG>          & DistrG,
+ FGEOM                              & DistrGeom,
+ partitioning<MG>                   & Prtng, 
+ GEOM                         const &MasterGeom,
+ overlap_pattern              const &ovlp_pattern,
+ bijective_mapping<int,int>         &per_v_1,
+ bijective_mapping<int,int>         &per_v_2,
+ TRAFO                 const        &T1,
+ TRAFO                 const        &T2,
+ bijective_mapping<int, int>        &master2distr_v,
+ bijective_mapping<int, int>        &master2distr_c
+)
+{
+  typedef grid_types<CG>                    cgt;
+  typedef typename cgt::Cell                CoarseCell;
+  typedef typename cgt::CellIterator        CoarseCellIterator;
+
+  typedef grid_types<FG>                    fgt;
+  typedef typename fgt::cell_handle         cell_handle;
+  typedef typename fgt::vertex_handle       vertex_handle;
+
+  typedef FGEOM                             geometry_type;
+
+  //----------- (1) construct composite grid for ALL partitions -------------
+
+  // it would be enough to construct the local part & neighbor parts
+  // of the composite grid!
+  CompositeGrid<CG,FG>     compG;
+  typedef bijective_mapping<vertex_handle,vertex_handle> vertex_corr_map;
+  typedef bijective_mapping<cell_handle,  cell_handle>   cell_corr_map;
+
+  grid_function<CoarseCell, vertex_corr_map> master2part_v;
+  grid_function<CoarseCell, cell_corr_map>   master2part_c;
+  ConstructComposite_per(compG,Prtng,MasterGeom,ovlp_pattern,
+			 per_v_1,per_v_2, T1, T2,
+			 master2part_v, master2part_c);
+
+  // composite geometry -- should be constructed in  ConstructComposite_per above.
+  grid_function<CoarseCell,geometry_type> compGeom(compG.TheCoarseGrid());
+  for(CoarseCellIterator CC = compG.TheCoarseGrid().FirstCell(); ! CC.IsDone(); ++CC) 
+    compGeom[*CC] = geometry_type(compG.Grid(*CC));
+
+  //---------- (2) copy the appropriate local part to the distributed grid --------
+
+  DistrG.set_coarse_grid(compG.TheCoarseGrid());
+
+  cell_corr_map distr2coarse;
+  ConstructCellCorrespondence(DistrG.TheCoarseGrid(),compG.TheCoarseGrid(),distr2coarse);
+  
+  CoarseCell mMyC = DistrG.MyCell();
+  CoarseCell cMyC = compG.TheCoarseGrid().cell(distr2coarse(DistrG.TheCoarseGrid().handle(mMyC)));
+
+  cell_corr_map   part2distr_v;
+  vertex_corr_map part2distr_c;
+  ConstructGridVC(DistrG.TheGrid(),    compG.Grid(cMyC), compGeom(cMyC),
+		  part2distr_v, part2distr_c);
+
+  inverse_mapping<cell_handle,   cell_handle> coarse2distr(distr2coarse.inverse());
+  CopyOverlap(DistrG.TheOverlap(),  compG.Overlap(cMyC),
+	      DistrG.TheCoarseGrid(), coarse2distr,
+	      DistrG.TheGrid(), 		   
+	      part2distr_v, part2distr_c);
+
+  // chain correspondance maps
+  // master2distr_v = part2distr_v o master2part_v
+  //  mapping_assign(master2distr_v, compose_map(make_unary_fct_ref(part2distr_v),
+  //				     make_unary_fct_ref(master2part_v)));
+  typedef typename vertex_corr_map::domain_type dom_type_v;
+  typedef typename dom_type_v::const_iterator dom_iter_v;
+  for(dom_iter_v v = master2part_v[cMyC].domain().begin(); v != master2part_v[cMyC].domain().end(); ++v)
+    master2distr_v[*v] = part2distr_v(master2part_v[cMyC](*v));
+
+  //  mapping_assign(master2distr_c, compose_map(make_unary_fct_ref(part2distr_c),
+  //					     make_unary_fct_ref(master2part_c)));
+  typedef typename cell_corr_map::domain_type dom_type_c;
+  typedef typename dom_type_c::const_iterator dom_iter_c;
+  for(dom_iter_c c = master2part_c[cMyC].domain().begin(); c != master2part_c[cMyC].domain().end(); ++c)
+    master2distr_c[*c] = part2distr_c(master2part_c[cMyC](*c));
+
+  DistrGeom.set_grid(DistrG.TheGrid()); // let it point to THE local grid.
+}
+
+#endif
