@@ -20,7 +20,7 @@ all: compile lib
 
 compile: makefile
 	(cd $(OBJDIR);\
-         $(MAKE) compile SRC="$(LOCALSOURCES)" LOCAL_IFLAGS+=-I$(METIS_INC))
+         $(MAKE) compile SRC="$(LOCALSOURCES)" EXTRA_IFLAGS+=-I$(METIS_INC))
 
 lib: makefile
 	mkdir -p $(LIBDIR)
