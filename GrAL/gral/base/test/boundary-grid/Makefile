@@ -19,7 +19,10 @@ LIBS = -lgral-cartesian2d -lgral-base
 
 
 
-new-check-clean: new check clean
+new-check-clean: # new check clean1
+	$(MAKE) new
+	$(MAKE) check
+	$(MAKE) clean
 
 new : clean all
 
@@ -37,8 +40,8 @@ check:
 	./runtest
 
 clean: stdclean
-	rm -f $(EXEC)
-	rm -f *.o *~ *.flc core
-	rm -f .depend *.oogl *out 
+	@rm -f $(EXEC)
+	@rm -f *.o *~ *.flc core
+	@rm -f .depend *.oogl *out 
 
 

@@ -17,7 +17,7 @@ include $(DEPS)
 
 
 
-LIBS = -lgral-triang2d -lgral-base -lexternal-control -lutilities
+LIBS = -lgral-triang2d -lgral-base -lgeometry -lexternal-control -lutilities
 
 
 

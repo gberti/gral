@@ -13,7 +13,8 @@ LOCALTARGET = test-distributed test-distri-io
 #MPIPATH=/usr/lib/mpich
 #MPIRUN=$(MPIPATH)/bin/mpirun
 #IFLAGS += -I$(MPIPATH)/include
-LIBS = -lgral-distributed -lgral-complex2d -lgral-base -lexternal-control -lutilities
+LIBS = -lgral-distributed -lgral-complex2d -lgral-base \
+       -lgeometry -lexternal-control -lutilities
 
 
 
@@ -24,9 +25,13 @@ EXEC =  $(LOCALTARGET)
 
 
 
+env:
+	@echo "ENVIRONMENT CHECK"
+	@printenv | grep LD  || echo ""
+	@$(MPICC) -v         || echo ""
+	@echo "-----------------"
 
-
-new: clean all
+new: env clean all
 
 all : $(LOCALTARGET)
 
