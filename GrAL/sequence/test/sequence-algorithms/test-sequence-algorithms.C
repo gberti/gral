@@ -8,6 +8,7 @@
 
 
 int main() {
+  using namespace std;
 
   namespace seq = sequence;
   int a[3] = { 1, 2, 3};

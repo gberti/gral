@@ -10,15 +10,15 @@
 namespace sequence {
   template<class ForwardIterator>
   bool increasing(ForwardIterator begin, ForwardIterator end)
-  { return std::accumulate(begin,end, true, less_equal<typename std::iterator_traits<ForwardIterator>::value_type>());}
+  { return std::accumulate(begin,end, true, std::less_equal<typename std::iterator_traits<ForwardIterator>::value_type>());}
 
   template<class ForwardIterator, class LessEqual>
-  bool increasing(ForwardIterator begin, ForwardIterator end, LessEqual less_equal)
-  { return std::accumulate(begin,end, true, less_equal);}
+  bool increasing(ForwardIterator begin, ForwardIterator end, LessEqual lesseq)
+  { return std::accumulate(begin,end, true, lesseq);}
 
   template<class ForwardIterator>
   bool decreasing(ForwardIterator begin, ForwardIterator end)
-  { return std::accumulate(begin,end, true, greater_equal<typename std::iterator_traits<ForwardIterator>::value_type>());}
+  { return std::accumulate(begin,end, true, std::greater_equal<typename std::iterator_traits<ForwardIterator>::value_type>());}
 }
 
 

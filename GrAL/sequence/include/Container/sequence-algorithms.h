@@ -162,7 +162,7 @@ namespace sequence {
   { 
     int t1 = bubble_sort(begin1, end1);
     int t2 = bubble_sort(begin2, end2);
-    REQUIRE(equal(begin1, end1, begin2), "", 1);
+    REQUIRE(std::equal(begin1, end1, begin2), "", 1);
     return (t1%2) == (t2%2);
   }
 
