@@ -10,5 +10,6 @@
 #include "Gral/Test/test-iterators.h"
 #include "Gral/Test/test-grid-functions.h"
 #include "Gral/Test/test-partial-grid-functions.h"
+#include "Gral/Test/test-archetypes.h"
 
 #endif

@@ -46,6 +46,8 @@
 // Gral Base
 #include "Gral/IO/complex2d-format.h"
 
+#include "Gral/Test/test-archetypes.h"
+
 // Gral Complex2D
 #include "Gral/Grids/Complex2D/complex2d.h"
 #include "Gral/Grids/Complex2D/grid-functions.h"
@@ -170,7 +172,7 @@ int main(int argc, char* argv[]) {
   typedef gt::incidence_iterator<vertex_type_tag, cell_type_tag> incVertexOnCellIterator;
 
 
+  test_archetypes(CC[0], testout);
+
   return 0;
-
-
 }
