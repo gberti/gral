@@ -43,8 +43,8 @@ public:
 
 private:
   //------- DATA  -------
-  const ovrlp_grid_type* the_ovrlp_grid;
-  const overlap_type *   the_overlap;
+  ovrlp_grid_type const* the_ovrlp_grid; // referenced
+  overlap_type    const* the_overlap;    // referenced
   local_grid_function    data;
 
   /*
@@ -59,24 +59,17 @@ public:
 
   overlapping_grid_function_adapter() :  the_ovrlp_grid(0), the_overlap(0) {}
 
-  overlapping_grid_function_adapter(local_grid_function const& lgf, const ovrlp_grid_type& og)
+  overlapping_grid_function_adapter(local_grid_function const& lgf, 
+                                    ovrlp_grid_type     const& og)
     : the_ovrlp_grid(& og), 
-      the_overlap(& og.TheOverlap()),
-      data(lgf)
+      the_overlap   (& og.TheOverlap()),
+      data          (lgf)
     {}
-
-  void set_grid(const ovrlp_grid_type& dg)
-    {
-      the_ovrlp_grid = & dg;
-      the_overlap    = & dg.TheOverlap();
-      data.set_grid(dg.TheGrid());
-
-    }
 
   //-----------------  data access  ------------------------
 
   T& operator[](const E& e) { return data[e];}
-  const T& operator[](const E& e) const { return data(e);}
+  // const T& operator[](const E& e) const { return data(e);}
   const T& operator()(const E& e) const { return data(e);}
 
   //---------------- component access ----------------------
