@@ -13,7 +13,7 @@ new: partial-clean all
 
 # use generic makefile for building objects
 makefile:
-	cp $(CONFIGURATION)/defs/Makefile.obj $(OBJDIR)/Makefile 
+	cp $(CONFIGURATION)/defs/Makefile.objects $(OBJDIR)/Makefile 
 
 all: compile lib
 
