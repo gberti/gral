@@ -1,6 +1,6 @@
 #include "GraphicsDevice/calc-transformations.h"
 
-#include <math.h>
+#include <cmath>
 
 
 Transformation 
@@ -35,7 +35,7 @@ TransformRectangle(Transformation::coord_type const& b_l,
   if ((b_l[1]-b_r[1]==0) && (b_l[1]-t_l[1]!=0)) 
     {TF3=Rotation3D(coord_type(0,1,0),atan2((b_r[3]-b_l[3]),(b_r[1]-b_l[1])));
     if ((t_l[1]-b_l[1]>0) && (b_r[2]==t_l[2]))
-      {TF5=Rotation3D(coord_type(0,0,1),M_PI/2);}
+      {TF5=Rotation3D(coord_type(0,0,1), M_PI/2);}
     if ((t_l[1]-b_l[1]<0) && (b_r[2]==t_l[2]))
       {TF5=Rotation3D(coord_type(0,0,1),-M_PI/2);}
     }
