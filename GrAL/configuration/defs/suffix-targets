@@ -82,8 +82,9 @@ DOXYPATH=doxygen/html
 RELPATH=../../..#
 ADDRELPATH=#
 RELROOT=$(RELPATH)/$(ADDRELPATH)
+
 doxy:
-	$(CONFIGURATION)/doxycfg/filter-doxy-cfg.pl -root $(ALLROOT) \
+	$(CONFIGURATION)/doxycfg/filter-doxy-cfg.pl -root $(ALLROOT) -binpath $(LOCALBINPATH) \
         $(CONFIGURATION)/doxycfg/doxy.paths.cfg                  > doxy.cfg.tmp
 	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxycfg/"        >> doxy.cfg.tmp
 	cat doxy.local.cfg                                      >> doxy.cfg.tmp

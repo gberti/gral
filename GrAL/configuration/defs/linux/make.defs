@@ -2,3 +2,5 @@
 
 AR = ar
 ARFLGS = -rs
+
+LOCALBINPATH=/usr/local/bin

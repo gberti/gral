@@ -34,6 +34,9 @@ endif
 export SCRIPTS=$(CONFIGURATION)/scripts
 export STLURL=http://www.sgi.com/tech/stl
 
+ifndef LOCALBINPATH
+export LOCALBINPATH=/opt/local/bin#
+endif
 
 # targets for tree makefiles (directory makefiles calling subdir makefiles) 
 export RECURSIVETARGETS=$(CONFIGURATION)/defs/recursive-targets
@@ -65,23 +68,13 @@ export DEFPATH:=$(ARCH)/$(CCNAME)/$(DEBUG)#
 export LIBPATH:=$(DEFPATH)#
 
 
-# if developing code, use include and libraries
-# of other (`peer') modules directly (because of frequent 
-# mutual change requirements)
-ifeq ($(DEVELOP),develop)
-IFLAGS  += $(addsuffix /include,$(addprefix -I$(ALLROOT)/,$(DEPMODULES)))
-LDFLAGS += $(addsuffix /lib/$(LIBPATH),$(addprefix -L$(ALLROOT)/,$(DEPMODULES)))
-else # use installed versions
-IFLAGS  += $(PREFIX)/include
-LDFLAGS += $(PREFIX)/lib/$(LIBPATH)
-endif
 
 # The includes and libs of the current module
 export INCDIR   =$(ROOT)/include#
 export LIBDIR   =$(ROOT)/lib/$(LIBPATH)#
 
 LDFLAGS += -L$(LIBDIR)
-IFLAGS  += -I$(INCDIR)
+#IFLAGS  += -I$(INCDIR)
 
 export CC      = $(CCC)
 
@@ -100,3 +93,16 @@ include $(COMPILERDIR)/make.defs
 # momentarily not used
 export DEFDIR     :=$(CONFIGURATION)/defs/$(DEFPATH)#  
 #include $(DEFDIR)/make.defs
+
+IFLAGS  += -I$(INCDIR)
+
+# if developing code, use include and libraries
+# of other (`peer') modules directly (because of frequent 
+# mutual change requirements)
+ifeq ($(DEVELOP),develop)
+IFLAGS  += $(addsuffix /include,$(addprefix -I$(ALLROOT)/,$(DEPMODULES)))
+LDFLAGS += $(addsuffix /lib/$(LIBPATH),$(addprefix -L$(ALLROOT)/,$(DEPMODULES)))
+else # use installed versions
+IFLAGS  += $(PREFIX)/include
+LDFLAGS += $(PREFIX)/lib/$(LIBPATH)
+endif
