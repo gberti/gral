@@ -5,7 +5,9 @@ CCC      =  /usr/net/lnx/INTEL-COMP/c++/compiler60/ia32/bin/icc
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += 
 
-CCFLAGS += -w0  # -w2 -wd981
+CCFLAGS += -w1 
+CCFLAGS += -wd186  ## Warning #186 is pointless comparison of unsigned integer with zero
+#CCFLAGS += -w2 -wd981 
 CCFLAGS += -DINTEL_CC
 #CCFLAGS += -D_HAS_TRADITIONAL_STL
 #CCFLAGS += -I$(HOME)/lib/STLport-4.5.3/stlport
