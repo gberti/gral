@@ -11,10 +11,10 @@
 
 #include "Gral/Distributed/construct-local-overlapping-grids.h"
 #include "Container/functions.h"
-#include "Gral/Base/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-subrange.h"
 
-#include "Gral/Algorithms/enlarge-grid.h"
-#include "Gral/Algorithms/construct-grid.h"
+#include "Gral/Base/enlarge-grid.h"
+#include "Gral/Base/construct-grid.h"
 
 #include "Gral/Distributed/mark-ranges.h"
 
@@ -40,8 +40,11 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid,
 
   enumerated_subrange<grid_type> owned;
   ConstructSubrangeFromCells(owned,owned_c.FirstElement());
+  // Fixme!!
+  Geometry dummy(ovlp_grid.TheGrid());
   ConstructGridVC(ovlp_grid.TheGrid(),
 		  //	    SubrangeFromCells(owned_c),
+                  dummy,
 		  owned,
 		  geom,  
 		  v_corr,   // global -> local
