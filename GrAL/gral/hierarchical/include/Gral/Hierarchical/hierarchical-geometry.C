@@ -104,6 +104,26 @@ namespace hierarchical {
   }
 
   template<class HGRID, class FLATGEOM>
+  typename hier_geometry<HGRID, FLATGEOM>::level_handle
+  hier_geometry<HGRID, FLATGEOM>::add_root_level()
+  {
+    if(root_geom == 0)
+      return base::add_root_level();
+    else {
+      update_root_geom();
+      return base::add_root_level(*root_geom);
+    }
+  }
+
+  template<class HGRID, class FLATGEOM>
+  void hier_geometry<HGRID, FLATGEOM>::update_root_geom()
+  {
+    root_geom.make_own(new flat_geometry_type(* TheGrid()->FlatGrid(0), *root_geom));
+		       
+					  
+  }
+
+  template<class HGRID, class FLATGEOM>
   void
   hier_geometry<HGRID, FLATGEOM>::remove_coarsest_level()
   {

@@ -67,9 +67,11 @@ namespace hierarchical {
 
   private:
     //    void init(hier_grid_type const& gg);
+    void update_root_geom();
   public:
-    level_handle add_coarser_level();
-    level_handle add_finer_level();
+    virtual level_handle add_coarser_level();
+    virtual level_handle add_finer_level();
+    virtual level_handle add_root_level();
     void         remove_coarsest_level();
     void         remove_finest_level();
 
