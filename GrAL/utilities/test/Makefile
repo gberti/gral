@@ -1,5 +1,5 @@
 CONFIG=$(shell pwd)/../mk.config
-SUBDIRS = reference-count notifier ref-ptr  checked-istream selective_ostream
+SUBDIRS = reference-count notifier ref-ptr  checked-istream selective-ostream
 
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
