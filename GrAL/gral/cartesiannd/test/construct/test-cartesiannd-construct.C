@@ -21,6 +21,75 @@ void print_grid(G const& g, std::ostream& out)
     out << g.NumOfElements(k) << " " << k << "-elements\n";
 } 
 
+template<class G, int DIM>
+struct local_vertex_access_tester {
+  static void act(G const& g, std::ostream& out) {}
+};
+
+template<class G>
+struct local_vertex_access_tester<G,1>  {
+  static void act(G const& g, std::ostream& out) 
+  {
+    typedef grid_types<G> gt;
+    typedef typename gt::sequence_iterator_d<1>::type ElementIterator;
+    out << "Dim=1:" << std::endl;
+    for(ElementIterator e(g); ! e.IsDone(); ++e) {
+      typedef typename ElementIterator::local_index_type lit;
+      out << "Element " <<  (*e).low_vertex_index() << "," << (*e).high_vertex_index() << "  ";
+      for(int i = 0; i <= 1; ++i)
+	  out << "V(" << i << ")=" << (*e).Vl(lit(i)).index() << "  " << std::flush;
+      out << std::endl; 
+   }
+  }
+};
+
+
+template<class G>
+struct local_vertex_access_tester<G,2>  {
+  static void act(G const& g, std::ostream& out) 
+  {
+    local_vertex_access_tester<G,1>::act(g,out);
+    typedef grid_types<G> gt;
+    typedef typename gt::sequence_iterator_d<2> s2;
+    typedef typename gt::template sequence_iterator_d<2>::type ElementIterator;
+    out << "Dim=2:" << std::endl;
+    for(ElementIterator e(g); ! e.IsDone(); ++e) {
+      typedef typename ElementIterator::local_index_type lit;
+      out << "Element " <<  (*e).low_vertex_index() << "," << (*e).high_vertex_index() << "  ";
+      for(int i = 0; i <= 1; ++i)
+	for(int j = 0; j <= 1; ++j)
+	  out << "V(" << i << "," << j << ")=" << (*e).Vl(lit(i,j)).index() << "  " << std::flush;
+      out << std::endl;
+    }
+  }
+};
+
+template<class G>
+struct local_vertex_access_tester<G,3>  {
+ static void act(G const& g, std::ostream& out) 
+  {
+    local_vertex_access_tester<G,2>::act(g,out);
+    typedef grid_types<G> gt;
+    typedef typename gt::sequence_iterator_d<3>::type ElementIterator;
+    out << "Dim=3:" << std::endl;
+    for(ElementIterator e(g); ! e.IsDone(); ++e) {
+      typedef typename ElementIterator::local_index_type lit;
+      out << "Element " <<  (*e).low_vertex_index() << "," << (*e).high_vertex_index() << "  ";
+      for(int i = 0; i <= 1; ++i)
+	for(int j = 0; j <= 1; ++j)
+	  for(int k = 0; k <= 1; ++k)
+	    out << "V(" << i << "," << j << "," << k << ")=" << (*e).Vl(lit(i,j,k)).index() << "  " << std::flush;
+      out << std::endl;
+    }
+  }
+};
+
+
+template<class G>
+void test_local_vertex_access(G const& g, std::ostream& out) 
+{ local_vertex_access_tester<G, G::dim>::act(g,out);}
+
+
 int main() {
   using namespace std;
 
@@ -51,6 +120,9 @@ int main() {
   cartesiannd::delta_map<6>::print_maps(cout);
   cartesiannd::delta_map<6>::selfcheck();
   
+
+  typedef grid_types<cartesiannd::grid<1> > gt1;
+  typedef gt1::index_type it1;
 
   typedef grid_types<cartesiannd::grid<2> > gt2;
   typedef gt2::index_type it2;
@@ -133,16 +205,16 @@ int main() {
     } while ( v != v_first);
     cout << endl;
 
-    cout << "Testing vertex_index_low/high: " << endl;
+    cout << "Testing low_vertex_index/high: " << endl;
     cout << "Cells: " << endl;
     for(gt::CellIterator c(R); ! c.IsDone(); ++c)
-      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+      cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
     cout << "Edges: " << endl;
     for(gt::EdgeIterator c(R); ! c.IsDone(); ++c)
-      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+      cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
     cout << "Vertices: " << endl;
     for(gt::VertexIterator c(R); ! c.IsDone(); ++c)
-      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+      cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
 
   }
 
@@ -176,19 +248,19 @@ int main() {
 
     test_cell_on_cell_iterator(R,cout);
 
-    cout << "Testing vertex_index_low/high: " << endl;
+    cout << "Testing low/high_vertex_index: " << endl;
     cout << "Cells: " << endl;
     for(gt::CellIterator c(R); ! c.IsDone(); ++c)
-      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+      cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
     cout << "Facets: " << endl;
     for(gt::FacetIterator c(R); ! c.IsDone(); ++c)
-      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+      cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
     cout << "Edges: " << endl;
     for(gt::EdgeIterator c(R); ! c.IsDone(); ++c)
-      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+      cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
     cout << "Vertices: " << endl;
     for(gt::VertexIterator c(R); ! c.IsDone(); ++c)
-      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+      cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
 
   }
 
@@ -244,6 +316,11 @@ int main() {
     // test_face_iterator  (R, cout);
     test_facet_iterator (RR, cout);
     test_cell_iterator  (RR, cout);
+
+
+    test_local_vertex_access(RR, cout);
+
+
   }
 
  {
@@ -259,8 +336,25 @@ int main() {
     // test_face_iterator  (R, cout);
     test_facet_iterator (RR, cout);
     test_cell_iterator  (RR, cout);
+
   }
 
+ {
+    cartesiannd::grid<3> R(it3(2,2,2));
+    cartesiannd::subrange<3> RR(R, R.low_vertex_index(), R.beyond_vertex_index());
+    cout << "Subrange 2x2x2 vertices:\n";
+    RR.print(cout);
+    print_grid(RR, cout);
+    cout << endl;
+
+    test_vertex_iterator(RR, cout);
+    test_edge_iterator  (RR, cout);
+    // test_face_iterator  (R, cout);
+    test_facet_iterator (RR, cout);
+    test_cell_iterator  (RR, cout);
+
+    test_local_vertex_access(RR, cout);
+  }
 
   
 }
