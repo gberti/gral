@@ -30,8 +30,11 @@ install: install-headers install-libs
 clean: stdclean
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
 	rm -f doxy.tags doxy.log
+	(cd test; $(MAKE) clean)
+	(cd src; $(MAKE) clean)
 
-realclean: clean
+
+realclean: clean libclean
 	rm -rf doxygen
 
 
