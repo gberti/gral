@@ -21,8 +21,6 @@ namespace measurement {
 
     \todo works for 3D only
     \todo assumes each cell corner has 3 edges incident to the cell
-    \todo has to introduce weighting matrices for tetrahedrons,
-    where the ideal cell corner is that of a regular tet and not of a cube. 
  */
 template<class GRID, class GEOM>
 class corner_jacobian {
@@ -50,7 +48,7 @@ private:
   geom_type const* geom;
 
   typedef grid_function<ArchVertex, flag<archetype_type> >  vertex_star_map;
-  // Cell -> (ArchVertex -> star) 
+  // mapping  Cell -> (ArchVertex -> star) 
   partial_mapping<archetype_type const*, vertex_star_map> vertex_stars;
 
   geom_type const* ideal_geom;
