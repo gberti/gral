@@ -5,9 +5,9 @@
 
 // External control
 #include "IO/control-device.h"
-#include "IO/safe-file.h"
 
 // Utility
+#include "Utility/safe-file.h"
 #include "Utility/pre-post-conditions.h"
 #include "Utility/as-string.h"
 
