@@ -82,9 +82,14 @@ private:
 
 
 template<unsigned N>
+inline 
 bool operator==(const coordN<N>& lhs, const coordN<N> rhs)
 { for(unsigned int i=1; i<=N; i++) if (lhs[i]!=rhs[i]) return false;
  return true; }
+
+template<unsigned N>
+inline bool operator!=(const coordN<N>& lhs, const coordN<N> rhs)
+{ return !(lhs == rhs);}
 
 template<unsigned N>
 inline coordN<N> operator+(const coordN<N>& lhs, const coordN<N>& rhs)
@@ -113,7 +118,7 @@ inline coordN<N> operator-(const coordN<N>& rhs)
 
 
 template<unsigned N>
-inline ostream& operator<<(ostream& out, const coordN<N>& P)
+inline std::ostream& operator<<(std::ostream& out, const coordN<N>& P)
 {
   for(unsigned i = 1; i<= N-1; i++)
     out <<  P[i] << ' ';
@@ -121,8 +126,9 @@ inline ostream& operator<<(ostream& out, const coordN<N>& P)
   return out;
 }
 
+
 template<unsigned N>
-inline istream& operator>>(istream& in, coordN<N>& P)
+inline std::istream& operator>>(std::istream& in, coordN<N>& P)
 {
   for(unsigned i = 1; i<= N; i++)
     in >> P[i];
@@ -142,11 +148,11 @@ struct point_traits_for_coordN
 
   static int LowerIndex(const Ptype&) { return 1;}
   static int UpperIndex(const Ptype&) { return N;}
-  static int Dimension(const Ptype&)  { return N;}
-  static int Dim      (const Ptype&)  { return N;}
+  // static unsigned Dimension(const Ptype&)  { return N;}
+  static unsigned  Dim      (const Ptype&)  { return N;}
 
-  static int Dimension()                 { return N;}
-  static int Dim      ()                 { return N;}
+  // static unsigned  Dimension()                 { return N;}
+  static unsigned  Dim      ()                 { return N;}
 
   static void ConstructWithDim(unsigned, Ptype&) {}
   //static fixed_size_tag point_size_tag() { return fixed_size_tag();}
@@ -174,11 +180,11 @@ struct point_traits_for_coordN_2
 
   static int LowerIndex(const Ptype&) { return 1;}
   static int UpperIndex(const Ptype&) { return 2;}
-  static int Dimension(const Ptype&)  { return 2;}
-  static int Dim      (const Ptype&)  { return 2;}
+  // static int Dimension(const Ptype&)  { return 2;}
+  static unsigned Dim      (const Ptype&)  { return 2;}
 
-  static int Dimension()                 { return 2;}
-  static int Dim()                       { return 2;}
+  //static int Dimension()                 { return 2;}
+  static unsigned Dim()                       { return 2;}
   static void ConstructWithDim(unsigned, Ptype&) {}
   //static fixed_size_tag point_size_tag() { return fixed_size_tag();}
 
