@@ -1,7 +1,7 @@
-#include "Grids/Reg2D/general-index-map.h"
+#include "Gral/Grids/Cartesian2D/general-index-map.h"
 
 
-void general_indexmap2D::pretty_print(ostream& out) {
+void general_indexmap2D::pretty_print(std::ostream& out) {
   out << "v1 = " << v1 << "   v2 = " << v2 << '\n'
       << "major_idx = " << major_idx  << ";  minor_idx = " << minor_idx << '\n'
       << "major_incr = " << major_incr  << ";  minor_incr = " << minor_incr << '\n'
