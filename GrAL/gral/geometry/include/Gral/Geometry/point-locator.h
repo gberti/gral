@@ -314,7 +314,7 @@ void point_locator<GRID,GEOM,GT>::init()
   }
 
 
-  buckets.make_own(new cart_grid_type(size+index_type(1)));
+  buckets.make_shared(new cart_grid_type(size+index_type(1)));
 
   // create corresponding Cartesian geometry (scaling & translation)
   matrix_type A    (0.0);
@@ -333,7 +333,7 @@ void point_locator<GRID,GEOM,GT>::init()
 
   mapping_type mapping        (A,     T);
   mapping_type inverse_mapping(A_inv, T_inv);
-  bucket_geometry.make_own(new cart_geom_type(*buckets, mapping));
+  bucket_geometry.make_shared(new cart_geom_type(*buckets, mapping));
   bucket_geometry->set_inverse_mapping(inverse_mapping);
 
 

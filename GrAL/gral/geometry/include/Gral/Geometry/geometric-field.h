@@ -31,12 +31,12 @@ private:
 public:
   geometric_field() 
   {
-    loc.make_own(new point_locator_type());
+    loc.make_shared(new point_locator_type());
   }
   geometric_field(geom_type const& geo,
 		  function_type const& ff) : the_geom(geo), f(ff)
   {
-    loc.make_own(new point_locator_type(TheGrid(), TheGeometry()));
+    loc.make_shared(new point_locator_type(TheGrid(), TheGeometry()));
     loc->init();
   }
   void init(ref_ptr<geom_type     const> geo, 
