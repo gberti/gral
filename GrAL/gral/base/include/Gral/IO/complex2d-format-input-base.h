@@ -107,7 +107,7 @@ public:
 /*! \brief Vertex iterator for IstreamComplex2DFmt_base
 7    \ingroup complex2dformat
 
-    Model of $GrAL GridVertexIterator
+    Model of $GrAL VertexIterator
 
     \see Module \ref complex2dformat
     \see IstreamComplex2DFmt_base
@@ -159,7 +159,7 @@ public:
 /*! \brief Cell iterator for IstreamComplex2DFmt_base
     \ingroup complex2dformat
 
-    Model of $GrAL GridCellIterator
+    Model of $GrAL CellIterator
 
     \see Module \ref complex2dformat
     \see IstreamComplex2DFmt_base

@@ -319,7 +319,7 @@ private:
     The main work is done by vertex_set_of_facets_iterator
 
     <b> Template parameters: </b>
-      - FacetRange: $GrAL GridFacetRange 
+      - FacetRange: $GrAL FacetRange 
         (same as in vertex_set_of_facets_iterator)
 
     \see vertex_set_of_facets_iterator
@@ -368,7 +368,7 @@ VerticesOfFacets(const FacetRange& FR)
   Only on construction time this iterator should be rather "lean".
    
   \b Template parameters:
-  - <tt> CellRange </tt>: $GrAL GridCellRange
+  - <tt> CellRange </tt>: $GrAL CellRange
 
   \see    Used by vertex_set_of_cells
   \todo   shallow copy / copy-on-write
@@ -445,7 +445,7 @@ private:
     The main work is done by vertex_set_of_cells_iterator
 
     <b> Template parameters: </b>
-      - FacetRange: $GrAL GridCellRange 
+      - CellRange: $GrAL CellRange 
         (same as in vertex_set_of_cells_iterator)
 
     \see vertex_set_of_cells_iterator
