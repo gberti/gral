@@ -54,6 +54,9 @@ private:
   mutable int   nv; // number of vertices
   mutable int   nc; // number of cells
   mutable bool  nv_nc_read;
+  // mutable  bool  vertex_iter_instance;
+  mutable  bool  cell_iter_instance;
+
 public:
   IstreamComplex2DFmt_base();
   IstreamComplex2DFmt_base(std::string const& file, int off = 0);
@@ -71,7 +74,24 @@ protected:
   virtual void init()        const;
   virtual bool initialized() const;
 
+
   checked_istream & In() const { return checked_in;}
+
+  /*
+  void set_vertex_iter_initialized() const
+    {
+      REQUIRE(! vertex_iter_instance, 
+	      "Can pass only once trough vertices!\n",1);
+      vertex_iter_instance = true;
+    }
+  */
+  void set_cell_iter_initialized() const
+    {
+      REQUIRE(! cell_iter_instance, 
+	      "Can pass only once trough cells!\n",1);
+      cell_iter_instance = true;
+    }
+
 public:
   unsigned NumOfVertices() const { self::init(); return nv;}
   unsigned NumOfCells()    const { self::init(); return nc;}
@@ -104,10 +124,16 @@ public:
   VertexIterator_istream_complex2d() : g(0), v(-1) {}
   VertexIterator_istream_complex2d(grid_type const& gg) 
     : g(&gg), v(0) 
-    { g->init(); }
+    { 
+      g->init(); 
+      //g->set_vertex_iter_initialized();
+    }
   VertexIterator_istream_complex2d(grid_type const& gg, int vv)
     : g(&gg), v(vv) 
-    { g->init(); } 
+    { 
+      g->init(); 
+      //g->set_vertex_iter_initialized();
+    } 
   
 
   self& operator++() {
@@ -151,6 +177,7 @@ public:
     : g(&gg), c(0)
     {
       g->init();
+      g->set_cell_iter_initialized();
       if(!IsDone())
 	g->In() >> nv;
     }

@@ -5,7 +5,8 @@ IstreamComplex2DFmt_base::IstreamComplex2DFmt_base()
     in(0),
     checked_in(in),
     is_in_owned(false),
-    nv_nc_read(false)
+    nv_nc_read(false),
+    cell_iter_instance(false)
 {}
 
 IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::string const& file, int off)    
@@ -13,7 +14,9 @@ IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::string const& file, int 
     in(new std::ifstream(file.c_str())),
     checked_in(in),
     is_in_owned(true),
-    nv_nc_read(false)
+    nv_nc_read(false),
+    cell_iter_instance(false)
+
 {
  
 }
@@ -23,7 +26,9 @@ IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::istream& is, int off)
     in(&is),
     checked_in(&is),
     is_in_owned(false),
-    nv_nc_read(false)
+    nv_nc_read(false),
+    cell_iter_instance(false)
+
 {
  
 }
@@ -40,6 +45,7 @@ void IstreamComplex2DFmt_base::copy(IstreamComplex2DFmt_base const& rhs)
     offset = rhs.offset;
     nv = rhs.nv;
     nc = rhs.nc;
+    cell_iter_instance = rhs.cell_iter_instance;
     // no call to init() here - either rhs has already been initialized  using in,
     // in which case the information is ok, or not - then in is not a valid stream,
     // and there must be a call to init(string) later on.
