@@ -9,13 +9,20 @@
 
 #include <iostream>
 #include <algorithm>
+#include <cmath>
+
+/*! \file
+ */
 
 /*! \brief Geometry wrapper class for Triang3D
+   
+    \ingroup triang3dmodule
+ 
+   Model of $GrAL VertexGridGeometry.
 
-   This class assumes vertex coordinates in an array
-   \f$ (x_0,y_0, x_1, y_1, \ldots) \f$.
-
-   It is a model of $GrAL VertexGridGeometry.
+   \see Test in \ref test-triang3d-geometry.C
+   \todo It could be parameterised by scalar type of coordinates, 
+    and by space dimension.
  */
 class stored_geometry_triang3d {
 public:
@@ -31,6 +38,7 @@ private:
   double         * xyz;
   bool             owned;
 public:
+  //! Empty geometry
   stored_geometry_triang3d() : g(0), xyz(0), owned(false) {}
   //! initialize with value semantics (coords are owned)
   stored_geometry_triang3d(grid_type const& g_)
@@ -41,9 +49,10 @@ public:
   //! initialize with reference semantics (coords are referenced)
   stored_geometry_triang3d(grid_type const& g_, double* xyz_)
     : g(&g_), xyz(xyz_), owned(false) {}
-
+  //! Destructor
   ~stored_geometry_triang3d() { clear();}
 
+  //! Dimension of embedding space
   unsigned space_dimension() const { return 3;}
 
   //! change to value semantics
@@ -67,6 +76,7 @@ private:
   }
 
 public:
+  //! Anchor grid
   grid_type const& TheGrid() const { return *g;}
 
   class coord_type;
@@ -88,6 +98,7 @@ public:
     }
   };
 
+  //! \brief coordinate representation
   class coord_type : public array_operators<coord_type, double, 3> {
     double xyz[3];
   public:
@@ -109,11 +120,13 @@ public:
     void init(double const* p)
       { xyz[0] = p[0]; xyz[1] = p[1]; xyz[2] = p[2]; }
   };
+  //! A type for real numbers
   typedef double scalar_type;
 
-
+  //! coordinate of Vertex (read/write access)
   coord_proxy coord(Vertex const& v) 
     { return coord_proxy(xyz + 3*v.handle());}
+  //! coordinate of Vertex (read access)
   coord_type  coord(Vertex const& v) const 
     { return coord_type (xyz + 3*v.handle());}
 
@@ -123,18 +136,25 @@ public:
   //! area of a facet
   inline scalar_type area(Facet const& f)  const;
 
+  //! 1D-volume of edge
+  inline scalar_type volume(Edge const& e) const { return length(e);}
+  //! 2D-volume of facet
+  inline scalar_type volume(Facet const& f)  const { return area(f);}
+  //! 3D-volume of cell
+  inline scalar_type volume(Cell  const& c) const;
 
-  //! Center of intertia of \c c
+
+  //! Center of inertia of \c c
   coord_type center(Cell const& c) const 
     { return (coord(c.V(0)) + coord(c.V(1)) + coord(c.V(2)) + coord(c.V(3)))/4.0;}
 
-  //! Barycenter (average of vertices) of cell \c c
+  //! Barycenter/Centroid (average of vertices) of cell \c c
   coord_type barycenter(Cell const& c) const { return center(c);}
 
   //! solid angle of the wedge of vertex \c vc, in steradians (3D)   
   scalar_type solid_angle(VertexOnCellIterator const& vc) const;
 
-  /*! ratio of solid angle of wedge \c vc to complete solid angle
+  /*! \brief ratio of solid angle of wedge \c vc to complete solid angle
 
       The ratios of the wedges of an internal regular vertex sum up to 1.
    */
@@ -218,6 +238,14 @@ stored_geometry_triang3d::area(stored_geometry_triang3d::Facet const& f) const
   coord_type p1 = coord(*vf); ++vf;
   coord_type p2 = coord(*vf);
   return ap::triangle_area(p0,p1,p2);
+}
+
+inline stored_geometry_triang3d::scalar_type 
+stored_geometry_triang3d::volume(stored_geometry_triang3d::Cell  const& c) const
+{ 
+  typedef algebraic_primitives<coord_type> ap;
+  coord_type v0 = coord(c.V(0));
+  return fabs(1.0/6.0 * ap::det3(coord(c.V(1))-v0, coord(c.V(2))-v0, coord(c.V(3))-v0));
 }
 
 inline stored_geometry_triang3d::scalar_type 
