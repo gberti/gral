@@ -106,6 +106,7 @@ namespace connected_components {
     std::queue<cell_handle> Q;
     visited_table_type      visited;
   public:
+    cell_iterator() : comp(0) {}
     cell_iterator(component_type const&  comp_) 
        : comp(&comp_), 
 	 visited(comp_.BaseGrid(), false) 
