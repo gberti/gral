@@ -26,7 +26,7 @@ void test_level(GRID const& G, GEOM const& Geom, std::ostream& out)
 template<class GEOM, class GRID>
 void test_hier_grid_table(GRID const& root,
 			  GRID const& pattern,
-			  ostream & out)
+			  std::ostream & out)
 {
   typedef GRID flat_grid_type;
   typedef GEOM flat_geom_type;

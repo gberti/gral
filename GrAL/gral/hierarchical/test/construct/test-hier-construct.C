@@ -8,12 +8,13 @@
 template<class GRID>
 void test_hier_grid(GRID const& root,
 		    GRID const& pattern,
-		    ostream & out)
+		    std::ostream & out)
 {
   typedef GRID cart_grid_type;
   typedef grid_types<cart_grid_type> cgt;
   typedef hierarchical::hgrid_cartesian<cart_grid_type> hier_grid_type;
   typedef hier_grid_type                                hgt;
+  typedef typename hgt::HierCell                        HierCell;
 
   hier_grid_type H(root,pattern);
   H.add_finer_level();
@@ -23,9 +24,9 @@ void test_hier_grid(GRID const& root,
     out << "Level " << lev << ": " << H.FlatGrid(lev).cell_size() << " cells\n";
   
   for(typename cgt::CellIterator c = H.FlatGrid(H.finest_level()).FirstCell(); !c.IsDone(); ++c) {
-    hgt::HierCell h(H,*c,H.finest_level());
-    hgt::HierCell p = H.Parent(h);
-    hgt::HierCell pp = H.Parent(p);
+    HierCell h(H,*c,H.finest_level());
+    HierCell p = H.Parent(h);
+    HierCell pp = H.Parent(p);
     
     out << "child: " << h.Flat().index()  << "; "
 	<< "parent: " << p.Flat().index() << "; (children: ";
