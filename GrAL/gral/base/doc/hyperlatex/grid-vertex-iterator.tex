@@ -1,0 +1,50 @@
+\xname{GridVertexIterator}
+\begin{Label}{GridVertexIterator}
+ \conceptsection{Grid Vertex (Edge, Facet, Cell ...) Iterator Concept}
+\end{Label}
+
+
+\conceptsubsection{Description}
+A \concept{Grid Vertex Iterator} allows iteration over the vertices
+of a \conceptlink{Vertex Grid Range}{VertexGridRange}.
+
+Analogous concepts exist for edges, facets and cells; 
+these are not listed seperately.
+
+\conceptsubsection{Refinement of}
+\conceptlink{Grid Sequence Iterator}{GridSequenceIterator}
+
+\conceptsubsection{Notation}
+\conceptsubsection{Definitions}
+\conceptsubsection{Associated types}
+\begin{tabularx}{12cm}{llR} \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Description  \\ 
+  \hline
+  \\ 
+  vertex type  & 
+  {\tt I::Vertex} &
+   type of the underlying vertex,
+   \par   model of \conceptlink{Grid Vertex}{GridVertex}
+   \par identical to \code{V::element\_type}
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\conceptsubsection{Valid Expressions}
+\conceptsubsection{Expression semantics}
+\conceptsubsection{Invariants}
+\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+\sectionlink{Complex2D::VertexIterator}{Complex2DVertexIterator},
+defined in 
+\gralcodelink{vertex2d-it.h}{complex2d}
+
+\conceptsubsection{Notes}
+\conceptsubsection{See also}
+\conceptlink{Grid Sequence Iterator}{GridSequenceIterator}
+~
+\conceptlink{Vertex Grid Range}{VertexGridRange}
+

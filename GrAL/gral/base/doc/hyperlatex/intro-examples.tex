@@ -1,0 +1,24 @@
+\xname{ConcreteExamples}
+\begin{Label}{ConcreteExamples}
+   \introsection{Concrete examples}
+\end{Label}
+ \needswork{This section needs work!}
+
+There are several grid classes implemented, 
+that conform to the interface described above, 
+presented here with varying degree of ``iteration power'':
+\begin{itemize}
+\item  \sectionlink{\type{RegGrid2D}}{RegGrid2D}, a 2-dimensional
+  regular grid, model of \sectionlink{\concept{FullGrid}}{FullGrid},
+\item  \sectionlink{\type{Complex2D}}{Complex2D}, a  2-dimensional
+  unstructured grid with arbitrary cells, model of \sectionlink{\concept{FullCellGrid}}{FullCellGrid},
+\item \sectionlink{\type{Triang2D}}{Triang2D}, a  2-dimensional triangulation
+\end{itemize}
+Some (not very useful) examples of the iterator features
+can be found in a  
+\xlink{test routine}{\GRALINC{cartesian2d}{test-cartesian.C}}
+for the cartesian grid, 
+and a  
+\xlink{test class}{\GRALINC{complex2d}{test-complex.C}
+for  the {\tt Complex2D} grid.
+  

@@ -1,0 +1,172 @@
+\xname{GridEdge}
+\begin{Label}{GridEdge}
+\conceptsection{Grid Edge Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A  {\em Grid Edge\/} represents the mathematical concept of an edge 
+--- a 1-dimensional entity in a \sectionlink{\concept{Grid}}{Grid}.
+
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{ Grid Element}}{GridElement}
+ 
+\conceptsubsection{Notation}
+{\tt E} is a type which is a model of \concept{Grid Edge}
+\\
+{\tt e} is an object of type {\tt E}
+\\
+{\tt V} is  a shorthand for the {\tt E::Vertex} type
+\\
+{\tt v} is an object of type {\tt V}
+\\
+{\tt g} is an object of type {\tt E::grid\_type}
+\\
+{\tt h} is an object of type {\tt E::edge\_handle}
+
+\conceptsubsection{Associated types}
+
+{\em NOTE:\/} The types and expression involving 
+\sectionlink{\concept{ Incidence Iterators}}{GridIncidenceIterator} are given below for the
+case of \sectionlink{cell-on-edge iteration}{Cell-On-EdgeIterator}.
+Analogous types and expressions can be defined for the other element types,
+like edge, facet, or cell. 
+The tables are to be understood in the following sense:
+\\
+{\em If\/} a edge defines the incidence iterator over cells,
+{\em then\/} the requirements under {\em Optional part\/} apply.
+Analogous requirements take effect if `cell' is replaced by another element type.
+
+\noindent
+\begin{tabularx}{12cm}{llX} 
+  \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Description   \\ \hline
+  handle type & 
+  {\tt E::edge\_handle} &
+  type of the corresponding \sectionlink{\concept{Edge Handle}}{GridVertexHandle} 
+  \\ 
+  vertex type &
+  \code{E::Vertex} &
+  Vertex type of the edge, 
+  short for \code{E::grid\_type::Vertex}.
+  \\ 
+  \hline
+  \multicolumn{3}{c}{\bf \em Optional part (as example) }
+  \\
+  \hline
+  cell-on-edge iterator &
+  {\tt E::CellIterator}&
+  type of the corr. CellOnEdgeIterator
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+    
+\conceptsubsection{Valid Expressions}
+
+\begin{tabularx}{12cm}{Xlll} \\ 
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type \\ 
+  \hline
+  handle & 
+  {\tt e.handle()} &
+  ~ &
+  {\tt E::edge\_handle} 
+  \\
+  first vertex &
+  \code{v = e.V1()} &
+  ~ &
+  \type{Vertex}
+  \\
+  second vertex &
+  \code{v = e.V2()} &
+  ~ &
+  \type{Vertex}
+  \\
+  \hline
+  \multicolumn{3}{c}{\bf \em Optional part (as example) }
+  \\
+  \hline
+  cell-on-edge iteration start & 
+  {\tt e.FirstCell()} &
+  ~ &
+  {\tt E::CellIterator} 
+  \\
+  number of incident cells & 
+  {\tt E.NumOfCells()} &
+  ~ &
+  {\tt int} 
+  \\
+  \hline
+  \\
+\end{tabularx}
+ 
+\T\begin{small}
+\conceptsubsection{Expression semantics}
+\begin{tabularx}{15cm}{XXXXX} \\
+  \hline
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  handle &
+  {\tt h = e.handle();} &
+  e is \footlink{valid}{valid} &
+  shorthand for {\tt h = e.TheGrid(). handle(e)} &
+  {\tt e == e.TheGrid(). edge(h)}  
+  \\ 
+  \hline
+  \multicolumn{3}{c}{\bf \em Optional part (as example) }
+  \\
+  \hline
+  cell-on-edge iteration start & 
+  {\tt ci = e.FirstCell()} &
+  {\tt e} is \link{valid}{valid}  &
+  let {\tt ci} point to  the first cell incident to {\tt e}  & 
+  {\tt ci.TheEdge() == ci.TheAnchor() == e} 
+   and 
+  {\tt ci.TheGrid() == e.TheGrid()}
+  \\ 
+  number of incident cells & 
+  {\tt n =  e.NumOfCells()} &
+  {\tt e} is \link{valid}{valid}  &
+  n is the number of cells that are incident to {\tt e} &
+  ~ 
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+\T\end{small}
+    
+\conceptsubsection{Complexity guarantees}
+All operations are amortized constant time\noteref{note-edge-amort}.
+
+\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+\sectionlink{{\tt Complex2D::Edge}}{Complex2DEdge} 
+defined in
+\gralcodelink{edge2d.h}{complex2d}
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-edge-amort}
+  Amortization is understood to involve calling the operations for all
+  edges of a grid.
+\end{enumerate}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{Grid}}{Grid} ~
+\sectionlink{\concept{Grid Element Handle}}{GridElementHandle} ~
+\sectionlink{\concept{Edge Handle}}{GridVertexHandle}~
+\sectionlink{\concept{Grid Element }}{GridElement} ~
+\sectionlink{\concept{Grid Cell}}{GridCell} ~
+\sectionlink{\concept{Sequence Iterator}}{GridSequenceIterator} ~
+\sectionlink{\concept{Incidence Iterator}}{GridIncidenceIterator} ~
+
+  
+

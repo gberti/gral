@@ -1,0 +1,157 @@
+\xname{GridVertex}
+\begin{Label}{GridVertex}
+\conceptsection{Grid Vertex Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A  {\em Grid Vertex\/} represents the mathematical concept of a vertex 
+--- a 0-dimensional entity in a \sectionlink{\concept{ Grid }}{Grid}.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{ Grid Element}}{GridElement}
+ 
+\conceptsubsection{Notation}
+{\tt V} is a type which is a model of {\em grid vertex\/}
+\\
+{\tt v} is an object of type {\tt V}
+\\
+{\tt g} is an object of type {\tt V::grid\_type}
+\\
+{\tt h} is an object of type {\tt V::vertex\_handle}
+\\
+{\tt ci} is an object of type {\tt V::CellIterator}
+
+
+\conceptsubsection{Associated types}
+
+\noindent
+{\em NOTE:\/} The types and expression involving 
+\sectionlink{\concept{ Incidence Iterators}}{GridIncidenceIterator} are given below for the
+case of \sectionlink{cell-on-vertex iteration}{Cell-On-VertexIterator}.
+Analogous types and expressions can be defined for the other element types,
+like edge, facet, or cell. 
+The tables are to be understood in the following sense:
+\\
+{\em If\/} a vertex defines the incidence iterator over cells,
+{\em then\/} the requirements under {\em Optional part\/} apply.
+Analogous requirements take effect if `cell' is replaced by another element type.
+
+\noindent
+\begin{tabularx}{12cm}{llX} 
+  \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Description   \\ \hline
+  handle type & 
+  {\tt V::vertex\_handle} &
+  type of the corresponding \sectionlink{\concept{Vertex Handle}}{GridVertexHandle} 
+  \\ 
+  \hline
+  \multicolumn{3}{c}{\bf \em Optional part (as example) }
+  \\
+  \hline
+  cell-on-vertex iterator &
+  {\tt V::CellIterator}&
+  type of the corr. CellOnVertexIterator
+  \\ \hline
+\end{tabularx}
+    
+\conceptsubsection{Valid Expressions}
+
+\noindent
+\begin{tabularx}{14cm}{Xlll} 
+%  \\ 
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type \\ 
+  \hline
+  handle & 
+  {\tt v.handle()} &
+  ~ &
+  {\tt V::vertex\_handle} 
+  \\
+  \hline
+  \multicolumn{3}{c}{\bf \em Optional part (as example) }
+  \\
+  \hline
+  cell-on-vertex iteration start & 
+  {\tt v.FirstCell()} &
+  ~ &
+  {\tt V::CellIterator} 
+  \\
+  number of incident cells & 
+  {\tt v.NumOfCells()} &
+  ~ &
+  {\tt int} 
+  \\
+  \hline
+  \\
+\end{tabularx}
+ 
+\T\begin{small}
+\conceptsubsection{Expression semantics}
+\begin{tabularx}{15cm}{XXXXX} \\
+  \hline
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  handle &
+  {\tt h = v.handle();} &
+  v is \footlink{valid}{valid} &
+  shorthand for {\tt h = v.TheGrid(). handle(v)} &
+  {\tt v == v.TheGrid(). vertex(h)}  
+  \\ 
+  \hline
+  \multicolumn{3}{c}{\bf \em Optional part (as example) }
+  \\
+  \hline
+  cell-on-vertex iteration start & 
+  {\tt ci = v.FirstCell()} &
+  {\tt v} is \link{valid}{valid}  &
+  let {\tt ci} point to  the first cell incident to {\tt v}  & 
+  {\tt ci.TheVertex() == ci.TheAnchor() == v} 
+   and 
+  {\tt ci.TheGrid() == v.TheGrid()}
+  \\ 
+  number of incident cells & 
+  {\tt n =  v.NumOfCells()} &
+  {\tt v} is \link{valid}{valid}  &
+  n is the number of cells that are incident to {\tt v} &
+  ~ 
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+\T\end{small}
+    
+\conceptsubsection{Complexity guarantees}
+All operations are amortized constant time\noteref{note-vtx-amort}.
+
+\W\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+
+\sectionlink{{\tt Complex2D::Vertex}}{Complex2DVertex} 
+defined in
+\gralcodelink{vertex2d.h}{complex2d}
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-vtx-amort}
+  Amortization is understood to involve calling the operations for all
+  vertices of a grid.
+\end{enumerate}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{Grid}}{Grid} ~
+\sectionlink{\concept{Grid Element Handle}}{GridElementHandle} ~
+\sectionlink{\concept{Vertex Handle}}{GridVertexHandle}~
+\sectionlink{\concept{Grid Element }}{GridElement} ~
+\sectionlink{\concept{Grid Cell}}{GridCell} ~
+\sectionlink{\concept{Sequence Iterator}}{GridSequenceIterator} ~
+\sectionlink{\concept{Incidence Iterator}}{GridIncidenceIterator} ~
+
+  
+

@@ -1,0 +1,119 @@
+ \xname{Vertex-On-CellIterator}
+\begin{Label}{Vertex-On-CellIterator}
+\conceptsection{Vertex-On-Cell (-Facet, ...) Iterator Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A {\em Vertex-On-Cell Iterator\/} refines the concept of 
+\sectionlink{\concept{Grid Incidence Iterator }}{GridIncidenceIterator} :
+It allows to access all vertices incident to a given cell.
+Thus, it can also be seen as a 
+\sectionlink{\concept{Grid Sequence Iterator}}{GridSequenceIterator} 
+over the 
+\sectionlink{\concept{ Vertex Grid Range}}{VertexGridRange} of that cell.
+
+Similar iterators can be defined for other anchor elements, most notably facets.
+For these, just replace {\em cell\/} with {\em facet}.
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{ Incidence Iterator}}{GridIncidenceIterator}
+\\
+%\sectionlink{\concept{Sequence Iterator}}{GridSequenceIterator}
+
+\conceptsubsection{Notation}
+{\tt V} is a model of Vertex-On-Cell Iterator
+\\ 
+{\tt v} is an  object of type  {\tt V}
+\\
+{\tt c} is an  object of type  {\tt V::Cell}
+
+\conceptsubsection{Associated types}
+The types {\tt V::element\_type} and {\tt V::anchor\_type}
+can now be named more  specifically. The names from the incidence iterator concept
+remain valid.
+
+\noindent
+\begin{tabular}{llp{7cm}} 
+  \\
+  \hline
+  \bf  Name &\bf  Expression  &\bf  Description 
+  \\ 
+  \hline
+  Vertex type  &
+  {\tt V::Vertex} &
+  synomym to {\tt V::element\_type} 
+  \\ 
+  Cell type  &
+  {\tt V::Cell} &
+  the cell type {\tt V} operates upon,
+  \par model of \sectionlink{\concept{ Grid Cell }}{GridCell}
+  \\ 
+  Anchor type  & 
+  {\tt V::anchor\_type} &
+  synonym to  {\tt V::Cell},
+  \par model of \sectionlink{\concept{Vertex Grid Range}}{VertexGridRange}  
+  \\ 
+  \hline
+  \\
+\end{tabular}
+    
+\conceptsubsection{Valid Expressions}
+
+\begin{tabular}{llll} \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
+  \hline
+  anchor cell  &
+  {\tt v.TheCell();} &
+  ~ &
+  {\tt V::Cell const\&} 
+  \\ 
+  \hline
+  \\
+\end{tabular}
+
+
+\conceptsubsection{Expression semantics}
+
+\begin{tabularx}{14cm}{RRRRR} \\
+  \hline     
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\
+  \hline
+  anchor cell  &
+  {\tt Cell C = v.TheCell();} &
+  {\tt v is not singular} &
+  get the anchor of {\tt v} & 
+  {\tt c} is a valid cell; 
+  \par
+  {\tt c == v.TheCell()}
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\W\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+\sectionlinkUNDEF{{\tt Complex2D::VertexOnCellIterator}}{Complex2DVertexOnCellIterator}, 
+defined in  
+\gralcodelink{vertex-on-cell2d-it.h}{complex2d}.
+
+\W\conceptsubsection{Notes}
+
+
+\conceptsubsection{See also}
+\sectionlink{\concept{ Grid }}{Grid} ~
+\sectionlink{\concept{ Grid Range }}{GridRange} ~
+\\
+\sectionlink{\concept{ Grid Element }}{GridElement} ~
+\sectionlink{\concept{ Grid Vertex }}{GridVertex} ~
+\sectionlink{\concept{ Grid Cell}}{GridCell} ~
+\\
+\sectionlink{\concept{Grid Sequence Iterator }}{GridSequenceIterator} ~
+\sectionlink{\concept{Grid Incidence Iterator }}{GridIncidenceIterator} ~
+  
+

@@ -10,7 +10,6 @@
 //----------------------------------------------------------------
 
 /*! \defgroup boundaryalgorithms Algorithms for exploring Grid Boundaries
-    \ingroup algorithms
     \ingroup boundary
     
     The algorithms in this module count and find boundary facets and connected components.

@@ -19,6 +19,7 @@
 
 //----------------------------------------------------------------
 /*! \defgroup boundaryrange Generic Grid Boundary Range
+    \ingroup boundary
     \ingroup subranges   
  
    \brief Classes implementing generically a  grid boundary range.
@@ -29,6 +30,7 @@
    This works only for 2D, as it uses the 2D-component iterators.
 
    \see Module boundarycompiter
+   \see Moduel boundaryalgorithms
 */
 //----------------------------------------------------------------
 

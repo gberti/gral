@@ -1,0 +1,64 @@
+\xname{grid-function-hash}
+\begin{Label}{grid-function-hash}
+\datasection{grid\_function\_hash<E,T> }
+\end{Label}
+
+\datasubsection{Declaration}
+\begin{example}
+template<class E, class T>
+class grid_function_hash;
+\end{example}
+\datasubsection{Description}
+The class template \type{grid\_function\_function} 
+is an implementation 
+of the \conceptlink{Total Grid Function}{TotalGridFunction} concept.
+It works for any element type for which the
+\Stltypelink{hash} template has been specialized.
+
+\datasubsection{Model of}
+\conceptlink{Total Grid Function}{TotalGridFunction}
+\datasubsection{Definition}
+Defined in \gralcodelink{grid-function-hash.h}{base}
+
+\datasubsection{Template parameters}
+\begin{tabular}{lll} \hline
+  \bf Parameter & \bf Description & \bf Default \\
+  \hline
+  \type{E}  & the element type  & ~ \\
+  \type{T}  & the value  type  & ~ \\
+  \hline
+\end{tabular}
+
+\datasubsection{Type requirements}
+\type{E} must be a model of \conceptlink{Grid Element}{GridElement}.\\
+The \stltypelink{hash}{hash} template must be specialized for \type{E}. \\
+\type{T} must be a model of STL \Stllink{Assignable}.
+
+\datasubsection{Public base classes}
+\type{grid\_function\_hash\_base<E,T>}, defined in
+\gralcodelink{grid-function-hash.h}{base}.
+
+\datasubsection{Members}
+\datasubsection{New members}
+
+\datasubsection{Example}
+\begin{example}
+ a_grid_type g;
+ 
+ typedef grid_types<a_grid_type> gt;
+ partial_grid_function<gt::Vertex, int> color(g,black);
+ mark_white_vertices(g,colors);
+\end{example}
+\datasubsection{Known uses}
+Used for implementation of total grid functions for most grids,
+for example \Sectionlinkshort{RegGrid2D}  and
+total grid function for the element types \type{Vertex} and \type{Cell}
+of \Sectionlinkshort{Complex2D}.
+
+These implemenentations rely on the technique of
+\Glossarylink{partial specialization}.
+
+\datasubsection{Notes}
+\datasubsection{See also}
+\Sectionlinkshort{partial-grid-function-hash}
+

@@ -1,0 +1,53 @@
+\xname{istream-complex2d-fmt}
+\begin{Label}{istream-complex2d-fmt}
+\datasection{IstreamComplex2DFmt}
+\end{Label}
+
+\datasubsection{Declaration}
+class IstreamComplex2DFmt;
+
+\datasubsection{Description}
+The class \type{IstreamComplex2DFmt} is an adapter to the grid interface
+for a grid given by a squential stream, for example a file,
+in the complex2d format.
+By using this class, it is possible to read an arbitrary grid from
+this format, without knowing its details.
+
+\datasubsection{Model of}
+\conceptlink{Cell-Vertex Input Grid Range}{Cell-VertexInputGridRange}
+\\
+\conceptlink{Vertex Grid  Geometry}{VertexGridGeometry}
+
+\datasubsection{Definition}
+Defined in \gralcodelink{istream-grid-complex2d-fmt.h}{base}
+\datasubsection{Public base classes}
+\datasubsection{Members}
+\datasubsection{New members}
+\begin{tabularx}{14cm}{lR}
+  \hline
+  \bf Member & \bf Description \\
+  \hline
+  \pcode{IstreamComplex2DFmt(istream\&, int offset = 0)} &
+     Constructor, offset gives the lowest vertex number used
+    (usually 0 or 1).
+    \\
+    \pcode{coord\_type const\& coord(Vertex const\& v)}
+    & access to vertex coordinates.  
+    \\
+    \hline
+\end{tabularx}
+
+\datasubsection{Example}
+\begin{example}
+a_grid_type Agrid;
+a_geom_type Ageom; // model of \conceptlinkfoot{Mutable Grid Vertex Geometry}{VertexGridGeometry}
+ifstream in("grid.complex2d");
+IstreamComplex2DFmt SrcG(in); // Grid & geom combined
+
+// (Agrid, Ageom) = (SrcG, SrcG)
+\conceptlinkfoot{Construct}{ConstructGrid}(Agrid, Ageom, SrcG, SrcG);
+\end{example}
+\datasubsection{Known uses}
+\datasubsection{Notes}
+\datasubsection{See also}
+

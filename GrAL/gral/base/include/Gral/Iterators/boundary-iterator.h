@@ -14,9 +14,11 @@
 
 //----------------------------------------------------------------
 /*! \defgroup boundarycompiter Boundary Component Iterators
+
   \brief A set of general iterators for the boundary of a (subset of) a 2D grid
          described by a predicate on cells.
   \ingroup iterators
+  \ingroup boundary
   
   \contents
    - class BoundaryComponentIterator<Grid,CellPred>;
