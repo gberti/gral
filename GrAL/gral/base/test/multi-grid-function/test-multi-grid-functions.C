@@ -65,13 +65,18 @@ int main() {
 
     pmgf.set_default(-1);
     REQUIRE_ALWAYS(pmgf.get_default() == -1, "pmgf::get_default()=" << pmgf.get_default() ,1);
-    for(gt::VertexIterator v(R); !v.IsDone(); ++v ) 
+    for(gt::VertexIterator v(R); !v.IsDone(); ++v ) {
       REQUIRE_ALWAYS(pmgf(*v) == -1, "pmgf(*v)=" << pmgf(*v), 1);      
-    for(gt::EdgeIterator e(R); ! e.IsDone(); ++e)
+      REQUIRE_ALWAYS(!pmgf.defined(*v), "", 1);
+    }
+    for(gt::EdgeIterator e(R); ! e.IsDone(); ++e) {
       REQUIRE_ALWAYS(pmgf(*e) == -1, "pmgf(*e)=" << pmgf(*e), 1);
-    for(gt::CellIterator c(R); ! c.IsDone(); ++c)
+      REQUIRE_ALWAYS(!pmgf.defined(*e), "", 1);
+    }
+    for(gt::CellIterator c(R); ! c.IsDone(); ++c) {
       REQUIRE_ALWAYS(pmgf(*c) == -1, "pmgf(*c)=" << pmgf(*c), 1);
-
+      REQUIRE_ALWAYS(!pmgf.defined(*c), "", 1);
+    }
     for(gt::VertexIterator v(R); !v.IsDone(); ++v ) {
       mgf [*v] = v.handle();
       pmgf[*v] = v.handle();
@@ -79,6 +84,16 @@ int main() {
 
     test_mgf(mgf);
     test_mgf(pmgf);
+
+    pmgf.clear();
+    for(gt::VertexIterator v(R); !v.IsDone(); ++v ) {
+      REQUIRE_ALWAYS(pmgf(*v) == -1, " pmgf(v)=" << pmgf(*v),1);
+      // ! pmgf.defined(*v);
+    }
+    for(gt::EdgeIterator e(R); ! e.IsDone(); ++e)
+      REQUIRE_ALWAYS(pmgf(*e) == -1, "pmgf(*e)=" << pmgf(*e), 1);
+    for(gt::CellIterator c(R); ! c.IsDone(); ++c)
+      REQUIRE_ALWAYS(pmgf(*c) == -1, "pmgf(*c)=" << pmgf(*c), 1);
 
   }
 
