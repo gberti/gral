@@ -16,6 +16,7 @@ cat out2x2
 End output
 ";
 else
+sleep 5
 mv grid.0.out grid2x2.0.out
 mv grid.1.out grid2x2.1.out
 mv dgf.0 dgf2x2.0.out
@@ -38,6 +39,7 @@ cat out4x2
 End output
 ";
 else
+sleep 5
 mv grid.0.out grid4x2.0.out
 mv grid.1.out grid4x2.1.out
 mv dgf.0 dgf4x2.0.out
@@ -55,3 +57,7 @@ else
 fi
 done
 /bin/echo "\n";
+
+
+
+
