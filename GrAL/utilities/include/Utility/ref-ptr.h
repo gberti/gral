@@ -8,6 +8,9 @@
 
 namespace GrAL {
 
+
+  template<class T> class ref_ptr;
+
   /*! \brief Simplistic method for determining if a pointer resides on the stack
     
   \ingroup memory
@@ -41,6 +44,14 @@ namespace GrAL {
     Therefore, the corresponding pointer operators were overloaded.
     The address-of \c operator& was made private to forbid obtaining the
     address of the temporary object.
+ 
+    \note What we did try with this class was an implicit conversion to \c ref_ptr<T>
+     if assigned to such an object. However, this does not seem to work.
+     Neither the conversion operator  to \c ref_ptr<T> nor the constructors of \c ref_ptr taking
+     \c temporary work as desired. This needs further attention. Currently, no \c temporary<T>
+     objects are returned, so this class is not used. Instead, we return \c  ref_ptr, which always
+     uses dynamic allocation.
+
 */
 
 template<class T>
@@ -56,7 +67,8 @@ public:
   // make temporary<T> behave like T const& / T const* in almost all situations ...
   // ...except that we cannot take the address of it.
   // because we cannot overload operator., this conversion does not normally do the trick.
-  operator T const& () const { return t;}
+  // operator T const& () const { return t;}
+  operator ref_ptr<T> () const; 
   T const& value() const { return t;}
   // must rely on pointer interface
   T const& operator*()  const { return t;}
@@ -159,11 +171,18 @@ public:
 
       If \c tptr points to dynamically allocated memory, 
       deallocation  remains in the responsibility of the caller.
-
+      
       \post \c is_reference()
    */
   explicit ref_ptr(T *   tptr) 
     : ptr(tptr , null_deleter())
+  { 
+    ENSURE(is_reference(),"",1);
+  } 
+
+  template<class U>
+  explicit ref_ptr(U *   uptr) 
+    : ptr(uptr , null_deleter())
   { 
     ENSURE(is_reference(),"",1);
   } 
@@ -190,18 +209,40 @@ public:
     } 
   }
 
+  template<class U>
+  ref_ptr(U *   uptr, ownership own) 
+  { 
+    if(own == referenced) {
+      ptr.reset(uptr, null_deleter());
+      ENSURE(is_reference(),"",1);
+    }
+    else { // own == shared
+      // this cannot check if uptr is a pointer to a heap-allocated array element,
+      // which is equally forbidden.
+      REQUIRE(!is_stack_address(uptr), "Attempt to create shared pointer from automatic (stack) variable!",1);
+      ptr.reset(uptr);
+      ENSURE(is_shared(),"",1);
+    } 
+  }
+
+  /*
+  // FIXME
+  // if not explicit, gcc will try to use an intermediate temporary<> in some cases.
+  // else, it will not construct from a temporary<T> ... strange! 
   // explicit 
   ref_ptr(temporary<T> t) : ptr(new T(t.value())) 
   {     ENSURE(is_shared(),"",1); }  
-
   
   template<class U>
   explicit
   ref_ptr(temporary<U> t) : ptr(new T(t.value())) 
   {     ENSURE(is_shared(),"",1); } 
+  */
+ 
 
   // copy constructors and assigment
   ref_ptr(ref_ptr<T> const& rhs) : ptr(rhs.ptr) {} 
+
   ref_ptr<T> & operator=(ref_ptr<T> const& rhs) { 
     if(this != &rhs) {
       ptr = rhs.ptr;
@@ -209,7 +250,10 @@ public:
     return *this;
   }
 
-  /*! \brief Set to reference to tptr
+
+
+  // disabled - too dangerous.
+  /*  \brief Set to reference to tptr
     
       \post \c is_reference()
    */
@@ -226,14 +270,15 @@ public:
 
   //! conversion constructors 
   template<class U>
-  ref_ptr(ref_ptr<U> const& rhs) : ptr(rhs.get_ptr()) {}  
+  ref_ptr(ref_ptr<U>   const&   rhs) : ptr(rhs.get_ptr()) {}  
 
   //! conversion assignment
   template<class U>
-  ref_ptr<T> & operator=(ref_ptr<U> const& rhs) {
+  ref_ptr<T> & operator=(ref_ptr<U>   const&   rhs) {
     ptr = rhs.get_ptr();
     return *this;
   }
+
 
   /*! \brief Set to a shared pointer to \c uptr
       \pre \c tuptr must point to dynamically allocated memory,
@@ -291,7 +336,8 @@ public:
 
 
 template<class T>
-inline ref_ptr<T> make_ref_ptr(temporary<T> t) { return ref_ptr<T>(t);}
+temporary<T>::operator ref_ptr<T> () const { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
+
 
 } // namespace GrAL 
 

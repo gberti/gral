@@ -9,6 +9,20 @@ using namespace GrAL;
 
 template class ref_ptr<int>;
 
+class Base {
+public:
+  Base() {}
+  virtual void f() = 0;
+  virtual ~Base() {}
+};
+
+class Derived : public Base {
+public:
+  Derived() {}
+  virtual void f() {}
+};
+
+
 class A_ {
 public:
   int i;
@@ -92,8 +106,10 @@ int main() {
   // must be avoided, e.g by returning temporary<T> as in A_::f4() in the next example
   ref_ptr<int const> pci3(a.f3());  REQUIRE_ALWAYS( !pci3.is_shared(), "", 1);
 
-  // Correct way to use temporary objects with 
-  ref_ptr<int const> pci4(a.f4());  REQUIRE_ALWAYS(  pci4.is_shared(), "", 1);
+  // Correct way to use temporary objects with ref_ptr<>
+  // the intermediary construction of ref_ptr<int> should not be necessary
+  //ref_ptr<int const> pci4(a.f4());  REQUIRE_ALWAYS(  pci4.is_shared(), "", 1);
+  ref_ptr<int const> pci4(ref_ptr<int>(a.f4()));  REQUIRE_ALWAYS(  pci4.is_shared(), "", 1);
 
   int* orig_addr = &(a.i);
   REQUIRE_ALWAYS( (orig_addr == &(*pi1)), "", 1);
@@ -135,14 +151,14 @@ int main() {
   G g6(g1.AnY()); // this fails because we cannot construct ref_ptr<T const> from temporary<T>
                   // without making the templated constructor ref_ptr<T>::ref_ptr(temporary<U>) non-explicit.
 #endif
-  G g7(ref_ptr<Y const>(g1.AnY()));
+  // G g7(ref_ptr<Y const>(g1.AnY()));
 #ifdef COMPILE_FAIL
   G g8(make_ref_ptr(g1.AnY())); // ambiguous
 #endif
 
   Y y1(* g1.TheY1());
   Y y2(* g1.TheYOwned());
-  Y y3(g1.AnY());
+  //  Y y3(g1.AnY());
   Y y4(* g1.TheYExclOwned());
 
   {
@@ -213,5 +229,11 @@ int main() {
 #ifdef COMPILE_FAIL
   ref_ptr<Noisy>       rpn6(rpn5);
 #endif
+
+
+  ref_ptr<Base> pb;
+  ref_ptr<Derived> pd(new Derived(), ref_ptr_base::shared);
+  pb = pd;
+  ref_ptr<Base> pb2(pd);
 
 }
