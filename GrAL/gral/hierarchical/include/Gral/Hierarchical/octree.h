@@ -75,6 +75,7 @@ public:
   typedef typename hgt::pattern_grid_type          pattern_grid_type;
   typedef typename hgt::level_handle               level_handle;
   typedef typename hgt::hier_cell_type             hier_cell_type;
+  typedef typename hgt::hier_vertex_type           hier_vertex_type;
   typedef typename hgt::CellChildIterator          HierCellChildIterator;
   typedef typename hgt::cart_subrange_type         flat_subrange_type;
   typedef typename flatgt::CellIterator            flat_cell_iterator;
@@ -101,11 +102,19 @@ public:
   typedef hier::hier_partial_grid_function<hier_cell_type, bool>  subrange_table_type;
   typedef typename subrange_table_type::flat_gf_type              grid_range_type;
 
-  typedef typename grid_range_type::CellIterator ActiveLevelCellIterator;
-private:  
-  hier_grid_type      levels;
-  subrange_table_type active_range;
+  typedef hier::hier_partial_grid_function<hier_cell_type, bool>   cell_active_range_type;
+  typedef typename subrange_table_type::flat_gf_type               cell_flat_range_type;
+  typedef hier::hier_partial_grid_function<hier_vertex_type, bool> vertex_active_range_type;
+  typedef typename vertex_active_range_type::flat_gf_type          vertex_flat_range_type;
 
+  typedef typename vertex_flat_range_type::VertexIterator ActiveLevelVertexIterator;
+  typedef typename cell_flat_range_type  ::CellIterator   ActiveLevelCellIterator;
+private:  
+  hier_grid_type               levels;
+  cell_active_range_type       active_cell_range;
+  mutable vertex_active_range_type active_vertex_range;
+  mutable bool active_vertex_range_initialized;
+  void init_active_vertex_range() const;
   
 
   // Forbidden for the moment
@@ -139,8 +148,14 @@ public:
   ref_ptr<const pattern_grid_type>  ThePatternGrid()  const { return TheHierGrid()->ThePatternGrid();}
   ref_ptr<const flat_grid_type>     LevelGrid(level_handle lev) const 
   { return ref_ptr<const flat_grid_type>(levels(lev));}
+
   ref_ptr<const grid_range_type>    ActiveRange(level_handle lev) const
-  { return ref_ptr<const grid_range_type>(active_range(lev));}
+  { return ref_ptr<const grid_range_type>(active_cell_range(lev));}
+
+  ref_ptr<const cell_flat_range_type>     ActiveCellRange(level_handle lev) const
+  { return ref_ptr<const cell_flat_range_type>(active_cell_range(lev));}
+  ref_ptr<const vertex_flat_range_type>    ActiveVertexRange(level_handle lev) const
+  { init_active_vertex_range(); return ref_ptr<const vertex_flat_range_type>(active_vertex_range(lev));}
 
 
   /*! \name Modifying operations
@@ -183,7 +198,8 @@ public:
   //@{
   /*! \brief true if \c is part of the octree
    */
-  bool isActive(hier_cell_type const& c) const { return active_range(c.level())(c);}
+  bool isActive(hier_cell_type const& c) const { return active_cell_range(c.level())(c);}
+
   /*! A cell is a leaf if there are no sons, that is, 
     all child cells are inactive.
  
@@ -201,13 +217,44 @@ public:
   {
     return isActive(c) && ! isLeaf(c);
   }
-
   //! return the level of \c c
   level_handle  level(hier_cell_type c)   const { return c.level();}
 
   //! return the youngest ancestor of \c subLeaf which is in the octree (i.e. is a leaf).
   oct_cell_type leaf_ancestor(hier_cell_type subLeaf) const;
   //@}
+
+  //! \brief True if \c is active, i.e. incident to an active cell
+  bool isActive(hier_vertex_type v) const { 
+    if(! active_vertex_range_initialized)
+      init_active_vertex_range();
+    return active_vertex_range(v);
+  }
+
+
+  /*! \brief true if \c e is a leaf which has no subdivided (or branch) sides
+     <=> \c isLeaf(e) \c && no edges or \c e are subdivided
+     <=> \c isLeaf(e) \c && no incident lower-dimensional elements are subdivided
+  */
+  template<class HELEM>
+  bool isRegularLeaf(HELEM const& e) const;
+
+  // <=> all vertices are active <=> incident to  an active cell
+  template<class HELEM>
+  bool isActive(HELEM const& e) const; 
+
+  // <=> incident to a leaf cell but not to a branch cell
+  template<class HELEM>
+  bool isLeaf(HELEM const& e) const; 
+
+
+  // <=> all inner vertices on finer level are active
+  // if e is incident to a branch cell, it need not be a branch itself
+  template<class HELEM>
+  bool isBranch(HELEM const& e) const; 
+
+  
+
 
   /*! \name Level navigation
    */
@@ -243,7 +290,7 @@ public:
   /*! \brief true if level \c lev does not contain active cells.
       This means that also all finer levels are empty.
    */
-  bool empty(level_handle lev) const { return active_range(lev).empty();}
+  bool empty(level_handle lev) const { return active_cell_range(lev).empty();}
 
 
   bool valid(level_handle lev) const { return (levels.coarsest_level() <= lev && lev <= levels.finest_level());}
@@ -256,29 +303,29 @@ public:
    */
   void activate (level_handle lev) { 
     for(typename flatgt::CellIterator c = LevelGrid(lev)->FirstCell(); ! c.IsDone(); ++c)
-      active_range[lev][*c] = true;
+      active_cell_range[lev][*c] = true;
   }
   /*! \brief mark the level as non-active
    */
   void deactivate (level_handle lev) { 
-    active_range.set_default(false);
+    active_cell_range.set_default(false);
     for(typename flatgt::CellIterator c = LevelGrid(lev)->FirstCell(); ! c.IsDone(); ++c)
-      active_range[lev].undefine(*c);
+      active_cell_range[lev].undefine(*c);
   }
 
 
   /*! \brief mark the cell as active
    */
-  void activate (oct_cell_type c) { active_range[c.level()][c] = true;}
+  void activate (oct_cell_type c) { active_cell_range[c.level()][c] = true;}
 
   /*! \brief unmark the cell as active
       \todo This works only if the default value is false!
    */
-  void deactivate (oct_cell_type c) { active_range[c.level()].undefine(c); }
+  void deactivate (oct_cell_type c) { active_cell_range[c.level()].undefine(c); }
   //! mark the cell as active and leaf
-  void make_leaf  (oct_cell_type c) { active_range[c.level()][c] = true;}
+  void make_leaf  (oct_cell_type c) { active_cell_range[c.level()][c] = true;}
   //! mark the cell as an internal octcell (active, but no leaf)
-  void make_branch(oct_cell_type c) { active_range[c.level()][c] = true;}
+  void make_branch(oct_cell_type c) { active_cell_range[c.level()][c] = true;}
 
   void join_cells_rec(oct_cell_type const& newLeaf);
 

@@ -24,15 +24,24 @@ namespace octree {
   Octree<Grid, GT>::Octree(typename Octree<Grid, GT>::hier_grid_type const& H)
     : levels(H)
   {
-   active_range.init(levels,false);
-   active_range.set_default(false);
+   active_cell_range.init(levels,false);
+   active_cell_range.set_default(false);
+
+   active_vertex_range.init(levels,false);
+   active_vertex_range.set_default(false);
+   active_vertex_range_initialized = false;
   }
+
   template<class Grid, class GT>
   Octree<Grid, GT>::Octree(ref_ptr<typename Octree<Grid, GT>::hier_grid_type const> H)
     : levels(*H)
   {
-   active_range.init(levels,false);
-   active_range.set_default(false);
+   active_cell_range.init(levels,false);
+   active_cell_range.set_default(false);
+
+   active_vertex_range.init(levels,false);
+   active_vertex_range.set_default(false);
+   active_vertex_range_initialized = false;
   }
 
  template<class Grid, class GT>
@@ -40,8 +49,12 @@ namespace octree {
 			     typename Octree<Grid, GT>::pattern_grid_type   const& refpat)
  {
    levels.init(C0,refpat);
-   active_range.init(levels,false);
-   active_range.set_default(false);
+   active_cell_range.init(levels,false);
+   active_cell_range.set_default(false);
+
+   active_vertex_range.init(levels,false);
+   active_vertex_range.set_default(false);
+   active_vertex_range_initialized = false;
  }
 
   template<class Grid, class GT>
@@ -53,7 +66,7 @@ namespace octree {
 
     while(empty(finest_level())) {
       levels      .remove_finest_level();
-      // active_range.remove_finest_level();
+      // active_cell_range.remove_finest_level();
     }
   }
 
@@ -75,8 +88,8 @@ namespace octree {
       make_branch(oldLeaf);
       if(level(oldLeaf) == finest_level()) {
 	levels      .add_finer_level();
-	// active_range.add_finer_level(false); // by default, all cells are deactivated
-	active_range[levels.finest_level()].set_default(false);
+	// active_cell_range.add_finer_level(false); // by default, all cells are deactivated
+	active_cell_range[levels.finest_level()].set_default(false);
       }
       // use the more general H<XXX>ChildIterator, because there are no octree children yet
       for(HierCellChildIterator ch(oldLeaf.FirstChild()); !ch.IsDone(); ++ch) {
@@ -90,8 +103,8 @@ namespace octree {
     REQUIRE_ALWAYS( ! empty(), "", 1);
     levels.add_coarser_level();
     // all coarse cells deactivated by default
-    // active_range.add_coarser_level(false);
-    active_range[levels.coarsest_level()].set_default(false);
+    // active_cell_range.add_coarser_level(false);
+    active_cell_range[levels.coarsest_level()].set_default(false);
     // activate all cells having at least one active child
     for(flat_cell_iterator c(*LevelGrid(coarsest_level())); !c.IsDone(); ++c) {
       hier_cell_type hc(*TheHierGrid(), *c, coarsest_level());
@@ -106,7 +119,7 @@ namespace octree {
   {
     REQUIRE_ALWAYS( ! empty(), "", 1);
     levels.add_finer_level();
-    active_range[levels.finest_level()].set_default(false);
+    active_cell_range[levels.finest_level()].set_default(false);
   }
 
   template<class Grid, class GT>
@@ -146,6 +159,59 @@ namespace octree {
     return n;
   }
 
+  template<class Grid, class GT>
+  void Octree<Grid,GT>::init_active_vertex_range() const
+  {
+    for(int lev = coarsest_level(); lev <= finest_level(); ++lev) {
+      active_vertex_range[lev].clear();
+      active_vertex_range[lev].set_default(false);
+      for(ActiveLevelCellIterator c(ActiveRange(lev)->FirstCell()); !c.IsDone(); ++c)
+	for(typename flatgt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc)
+	  active_vertex_range[lev][*vc] = true;
+    }
+
+    active_vertex_range_initialized = true; 
+  }
+
+  // <=> all vertices are active <=> incident to  an active cell
+  template<class Grid, class GT>
+  template<class HELEM>
+  bool Octree<Grid,GT>::isActive(HELEM const& e) const
+  {
+    bool active = true;
+    for(typename HELEM::VertexOnElementIterator ve(e); !ve.IsDone(); ++ve)
+      active = active && isActive(*ve);
+    return active;
+  }
+
+  template<class Grid, class GT>
+  template<class HELEM>
+  bool Octree<Grid,GT>::isLeaf(HELEM const& e) const
+  {
+      return isActive(e) 
+	&& (e.level() == finest_level() 
+	    ||  ! sequence::exists(e.FirstChild(), e.EndChild(), isActivePred(*this)));
+  }
+
+  template<class Grid, class GT>
+  template<class HELEM>
+  bool Octree<Grid,GT>::isBranch(HELEM const& e) const
+  {
+    return (isActive(e) && !isLeaf(e));
+  }
+
+  template<class Grid, class GT>
+  template<class HELEM>
+  bool Octree<Grid,GT>::isRegularLeaf(HELEM const& e) const {
+    if(HELEM::dim <= 1)
+      return isLeaf(e);
+    else {
+      bool res = true;
+      for(typename HELEM::EdgeOnElementIterator ee(e); !ee.IsDone(); ++ee)
+	res = res && ! isBranch(*ee);
+      return res;
+    }
+  }
 
 
 } // namespace octree
