@@ -31,8 +31,8 @@ clean:
 realclean: clean
 	rm -rf lib/$(ARCH)/
 
-demo:
-	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
+test:
+	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 doxy:
 	mkdir -p doxygen
@@ -50,4 +50,4 @@ tar:
          tar -cf external-control.tar external-control; \
          rm -rf external-control/;)
 
-.PHONY: demo
+.PHONY: demo test

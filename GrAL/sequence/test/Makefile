@@ -2,6 +2,6 @@
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
 
-SUBDIRS = construct
+SUBDIRS = bijective-mapping
 
 

@@ -1,4 +1,4 @@
-# $(NMWRROOT)/test/bijective-mapping
+# sequence/test/bijective-mapping
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
@@ -16,9 +16,11 @@ include $(DEPS)
 
 
 
-LIBS =  -lcontrol-device -lutilities 
+LIBS =  -lutilities 
 
 
+
+new-check-clean: new check clean
 
 new : clean all
 
