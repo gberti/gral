@@ -1,8 +1,11 @@
+#ifndef NMWR_GB_VERTEX2D_C
+#define NMWR_GB_VERTEX2D_C
 
 // $LICENSE
 
-#ifndef NMWR_GB_VERTEX2D_C
-#define NMWR_GB_VERTEX2D_C
+
+inline Vertex2D::Vertex2D(Complex2D const& cc)
+  { *this = *(cc.FirstVertex());} 
 
 inline
 vertex_base const&

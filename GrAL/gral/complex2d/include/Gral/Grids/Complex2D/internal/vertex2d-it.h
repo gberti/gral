@@ -38,7 +38,7 @@ public:
   //------ iterator operations -----------------
 
   self& operator++()  {++_pos; return (*this);} 
-  Vertex operator*() const { return Vertex2D(_pos,*_cc);}
+  Vertex operator*() const { return Vertex2D(*_cc,_pos);}
   bool IsDone() const {return (_pos == _endpos);}
   operator bool() const { return !IsDone();}
 
