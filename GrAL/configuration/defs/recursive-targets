@@ -17,6 +17,10 @@ ifndef SUBDIRS
 generic:
 new-check-clean:
 new:
+new-check-clean-force:
+new-force:
+check:
+check-force:
 all:
 compile:
 lib:
@@ -45,16 +49,35 @@ new-check-clean:
 	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new-check-clean;\
 	echo "LEAVING  directory" $$i;cd ..; done 
 
+new-check-clean-force:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new-check-clean \
+        || echo ">>>>>>>>>>> TARGET new-check-clean-force FAILED for " $$i " (continuing)";\
+	echo "LEAVING  directory" $$i;cd ..; done 
+
 new:
 	@set -e; \
 	for i in $(SUBDIRS); \
 	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new;\
+	echo "LEAVING  directory" $$i;cd ..; done
+new-force:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new \
+        || echo ">>>>>>>>>>> TARGET new-force FAILED for " $$i " (continuing)";\
 	echo "LEAVING  directory" $$i;cd ..; done
 
 check:
 	@set -e; \
 	for i in $(SUBDIRS); \
 	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) check;\
+	echo "LEAVING  directory" $$i;cd ..; done
+check-force:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) check \
+        || echo ">>>>>>>>>>> TARGET check-force FAILED for " $$i " (continuing)";\
 	echo "LEAVING  directory" $$i;cd ..; done
 
 
