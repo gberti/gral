@@ -16,9 +16,11 @@
 
 //----------------------------------------------------------------
 //
-// class for storing an overlap (adjacency) pattern, for example
-// for characterizing the local stencil of a numeric function.
-//
+/*! \brief class for storing an overlap (incidence) pattern
+  
+   The pattern may be, for example,  the local stencil of a 
+   numeric function.
+*/
 //----------------------------------------------------------------
 
 class overlap_pattern {

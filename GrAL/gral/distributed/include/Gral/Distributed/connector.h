@@ -49,7 +49,7 @@
 
 
 //----------------------------------------------------------------
-/*! abstract base for data connectors (letter class)
+/*! \brief abstract base for data connectors (letter class)
    \ingroup connectors
  */
 //----------------------------------------------------------------
@@ -67,13 +67,13 @@ public:
   virtual ~connector_impl();
 };
 
-/*! specialization of copy_traits for connector_impl
+/*! \brief specialization of copy_traits for connector_impl
  */
 struct copy_traits<connector_impl> {
   static connector_impl* clone(connector_impl const& c) { return c.clone();}
 };
 
-/*! Envelope class for connector_impl
+/*! \brief Envelope class for connector_impl
    \ingroup connectors
  */
 class Connector {
@@ -97,8 +97,8 @@ public:
    \ingroup connectors
 */
 
-/*! send data associated to connector
-  \ingroup connectors
+/*! \brief send data associated to connector
+  \ingroup connectorfunctions
 
   If [b,e) is a range of Connector s, then
   \code
@@ -119,8 +119,8 @@ class ConnectorSendData {
   void operator()(connector_impl* C) const { C->send_data();}
 };
 
-/*! begin to send data associated to connector
-  \ingroup connectors
+/*! \brief begin to send data associated to connector
+  \ingroup connectorfunctions
   \see ConnectorSendData
  */
 class ConnectorSendBegin {
@@ -129,8 +129,8 @@ class ConnectorSendBegin {
   void operator()(connector_impl* C) const { C->send_data_begin();}
 };
 
-/*! finish to send data associated to connector
-  \ingroup connectors
+/*! \brief  finish to send data associated to connector
+  \ingroup connectorfunctions
   \see ConnectorSendData
  */
 class ConnectorSendEnd {
@@ -139,8 +139,8 @@ class ConnectorSendEnd {
   void operator()(connector_impl* C) const { C->send_data_end();}
 };
 
-/*! receive data associated to connector
-  \ingroup connectors
+/*! \brief receive data associated to connector
+  \ingroup connectorfunctions
   \see ConnectorSendData
  */
 class ConnectorRecvData {
@@ -149,8 +149,8 @@ class ConnectorRecvData {
   void operator()(connector_impl* C) const { C->recv_data();}
 };
 
-/*! begin to receive data associated to connector
-  \ingroup connectors
+/*! \brief  begin to receive data associated to connector
+  \ingroup connectorfunctions
   \see ConnectorSendData, ConnectorRecvData
  */
 class ConnectorRecvBegin {
@@ -159,8 +159,8 @@ class ConnectorRecvBegin {
   void operator()(connector_impl* C) const { C->recv_data_begin();}
 };
 
-/*! finish to receive data associated to connector
-  \ingroup connectors
+/*! \brief finish to receive data associated to connector
+  \ingroup connectorfunctions
   \see ConnectorSendData, ConnectorRecvData
  */
 class ConnectorRecvEnd {

@@ -28,13 +28,13 @@
        to C(ovlp_grid) 
   
   \param ovlp_grid: OUT, initially empty.
-  \param owned_c:IN, range of owned cells to be copied
+  \param owned_c: IN, range of owned cells to be copied
   \param geom: IN, geometry on owned & copied grid parts
   \param ovlp: IN/OUT, exposed/shared/copied ranges are ok,
     private ranges will be set.
-  \ v_corr: will be set to map vertices of src grid parts to 
+  \param v_corr: OUT, will be set to map vertices of src grid parts to 
       ovlp_grid.TheGrid()
-  \ c_corr: will be set to map cells of src grid parts 
+  \param c_corr: OUT, will be set to map cells of src grid parts 
       to ovlp_grid.TheGrid()
 
   \todo Fix geometry construction! There must be either a destination

@@ -15,23 +15,15 @@
 //----------------------------------------------------------------
 /*! \defgroup dynoverlap Dynamic (extensible) overlap ranges
     \ingroup overlapds
-   \brief Classes bundling overlap ranges allowing efficient \e extension of ranges
+   \brief Classes bundling overlap ranges allowing efficient 
+   \e extension of ranges
  
-   The classes in this module  are typically  used to assemble the overlap ranges
-   before copying them to a form supporting combination of adjacent ranges
+   The classes in this module  are typically  used to assemble the 
+   overlap ranges before copying them to a form supporting 
+   combination of adjacent ranges
 
    The class dyn_overlap is the dynamic version of overlap, and
    dyn_overlap_ranges is the dynamic version of overlap_ranges..
-
- DESCRIPTION:
- ------------
-  [1] Provides storage  for ranges of elements of type E 
-      and gives and read/write access to them:
-
-
-  [2] bundles range_layers for different types of E and gives
-      read/write access to complete as well as per-neighbor ranges
-
 */
 //----------------------------------------------------------------
 

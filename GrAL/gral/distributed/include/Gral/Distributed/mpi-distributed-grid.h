@@ -33,7 +33,7 @@ struct mpi_proc {
 
 
 /*! \brief Distributed grid class using MPI for communication
-    \ingroup mpidistributedgrid
+    \ingroup mpidistributedgrids
    
  */
 template<class CoarseG, class FineG>

@@ -12,20 +12,20 @@
 #include "Gral/Distributed/overlap.h"
 
 
-/*! \defgroup overlappingrids Overlapping Grids
-    \brief Grids and grid functions augmented with overlap ranges.
+/*! \defgroup overlappinggrids Overlapping Grids
+    \brief Grids and grid functions augmented with %overlap ranges.
     \ingroup distributedgrids
 */
 
 //----------------------------------------------------------------
-/*! \brief Sequential grid augmented with an overlap.
+/*! \brief Sequential grid augmented with an %overlap.
     \ingroup overlappinggrids
 
  An overlapping grid augments a base grid with the notion of
  overlap ranges that capture its relationship to other parts
  of a (conceptual) global grid.
 
- However, a overlapping grid has no idea of the context it is
+ However, an overlapping grid has no idea of the context it is
  contained in, which may be a really distributed environment with message
  passing or just a part of a composite grid.
 

@@ -21,11 +21,11 @@
  The Predicate \c inside controls if cells are to be collected
  inside (exposed) or outside (copied)  the partition.
 
- \preconditions:
+ \pre
  [inside(f.C1()) \f$ \iff \f$  ! inside(f.C2()))]  \f$ \forall f \in \f$ boundary_f
 
- \postconditions:
- \forall C \in c_layers : inside(C) = true.
+ \post
+ \f$ \forall C \in \f$ c_layers : inside(C) = true.
 
  \b Algorithm:
 
