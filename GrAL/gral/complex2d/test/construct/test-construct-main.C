@@ -2,25 +2,29 @@
 
 #include <algorithm>
 #include <fstream.h>
+
+// External control
 #include "IO/control-device.h"
 #include "IO/safe-file.h"
 
+// Utility
 #include "Utility/pre-post-conditions.h"
 #include "Utility/as-string.h"
 
+// Gral Base
+#include "Gral/IO/istream-grid-complex2d-fmt.h"
+
+// Gral Complex2D
 #include "Gral/Grids/Complex2D/complex2d.h"
 #include "Gral/Grids/Complex2D/grid-functions.h"
 #include "Gral/Grids/Complex2D/partial-grid-functions.h"
 #include "Gral/Grids/Complex2D/construct.h"
+#include "Gral/Grids/Complex2D/test-complex2d.h"
+#include "Gral/Grids/Complex2D/stored-geometry.h"
 
-#include "Grids/Reg2D/cartesian-grid2d-with-holes.h"
-#include "Visualization/generic/meshview.simple.h"
+typedef stored_geometry_complex2D geometry_type;
+typedef geometry_type::coord_type coord_type;
 
-#include "Gral/Grids/Complex2D/test-complex.h"
-#include "./problem-types.h"
-
-//typedef istream_iterator<int,ptrdiff_t> istream_it;
-typedef istream_iterator<int>           istream_it;
 
 
 int main(int argc, char* argv[]) {
@@ -29,20 +33,6 @@ int main(int argc, char* argv[]) {
 
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"test.in","main");
   
-
-  int nx = 4;
-  int ny = 5;
-  int llx = nx/2;
-  int lly = 0;
-  int urx = nx-1;
-  int ury = ny/2;
-
-  RegisterAt(Ctrl,"ngrid_x",nx);
-  RegisterAt(Ctrl,"ngrid_y",ny);
-  RegisterAt(Ctrl,"llx",llx);  
-  RegisterAt(Ctrl,"lly",lly);  
-  RegisterAt(Ctrl,"urx",urx);  
-  RegisterAt(Ctrl,"ury",ury);  
 
   string grid_file = "grid.in";
   RegisterAt(Ctrl,"grid-file",grid_file);
@@ -55,103 +45,44 @@ int main(int argc, char* argv[]) {
 
   ostream& testout(cout);  
 
-  // ifstream infile;
-  // infile.open("grid.cell2d");
-  // CC.read(infile);
-
-
-  //unit_quad2d geom_mapping;
-
-  // kopiere CC von einem regulaeren Gitter mit ngrid x ngrid Knoten,
-  // mit den durch die Abb. mapping_type : [0,1]^2 -> R^d gegebenen Koordinaten.
-
-   source_mapping_type mapping;
-   //RegGrid2D  source(nx,ny);
-    RegGrid2DWithHoles::rectangle rect(llx,lly,urx,ury);
-   RegGrid2DWithHoles  source(nx,ny,rect);
 
    
-   ifstream infile;
-
-    int NCC = 6;
-    vector<Complex2D> CC(NCC);
-   // construct from arrays
-   
-    file_interactive::open(infile, grid_file);
-    //if(infile.good()) {
-    //  cerr << "closing infile\n";
-    //  infile.close();
-    // }
-    //const char * fn = grid_file.c_str();
-    //cerr << '"' << fn << '"' << '\n';
-    // infile.open(fn);
-    // infile.open(grid_file.c_str());
-    // if(!infile)
-    //   cerr << "konnte " << fn << " nicht oeffnen!\n";
-    vector<int> griddescr;
-   int nvert, ncell;
-   infile >> nvert >> ncell;
-
-    griddescr.push_back(nvert);
-    griddescr.push_back(ncell);
-
-    vector<coord_type> gridcoord(nvert);
-    for(int v = 0; v < nvert; ++v)
-      infile >> gridcoord[v];
-    
-    istream_it begfile(infile);
-    istream_it endfile;
-    copy(begfile,endfile,back_inserter(griddescr));
-    infile.close();
+  int NCC = 4;
+  vector<Complex2D> CC(NCC);
   
-    /*
-      copy(griddescr.begin(),griddescr.end(),ostream_iterator<int>(cout,"\n"));
-      copy(gridcoord.begin(),gridcoord.end(),ostream_iterator<coord_type>(cout,"\n"));
-    */
-
-
-
-    testout << "constructing grid CC0 from coord-array and connectivity-array\n";
-    CC[0].construct(griddescr,gridcoord);
-
-
-
-   testout << "constructing Complex2D CC1 from regular source\n";
-   Construct(CC[1],source, source_geom_type(mapping,source.BaseGrid()));
-   
-   
-   testout << "constructing Complex2D CC2 from CC1\n";
-   CC[2] = CC[1];
-   
-   testout << "constructing Complex2D CC3 from file " << grid_file << "\n";
-
-   ifstream infile2; 
-   file_interactive::open(infile2,grid_file);
-   CC[3].read(infile2);
-   infile2.close();
-
-   /*   
-   file_interactive::open(infile,grid_file);
-   CC[3].read(infile);
-   infile.close();
-   */
-   testout << "constructing Complex2D CC4 from file (2 times) " << grid_file << "\n";
-   for(int k = 1; k <= 2; ++k) {
-     ifstream infile3;
-     file_interactive::open(infile3,grid_file);
-     CC[4].read(infile3);
-     infile3.close();
-   }
- 
-   testout << "leaving CC5 empty \n"; 
-
-   ofstream outfile;
-   for(int i =0; i < NCC; ++i) {
-     string nm = "CC" + as_string(i) + ".out";
-     outfile.open(nm.c_str());
-     CC[i].write(testout);
-     CC[i].write(outfile);
-     outfile.close();
+  testout << "constructing Complex2D CC[0] from file " << grid_file << "\n";
+  
+  ifstream infile2; 
+  file_interactive::open(infile2,grid_file);
+  IstreamComplex2DFmt IG(infile2,1);
+  geometry_type Geom3(CC[0]);
+  ConstructGrid(CC[0], Geom3,  IG, IG);
+  infile2.close();
+  
+  testout << "constructing Complex2D CC[1] from CC[0]\n";
+  CC[1] = CC[0];
+  
+  testout << "constructing Complex2D CC[2] from file (2 times) " << grid_file << "\n";
+  for(int k = 1; k <= 2; ++k) {
+    ifstream infile;
+    file_interactive::open(infile,grid_file);
+    IstreamComplex2DFmt IG(infile,1);
+    geometry_type Geom(CC[2]);
+    ConstructGrid(CC[2], Geom,  IG, IG);
+    infile.close();
+  }
+  
+  testout << "leaving CC[3] empty \n"; 
+  
+  ofstream outfile;
+  for(int i =0; i < NCC; ++i) {
+    string nm = "CC" + as_string(i) + ".out";
+    outfile.open(nm.c_str());
+    OstreamComplex2DFmt OG1(testout);
+    ConstructGrid(OG1, OG1, CC[i], geometry_type(CC[i]));
+    OstreamComplex2DFmt OG2(outfile);
+    ConstructGrid(OG2, OG2, CC[i], geometry_type(CC[i]));
+    outfile.close();
   }
  
    int Ncases = 8;
@@ -159,22 +90,18 @@ int main(int argc, char* argv[]) {
      ifstream casei;
      file_interactive::open(casei, ("case" + as_string(ii)  + ".grid"));
      CC.push_back(Complex2D());
-     CC.back().read(casei);
+     IstreamComplex2DFmt IG(casei,1);
+     geometry_type Geom(CC.back());
+     ConstructGrid(CC.back(), Geom, IG, IG);
      casei.close();
 
      ofstream casei_out;
      casei_out.open(("case" + as_string(ii)  + ".grid.out").c_str());
-     CC.back().write(casei_out);
+     OstreamComplex2DFmt OG(casei_out);
+     ConstructGrid(OG, OG, CC.back(), geometry_type(CC.back()));
      casei_out.close();
    }
 
-
-  // graphical output  
-  ofstream oogl_output;
-  oogl_output.open("mesh.oogl");
-  MeshView<Complex2D,geometry_type> view(CC[1],geometry_type(CC[1]));
-  oogl_output << view;
-  oogl_output.close();
 
   // textual output
 
