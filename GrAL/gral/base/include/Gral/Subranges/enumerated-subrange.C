@@ -16,7 +16,53 @@
 //----------------------------------------------------------------
 
 
+template<class GRID>
+void enumerated_subrange<GRID>::init() const
+{
+  if(! initialized) {
+    initialized = true;
+    REQUIRE(vertices.empty(), "enumerated_subrange<GRID>::init(): Vertex range must be empty!\n",1);
+    cell_range_ref<GRID,cell_sequence> cell_wrapper(0, cells.end()-cells.begin(), cells, TheGrid());
+    ConstructVertexRange(cell_wrapper,
+			 const_cast<self *>(this)->vertices);
+   }
+}
+
+
+template<class GRID>
+template<class CELLIT>
+void enumerated_subrange<GRID>::construct(CELLIT c) 
+{
+  REQUIRE(cells.empty(), "enumerated_subrange<GRID>::construct: cells must be empty!",1);
+  while(! c.IsDone()) {
+    append_cell(c.handle());
+    ++c;
+  }
+  init();
+}
+
+template<class CELLRANGE, class VERTEXRANGE>  
+void ConstructVertexRange(CELLRANGE const& CR, 
+			  VERTEXRANGE    & VR)
+{
+  typedef typename CELLRANGE::grid_type     grid_type;
+  typedef grid_types<grid_type>             gt;
+  typedef typename gt::Cell                 Cell;
+  typedef typename gt::Vertex               Vertex;
+  typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
+
+  partial_grid_function<Vertex,bool> visited(CR.TheGrid(),false);
+  for(typename CELLRANGE::CellIterator c=CR.FirstCell(); ! c.IsDone(); ++c) {
+    for(VertexOnCellIterator vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc) {
+      if(!visited(*vc)) {
+	visited[*vc] = true;
+	VR.push_back(vc.handle());
+      }
+    }
   
+  }
+}
+
 template<class Range, class CellIt>
 void ConstructSubrangeFromCells
 (Range& R,   // out: the subrange to be constructed

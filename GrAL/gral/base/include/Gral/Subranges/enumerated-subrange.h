@@ -10,6 +10,7 @@
 #include "Utility/pre-post-conditions.h"
 
 #include "Gral/Base/mapped-iterators.h"
+#include "Gral/Base/map-element-iter-names.h"
 #include "Gral/Base/grid-functors.h"
 #include "Gral/Iterators/facet-by-cell-it.h"
 
@@ -72,8 +73,16 @@ template<class Grid> class enumerated_cell_range;
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 
+// helper class to access ElementIterator type
+template<class E, class R>
+class element_range_ref_aux {
+public:
+  typedef R                            range_type;
+  typedef handle2element_map<E>        handle_map;
 
+  typedef mapped_element_ra_seq_iterator<range_type, handle_map > ElementIterator;
 
+};
 
 //----------------------------------------------------------------
 //                       element_range_ref
@@ -88,8 +97,12 @@ template<class Grid> class enumerated_cell_range;
 //----------------------------------------------------------------
 
 template<class E, class R>
-class element_range_ref {
-  typedef element_range_ref<E,R>      self;
+class element_range_ref 
+  : public map_element_iter_name<typename  element_range_ref_aux<E,R>::ElementIterator,
+                                 element_range_ref<E,R>, 
+                                 typename element_traits<E>::element_type_tag>
+{
+  typedef element_range_ref<E,R>       self;
 public:
   typedef element_traits<E>            et;
   typedef typename et::grid_type       grid_type;
@@ -291,6 +304,18 @@ public:
 //----------------------------------------------------------------
 //----------------------------------------------------------------
 
+// helper class to access ElementIterator type
+template<class E>
+class  enumerated_element_range_aux {
+  typedef element_traits<E>            et;
+  typedef typename et::handle_type     elt_handle;
+  typedef std::vector<elt_handle>      container_type;
+  typedef handle2element_map<E>        handle_map;
+public:
+  typedef mapped_element_ra_seq_iterator<container_type,
+                                         handle_map > ElementIterator;
+};
+
 
 //----------------------------------------------------------------
 //              enumerated_element_range (value semantics)
@@ -306,7 +331,10 @@ public:
 
 
 template<class E>
-class enumerated_element_range {
+class enumerated_element_range 
+  : public map_element_iter_name<typename enumerated_element_range_aux<E>::ElementIterator,
+                                 enumerated_element_range<E>, 
+                                 typename element_traits<E>::element_type_tag>{
   typedef enumerated_element_range<E> self;
 public:
   //------- referenced types ------------------
@@ -522,7 +550,8 @@ public:
   construction time, for example by using \ref ConstructSubrange.
 
   \todo Edges work correctly only for 2D.  
-  
+  \todo Cannot be used to copy 3D grids from it (missing archetype stuff)
+  \todo Fix NumOfEdges()  
 */
 //----------------------------------------------------------------
 
@@ -560,17 +589,27 @@ private:
   cell_sequence   cells;
   // note : consistency in the sence that vertices = V(cells)
   // (set of adj. vertices of cells) cannot be ensured here!
-
+  // It is ensured by calling init() before each access to vertices
+  mutable bool initialized;
 public:
   //-------------------- construction --------------------------
 
-  enumerated_subrange()                   : the_grid(0)  {}
-  enumerated_subrange(const grid_type& g) : the_grid(&g) {}
+  enumerated_subrange()                   : the_grid(0),  initialized(false) {}
+  enumerated_subrange(const grid_type& g) : the_grid(&g), initialized(false) {}
+
+  template<class CELLRANGE>
+  enumerated_subrange(const grid_type& g, CELLRANGE const& CR) :  
+    the_grid(&g), initialized(false) 
+  { construct(CR.FirstCell());}
+
+  template<class CELLIT>
+  void construct(CELLIT c);
 
 
   void append_vertex(vertex_handle v) { vertices.push_back(v);}
-  void append_cell(cell_handle v)     { cells.push_back(v);}
-		     
+  void append_cell(cell_handle v)     { cells.push_back(v); initialized = false;}
+
+  void init() const;		     
 
   //-------------------- iteration  ----------------------------
 
@@ -584,32 +623,37 @@ public:
   // 2D only!
   typedef FacetIterator                                            EdgeIterator;
 
-  unsigned NumOfCells()    const { return cells.size();}
-  unsigned NumOfVertices() const { return vertices.size();}
+  unsigned NumOfCells()    const { init(); return cells.size();}
+  unsigned NumOfVertices() const { init(); return vertices.size();}
+
   // valid only if homeomorphic to a disk!
   unsigned NumOfEdges()    const 
     { return NumOfCells() + NumOfVertices() - 2 + 1; /* 1 == NumOfBoundaryComponents */}
 
   CellIterator   FirstCell()   const 
     { 
+      init();
       return CellIterator(0,cells.size(),
 			  cells,
 			  handle2element_map<Cell>(*the_grid));
     }
   CellIterator   EndCell()   const 
     { 
+      init();
       return CellIterator(cells.size(),cells.size(),
 			  cells,
 			  handle2element_map<Cell>(*the_grid));
     }
   VertexIterator FirstVertex() const 
     {
+      init();
       return VertexIterator(0, vertices.size(),
 			    vertices,
 			    handle2element_map<Vertex>(*the_grid));
     }
   VertexIterator EndVertex() const 
     {
+      init();
       return VertexIterator(vertices.size(), vertices.size(),
 			    vertices,
 			    handle2element_map<Vertex>(*the_grid));
@@ -620,18 +664,18 @@ public:
   FacetIterator  EndEdge()  const { return FacetIterator(EndCell());}  
 
   vertex_range_type range(tpV) const 
-    { return vertex_range_type(0, vertices.size(), vertices, *the_grid);}
+    { init(); return vertex_range_type(0, vertices.size(), vertices, *the_grid);}
   vertex_range_type vertex_range() const 
-    { return vertex_range_type(0, vertices.size(), vertices, *the_grid);}
+    { init(); return vertex_range_type(0, vertices.size(), vertices, *the_grid);}
   vertex_range_type Vertices() const 
-    { return vertex_range_type(0, vertices.size(), vertices, *the_grid);}
+    { init(); return vertex_range_type(0, vertices.size(), vertices, *the_grid);}
 
   cell_range_type   range(tpC) const 
-    { return cell_range_type  (0,(int) cells.size(),    cells,    *the_grid);}
+    { init(); return cell_range_type  (0,(int) cells.size(),    cells,    *the_grid);}
   cell_range_type   cell_range() const 
-    { return cell_range_type  (0,(int) cells.size(),    cells,    *the_grid);}
+    { init(); return cell_range_type  (0,(int) cells.size(),    cells,    *the_grid);}
   cell_range_type   Cells() const 
-    { return cell_range_type  (0,(int) cells.size(),    cells,    *the_grid);}
+    { init(); return cell_range_type  (0,(int) cells.size(),    cells,    *the_grid);}
 
   const grid_type& TheGrid() const { return *the_grid;}
   cell_handle   handle(const Cell& C)   const { return TheGrid().handle(C);}
@@ -655,6 +699,7 @@ public:
   the underlying grid range.
 
   \todo Facets work correctly only for 2D.  
+  \todo Cannot be used to copy 3D grids from it (missing archetype stuff)
 */
 template<class Grid>
 class enumerated_subrange_ref {
@@ -729,30 +774,34 @@ public:
 };
   
 
-// with partial specialization, we could
-// take this directly as definition for grid_types.
-// now do:
-// grid_types<enumerated_subrange<Complex2D> > 
-//  : public grid_types_esr<Complex2D> {};
-
-template<class Grid>
-struct grid_types_esr  {
+template<class Grid, class GT  = grid_types<Grid> >
+struct grid_types_esr : public GT {
+  /*
   typedef grid_types<Grid> bgt;
+
+  typedef typename bgt::grid_type   grid_type;
   typedef typename bgt::Cell   Cell;
   typedef typename bgt::Vertex Vertex;
   typedef typename bgt::vertex_handle         vertex_handle;
   typedef typename bgt::cell_handle           cell_handle;
+  */
 
   typedef enumerated_subrange<Grid>           range_type;
+  typedef enumerated_subrange<Grid>           vertex_range_type;
+  typedef enumerated_subrange<Grid>           edge_range_type;
+  typedef enumerated_subrange<Grid>           facet_range_type;
+  typedef enumerated_subrange<Grid>           cell_range_type;
   typedef typename range_type::VertexIterator VertexIterator;
   typedef typename range_type::EdgeIterator   EdgeIterator;
   typedef typename range_type::FacetIterator  FacetIterator;
   typedef typename range_type::CellIterator   CellIterator;
 
+  /*
   typedef typename bgt::VertexOnCellIterator  VertexOnCellIterator;
   typedef typename bgt::EdgeOnCellIterator    EdgeOnCellIterator;
   typedef typename bgt::FacetOnCellIterator   FacetOnCellIterator;
   typedef typename bgt::CellOnCellIterator    CellOnCellIterator;
+  */
 };
 
 
@@ -784,7 +833,7 @@ struct grid_types_esr_ref  {
  */
 template<class Grid>
 struct grid_types<enumerated_subrange<Grid> >
- :  public grid_types_esr<Grid> {};
+ :  public grid_types_base<grid_types_esr<Grid> > {};
 
 /*! Partial specializaton of grid_types traits for enumerated_subrange_ref<Grid>
     \ingroup traits enumsubranges
@@ -801,6 +850,8 @@ struct grid_types<enumerated_subrange_ref<Grid> >
 //----------------------------------------------------------------
 /*! \brief Construct an enumerated subrange from  a set of cells
    \ingroup enumsubranges   
+
+   THIS FUNCTION IS OBSOLETE!
 
    \templateparams
     - Range: (a possible type is  enumerated_subrange)
