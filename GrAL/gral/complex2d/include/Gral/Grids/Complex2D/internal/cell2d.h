@@ -25,9 +25,8 @@ public:
 
   //------------ construction ------------------------  
   Cell2D() : _pos(-1), _cc(0) {}
-  Cell2D(const cell_handle& pos, ComplexPtr  cc) 
-    : _pos(pos), _cc(cc)  {}
-  Cell2D(const cell_handle& pos, Complex2D const&  cc) 
+  Cell2D(Complex2D const&  cc);
+  Cell2D(Complex2D const&  cc, cell_handle pos)
     : _pos(pos), _cc(&cc) {}
 
   ~Cell2D() {}
@@ -60,8 +59,9 @@ public:
   int NumOfFacets()     const {return NumOfVertices();}
   int NumOfNeighbours() const; 
 
-  inline void FlipEdge(const Vertex& v,  Edge& e);
-  
+  inline void FlipEdge(const Vertex& v,  Edge& e) const;
+  Edge FlippedEdge(Vertex const& v, Edge const& e) const;  
+
   Complex const& TheGrid() const {return (*_cc);}
   cell_handle    handle()  const { return _pos;}
 
@@ -73,6 +73,7 @@ public:
   { return (s1._pos == s2._pos);}
 
   inline bool is_valid() const;
+  inline bool valid() const { return is_valid();}
 private:
   friend class VertexOnCell2D_Iterator;
   friend class EdgeOnCell2D_Iterator;

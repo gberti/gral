@@ -7,6 +7,9 @@
 #include "algorithm"
 #include "functional"
 
+inline Cell2D::Cell2D(Complex2D const&  cc)
+{ *this = *(cc.FirstCell());}
+
 inline bool Cell2D::is_valid() const { return (_pos != _cc->outer_cell_handle());}
 
 inline
@@ -115,7 +118,12 @@ inline int Cell2D::find_local_facet(const Cell2D& Nb) const
 }
 
 
-inline void Cell2D::FlipEdge(const Vertex2D& v, Edge2D& e)
+inline  Edge2D 
+Cell2D::FlippedEdge(Vertex2D const& v, Edge2D const& e) const
+{ Edge res = e; FlipEdge(v,res); return res;}
+
+
+inline void Cell2D::FlipEdge(const Vertex2D& v, Edge2D& e) const
 {
   REQUIRE((is_valid()),"Cell2D: action with invalid cell!",1);
   REQUIRE(((v == e.V1()) || (v == e.V2())),
@@ -137,5 +145,6 @@ inline void Cell2D::FlipEdge(const Vertex2D& v, Edge2D& e)
  
   e._e = f;
 }
+
 
 #endif
