@@ -17,7 +17,7 @@ namespace cartesiannd {
 template<class G>
 void print_grid(G const& g, std::ostream& out)
 {
-  for(int k = 0; k <= G::dimension; ++k)
+  for(unsigned k = 0; k <= g.dimension(); ++k)
     out << g.NumOfElements(k) << " " << k << "-elements\n";
 } 
 
