@@ -1,6 +1,6 @@
 /*! \file
 
-    Test harness for \c bivector<>
+    Test harness for \ref GrAL::bivector
  */
 
 #include "Container/bivector.h"
@@ -10,6 +10,7 @@
 
 using namespace GrAL;
 
+// Archetype for the template parameter of bivector
 class bivector_valuetype_arch {
   typedef bivector_valuetype_arch self;
 public:
@@ -18,6 +19,7 @@ public:
   self& operator=(self const&) { return *this;}
 };
 
+// Check that archetype functionality is sufficient
 template class bivector<bivector_valuetype_arch>;
 template class bivector<int>;
 
