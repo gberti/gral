@@ -5,7 +5,7 @@
 // $LICENSE
 
 // for identity
-#include <functional>
+#include "Container/functions.h"
 
 #include "Container/bijective-mapping.h"
 
@@ -74,7 +74,7 @@ ConstructMPIDistributedFromMaster
   typedef typename  mgt::vertex_handle master_v_h;
   bijective_mapping<master_v_h,master_v_h> per_v_1, per_v_2;
   typedef typename GEOM::coord_type coord_type;
-  std::identity<coord_type> T1, T2;
+  stdext::identity<coord_type> T1, T2;
   ConstructMPIDistributedFromMaster(DistrG, DistrGeom,
 				    Prtng,  MasterGeom,
 				    ovlp_pattern,
