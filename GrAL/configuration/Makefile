@@ -9,7 +9,7 @@ install-headers:
 	cp include/Config/*.h $(INSTALLHEADERS)/Config
 
 
-new:
+new: libclean
 
 test:
 

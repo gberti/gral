@@ -6,7 +6,7 @@ TARGET=all
 all:
 	(cd src; $(MAKE) all)
 
-new:
+new: libclean
 	(cd src; $(MAKE) new)
 
 

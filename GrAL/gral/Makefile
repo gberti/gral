@@ -10,7 +10,7 @@ TARGET=all
 
 all:
 
-new:
+new: libclean
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\

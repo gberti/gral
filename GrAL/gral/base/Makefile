@@ -7,7 +7,7 @@ TARGET=all
 
 all:
 
-new:
+new: libclean
 
 
 compile:

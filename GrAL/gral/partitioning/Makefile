@@ -6,7 +6,7 @@ TARGET=all
 
 all:
 
-new:
+new: libclean
 	(cd src; gmake new)
 
 compile:

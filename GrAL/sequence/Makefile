@@ -7,7 +7,7 @@ TARGET=all
 HEADERS= $(shell ls include/Container/*.h)
 all:
 
-new:
+new: libclean
 
 
 compile:
