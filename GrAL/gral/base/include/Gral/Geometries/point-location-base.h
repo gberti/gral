@@ -17,9 +17,9 @@ template<class GT, class COORD>
 class point_location_result {
 public:
   enum result_tag { inside_tag, outside_tag, projection_tag, failure_tag, num_of_tags };
-  static  ::std::string tag_names[num_of_tags];
+  static  std::string tag_names[num_of_tags];
 
-   ::std::string tagname() const { return tag_names[t];}
+   std::string tagname() const { return tag_names[t];}
 
   typedef COORD                    coord_type;
   typedef typename GT::Cell        Cell;
@@ -42,6 +42,7 @@ public:
   Cell        TheCell()  const { return c;}
   coord_type  TheCoord() const { return p;}
   result_tag  tag   ()   const { return t;}
+  bool        found()    const { return t == inside_tag;}
 };
 
 
