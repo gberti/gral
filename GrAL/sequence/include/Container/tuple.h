@@ -156,6 +156,30 @@ class tuple<T,3> : public tuple_base<T,3> {
   T& z()       { return X[2];}
 };
 
+template<class T>
+class tuple<T,0>
+{
+public:
+  template<class IT>
+  tuple(IT beg, IT end) { REQUIRE(beg==end, "", 1);}
+  tuple()  {}
+  tuple(T) {}
+
+  unsigned size() const { return 0;}
+  typedef T const* iterator;
+
+  T & operator[](unsigned i)       { REQUIRE(false, "", 1);  return tt;}
+  T   operator[](unsigned i) const { REQUIRE(false, "", 1);  return 0;}
+  T   operator()(unsigned i) const { REQUIRE(false, "", 1);  return 0;}
+
+  iterator begin() const { return 0;}  
+  iterator end()   const { return 0;}  
+
+  static T tt;
+};
+
+
+template<class T> T tuple<T,0>::tt;
 
 
 //-------- comparison operators  ----------
