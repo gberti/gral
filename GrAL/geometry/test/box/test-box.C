@@ -39,6 +39,7 @@ int main() {
   box_type b0_1(p0 ,p_1);    REQUIRE_ALWAYS(!b0_1.empty(), "",1);
   box_type b_11(p_1,p1);     REQUIRE_ALWAYS(!b_11.empty(), "",1);
   box_type b1_1(p1,p_1);     REQUIRE_ALWAYS(!b1_1.empty(), "",1);
+  box_type b01(p0,p1);
 
   box_type be;               REQUIRE_ALWAYS(be.empty(), "", 1);
   
@@ -69,7 +70,25 @@ int main() {
   REQUIRE_ALWAYS( b_11.contains(p0), "", 1);
   REQUIRE_ALWAYS( b1_1.contains(p0), "", 1);
 
+  REQUIRE_ALWAYS(  (b_11 & b_10).contains(p0), "", 1);
+  REQUIRE_ALWAYS( !(b_11 & b_10).contains(p1), "", 1);
+
+  REQUIRE_ALWAYS(  (b01 | b_10).contains(p0),  "", 1);
+  REQUIRE_ALWAYS(  (b01 | b_10).contains(p_1), "", 1);
+  REQUIRE_ALWAYS(  (b01 | b_10).contains(p1),  "", 1);
+
+  REQUIRE_ALWAYS( ! (be & b_11).contains(p0), "", 1);
+  REQUIRE_ALWAYS( ! (be & b_11).contains(p_1), "", 1);
+  REQUIRE_ALWAYS( ! (be & b_11).contains(p1), "", 1);
   
+
+  print_contains( be & b_11, p0);
+  print_contains( be | b_11, p0);
+
+  cout << "Volume be  : " << be   .volume() << "\n"; 
+  cout << "Volume b_11: " << b_11.volume() << "\n"; 
+  cout << "Volume b_01: " << b01 .volume() << "\n"; 
+
   typedef coord_type ct;
   ct points[] = { ct(1.0,1.0), ct(2.0,1.0), ct(2.0, 2.0), ct(1.0, 2.0)};
   

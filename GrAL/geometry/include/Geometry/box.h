@@ -10,6 +10,13 @@
 
 #include <boost/limits.hpp>
 
+/*! \defgroup boundingboxfunctions Free functions on bounding boxes 
+    
+     \see \c box<COORD>
+
+ */
+
+
 /*! \brief An axisparallel box for arbitrary coordinate types.
 
     This class is especially useful for representing bounding boxes.
@@ -21,7 +28,8 @@
     hull of its min and max corner <tt> [the_min(), the_max()]</tt>, 
     in the obvious way.
 
-    \see Tested in test-box.C 
+    \see Tested in test-box.C
+    \see Module  boundingboxfunctions
  */
 
 
@@ -66,40 +74,12 @@ public:
     }
   }
 
+  void ce() const { REQUIRE(!empty(), "", 1);}
+
   const coord& the_min() const { return minc;}
   const coord& the_max() const { return maxc;}
   coord        center()  const { return 0.5*(minc+maxc);}
 
-  /*! \brief Scale by a factor \f$ s \geq 0 \f$
-     
-     The scaling is symmetric with respect to the center.
-     A scaling factor of \f$ s = 1 \f$ will leave the box unchanged.
-  */
-  void scale(scalar_type s) { 
-    REQUIRE(s >= 0.0, " s=" << s, 1);
-    coord c(center());
-    minc = c + s*(minc - c);
-    maxc = c + s*(maxc - c);
-  }
-  /*! \brief Translate the box by \c t
-   */
-  void translate(coord t) {
-    minc += t;
-    maxc += t;
-  }
-
-  // dangerous - cannot check consistency
-  coord& the_min()  { return minc;}
-  coord& the_max()  { return maxc;}
-
-  // (0,..,0) -> minc , (1,...,1) -> max
-  coord global_coords(const coord& local) const {
-    coord res = minc;
-    for(int i = pt::LowerIndex(res); i <= pt::UpperIndex(res); ++i) {
-      res[i] = (1-local[i]) * minc[i] + local[i] * maxc[i];
-    }
-    return res;
-  }
   // function interface
   typedef coord argument_type;
   typedef coord result_type;
@@ -111,6 +91,58 @@ public:
   coord operator()(const coord& local) const
     { return global_coords(local); }
 
+  // (0,..,0) -> minc , (1,...,1) -> max
+  coord global_coords(const coord& local) const {
+    ce();
+    coord res = minc;
+    for(int i = pt::LowerIndex(res); i <= pt::UpperIndex(res); ++i) {
+      res[i] = (1-local[i]) * minc[i] + local[i] * maxc[i];
+    }
+    return res;
+  }
+
+
+  /*! \brief Volume of the box
+   */
+  scalar_type volume() const {
+    if(empty()) return 0.0;
+    scalar_type res = 1.0;
+    for(int i = pt::LowerIndex(maxc); i <= pt::UpperIndex(maxc); ++i) {
+      res *= (maxc[i] - minc[i]);
+    }
+    return res;
+  }
+
+
+  /*! \brief Scale by a factor \f$ s \geq 0 \f$
+     
+     The scaling is symmetric with respect to the center.
+     A scaling factor of \f$ s = 1 \f$ will leave the box unchanged.
+  */
+  void scale(scalar_type s) { 
+    REQUIRE(s >= 0.0, " s=" << s, 1);
+    if(! empty()) {
+      coord c(center());
+      minc = c + s*(minc - c);
+      maxc = c + s*(maxc - c);
+    }
+  }
+  /*! \brief Translate the box by \c t
+   */
+  void translate(coord t) {
+    if(!empty()) {
+      minc += t;
+      maxc += t;
+    }
+  }
+
+
+  // dangerous - cannot check consistency
+  // coord& the_min()  { return minc;}
+  // coord& the_max()  { return maxc;}
+
+
+
   /*! \brief True iff \f$  p \in \f$ <tt> [the_min(), the_max()] </tt>
    */
   bool contains(coord const& p) const {
@@ -121,7 +153,6 @@ public:
     return res;
   }
   
-  // bool element(const coord& p) const;
   /*! \brief True iff the box is empty.
 
      The box is empty iff <tt> the_min()[i] > the_max()[i] </tt> for some \c i.
@@ -134,10 +165,19 @@ public:
   }
 
 
-  // intersection
-  // self& operator &=(self const&);
-  //  self operator & (const self& ls, const self& rs)
-  // closure of union
+  //! intersection
+  self& operator &=(self const& rhs) {
+    for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
+      minc[i] = std::max(minc[i], rhs.minc[i]);
+      maxc[i] = std::min(maxc[i], rhs.maxc[i]);
+    }
+    if(empty())
+      *this = self();
+    return *this;
+  }
+
+
+  //! closure of union
   self & operator |= (self const& rs)
     {
       for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
@@ -146,25 +186,42 @@ public:
       }
       return *this;
     }
-  friend self operator | (const self& ls, const self& rs)
-    { 
-      self res(ls);
-      return res |= rs;
-    }
-  /*
-      coord new_min(ls.minc), new_max(ls.maxc);
-      for(int i = pt::LowerIndex(new_min); i <= pt::UpperIndex(new_min); ++i) {
-          new_min[i] = min(new_min[i],rs.minc[i]);
-          new_max[i] = max(new_max[i],rs.maxc[i]);
-      }
-      return self(new_min,new_max);
-    }
-  */
+
 };
+
+
+/*! \brief Box intersection.
+
+    \see \c box<COORD>
+    \ingroup boundingboxfunctions
+*/
+template<class COORD>
+box<COORD>  operator & (box<COORD> const& b1, box<COORD> const& b2) 
+{
+  box<COORD> res(b1);
+  return res &= b2;
+}
+
+/*! \brief Box union
+
+    Returns the bounding box of the union of two boxes
+    \see \c box<COORD>
+    \ingroup boundingboxfunctions
+*/
+template<class COORD>
+box<COORD>  operator | (box<COORD> const& b1, box<COORD> const& b2) 
+{ 
+  box<COORD> res(b1);
+  return res |= b2;
+}
+
+
 
 /*! \brief Approximate Hausdorff distance of two bounding boxes
    
-    This is not the exact Hausdorff distance.
+    \note This is not the exact Hausdorff distance.
+    \see \c box<COORD>
+    \ingroup boundingboxfunctions
 */
 template<class COORD>
 inline
@@ -177,6 +234,8 @@ typename box<COORD>::scalar_type distance(box<COORD> const& b1, box<COORD> const
 
 /*! \brief Diameter of a box.
 
+    \see \c box<COORD>
+    \ingroup boundingboxfunctions
  */
 template<class COORD>
 inline

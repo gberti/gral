@@ -11,3 +11,8 @@
  box [0 0;0 0] contains  point 0 0
  box [-1 -1;1 1] contains  point 0 0
  box [-1 -1;1 1] contains  point 0 0
+ box [1.79769313486232e+308 1.79769313486232e+308;-1.79769313486232e+308 -1.79769313486232e+308] does not contain  point 0 0
+ box [-1 -1;1 1] contains  point 0 0
+Volume be  : 0
+Volume b_11: 4
+Volume b_01: 1
