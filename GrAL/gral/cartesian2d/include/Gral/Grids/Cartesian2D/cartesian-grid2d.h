@@ -845,6 +845,7 @@ public:
     }
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
     Cell  operator*() const  { return TheCell().neighbour(nb);}
+    cell_handle handle() const { return (operator*()).handle();}
 
     // operator Cell()   const { return this->operator*();}
     Edge facet()      const { return c.edge(LocalNumber());}
