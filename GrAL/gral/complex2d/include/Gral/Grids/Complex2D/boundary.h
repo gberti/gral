@@ -1,16 +1,14 @@
 #ifndef NMWR_GB_COMPLEX2D_BOUNDARY_H
 #define NMWR_GB_COMPLEX2D_BOUNDARY_H
 
-#include "Grids/boundary.h"
-#include "Grids/boundary-iterator.h"
-#include "Grids/grid-functors.h"
+// Gral Base
+#include "Gral/Base/boundary.h"
+#include "Gral/Iterators/boundary-iterator.h"
+#include "Gral/Base/grid-functors.h"
 
-#include "Grids/Complex2D/complex2d.h"
-#include "Grids/Complex2D/partial-grid-functions.h"
-
-// some basic gf specializations 
-// -- obsolete when partial spec. is available
-#include "Grids/Complex2D/spec-basic.h"
+// Gral Complex2D
+#include "Gral/Grids/Complex2D/complex2d.h"
+#include "Gral/Grids/Complex2D/partial-grid-functions.h"
 
 
 class boundary_range_iterator_complex2d {
