@@ -36,7 +36,7 @@ public:
 
   //----------- iterator operations --------------------------
 
-  Vertex operator*() const { return Vertex2D(C.vertex(lv), TheGrid());}
+  Vertex operator*() const { return Vertex2D(TheGrid(), C.vertex(lv));}
 
   self& operator++() { ++lv;  return (*this);}
   self& operator--() { --lv;  return (*this);}
@@ -63,8 +63,14 @@ public:
   //----------------- comparison  -----------------------
 
   friend bool operator==(const self& lhs, const self& rhs) 
-  {return ((lhs.lv == rhs.lv) && (lhs.C == rhs.C));}
+  { return ((lhs.lv == rhs.lv) && (lhs.C == rhs.C));}
+
+  bool valid()    const { return bound() && in_range();}
+  bool bound()    const { return C.valid();}
+  bool in_range() const { return (0 <= lv && lv < C.NumOfVertices());}
+ 
 };
 
 
 #endif
+
