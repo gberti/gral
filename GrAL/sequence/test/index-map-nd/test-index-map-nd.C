@@ -16,11 +16,11 @@ void test_map(MAP const& map, std::ostream& out)
   typedef typename MAP::index_type index_type;
   out << "map.min_flat_index()=" << map.min_flat_index()
       << " map.max_flat_index()=" << map.max_flat_index()
-      << " map.max_tuple()= "     << map.max_tuple() <<  endl;
+      << " map.max_tuple()= "     << map.max_tuple() <<  std::endl;
   for(int i = map.min_flat_index(); i <= map.max_flat_index(); ++i) {
     index_type it = map(i);
     int        j  = map(it);
-    out << "i= " << i << " map(i)= " << it << endl;
+    out << "i= " << i << " map(i)= " << it << std::endl;
     REQUIRE_ALWAYS( (i==j), " i=" << i << " j=" << j << " index=" << it << "\n", 1);
   }
 }
