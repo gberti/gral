@@ -5,7 +5,6 @@ CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/testing
-#ADDCCFLAGS += -DGRAL_NO_ABORT -DGRAL_NO_SHOW_DATE -DNMWR_DEBUG
 LOCALSOURCES =  test-cartesiannd-gf.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)

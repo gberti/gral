@@ -5,7 +5,6 @@ CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/testing gral/complexnd gral/complex2d gral/complex3d gral/gmv-io
-#ADDCCFLAGS += -DGRAL_NO_ABORT -DGRAL_NO_SHOW_DATE -DNMWR_DEBUG
 LOCALSOURCES =  test-cartesiannd-copy.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
