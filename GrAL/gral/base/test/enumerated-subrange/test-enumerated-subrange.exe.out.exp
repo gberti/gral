@@ -38,7 +38,7 @@ has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
 
-Subrange S: 4 cells, 9 vertices
+Subrange S: 4 cells, 12 edges, 12 facets, 9 vertices
 Cells: C 0 = [0 0]  C 1 = [0 1]  C 2 = [1 0]  C 3 = [1 1]  
 Vertices: V0 = [0 0]  V3 = [1 0]  V4 = [1 1]  V1 = [0 1]  V5 = [1 2]  V2 = [0 2]  V6 = [2 0]  V7 = [2 1]  V8 = [2 2]  
 
