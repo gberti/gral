@@ -1,9 +1,9 @@
 #ifndef NMWR_GB_COMPLEX2D_GRIDFUNCTIONS_H
 #define NMWR_GB_COMPLEX2D_GRIDFUNCTIONS_H
 
-#include "Grids/Complex2D/complex2d.h"
-#include "Grids/grid-function-vector.h"
-#include "Grids/grid-function-hash.h"
+#include "Gral/Grids/Complex2D/complex2d.h"
+#include "Gral/Base/grid-function-vector.h"
+#include "Gral/Base/grid-function-hash.h"
 
 template<class T>
 class grid_function<Vertex2D,T> 

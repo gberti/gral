@@ -9,8 +9,8 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Algorithms/enlarge-grid.h"
-#include "Grids/Complex2D/complex2d.h"
+#include "Gral/Grids/Algorithms/enlarge-grid.h"
+#include "Gral/Grids/Complex2D/complex2d.h"
 
 //----------------------------------------------------------------
 //
