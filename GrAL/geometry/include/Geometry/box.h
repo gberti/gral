@@ -68,8 +68,8 @@ public:
     maxc = coord(-::std::numeric_limits<scalar_type>::max());
     while(begin != end) {
       for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
-	minc[i] = ::std::min(minc[i], (*begin)[i]);
-	maxc[i] = ::std::max(maxc[i], (*begin)[i]);
+	minc[i] = std::min(minc[i], (*begin)[i]);
+	maxc[i] = std::max(maxc[i], (*begin)[i]);
       }
       ++begin;
     }
@@ -79,6 +79,8 @@ public:
 
   const coord& the_min() const { return minc;}
   const coord& the_max() const { return maxc;}
+  const coord& min() const { return minc;}
+  const coord& max() const { return maxc;}
   coord        center()  const { return 0.5*(minc+maxc);}
 
   unsigned dimension()       const { return pt::Dim(minc);}
@@ -172,8 +174,8 @@ public:
   //! intersection
   self& operator &=(self const& rhs) {
     for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
-      minc[i] = ::std::max(minc[i], rhs.minc[i]);
-      maxc[i] = ::std::min(maxc[i], rhs.maxc[i]);
+      minc[i] = std::max(minc[i], rhs.minc[i]);
+      maxc[i] = std::min(maxc[i], rhs.maxc[i]);
     }
     if(empty())
       *this = self();
@@ -181,12 +183,12 @@ public:
   }
 
 
-  //! closure of union
+  //! bounding box of union
   self & operator |= (self const& rs)
     {
       for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
-          minc[i] = ::std::min(minc[i],rs.minc[i]);
-          maxc[i] = ::std::max(maxc[i],rs.maxc[i]);
+          minc[i] = std::min(minc[i],rs.minc[i]);
+          maxc[i] = std::max(maxc[i],rs.maxc[i]);
       }
       return *this;
     }
