@@ -15,7 +15,7 @@ include $(DEPS)
 
 
 
-LIBS = -lgral-cartesian3d -lgral-base
+LIBS = -lgral-cartesian3d -lgral-complex2d -lgral-base
 
 
 
@@ -29,7 +29,7 @@ new : clean all
 all : $(TARGETS)
 
 
-test-carte-gf: $(LOCALOBJECTS)
+test-cart-gf: $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
