@@ -5,13 +5,16 @@
 // $LICENSE
 
 #include "Gral/Distributed/construct-local-overlapping-grids.h"
+
+#include "Gral/Distributed/copy-overlap.h"
+#include "Gral/Distributed/mark-ranges.h"
+
 #include "Container/functions.h"
 #include "Gral/Subranges/enumerated-subrange.h"
 
 #include "Gral/Base/enlarge-grid.h"
 #include "Gral/Base/construct-grid.h"
 
-#include "Gral/Distributed/mark-ranges.h"
 
 
 //----------------------------------------------------------------
@@ -68,6 +71,8 @@ void ConstructLocalOverlappingGrid(OvlpGrid       & ovlp_grid,
 		id_shared,
 		v_corr,  // v_corr remains unchanged on shared vertices
 		c_corr);
+
+  ovlp_grid.fine_grid_complete();
 
   //--------------------- copy the overlap ranges -------------------------------
 

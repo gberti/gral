@@ -91,9 +91,12 @@ ConstructMPIDistributedFromMaster
   // using the master2distr mappings.
   DistrGeom.set_grid(DistrG.TheGrid());
   
+  // Use CopyOverlappingGrid for the stuff below??
   ConstructGridVC(DistrG.TheGrid(),  DistrGeom,
 		   compG.Grid(cMyC), compGeom(cMyC),
 		   part2distr_v, part2distr_c);
+
+  DistrG.TheOvrlpGrid().fine_grid_complete();
 
   inverse_mapping<cell_handle,   cell_handle> coarse2distr(distr2coarse.inverse());
   CopyOverlap(DistrG.TheOverlap(),  compG.Overlap(cMyC),

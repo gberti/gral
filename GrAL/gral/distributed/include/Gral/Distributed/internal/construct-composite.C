@@ -32,8 +32,9 @@ void ConstructComposite(CompositeG     & CG,
   typedef typename cgt::vertex_handle             coarse_vertex_handle;
   typedef typename cgt::cell_handle               coarse_cell_handle;
   
-  typedef typename Partition::grid_type           fine_grid_type;
-  typedef grid_types<fine_grid_type>              fgt;
+  //  typedef typename Partition::grid_type           fine_grid_type;
+  typedef typename CompositeG::fine_grid_type      fine_grid_type;
+  typedef grid_types<fine_grid_type>               fgt;
   // typedef grid_types<fine_grid_type>::Vertex    Vertex;
   // typedef grid_types<fine_grid_type>::Facet     Facet;
   typedef typename fgt::Cell                      Cell;
@@ -41,13 +42,13 @@ void ConstructComposite(CompositeG     & CG,
 
   //------------------ construct coarse grid and correspondencies -----------------
 
-  bijective_mapping<coarse_cell_handle,   int>           CoarseCellCorr;
-  bijective_mapping<coarse_vertex_handle, vertex_handle> CoarseVertexCorr;
+  bijective_mapping<coarse_cell_handle,   int>            CoarseCellCorr;
+  bijective_mapping<coarse_vertex_handle, vertex_handle>  CoarseVertexCorr;
 
   ConstructCoarsePartitionGrid(CG.TheCoarseGrid(),Prtng, 			       
 			       CoarseVertexCorr,
 			       CoarseCellCorr);
-  CG.update();
+  CG.coarse_grid_complete();
 
   v_corr.set_grid(CG.TheCoarseGrid());
   c_corr.set_grid(CG.TheCoarseGrid());
@@ -68,9 +69,7 @@ void ConstructComposite(CompositeG     & CG,
   typedef dyn_overlap<coarse_grid_type, fine_grid_type> overlap_type;
   grid_function<CoarseCell, overlap_type>               Ovlp(CrsG);
   for(CoarseCellIterator P0 = CrsG.FirstCell(); ! P0.IsDone(); ++P0) {
-    // Ovlp[*P] = overlap_type(CrsG, Prtng.TheGrid());
-    Ovlp[*P0].set_coarse_grid(CrsG);
-    Ovlp[*P0].set_fine_grid  (Prtng.TheGrid());
+    Ovlp[*P0].init(CrsG,Prtng.TheGrid());
   }
 
   // identity mapping
@@ -81,7 +80,7 @@ void ConstructComposite(CompositeG     & CG,
   //--------------------- construct local grids  ---------------------------------
 
   for(CoarseCellIterator P1 = CrsG.FirstCell(); ! P1.IsDone(); ++P1) {
-    CG.OvrlpGrid(*P1).set_coarse_grid(CG.TheCoarseGrid());
+    CG.OvrlpGrid(*P1).init(CG.TheCoarseGrid());
     ConstructLocalOverlappingGrid(CG.OvrlpGrid(*P1),
 				  Prtng.Range(cell2part(*P1)), geom,
 				  Ovlp[*P1], v_corr[*P1], c_corr[*P1]);
