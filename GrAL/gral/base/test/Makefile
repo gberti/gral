@@ -23,6 +23,7 @@ SUBDIRS = boundary-grid  \
           grid-as-volume \
           grid-function-array-adapter \
           incidence-hulls \
+          mapped-grid-function \
           multi-grid-function \
           partial-grid-morphism \
           polygon1d \

@@ -17,6 +17,7 @@
 #include "Container/functions.h"
 
 
+
 int main() {
   using namespace GrAL;
   using namespace std;
@@ -52,6 +53,18 @@ int main() {
     pred_type  p(h,GeomR);
     
     rcv::grid_view<grid_type, pred_type> component(R,p, * R.FirstCell());
+    cout << "Component: " 
+	 << component.NumOfVertices() << " vertices, "
+	 << component.NumOfCells()    << " cells\n";
+    
+    OstreamGMV2DFmt Out("component-0.99.gmv.out");
+    ConstructGrid(Out,component,GeomR);
+  }
+  {
+    shape_type h(coord_type(1.0,1.0), 0.99);
+    pred_type  p(h,GeomR);
+    
+    rcv::grid_view<grid_type, pred_type> component(R,p, R.FirstCell(), R.EndCell());
     cout << "Component: " 
 	 << component.NumOfVertices() << " vertices, "
 	 << component.NumOfCells()    << " cells\n";
