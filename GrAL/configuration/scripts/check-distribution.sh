@@ -1,11 +1,12 @@
 #! /bin/bash
 
+TMP=$1
 
-cd /home/nmwr/tmp
+cd ${TMP}
 rm -rf GrAL
-gzcat ${HOME}/tmp/gral-all.tar.gz | tar -xfv -
+zcat ${TMP}/gral-all.tar.gz | tar -xvf -
 cd GrAL
-gzcat ${HOME}/tmp/gral-doc.tar.gz | tar -xfv - 
+zcat ${TMP}/gral-doc.tar.gz | tar -xvf - 
 gmake new
-gmake install PREFIX=/home/nmwr/tmp/gral
-gmake check DEVELOP=user PREFIX=/home/nmwr/tmp/gral
+gmake install PREFIX=${TMP}/gral
+gmake check DEVELOP=user PREFIX=${TMP}/gral

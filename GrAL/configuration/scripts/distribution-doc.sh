@@ -1,7 +1,8 @@
 #! /bin/bash
 
 
-CVSREPO=/home/nmwr/CVS;
+#CVSREPO=/home/nmwr/CVS;
+CVSREPO=`cat CVS/Root`;
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules.sh`;
 TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
@@ -14,7 +15,7 @@ cd ${HOME}/tmp;
 rm -rf ${ALLROOT};
 mkdir -p  ${ALLROOT};
 cd  ${ALLROOT};
-for i in ${MODULES}
+for i in ${TOPLEVELMODULES}
 do
  echo $i; 
  cvs -d ${CVSREPO} export -r HEAD $i;
