@@ -34,9 +34,9 @@ install-headers: std-install-headers
 install: install-headers install-libs
 
 clean: stdclean
-	(cd src;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 	(cd test; $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 
+#	(cd src;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 #	(cd doc;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 
 tarclean: clean
@@ -44,9 +44,9 @@ tarclean: clean
 
 realclean: tarclean
 	rm -rf doxygen/
-	(cd src;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
 	(cd test; $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
 
+#	(cd src;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
 #	(cd doc; $(MAKE) realclean)
 
 
