@@ -3,7 +3,8 @@
 
 #include "cartesiannd.h"
 #include "mapped-geometry.h"
-// #include "partial-gridfunctions.h"
+#include "grid-functions.h"
+#include "partial-grid-functions.h"
 
 
 #endif

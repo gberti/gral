@@ -87,8 +87,14 @@ public:
     : base_gf(gg), default_value(T()) {} 
   partial_grid_function(const grid_type& gg, const T& dflt)
     : base_gf(gg), default_value(dflt)  {}
+  partial_grid_function(ref_ptr<grid_type const> gg) 
+    : base_gf(gg), default_value(T()) {} 
+  partial_grid_function(ref_ptr<grid_type const> gg, const T& dflt)
+    : base_gf(gg), default_value(dflt)  {}
 
-  void init(grid_type const& gg, T const& t) {
+
+  void init(grid_type const& gg, T const& t) { init(ref_ptr<grid_type const>(gg), t);}
+  void init(ref_ptr<grid_type const> gg, const T& t) {
     set_grid(gg);
     set_default(t);
   }
