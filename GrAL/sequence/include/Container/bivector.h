@@ -15,15 +15,17 @@ namespace GrAL {
    \author Guntram Berti
    \ingroup mappings
 
-   Similarly to ::std::deque, this class offers a random-access container
+   Similarly to std::deque, this class offers a random-access container
    which can grow at both ends.
-   Unlike ::std::deque (but like ::std::vector), indices will continue to be valid
-   if insertion is performed only at the beginning/end (for ::std::vector: only at the end).
+   Unlike std::deque (but like std::vector), indices will continue to be valid
+   if insertion is performed only at the beginning/end (for std::vector: only at the end).
    The first item inserted will get index 0, items inserted later on at the beginning will
    get negative indices.
 
    This behavior is useful if we want to maintain external indexing into the container.
    Because arbitrary insertions would destroy this property, bivector does not support it.
+
+   \see Tested in \ref test-bivector.C
 */
 
 
@@ -45,10 +47,20 @@ public:
   typedef typename tt::difference_type  difference_type;
   typedef typename tt::difference_type  index_type;
 
+  //! Construct empty bivector
   bivector()                         :              offset(0) {}
+  /*! \brief Construct bivector with \c n items
+    \post <tt>begin_index() == 0 && end_index() == n </tt>
+   */
   bivector(size_type n)              : table(n),    offset(0) {} 
+  /*! \brief Construct bivector with \c n items of value \c t0
+    \post <tt>begin_index() == 0 && end_index() == n </tt>
+   */
   bivector(size_type n, T const& t0) : table(n,t0), offset(0) {} 
 
+  /*! \brief Set the first index to \c i
+     \post <tt>begin_index() == i && end_index() == i + size() </tt>
+   */
   void init_begin_index(index_type i) {
     REQUIRE_ALWAYS(table.empty(), "",1);
     offset = -i;

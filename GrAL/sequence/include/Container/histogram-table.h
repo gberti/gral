@@ -1,6 +1,8 @@
 #ifndef GRAL_GB_CONTAINER_HISTOGRAM_TABLE_H
 #define GRAL_GB_CONTAINER_HISTOGRAM_TABLE_H
 
+// $LICENSE_NEC_2003
+
 #include "Container/my-hash-map.h"
 #include "Utility/pre-post-conditions.h"
 
@@ -12,7 +14,7 @@ namespace GrAL {
     \ingroup containers
 
     \see compute_histogram
-    \test test-histogram.C
+    \see Tested in \ref test-histogram.C
  
     \todo could be specialized for small data types, say range is one byte.
           Must transform key to range [0, max]   
