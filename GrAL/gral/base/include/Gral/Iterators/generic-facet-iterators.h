@@ -46,6 +46,8 @@ namespace generic_facet {
 
   template<class gt> class vertex_on_facet_iterator;
 
+  template<class gt> class edge_on_facet_iterator;
+
   template<class gt> class facet_handle_t;
 
   template<class gt> class hasher_facet;
@@ -64,11 +66,14 @@ namespace generic_facet {
       typedef typename gt::cell_handle   cell_handle;
       typedef typename gt::vertex_handle vertex_handle;
       typedef typename gt::CellIterator  CellIterator;
-      
+     
+      typedef typename gt::Edge          Edge;
+      typedef typename gt::edge_handle   edge_handle; 
 
       typedef grid_types<typename gt::archetype_type> agt;
       typedef typename agt::CellIterator archCellIterator;
       typedef typename agt::VertexOnCellIterator archVertexOnCellIterator;
+      typedef typename agt::EdgeOnCellIterator   archEdgeOnCellIterator;
       typedef typename agt::cell_handle  arch_cell_handle;
       typedef typename agt::Cell         archCell;      
 
@@ -76,6 +81,7 @@ namespace generic_facet {
       typedef facet_iterator<gt>           FacetIterator;
       typedef facet_on_cell_iterator<gt>   FacetOnCellIterator;
       typedef vertex_on_facet_iterator<gt> VertexOnFacetIterator;
+      typedef edge_on_facet_iterator<gt>   EdgeOnFacetIterator;
       typedef facet_handle_t<gt>           facet_handle; 
       typedef hasher_facet<gt>             facet_hasher_type;
 
@@ -132,6 +138,7 @@ namespace generic_facet {
 	typedef facet_on_cell_iterator<gt> self;
 	typedef grid_types_facet<gt>       base;
 	friend class vertex_on_facet_iterator<gt>;
+	friend class edge_on_facet_iterator<gt>;
 	friend class facet<gt>;
       public:
 	typedef typename base::Cell         Cell;
@@ -188,9 +195,11 @@ namespace generic_facet {
       typedef facet<gt>            self;
       typedef grid_types_facet<gt> base;
       friend class vertex_on_facet_iterator<gt>;
+      friend class edge_on_facet_iterator  <gt>;
     public:
       typedef typename base::facet_handle facet_handle;
       typedef typename base::VertexOnFacetIterator VertexOnFacetIterator;
+      typedef typename base::EdgeOnFacetIterator   EdgeOnFacetIterator;
       typedef typename base::grid_type        grid_type;
 
     private:
@@ -203,6 +212,10 @@ namespace generic_facet {
       VertexOnFacetIterator FirstVertex() const;
       VertexOnFacetIterator EndVertex()   const;
       unsigned NumOfVertices() const { c_(); return (*fc.lf).NumOfVertices();}
+      EdgeOnFacetIterator FirstEdge() const;
+      EdgeOnFacetIterator EndEdge()   const;
+      unsigned NumOfEdges() const { c_(); return (*fc.lf).NumOfEdges();}
+
 
       grid_type  const& TheGrid() const { c_(); return fc.TheGrid();}
       facet_handle handle() const { c_(); return fc.handle();}
@@ -334,6 +347,57 @@ namespace generic_facet {
 
 
 
+  /*! \brief Generic EdgeOnFacetIterator
+   */
+    template<class gt>
+      class edge_on_facet_iterator : public grid_types_facet<gt> {
+	typedef edge_on_facet_iterator<gt> self;
+	typedef grid_types_facet<gt>         base;
+      public:
+	typedef typename base::Edge          Edge;
+	typedef typename base::edge_handle   edge_handle;
+	typedef typename base::Facet         Facet;
+	typedef typename base::facet_handle  facet_handle;
+	typedef typename base::archEdgeOnCellIterator archEdgeOnCellIterator;
+	typedef typename base::grid_type        grid_type;
+
+      private:
+	 facet_on_cell_iterator<gt> f;
+	 archEdgeOnCellIterator  ef;
+      public:
+	edge_on_facet_iterator() {}
+	explicit
+	edge_on_facet_iterator(facet<gt> const& ff) 
+	  : f(ff.fc), ef((*f.lf).FirstEdge()) {}
+	edge_on_facet_iterator(facet<gt> const& ff, 
+				 archEdgeOnCellIterator const& eff) 
+	  : f(ff.fc), ef(eff) 
+	  { REQUIRE( IsDone() || (f.ArchetypeCell() == ef.TheCell()),"",1);}
+	
+        self& operator++() { c_(); ++ef; return (*this);}
+	Edge operator*() const { c_(); return Edge(TheGrid(), handle());}
+	bool IsDone() const { cb_(); return ef.IsDone();}
+
+	grid_type const& TheGrid() const { c_(); return f.TheGrid();}
+        edge_handle handle() const { c_(); return f.TheCell().e(ef.handle());}
+
+	bool operator==(self const& rhs) const { 
+	  cb_(); rhs.cb_();
+	  return ef == rhs.ef;
+	}
+	bool operator!=(self const& rhs) const 
+	  { return !((*this) == rhs);}
+
+
+	bool bound() const { return (f.valid());}
+	bool valid() const { return (bound() && ef.valid());}
+	void c_()       const { REQUIRE(valid(), "", 1);}
+	void cb_() const { REQUIRE(bound(), "", 1);}
+	
+      };
+
+
+
     /*! Facet iterator based on marking visited facets.
 
      */
@@ -418,6 +482,18 @@ namespace generic_facet {
       typename facet<gt>::VertexOnFacetIterator 
       facet<gt>::EndVertex() const 
       { c_(); return VertexOnFacetIterator(*this, fc.ArchetypeCell().EndVertex());}
+
+    template<class gt>
+      inline 
+      typename facet<gt>::EdgeOnFacetIterator 
+      facet<gt>::FirstEdge() const 
+      { c_(); return EdgeOnFacetIterator(*this);}
+
+    template<class gt>
+      inline 
+      typename facet<gt>::EdgeOnFacetIterator 
+      facet<gt>::EndEdge() const 
+      { c_(); return EdgeOnFacetIterator(*this, fc.ArchetypeCell().EndEdge());}
 
 
     // cell type in gt must derive from this type
