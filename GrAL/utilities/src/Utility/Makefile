@@ -1,7 +1,9 @@
+CONFIG=$(shell pwd)/../../mk.config
+
 include  $(CONFIG)
 
 
-LOCALSOURCES= safe-file.C
+LOCALSOURCES= safe-file.C notifier.C
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
 

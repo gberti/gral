@@ -1,0 +1,30 @@
+OA: notifier == na (ok),  old value: 2  new value: 3
+NA::NA(const NA&)
+OA::operator= called!
+OA: notifier == na (ok),  old value: 3  new value: 7
+OA: notifier == na (ok),  old value: 3  new value: 7
+OA: notifier == na (ok),  old value: 3  new value: 7
+NA::operator=
+OA: notifier == na (ok),  old value: 7  new value: 10
+OA: notifier == na (ok),  old value: 7  new value: 10
+OA: notifier == na (ok),  old value: 7  new value: 10
+na2: 0 observers
+na2: 1 observers
+na2: 2 observers
+OA::operator= called!
+na2: 4 observers
+OA: notifier == na (ok),  old value: 11  new value: 12
+OA: notifier == na (ok),  old value: 11  new value: 12
+OA: notifier == na (ok),  old value: 10  new value: 13
+OA: notifier == na (ok),  old value: 10  new value: 13
+OA: notifier != na,  old value: 12  new value: 12
+OA: notifier != na,  old value: 12  new value: 12
+OA: notifier != na,  old value: 12  new value: 12
+OA: notifier != na,  old value: 12  new value: 12
+na1: 2 observers
+na2: 4 observers
+na3: 2 observers
+oa1: 1 notifiers
+oa2: 1 notifiers
+oa3: 3 notifiers
+oa4: 3 notifiers
