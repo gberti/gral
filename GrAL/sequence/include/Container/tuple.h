@@ -115,7 +115,7 @@ class tuple<T,2> : public tuple_base<T,2> {
   tuple(T const& t1, T const& t2) { X[0] = t1; X[1] = t2;}
 
   template<class U>
-  tuple(tuple<U,2> const& rhs) { X[0] = rhs[0]; X[1] = rhs[1];}
+  tuple(tuple<U,2> const& rhs) { X[0] = T(rhs[0]); X[1] = T(rhs[1]);}
 
   T  x() const { return X[0];}
   T  y() const { return X[1];}
@@ -155,7 +155,7 @@ class tuple<T,3> : public tuple_base<T,3> {
   tuple(T const& t1, T const& t2, T const& t3) { X[0] = t1; X[1] = t2; X[2] = t3;}
 
   template<class U>
-  tuple(tuple<U,3> const& rhs) { X[0] = rhs[0]; X[1] = rhs[1]; X[2] = rhs[2];}
+  tuple(tuple<U,3> const& rhs) { X[0] = T(rhs[0]); X[1] = T(rhs[1]); X[2] = T(rhs[2]);}
 
 
   T  x() const { return X[0];}
@@ -361,6 +361,39 @@ power(tuple<T,N> const& a, U k)
       res[i] *= a(i);
   return res;
 }
+
+
+/*! \brief component-wise floor
+
+    \f$ (a_0, \ldots, a_{N-1}) \mapsto (\lfloor a_0\rfloor, \ldots, \lfloor a_{N-1}\rfloor) \f$
+
+*/
+template<class T, unsigned N>
+inline
+tuple<T,N>
+floor_tuple(tuple<T,N> const& a)
+{ 
+  tuple<T,N> res;
+  for(unsigned i = 0; i < N; ++i)
+    res[i] = floor(a[i]);
+  return res;
+}
+/*! \brief component-wise ceiling
+
+    \f$ (a_0, \ldots, a_{N-1}) \mapsto (\lceil a_0\rceil, \ldots, \lceil a_{N-1}\rceil) \f$
+
+*/
+template<class T, unsigned N>
+inline
+tuple<T,N>
+ceil_tuple(tuple<T,N> const& a)
+{ 
+  tuple<T,N> res;
+  for(unsigned i = 0; i < N; ++i)
+    res[i] = ceil(a[i]);
+  return res;
+}
+
 
 
 /*!  \brief Test for component-wise divisibility
