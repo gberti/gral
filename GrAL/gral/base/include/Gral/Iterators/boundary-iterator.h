@@ -108,13 +108,18 @@ public:
   /*! \pre ins(E1.C1()) != ins(E1.C2()) (that is, E1 is boundary facet)
    */
   BoundaryComponentIterator2D(const Edge&   E1, const CellPred& ins)
-    : inside(ins),
+   : inside(ins),
       V(E1.V2()), 
       E(E1), 
       Estart(E1), 
-      C(! inside(E1.C1()) ? E1.C2() : E1.C1()), 
       done(false) 
-    {}
+    {
+      // why necessary?
+      if(! TheGrid().IsInside(E1.C1()))
+       C = E1.C2();
+      else 
+       C = (! inside(E1.C1()) ? E1.C2() : E1.C1());
+    }
 
   //--- copying ----
   BoundaryComponentIterator2D(const self& rs) 
