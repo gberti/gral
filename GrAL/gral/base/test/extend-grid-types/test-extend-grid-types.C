@@ -15,50 +15,10 @@ void checkgt(std::ostream& out)
 
 #define PRINT_HAS_MEMBER(T)  out << "has" << ( has_##T<gt>::result ? "   " : " no") << " type " << #T << "\n";
 
-  PRINT_HAS_MEMBER(vertex_handle);
-  PRINT_HAS_MEMBER(edge_handle);
-  PRINT_HAS_MEMBER(face_handle);
-  PRINT_HAS_MEMBER(facet_handle);
-  PRINT_HAS_MEMBER(cell_handle);
-
-  PRINT_HAS_MEMBER(Vertex);
-  PRINT_HAS_MEMBER(Edge);
-  PRINT_HAS_MEMBER(Face);
-  PRINT_HAS_MEMBER(Facet);
-  PRINT_HAS_MEMBER(Cell);
-
-  PRINT_HAS_MEMBER(VertexIterator);
-  PRINT_HAS_MEMBER(EdgeIterator);
-  PRINT_HAS_MEMBER(FaceIterator);
-  PRINT_HAS_MEMBER(FacetIterator);
-  PRINT_HAS_MEMBER(CellIterator);
-
-  PRINT_HAS_MEMBER(VertexOnVertexIterator);
-  PRINT_HAS_MEMBER(EdgeOnVertexIterator);
-  PRINT_HAS_MEMBER(FaceOnVertexIterator);
-  PRINT_HAS_MEMBER(FacetOnVertexIterator);
-  PRINT_HAS_MEMBER(CellOnVertexIterator);
-
-  PRINT_HAS_MEMBER(VertexOnEdgeIterator);
-  PRINT_HAS_MEMBER(FaceOnEdgeIterator);
-  PRINT_HAS_MEMBER(FacetOnEdgeIterator);
-  PRINT_HAS_MEMBER(CellOnEdgeIterator);
-
-  PRINT_HAS_MEMBER(VertexOnFaceIterator);
-  PRINT_HAS_MEMBER(EdgeOnFaceIterator);
-  PRINT_HAS_MEMBER(CellOnFaceIterator);
-
-  PRINT_HAS_MEMBER(VertexOnFacetIterator);
-  PRINT_HAS_MEMBER(EdgeOnFacetIterator);
-  PRINT_HAS_MEMBER(CellOnFacetIterator);
-
-  PRINT_HAS_MEMBER(VertexOnCellIterator);
-  PRINT_HAS_MEMBER(EdgeOnCellIterator);
-  PRINT_HAS_MEMBER(FaceOnCellIterator);
-  PRINT_HAS_MEMBER(FacetOnCellIterator);
-  PRINT_HAS_MEMBER(CellOnCellIterator);
+GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(PRINT_HAS_MEMBER);
 
 #undef PRINT_HAS_MEMBER
+
 }
 
 int main() {
