@@ -79,6 +79,14 @@ private:
   void do_copy();
   int  calc_num_of_vertices();
 
+  struct SD {
+    typedef Triang2D::archetype_type archetype_type;
+
+    archetype_type the_archetype[1];
+    SD();
+  };
+  static SD sd;
+
 public:
 
   friend class Triang2D_VertexOnCellIterator;
@@ -102,6 +110,29 @@ public:
   inline Vertex switched_vertex(Vertex const& v, Edge const& e) const;
   inline Edge   switched_edge  (Vertex const& v, Edge const& e, Cell const& c) const;
 
+  bool valid(vertex_handle v) const { return 0 <= v && v < nvertices;}
+  bool valid(cell_handle   c) const { return 0 <= c && c < ncells;}
+
+
+   /*! \name Archetype handling
+   */
+  /*@{*/
+  static archetype_type const& Archetype(archetype_handle a) {
+    REQUIRE(a == 0, "a = " << a,1);
+    return *BeginArchetype();
+  }
+  static archetype_type   const& ArchetypeOf (Cell const&) { return *BeginArchetype();}
+  static archetype_type   const& ArchetypeOf (cell_handle) { return *BeginArchetype();}
+  static archetype_handle        archetype_of(cell_handle) { return 0;}
+  static archetype_handle        archetype_of(Cell const&) { return 0;}
+
+  static archetype_iterator BeginArchetype()
+    { return archetype_iterator(sd.the_archetype);}
+  static archetype_iterator EndArchetype()  { return BeginArchetype() +1;}
+  static unsigned NumOfArchetypes() { return 1;}
+  static archetype_handle handle(archetype_iterator a)
+    { return a - BeginArchetype();}
+  /*@}*/
 };
 
 
@@ -141,6 +172,8 @@ public:
 
   vertex_handle v(int lv) const;
   Vertex        V(int lv) const;
+
+  archetype_type const& TheArchetype() const { return TheGrid().ArchetypeOf(*this);}
 
   // checking functions
   bool bound() const { return g != 0;}
@@ -269,6 +302,7 @@ public:
   int local_handle() const { cv(); return fc;}
   
   // checking functions
+  archgt::Cell ArchetypeCell() const { return archgt::Cell(TheCell().TheArchetype(), fc);}
 
   bool bound() const { return c.bound();}
   bool valid() const { return (c.valid() && (0 <= fc) && (fc < 3));}
