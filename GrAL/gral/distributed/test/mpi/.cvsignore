@@ -1,0 +1,6 @@
+*.out
+distributed-output
+out?x?
+test-distri-io  test-distributed
+mpihosts 
+grid.part grid.complex2d 
