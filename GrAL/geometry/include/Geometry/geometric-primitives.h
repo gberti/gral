@@ -5,46 +5,148 @@
 
 #include "Geometry/algebraic-primitives.h"
 #include "Utility/pre-post-conditions.h"
+#include "Container/integer-iterator.h"
 
-// should use C++ <limits>
-//#include <limits.h>
+// FIXME: workaround for missing <limits>
+#include <boost/limits.hpp>
 
 template<class Geom>
 struct geom_traits {};
 
-   
+
+
 template<class P>
-class segment {
+class space_point {
+  typedef space_point<P> self;
 public:
   typedef P coord_type;
-  typedef coord_type const& const_ref;
-  //   coord_type const& p_0, p_1;
-  // coord_type  p_0, p_1;
-  const_ref  p_0, p_1;
+  typedef point_traits<P> pt;
+  typedef typename pt::component_type scalar_type;
+
+private:
+  coord_type  p[1];
 public:
-  segment(coord_type const& P0, coord_type const& P1)
-    : p_0(P0), p_1(P1) {}
-  coord_type const& p0() const { return p_0;}
-  coord_type const& p1() const { return p_1;}
+  space_point() {}
+  space_point(coord_type const& P0)
+  { p[0]=P0;}
+  coord_type const& p0() const { return p[0];}
+  coord_type const& operator[](int i) const { return p[i];}
+  coord_type const& operator()(int i) const { return p[i];}
+
+  int space_dimension() const { return pt::Dim(p[0]);}
+
+  typedef integer_iterator<int, self>     VertexIterator;
+  VertexIterator FirstVertex() const { return VertexIterator(0);}
+  VertexIterator EndVertex()   const { return VertexIterator(1);}
+
+  typedef coord_type const*  geom_vertex_iterator;
+  geom_vertex_iterator begin_vertex() const { return p;}
+  geom_vertex_iterator end_vertex()   const { return p+1;}
 };
+
+
+
+template<class P>
+class segment {
+  typedef segment<P> self;
+public:
+  typedef P coord_type;
+  typedef point_traits<P> pt;
+  typedef typename pt::component_type scalar_type;
+private:
+  coord_type  p[2];
+public:
+  segment() {}
+  segment(coord_type const& P0, coord_type const& P1)
+  { p[0]=P0; p[1]=P1;}
+  coord_type const& p0() const { return p[0];}
+  coord_type const& p1() const { return p[1];}
+
+  coord_type const& operator[](int i) const { return p[i];}
+  coord_type const& operator()(int i) const { return p[i];}
+  coord_type operator()(scalar_type t) const { return (1-t)*p[0] + t*p[1];}
+
+  int space_dimension() const { return pt::Dim(p[0]);}
+
+  typedef integer_iterator<int, self>     VertexIterator;
+  VertexIterator FirstVertex() const { return VertexIterator(0);}
+  VertexIterator EndVertex()   const { return VertexIterator(2);}
+
+  typedef coord_type const*  geom_vertex_iterator;
+  geom_vertex_iterator begin_vertex() const { return p;}
+  geom_vertex_iterator end_vertex()   const { return p+2;}
+};
+
+
+
 
 template<class P>
 class triangle {
+  typedef triangle<P> self;
 public:
   typedef P coord_type;
-  typedef coord_type const& const_ref;
-  // coord_type const& p_0, p_1, p_2;
-  coord_type  p_0, p_1, p_2;
-  // const_ref  p_0, p_1, p_2;
+  typedef point_traits<P> pt;
+  typedef typename pt::component_type scalar_type;
+
+private:
+  coord_type  p[3];
 public:
+  triangle() {}
   triangle(coord_type const& P0, 
 	   coord_type const& P1,
 	   coord_type const& P2)
-    : p_0(P0), p_1(P1), p_2(P2) {}
-  coord_type const& p0() const { return p_0;}
-  coord_type const& p1() const { return p_1;}
-  coord_type const& p2() const { return p_2;}
+    { p[0]=P0; p[1]=P1;p[2]=P2;}
+
+  coord_type const& operator[](int i) const { return p[i];}
+  coord_type const& operator()(int i) const { return p[i];}
+  coord_type const& p0() const { return p[0];}
+  coord_type const& p1() const { return p[1];}
+  coord_type const& p2() const { return p[2];}
+
+  int space_dimension() const { return pt::Dim(p[0]);}
+
+  typedef integer_iterator<int, self>     VertexIterator;
+  VertexIterator FirstVertex() const { return VertexIterator(0);}
+  VertexIterator EndVertex()   const { return VertexIterator(3);}
+
+  typedef coord_type const*  geom_vertex_iterator;
+  geom_vertex_iterator begin_vertex() const { return p;}
+  geom_vertex_iterator end_vertex()   const { return p+3;}
 };
+
+
+template<class P>
+class tetrahedron {
+  typedef tetrahedron<P> self;
+public:
+  typedef P coord_type;
+  typedef point_traits<P> pt;
+  typedef typename pt::component_type scalar_type;
+
+private:
+  coord_type  p[4];
+public:
+  tetrahedron() {}
+  tetrahedron(coord_type const& P0, 
+	      coord_type const& P1,
+	      coord_type const& P2,
+	      coord_type const& P3)
+    { p[0]=P0; p[1]=P1;p[2]=P2;p[3]=P3;}
+
+  coord_type const& operator[](int i) const { return p[i];}
+  coord_type const& operator()(int i) const { return p[i];}
+
+  int space_dimension() const { return pt::Dim(p[0]);}
+
+  typedef integer_iterator<int, self>  VertexIterator;
+  VertexIterator FirstVertex() const { return VertexIterator(0);}
+  VertexIterator EndVertex()   const { return VertexIterator(4);}
+
+  typedef coord_type const*  geom_vertex_iterator;
+  geom_vertex_iterator begin_vertex() const { return p;}
+  geom_vertex_iterator end_vertex()   const { return p+4;}
+};
+
 
 
 template<class P> class ray {
@@ -225,9 +327,7 @@ public:
     {}
 
   real eps() const { 
-    // FIXME! return numeric_limits<real>::epsilon();
-    //  return FLT_EPSILON;
-    return 1.0e-6;
+    return std::numeric_limits<real>::epsilon();
   }
 
   bool ray_intersects_plane() {
