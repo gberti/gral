@@ -129,13 +129,28 @@ for(gt::CellIterator c(G), ! c.IsDone(); ++c)
 \algosubsection{Used by}
 The operation of copying is so fundamental that
 it is used virtually everywhere a grid has to be created.
-For example, the algorithm is used for implementing 
-the member function \code{Complex2D::read(istream\&)}, 
-defined in \gralfilelink{complex2d}{C}{complex2d}
-Here an adapter \sectionlink{\type{IstreamComplex2DFmt}}{istream-complex2d-fmt}
-for a grid stored in a file is used.
+If a grid of any type has to be constructed in the 
+Complex2D file format, 
+an input  adapter 
+\sectionlink{\type{IstreamComplex2DFmt}}{istream-complex2d-fmt}
+for this format is used.
+To write any grid to this format,
+the corresponding output adapter
+\gralclasslink{OstreamComplex2DFmt}{base}
+is used, see for instance 
+\gralfilelink{test-construct-main}{C}{complex2d}
+or \gralfilelink{test-triang2d-construct}{C}{triang2d}.
+
 \algosubsection{Notes}
+
 
 \algosubsection{See also}
 \sectionlinkUNDEF{EnlargeGrid}{EnlargeGrid}
-
+~
+\sectionlink{\type{IstreamComplex2DFmt}}{istream-complex2d-fmt}
+~
+\gralclasslink{OstreamComplex2DFmt}{base}
+~
+\gralclasslink{OstreamGMV2DFmt}{gmv-io}
+~
+\gralclasslink{OstreamOFF2DFmt}{geomview-io}

@@ -41,9 +41,11 @@ we can define  the following types more or less directly:
 We will implement them as nested classes of \texttt{Triang2D}
 (note: the actual code used separate classes).
 Also, in order to save some work, we will implement the
-\Conceptlink{Vertex} and \Conceptlink{VertexIterator} by one and the same class
+\Conceptlink{Vertex} and \Conceptlink{VertexIterator} 
+by one and the same class
 \texttt{Triang2D::Vertex},
-and the similarly for \Conceptlink{Cell}.
+and do the same with \type{Triang2D::Cell}
+and  \Conceptlink{Cell} / \Conceptlink{CellIterator}.
 
 
 Moreover, as show below, we can also implement edges and related iterators.
@@ -515,3 +517,12 @@ and \gralfilelink{copy}{C}{triang2d}.
 \end{Label}
 
 To be written.
+
+\begin{Label}{triang2d-testing}
+\introsubsubsection{Testing the adaptation cless}
+\end{Label}
+
+To be written. 
+
+(Have a look at \gralfilelink{test-cartesian-iterators}{C}{cartesian2d},
+which uses the GrAL testing module.)

@@ -13,15 +13,18 @@
 //----------------------------------------------------------------
 // 
 /*!  \class partial_grid_function
-   \brief Implements a total grid_function on hash-basis.
+   \brief Implements a partial grid_function using hash tables.
    \ingroup gridfunctions
 
  This class template supplies a generic implementation
  for partial grid functions - no partial specializations
  to the element type E are required.
 
- This template assumes that a hash function is associated with
- an element_handle type via element_traits<E>.
+ This template assumes that 
+  \c element_traits<E>::hasher_type
+  is a hash function for
+  \c element_traits<E>::element_handle.
+
 
 */
 //----------------------------------------------------------------
