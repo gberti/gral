@@ -108,7 +108,7 @@ void copy_cells_archetypes(Complex2D      & G_dst,
     typedef cell2d_connectivity c2d;
     c2d::vertex_list&   verts (cc._cell_vertices(pc));
  
-    src_vertex_on_cell_it vc_src((*c_src).FirstVertex());
+    src_vertex_on_cell_it vc_src((*c_src)); // .FirstVertex());
     typename grid_types<src_archetype>::VertexIterator
        lv_src(G_src.Archetype(a_src).FirstVertex());
     for(; ! vc_src.IsDone(); ++vc_src, ++lv_src) {

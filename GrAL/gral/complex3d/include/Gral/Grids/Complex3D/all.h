@@ -7,7 +7,7 @@
 #include "Gral/Grids/Complex3D/grid-functions.h"
 #include "Gral/Grids/Complex3D/partial-grid-functions.h"
 #include "Gral/Grids/Complex3D/construct-grid.h"
-
+#include "Gral/Grids/Complex3D/boundary.h"
 
 
 #endif

@@ -2,6 +2,8 @@
 #include "Gral/Grids/ComplexND/all.h"
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/Grids/Complex3D/all.h"
+
+#include "Gral/Base/grid-morphism.h"
 #include "Gral/Base/partial-grid-morphism.h"
 
 #include "Gral/Test/all.h"
@@ -40,8 +42,6 @@ int main() {
     typedef grid_types<Complex2D> gtc;
     Complex2D G;
     stored_geometry_complex2D GeomG(G);
-    //  partial_grid_morphism< cartesiannd::grid<2>,complexnd::ComplexND<2> > Phi(R,G);
-    // ConstructGrid0(G, R, Phi);
     std::vector<gtc::vertex_handle> v_corr(R.NumOfVertices());
     std::vector<gtc::cell_handle>   c_corr(R.NumOfCells());
     // FIXME: this will assume wrong archetype!
@@ -60,13 +60,10 @@ int main() {
     typedef grid_types<cartesiannd::grid<3> > gt;;
     typedef gt::vertex_index_type it;
     cartesiannd::grid<3> R(it(2,2,2));
-    //  complexnd  ::ComplexND<2> G;
     typedef grid_types<Complex3D> gtc;
     Complex3D G;
-    //  partial_grid_morphism< cartesiannd::grid<2>,complexnd::ComplexND<2> > Phi(R,G);
-    // ConstructGrid0(G, R, Phi);
-    std::vector<gtc::vertex_handle> v_corr(R.NumOfVertices());
-    std::vector<gtc::cell_handle>   c_corr(R.NumOfCells());
+    vertex_morphism<cartesiannd::grid<3>,   Complex3D> v_corr(R,G);
+    cell_morphism  <cartesiannd::grid<3>,   Complex3D> c_corr(R,G);
     test_archetypes(R,cout);
 
     cout << "Grid:\n";

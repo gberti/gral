@@ -38,6 +38,7 @@ public:
   operator bool() const { return !IsDone();}
 
   vertex_handle handle() const { return _pos;}
+  bool valid() const { return 0 <= _pos && _pos < _endpos;}
 
   //------------ comparision  -------------------
 
