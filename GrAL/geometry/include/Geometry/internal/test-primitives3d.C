@@ -44,12 +44,12 @@ void check_intersections(P const& s0, P const& s1,
 
   // ray intersection
   out << "line does" 
-      << (IR.line_intersects_plane() ? " " : " not ")
+      << (IR.ray_intersects_plane() ? " " : " not ")
       << "intersect plane\n"
       << "ray does" 
       << (IR.ray_intersects_triangle() ? " " : " not ")
       << "intersect triangle\n";
-  if(IR.line_intersects_plane())
+  if(IR.ray_intersects_plane())
     out << "plane intersection: " << IR.intersection() << '\n'; 
 }
 
