@@ -1,4 +1,5 @@
 export CONFIG:=$(PWD)/mk.config
+unexport PWD
 include $(CONFIG)
 
 
@@ -36,25 +37,34 @@ test:
 
 doxy:
 	mkdir -p doxygen
-	(TEXINPUTS=$(TEXINPUTS):$(PWD); export TEXINPUTS; doxygen doxy.cfg;)
+	(TEXINPUTS=$(TEXINPUTS):$(ROOT); export TEXINPUTS; doxygen doxy.cfg;)
 
 concepts:
 	(cd doc; gmake concepts)
 
 doc: doxy concepts
 
+TMPDIR=$(HOME)/tmp
+TARDIR=$(TMPDIR)/gral/base
 
 tar: 
 	(cd $(HOME)/tmp;\
          rm -rf gral/base;\
          cvs -d /home/nmwr/CVS export -r HEAD gral/base; \
           (cd gral/base;\
-            gmake doc 'CONFIG=/home/berti/tmp/gral/base/mk.config'; \
-            gmake tarclean 'CONFIG=/home/berti/tmp/gral/base/mk.config'; \
+            $(MAKE) doc 'CONFIG=$(TARDIR)/mk.config' 'ROOT=$(TARDIR)';\
+            $(MAKE) tarclean 'CONFIG=$(TARDIR)/mk.config' 'ROOT=$(TARDIR)';\
            ); \
          tar cf gral-base.tar gral/base; \
-         cvs -d /home/nmwr/CVS release gral/base;\
+         cvs -d /home/nmwr/CVS release -d gral/base;\
         )
+
+
+testit:
+	(cd $(HOME)/tmp/gral/base; \
+         $(MAKE) doxy 'CONFIG=/home/berti/tmp/gral/base/mk.config');
+
+#                      'ROOT=/home/berti/tmp/gral/base/mk.config';)
 
 dist: doc  tarclean tar
 
