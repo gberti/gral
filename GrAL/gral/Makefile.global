@@ -3,6 +3,7 @@ GRALROOT=$(shell pwd)
 SUBDIRS= configuration utilities external-control sequence geometry \
          graphics-device function-algebra gral
 
+TARGET=new
 
 all:
 	@set -e; \
@@ -27,11 +28,19 @@ realclean:
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
+
 new:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) new GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+new-force:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config \
+        || echo ">>>>>>>>>>> TARGET new-force FAILED for " $$i " (continuing)";\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 install:
@@ -46,7 +55,14 @@ test:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) test GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
+        $(MAKE) test TARGET=$(TARGET) GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+test-force:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) test TARGET=$(TARGET) GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config \
+        || echo ">>>>>>>>>>> TARGET test-force FAILED for " $$i " (continuing)";\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 check:
@@ -56,13 +72,21 @@ check:
         $(MAKE) check GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
+check-force:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) check GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config \
+        || echo ">>>>>>>>>>> TARGET check-force FAILED for " $$i " (continuing)";\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
 new-check-clean: new test-check-clean
 
 test-check-clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) test-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
+        $(MAKE) test-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 
 test-check-clean-force:
@@ -70,7 +94,7 @@ test-check-clean-force:
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) test-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config \
-        || echo ">>>>>>>>>>> FAILED for " $$i " (continuing)";\
+        || echo ">>>>>>>>>>> TARGET test-check-clean-force FAILED for " $$i " (continuing)";\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
