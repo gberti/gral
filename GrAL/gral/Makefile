@@ -2,9 +2,24 @@ export CONFIG:=$(shell pwd)/mk.config
 #unexport PWD
 include $(CONFIG)
 
-SUBDIRS =  base complex2d distributed partitioning cartesian2d testing \
-           gmv-io geomview-io cartesian3d complex3d triang2d measurement \
-           hierarchical cartesiannd complexnd
+SUBDIRS =  base \
+           cartesian2d \
+           cartesian3d \
+           cartesiannd \
+           complex2d \
+           complex3d \
+           complexnd \
+           distributed \
+           geometry \
+           geomview-io \
+           gmv-io \
+           hierarchical \
+           measurement \
+           partitioning \
+           testing \
+           triang2d \
+           triang3d \
+
 
 #include $(GRALROOT)/configuration/defs/recursive-targets
 
