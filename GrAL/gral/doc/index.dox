@@ -24,7 +24,7 @@
      <LI>  $gral-geometry         Geometry module:
            some geometric primitives
      <H2> Proper GrAL Modules </H2> 
-      <LI> $GrAL index Concept documentation
+      <LI> $GRALCONCEPTSTOP 'Intro and concepts documentation'
       <LI> $gral-gral/base GrAL-Base module:
          Basis generic data structures and algorithms. This module is used by all
         other GrAL modules.

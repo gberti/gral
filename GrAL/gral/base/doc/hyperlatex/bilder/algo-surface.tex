@@ -1,0 +1,45 @@
+\documentclass{article}
+
+% switch PS/TeX fonts: contains either nothing or
+% \usepackage{times,mathptm}
+\usepackage{bilder-pdf}
+
+
+\usepackage{pstricks}
+\usepackage{pst-all}
+\usepackage[dvips]{graphicx}
+\usepackage{myalgorithmic}
+
+\usepackage{amsmath}
+\usepackage{amsfonts}
+\pagestyle{empty}
+\begin{document}
+
+\TeXtoEPS
+\psset{unit=1cm}
+\LARGE\sf
+\begin{pspicture}(0,0)(8,4)
+
+%\rput[bl](0,0){%
+%\psgrid(8,4)
+%}
+
+\rput[bl](0,0){%
+\psframebox{%
+\begin{minipage}{8cm}
+  \begin{algorithmic}
+    \sf
+    \OUT surface: ${\cal G}^d \mapsto \mathbb{R}$
+    \FORALL{Cells $c \in {\cal G}^d$} 
+      \STATE surface($c$) = 0 
+      \FORALL{Facets $f$ of $C$}
+        \STATE surface(c) += volume($f$)
+      \ENDFOR
+    \ENDFOR
+  \end{algorithmic}
+\end{minipage}
+}}
+\end{pspicture}
+\endTeXtoEPS
+
+\end{document}

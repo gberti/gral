@@ -4,37 +4,62 @@
 \introsection{Overview over the Grid Category}
 \end{Label} 
 
-{\em 
-  NOTE: This documentation follows the pattern of the 
-  \xlink{STL Documentation}[\footnote{see {\tt \STLURL}}]{\STLURL},
-  it may be helpful consulting its sections
-  \xlink{{\em Introduction\/}}{\STLURL/stl_introduction.html}
-  and
-  \xlink{{\em Usage of the documentation\/}}{\STLURL/doc_introduction.html}.
-}
-      
-  Components belonging to the 
-  \glossarylink{category}{category}
-  {\em Grid\/} provide a uniform 
-  interface for geometric grids. 
-  As unifying mathematical framework
-  we utilize the notion of a
-  \xlink{CW-complex}{http://www.treasure-troves.com/math/CW-Complex.html}
-  provided by algebraic topology. 
-  More common special cases are
-  simplicial complexes or triangulations,
-  planar straight line graphs (PSLG),
-  finite element meshes and Cartesian grids.
+  In the \sectionlinkshort{preceding section}{GridsAlgorithmsAndReuse},
+  we have seen that the major obstacle for reusing grid-related software
+  is direct access to low-level representation details,
+  together with to inavoidable high variability of such details
+  in the field of geometric data structures.
+
+  In order to  decouple implementations of algorithms 
+  (or other data structures)
+  from these details, we will develop in the following 
+  a uniform, abstract interface layer for grids.
+
+  How can one obtain such an interface? 
+  Let us look again at the simple 
+  \xlink{algorithm for surface calculation}{GridAlgorithmsAndReuse.html\#algo-surface}:
+
+   \begin{figure}[h]
+     \begin{center}
+       \begin{Label}{algo-surface-2}
+       \T\input{bilder/algo-surface.tex}
+       \W\htmlimage[ALT="A simple algorithm calculating cell surfaces"]{%
+          \img{algo-surface}}
+        \end{Label}
+     \end{center}
+   \end{figure}
+
+   What kind of functionality does this algorithm need?
+   \begin{enumerate}
+   \item \label{iter-cell} Iteration over all cells of a grid
+   \item \label{iter-facet-on-cell} Iteration over all facets of a cell
+   \item \label{gf-real-on-cell} Storage of real numbers on cells
+   \item \label{geom-volume} Calculation of volumes of  facets 
+     (i.\ e.\ area in 3D, length in 2D)
+   \end{enumerate}
   
-  We distinguish three fundamental layers of functionality (sub-categories):
+   Items \ref{iter-cell} and \ref{iter-facet-on-cell} 
+   can be summarized as iteration or combinatorial functionality.
+   Item \ref{gf-real-on-cell} obeys to the general pattern of storing
+   data on (or associating data to) grid elements.
+   And item \ref{geom-volume} attaches geometric meaning to the combinatorial
+   entitiy ``facet''.
+
+   Thus, in this case, functionality needed by  the algorithm falls
+   into three classes. This, however, is no accident due to the simplicity
+   of the algorithm, but a pattern found also when investigating 
+   more complex algorithms.
+  To sum up, we distinguish the following three fundamental layers 
+  of functionality:
   \begin{itemize}
-  \item  the \sectionlink{ combinatorial layer }{CombinatorialLayer}
-  \item the \sectionlink{ data association layer }{DataAssociationLayer}
-  \item the \sectionlink{ geometrical layer }{GeometricalLayer} 
+  \item  the \sectionlink{combinatorial layer}{CombinatorialLayer}
+  \item the \sectionlink{data association layer}{DataAssociationLayer}
+  \item the \sectionlink{geometrical layer}{GeometricalLayer} 
   \end{itemize}
   
   The {\em combinatorial layer\/} views a grid 
-  simply as a {\em lattice\/} or, more generally, {\em poset},
+  simply as a \glossarylinkemph{lattice},
+  or, more generally, a \glossarylinkemph{poset},
   given by the {\em incidence\/} relationship.
   The entities involved are of  a purely discrete nature;
   there is not notion of coordinates of vertices or the like.
@@ -45,31 +70,56 @@
   with the discrete grid elements, 
   for example to put marks on vertices,
   or to store solution values on cells.
-  
+  Mathematically, it captures the notion of a function from
+  the discrete set of grid elements of any fixed dimension 
+  to entities of some given type, for example reals or integers.
+
   
   The {\em geometrical layer\/} provides an embedding into a concrete geometrical space of 
   an ({\em external\/}) dimension which is at least the intrinsic dimension. 
   For example, a grid of (intrinsic) dimension 2 could be embedded in 3-space,
   like the surface of a torus.
-  
+  It corresponds to the notion of a \glossarylinkemph{geometric realization}
+  of a combinatorial complex.
 
   
-  We  informally discuss these layers in the introductory sections
-  on the
+  We will discuss these layers in an informal way 
+  in the introductory sections on the
   \sectionlink{combinatorial}{CombinatorialLayer}, 
  \sectionlink{grid function}{DataAssociationLayer}
  and \sectionlink{geometrical}{GeometricalLayer} layers, respectively.
 
  A more formal description of the
  \glossarylink{concepts}{concept} involved starts in 
- \sectionlink{the concept section.}{Concepts}
+ \sectionlink{the concept section.}{Concepts}.
+ Here C++ syntax is prescribed, in a way analogous to
+ the STL documentation.
  We will refer to them with a trailing (C).
+ This part is of cours crucial for actually implementing generic components;
+ it is not so important for understanding the bib picture
+ (because it contains inevitably many arbitrary decisions).
 
- In the third part of the documentation, concrete \sectionlink{components}{Components}
- are described, sorted by functionality (algorithms, grid ranges, iterators and so on).
- These components separate into two layers, depending on whether they are `leaf' components
+ In a short lookahead, here is the generic version of the 
+ algorithm  \xlink{presented before}{GridIntro.html\#algo-surface-2}:
+
+ \begin{example}
+\conceptlinkfoot{grid_function}{TotalGridFunction}<\Conceptlinkfoot{Cell},double> surface(Grid);
+for(\Conceptlinkfoot{CellIterator} c(Grid); !c.IsDone(); ++c) {
+  surface[*c] = 0.0; 
+  for(\Conceptlinkfoot{FacetOnCellIterator} fc(c); !fc.IsDone(); ++fc)
+    surface[*c] += \conceptlinkfoot{Geometry}{VolumeGridGeometry}.volume(*fc);
+}
+ \end{example}
+
+ In the \sectionlinkshort{third part}{Components} of the documentation,
+ concrete \sectionlink{components}{Components}
+ are described, sorted by functionality 
+ (algorithms, grid ranges, iterators and so on).
+ These components separate into two layers, 
+ depending on whether they are  \emph{leaf components\/}
  (for example basic grid implementations),
- or generic extensions, that is, classes which provide additional functionality 
+ or \emph{generic extensions}, that is, 
+ classes which provide additional functionality 
  for each grid component that is a \Glossarylink{model} of a certain \Glossarylink{concept}.
  In fact, most components belong to this second layer,
  which evidently greatly enhances reuse.

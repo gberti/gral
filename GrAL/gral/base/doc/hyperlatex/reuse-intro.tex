@@ -1,0 +1,80 @@
+   \xname{GridsAlgorithmsAndReuse}
+  \begin{Label}{GridsAlgorithmsAndReuse}
+    \introsection{Grids, Algorithms and Reuse}
+  \end{Label}
+
+  Grids are geometric data structures for representing certain subdivisions of space.
+  They are used in numerical solution of partial differential equations
+  (finite element or finite volume methods),
+  computer graphics, computational geometry, geometric modeling, 
+  or geographic information systems.
+  In each of these areas, they are known by differing names,
+  like mesh, subdivision, triangulation, cell or simplicial complex, 
+  BRep, or planar straight line graph (PSLG), to name just a few.
+
+  There is, however, a common underlying mathematical concept unifying (most of)
+  these different notions, namely the 
+  \xlink{CW-complex}{http://www.treasure-troves.com/math/CW-Complex.html}
+  of combinatorial topology.
+
+  Software development in the domain of geometric computing is 
+  notoriously hard, 
+  and reuse of algorithms is particularly difficult to achieve.
+  This stems from the literally thousand of possibilities of
+  representing such grids which are found throughout geometric software.
+  Therefore, implementations of algorithms are tied very closely to the
+  concrete data structure they are written for.
+  As an example, consider the following algorithm,
+  which calculates the surface of each cell in a grid 
+  (e.g. for 2D triangulation, this is the perimeter of each triangle in the grid):
+
+   \begin{figure}[h]
+     \begin{center}
+       \begin{Label}{algo-surface}
+       \T\input{bilder/algo-surface.tex}
+       \W\htmlimage[ALT="A simple algorithm calculating cell surfaces"]{%
+          \img{algo-surface}}
+        \end{Label}
+     \end{center}
+   \end{figure}
+
+  Here ${\cal G}$ is a grid of dimension $d$, ${\cal G}^d$ is the set of its cells
+  (elements of dimension $d$), and a \emph{facet} is an element of dimension $d-1$.
+
+  This algorithm is completely independent of any concrete grid representation;
+  it works for any dimension, for triangles as well as for general polygons as cells,
+  and it does not care whether cells are stored in arrays or lists, or even given
+  implicitely as in a cartesian grid.
+
+  Now consider what happens when we implement this algorithm for a given grid data structure.
+  Let us assume we have a simple data structure for a 2D triangulation
+  where cell-vertex incidences are stored in a plain array \texttt{cells},
+  such that \texttt{cells[3*c +v]} gives the index of the \texttt{v}'th vertex
+  of cell \texttt{c}. Likewise, the array \texttt{geom} is assumed to 
+  hold the coordinates of vertex \texttt{v}.
+  A possible implementation could be the following:
+  \begin{example}  
+   double * surf = new double[nc];
+   for(c = 0; c < nc; ++c) {
+     surf[c] = 0.0;
+     for(vc = 0; vc < 3; ++vc) {
+       int vc1 = (vc+1)\%3;
+       double dx = (geom[2*cells[3*c+vc ]   ] - geom[2*cells[3*c+vc1]   ]);
+       double dy = (geom[2*cells[3*c+vc ]+1 ] - geom[2*cells[3*c+vc1] +1]);
+       surf[c] +=  sqrt(dx*dx+dy*dy);
+     }
+   }
+  \end{example}
+  
+  Evidently, any generality is lost. 
+  This is perhaps not an issue for this trivial algorithm, 
+  but most algorithm are somewhat more complex.
+  And there is a lot of algorithms operating on grids 
+  one might want to use.
+  So \ldots what can one do? 
+  The idea is to exploit the common underlying structure of grids
+  in order to create an abstract grid interface.
+  Algorithms will be implemented on top of this interface,
+  much like STL algorithms are implemented on top of iterators
+  and do not use directly the way data is stored e.g. in a list.
+

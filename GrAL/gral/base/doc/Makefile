@@ -28,6 +28,10 @@ make-links:
           ln -s GridEdge.html   Edge.html;\
           ln -s GridFacet.html  Facet.html;\
           ln -s GridCell.html   Cell.html;\
+          ln -s GridVertexIterator.html VertexIterator.html; \
+          ln -s GridVertexIterator.html EdgeIterator.html; \
+          ln -s GridVertexIterator.html FacetIterator.html; \
+          ln -s GridVertexIterator.html CellIterator.html; \
           ln -s VertexGridRange.html VertexRange.html;\
           ln -s VertexGridRange.html EdgeRange.html;\
           ln -s VertexGridRange.html FacetRange.html;\

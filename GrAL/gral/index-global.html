@@ -13,12 +13,24 @@
     It contains generic algorithms and data structures
     working on grids (or meshes), such as used in finite element modelling,
     but also in computer graphics, geometric modelling and so on.
-    It also contains some concrete grid data structures,
-    but the focus is clearly on the generic (data-structure neutral) stuff.
+    It does contains some concrete grid data structures,
+    but the focus is clearly on the generic (data-structure neutral) stuff,
+    mainly algorithms.
+    <BR>
+    GrAL's ultimate aim is to provide implementations of algorithms 
+    which are <EM> as generic as possible </EM>,
+    that is, work on any grid data structures satisfying the minimal requirements
+    of the algorithm.
     <BR>
     <BR>
+    See the file 
+    <A HREF="README"> README </A> for some general information.
+    Up-to-date information on GrAL can be found on the
+    <A HREF="http://www.math.tu-cottbus.de/~berti/gral"> GrAL Homepage </A>.
 
-     GrAL consist of 
+    <H3> Contents of GrAL </H3>
+     GrAL consist of <A HREF="$GRALDOC/gral/doxygen/html/index.html"> 
+      several smaller modules </A>:
     <UL>
       <LI> a growing number (currently 4) of grid-related modules,
       <LI>  some low-level support modules,
@@ -30,47 +42,64 @@
     complete at the moment, and are expected to grow quite a bit.
     </EM>
     <BR>
+
+  <H3> Understanding GrAL </H3>
     For an in-depth treatment of the concepts underlying GrAL, 
     see Guntram Berti's 
-    <A HREF="http://www.math.tu-cottbus.de/~berti/diss"> PhD dissertation </A>.
-     <BR>
-     <BR>
+    <A HREF="http://www.math.tu-cottbus.de/~berti/diss"> PhD dissertation </A>,
+    and the documentation of 
+    <A HREF="$GRALDOC/gral/base/doc/hyperlatex/html/top.html"> GrAL's concepts </A>.
     Look <A HREF="$GRALDOC/gral/doxygen/html/index.html"> here </A>
-    for the top level entry point to the technical documentation of
-    all (support and GrAL) modules.
-    <BR>
+    for the top level entry point to the more  technical documentation of
+    the modules.
+     <BR>
     <EM> Warning: Some links do not yet work.</EM>
+     <BR>
+     <BR>
+    It can certainly do no harm if you know some other generic libraries,
+    above all the STL (of course), or
+    the <A HREF="http://www.boost.org/libs/graph/doc/table_of_contents.html"> 
+      Boost Graph Library (BGL) </A> 
+    (formerly <A HREF="http://www.lsc.nd.edu/research/ggcl/"> GGCL </A>).
+
+    <BR>
 
     <BR>
     <BR>
-    There is currently no tutorial of how to use GrAL's generic 
-    algorithms. (This is certainly an urgent TODO.) 
-    However, if you are acquainted with other generic libraries,
-    especially <A HREF="http://www.boost.org/libs/graph/doc/table_of_contents.html"> BGL </A> 
-    (formerly <A HREF="http://www.lsc.nd.edu/research/ggcl/"> ggcl </A>),
-    you should have no major problems. 
-    A good place to start
-    is the <A HREF="doc/gral/base/doc/hyperlatex/html/top.html"> concepts </A>
-    section of this documentation.
-    <BR>
-    <BR>
-    The GrAL is distributed under the terms of 
-     <A HREF="LICENSE"> this License </A>.
-    <BR>
-    <BR>
-    See the file 
-    <A HREF="README"> README </A> for some general information, 
-    and  <A HREF="INSTALL"> INSTALL </A> for installation instructions.
-    <BR>
-    <BR>
-    Up-to-date information on GrAL can be found on the
-    <A HREF="http://www.math.tu-cottbus.de/~berti/gral"> GrAL Homepage </A>
 
+    <H3> Using GrAL </H3>
+    First, of course, you have to install GrAL, following the
+    instructions in <A HREF="INSTALL"> INSTALL </A>.
+    <BR>
+    <BR>
+    If you want to use GrAL, you typically have to adapt your own data structures
+    to satisfy the interface expected by GrAL's generic components.
+    (At present, GrAL does not provide many sophisticated grid data structures.)
+    There is currently only an 
+     <A HREF="$GRALDOC/gral/base/doc/hyperlatex/html/AdaptingToInterface.html"> 
+    incomplete tutorial </A> of how to do this.
+    (This is certainly an urgent TODO.) 
+    <BR>
+    <BR>
+
+    <H3> License </H3>
+    The GrAL is distributed under the terms of a rather liberal
+    <A HREF="LICENSE"> License </A>.
+    <BR>
+    <BR>
+
+    <H3> Contributing to GrAL </H3>
+    If you have questions, suggestions, found a bug,
+    helpful criticism, or want to contribute,
+    do not hesitate to contact me at
+    <address><a href="mailto:berti@math.tu-cottbus.de">berti@math.tu-cottbus.de</a></address>.
+    Research efforts like this need extensive exchange of ideas;
+    I am looking forward to here from you!
     <hr>
     <address><a href="mailto:berti@math.tu-cottbus.de">Guntram Berti</a></address>
 <!-- Created: Tue Feb 27 20:00:49 MET 2001 -->
 <!-- hhmts start -->
-Last modified: Wed Feb 28 19:09:14 MET 2001
+Last modified: Sun Mar  4 19:05:12 MET 2001
 <!-- hhmts end -->
   </body>
 </html>

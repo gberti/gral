@@ -3,7 +3,7 @@
   
    This packages is used by all other parts of the GrAL.
 
-   See $GrAL top for an introduction into the concepts of GrAL.
+   See $GRALCONCEPTSTOP here for an introduction into the concepts of GrAL.
 
    \todo Namespace \c gral 
 */

@@ -45,6 +45,19 @@
     program, or to declare that a particular type is a model of a concept.
   \end{quote}
 
+\item[CW-complex]
+A finite CW-complex $C$ of dimension $d$ 
+is a set of topological open $k$-cells with $0 \leq k \leq d$.
+(An open k-cell is a set homeomorphic to the open k-ball in $R^k$.)
+The boundary of each $k-cell$ in $C$ must be formed by
+the union of cells of lower dimension
+which are also contained in $C$.
+
+This is a very general definition, which must often be refined
+for practical purposes.
+However, the case of cells with holes (sometimes used in geometric modeling)
+is \emph{not\/} covered by the definition.
+
 \item[dimension-homogeneous]
   A grid element is called {\sl principal\/} if it is not incident to a higher dimensional element.
    A grid is dimension-homogeneous, if each principal element is of
@@ -53,9 +66,37 @@
    This property excludes for example isolated vertices,
    or `free' edges (if the dimension is at least $2$).
 
+\item[element]
+We use the term element to denote any k-cell of a grid:
+A vertex is a 0-element, an edge a 1-element, and a cell a $d$-element
+(if the grid is $d$-dimensional). 
+See also \xlink{Element subsection}{CombinatorialLayer.html#element-intro}
+
+\item[generic programming]
+Generic programming has been called ``programming with concepts''.
+It aims at implementing algorithms as general as possible, 
+without sacrificing efficiency by doing overgeneralization or
+introducing undue amounts of runtime overhead.
+More information can be found \xlink{here}{\BERTIURL/research/generic.html}.
+
 \item[geometric realization]
+A geometric realization of a combinatorial (or abstract) complex
+(which is given by a graded \Glossarylink{poset} or a \Glossarylink{lattice})
+is a CW-complex which has the same (or isomorphic) 
+incidence poset.
+
+
+\item[grid]
+Grid is used as synonym for a 
+finite 
+\Glossarylink{dimension-homogeneous}
+\Glossarylink{CW-complex}.
 
 \item[grid morphism]
+A grid morphism is a mapping between the 
+\glossarylink{posets}{poset} of two grids
+which respects the partial order.
+It is an isomorphism if it is bijective.
 
 \item[interior facet] A facet $f$ is called interior with respect to a cell set 
   $C$ (which is assumed to be a sub-range of a manifold-with-boundary grid),
@@ -63,6 +104,17 @@
   If there is exactly one cell in $C$ incident to $f$, then $f$ is a
   {\sl boundary facet\/} of $C$. If there is no such cell, $f$ is not a facet 
   of $C$.
+
+
+\item[lattice]
+  A lattice is a graded, bounded \Glossarylink{poset}
+  with the additional property that given two element $a$ and $b$,
+  there is a unique minimal upper bound $a \vee b$ (the {\sl join\/})
+  greater then $a$ and $b$,
+  and a unique maximal lower bound $a \wedge b$ (the {\sl meet\/}).
+  For example, two edges both incident to the same 2D cell have
+  as join that cell, and as meet either a common vertex (which must be unique)
+  or the empty set.
 
 \item[manifold-with-boundary]
   A combinatorial grid of dimension $d$ is a manifold-with-boundary grid,

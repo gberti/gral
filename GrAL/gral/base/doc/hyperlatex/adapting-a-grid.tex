@@ -1,0 +1,153 @@
+\xname{AdaptingToInterface}
+\begin{Label}{AdaptingToInterface}
+\introsection{Creating an Interface Adaption to Your Own Grid Data Structure}
+\end{Label}
+
+
+If you want to use GrAL, you typically want to use it's generic
+components and less it's concrete grid data structure
+-- at least that's how it is intended.
+Therefore, you will need to create an interface layer 
+satisfiying the syntax specified in the \Sectionlink{Concepts} section.
+
+For sake of simplicity, let us assume that your grid data structure
+is a plain  good ole C one:
+Cell-vertex incidences are stored in a plain array \texttt{cells},
+such that \texttt{cells[3*c +v]} gives the index of the \texttt{v}'th vertex
+of cell \texttt{c}. 
+Likewise, an array \texttt{geom} 
+holds the coordinates of vertex \texttt{v}
+at indices \texttt{2*v} and \texttt{2*v+1}.
+
+\begin{Label}{triang2d-combi}
+\introsubsection{Defining the Combinatorial Layer}
+\end{Label}
+
+Let's call our grid class \texttt{triang2d}:
+\begin{example}
+class triang2d \{
+  int * cells;
+
+  // to be continued ...
+\};
+\end{example}
+From the information present in the array \texttt{cells},
+we can define  the following types more or less directly:
+\texttt{Vertex, VertexIterator, Cell, CellIterator, VertexOnCellIterator}.
+We will implement them as nested classes of \texttt{triang2d}.
+Also, in order to save some work, we will implement the
+\Conceptlink{Vertex} and \Conceptlink{VertexIterator} by the same class
+\texttt{triang2d::Vertex},
+and the same goes for \Conceptlink{Cell}.
+Finally, element handles are just integers in this case.
+
+\begin{example}
+class triang2d \{
+
+  typedef int vertex_handle;
+  typedef int cell_handle;
+
+  class Vertex \{
+     // to be continued ...
+  \};
+  typedef Vertex VertexIterator;
+
+  class Cell \{
+     // to be continued ...
+  \};
+  typedef Cell   CellIterator;
+
+  class VertexOnCellIterator \{
+     // to be continued ...
+  \};
+\};
+\end{example}
+We first show the definition of \texttt{triang2d::Cell},
+and then \texttt{triang2d::VertexOnCellIterator}.
+
+\begin{example}
+class triang2d \{
+   class Cell \{
+     typedef Cell     self;
+     typedef triang2d grid_type;
+   private:
+      cell_handle      c;
+      grid_type const* g;
+   public:
+      Cell(grid_type const& gg, cell_handle cc = 0) : g(&gg), c(cc) \{\}  
+   
+      self      & operator++() \{ ++c; return *this;\}
+      self const& operator* () const \{ return *this;\}
+      bool IsDone() const \{ return c >= TheGrid.NumOfCells();\}
+  
+      cell_handle handle() const \{ return c;\}     
+      grid_type   const& TheGrid() const \{ return *g; \} 
+
+      unsigned NumOfVertices() const \{ return 3; \}
+      VertexOnCellIterator FirstVertex() const 
+       \{ return VertexOnCellIterator(*this);\}
+   \};
+
+\};
+\end{example}
+(In pactice, we would have to define \texttt{FirstVertex()} outside
+of \texttt{triang2d::Cell}.)
+The class \texttt{triang2d::Vertex} is of course very similar and 
+not shown here. 
+Now for the incidence iterator which models \Conceptlink{VertexOnCellIterator}:
+
+\begin{example}
+class triang2d \{
+ 
+  class VertexOnCellIterator \{
+    // typedefs omitted ...
+  private:
+    cell_handle c;
+    int         lv;
+    grid_type   g;
+  public:
+    VertexOnCellIterator(Cell const& cc) : c(CC.c), lv(0), g(CC.g) \{\}
+     
+    self&  operator++() \{ ++lv; return *this; \}
+    Vertex operator*() const \{ return Vertex(*g, handle());\}
+    bool   IsDone() const \{ return (lv >= 3);\}
+    
+    vertex_handle handle()  const \{ return g->cells[3*c+lv];\}
+    Cell          TheCell() const \{ return Cell(*g,c);\}
+    grid_type     TheGrid() const \{ return *g;\}
+  \};
+
+\}
+\end{example}
+Now we have defined enough types to satisfy the 
+\Conceptlink{Cell-VertexInputGridRange} model.
+It remains to fill in the \texttt{grid\_types<>} template:
+\begin{example}
+template<>
+struct grid_types<triang2d> \{
+  typedef triang2d grid_type;
+
+  typedef triang2d::vertex_handle vertex_handle;
+  
+  //  etc.
+\};
+\end{example}
+
+
+\begin{Label}{triang2d-geom}
+\introsubsection{Defining the Geometrical Layer}
+\end{Label}
+
+To be written.
+
+\begin{Label}{triang2d-gf}
+\introsubsection{Defining the Grid Function Layer}
+\end{Label}
+
+To be written.
+
+\begin{Label}{triang2d-gf}
+\introsubsection{Defining the Mutating primitives}
+\end{Label}
+
+To be written.

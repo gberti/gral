@@ -22,15 +22,40 @@
       
       The underlying mathematical model of the first usage scenario 
       is that of a function $f$ from the set 
-      of k-Elements of a Grid \T${\cal G}$ \W$G$ to values of an arbitrary type {\em T\/}.
-      With the grid function concept \sectionlink{(C)}{GridFunction},
-      we develop a natural interface
-      closely following the  mathematical model.
-      This can be possibly satisfied by many different representations,
+      of k-Elements of a Grid \T${\cal G}$ \W$G$ to values of an arbitrary type {\em T\/}:
+
+      \begin{center}
+        \begin{figure}[h]
+          \W\rhtml{<TABLE> <TR>}
+          \T\begin{minipage}{6cm}
+            \T\includegraphics[width=5cm]{bilder/gf-map-cell}
+            \W\rhtml{<TD>}
+            \W\htmlimage[ALT="Grid function on cells"]{\img{gf-map-cell}}
+            \caption{grid function on cells}
+            \W\rhtml{</TD>}
+            \T\end{minipage}  \T\hspace{1cm}
+          \T\begin{minipage}{6cm}
+            \T\includegraphics[width=5cm]{bilder/gf-map-edge}
+            \W\rhtml{<TD>}
+            \W\htmlimage[ALT="Grid function on edges"]{\img{gf-map-edge}}
+            \caption{Grid function on edges}
+            \W\rhtml{</TD>}
+            \T\end{minipage}
+          \W\rhtml{</TR> </TABLE>}
+        \end{figure}
+      \end{center}
+
+
+
+      The grid function concept \sectionlink{(C)}{GridFunction},
+      is a natural interface
+      which is close to the  mathematical model.
+      This interface can be implemented by many different representations,
       including calculation on-the-fly, and corresponds to the first
       requirement (data abstraction).
       
-      Beyond this, the second scenario requires a  container component,
+      Beyond this, the second scenario (temporary values / local grid functions)
+      requires a  container component,
       which extends this interface with
       methods for creation of grid functions. 
       The corresponding concept 
@@ -72,7 +97,8 @@ These are typically used for special restricted purposes only,
 like grid adapters for input from a file, which offer a clean way 
 to encapsulate specific file formats from the rest of the world.
 An example is 
-\sectionlink{{\tt Complex2DInput}}{istream-complex2d-fmt}.
+\sectionlink{{\tt IstreamComplex2DFmt}}{istream-complex2d-fmt}.
+
 
 \begin{Label}{refine-example}
 {\bf Example:}

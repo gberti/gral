@@ -7,9 +7,11 @@ $DOXYPATH="doxygen/html";
 
 print "
 \\newcommand{\\GRALROOT}{GRALROOT}
-\\newcommand{\\GRALINC}[2]{\\GRALROOT/#1/$DOXYPATH/#2.html}
+\\newcommand{\\GRALINC}[2]{\\GRALROOT/#2/$DOXYPATH/#1.html}
 \\newcommand{\\STLURL}{STLURL}
 \\newcommand{\\STLPATH}[1]{\\STLURL/#1}
+\\newcommand{\\BERTIURL}{http://www.math.tu-cottbus.de/\\~{}berti}
+\\newcommand{\\GRALURL}{\\BERTIURL/gral}
 \\newcommand{\\traitsURL}{}
 
 ";

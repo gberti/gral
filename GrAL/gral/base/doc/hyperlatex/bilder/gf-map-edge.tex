@@ -1,0 +1,45 @@
+\documentclass{article}
+
+\usepackage{pstricks}
+\usepackage{pst-all}
+\pagestyle{empty}
+
+\begin{document}
+
+\TeXtoEPS
+\LARGE \sf
+\psset{unit=0.5cm}
+\newcommand{\mbf}{\mathbf}
+
+\begin{pspicture}(13,9)
+
+\rput(6,1){\rnode{v1}{\pscirclebox{}}}
+\rput(12,4){\rnode{v2}{\pscirclebox{}}}
+\rput(7,8){\rnode{v3}{\pscirclebox{}}}
+\rput(1,4){\rnode{v4}{\pscirclebox{}}}
+
+
+
+\ncline{-}{v1}{v2}\mput*{\rnode{e1}{$\mbf e_1$}}
+\ncline{-}{v2}{v3}\mput*{\rnode{e2}{$\mbf e_2$}}
+\ncline{-}{v3}{v1}\mput*{\rnode{e3}{$\mbf e_3$}}
+\ncline{-}{v3}{v4}\mput*{\rnode{e4}{$\mbf e_4$}}
+\ncline{-}{v4}{v1}\mput*{\rnode{e5}{$\mbf e_5$}}
+
+\rput(12,6){\rnode{fe1}{$f(e_1)$}}
+\rput(9.5,10){\rnode{fe2}{$f(e_2)$}}
+\rput(6.5,8.5){\rnode{fe3}{\psframebox[linestyle=none,fillstyle=solid,fillcolor=white]{$f(e_3)$}}}
+\rput(4,10){\rnode{fe4}{$f(e_4)$}}
+\rput(1.5,6){\rnode{fe5}{$f(e_5)$}}
+
+\ncline[nodesep=0.1cm,linecolor=lightgray,linewidth=0.2cm]{->}{e1}{fe1}
+\ncline[nodesep=0.1cm,linecolor=lightgray,linewidth=0.2cm]{->}{e2}{fe2}
+\ncline[nodesep=0.1cm,linecolor=lightgray,linewidth=0.2cm]{->}{e3}{fe3}
+\ncline[nodesep=0.1cm,linecolor=lightgray,linewidth=0.2cm]{->}{e4}{fe4}
+\ncline[nodesep=0.1cm,linecolor=lightgray,linewidth=0.2cm]{->}{e5}{fe5}
+
+
+\end{pspicture}
+
+\endTeXtoEPS
+\end{document}
