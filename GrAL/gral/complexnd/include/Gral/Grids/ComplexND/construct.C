@@ -20,8 +20,9 @@ namespace complexnd  {
    
   }
 
+
   template<int D, class G_SRC, class PHI>
-  void ConstructGrid0(ComplexND<D>& g, G_SRC const& g_src, PHI& phi) {
+  void ConstructGrid0_dispatched(ComplexND<D>& g, G_SRC const& g_src, PHI& phi) {
 
     typedef grid_types<G_SRC>         srcgt;
     typedef grid_types<ComplexND<D> > gt;
@@ -29,7 +30,7 @@ namespace complexnd  {
     // copy vertices
     g.incidences[0].resize(g_src.NumOfVertices());
     unsigned vcnt = 0;
-    for(typename srcgt::VertexIterator v(g_src); ! v.IsDone(); ++v) {
+    for(typename srcgt::VertexIterator v(g_src.FirstVertex()); ! v.IsDone(); ++v) {
       phi[v.handle()] = typename gt::vertex_handle(vcnt);
       ++vcnt;
     }
@@ -46,14 +47,14 @@ namespace complexnd  {
       
       // copy cells
       g.incidences[g.dimension()].resize(g_src.NumOfCells());
-      for(typename srcgt::CellIterator c_src(g_src); ! c_src.IsDone(); ++c_src) {
+      for(typename srcgt::CellIterator c_src(g_src.FirstCell()); ! c_src.IsDone(); ++c_src) {
 	typename srcgt::archetype_handle a = g_src.archetype_of(c_src.handle());
 	typename gt   ::cell_handle      c = g.add_cell(a);
 	// phi[c] = c_src.handle();    
 	g.incidences[g.dimension()][c].resize(g.dimension()+1);
 	g.incidences[g.dimension()][c][0].resize(g_src.Archetype(a).NumOfVertices());
-	typedef typename srcgt::archgt srcarchgt;
-	typename srcarchgt::VertexIterator       lv    (g_src.Archetype(a));
+	typedef grid_types<typename srcgt::archetype_type> srcarchgt;
+	typename srcarchgt::VertexIterator       lv    (g_src.Archetype(a).FirstVertex());
 	typename srcgt    ::VertexOnCellIterator vc_src(*c_src);        
 	for( ; !vc_src.IsDone(); ) { // ++lv, ++vc_src) {
 	  // morphism[a](*lv) is a vertex_handle of c's archetype
@@ -68,6 +69,33 @@ namespace complexnd  {
     }
   }
 
+
+  template<int D>
+  struct dispatch {
+    template<class G_SRC, class PHI>
+    static void construct(ComplexND<D>& g, G_SRC const& g_src, PHI & phi) 
+    { ConstructGrid0_dispatched(g,g_src,phi);}
+  };
+
+  template<>
+  struct dispatch<0> {
+    template<class G_SRC, class PHI>
+    static void construct(ComplexND<0>& g, G_SRC const& g_src, PHI & phi) 
+    { ConstructGrid0_0(g,g_src,phi);}
+  };
+
+  /*
+  class archetype_0D;
+  template<class PHI>
+  void ConstructGrid0(ComplexND<0>& g, archetype_0D const& g_src, PHI& phi) {
+    // g.xxx();
+    ConstructGrid0_0(g, g_src, phi);
+  }
+  */
+
+  template<int D, class G_SRC, class PHI>
+  void ConstructGrid0(ComplexND<D>& g, G_SRC const& g_src, PHI& phi) 
+  { dispatch<D>::construct(g,g_src,phi);}
 
 } // namespace complexnd
 
