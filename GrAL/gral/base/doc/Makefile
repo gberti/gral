@@ -9,6 +9,7 @@ concepts:
           hyperlatex-2.3.1 top; \
           cp $(HOME)/WWW/icons/*.xbm html/;\
          (cd html; rm -f bilder; ln -s ../bilder ./; \
+          ln -s top.html index.html;\
           ln -s GridVertex.html  Vertex.html;\
           ln -s GridEdge.html   Edge.html;\
           ln -s GridFacet.html  Facet.html;\
