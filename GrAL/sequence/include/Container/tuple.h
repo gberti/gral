@@ -56,6 +56,7 @@ private:
 template<class T, unsigned N>
 class tuple : public tuple_base<T,N> {
   typedef tuple_base<T,N> base;
+  using base::X;
 
  public:
   // should not be necessary ... but problems with gcc 2.96
@@ -63,6 +64,8 @@ class tuple : public tuple_base<T,N> {
   typedef typename base::const_iterator const_iterator;
   typedef typename base::c_array        c_array;
 
+  using base::begin;
+  using base::end;
   tuple() {}
   tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
@@ -92,11 +95,14 @@ class tuple : public tuple_base<T,N> {
 template<class T>
 class tuple<T,2> : public tuple_base<T,2> {
   typedef tuple_base<T,2> base;
+  using base::X;
  public:
   // should not be necessary ... but problems with gcc 2.96
   typedef typename base::iterator       iterator;
   typedef typename base::const_iterator const_iterator;
   typedef typename base::c_array        c_array;
+  using base::begin;
+  using base::end;
 
   tuple() {}
   tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
@@ -133,11 +139,14 @@ class tuple<T,2> : public tuple_base<T,2> {
 template<class T>
 class tuple<T,3> : public tuple_base<T,3> {
   typedef tuple_base<T,3> base;
+  using base::X;
  public:
   // should not be necessary ... but problems with gcc 2.96
   typedef typename base::iterator       iterator;
   typedef typename base::const_iterator const_iterator;
   typedef typename base::c_array        c_array;
+  using base::begin;
+  using base::end;
 
   tuple() {}
   tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
