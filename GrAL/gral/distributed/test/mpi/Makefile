@@ -56,6 +56,7 @@ run:
 
 check:
 	./runtest    $(MPIRUN)
+	sleep 10
 	./runtest-io $(MPIRUN)
 
 
