@@ -100,6 +100,16 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
   // better: ?
   // static void normalize(POINT& p) { p *= 1.0/norm(p);}
 
+  static real rel_diff(POINT const& p1, POINT const& p2)
+    {
+     POINT p(p1-p2);
+     real result = norm_2(p);
+     if(result != 0.0) {
+       result /= std::max(norm_2(p1), norm_2(p2));
+     }
+     return result;
+    }
+
   /*! \brief calculate the cosine of the angle \f$\alpha\f$ in radians between p and q
 
      The result is oriented such that a rotation about \f$\arccos \alpha\f$ 
@@ -120,35 +130,13 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
 
 
 
-  ////////////////////////////////////////////////////////////////
-  //
-  // dimension dependent functions 
-  //
-  ////////////////////////////////////////////////////////////////
+////////////////////////////////////////////////////////////////
+//
+// dimension dependent functions 
+//
+////////////////////////////////////////////////////////////////
 
 
-
-/*
-template<class POINT, class dim_tag>
-struct algebraic_primitives_for_dim   
- : public basic_algebraic_primitives<POINT>  
-{};
-
-template<class POINT>
-struct dimension_dependent_primitives 
-  : public algebraic_primitives_for_dim<POINT,point_traits<POINT>::dimension_tag> 
-{};
-
-// partial specializations for tag2D and tag3D:
-
-template<class POINT, tag2D>
-struct algebraic_primitives_for_dim 
-  : public dimension_dependent_primitives_2d {};
-
-template<class POINT, tag3D>
-struct algebraic_primitives_for_dim 
-  : public dimension_dependent_primitives_3d {};
-  */
 
 #include "Geometry/primitives2d.h"
 #include "Geometry/primitives3d.h"
