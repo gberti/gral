@@ -1,6 +1,6 @@
 # gcc/make.defs
 
-CCC      =  g++
+CCC      =  gcc3 
 CCFLAGS += -Wall
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += -DNMWR_PARTIAL_SPEC
