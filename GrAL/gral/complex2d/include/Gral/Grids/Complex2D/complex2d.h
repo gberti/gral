@@ -310,7 +310,7 @@ public:
   inline Vertex switched_vertex(Vertex const& v, Edge const& e) const;
   inline Edge   switched_edge  (Vertex const& v, Edge const& e, Cell const& c) const;
   inline Facet  switched_facet (Vertex const& v, Edge const& e, Cell const& c) const;
-  inline Cell   switched_cell  (Edge & e, Cell const& c) const;
+  inline Cell   switched_cell  (Edge   const& e, Cell const& c) const;
   //@}
 
 
