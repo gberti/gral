@@ -106,7 +106,10 @@ struct element_traits_vertex_base
   //  typedef element_codim_tag<grid_dimension_tag::dim> element_codimension_tag;
   typedef typename grid_dimension_tag::elem_codim<0>::tag element_codimension_tag;
   typedef element_dim_tag<0>                              element_dimension_tag;
+  enum { dim = element_dimension_tag::dim, codim = element_codimension_tag::dim };
 
+  static unsigned dimension  (element_type const&)   { return 0;}
+  static unsigned codimension(element_type const& e) { return e.TheGrid().dimension();}
   typedef element_traits_base<GRID>:: /* template */
     hasher_type_base<GRID, element_type> hasher_type_elem_base;
 
@@ -138,6 +141,10 @@ struct element_traits_edge_base
   typedef element_codim_tag<(int)(grid_dimension_tag::dim)-1> 
                                          element_codimension_tag;
   typedef element_dim_tag<1>             element_dimension_tag;
+  enum { dim = element_dimension_tag::dim, codim = element_codimension_tag::dim };
+
+  static unsigned dimension  (element_type const&)   { return 1;}
+  static unsigned codimension(element_type const& e) { return e.TheGrid().dimension()-1;}
 
   typedef element_traits_base<GRID>:: /* template */ 
     hasher_type_base<GRID, element_type> hasher_type_elem_base;
@@ -169,6 +176,10 @@ struct element_traits_face_base
   typedef element_codim_tag<(int)(grid_dimension_tag::dim)-2> 
                                          element_codimension_tag;
   typedef element_dim_tag<2>             element_dimension_tag;
+  enum { dim = element_dimension_tag::dim, codim = element_codimension_tag::dim };
+
+  static unsigned dimension  (element_type const&)   { return 2;}
+  static unsigned codimension(element_type const& e) { return e.TheGrid().dimension()-2;}
 
   typedef element_traits_base<GRID>:: /* template */ 
     hasher_type_base<GRID, element_type> hasher_type_elem_base;
@@ -201,6 +212,10 @@ struct element_traits_facet_base
   typedef element_dim_tag<(int)(grid_dimension_tag::dim)-1> 
                                           element_dimension_tag;
   typedef element_codim_tag<1>            element_codimension_tag;
+  enum { dim = element_dimension_tag::dim, codim = element_codimension_tag::dim };
+
+  static unsigned dimension  (element_type const& e) { return e.TheGrid().dimension()-1;}
+  static unsigned codimension(element_type const&)   { return 1;}
 
   typedef element_traits_base<GRID>:: /* template */ 
     hasher_type_base<GRID, element_type> hasher_type_elem_base;
@@ -232,6 +247,10 @@ struct element_traits_cell_base
   typedef typename gt::dimension_tag     grid_dimension_tag;
   typedef element_dim_tag<grid_dimension_tag::dim> element_dimension_tag;
   typedef element_codim_tag<0>                     element_codimension_tag;
+  enum { dim = element_dimension_tag::dim, codim = element_codimension_tag::dim };
+
+  static unsigned dimension  (element_type const& e) { return e.TheGrid().dimension();}
+  static unsigned codimension(element_type const&)   { return 0;}
 
 
   typedef element_traits_base<GRID>:: /* template */ 
