@@ -6,8 +6,8 @@
 #include "Container/tuple.h"
 #include "Utility/pre-post-conditions.h"
 
-/*! \brief Map between \f$ [0,n_0[ \times [0,n_1[ \times \cdots \times [0,n_{N-1}[ \subset \Z^N \f$ 
-    and \f$ [0,n_0 n_1  \cdots n_{N-1} -1] \subset \Z\f$
+/*! \brief Map between \f$ [l_0,b_0[ \times [l_1,b_1[ \times \cdots \times [l_{N-1},b_{N-1}[ \subset \Z^N \f$ 
+    and \f$ [0,n_0 n_1  \cdots n_{N-1} -1] \subset \Z\f$ (where \f$ n_i = b_i - l_i \f$)
 
     Highest 1D index \f$ n_{N-1} \f$ variest fastest.
     \f[
@@ -26,12 +26,13 @@ class index_map_nd {
  
   typedef tuple<int,N> index_type;
  private:
+  index_type low;
   index_type n;
   index_type prod; // prod[k] = n[k+1]* ... *n[N-1]
-
+  
  public:
   /*! \brief Construct empty map */
-  index_map_nd() : n(index_type(0)) { init(); } 
+  index_map_nd() : low(0), n(0) { init(); } 
 
   /*! \brief Construct map range \f$ [0,n_0[\times[0,n_1[\times \cdots \times[0,n_{N-1}[ \f$
 
@@ -39,7 +40,17 @@ class index_map_nd {
       and using the mapping operators will result in an error
       (there is no valid input for them).
    */
-  index_map_nd(index_type const& nn) : n(nn) { init();}
+  index_map_nd(index_type const& nn) : low(0), n(nn) { init();}
+ /*! \brief Construct map range \f$ [l_0,b_0[\times[l_1,b_1[\times \cdots \times[l_{N-1},b_{N-1}[ \f$
+   
+      Here \f$l = \f$ \c low_ and \f$ b = \f$ \c beyond_. 
+      If \f$ b_i - l_i \leq 0\f$ for some \f$ i \f$, the range is empty,
+      and using the mapping operators will result in an error
+      (there is no valid input for them).
+   */
+
+  index_map_nd(index_type const& low_,
+	       index_type const& beyond_) : low(low_), n(beyond_-low_) {init();}
 private:
   void init()
     {
@@ -71,8 +82,9 @@ public:
     { 
       c(p);
       int res = 0;
+      index_type pp = p - min_tuple();
       for(int k = N-1; k >= 0; --k) {
-	res += prod[k]*p[k];
+	res += prod[k]*pp[k];
       }
       return res;
     }
@@ -91,18 +103,18 @@ public:
 	remainder -= prod[k]*res[k]; 
 	// prod[N-1] = 1 => remainder = 0 for k = N-1
       }
-      return res;
+      return res + min_tuple();
     }
   /*@}*/
 
   /*! \name Validity checks */
   /*@{*/
 
-  /*! \brief True if \p is valid: \f$ 0 \leq \f$ p[k] \f$ \leq \f$ \c max_tuple()[k] \f$ 0 \leq k \leq N-1 \f$ */
+  /*! \brief True if \p is valid: \f$ min_tuple()[k] \leq \f$ p[k] \f$ \leq \f$ \c max_tuple()[k] \f$ 0 \leq k \leq N-1 \f$ */
   bool valid(index_type const& p) const {
     bool res = true;
     for(unsigned k = 0; k < N; ++k) 
-      res = res && ( 0 <= p[k] && p[k] < n[k]);
+      res = res && ( low[k] <= p[k] && p[k] < low[k]+n[k]);
     return res;
   }
   /*! \brief True if \c i is valid: \f$ 0 \leq \f$ \c i \f$ \leq \f$ max_flat_index() */
@@ -120,11 +132,19 @@ public:
   index_type max_tuple() const { 
     index_type mx;
     for(unsigned k = 0; k < N; ++k)
-      mx[k] = n[k]-1;
+      mx[k] = low[k]+n[k]-1;
     return mx;
   } 
-  /*! \brief Minimal valid N-dimensional index \f$ (0, \ldots, 0) \f$ */
-  index_type min_tuple() const { return index_type(0);}
+  /*! \brief Minimal valid N-dimensional index  */
+  index_type min_tuple() const { return low;}
+  /*! \brief Index one beyond the maximal admissible index in each dimension. */
+  index_type beyond_tuple() const { return low + n;}
+  /*! \brief N-dimensional size 
+      
+       \c size()[i] gives the number of valid entries in the ith direction. 
+       If \c size()[i] \f$ \leq 0 \f$ for some \c i, the range is empty.
+    */
+  index_type size() const { return n;}
 
   /*! \brief Minimal flat index, = 0 */
   int        min_flat_index() const { return 0;}
