@@ -20,7 +20,7 @@ module-check: test-new-check-clean
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Cartesian3D
-	cp include/Gral/Grids/Cartesian3D/*.h  $(INSTALLHEADERS)/Gral/Grids/Cartesian2D
+	cp include/Gral/Grids/Cartesian3D/*.h  $(INSTALLHEADERS)/Gral/Grids/Cartesian3D
 
 install: install-headers  install-libs
 
