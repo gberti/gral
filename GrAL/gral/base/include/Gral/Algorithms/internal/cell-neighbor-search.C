@@ -6,7 +6,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Algorithms/cell-neighbor-search.h"
-#include "Gral/Base/vtuple2d.h"
+
+#include "Gral/Base/vertex-set.h"
 
 #include "Container/my-hash-map.h"
 
@@ -32,7 +33,7 @@ void CalculateNeighborCells(NBF             &  Nb,          // out
 			    CELLSET    const&  cell_set)    // in
 { 
   typedef grid_types<CELLSET> gt;
-  typedef hash_map<vtuple_2d<CELLSET>, 
+  typedef hash_map<vertex_set<CELLSET>, 
                    typename gt::FacetOnCellIterator> FACETMAP;
   FACETMAP facet_map;
   CalculateNeighborCells(Nb,cell_set,facet_map, gt()); 
@@ -57,22 +58,23 @@ void CalculateNeighborCells(NBF           &  NB,
   typedef typename CGT::FacetOnCellIterator FacetOnCellIt;
 
   typedef typename FACETMAP::iterator        MapIt;
-  typedef vtuple_2d<typename CGT::grid_type> vtuple;
-  // must be equal to FACETMAP::data_type / result_type;
+
+  typedef vertex_set<typename CGT::Facet>    vtuple;
+  // must be equal to FACETMAP::key_type 
 
   CellIt c(cell_set);
   for(; !c.IsDone(); ++c){
     Cell C(*c);
     FacetOnCellIt f(C);
     for(; !f.IsDone();++f) {
-      vtuple facet(get_vertices(f));
+      vtuple facet(*f);
       MapIt nb;
       if((nb = facet_map.find(facet)) != facet_map.end()){ 
         // facet found: nb has already been visited
         // do appropriate entries in the neighborlists
         //  & remove facet from the map.
         FacetOnCellIt NbIt((*nb).second);
-        NB[NbIt] = 0;
+        // NB[NbIt] = 0;
 	typename CGT::cell_handle fh = f.TheCell().handle();
         NB[NbIt]    = fh;
         NB[f   ]    = NbIt.TheCell().handle();
