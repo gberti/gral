@@ -904,6 +904,7 @@ struct grid_types<cartesian3d::CartesianGrid3D>
 {
   typedef grid_type::archetype_type      archetype_type;
   //typedef grid_type::archetype_handle  archetype_handle;
+  typedef grid_type::archetype_iterator  archetype_iterator;
   typedef grid_type::archetype_iterator  ArchetypeIterator;
   typedef grid_type::archetype_geom_type archetype_geom_type;
   typedef grid_types<archetype_type>     archgt;
