@@ -1,8 +1,10 @@
 export CONFIG:=$(PWD)/mk.config
 include $(CONFIG)
 
+
 TARGET=all
 
+HEADERS= $(shell ls include/Container/*.h)
 all:
 
 new:
@@ -15,7 +17,6 @@ lib:
 
 install:
 	mkdir -p $(INSTALLHEADERS)/Container
-	mkdir -p $(INSTALLLIBRARIES)
 	cp include/Container/*.h $(INSTALLHEADERS)/Container
 
 clean:
