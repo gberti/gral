@@ -30,6 +30,13 @@ private:
 public:
   histogram_table() {}
 
+  template<class IT>
+  histogram_table(IT b, IT e) {
+    while(b != e) {
+      this->operator[](*b)++;
+      ++b;
+    }
+  }
   /*! \brief Write access. Returns 0 if key \k does not exist.
     \Note: This inserts a new entry if none exists for the key \c k.
    */
@@ -63,6 +70,15 @@ public:
   const_iterator end()   const { return the_map.end();}
   //@}
 
+  //! return key with maximal number of entries 
+  key_type max_entry() const {
+    int mx = 0;
+    key_type res;
+    for(const_iterator e = begin(); e != end(); ++e)
+      if((*e).second > mx)
+	res = (*e).first;
+    return res;
+  }
 };
 
 // could be specialized for small data types, say range is one byte
