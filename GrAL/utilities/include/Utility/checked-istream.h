@@ -4,6 +4,7 @@
 // $LICENSE
 
 #include <iostream>
+#include <typeinfo>
 #include "Utility/pre-post-conditions.h"
 
 namespace GrAL {
@@ -16,19 +17,30 @@ namespace GrAL {
     checked_istream checked_cin(&cin);
     checked_in >> in >> j;
     \endcode
+
+    \see Tested in \ref test-checked-istream.C
  */
 class checked_istream {
 private:
-  ::std::istream* in;
+  std::istream* in;
 public:
-  checked_istream(::std::istream* in_ = 0) : in(in_) {}
+  checked_istream(std::istream* in_ = 0) : in(in_) {}
+
+  operator void*() const   { REQUIRE(in != 0, "", 1); return (in->fail() ? (void *)0 : (void *)(-1));}
+  operator std::istream&() { REQUIRE(in != 0, "",1); return *in;}
+
+  //  bool is_good() const { return (in != 0? in->is_good() : false);}
 
   template<class T>
   friend checked_istream& operator>>(checked_istream& in, T & t)
   { 
     REQUIRE( (in.in != 0), "no istream!\n",1);
+    REQUIRE( (in.in->good()), "attempt to read from empty istream!",1);
+
     *(in.in) >> t; 
-    REQUIRE( (in.in->good()), "bad istream, reading " << t << " failed!\n",1);
+
+    REQUIRE( (in.in->eof() || !in.in->fail()), "reading value " << t << " of type " << typeid(T).name() << " caused an error!\n",1);
+    REQUIRE( (!in.in->bad()), "bad istream, reading " << t << " of type " << typeid(T).name()  << " caused an error!\n",1);
     return in;
   }
 };
