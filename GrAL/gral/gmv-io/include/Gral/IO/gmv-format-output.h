@@ -14,6 +14,7 @@
 #include "Container/bijective-mapping.h"
 
 #include "Utility/as-string.h"
+#include "Utility/ref-ptr.h"
 
 #include <boost/type_traits.hpp>
 
@@ -55,7 +56,6 @@ public:
 
   std::ostream& Out() { return *out;}
 
-  void output_materials() { material_treat_special = true;}
 
   template<int N>
   std::string element_tag(vertex_type_tag, grid_dim_tag<N>) const { return "1";}
@@ -91,6 +91,54 @@ public:
   static gf_name_pair<GF> pair(std::string const& nm, GF const& gf)
     { return gf_name_pair<GF>(nm,gf);}
 
+
+private:
+  // map material ids to names
+  struct material_names_impl {
+    virtual std::string name(int m) const = 0;
+    virtual ~material_names_impl() {}
+  };
+
+  template<class MAP>
+  struct material_names_impl_tt : public material_names_impl {
+  private:
+    ref_ptr<MAP> f;
+  public:
+    material_names_impl_tt(ref_ptr<MAP> ff) : f(ff) {}
+    virtual std::string name(int m) const { return (*f)(m);}
+  };
+
+
+  struct material_names {
+    ref_ptr<material_names_impl> impl;
+  public:
+    material_names()  {}
+
+    template<class MAP>    material_names(ref_ptr<MAP> f) { init(f);}
+
+    template<class MAP>    void init(ref_ptr<MAP> f) {
+      impl = copy_to_ref_ptr(material_names_impl_tt<MAP>(f)); 
+    }
+    
+    std::string name(int m) const { 
+      return (impl != 0 && impl->name(m) != "" ? impl->name(m) : "mat" + as_string(m)); }
+  };
+
+  material_names the_material_names;
+
+public:
+  template<class MAP>
+  void set_material_names(ref_ptr<MAP>  f) { the_material_names.init(f);}
+
+  void output_materials() { material_treat_special = true;}
+
+  template<class MAP>
+  void output_materials(ref_ptr<MAP>  f) {
+    set_material_names(f);
+    material_treat_special = true;
+  }
+
+
 protected:
   virtual void begin_variable() = 0;
   virtual void end_variable()   = 0;
@@ -110,7 +158,7 @@ private:
 	// is the same as numbering in GMV file.
 	*out << gf(*e) << ' ';
       }
-      *out << '\n';
+      *out << '\n' << std::flush;
     }
   template<class GF>
   void copy_material(GF const& gf)
@@ -138,19 +186,19 @@ private:
       nmats = 128;
     }
 
-    std::vector<typename GF::value_type> mat; // (hist.size());
+    std::vector<typename GF::value_type> origmat; // (hist.size());
     for(typename hist_table_type::const_iterator it = hist.begin(); it != hist.end(); ++it)
-      mat.push_back((*it).first);
-    std::sort(mat.begin(), mat.end());
+      origmat.push_back((*it).first);
+    std::sort(origmat.begin(), origmat.end());
     bijective_mapping<typename GF::value_type, int> new_mat;
     for(unsigned m = 0; m < nmats; ++m)
-      new_mat[mat[m]] = m+1;
+      new_mat[origmat[m]] = m+1;
     // map possible extraneous materials
-    for(unsigned m = nmats; m < mat.size(); ++m)
-      new_mat[mat[m]] = nmats;
+    for(unsigned m = nmats; m < origmat.size(); ++m)
+      new_mat[origmat[m]] = nmats;
     std::string matnames;
     for(unsigned m = 0; m < nmats; ++m)
-      matnames +=  (std::string("mat") + as_string(mat[m]) + " ");
+      matnames +=  the_material_names.name(origmat[m]) +  "  "; 
 
 
 
@@ -159,7 +207,7 @@ private:
     for(typename et::ElementIterator e(gf.TheGrid()); ! e.IsDone(); ++e) {
       *out << new_mat(gf(*e)) << " ";
     }
-    *out << "\n";
+    *out << "\n" << std::flush;
   }
 
   typedef heterogeneous_list::END END;
