@@ -1214,9 +1214,118 @@ struct element_traits<complexnd::element_t<complexnd::ComplexND<D>, 0, D> >
   : public element_traits_vertex_base<complexnd::ComplexND<D> >
 {
   typedef element_traits_vertex_base<complexnd::ComplexND<D> >  base;
-  typedef consecutive_integer_tag<0>                 consecutive_tag;
-  typedef typename base::hasher_type_elem_base       hasher_type;
+  typedef consecutive_integer_tag<0>                            consecutive_tag;
+  typedef typename base::hasher_type_elem_base                  hasher_type;
 };
+
+// edge
+template<int D>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<D>, 1, D-1> > 
+  : public element_traits_edge_base<complexnd::ComplexND<D> >
+{
+  typedef element_traits_edge_base<complexnd::ComplexND<D> >  base;
+  typedef consecutive_integer_tag<0>                          consecutive_tag;
+  typedef typename base::hasher_type_elem_base                hasher_type;
+};
+
+// face
+template<int D>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<D>, 2, D-2> > 
+  : public element_traits_edge_base<complexnd::ComplexND<D> >
+{
+  typedef element_traits_face_base<complexnd::ComplexND<D> >  base;
+  typedef consecutive_integer_tag<0>                          consecutive_tag;
+  typedef typename base::hasher_type_elem_base                hasher_type;
+};
+
+// facet
+template<int D>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<D>, D-1, 1> > 
+  : public element_traits_facet_base<complexnd::ComplexND<D> >
+{
+  typedef element_traits_facet_base<complexnd::ComplexND<D> >  base;
+  typedef consecutive_integer_tag<0>                           consecutive_tag;
+  typedef typename base::hasher_type_elem_base                 hasher_type;
+};
+
+
+// cell
+template<int D>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<D>, D, 0> > 
+  : public element_traits_cell_base<complexnd::ComplexND<D> >
+{
+  typedef element_traits_cell_base<complexnd::ComplexND<D> >  base;
+  typedef consecutive_integer_tag<0>                          consecutive_tag;
+  typedef typename base::hasher_type_elem_base                hasher_type;
+};
+
+// disambiguate for 0D: vertex <-> cell 
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<0>, 0, 0> > 
+  : public element_traits_vertex_base<complexnd::ComplexND<0> >
+{
+  typedef element_traits_vertex_base<complexnd::ComplexND<0> >  base;
+  typedef consecutive_integer_tag<0>                            consecutive_tag;
+  typedef base::hasher_type_elem_base                           hasher_type;
+};
+
+
+// disambiguate for 1D: edge <-> cell
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<1>, 1, 0> > 
+  : public element_traits_edge_base<complexnd::ComplexND<1> >
+{
+  typedef element_traits_edge_base<complexnd::ComplexND<1> >  base;
+  typedef consecutive_integer_tag<0>                          consecutive_tag;
+  typedef base::hasher_type_elem_base                         hasher_type;
+};
+
+
+// disambiguate for 1D: vertex <-> facet
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<1>, 0, 1> > 
+  : public element_traits_vertex_base<complexnd::ComplexND<1> >
+{
+  typedef element_traits_vertex_base<complexnd::ComplexND<1> >  base;
+  typedef consecutive_integer_tag<0>                            consecutive_tag;
+  typedef base::hasher_type_elem_base                           hasher_type;
+};
+
+
+
+// disambiguate for 2D: edge <-> facet 
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<2>, 1, 1> > 
+  : public element_traits_edge_base<complexnd::ComplexND<2> >
+{
+  typedef element_traits_edge_base<complexnd::ComplexND<2> >  base;
+  typedef consecutive_integer_tag<0>                          consecutive_tag;
+  typedef base::hasher_type_elem_base                         hasher_type;
+};
+
+// disambiguate for 2D: face <-> cell 
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<2>, 2, 0> > 
+  : public element_traits_cell_base<complexnd::ComplexND<2> >
+{
+  typedef element_traits_cell_base<complexnd::ComplexND<2> >  base;
+  typedef consecutive_integer_tag<0>                          consecutive_tag;
+  typedef base::hasher_type_elem_base                         hasher_type;
+};
+
+// disambiguate for 3D: face <-> facet
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<3>, 2, 1> > 
+  : public element_traits_facet_base<complexnd::ComplexND<3> >
+{
+  typedef element_traits_facet_base<complexnd::ComplexND<3> >  base;
+  typedef consecutive_integer_tag<0>                           consecutive_tag;
+  typedef base::hasher_type_elem_base                          hasher_type;
+};
+
+
+
+// specializations for ANY
 
 // spec. vertex for ANY
 template<>
@@ -1228,22 +1337,69 @@ struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>,
   typedef base::hasher_type_elem_base                hasher_type;
 };
 
+// spec. edge for ANY
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>, 1, complexnd::ANY> > 
+  : public element_traits_edge_base<complexnd::ComplexND<complexnd::ANY> >
+{
+  typedef element_traits_edge_base<complexnd::ComplexND<complexnd::ANY> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef base::hasher_type_elem_base                hasher_type;
+};
+
+
+// spec. face for ANY
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>, 2, complexnd::ANY> > 
+  : public element_traits_face_base<complexnd::ComplexND<complexnd::ANY> >
+{
+  typedef element_traits_edge_base<complexnd::ComplexND<complexnd::ANY> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef base::hasher_type_elem_base                hasher_type;
+};
+
+// spec. facet for ANY
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>, complexnd::ANY, 1 > >
+  : public element_traits_facet_base<complexnd::ComplexND<complexnd::ANY> >
+{
+  typedef element_traits_edge_base<complexnd::ComplexND<complexnd::ANY> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef base::hasher_type_elem_base                hasher_type;
+};
+
+
+// spec. cell for ANY
+template<>
+struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>, complexnd::ANY, 0 > >
+  : public element_traits_facet_base<complexnd::ComplexND<complexnd::ANY> >
+{
+  typedef element_traits_edge_base<complexnd::ComplexND<complexnd::ANY> >  base;
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef base::hasher_type_elem_base                hasher_type;
+};
+
+
 
 
 //------------------------------- total grid functions --------------------------------
 
-// vertex
+
 template<int D, int K, class T>
 class grid_function<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T>
   : public grid_function_vector<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T> 
 {
-  typedef grid_function_vector<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T> base;
-  typedef complexnd::ComplexND<D>                                                        grid_type;
+  typedef complexnd::ComplexND<D>                 grid_type;
+  typedef complexnd::element_t<grid_type, K, D-K> element_type;
+  typedef grid_function_vector<element_type, T>   base;
+
 public:
   grid_function() {}
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g, T const& t) : base(g,t) {}
 };
+
+
 
 
 
