@@ -2,7 +2,7 @@
 
 $STL = "http://www.sgi.com/Technology/STL";
 #$GRAL = "file:/home/berti/CVS-work/nmwrlib/doc/tex/html";
-$GRAL = "file:/home/berti/CVS-work/gral/base/doc/hyperlatex/html";
+$GRAL = "../../doc/hyperlatex/html";
 
 while(<>) {
   s|\$GrAL ([a-z\-_A-Z0-9]+)|

@@ -13,6 +13,15 @@
 #include <iostream.h>
 #include "Geometry/point-traits.h"
 
+#ifndef NO_COORD_SPECIAL
+
+#include "Geometry/coords_2_special.h"
+#include "Geometry/coords_3_special.h"
+
+#endif
+
+#include "Geometry/algebraic-primitives.h"
+
 //----------------------------------------------------------------
 //
 //  class coord<N>;
@@ -75,12 +84,6 @@ private:
 };
 
 
-#ifndef NO_COORD_SPECIAL
-
-#include "coords_2_special.h"
-#include "coords_3_special.h"
-
-#endif
 
 template<unsigned N>
 bool operator==(const coordN<N>& lhs, const coordN<N> rhs)
@@ -190,22 +193,16 @@ struct point_traits_for_coordN_2 {
   static const char* name() { return "coord<2>"; }
 };
 
-// partielle Spezialisierung von point_traits<T> :
-// (geht noch nicht)
-/*
 template<unsigned N>
 struct point_traits<coordN<N> > :  public point_traits_for_coordN<N> {};
-*/
-// daher:
-// totale Spezialisierung f"ur alle ben"otigten N.
 
+/*
 struct point_traits<coordN<2> > : public point_traits_for_coordN_2  {};
 struct point_traits<coordN<3> > : public point_traits_for_coordN<3> {};
 struct point_traits<coordN<4> > : public point_traits_for_coordN<4> {};
 struct point_traits<coordN<5> > : public point_traits_for_coordN<5> {};
+*/
 
-
-#include "Geometry/algebraic-primitives.h"
 
 // total specializations, could be made partial in
 // algebraic-primitives.

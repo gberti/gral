@@ -17,6 +17,8 @@
 //
 //----------------------------------------------------------------
 
+template<unsigned N> class coordN;
+
 class coordN<3> {
 public:
   typedef double   component;
@@ -60,8 +62,9 @@ private:
   component X[3];
 };
 
-#include "is-specialized.h"
+template<class T> struct is_specialized;
 
+template<>
 struct is_specialized<coordN<3> > {
   static bool specialized() { return true;}
   static const char* name() { return "coordN<3>";}

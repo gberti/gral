@@ -3,7 +3,7 @@
 
 #include <iostream.h>
 #include "Utility/pre-post-conditions.h"
-#include "./coords.h"
+#include "Geometry/coords.h"
 
 template<unsigned M, unsigned N, unsigned offset>
 struct fixed_row_mjr_subcriptor {

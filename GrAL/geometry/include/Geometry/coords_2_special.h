@@ -17,6 +17,8 @@
 //
 //----------------------------------------------------------------
 
+template<unsigned N> class coordN;
+
 class coordN<2> {
 public:
   typedef unsigned index;
@@ -59,9 +61,10 @@ private:
   component X[2];
 };
 
-#include "is-specialized.h"
-#include "compiler-config.h" // bool-type
 
+template<class T> struct is_specialized;
+
+template<>
 struct is_specialized<coordN<2> > {
   static bool specialized() { return true;}
   static const char* name() { return "coordN<2>";}

@@ -71,7 +71,6 @@ public:
   // Complex2D* g;
 public:  
   typedef stored_geometry_complex2D self;
-  MAKE_DEFAULT_IO_OPS_SELF
   stored_geometry_complex2D() {}
   stored_geometry_complex2D(grid_type const& gg) : base(gg)  {}
 

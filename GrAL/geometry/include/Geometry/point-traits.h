@@ -10,7 +10,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 
 // must be specialized
@@ -49,11 +49,11 @@ struct real_point_traits {
   static component_type  z(const Ptype&) {return component_type(0.0);}
 };
 
-__STL_TEMPLATE_NULL
+template<>
 struct point_traits<float> 
   : public real_point_traits<float> {};
 
-__STL_TEMPLATE_NULL
+template<>
 struct point_traits<double> 
   : public real_point_traits<double> {};
 

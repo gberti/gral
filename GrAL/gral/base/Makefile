@@ -5,7 +5,6 @@ include $(CONFIG)
 
 TARGET=all
 
-HEADERS= $(shell ls include/Container/*.h)
 all:
 
 new:
@@ -15,10 +14,13 @@ compile:
 
 lib:
 
-
+DIRS = Base Geometries IO Iterators Subranges
+SHELL=/bin/bash
 install:
-	mkdir -p $(INSTALLHEADERS)/Container
-	cp include/Container/*.h $(INSTALLHEADERS)/Container
+	for i in $(DIRS);\
+        do mkdir -p $(INSTALLHEADERS)/Gral/$$i; \
+	cp  include/Gral/$$i/*.{h,C} $(INSTALLHEADERS)/Gral/$$i;\
+        done;
 
 clean:
 	(cd doc;  $(MAKE) clean DEPS="")

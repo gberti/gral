@@ -22,6 +22,7 @@ install:
 	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
 	cp include/Gral/Grids/Complex2D/internal/*.h  $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
 	cp include/Gral/Grids/Complex2D/internal/*.C  $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
+	cp $(LIBDIR)/*.a $(INSTALLLIBRARIES)
 
 clean:
 	(cd src;  $(MAKE) clean DEPS="")
@@ -50,4 +51,4 @@ tar:
          tar -cf external-control.tar external-control; \
          rm -rf external-control/;)
 
-.PHONY: demo test
+.PHONY: demo test doc

@@ -163,7 +163,7 @@ void Construct_complex2d0(Complex2D     & CC,
   friend_for_input cc(CC); // template routines cannot be friends,
                            // so we use a dirty trick
 
-  CC.clear();
+  cc.clear();
 
   //---  construct vertices ---------------------------
   

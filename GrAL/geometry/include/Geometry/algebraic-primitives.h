@@ -135,12 +135,13 @@ template<class POINT>
 struct dimension_dependent_primitives 
   : public basic_algebraic_primitives<POINT>  {};
 
-#include "Geometry/primitives2d.h"
-#include "Geometry/primitives3d.h"
 
 
 template<class POINT>
 struct algebraic_primitives : public dimension_dependent_primitives<POINT> {};
+
+#include "Geometry/primitives2d.h"
+#include "Geometry/primitives3d.h"
 
 
 //-------------------------------------------------------------------------
@@ -160,7 +161,7 @@ void get_polygon2d_center_and_area(PIt begin, PIt end, // in:  iterator over pol
 				   double& area);      // out: polygon area
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Geometry/generic/algebraic-primitives.C"
+#include "Geometry/algebraic-primitives.C"
 #endif
 
 #endif

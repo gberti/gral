@@ -16,7 +16,8 @@
 //
 //----------------------------------------------------------------
 
-#include "algorithm" // STL: swap
+#include <algorithm> // STL: swap
+
 
 template<class POINT>
 struct dimension_dependent_primitives_2d 

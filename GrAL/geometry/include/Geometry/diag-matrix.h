@@ -1,7 +1,7 @@
 #ifndef NMWR_GB_DIAG_MATRIX_NM
 #define NMWR_GB_DIAG_MATRIX_NM
 
-#include "./matrix.h"
+#include "Geometry/matrix.h"
 
 template<unsigned N>
 class diag_matrix : public coordN<N> {
