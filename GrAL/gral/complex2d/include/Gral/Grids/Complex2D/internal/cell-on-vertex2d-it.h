@@ -36,7 +36,7 @@ public:
 
   //------------ iterator operations -------------------
 
-  Cell operator*() const {return Cell(V.cell(lc), TheGrid());}
+  Cell operator*() const {return Cell(TheGrid(),V.cell(lc));}
 
   self& operator++()   { ++lc;  return (*this);}
   self& operator--()   { --lc;  return (*this);}
