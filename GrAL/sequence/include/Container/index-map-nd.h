@@ -1,23 +1,24 @@
-#ifndef GRAL_GB_CARTESIAN3D_INDEXMAP_ND_H
-#define GRAL_GB_CARTESIAN3D_INDEXMAP_ND_H
+#ifndef GRAL_GB_SEQUENCE_INDEXMAP_ND_H
+#define GRAL_GB_SEQUENCE_INDEXMAP_ND_H
 
 // $LICENSE
 
 #include "Container/tuple.h"
+#include "Utility/pre-post-conditions.h"
 
-/*! Map between \f$ [0,n_0]\times[0,n_1]\times \cdots \times[0,n_{N-1}] \subset \Z^N \f$ 
+/*! \brief Map between \f$ [0,n_0[ \times [0,n_1[ \times \cdots \times [0,n_{N-1}[ \subset \Z^N \f$ 
     and \f$ [0,n_0 n_1  \cdots n_{N-1} -1] \subset \Z\f$
 
     Highest 1D index \f$ n_{N-1} \f$ variest fastest.
     \f[
-     p = (p_0, \ldots, p_{N-1}) \mapsto \sum_{k=0}^N-1 p_k \prod_{j=k+1}^{N-1} n_j
+     p = (p_0, \ldots, p_{N-1}) \mapsto \sum_{k=0}^{N-1} p_k \prod_{j=k+1}^{N-1} n_j
     \f]
 
-    \todo Create test cases.
-    \todo Check if some coordinates are 0.
-    \todo The name index_type may be misleading: 
-       Normally an n-dimensional multi_index is meant here.
-    \todo Move to sequence module
+    Tests in test-index-map-nd.C
+
+    \note The name index_type may be misleading: 
+           In this class, an N-dimensional multi-index is meant,
+           whereas a linear  (1D) index is called flat index.
  */
 template<unsigned N>
 class index_map_nd {
@@ -29,27 +30,43 @@ class index_map_nd {
   index_type prod; // prod[k] = n[k+1]* ... *n[N-1]
 
  public:
-  index_map_nd() {} 
-  /*! Construct map range \f$ [0,n_0]\times[0,n_2]\times \cdots \times[0,n_{N-1}] \fN
+  /*! \brief Construct empty map */
+  index_map_nd() : n(index_type(0)) { init(); } 
 
-      Some $n_i$ may be zero. 
-      If some $n_i < 0$, the range is empty, and using the mapping operators will result in an error
+  /*! \brief Construct map range \f$ [0,n_0[\times[0,n_1[\times \cdots \times[0,n_{N-1}[ \f$
+
+      Some \f$n_i\f$ may be zero, then the range is empty 
+      and using the mapping operators will result in an error
       (there is no valid input for them).
    */
-  index_map_nd(index_type const& nn) : n(nn)
+  index_map_nd(index_type const& nn) : n(nn) { init();}
+private:
+  void init()
     {
-      // REQUIRE(non_negative(n), "n = " << n, 1);
       prod[N-1] = 1;
       for(int k = N-2; k >= 0; --k) {
 	// sort out degenerate cases:
-	// n[k+1] == 0 is valid, will not change produkt: nk1 = 1
-	// n[k+1] <  0 means empty range: nk1 = 0,=> prod[0] = 0
-	int nk1 = (n[k+1] > 0 ? n[k+1] ( n[k+1] == 0 ? 1 : 0));
+	// n[k+1] <= 0 means empty range: nk1 = 0,=> prod[0] = 0
+	int nk1 = (n[k+1] > 0 ? n[k+1] : 0);
 	prod[k] = prod[k+1]*nk1;
       }
     }
+
+public:
   // the next two operators could probably be made more
   // efficient by using template metaprogramming
+  /*! \name Mapping function  */
+
+  /*@{*/
+  /*! \brief Map N-dimensional index \c p to flat index
+      \pre \c valid(p)
+      \post 
+      \code
+       index_map_nd<N>             map; 
+       index_map_nd<N>::index_type it;
+       it == map(map(it));
+      \endcode
+   */
  int operator()(index_type const& p) const
     { 
       c(p);
@@ -59,14 +76,15 @@ class index_map_nd {
       }
       return res;
     }
-
+  /*! \brief Map flat index \c i to N-dimensional index
+   */
   index_type operator()(int i) const 
     {
       c(i);
       index_type res;
       int remainder = i;
       for(unsigned k = 0; k < N; ++k) {
-	if(n[k] == 0) // 'flat' dimension: skip
+	if(n[k] == 1) // 'flat' dimension: skip
 	  res[k] = 0;
 	else
 	  res[k] = remainder / prod[k];
@@ -75,35 +93,48 @@ class index_map_nd {
       }
       return res;
     }
+  /*@}*/
 
+  /*! \name Validity checks */
+  /*@{*/
+
+  /*! \brief True if \p is valid: \f$ 0 \leq \f$ p[k] \f$ \leq \f$ \c max_tuple()[k] \f$ 0 \leq k \leq N-1 \f$ */
   bool valid(index_type const& p) const {
     bool res = true;
-    for(int k = 0; k < N; ++k) 
+    for(unsigned k = 0; k < N; ++k) 
       res = res && ( 0 <= p[k] && p[k] < n[k]);
     return res;
   }
+  /*! \brief True if \c i is valid: \f$ 0 \leq \f$ \c i \f$ \leq \f$ max_flat_index() */
   bool valid(int i) const {
     return (0 <= i && i <= max_flat_index());
   }
-  bool non_negative(index_type const& n) const {
-    bool res = true;
-    for(int k = 0; k < N; ++k)
-      res = res && (n[k] >= 0);
-    return res;
-  }
+  /*@}*/
 
+
+  /*! \name Bounds accessors */
+  /*@{*/
+
+  /*! \brief Maximal valid N-dimensional index \f$ (n_0-1, \ldots, n_{N-1}-1)\f$
+   */
   index_type max_tuple() const { 
     index_type mx;
     for(unsigned k = 0; k < N; ++k)
       mx[k] = n[k]-1;
     return mx;
   } 
+  /*! \brief Minimal valid N-dimensional index \f$ (0, \ldots, 0) \f$ */
+  index_type min_tuple() const { return index_type(0);}
+
+  /*! \brief Minimal flat index, = 0 */
   int        min_flat_index() const { return 0;}
+  /*! \brief Maximal flat index, = \f$ \prod_{k=0}^{N-1} n_k -1 \f$ */
   int        max_flat_index() const { return n[0]*prod[0] -1;}
+  /*@}*/
 
 private:
-  void c(index_type const& p) { REQUIRE(valid(p), "p = " << p, 1);}
-  void c(int               i) { REQUIRE(valid(i), "i = " << i, 1);}
+  void c(index_type const& p) const { REQUIRE(valid(p), "p = " << p, 1);}
+  void c(int               i) const { REQUIRE(valid(i), "i = " << i, 1);}
 };
 
 
