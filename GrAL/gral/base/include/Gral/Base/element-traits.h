@@ -5,6 +5,10 @@
 
 // $LICENSE
 
+
+
+
+
 //----------------------------------------------------------------
 /*!  \brief traits classes for enabling uniform treatment
       of different element types (vertex, edge etc).
@@ -52,6 +56,9 @@
       \endcode
 */
 //----------------------------------------------------------------
+
+
+
 
 template<class E>
 struct element_traits {};
@@ -137,6 +144,37 @@ struct element_traits_edge_base
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstEdge();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfEdges();}
+  static handle_type     handle      (element_type const& e)    { return e.handle();}
+  static element_type    handle2element(grid_type const& g, handle_type h)
+  {
+    return element_type(g,h); // could be factored out.
+  }
+};
+
+/*! \brief basic definition to derive from for actual specializations
+     of element_traits<> for face types
+  \ingroup traits
+  \relates element_traits
+*/
+template<class GRID>
+struct element_traits_face_base 
+ : public element_traits_base<GRID>  {
+  typedef GRID grid_type;
+  typedef grid_types<grid_type>          gt;
+  typedef typename gt::Face              element_type;
+  typedef typename gt::FaceIterator      ElementIterator;
+  typedef typename gt::face_handle       handle_type;
+  typedef face_type_tag                  element_type_tag;
+  typedef typename gt::dimension_tag     grid_dimension_tag;
+  typedef element_codim_tag<(int)(grid_dimension_tag::dim)-2> 
+                                         element_codimension_tag;
+  typedef element_dim_tag<2>             element_dimension_tag;
+
+  typedef element_traits_base<GRID>:: /* template */ 
+    hasher_type_base<GRID, element_type> hasher_type_elem_base;
+
+  static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFace();}
+  static unsigned        size        (grid_type    const& g)    { return g.NumOfFaces();}
   static handle_type     handle      (element_type const& e)    { return e.handle();}
   static element_type    handle2element(grid_type const& g, handle_type h)
   {
