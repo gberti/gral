@@ -7,7 +7,8 @@ $license1 = "
 /* ------------------------------------------------------------
 
     Copyright (C) 1997-2001 Guntram Berti,
-    NEC C&C Research Labs, St. Augustin, Germany.
+    NEC C&C Research Laboratories, NEC Europ Ltd.
+    Rathausallee 10, D-53757 St. Augustin, Germany.
     Contact: berti\@ccrl-nece.de
 
     This file is part of the Grid Algorithms Library (GrAL),
@@ -16,7 +17,9 @@ $license1 = "
 
     You are free to use, copy and modify the sources under
     certain circumstances, provided this copyright notice
-    remains intact. See the file LICENSE for details.
+    remains intact. See the file LICENSE for details, which
+    is contained in this distribution, and available online at
+    http://www.math.tu-cottbus.de/~berti/gral/license.html .
 
 --------------------------------------------------------------- */
 ";
@@ -31,7 +34,7 @@ $license1 = "
 
 $license = $license1;
 
-print "executing replace-license.pl\n";
+#print "executing replace-license.pl\n";
 while(<>) {
     s|//[ ]*\$LICENSE_NEC|$license|;
     s|//[ ]*\$LICENSE|$license|;
