@@ -56,10 +56,22 @@ class index_map_nd {
       return res;
     }
 
-  index_type const& max_tuple() const { return n;} 
+  index_type max_tuple() const { 
+    index_type mx;
+    for(unsigned k = 0; k < N; ++k)
+      mx[k] = n[k]-1;
+    return mx;
+  } 
   int        min_flat_index() const { return 0;}
   int        max_flat_index() const { return n[0]*prod[0] -1;}
 };
 
 
+
+
 #endif
+
+
+
+
+
