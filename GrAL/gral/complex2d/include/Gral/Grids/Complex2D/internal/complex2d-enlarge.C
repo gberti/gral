@@ -126,7 +126,7 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   //--- (3) set facet table --------------------------------
 
   typedef vtuple_2d<Complex2D> vtuple;
-  typedef map<vtuple, FacetOnCellIterator, less<vtuple> > FacetTable;
+  typedef std::map<vtuple, FacetOnCellIterator, std::less<vtuple> > FacetTable;
   //typedef map<vtuple_2d, Facet, less<vtuple_2d> > FacetTable;
   FacetTable facet_id; // facets contained in Iv
 

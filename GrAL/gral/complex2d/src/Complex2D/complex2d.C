@@ -87,7 +87,7 @@ void Complex2D::calculate_vertex_cells()
 void Complex2D::calculate_neighbour_cells()
 {
   typedef vtuple_2d<Complex2D> vtuple;
-  typedef map<vtuple, FacetOnCellIterator, less<vtuple> > FacetTable;
+  typedef std::map<vtuple, FacetOnCellIterator, std::less<vtuple> > FacetTable;
   FacetTable Facets;
   CalculateNeighbourCells(*this,*this,Facets);
 
