@@ -142,8 +142,8 @@ public:
   //------------------- iteration ----------- ------------------------
 
   typedef vertex_iterator_Polygon2d<Face,geom>  vertex_iterator;
-  vertex_iterator FirstVertex() const { return vertex_iterator(1,*this);}
-  vertex_iterator EndVertex()   const { return vertex_iterator(NumOfVertices()+1,*this);}
+  vertex_iterator FirstVertex() const { return vertex_iterator(0,*this);}
+  vertex_iterator EndVertex()   const { return vertex_iterator(NumOfVertices(),*this);}
 
   int               NumOfVertices() const {return _f.NumOfVertices();}
   coord_type /*const&*/ V(int i) const {
@@ -159,8 +159,8 @@ public:
   //! mass center of the vertices
   coord_type barycenter() const 
     { 
-      coord_type c(pt::Origin(pt::Dim(V(1)))); //TheGeometry().space_dimension()));
-      for(int i =1; i<= NumOfVertices(); i++) 
+      coord_type c(pt::Origin(pt::Dim(V(0)))); //TheGeometry().space_dimension()));
+      for(int i =0; i< NumOfVertices(); i++) 
 	c+= V(i);
       return (c/(double)NumOfVertices());
     }
@@ -177,8 +177,8 @@ public:
   //! Area calculation works for general simple polygons
   double    area() const {
     double a = 0.0;
-    for(int i = 3; i<= NumOfVertices(); ++i) {
-      coord_type v1(V(1));
+    for(int i = 2; i< NumOfVertices(); ++i) {
+      coord_type v1(V(0));
       coord_type vi_1(V(i-1));
       coord_type vi(V(i));
       a += algebra::signed_triangle_area(v1,vi_1,vi);
