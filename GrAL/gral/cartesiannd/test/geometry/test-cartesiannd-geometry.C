@@ -100,5 +100,19 @@ int main()
     test_geometry(GeomR,cout);
   }
  
+
+  {
+    grid_type R2(gt::index_type(0,0), gt::index_type(5,3));
+    matrix_type A(0.0);
+    A(0,0) = 1.0; A(1,1) = 1.0;
+    matrix_type  A_inv(A);
+    mapping_type M(A);
+    mapping_type M_inv(A_inv);
+    mapping_type M_dummy;
+    geom_type GeomR(R2, M_dummy);
+    GeomR.set_mapping(M);
+    GeomR.set_inverse_mapping(M_inv);
+    test_geometry(GeomR,cout);
+  }
    
 }
