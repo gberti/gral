@@ -150,14 +150,16 @@ int main() {
   using namespace std;
 
 
-  /*
+   
   ComplexND<3> C3;
-  cartesian3d::CartesianGrid3D  R3(3,3,3);
+  cartesian3d::CartesianGrid3D  R3(2,2,2);
   vertex_morphism<cartesian3d::CartesianGrid3D, ComplexND<3> >  Phi3D(R3, C3);
    ConstructGrid0(C3, R3, Phi3D);
   cout << "ComplexND<3> incidences:" << endl;
   print_incidences(C3, cout);
-  */
+ 
+
+
   ComplexND<2> C;
   cartesian2d::CartesianGrid2D  R(3,3);
 
