@@ -67,6 +67,18 @@ public:
     g = & g_;
     init_xy();
   }
+  /*!  \brief Initialize with reference semantics
+      
+       <tt> stored_geometry_triang2d GeomT;  GeomT.init(T, xy) <tt> <br>
+       is equivalent to
+       <tt> stored_geometry_triang2d GeomT(T, xy);</tt> 
+   */
+  void init(grid_type const& g_, double * xy_) 
+  {
+    g = &g_;
+    xy = xy_;
+    owned = false;
+  }
   //! Dimension of embedding space
   unsigned space_dimension() const { return 2;}
 private:
