@@ -176,18 +176,19 @@ struct point_traits_fixed_size_array<ARRAY, COMPONENT, 2>
   typedef point_traits_fixed_size_array_base<ARRAY, COMPONENT, 2> base;
   typedef typename base::component_type component_type;  
 
-  static component_type  z(typename base::Ptype const& p) {return zero;}
-  static component_type& z(typename base::Ptype      & p) {return zero;}
+  static component_type  z(typename base::Ptype const& p) {return zero();}
+  static component_type& z(typename base::Ptype      & p) {return (dummy_zero=component_type(0));}
   
-  static const component_type zero = 0;
-
+  static component_type zero() { return component_type(0);}
+  static component_type dummy_zero;
 };
 
-/*
+
 template<class ARRAY, class COMPONENT>
-point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::componenent_type const
-point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::zero = 0;
-*/
+typename 
+point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::component_type 
+point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::dummy_zero = 0;
+
 
 template<class ARRAY, class V, unsigned N>
 struct array_operators 
@@ -237,6 +238,7 @@ struct array_operators
     return lhs /= v;
   }
 };
+
 
 
 //----------------------------------------------------------------
