@@ -21,11 +21,15 @@ install:
 
 clean:
 	(cd doc;  $(MAKE) clean DEPS="")
-	rm -f *~ include/*~ include/*/*~
+	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
+	rm -f doxy.tags doxy.log
 
-realclean: clean
-	rm -rf lib/$(ARCH)/
+tarclean: clean
+	rm -rf lib/
+
+realclean: tarclean
 	rm -rf doxygen/
+	(cd doc; gmake realclean)
 
 test:
 	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
@@ -34,16 +38,15 @@ doxy:
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(PWD); export TEXINPUTS; doxygen doxy.cfg;)
 
-docs:
-	(cd doc; $(MAKE) $(TARGET))
-	rm -f $(ROOT)/doxygen/html/external-control.html
-	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html
+concepts:
+	(cd doc; gmake concepts)
 
-tar:
-	(cd $(HOME)/tmp;\
-	rm -rf external-control/;\
-         cvs -d /home/nmwr/CVS export -r HEAD external-control; \
-         tar -cf external-control.tar external-control; \
-         rm -rf external-control/;)
+doc: doxy concepts
 
-.PHONY: demo test
+
+tar: 
+	(cd ..; tar cf gral-base.tar base; gzip gral-base.tar)
+
+dist: doc  tarclean tar
+
+.PHONY: demo test doc
