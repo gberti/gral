@@ -20,10 +20,10 @@
 // file ("ctrl.in" in this example) and command line.
 //
 // try something like 
-// $ main   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 }
+// $ ./ex1.exe   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 }
 // on the commandline to see what is happening.
 // To see error handling, try:
-// $ main this is rubbish   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 }
+// $ ./ex1.exe   this is rubbish   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 }
 //
 //----------------------------------------------------------------
 
