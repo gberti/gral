@@ -31,6 +31,9 @@ typedef geometry_type::coord_type coord_type;
 
 
 int main(int argc, char* argv[]) {
+  using std::ifstream;
+  using std::ofstream;
+  using std::string;
 
   typedef grid_types<Complex2D> gt; 
 
@@ -46,7 +49,7 @@ int main(int argc, char* argv[]) {
 
   Ctrl.update();
 
-  ostream& testout(cout);  
+  std::ostream& testout(cout);  
 
 
    
