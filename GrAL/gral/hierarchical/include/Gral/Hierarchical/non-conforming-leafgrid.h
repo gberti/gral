@@ -217,6 +217,11 @@ namespace octree {
     friend bool operator==(self const& lhs, self const& rhs) 
     { lhs.cv(); rhs.cv(); return lhs.level() == rhs.level() && lhs.flat_handle() == rhs.flat_handle();}
     friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
+    friend bool operator< (self const& lhs, self const& rhs) { 
+      lhs.cv(); rhs.cv(); 
+      return lhs.level() < rhs.level() 
+	|| ((lhs.level() == rhs.level()) && (lhs.flat_handle() < rhs.flat_handle()));
+    }
   protected:
     void set(flat_vertex_handle newfh, level_handle newlev) { base::set(newfh, newlev);}
   private:
