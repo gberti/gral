@@ -2,16 +2,20 @@ CONFIG=../mk.config
 
 include $(CONFIG)
 
+all: concepts install-doc
+
 gen-paths:
 	./gen-tex-paths.pl  > hyperlatex/paths.tex
 
 
 
-install-doc:
+install-doc1:
 	./install-doc.pl -stl $(STLURL) \
          hyperlatex/html/*.html
 
-concepts: gen-paths latex make-links
+
+install-doc: install-doc1  make-links
+concepts: gen-paths latex
 
 latex:
 	(cd hyperlatex;\
