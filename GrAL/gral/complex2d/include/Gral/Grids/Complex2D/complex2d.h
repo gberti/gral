@@ -305,6 +305,8 @@ private:
 public:
   //-------------- iteration ------------------
 
+  unsigned dimension() const { return 2;}
+
   //@{ @name STL half-open ranges
   inline VertexIterator   FirstVertex() const;
   inline VertexIterator   EndVertex()   const;
@@ -408,6 +410,11 @@ public:
     { return arch_for_n_vertices[c.NumOfVertices()];}
   unsigned NumOfArchetypes() const { return archetypes.size(); }
 
+  /*! \brief Add an archetype to the archetype list.
+ 
+     If there is already an archetype with nv vertices, the handle of the old
+     archetype is returned. Else the handle of the newly added archetype is returned.
+   */
   archetype_handle add_archetype(archetype_type const& A, int nv);
   /*@}*/
   
