@@ -134,7 +134,7 @@ std::ostream& operator<<
  typename grid_function_array_adapter<ELEMENT,T,N>::
  value_type<ELEMENT,T,N>  const &v)
 {
- for(int i = 0; i < N; ++i)
+ for(unsigned i = 0; i < N; ++i)
    out << v(i) << ' ';
  return out;
 }
