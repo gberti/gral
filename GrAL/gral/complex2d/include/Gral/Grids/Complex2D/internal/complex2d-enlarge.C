@@ -122,7 +122,7 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   
   //--- (2) construct cells -------------------------------
 
-  copy_cells(G,G_src, VertexCorr, CellCorr);
+  dispatch_complex2d_copy<has_archetype_type<Conn>::result>::copy_cells(G,G_src,VertexCorr,CellCorr);
 
   //--- (3) set facet table --------------------------------
 
@@ -256,9 +256,11 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   //  gg.end_modification()
 
   // setup archetype info. NOTE: if the src G2 has archetype info, this should be used.
-  for(src_cell_it src_c = G_src.FirstCell(); ! src_c.IsDone(); ++src_c) {
-    Cell C =   G.cell(CellCorr(G_src.handle(*src_c)));
-    gg.add_archetype_of(C);
+  if(! has_archetype_type<Conn>::result) {
+    for(src_cell_it src_c = G_src.FirstCell(); ! src_c.IsDone(); ++src_c) {
+      Cell C =   G.cell(CellCorr(G_src.handle(*src_c)));
+      gg.add_archetype_of(C);
+    }
   }
 }
 
