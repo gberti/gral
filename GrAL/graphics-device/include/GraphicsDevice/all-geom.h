@@ -6,6 +6,8 @@
 #include <string>
 
 #include "Geometry/point-traits.h"
+#include "Geometry/algebraic-primitives.h"
+
 #include "GraphicsDevice/renderable-geom.h"
 
 
@@ -32,16 +34,16 @@ extern RenderableGeom RSegment(RenderableGeom::coord_type const& c1,
 inline RenderableGeom RSegment(float x1, float y1, float z1,
 			       float x2, float y2, float z2)
 {
-  return RSegment_1(RenderableGeom::coord_type(x1,y1,z1),
-                  RenderableGeom::coord_type(x2,y2,z2));
+  return RSegment(RenderableGeom::coord_type(x1,y1,z1),
+		  RenderableGeom::coord_type(x2,y2,z2));
 }
 
 template<class P>
 inline RenderableGeom RSegment(const P& c1, const P& c2)
 { 
   typedef point_traits<P> pt;
-  return RSegment_1(RenderableGeom::coord_type(pt::x(c1), pt::y(c1), pt::z(c1)),
-		    RenderableGeom::coord_type(pt::x(c2), pt::y(c2), pt::z(c2)));
+  return RSegment(RenderableGeom::coord_type(pt::x(c1), pt::y(c1), pt::z(c1)),
+		  RenderableGeom::coord_type(pt::x(c2), pt::y(c2), pt::z(c2)));
 }
 
 // hack: sometimes g++ doesn't take the above template definition.
@@ -173,10 +175,52 @@ extern RenderableGeom RSimplex(double a);
 
 
 extern RenderableGeom RCylinder(double r, double h);
+
+template<class P>
+inline RenderableGeom RCylinder(double r, P const& p, P const& q)
+{
+  typedef  RenderableGeom::coord_type ct;
+  typedef point_traits<P>  pt;
+  typedef point_traits<ct> ptc;
+  typedef algebraic_primitives<ct> ap;
+  ct p1(pt::x(p), pt::y(p), pt::z(p));
+  ct q1(pt::x(q), pt::y(q), pt::z(q));
+  ct axis(q1-p1);
+  
+  double h = ap::norm_2(axis);
+  ct     cyl_axis(0,0,h);
+  ct     rot_axis  = ap::vectorproduct(cyl_axis, axis);
+  double rot_angle = ap::angle        (cyl_axis, axis);  
+
+  double n = ap::norm_2(rot_axis);
+  Transformation T;
+  Transformation T2(Translation(p1));
+
+  if( n < 1.0e-5*h*h)
+    if(ap::dot(axis, cyl_axis) > 0)
+      T = T2(Identity3D);
+    else
+      T = T2(-Identity3D);
+  else
+    T = T2(Rotation3D(rot_axis, rot_angle));
+
+  return T(RCylinder(r,h));
+}
+				
+				
+
 extern RenderableGeom RCone(double r1, double r2, double h);
 
 extern RenderableGeom RBall(double r, RenderableGeom::coord_type const& m);
 extern RenderableGeom RSphere(double r, RenderableGeom::coord_type const& m);
+
+template<class P>
+inline RenderableGeom RSphere(double r, P const& m) 
+{
+  typedef point_traits<P> pt;
+  RenderableGeom::coord_type m1(pt::x(m),pt::y(m),pt::z(m));
+  return RSphere(r, m1);
+}
 
 extern RenderableGeom RTorus(double r1, double r2, char style='n');
 
