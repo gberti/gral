@@ -16,7 +16,7 @@
 
   Two different sets of macros are defined:
  - REQUIRE/ENSURE (condition, message, severity)
-   are defined only #ifdef DEBUG
+   are defined only if  \c NMWR_DEBUG is defined
  - REQUIRE_ALWAY/ENSURE_ALWAYS (condition, message, severity)
    are always defined
 
