@@ -95,10 +95,11 @@ int main()
     A_inv(0,0) =1.0; A_inv(1,1) = 0.5;
     mapping_type M(A);
     mapping_type M_inv(A_inv);
-    geom_type GeomR(R, gt::index_type(0,0), gt::index_type(1,1), M);
-    GeomR.set_inverse_mapping(M_inv);
+    vector<geom_type> GeomR;
+    GeomR.push_back(geom_type(R, gt::index_type(0,0), gt::index_type(1,1), M));
+    GeomR.back().set_inverse_mapping(M_inv);
 
-    test_geometry(GeomR,cout);
+    test_geometry(GeomR.back(),cout);
   }
  
 
