@@ -1,7 +1,8 @@
+PWD=$(shell pwd)
+CONFIG=$(PWD)/../mk.config
 include $(CONFIG)
 
-CTRLLIB=control-device
-LIBS = -l$(CTRLLIB) -lnmwr-io
+LIBS =  -lutilities -lcontrol-device
 
 
 ex1: ex1.o

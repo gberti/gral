@@ -1,6 +1,6 @@
 
 include  $(CONFIG)
-include  $(GENERICTARGETS)
+include  $(RECURSIVETARGETS)
 
 SUBDIRS = IO
 

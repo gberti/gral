@@ -1,11 +1,13 @@
-CONFIG:=$(PWD)/mk.config
+export CONFIG:=$(PWD)/mk.config
 
+unexport PWD
+include $(CONFIG)
 export DEBUG
 export CCC
 #export CCFLAGS
 export IOLIB:=control-device#
 export LIBDIR
-export CONFIG
+#export CONFIG
 #export IFLAGS
 
 TARGET=all
@@ -23,16 +25,23 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
+install:
+	mkdir -p $(INSTALLHEADERS)/IO
+	mkdir -p $(INSTALLLIBRARIES)
+	cp include/IO/*.h $(INSTALLHEADERS)/IO
+	cp $(LIBDIR)/*.a $(INSTALLLIBRARIES)
+
 clean:
 	(cd src;  $(MAKE) clean DEPS="")
 	(cd demo; $(MAKE) clean DEPS="")
 	(cd doc;  $(MAKE) clean DEPS="")
+	rm -f *~ include/*~ include/*/*~
 
 realclean: clean
-	rm -f lib/*.a
+	rm -f lib/*.a lib/*/*.a lib/*/*/*.a lib/*/*/*/*.a
 
-demos:
-	(cd demo; $(MAKE) $(TARGET))
+demo:
+	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 docs:
 	(cd doc; $(MAKE) $(TARGET))
@@ -44,3 +53,5 @@ tar:
          cvs -d /home/nmwr/CVS export -r HEAD external-control; \
          tar -cf external-control.tar external-control; \
          rm -rf external-control/;)
+
+.PHONY: demo
