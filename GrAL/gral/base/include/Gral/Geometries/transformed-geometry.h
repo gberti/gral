@@ -7,9 +7,8 @@
 #include "Geometry/algebraic-primitives.h"
 #include "Utility/pre-post-conditions.h"
 
-//----------------------------------------------------------------
-// 
 /*! \brief Grid geometry transformed by a mapping.
+
    \ingroup gridgeometries
 
    The only function is currently transformation of vertices --
@@ -24,10 +23,10 @@
    \todo 
    Extend approach to yield transformed (i.e., curved) segments,
    polygons etc.
+   \todo Test
 
   \see Module gridgeometries
 */  
-//----------------------------------------------------------------
 
 template<class Geom, class Trafo>
 class transformed_geom {
@@ -62,6 +61,7 @@ public:
 };
 
 /*! \brief Creator function for transformed_geom<Geom,Trafo>
+    \ingroup gridgeometries    
     \relates transformed_geom<Geom,Trafo>
  */
 template<class Geom, class Trafo>

@@ -3,7 +3,9 @@
 
 // $LICENSE
 
-/*! \file  convenience header
+/*! \file  
+
+   Convenience header for including all iterator test functions
 
  */
 

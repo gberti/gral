@@ -9,7 +9,7 @@
 
 /*! \brief Dummy geometry for places where one is formally required.
     \ingroup gridgeometries
-    \see     gridgeometries
+    \see \ref    gridgeometries module
  */
 template<class GRID> 
 class dummy_geometry : public grid_types<GRID> {

@@ -2,6 +2,15 @@
 
     This module contains code for Cartesian grids of arbitrary dimension.
 
+    Browse the documentation starting from the \ref cartesianndmodule module.
+    A convenience header including all functionality is located at
+   <tt> Gral/Grids/CartesianND/all.h </tt>
+
     \status
-    Under development.
+     Correct archetype type is missing. 
+     Switch operators are missing.
+*/
+
+/*! \defgroup cartesianndmodule Components for CartesianND
+
 */

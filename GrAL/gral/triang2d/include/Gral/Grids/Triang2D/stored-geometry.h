@@ -3,6 +3,10 @@
 
 // $LICENSE_NEC
 
+/*! \file
+
+*/
+
 #include "Gral/Grids/Triang2D/triang2d.h"
 #include "Geometry/point-traits.h"
 #include "Geometry/algebraic-primitives.h"
@@ -13,12 +17,14 @@
 
 /*! \brief Geometry wrapper class for Triang2D
 
+   \ingroup triang2dmodule 
+
    This class assumes vertex coordinates in an array
    \f$ (x_0,y_0, x_1, y_1, \ldots) \f$.
 
    It is a model of $GrAL VertexGridGeometry.
 
-   \see test-triang2d-geometry.C
+   \see \ref test-triang2d-geometry.C
    \todo It could be parameterised by scalar type of coordinates, 
     and by space dimension.
  */
@@ -38,6 +44,7 @@ private:
   double         * xy;
   bool             owned;
 public:
+  //! Empty geometry
   stored_geometry_triang2d() : g(0), xy(0), owned(false) {}
   //! initialize with value semantics (coords are owned)
   stored_geometry_triang2d(grid_type const& g_)
@@ -49,7 +56,7 @@ public:
   stored_geometry_triang2d(grid_type const& g_, double* xy_)
     : g(&g_), xy(xy_), owned(false) {}
 
-
+  //! destructor
   ~stored_geometry_triang2d() { clear();}
 
   //! change to value semantics
@@ -58,7 +65,7 @@ public:
     g = & g_;
     init_xy();
   }
-
+  //! Dimension of embedding space
   unsigned space_dimension() const { return 2;}
 private:
   void clear() { if (owned) delete [] xy; xy = 0;}
@@ -74,6 +81,7 @@ private:
   }
 
 public:
+  //! Anchor grid
   grid_type const& TheGrid() const { return *g;}
 
   class coord_type;
@@ -95,6 +103,7 @@ public:
     }
   };
 
+  //! \brief coordinate representation
   class coord_type : public array_operators<coord_type, double, 2> {
     double xy[2];
   public:
@@ -118,23 +127,27 @@ public:
     void init(double const* p)
       { xy[0] = p[0]; xy[1] = p[1]; }
   };
+  //! Representation of real numbers
   typedef double scalar_type;
 
 
-
+  //! coordinate of Vertex (read/write access)
   coord_proxy coord(Vertex const& v) 
     { return coord_proxy(xy + 2*v.handle());}
+  //! coordinate of Vertex (read access)
   coord_type  coord(Vertex const& v) const 
     { return coord_type (xy + 2*v.handle());}
 
+  //! Length of (straight) edge
   inline scalar_type length(Edge const& e) const;
 
-  scalar_type area(Facet const& f)  const { return length(f);}
+  //! \f$ d-1 \f$ dimensional volume of Facet (i.e. edge length)
+  scalar_type volume(Facet const& f)  const { return length(f);}
 
   //! Center of intertia of \c c
   coord_type center(Cell const& c) const { return (coord(c.V(0)) + coord(c.V(1)) + coord(c.V(2)))/3.0;}
 
-  //! Barycenter (average of vertices) of cell \c c
+  //! Barycenter/Centroid (average of vertices) of cell \c c
   coord_type barycenter(Cell const& c) const { return center(c);}
 
   //! solid angle of the wedge of vertex \c vc, in radians (2D) 

@@ -9,27 +9,28 @@
 #include <iostream>
 #include <stdlib.h>
 
-//----------------------------------------------------------------
-/*!
- \brief A generic facet handle defined by a (cell handle, local facet) pair.
- \ingroup elements
+/*! \defgroup facethandle Generic facet handle
 
- In the pair (c,lf)  c is a cell handle, 
- lf is an integer giving the local
- number of the facet on the cell c: lf \in [0, Cell(c).NumOfFacets()]
+   \ingroup elements
+ 
+*/
+
+/*! \brief A generic facet handle
+
+     \ingroup facethandle
+
+  A generic facet handle defined by a (cell handle, local facet) pair.
+
+ In the pair <tt>(c,lf)</tt>  \c c is a cell handle, 
+ \c lf is an integer giving the local
+ number of the facet on the cell \c c: \c lf \f$\in\f$  <tt>[0, Cell(c).NumOfFacets()) </tt>
 
  On construction, one has to take care that only one of two 
  possible handles for an interior facet is ever created.
  Else two handle denoting the same facet could compare not equal.
  This generally requires access to cell neighbors, i.e. a grid 
  with CellOnCellIterator defined.
-
- \see \ref hash<facet_handle>
-*/
-//----------------------------------------------------------------
-
-
-
+ */
 template<class CHandle>
 struct facet_handle {
   CHandle c;  // cell
@@ -41,49 +42,58 @@ struct facet_handle {
   int local_facet() const { return lf;}
 };
 
-/*! \relates facet_handle
+/*! \brief Equality test
+    \ingroup facethandle
  */
 template<class CHandle>
 inline
 bool operator== (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& rs)
    { return ((ls.c == rs.c) && (ls.lf == rs.lf)); }
 
-/*! \relates facet_handle
+/*! \ingroup facethandle
  */
 template<class CHandle>
 inline
 bool operator!= (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& rs)
    { return ! (ls == rs) }
 
-/*! \relates facet_handle
+/*! \brief Ordering test
+
+    The order defined is a total ordering, but arbitrary otherwise.
+
+    \ingroup facethandle
  */
 template<class CHandle>
 inline
 bool operator<  (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& rs)
   { return ((ls.c < rs.c)  || ((ls.c == rs.c) &&  (ls.lf < rs.lf))); }
 
-/*! \relates facet_handle
+/*! \ingroup facethandle
  */
 template<class CHandle>
 inline
 std::ostream& operator<< (std::ostream& out, facet_handle<CHandle> const& e)
  { return (out << e.c << ' ' << e.lf);}
 
-/*! \relates facet_handle
+/*! \ingroup facethandle
  */
 template<class CHandle>
 inline
 std::istream& operator>> (std::istream& in,  facet_handle<CHandle>     & e)
  { return (in >> e.c >> e.lf);}
 
-/*! \relates facet_handle
+/*! \ingroup facethandle
  */
 inline size_t hash_facet_handle(facet_handle<int> const& h)
 { return (8*h.c + h.lf);}
 
-/*! \brief Specialization of STL hash<> template.
+/*! \brief Specialization of  hash<> template.
 
-  \relates facet_handle
+   \ingroup  facet_handle
+
+   The hash template is not yet a part of the standard, 
+   and may live in different namespaces
+   for different compilers.
  */
 template<class T> class hash;
 struct hash<facet_handle<int> > {

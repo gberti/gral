@@ -1,3 +1,7 @@
+
+// $LICENSE_NEC
+
+
 /*! \file
    
      Test for extrusion_view

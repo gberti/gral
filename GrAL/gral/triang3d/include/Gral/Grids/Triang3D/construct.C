@@ -9,6 +9,9 @@
 #include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"
 
+/*! \file
+ */
+
 //----------------------------------------------------------------
 //
 //  Copy-construct a Triang3D grid from a right-hand side (Connect)

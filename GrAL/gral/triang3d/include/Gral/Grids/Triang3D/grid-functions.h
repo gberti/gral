@@ -10,9 +10,20 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
 
+/*! \file
+ */
 
 
-template<class T>
+/*! \defgroup triang3dgf Total grid functions for Triang3D
+    \ingroup triang3dmodule
+ 
+    The specializations of grid_function in this group are
+    models of $GrAL TotalGridFunction.
+ */
+
+/*! \brief Specialization of the grid_function primary template for Triang3D::Vertex
+    \ingroup triang3dgf
+ */template<class T>
 class grid_function<Triang3D_Vertex, T> 
   : public grid_function_vector<Triang3D_Vertex, T> 
 {
@@ -26,6 +37,9 @@ public:
 };
 
 
+/*! \brief Specialization of the grid_function primary template for Triang3D::Cell
+    \ingroup triang3dgf
+ */
 template<class T>
 class grid_function<Triang3D_Cell, T> 
   : public grid_function_vector<Triang3D_Cell, T> 
@@ -41,6 +55,12 @@ public:
 
 
 
+/*! \brief Specialization of the grid_function primary template for Triang3D::Edge
+
+    \ingroup triang3dgf
+
+    \note This class uses a hash-based implementation.
+ */
 template<class T>
 class grid_function<Triang3D::Edge, T>
   : public grid_function_hash<Triang3D::Edge,T>
@@ -55,6 +75,12 @@ class grid_function<Triang3D::Edge, T>
 
 };
 
+/*! \brief Specialization of the grid_function primary template for Triang3D::Facet
+
+    \ingroup triang3dgf
+
+    \note This class uses a hash-based implementation.
+ */
 template<class T>
 class grid_function<Triang3D::Facet, T>
   : public grid_function_hash<Triang3D::Facet,T>

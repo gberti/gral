@@ -3,10 +3,30 @@
 
 // $LICENSE
 
+/*! \file  
+
+    Test of facet-on-cell iterators (models of $GrAL FacetOnCellIterator).
+*/
+
 #include <iostream>
 
+/*! \brief Test a facet-on-cell iterator
+ 
+    Test a model of $GrAL FacetOnCellIterator
+
+    \ingroup incidenceiteratortests
+ */
 template<class G>
 bool test_facet_on_cell_iterator(G const& g, std::ostream & out);
+
+/*! \brief Test a facet-on-cell iterator
+ 
+    Test a model of $GrAL FacetOnCellIterator
+
+    \ingroup incidenceiteratortests
+ */
+template<class G, class GT>
+bool test_facet_on_cell_iterator(G const& g, std::ostream & out, GT);
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS

@@ -10,7 +10,18 @@
 #include "Utility/ref-ptr.h"
 #include <vector>
 
+/*! \file
 
+*/
+
+
+/*! \brief Namespace for classes related to ComplexND, 
+     a n-dimensional unstructured grid.
+
+    Every class and function related to ComplexND is located in this namespace.
+
+    \ingroup complexndstuff    
+*/
 namespace complexnd {
 
   //----------------------- forward declarations -------------------------
@@ -350,6 +361,7 @@ namespace complexnd {
   template<int D>
   struct dimension_mixin_grid {
     enum { dim = D };
+    //! \brief Grid dimension
     unsigned dimension() const { return D;} 
   };
 
@@ -375,21 +387,36 @@ namespace complexnd {
   template<int CK>
   struct c2d<ANY,CK> { enum { value = ANY};};
 
-  
+  /*! \brief Helper class to initialize ComplexND<0>
+    \ingroup complexndstuff
+  */  
   class pointcloud {
     unsigned nnodes;
   public:
+    /*! \brief Construction with \c n  the number of vertices
+      \pre 
+         \f$ n \ge 0 \f$
+     */
     explicit pointcloud(unsigned n = 0) : nnodes(n) {}
 
+    /*! \invariant <tt> n == pointcloud(n).NumOfVertices() </tt>
+     */
     unsigned NumOfVertices() const { return nnodes;}
   };
 
+  /*! \brief Helper class to initialize ComplexND<1>
+     
+      \ingroup complexndstuff
+  */  
   class polygon {
     unsigned nnodes;
   public:
+    //! \brief Construction with n vertices
     explicit polygon(unsigned n = 0) : nnodes(n) {}
 
+    //!
     unsigned NumOfVertices() const { return nnodes;}
+    //!
     unsigned NumOfEdges()    const { return nnodes;}
   };
 
@@ -406,9 +433,10 @@ namespace complexnd {
       
       \author Guntram Berti
 
-       ComplexND<N> is a N-dimensional grid.
-       ComplexND<ANY> is a grid of construction-time determined dimension.
-
+       <tt> ComplexND<N> </tt>   is a N-dimensional grid (dimension fixed at compile time). <br>
+       <tt> ComplexND<ANY> </tt> is a grid with runtime determined dimension.
+   
+      \ingroup complexndstuff
    */
   template<int D>
   class ComplexND : public grid_types_ComplexND<D>, public dimension_mixin_grid<D> {
@@ -452,47 +480,70 @@ namespace complexnd {
     friend void ConstructGrid0(ComplexND<D>& g, G_SRC const& g_src, PHI& phi);
     */
   public:
-    // for D!=ANY => init incidences
+    //@{ 
+    /*! @name Constructors
+     */
+      /*! \brief for <tt> D != ANY</tt>  
+        \internal init incidences
+    */
     ComplexND() : incidences(dimension()+1) {}
-    // allowed only for D==ANY, else compile-time error
-    // made compilable here to allow for explicit instantiation for testing
+  
+    /*! \brief Only for <tt> D==ANY </tt>, else compile-time error
+       \internal
+        made compilable here to allow for explicit instantiation for testing
+    */
     explicit ComplexND(unsigned dim) : incidences(dim+1) { REQUIRE_ALWAYS(dim==dimension(), "",1);}
-   
-   
-    // only for 0D
+      
+    //! only for <tt>D==0</tt>
     explicit ComplexND(pointcloud p);
 
-    // only for 1D
+    //! only for  <tt>D==1</tt>
     explicit ComplexND(polygon pn);
+    //! Only for  <tt>D==1</tt>
     ComplexND(unsigned a[][2], unsigned N);
-    
+    //@}
+
     element_incidences const& Incidences(typename gt::AnyElement e) const { return incidences[e.dimension()][e.handle().h()];}
     template<int K, int CK>
     element_incidences const& Incidences(element_t<self,K,CK>    e) const { return incidences[e.dimension()][e.handle().h()];}
     element_incidences const& Incidences(unsigned d, unsigned h) const { return incidences[d][h];}
 
+    /*@{*/ 
+    /*! \name Dimension-independent sequence iteration (compiletime defined dimension) 
+     \brief \c K is the dimension, \c CK is the codimension of the element. 
+      \pre 
+          if <tt>D!=ANY</tt> we must have  <tt> K+CK==D </tt>
+    */
     template<int K, int CK> // = dim-K>
-    element_iterator_t<self,K,CK> FirstElement() const;
+    element_iterator_t<self,K,CK> FirstElement() const; 
     template<int K, int CK> // = dim-K>
     element_iterator_t<self,K,CK> EndElement() const;
+    /*@}*/
 
+    //@{ 
+    //! \name Dimension-independent sequence iteration (runtime defined dimension)
+    //! \brief \c d is the dimension of the element.
     AnyElementIterator FirstElement(unsigned dd) const;
-    typename gt::AnyElementIterator EndElement  (unsigned dd) const;
+    AnyElementIterator EndElement  (unsigned dd) const;
+    unsigned NumOfElements(unsigned k) const { return incidences[k].size();}
+    //@}
 
-
+    //@{ 
+    //! \name Dimension-dependent sequence iteration
+    //! \brief Classical sequence iterator interface
     VertexIterator FirstVertex() const;
     EdgeIterator   FirstEdge()   const;
     FaceIterator   FirstFace()   const;
     FacetIterator  FirstFacet()  const;
     CellIterator   FirstCell()   const;
 
-    unsigned NumOfElements(unsigned k) const { return incidences[k].size();}
 
     unsigned NumOfVertices() const { return NumOfElements(0);}
     unsigned NumOfEdges()    const { return NumOfElements(1);}
     unsigned NumOfFaces()    const { return NumOfElements(2);}
     unsigned NumOfFacets()   const { return NumOfElements(dimension()-1);}
     unsigned NumOfCells()    const { return NumOfElements(dimension());}
+    //@}
 
     // must make them public because friend definition does not work
     // private:
@@ -524,12 +575,14 @@ namespace complexnd {
     { REQUIRE_ALWAYS(NumOfVertices() == 0, "", 1);  incidences[0].resize(nv);}
 
   public:
+    //@{ 
+    //! @name Archetype handling
+    //! \brief Access to archetypes
     archetype_type      & Archetype(archetype_handle a)       { ca(a); return archetypes[a]; }
     archetype_type const& Archetype(archetype_handle a) const { ca(a); return archetypes[a]; }
 
     bool valid_archetype(archetype_handle a) const  { return ((0 <= a) && (a < archetypes.size())); }
-    void ca(archetype_handle a) const { REQUIRE(valid_archetype(a), "a = " << a,1); }
-  public:
+
     inline
     archetype_type const& ArchetypeOf(Cell const&  c) const;
     archetype_type const& ArchetypeOf(cell_handle  c) const { return archetypes[cell_archetype[c]];}
@@ -537,7 +590,9 @@ namespace complexnd {
     
     archetype_iterator BeginArchetype() const { return archetypes.begin();}
     archetype_iterator   EndArchetype() const { return archetypes.end  ();}
-
+    //@} 
+  private:
+    void ca(archetype_handle a) const { REQUIRE(valid_archetype(a), "a = " << a,1); }
     
   }; // class ComplexND<D>
 
@@ -1231,6 +1286,10 @@ namespace complexnd {
 
 //-----------------------------  grid types  -----------------------------  
 
+/*! \brief Specialization of grid_types primary template
+
+    \ingroup complexndstuff
+ */
 template<int D>
 struct grid_types<complexnd::ComplexND<D> > 
   : public grid_types_base<complexnd::grid_types_ComplexND<D> > 
@@ -1414,7 +1473,16 @@ struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>,
 
 //------------------------------- total grid functions --------------------------------
 
+/*! \defgroup complexndgf Total grid functions for ComplexND
+    \ingroup complexndstuff
+ */
 
+
+/*! \brief Specialization of the grid_function primary template for 
+           \c complexnd::ComplexND<D> k-dimensional element type
+
+    \ingroup complexndgf
+ */
 template<int D, int K, class T>
 class grid_function<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T>
   : public grid_function_vector<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T> 

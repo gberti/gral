@@ -9,8 +9,10 @@
 
 
 /*! \brief View a cell as spatial volume
- 
-    \test test-cell-as-volume.C
+   \ingroup  geometricgridtools
+
+   \see \ref geometricgridtools module
+   \see Tested in \ref test-cell-as-volume.C
 */
 template<class GEOM, class CELL, class GT = grid_types<typename CELL::grid_type> >
 class cell_as_volume : public geometric_shapes::geom_base

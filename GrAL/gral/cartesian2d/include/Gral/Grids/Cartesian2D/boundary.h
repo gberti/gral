@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Gral/Base/boundary.h"
 #include "Gral/Base/grid-functors.h"
 
@@ -10,8 +13,16 @@
 
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
-/*! \brief Specialization of the BoundaryRange template for RegGrid2D
+/*! \defgroup cartesian2dboundary Boundary Range for Cartesian2D
+     \ingroup cartesian2dmodule
+*/
 
+/*! \brief Specialization of the BoundaryRange primary template for RegGrid2D
+    \ingroup cartesian2dboundary
+   
+    \todo This uses generic boundary iteration. It could  make do with \f$ O(1) \f$
+     memory when using a specialized implementation.
+    \todo \c NumOfVertices() etc. is missing
  */
 template<>
 class BoundaryRange<cartesian2d::RegGrid2D> {
@@ -55,6 +66,11 @@ public:
 
 };
 
+
+/*! \brief Specialization of the grid_types primary template for BoundaryRange<RegGrid2D>
+  
+    \ingroup cartesian2dboundary
+*/
 template<>
 struct grid_types<BoundaryRange<cartesian2d::RegGrid2D> > 
 {

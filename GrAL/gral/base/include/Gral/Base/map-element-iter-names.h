@@ -15,6 +15,7 @@
     - \c size() to \c NumOfVertices()
 
     \ingroup elements
+    \see \ref elements module
 
     \see Paper <A HREF="http://www.math.tu-cottbus.de/INSTITUT/lsnmwr/papers/tmpw00">  
          Generic Components for Grid Data Structures and Algorithms with C++ </A> 
@@ -53,7 +54,7 @@ struct map_element_iter_name_2
 {};
 
 
-//! Specialization for vertex types
+// Specialization for vertex types
 template<class EIt, class ER>
 struct map_element_iter_name<EIt, ER, vertex_type_tag>
 { 
@@ -66,7 +67,7 @@ public:
   unsigned NumOfVertices()     const { return asER().size();}
 };
 
-//! Specialization for edge types
+// Specialization for edge types
 template<class EIt, class ER>
 struct map_element_iter_name<EIt, ER, edge_type_tag>
 { 
@@ -79,7 +80,7 @@ public:
   unsigned NumOfEdges()    const { return asER().size(); }
 };
 
-//! Specialization for facet types
+// Specialization for facet types
 template<class EIt, class ER>
 struct map_element_iter_name<EIt, ER, facet_type_tag>
 { 
@@ -92,7 +93,8 @@ public:
   unsigned NumOfFacets()     const {  return asER().size();}
 };
 
-/*! \brief Specialization for 2D edge
+/*! \internal
+    \brief Specialization for 2D edge
  
     Choose edge AND facet in 2D 
     if types Edge and Facet coincide.

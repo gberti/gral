@@ -14,13 +14,15 @@
 /*! \defgroup disjoint_union_view View for handling formal unions of grids
    
     \ingroup gridviews
-    \see test-disjoint-union.C
 
     Components of interest to a user are:
     - disjoint_union_view::grid_view
     - disjoint_union_view::geom_view
 
     The templates grid_types and grid_function are specialized.
+
+    \see \ref gridviews module
+    \see Test in \ref test-disjoint-union.C
  */
 
 

@@ -50,9 +50,13 @@ namespace polygon1d  {
     typedef CellOnVertexIterator       CellOnFacetIterator;
   };
 
-  /*! A 1D grid class
-   
-     An object of type polygon represents a simple polygon.
+  /*! \brief A 1D grid class
+      
+      \ingroup grids
+      \see \ref grids module 
+       An object of type polygon represents a simple polygon.
+
+      \see \ref test-polygon.C
 
   */
   class polygon : public grid_types_p1d, public archetype_0D::grid_mixin<polygon, grid_types_p1d> {

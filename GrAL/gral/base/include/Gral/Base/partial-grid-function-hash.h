@@ -11,24 +11,24 @@
 #include "Gral/Base/grid-function-hash.h"
 #include "Gral/Base/map-element-iter-names.h"
 
-//----------------------------------------------------------------
-// 
+
 /*!  \class partial_grid_function
-   \brief Implements a partial grid_function using hash tables.
+   \brief Implements a partial grid function using hash tables.
    \ingroup gridfunctions
+   \see \ref gridfunctions module
+  
+   This class template supplies a generic implementation
+   of the $GrAL PartialGridFunction concept 
+   - no partial specializations to the element type \c E are required.
 
- This class template supplies a generic implementation
- for partial grid functions - no partial specializations
- to the element type E are required.
 
- This template assumes that 
-  \c element_traits<E>::hasher_type
-  is a hash function for
-  \c element_traits<E>::element_handle.
+   \templateparams
+   \c element_traits<E>::hasher_type
+   is a hash function for
+   \c element_traits<E>::element_handle.
 
 
 */
-//----------------------------------------------------------------
 
 
 /* Generic element iterator for partial grid functions 

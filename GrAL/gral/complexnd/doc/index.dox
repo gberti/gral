@@ -1,0 +1,14 @@
+/*! \mainpage Index of the GrAL ComplexND Grid Module
+
+    <tt>complexnd::ComplexND<N></tt> implemenents an N-dimensional unstructured grid.
+    The dimension can either be set at compile time, or at runtime using <tt> N=complexnd::ANY</tt>.
+
+    Browse the documentation starting at \ref complexndstuff module.
+    A convenience header including all functionality is found in 
+    <tt> Gral/Grids/ComplexND/all.h</tt>.
+*/
+
+
+/*! \defgroup complexndstuff Components related to ComplexND
+*/
+

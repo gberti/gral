@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include "Gral/Geometries/geometric-types-nd.h"
 
 #include "Gral/Grids/Cartesian2D/all.h"

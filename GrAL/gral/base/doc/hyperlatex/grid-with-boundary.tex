@@ -35,24 +35,22 @@ of \conceptlink{Grid Cell}{GridCell} and of
 No new ones, but the requirements on \code{G::Cell}
 are strengthened.
 
-\begin{tabular}{ccc} \\ 
-  \hline
+\begin{tabular}{ccc} 
+  \T \\   \hline
   {\bf  Name  } & {\bf  Expression  } & {\bf  Description  } \\ 
   \hline
   cell type  & \code{G::Cell} &
   the cell element type of \code{G}
   \par model of \conceptlink{Grid Cell}{GridCell}
   and of \conceptlink{Facet Grid Range}{VertexGridRange} 
-  \\
-  \hline
-  \\
+  \T \\  \hline  \\
 \end{tabular}
 
 \conceptsubsection{Valid Expressions}
 
 \noindent
-\begin{tabular}{llll} \\
-  \hline
+\begin{tabular}{llll} 
+  \T \\  \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
   \hline
   inside test &
@@ -75,16 +73,14 @@ are strengthened.
   \code{g.outer\_cell\_handle()} &
   ~ &
   \type{G::cell\_handle}
-  \\
-  \hline
-  \\
+  \T \\  \hline  \\
 \end{tabular}
 
 \conceptsubsection{Expression semantics}
 
 \noindent
-\begin{tabularx}{14cm}{RRRRR} \\
-  \hline
+\begin{tabularx}{14cm}{RRRRR} 
+  \T \\  \hline
   \bf  Name       &
   \bf  Expression &
   \bf  Precondition&
@@ -130,23 +126,21 @@ are strengthened.
    ~ &
   return a handle denoting an `outside' cell &
   \code{g.IsInside(h)} is false 
-  \\
-  \hline
+  \T \\  \hline
 \end{tabularx}
 
 \conceptsubsection{Invariants}
 
 \noindent
 \begin{tabularx}{14cm}{RR}
-  \\
-  \hline
+  \T \\  \hline
   & \code{g.IsInside(g.outer\_cell\_handle()) == false}\\
   & \code{g.IsInside(c) == g.IsInside(c.handle())} \\
   & \code{g.IsOnBoundary(fc) == ! g.IsInside(fc.OtherCell())}\noteref{note-gwb-othercell} \\
   & \code{g.IsOnBoundary(f) == (!g.IsInside(f.TheCell()) || !g.IsInside(f.OtherCell()))} \\
   & \code{g.IsInside()} evaluates to \code{true} for all
-  cells in the range [\code{g.FirstCell()},\code{g.EndCell()}).\\
-  \hline
+  cells in the range [\code{g.FirstCell()},\code{g.EndCell()}).
+  \T \\  \hline
 \end{tabularx}
 
 \conceptsubsection{Refinements}

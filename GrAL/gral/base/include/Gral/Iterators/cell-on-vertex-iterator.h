@@ -13,8 +13,10 @@
 #include <map>
 
 /*! \brief A generic CellOnVertexIterator
+    \ingroup iterators
+    \see \ref iterators module
 
-   \see test-cell-on-vertex-iterator.C
+   \see Test in \ref test-cell-on-vertex-iterator.C
 */
 
 template<class G, class GT = grid_types<G> >

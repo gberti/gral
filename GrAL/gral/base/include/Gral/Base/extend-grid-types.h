@@ -54,6 +54,8 @@ DEFINE_OVERRIDE(CellOnCellIterator);
 
 
 /*! \brief factory for type-wise changes to a grid_types<> specialization.
+    
+   \ingroup gridtypesreflection
 
    Usage:
    \code
@@ -67,6 +69,8 @@ DEFINE_OVERRIDE(CellOnCellIterator);
    // call some component needing  VertexOnEdgeIterator
    someAlgoNeedingVertexOnEdgeIter<mygt>(aGrid, ...);
    \endcode
+
+   \see \ref text-extend-grid-types.C
  */
 template<class ORIGGT, class CHANGE> 
 struct xgt : public ORIGGT, public CHANGE {};

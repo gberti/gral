@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 /*! \brief Wrapper for Metis graph partitioning routines
     \ingroup metispartitioninginternal
 

@@ -13,6 +13,11 @@
 #include "Gral/Grids/Complex2D/complex2d.h"
 #include "Gral/Grids/Complex2D/partial-grid-functions.h"
 
+/*! \defgroup complex2dboundary Boundary range for Complex2D
+    \ingroup complex2dmodule
+
+    \todo Test
+*/
 
 class boundary_range_iterator_complex2d {
 
@@ -124,6 +129,12 @@ public:
   edge_handle handle() const { return base.curr_edge().handle();}
 };
 
+/*! \brief Specialization of the BoundaryRange template for Complex2D.
+
+   Model of $GrAL VertexRange, $GrAL EdgeRange, $GrAL GridRange.
+
+   \ingroup complex2dboundary
+*/
 template<>
 class BoundaryRange<Complex2D> {
 private:
@@ -150,6 +161,10 @@ public:
 
 };
 
+/*! \brief Specialization of \c grid_types for <tt> BoundaryRange <Complex2D> </tt>
+
+    \ingroup complex2dboundary
+ */
 template<>
 struct grid_types<BoundaryRange<Complex2D> > 
 {

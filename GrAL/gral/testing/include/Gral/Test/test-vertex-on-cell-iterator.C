@@ -6,8 +6,15 @@
 #include "Gral/Test/test-vertex-on-cell-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+template<class G, class GT>
+bool test_vertex_on_cell_iterator(G const& g, std::ostream & out, GT);
+
 template<class G>
 bool test_vertex_on_cell_iterator(G const& g, std::ostream & out)
+{ return  test_vertex_on_cell_iterator(g, out, grid_types<G>()); }
+
+template<class G, class GT>
+bool test_vertex_on_cell_iterator(G const& g, std::ostream & out, GT)
 {
   typedef grid_types<G> gt;
   typedef typename gt::CellIterator         CellIterator;

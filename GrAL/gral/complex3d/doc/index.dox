@@ -12,18 +12,16 @@
    iterators which maintain an internal table of already visited elements.
 
    For each cell, an index to a 2D archetype of the cell's surface
-   grid is stored. This (still experimental) archetype technique
+   grid is stored. archetype technique
    accounts for a economic storage of grids with different cell types.
    It is also the key for implementing generic grid copy operations.
+   See also the $GrAL ArchetypedGrid concept.
 
-   The main header files a user may want to include are:
-   (under the path Gral/Grids/Complex3D)
-   -  complex3d.h for the grid and iterator definitions
-   -  grid-functions.h for total grid functions
-     (see $GrAL TotalGridFunction concept)
-   -  partial-grid-functions.h for partial grid functions
-     (see $GrAL PartialGridFunction concept)
-   - construct.h for generic copy operations
-   - all.h for getting all of the above at once
+   Start browsing in the \ref complex3dmodule module. 
+   A convenience header including all functionality is <tt>Gral/Grids/Complex3D/all.h</tt>.
+*/
 
+/*! \defgroup complex3dmodule Components for Complex3D
+   
+    This is the main module for Complex3D.
 */

@@ -8,15 +8,24 @@
 #include "Gral/Grids/Triang3D/triang3d.h"
 
 
-/*! copy-construct a Triang3D <dest> from another 3D grid <source_grid>
-   supporting 
-    - grid_types<>, 
-    - CellIterator, VertexIterator, VertexOnCellIterator,
-    - vertex_handle
-  This template is defined in generic/construct.C
+
+/*! \file 
+ */
+
+/*! \defgroup triang3dcopy Generic copy operations for Triang3D
+   
+    \ingroup triang3dmodule
+
+    Overloads of the templates in \ref Gral/Base/construct-grid.h
+    \see $GrALConstructGrid
+    \see GrAL base module \ref copyoperations
 */
 
 
+/*! \brief Copy any grid \c srcG to \c  Triang3D, including geometry
+
+    \ingroup triang3dcopy
+ */
 template<class Geom, class G2, class Geom2>
 extern  void 
 ConstructGrid(Triang3D   & destG,
@@ -24,6 +33,11 @@ ConstructGrid(Triang3D   & destG,
 	      G2    const& srcG, 
 	      Geom2 const& srcGeom);
 
+
+/*! \brief Copy any grid \c srcG to \c  Triang3D, including geometry and vertex mapping
+
+    \ingroup triang3dcopy
+ */
 template<class Geom, class G2, class Geom2, class VertexMap>
 extern void 
 ConstructGridV(Triang3D      & destG,
@@ -34,6 +48,10 @@ ConstructGridV(Triang3D      & destG,
 // VertexCorr  maps G2::vertex_handles to  G1::vertex_handles
 // for transfer of grid-related information, e.g. grid-functions.
 
+/*! \brief Copy any grid \c srcG to \c  Triang3D, including geometry and vertex/cell mapping
+
+    \ingroup triang3dcopy
+ */
 template<class Geom, class G2, class Geom2, class VertexMap, class CellMap>
 extern void 
 ConstructGridVC(Triang3D      & destG, 
@@ -45,6 +63,10 @@ ConstructGridVC(Triang3D      & destG,
 // CellCorr  maps G2::cell_handles to  G1::vertex_handles
 // for transfer of grid-related information, e.g. grid-functions.
 
+/*! \brief Copy any grid \c srcG to \c  Triang3D (without geometry, with vertex and cell mapping)
+
+    \ingroup triang3dcopy
+ */
 template<class G2, class VertexMap, class CellMap>
 extern void 
 ConstructGrid0(Triang3D      & destG, 
@@ -52,6 +74,10 @@ ConstructGrid0(Triang3D      & destG,
 	       VertexMap     & VCorrG2_G1,
 	       CellMap       & CCorrG2_G1); 
 
+/*! \brief Copy any grid \c srcG to \c  Triang3D (without geometry and mapping)
+
+    \ingroup triang3dcopy
+ */
 template<class G2, class VertexMap, class CellMap>
 extern void 
 ConstructGrid0(Triang3D      & destG, 

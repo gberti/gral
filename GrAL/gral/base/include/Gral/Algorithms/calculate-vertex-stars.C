@@ -3,6 +3,9 @@
 
 // $LICENSE_NEC
 
+/*! \file
+ */
+
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Algorithms/calculate-vertex-stars.h"
 

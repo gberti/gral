@@ -4,6 +4,9 @@
 
 // $LICENSE
 
+/*! \file
+*/
+
 #include <vector>   // STL
 
 // Gral Base
@@ -14,9 +17,11 @@
 // Utility
 #include "Utility/pre-post-conditions.h"
 
-//----------------------------------------------------------------
+
 /*! \defgroup partitioningds Data structures for grid partitionings
- */
+
+    \ingroup partitioningmodule
+*/
 
 
 /*! \brief predicate object for membership in partition p

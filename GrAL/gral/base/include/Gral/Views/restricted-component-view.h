@@ -10,6 +10,7 @@
 
 
 /*! Provide a view on a connected grid part defined by a predicate
+    \ingroup gridviews
 
     A typical use would be to restrict analysis to a small patch
     of a given grid in the neighborhood of some cell, bounded
@@ -23,6 +24,9 @@
  
    \todo implement Edge/Facet if supported by \c GRID
    \todo reuse archetypes from GRID
+   \see \ref gridviews module
+   \see Test in \ref test-restricted-component-view.C
+
 */
 
 namespace restricted_grid_component_view { 
@@ -51,8 +55,11 @@ namespace restricted_grid_component_view {
     typedef typename GT::dimension_tag dimension_tag;
   };
 
-  /*! The grid view class
-  
+  /*! \brief The restricted grid component view class
+
+    This class is a model of $GrAL Cell-VertexInputGridRange.
+    Grid functions are defined for the vertex type.
+
     \templateparams
     - GRID:
       - Vertex/VertexIterator

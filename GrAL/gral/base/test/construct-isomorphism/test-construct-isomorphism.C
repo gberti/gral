@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include "Gral/Algorithms/construct-isomorphism.h"
 #include "Gral/Base/partial-grid-morphism.h"
 

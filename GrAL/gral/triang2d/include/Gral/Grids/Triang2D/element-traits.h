@@ -1,14 +1,10 @@
 #ifndef GRAL_GB_GRIDS_TRIANG2D_ELEMENT_TRAITS_H
 #define GRAL_GB_GRIDS_TRIANG2D_ELEMENT_TRAITS_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1999
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+// $LICENSE
 
+/*! \file
+ */
 
 #include "Gral/Grids/Triang2D/triang2d.h"
 

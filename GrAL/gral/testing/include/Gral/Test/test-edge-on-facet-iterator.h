@@ -3,10 +3,14 @@
 
 // $LICENSE
 
+/*! \file  
+
+    Test of edge-on-facet iterators (models of $GrAL EdgeOnFacetIterator).
+
+*/
+
 #include <iostream>
 
-//template<class G>
-//bool test_edge_on_facet_iterator(G const& g, std::ostream & out);
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
@@ -14,8 +18,25 @@
 
 #else
 
+
+/*! \brief Test a edge-on-facet iterator
+ 
+    Test a model of $GrAL EdgeOnFacetIterator
+
+    \ingroup incidenceiteratortests
+ */
 template<class G>
 extern bool test_edge_on_facet_iterator(G const& g, std::ostream & out);
+
+
+/*! \brief Test a edge-on-facet iterator
+ 
+    Test a model of $GrAL EdgeOnFacetIterator
+
+    \ingroup incidenceiteratortests
+ */
+template<class G, class GT>
+extern bool test_edge_on_facet_iterator(G const& g, std::ostream & out, GT);
 
 #endif
 

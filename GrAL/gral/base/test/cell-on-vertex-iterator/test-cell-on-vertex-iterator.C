@@ -1,7 +1,9 @@
 
 // $LICENSE_NEC
 
-/*! \file Test cases for cell_on_vertex_iterator<>
+/*! \file 
+
+   Test cases for cell_on_vertex_iterator<>
 
 */
 

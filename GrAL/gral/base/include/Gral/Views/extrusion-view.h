@@ -19,11 +19,18 @@
 #include <vector>
 
 /*! \brief Extrusion of a 2D triangular grid
+    \ingroup gridviews
 
-    \see test-extrusion-view.C
+    \see \ref gridviews module
+    \see Test in \ref test-extrusion-view.C
 */
 namespace extrusion_view {
 
+  /*! \brief Extrusion grid type
+
+      The grid type is a model of $GrAL Cell-VertexInputGridRange.
+      Grid functions are defined for vertex and cell types.
+   */
   template<class GRID2D>
   class grid;
   template<class GRID2D>
@@ -37,6 +44,9 @@ namespace extrusion_view {
   template<class GRID2D>
   class vertex_on_cell_iterator_t;
 
+  /*! \brief Extrusion geometry type
+
+   */
   template<class GEOM2, class F>
   class geometry;
 

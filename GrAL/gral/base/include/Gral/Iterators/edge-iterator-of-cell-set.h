@@ -17,8 +17,8 @@
      - \c CellIt::grid_type: Has \c Edge and \c Cell types.
      - \c CellIt::Cell: Model of $GrAL EdgeRange
 
-    \test in  test-edge-iterator-of-cell-set.C  
- 
+    \see Test in  \ref test-edge-iterator-of-cell-set.C  
+    \see \ref iterators module  
     \see vertex_iterator_of_cell_set 
     \see facet_iterator_of_cell_set
 */

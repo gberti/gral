@@ -1,0 +1,171 @@
+\xname{ArchetypedGrid}
+\begin{Label}{ArchetypedGrid}
+ \conceptsection{ArchetypedGrid Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+An \concept{ArchetypedGrid} is a grid which associates
+an archetype with each cell. 
+An archetype is a combinatorial model of a cell,
+or, more precisely, of the boundary of a cell. 
+Thus, the archetype $A$ of a cell $C$ of dimension $d$ is a grid of
+dimension $d-1$. The cells of $A$ correspond to the facets of $C$.
+
+The rationale for having archetypes stems from the fact that in general, 
+it is not enough to know the vertices of a cell to determine its topology.
+We must also know how the vertices form the facets of the cell.
+In general, the archetype will again be a model of \concept{ArchetypedGrid},
+so that we can apply the concept recursively.
+
+For an example of how to use archetypes, consider the problem of copying grids
+from one representation (\emph{source}) into a different one (\emph{target}). 
+Consider the case of quadrilateral cells, 
+where the vertices of a cell are ordered in a binary way in the source representation 
+(for example, row-major numbering in a Cartesian grid), 
+and cyclically in the target representation.
+If we don't care about this different numbering, twisted cells will result.
+In order to avoid this, we must somehow know about the different orderings.
+We can of course implement ad hoc copy procedures for each pair of grid representations,
+but this is against the ``generic spirit''. 
+
+  \begin{figure}[h]
+     \begin{center}
+       \begin{Label}{vertex-ordering}
+       \T\includegraphics{bilder/vertex-ordering}
+       \W\htmlimage[ALT="Incompatible vertex-ordering may result in self-intersecting cells"]{%
+          \img{vertex-ordering}}
+        \caption{A binary ordering (left), an incompatible cyclic ordering (middle), 
+                 and the effect of direct copying (right)}
+        \end{Label}
+     \end{center}
+   \end{figure}
+
+A better way is to make this ordering explicit and amenable to algorithmic treatment.
+This is what archetypes are for.
+Before starting the actual copying of the grid, 
+we try to match the archetypes of the source grid to that of the target grid
+by calculating isomorphisms between source and target archetypes.
+These isomorphisms will define a permutation of the vertex ordering of the source cells,
+such that an isomorphic copy of the source grid results.
+
+
+\conceptsubsection{Refinement of}
+\conceptlink{Grid}{Grid}
+\\
+\conceptlink{Cell-Vertex Input Grid Range}{Cell-VertexInputGridRange}
+
+
+\conceptsubsection{Notation}
+\type{G} is a type which is a model of \concept{ArchetypedGrid}\\
+\variable{g} is an object of type \type{G}\\
+\variable{A} is an object of type \type{G::archetype\_type} \\
+\variable{a} is an object of type \type{G::archetype\_handle}\\
+\variable{ai} is an object of type \type{G::archetype\_iterator}\\
+\variable{C} is an object of type \type{G::Cell}
+\variable{c} is an object of type \type{G::cell_handle}
+
+\conceptsubsection{Definitions}
+
+\conceptsubsection{Associated types}
+
+\begin{tabularx}{14cm}{RRR} 
+  \T \\   \hline
+  {\bf  Name  } & {\bf  Expression  } & {\bf  Description  } \\ 
+  \hline
+  archetype type  & \code{G::archetype_type} &
+  The type of cell archetypes, 
+  \par model of \conceptlink{Grid}{Grid}
+  and of \conceptlink{Cell-Vertex Input Grid Range}{Cell-VertexInputGridRange}
+  of dimension \code{G::dimension()-1}
+  \\
+  \hline
+  archetype handle & \code{G::archetype_handle} & unique handle for an archetype 
+  within the grid \code{G}
+  \\
+  \hline
+  archetype iterator & \code{G::archetype_iterator} & iterator over all archetypes of a grid 
+  \T \\   
+\end{tabularx}
+
+\conceptsubsection{Valid Expressions}
+
+\noindent
+\begin{tabular}{llll} 
+  \T \\  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
+  \T \hline \\
+  Archetype association &
+  \code{g.Archetypeof(C)} &
+   ~ & 
+  \type{archetype\_type const\&} \\
+  \T \hline \\
+  Archetype association &
+  \code{g.archetype\_of(c)} &
+   ~ & 
+  \type{archetype\_handle} \\
+  \T \hline  \\
+  Archetype iteration start&
+  \code{g.BeginArchetype()} &
+   ~ & 
+  \type{archetype\_iterator} \\
+  \T \hline \\
+  Archetype iteration past-the-end &
+  \code{g.EndArchetype()} &
+   ~ & 
+  \type{archetype\_iterator} \\
+  \T \hline \\
+  Archetype count &
+  \code{g.NumOfArchetypes()} &
+   ~ & 
+  \type{unsigned} \\
+  \T \hline \\
+  Handle to archetype &
+  \code{g.Archetype(a)} &
+   ~ & 
+  \type{archetype\_type const\&} \\
+  \T \hline  \\
+  iterator to handle &
+  \code{g.handle(ai)} &
+   ~ & 
+  \type{archetype\_handle} 
+  \T \\  \hline  \\
+\end{tabular}
+
+\conceptsubsection{Expression semantics}
+
+\noindent
+\begin{tabularx}{14cm}{RRRRR} 
+  \T \\ \hline
+  \bf  Name       &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf   Semantics &
+  \bf   Postcondition \\
+  \hline
+  \T \\  \hline  \\
+\end{tabularx}
+
+\conceptsubsection{Invariants}
+
+\noindent
+\begin{tabularx}{14cm}{RR}
+  \T \\  \hline
+   & \code{\&(g.Archetype(archetype\_of(C))) == \&(g.ArchetypeOf(C))} \\ 
+   & \code{std::distance(g.BeginArchetype(), g.EndArchetype()) == g.NumOfArchetypes()} \\
+   & \code{ \&(*ai) == \&(g.Archetype(g.handle(ai)))} 
+  \T \\ \hline
+\end{tabularx}
+
+\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+\sectionlink{\type{Complex2D}}{Complex2D}   
+
+\conceptsubsection{Notes}
+\begin{enumerate}
+%\item
+\end{enumerate}
+
+\conceptsubsection{See also}
+
+

@@ -4,8 +4,12 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Grids/Partitioning/remove-partitioning-orphanes.h"
 #include "Grids/Partitioning/partitioning.h"
+
 
 template<class GRID>
 void

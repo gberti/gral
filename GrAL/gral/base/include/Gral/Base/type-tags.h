@@ -7,9 +7,8 @@
 
 
 //----------------------------------------------------------------
-/*!
-  \brief workaround for missing explicit
-  specialization of function template arguments.
+/*!  \brief workaround for missing explicit
+     specialization of function template arguments.
 
   This empty frame is to be specialized for every element type.
   Its purpose is to create a unique tagging type for that element
@@ -39,13 +38,14 @@
  This approach allows in class client to write code independent
  of the type of Elt, be it Vertex, Edge or Cell.
 */
-//----------------------------------------------------------------
 
 template<class T> 
 class tp {};
 
 /*! \defgroup elementtags Element tags
     \ingroup  traits
+     Workaround for missing explicit
+     specialization of function template arguments.
  */
 
 /*! \ingroup elementtags
@@ -94,7 +94,9 @@ class cell2d_type_tag  : public cell_type_tag {};
  */
 class cell3d_type_tag  : public cell_type_tag {};
 
-
+/*! \brief Map dimensions to element tags.
+   \ingroup elementtags
+ */
 template<int GD, int D, int CD>
 struct int2element_tag {};
 
@@ -129,15 +131,16 @@ struct int2element_tag<1,0,1> { typedef vertex_type_tag tag;};
 
 
 
-
+/*! \brief Tags for differentiating between fixed and variable dimensions
+    \ingroup traits
+ */ 
 namespace type_tags {
-
   struct fixed {};
   struct variable {};
 }
 
 
-/*! Combinatorial element dimension
+/*! \brief Combinatorial element dimension
 
    \ingroup traits
  */
@@ -155,7 +158,7 @@ struct element_dim_tag<-1>
   enum { dim = -1 };
 };
 
-/*! Combinatorial element co-dimension
+/*! \brief Combinatorial element co-dimension
 
    \ingroup traits
  */
@@ -174,7 +177,7 @@ struct element_codim_tag<-1>
 };
 
 
-/*! Combinatorial grid dimension
+/*! \brief Combinatorial grid dimension
 
    \ingroup traits
  */

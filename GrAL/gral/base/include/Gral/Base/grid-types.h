@@ -9,7 +9,6 @@
 template<class ELEM, class ANCHOR>
 class dummy_incidence_iterator;
 
-//----------------------------------------------------------------
 /*! \brief Empty traits class for parameterized namespaces associated 
     with a grid.
     \ingroup traits
@@ -43,7 +42,6 @@ class dummy_incidence_iterator;
 
   
 */
-//----------------------------------------------------------------
 
 
 template<class Grid>
@@ -287,8 +285,6 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_TESTFOR);
 } // namespace grid_types_detail 
 
 
-/*! \defgroup gridtypesreflection Compile time reflection mechanism for grid_types<> specializations
-*/
 
 /*! \brief Compile-time mechanism to detect presence of typedefs in grid_types<> specializations
  

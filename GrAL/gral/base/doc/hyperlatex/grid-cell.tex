@@ -24,32 +24,34 @@ of a d-dimensional \sectionlink{\concept{Grid}}{Grid}
 \conceptsubsection{Associated types}
 
 \noindent
-\begin{tabular}{lll} \hline
+\begin{tabular}{lll} 
+  \T \hline
   \bf  Name  &\bf  Expression  &\bf  Description  \\ \hline
   handle type & 
   {\tt C::cell\_handle} &
   type of the corresponding \sectionlink{\concept{cell handle}}{GridVertexHandle} 
-  \\ \hline
+ \T \\ \hline
 \end{tabular}
 
 
 \conceptsubsection{Valid Expressions}
 
 \noindent
-\begin{tabular}{llll} \hline
+\begin{tabular}{llll} 
+  \T \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ \hline
   handle & 
   {\tt c.handle()} &
   ~ &
   {\tt C::vertex\_handle} 
-  \\ \hline
+  \T \\ \hline
 \end{tabular}
 
 \conceptsubsection{Expression semantics}
 
 \noindent
 \begin{tabularx}{14cm}{RRRRR}
-  \hline
+  \T \hline
   \bf  Name     &
   \bf  Expression &
   \bf  Precondition&
@@ -62,7 +64,7 @@ of a d-dimensional \sectionlink{\concept{Grid}}{Grid}
   shorthand for 
   \par  {\tt h = c.TheGrid(). handle(c)} &
   {\tt c == c.TheGrid().cell(h)}  
-  \\ \hline
+ \T \\ \hline
 \end{tabularx}
 
 \conceptsubsection{Refinements}

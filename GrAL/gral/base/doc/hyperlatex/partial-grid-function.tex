@@ -36,7 +36,7 @@ None, exept those defined in
 
 \conceptsubsection{Valid Expressions}
 \begin{tabular}{llll} 
-  \hline
+  \T \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
   \hline
   Definition test  &
@@ -58,15 +58,15 @@ None, exept those defined in
   {\tt f.default();} &
   ~ &
   F::value\_type 
-  \\ 
-  \hline
-  \\
+  \T\\ 
+  \T\hline
+  \T\\
 \end{tabular}
 
 
 \conceptsubsection{Expression semantics}
 \begin{tabularx}{15cm}{RRRRR}
-  \hline      
+ \T  \hline      
   \bf  Name    &
   \bf  Expression &
   \bf  Precondition&
@@ -142,9 +142,9 @@ None, exept those defined in
     if  {\tt ! f.defined(e)};
     \par assign  {\tt f(e)} to  {\tt t}. &
     {\tt f(e)} is equal to {\tt t}
-   \\
-   \hline
-   \\
+   \T\\
+   \T\hline
+   \T\\
  \end{tabularx}
 
  \conceptsubsection{Invariants}
@@ -152,8 +152,8 @@ None, exept those defined in
    \hline
    Default value &
    If not  {\tt f.defined(e)} then  {\tt f(e)} is equal to {\tt f.default()}  
-   \\ 
-   \hline
+   \T\\ 
+   \T\hline
  \end{tabular}
 
  \conceptsubsection{Complexity Guarantees}

@@ -62,35 +62,53 @@ public:
 };
 
 
+/*! \brief Geometry class for Complex2D
+
+     \ingroup complex2dmodule
+ 
+     This is an embedding of a grid of type Complex2D into 2D Euclidean space,
+     using straight edges.
+
+     \todo Test
+ */
 struct stored_geometry_complex2D
  : public stored_geometry_complex2D_base
 {
-public:
+private:
   typedef stored_geometry_complex2D_base base;
-  //private:
-  // Complex2D* g;
+  typedef stored_geometry_complex2D      self;
 public:  
-  typedef stored_geometry_complex2D self;
   stored_geometry_complex2D() {}
   stored_geometry_complex2D(grid_type const& gg) : base(gg)  {}
 
+  //! Geometric representation for an edge
   typedef Segment<Edge,base>               segment_type;
+  //! Geometric representation for an edge
   typedef Polygon2d<Cell,base>             polygon_type;
   typedef algebraic_primitives<coord_type> ap;
 
-
+  //! Get geometric representation for an edge
   segment_type segment(const Edge& E) const { return segment_type(E,basic_geom());}
+  //! Get geometric representation for a face (cell)
   polygon_type polygon(const Face& F) const { return polygon_type(F,basic_geom());}
 
+  //! 
   double length(const Edge& e) const { return (segment_type(e,basic_geom()).length());}
 
+  //! 1-dimensional volume of an edge (length)
   double volume(const Edge& e) const { return (segment_type(e,basic_geom()).length());}
+  //! 1-dimensional volume of an edge (length)
   double volume(const EdgeIterator& e) const {return volume(*e);}
+  //! 2-dimensional volume of a cell (area)
   double volume(const Cell& c) const { 
     polygon_type poly(c,basic_geom());
     return (poly.area());
   }
 
+  /*! \brief Diameter of a cell
+     
+      This function returns the maximal distance of two vertices. 
+  */
   double diameter(Cell const& c)  const {
     double diam2 = 0.0;
     for(VertexOnCellIterator vc(c); ! vc.IsDone(); ++vc) {
@@ -102,15 +120,17 @@ public:
     return sqrt(diam2);
   }
 
+  //!
   coord_type center(const Edge& e) const {return(segment_type(e,basic_geom()).center());}
 
-  // center of inertia
+  //! center of inertia
   coord_type center(const Cell& c) const {return(polygon_type(c,basic_geom()).center());}
 
-
+  /*! \brief Outward pointing normal of a facet
+       The result is normalized and  points outward of <tt>nb.TheCell()</tt>.
+   */
   coord_type outer_normal(/*const CellIterator& c, */
 			  const FacetOnCellIterator& nb) const 
-    //const NeighbourCellIterator& nb) const
     {
       coord_type ctr(center(nb.TheCell()));
       Edge e(nb);
@@ -120,6 +140,10 @@ public:
     }
 
  
+  /*! \brief Outward pointing normal of a facet
+       The result points outward of <tt>f.TheCell()</tt>.
+       Its Euclidean norm is equal to the volume of the facet \c f (i.e. the length of \f). 
+   */
   coord_type outer_area_normal(const FacetOnCellIterator& f) const 
     //    const NeighbourCellIterator& nb) const
     {
@@ -130,6 +154,11 @@ public:
       return ( ap::dot(n,(ctr - S.Start())) < 0 ? n : coord_type(-n));
     }
 
+ /*! \brief Outward pointing normal towards a neighbor cell
+       The result points toward  <tt>nb</tt>.
+       Its Euclidean norm is equal to the volume (i.e. length) of the facet f 
+       separating \c nb and <tt>nb.TheCell()</tt>.
+   */
   coord_type outer_area_normal(const CellNeighbourIterator& nb) const
     {
       coord_type ctr(center(nb.TheCell()));
@@ -139,13 +168,16 @@ public:
       return ( ap::dot(n,(ctr - S.Start())) < 0 ? n : coord_type(-n));
     }
   
-  
+  /*! \brief  Normal to the edge \e having the same length 
+   */
   coord_type area_normal(const Edge& e) const
   {
     segment_type S(e,basic_geom());
     return ap::normal_with_same_length(S.End()-S.Start());
   }
   
+  /*! \brief  Normalized normal to the edge \e 
+   */
   coord_type normal(const Edge& e) const
   {
     segment_type S(e,basic_geom());

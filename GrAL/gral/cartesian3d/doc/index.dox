@@ -5,22 +5,15 @@
    Hence, there is no explicit incidence information stored, all
    iterator functionality is implemented via index calculations.
 
-  <EM> This class is still incomplete, and does not include all
-       planned functionality 
-  </EM>	
-
+   Start browsing to documentation starting with the \ref cartesian3dmodule module.
+   A convenience header including all functionality can be found in 
+   <tt> \ref Gral/Grids/Cartesian3D/all.h </tt>
    
-   The main classes one might use are:
-   (headers under the path Gral/Grids/Cartesian3D)
-   -  CartesianGrid3D (cartesian-grid3d.h): The combinatorial grid
-   -  mapped_geometry_cartesian3d (mapped-geometry.h): 
-        A grid geometry using a mapping from a default embedding in \f$ [0,1]^2 \f$
-   - total grid function (see $GrAL TotalGridFunction concept, grid-functions.h)
-   - partial grid functions 
-     (see $GrAL PartialGridFunction concept, partial-grid-functions.h )
-   - all.h for all of the above.
-
    \status 
-   - there are no edges and facets defined, just vertices and cells.
+   - Upward incidence iterators are still missing.
+
+*/
+
+/*! \defgroup cartesian3dmodule Components for CartesianGrid3D
 
 */

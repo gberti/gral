@@ -2,7 +2,7 @@
 // $LICENSE
 
 
-/*! \file test-construct-main.C
+/*! \file 
     \brief Test cases for \c Complex2D
 
     <H4> Degenerate Test Cases </H4>

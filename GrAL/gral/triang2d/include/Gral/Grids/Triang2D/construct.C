@@ -2,7 +2,9 @@
 #define GRAL_GB_GRIDS_TRIANG2D_CONSTRUCT_C
 
 // $LICENSE
-
+ 
+/*! \file
+ */
 
 #include "Gral/Grids/Triang2D/copy.h"
 

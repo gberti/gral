@@ -1,9 +1,9 @@
 
 // $LICENSE_NEC_2003
 
-/*! \file Tests for Triang3D
- 
-*/
+/*! \file 
+   Tests for Triang3D
+ */
 
 #include "Gral/Grids/Triang3D/all.h"
 #include "Gral/IO/gmv-format-output3d.h"

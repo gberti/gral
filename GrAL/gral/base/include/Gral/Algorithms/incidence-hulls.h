@@ -178,7 +178,9 @@ void mark_on_vertices(VertexIt    seed,         // in : vertex seed set
 
 /*! \brief Calculate incidence hull
 
-    \see test-incidence-hulls.C
+    \ingroup incidence_hull
+
+    \see \ref test-incidence-hulls.C
 */
 template<class RANGE, class STENCIL, class GT>
 class incidence_hull

@@ -26,8 +26,8 @@
  {\tt i, j} are  objects of type  {\tt I}
  
  \conceptsubsection{Associated types}
- \begin{tabularx}{12cm}{llR}\\
-   \hline
+ \begin{tabularx}{12cm}{llR}
+   \T \\ \hline
    \bf  Name  &\bf  Expression  &\bf  Description   \\ 
    \hline
    grid type  &  
@@ -41,15 +41,14 @@
    type of the \sectionlink{\concept{Element}}{GridElement} that the iterator references   \\ 
    value type  & 
    {\tt I::value\_type} &
-   synomym for {\tt I::element\_type} \\ 
-   \hline
-   \\
+   synomym for {\tt I::element\_type} 
+   \T \\ \hline \\
  \end{tabularx}
  
 
  \conceptsubsection{Valid Expressions}
- \begin{tabular}{llll} \\
-   \hline
+ \begin{tabular}{llll} 
+   \T \\ \hline
    \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\
    \hline
    prefix increment  &
@@ -70,16 +69,15 @@
    validity check  &
    {\tt i.IsDone();}\noteref{note-isdone} & 
    ~ &
-   {\tt bool} \\
-   \hline
-   \\
+   {\tt bool} 
+   \T \\   \hline   \\
  \end{tabular}
 
    
  \conceptsubsection{Expression semantics}
 
-\begin{tabularx}{15cm}{RlRRR} \\
-  \hline      
+\begin{tabularx}{15cm}{RlRRR} 
+  \T \\  \hline      
   \bf  Name       &
   \bf  Expression &
   \bf  Precondition&
@@ -117,9 +115,7 @@
   ~ &  
   true iff {\tt i} is past-the-end. &
   ~ 
-  \\ 
-  \hline
-  \\
+  \T \\   \hline  \\
 \end{tabularx}
 
 \W\conceptsubsection{Complexity guarantees}

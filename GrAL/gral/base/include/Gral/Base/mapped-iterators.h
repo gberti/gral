@@ -7,15 +7,15 @@
 #include "Gral/Base/common-grid-basics.h"
 
 
-//-------------------------------------------------------------------------
 /*! \file
     \brief mapped iterators and sequences 
 */
-//-------------------------------------------------------------------------
+
 
 /*! \brief Maps STL-style random-access iterator (range [b,e) pairs) 
     to IsDone()-style iterator
     \ingroup iterators
+    \see \ref iterators module
      
     \b Template parameters:
     - C; container with begin()/end(), and random-access
@@ -63,6 +63,7 @@ public:
 /*! \brief Maps STL-style Forward Iterator (range [b,e) pairs) 
     to IsDone()-style iterator
     \ingroup iterators
+    \see \ref iterators module
      
     \b Template parameters:
     - SeqIt: Forward Iterator
@@ -100,6 +101,7 @@ public:
 
 /*! \brief Maps  IsDone()-style iterators by composing with function object
     \ingroup iterators
+    \see \ref iterators module
 
     Template parameters:
     - F: Adaptable Unary Function, 
@@ -135,6 +137,7 @@ public:
 
 /*! \brief A cell sequence defined by another cell sequence and a mapping
     \ingroup subranges
+    \see \ref subranges module    
 
     <b> Template parameters: </b>
     - G: $Gral CellGridRange
@@ -161,8 +164,11 @@ public:
   unsigned     NumOfCells() const { return (g->NumOfCells()); }
 };
 
-/*! \brief creator function for mapped_cell_sequence
+/*! \brief Creator function for mapped_cell_sequence
+
     \ingroup subranges
+    \see \ref subranges module    
+
     \relates mapped_cell_sequence
 */
 template<class G, class F>

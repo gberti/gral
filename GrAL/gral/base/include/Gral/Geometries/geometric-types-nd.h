@@ -8,6 +8,14 @@
 
 #include <vector>
 
+/*! \defgroup geometrictypes   Geometric types 
+
+    Generic geometric types for combinatorial grid elements.
+ 
+    \ingroup gridgeometries
+    \see \ref gridgeometries module
+*/
+
 namespace detail {
 
 
@@ -89,7 +97,8 @@ public:
 
 
 
-/*! \brief Mapping of combinatorial grid elements to geometric entities
+/*! \internal
+    \brief Mapping of combinatorial grid elements to geometric entities
 
    \todo Polytopes should give access to the underlying grid, i.e. the archetype
     of the anchor element.
@@ -204,7 +213,10 @@ struct geometric_grid_types {
 
 
 /*! \brief Map combinatorial grid elements to geometric entities (polytopes)
-    
+    \ingroup  geometrictypes
+    \see \ref geometrictypes module 
+    \see Tests in <tt> \ref test-geometric-types.C </tt>
+
     The name polytope is justified only for linear geometries!
 */
 

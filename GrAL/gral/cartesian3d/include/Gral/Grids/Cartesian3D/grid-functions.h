@@ -4,13 +4,22 @@
 // $LICENSE
 
 #include "Gral/Grids/Cartesian3D/cartesian3d.h"
-
-// generic total grid function based on std::vector 
 #include "Gral/Base/grid-function-vector.h"
+
+/*! \defgroup cartesian3dgf Total grid functions for CartesianGrid3D
+    \ingroup cartesian3dmodule
+
+     \see $GrAL TotalGridFunction
+     \see Test in \ref test-cart-gf.C
+ */
 
 
 // use generic version for total grid functions
 
+/*! \brief Specialization of the grid_function primary template for CartesianGrid3D::Vertex
+    
+    \ingroup cartesian3dgf
+ */
 template<class T>
 class grid_function<cartesian3d::Vertex_Cartesian3D, T>
   : public grid_function_vector<cartesian3d::Vertex_Cartesian3D,T>
@@ -26,6 +35,10 @@ class grid_function<cartesian3d::Vertex_Cartesian3D, T>
 };
 
 
+/*! \brief Specialization of the grid_function primary template for CartesianGrid3D::Edge
+    
+    \ingroup cartesian3dgf
+ */
 template<class T>
 class grid_function<cartesian3d::Edge_Cartesian3D, T>
   : public grid_function_vector<cartesian3d::Edge_Cartesian3D,T>
@@ -40,6 +53,10 @@ class grid_function<cartesian3d::Edge_Cartesian3D, T>
 
 };
 
+/*! \brief Specialization of the grid_function primary template for CartesianGrid3D::Facet
+    
+    \ingroup cartesian3dgf
+ */
 template<class T>
 class grid_function<cartesian3d::Facet_Cartesian3D, T>
   : public grid_function_vector<cartesian3d::Facet_Cartesian3D,T>
@@ -55,6 +72,10 @@ class grid_function<cartesian3d::Facet_Cartesian3D, T>
 };
 
 
+/*! \brief Specialization of the grid_function primary template for CartesianGrid3D::Cell
+    
+    \ingroup cartesian3dgf
+ */
 template<class T>
 class grid_function<cartesian3d::Cell_Cartesian3D, T>
   : public grid_function_vector<cartesian3d::Cell_Cartesian3D,T>

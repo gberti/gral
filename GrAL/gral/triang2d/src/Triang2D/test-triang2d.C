@@ -1,3 +1,9 @@
+
+// $LICENSE
+
+/*! \file
+ */
+
 #include "Gral/Grids/Triang2D/test-triang2d.h"
 #include "Gral/Grids/Triang2D/partial-grid-functions.h"
 

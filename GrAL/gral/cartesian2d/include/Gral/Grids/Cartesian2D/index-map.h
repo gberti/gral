@@ -3,12 +3,16 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include <iostream>
 #include "Utility/pre-post-conditions.h"
-//#include "Gral/Grids/Cartesian2D/index-type.h"
-#include "Container/index-map-nd.h"
+#include "Container/tuple.h"
 
 /*! \brief Mapping between integer intervals and integer rectangles
+
+    \ingroup cartesian2dmodule
 
  This class implements a bijective map between
  the subset [n0,n0+size-1] of Z and the subset
@@ -27,13 +31,14 @@
  (llx,lly)                                  (urx,lly)
   \endcode
 
+   \todo This could probably replace with the general n-dimensional
+   index_map_nd.
 */
 
 
 
 class xmjr_indexmap2D {
 public:
-  //   typedef int_index_type index_type;
   typedef tuple<int,2>   index_type; 
  
   /*! simple range type

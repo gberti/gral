@@ -3,6 +3,12 @@
 
 // $LICENSE
 
+/*! \file  
+
+    Test of cell-on-vertex iterators (models of $GrAL CellOnVertexIterator).
+
+*/
+
 #include <iostream>
 
 
@@ -11,8 +17,22 @@
 
 #else
 
+/*! \brief Test a cell-on-vertex iterator
+ 
+    Test a model of $GrAL CellOnVertexIterator
+
+    \ingroup incidenceiteratortests
+ */
 template<class G>
 bool test_cell_on_vertex_iterator(G const& g, std::ostream & out);
+
+/*! \brief Test a cell-on-vertex iterator
+ 
+    Test a model of $GrAL CellOnVertexIterator
+
+    \ingroup incidenceiteratortests
+ */template<class G, class GT>
+bool test_cell_on_vertex_iterator(G const& g, std::ostream & out, GT);
 
 #endif
 

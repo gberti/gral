@@ -5,6 +5,9 @@
 
 // $LICENSE
 
+/*! \file
+
+*/
 
 #include <list>
 #include <vector> 
@@ -236,6 +239,7 @@ struct complex2d_types {
 #include "Gral/Grids/Complex2D/internal/edge-on-cell2d-it.h"
 
 /*! \brief General 2D grid class
+     \ingroup complex2dmodule
 
     An object of type Complex2D can represent a general two-dimensional
     grid of homogeneous dimension. 
@@ -244,7 +248,9 @@ struct complex2d_types {
     relation will not be calculated correctly.
        
 
-    Complex2D is a model of $GrAL Grid-With-Boundary,
+    Complex2D is a model of 
+    $GrAL Grid-With-Boundary,
+    $GrAL ArchetypedGrid,
     $GrAL  VertexRange, $GrAL EdgeRange,
     $GrAL  FacetRange, and $GrAL CellRange.
 
@@ -308,8 +314,10 @@ private:
 public:
   //-------------- iteration ------------------
 
+  //@{ @name Dimension information
   enum { dim = 2};
   unsigned dimension() const { return 2;}
+  //@}
 
   //@{ @name STL half-open ranges
   inline VertexIterator   FirstVertex() const;
@@ -497,6 +505,7 @@ public:
   // the sole purpose of this class is to make public
   // some private functions/data of Complex2D, that are
   // needed to build it from some connectivity information
+  // FIXME: this should not be necessary any more for modern compilers.
   
 class friend_for_input : public complex2d_types {
 public:
@@ -627,7 +636,9 @@ struct grid_types_Complex2D  : public complex2d_types {
   { return G.outer_cell_handle();}
 };
 
-
+/*! \brief Specialization of the grid_types primary template.
+   \ingroup complex2dmodule
+ */
 template<>
 struct grid_types<Complex2D> : public grid_types_base<grid_types_Complex2D> {};
 

@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include "Gral/Base/multi-grid-functions.h"
 #include "Gral/Base/partial-multi-grid-functions.h"
 

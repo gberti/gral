@@ -60,6 +60,8 @@ struct incidence<edge_type_tag, facet_type_tag,E1,E2>
 
 /*! \brief Compile-time switch to get VertexOn<E> incidence iterator
 
+   \ingroup  traits
+   \see \ref traits
  */
 template<class E>
 struct VertexOn {
@@ -75,11 +77,13 @@ struct VertexOn {
 
 
 
-/*! predicate to decide wether two elements are incident.
+/*! \brief Predicate to decide whether two elements are incident.
+    \ingroup predicates
+    \see \ref predicates    
 
-  \todo Tests
-  \todo branch on iterator capabilities:
-        Use either E1OnE2Iter or E2OnE1Iter.
+    \todo Tests
+    \todo branch on iterator capabilities:
+          Use either E1OnE2Iter or E2OnE1Iter.
 */
 template<class E1, class E2>
 bool incident(E1 const& e1, E2 const& e2)

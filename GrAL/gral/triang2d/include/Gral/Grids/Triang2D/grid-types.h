@@ -3,6 +3,9 @@
 
 // $LICENSE 
 
+/*! \file
+ */
+
 #include "Gral/Base/element-handle.h"
 #include "Gral/Base/polygon.h"
 

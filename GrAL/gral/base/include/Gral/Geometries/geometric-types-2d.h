@@ -12,10 +12,12 @@
 
 //----------------------------------------------------------------
 //
-/*! \defgroup geometrictypes Geometric types
-    \ingroup gridgeometries
+/*! \defgroup geometrictypes2d   Geometric types for 2D (obsolete)
 
-    Generic geometric types for combinatorial grid elements.
+    \ingroup gridgeometries
+    \see \ref gridgeometries module
+
+    Generic geometric types for combinatorial grid elements in 2D.
 
    \b Contents:
     - template<class Edge, class geom> class Segment;
@@ -37,13 +39,14 @@
 
 
 /*! \brief  Geometric segment corresponding to combinatorial edge
-   \ingroup geometrictypes
+   \ingroup geometrictypes2d
+
     
    \templateparams
     - Edge: $GrAL GridEdge
     - geom: $GrAL VertexGridGeometry
 
-   \see Module \ref geometrictypes
+   \see Module \ref geometrictypes2d
 */
 template<class Edge, class geom>
 class Segment {
@@ -78,7 +81,7 @@ inline bool operator<(vertex_iterator_Polygon2d<Face,geom> const&,
 template<class Face, class geom> class Polygon2d;
 
 /*! \brief Iterator over vertices of Polygon2d
-   \ingroup geometrictypes
+   \ingroup geometrictypes2d
 
    \templateparams
    (same as for Polygon2d<Face,geom>)
@@ -86,7 +89,7 @@ template<class Face, class geom> class Polygon2d;
    - geom $GrAL VertexGridGeometry
 
    \see Polygon2d
-   \see Module \ref geometrictypes
+   \see Module \ref geometrictypes2d
  */
 template<class Face, class geom>
 class vertex_iterator_Polygon2d {
@@ -111,14 +114,15 @@ public:
 
 
 /*! \brief  Geometric polygon corresponding to geometric face
-   \ingroup geometrictypes
+   \ingroup geometrictypes2d
 
    \templateparams
    (same as for vertex_iterator_Polygon2d<Face,geom>)
    - Face $GrAL GridFace
    - geom $GrAL VertexGridGeometry
+
    \see vertex_iterator_Polygon2d<Face,geom>
-   \see Module \ref geometrictypes
+   \see Module \ref geometrictypes2d
  */
 template<class Face, class geom>
 class Polygon2d {
@@ -197,7 +201,7 @@ typename
 vertex_iterator_Polygon2d<Face,geom>::value_type 
 vertex_iterator_Polygon2d<Face,geom>::operator*() const { return p->V(i);}
 
-/*! \ingroup geometrictypes
+/*! \ingroup geometrictypes2d
     \relates  vertex_iterator_Polygon2d
  */
 template<class Face, class geom>
@@ -215,7 +219,7 @@ bool operator!=  (vertex_iterator_Polygon2d<Face,geom> const& lhs,
 		  vertex_iterator_Polygon2d<Face,geom> const& rhs)
 { return !(lhs == rhs);}
 
-/*! \ingroup geometrictypes
+/*! \ingroup geometrictypes2d
     \relates  vertex_iterator_Polygon2d
  */
 template<class Face, class geom>

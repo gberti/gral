@@ -1,9 +1,9 @@
-/*! \mainpage Index of the GrAL Measurement Module
+/*! \mainpage Index of the GrAL Measurement Package
 
     This module contains components for checking grids
     for combinatorial and geometric validity and quality.
 
-    See test/corner-jacobian/test-corner-jacobian.C
-    and test/edge-facet-intersection/test-edge-facet-intersection.C
+    See \ref test-corner-jacobian.C
+    and \ref test-edge-facet-intersection.C
     for examples.
 */

@@ -1,7 +1,9 @@
 
 // $LICENSE_NEC_2003
 
-/*! \file Test cases for the algorithms in the incidence_hull module.
+/*! \file 
+
+    Test cases for the algorithms in the incidence_hull module.
 
  */
 

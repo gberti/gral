@@ -82,11 +82,9 @@ namespace detail {
    These classes are  fully generic and do not need any further
    specialization, because they build on grid_function<Elt,T>.
 
-   \see partial_multi_grid_function<Grid,T>
+   \see \c partial_multi_grid_function
    \see Module \ref gridfunctions
 */
-//----------------------------------------------------------------
-
 
 template<class Grid, class T>
 class multi_grid_function : public detail::multi_gf_aux<Grid, T,  

@@ -8,7 +8,7 @@
 
 /*! \brief Helper class to reuse the archetype functionality of a base grid
 
-
+    \ingroup gridarchetypes
 */
 template<class DERIVED, class BASEGRID, class GT = grid_types<BASEGRID> >
 class archetypes_from_base {

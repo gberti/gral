@@ -19,12 +19,35 @@
 
 */
 
+/*! \defgroup gridarchetypes Archetypes 
+   \ingroup gralbasemodules
+ 
+    \brief Components for dealing with grid archetypes
+
+    Grid archetypes are combinatorial (aka topological) models of cells,
+    or, more precisely, of cell boundaries. Using archetypes allows one to make 
+    assumptions on connectivity of cells explicit. For instance, the vertices of a cube
+    may be ordered in various ways. Normally, this ordering is implicit in the sense that it
+    is perhaps described verbally in a comment, but not accessible to algorithms. This makes it
+    painstaking and errorprone to deal with grids having different numbering convention,
+    and practically impossible to implement generic algorithms.
+
+    This is why we use cell archetypes: To each cell of a grid, a unique archetype is associated.
+    When dealing with different grid types (for instance when generating output to a specific file format),
+    the archetypes of the grids involved can be compared and isomorphisms between them can be automatically
+    calculated (see \ref construct_isomorphism module).
+*/
 
 /*! \defgroup boundary Boundary 
 
     \ingroup gralbasemodules
    
     \brief  Iterators, Algorithms and Subranges for working with grid boundaries
+*/
+
+/*! \defgroup grids Grid datastructures
+
+    There are more data structures in other GrAL packages.   
 */
 
 /*! \defgroup subranges Components for Grid Subranges
@@ -111,6 +134,9 @@
      Therefore, grid I/O is nothing than a generic grid copy 
      operation (see \ref mutatingoperations) 
      on these special representations.
+     To achieve generic grid I/O, one has to extract informatio on combinatorial
+     structure of cells (e.g. deal with different numbering conventions for cube vertices).
+     GrAL uses cell archetypes (see also \ref gridarchetypes module) for this task.
 
 */
 
@@ -134,15 +160,6 @@
 
 */
 
-/*! \defgroup traits    Traits classes for Grids
-
-    \ingroup gralbasemodules
-   
- 
-      \brief Some really basic traits classes (like \ref grid_types),
-       which in general must be specialized
-*/
-
 /*! \defgroup mutatingoperations Mutating Grid Operations
 
     \ingroup gralbasemodules
@@ -160,4 +177,20 @@
 
      For example, disjoint_union_view lets two disjoint grids be regarded
      as a single grid, without actually  performing a union.
+*/
+
+
+
+/*! \defgroup traits    Traits classes for Grids
+
+    \ingroup gralbasemodules
+   
+ 
+      \brief Some really basic traits classes (like \ref grid_types),
+       which in general must be specialized
+*/
+
+/*! \defgroup gridtypesreflection Compile time reflection mechanism for grid_types<> specializations
+
+    \ingroup gralbasemodules
 */

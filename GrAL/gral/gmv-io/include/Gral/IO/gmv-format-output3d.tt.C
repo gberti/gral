@@ -1,6 +1,11 @@
 #ifndef GRAL_GB_GMV_FMT_OUTPUT3D_TT
 #define GRAL_GB_GMV_FMT_OUTPUT3D_TT
 
+// $LICENSE_NEC
+
+/*! \file
+ */
+
 #include "Gral/IO/gmv-format-output3d.h"
 
 template<class GRID,class GEOM, class GF, class MOREGFS>

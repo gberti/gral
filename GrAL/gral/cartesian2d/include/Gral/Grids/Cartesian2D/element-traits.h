@@ -7,7 +7,8 @@
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
 /*! \defgroup elementtraitsreggrid2d element traits for RegGrid2D
-
+    \ingroup cartesian2dmodule
+    
     Specialization of the template element_traits for the
     element types of RegGrid2D
  */

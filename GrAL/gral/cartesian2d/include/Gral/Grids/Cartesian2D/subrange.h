@@ -6,7 +6,11 @@
 
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
+namespace cartesian2d {
+
 /*! \brief Rectangular subrange of RegGrid2D
+  
+  \ingroup cartesian2dmodule
 
    This class allows it to describe a rectangular subrange
    of a regular 2D-grid. It defines altered versions of
@@ -17,7 +21,6 @@
    of the subrange.
 */
 
-namespace cartesian2d {
 
 class SubrangeReg2D {
 public:
@@ -34,8 +37,13 @@ public:
   typedef  Grid::edge_handle edge_handle;
   typedef  Grid::Edge Edge;
 
+  //@{
+  //! \name Constructors
+
+  //! Empty subranges
   SubrangeReg2D() : g(0) {}
   // what should be the behavior if  !(llv  <= urv) ? 
+  //! Subrange containing vertex indices <tt>  [llv, urv] </tt>
   SubrangeReg2D(const Grid& gg, const index_type& llv, const index_type& urv)
     : g(&gg), 
       vertex_index_map(llv,urv), 
@@ -43,6 +51,8 @@ public:
       xedge_index_map (llv,index_type(urv.x()-1,urv.y()  )), 
       yedge_index_map (llv,index_type(urv.x(),  urv.y()-1))
     {}
+
+  //! Subrange containing vertex indices <tt>  [(llx,lly), (urx,ury)] </tt>
   SubrangeReg2D(const Grid& gg,int llx, int lly, int urx, int ury) 
     : g(&gg), 
       vertex_index_map(index_type(llx,lly),index_type(urx,ury)),
@@ -51,7 +61,12 @@ public:
       yedge_index_map (index_type(llx,lly),index_type(urx,  ury-1))
 
     {}
-  // hack: Allow non-closed subranges
+  /*! Non-closed subrange
+    
+      <tt> [llv_v,urv_v] </tt> is the vertex range, 
+      <tt> [llv_c,urv_c] </tt> is the cell range.
+      \Warning This is a hack. Use with care
+  */
   SubrangeReg2D(const Grid& gg, 
 		const index_type& llv_v, const index_type& urv_v,
 		const index_type& llv_c, const index_type& urv_c)
@@ -62,11 +77,11 @@ public:
       xedge_index_map (llv_v,index_type(urv_v.x()-1,urv_v.y()  )), 
       yedge_index_map (llv_v,index_type(urv_v.x(),  urv_v.y()-1))
   {}
+  //@}
 
+  //! Combinatorial dimension
   static unsigned dimension() { return 2;}
 
-  //  SubrangeReg2D(const Grid& gg, const rect& b) 
-  // : g(gg), vertex_index_map(b.ll,b.ur) {}
 
   class iterator_base_1 {
   public:
@@ -186,16 +201,29 @@ public:
   typedef EdgeIterator_1 EdgeIterator;
 
 
-
+  //! Anchor grid
   const Grid& TheGrid() const { return *g;}
 
-  const index_type& ll() const {return TheVertexMap().ll();}
-  const index_type& ur() const {return TheVertexMap().ur();}
+  //@{
+  //! \name Bounds
 
+  //! lower vertex index bound
+  const index_type& ll() const {return TheVertexMap().ll();}
+  //! upper vertex index bound
+  const index_type& ur() const {return TheVertexMap().ur();}
   int  llx() const { return TheVertexMap().llx();}
   int  lly() const { return TheVertexMap().lly();}
   int  urx() const { return TheVertexMap().urx();}
   int  ury() const { return TheVertexMap().ury();}
+
+  index_type low_vertex_index()    const { return TheVertexMap().ll();}
+  index_type high_vertex_index()   const { return TheVertexMap().ur();}
+  index_type beyond_vertex_index() const { return TheVertexMap().ur()+index_type(1);}
+  index_type low_cell_index()      const { return TheCellMap().ll();}
+  index_type high_cell_index()     const { return TheCellMap().ur();}
+  index_type beyond_cell_index()   const { return TheCellMap().ur()+index_type(1);}
+  //@}
+
   index_type side_vertex1(int s) const {
     return index_type(llx()+(NumOfXVertices()-1)* Grid::side_vertex_1_[s-1].x(),
 		      lly()+(NumOfYVertices()-1)* Grid::side_vertex_1_[s-1].y());
@@ -205,58 +233,70 @@ public:
 		      lly()+(NumOfYVertices()-1)* Grid::side_vertex_2_[s-1].y());
   }
   
-  const indexmap_type& TheVertexMap() const {return vertex_index_map;}
-
+  //@{ 
+  /*! @name Sequence iteration 
+      \brief STL-style iterator ranges.
+  */
   VertexIterator FirstVertex() const { return VertexIterator(TheGrid(),*this);}
   VertexIterator EndVertex()   const { return VertexIterator(MaxVertexNum() +1,TheGrid(),*this);}
+  EdgeIterator FirstEdge()     const { return EdgeIterator(TheGrid(),*this);}
+  EdgeIterator EndEdge()       const { return EdgeIterator(MaxEdgeNum()+1,TheGrid(),*this);} 
+  EdgeIterator FirstFacet()    const {return FirstEdge();}
+  EdgeIterator EndFacet()      const {return EndEdge();} 
+  CellIterator FirstCell()     const { return CellIterator(TheGrid(),*this);}
+  CellIterator EndCell()       const { return CellIterator(MaxCellNum()+1,TheGrid(),*this);}
+
+  unsigned NumOfVertices()     const { return TheVertexMap().range_size();}
+  unsigned NumOfEdges()        const { return(  TheXEdgeMap().range_size() 
+						+ TheYEdgeMap().range_size());}
+  unsigned NumOfFacets()       const { return NumOfEdges();}
+  unsigned NumOfCells()        const { return TheCellMap().range_size();}
+  //@}
+
+
+  //@{ 
+  /*! @name Cartesian size information
+     \brief Number of elements in each direction
+  */
+  int NumOfXVertices() const { return (urx()-llx()+1);}
+  int NumOfYVertices() const { return (ury()-lly()+1);}
+  int NumOfXCells() const { return (urx()-llx());}
+  int NumOfYCells() const { return (ury()-lly());}
+  //@}
+
+  //@{
+  /*! \name Element / handle conversion
+      \brief Conversion to and from element handles
+   */
   vertex_handle handle(Vertex const& V) const { return TheGrid().handle(V);}
   Vertex vertex(vertex_handle v) const { return TheGrid().vertex(TheVertexMap().index(v));}
   vertex_handle MinVertexNum()   const { return  TheVertexMap().n0();}
   vertex_handle MaxVertexNum()   const { return  TheVertexMap().nmax();}
-  unsigned NumOfVertices() const { return TheVertexMap().range_size();}
-  int NumOfXVertices() const { return (urx()-llx()+1);}
-  int NumOfYVertices() const { return (ury()-lly()+1);}
 
-  index_type low_vertex_index()    const { return TheVertexMap().ll();}
-  index_type high_vertex_index()   const { return TheVertexMap().ur();}
-  index_type beyond_vertex_index() const { return TheVertexMap().ur()+index_type(1);}
-  index_type low_cell_index()      const { return TheCellMap().ll();}
-  index_type high_cell_index()     const { return TheCellMap().ur();}
-  index_type beyond_cell_index()   const { return TheCellMap().ur()+index_type(1);}
-
-  const indexmap_type& TheCellMap() const {return cell_index_map;}
-  CellIterator FirstCell() const { return CellIterator(TheGrid(),*this);}
-  CellIterator EndCell()   const { return CellIterator(MaxCellNum()+1,TheGrid(),*this);}
-  cell_handle handle(Cell const& C) const { return TheGrid().handle(C);}
-  Cell cell(cell_handle v) const { return TheGrid().cell(TheCellMap().index(v));}
-  cell_handle MinCellNum()   const { return  TheCellMap().n0();}
-  cell_handle MaxCellNum()   const { return  TheCellMap().nmax();}
-  unsigned NumOfCells() const { return TheCellMap().range_size();}
-  int NumOfXCells() const { return (urx()-llx());}
-  int NumOfYCells() const { return (ury()-lly());}
-
-
-  const indexmap_type& TheXEdgeMap() const {return xedge_index_map;}
-  const indexmap_type& TheYEdgeMap() const {return yedge_index_map;}
-  EdgeIterator FirstEdge() const { return EdgeIterator(TheGrid(),*this);}
-  EdgeIterator EndEdge()   const { return EdgeIterator(MaxEdgeNum()+1,TheGrid(),*this);} 
   Edge edge(edge_handle e) const { 
     return (e <= TheXEdgeMap().nmax() 
 	    ?  TheGrid().xedge(TheXEdgeMap().index(e))
 	    :  TheGrid().yedge(TheYEdgeMap().index(e - (TheXEdgeMap().nmax() + 1)
 						     + TheYEdgeMap().n0()))); 
   }
-
   edge_handle MinEdgeNum()   const { return  TheXEdgeMap().n0();}
   edge_handle MaxEdgeNum()   const { return  MinEdgeNum() + NumOfEdges() -1;}
-  unsigned NumOfEdges() const { return(  TheXEdgeMap().range_size() 
-				       + TheYEdgeMap().range_size());}
-  // aliases for facets
-  unsigned NumOfFacets() const { return NumOfEdges();}
-  EdgeIterator FirstFacet() const {return FirstEdge();}
-  EdgeIterator EndFacet()   const {return EndEdge();} // past-the-end!
+
+  cell_handle handle(Cell const& C) const { return TheGrid().handle(C);}
+  Cell cell(cell_handle v) const { return TheGrid().cell(TheCellMap().index(v));}
+  cell_handle MinCellNum()   const { return  TheCellMap().n0();}
+  cell_handle MaxCellNum()   const { return  TheCellMap().nmax();}
+  //@}
+
+
+  const indexmap_type& TheVertexMap() const {return vertex_index_map;}
+  const indexmap_type& TheXEdgeMap() const {return xedge_index_map;}
+  const indexmap_type& TheYEdgeMap() const {return yedge_index_map;}
+  const indexmap_type& TheCellMap() const {return cell_index_map;}
+
 
   /*! \name Archetype handling
+      \see $GrAL ArchetypedGrid
    */
   /*@{*/ 
   typedef grid_type::archetype_iterator archetype_iterator;

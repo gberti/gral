@@ -1,9 +1,14 @@
 #ifndef GRAL_GB_COMPLEXND_CONSTRUCT_C
 #define GRAL_GB_COMPLEXND_CONSTRUCT_C
 
+/*! \file
+
+*/
+
 #include "Gral/Grids/ComplexND/complexnd.h"
 #include "Gral/Base/grid-morphism.h"
 #include "Gral/Base/construct-grid.h"
+
 
 namespace complexnd  {
 
@@ -92,13 +97,30 @@ namespace complexnd  {
 
 } // namespace complexnd
 
+/*! \defgroup complexndcopy Generic copy operations for complexnd::ComplexND
+    \ingroup complexndstuff
+
+    \see $GrAL ConstructGrid
+    \see Gral base module \ref copyoperations
+*/
 
 // global namespace 
+/*! \brief Copy any grid type to complexnd::ComplexND<>
+
+    This function copies only the combinatorial information.
+    \ingroup complexndcopy
+*/
 template<int D, class G_SRC, class VCORR, class CCORR>
 void ConstructGrid0(complexnd::ComplexND<D>& g, G_SRC const& g_src, VCORR& v_corr, CCORR& c_corr)
 { complexnd::dispatch<D>::construct(g,g_src, v_corr, c_corr);}
 
 
+/*! \brief Copy any grid type to complexnd::ComplexND<>
+
+    This function copies combinatorial and geometric information.
+
+   \ingroup complexndcopy
+*/
 template<int D, class GEOM_DEST,
 	 class G_SRC,  class GEOM_SRC,
 	 class VCORR,  class CCORR>

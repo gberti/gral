@@ -4,27 +4,30 @@
 
 // $LICENSE
 
+/*! \file
+ */
 
-//----------------------------------------------------------------
+
 /*! \defgroup copyoperations Generic grid copy operations
-    \brief copy-construct a grid destG from another 2D grid srcG
+    \brief copy-construct a grid \c destG from another grid \c srcG
     \ingroup mutatingoperations
 
-  The generic versions implemented in this module
-  are based on an overloaded master version for each destination
-  grid type \c G1.
+    The generic versions implemented in this module
+    are based on an overloaded master version for each destination
+    grid type \c G1.
 
-  Template parameters:
-   - G2: model of $GrAL Cell-VertexInputGridRange, i.e. must support
+  \templateparams
+   - G2: model of $GrAL Cell-VertexInputGridRange and $GrAL ArchetypedGrid, i.e. must support
      - grid_types<>, 
      - $GrAL CellIterator, $GrAL VertexIterator, $GrAL Vertex-On-CellIterator,
      - vertex_handle
+     - archetype related functionality
    - Geom2 : model of VertexGridGeometry
      - <tt> Geom2::coord(Vertex2) </tt>
-   - VertexMap:  map V(G2) -> V(G1)
+   - VertexMap:  map \f$  V(G_2) \mapsto V(G_1) \f$ 
       - <tt> vertex_handle1  operator()(vertex_handle2) </tt>(read)
       - <tt> vertex_handle1 operator[](vertex_handle2)  </tt> (write)
-   - CellMap: map C(G2) -> C(G1)
+   - CellMap: map \f$ C(G_2) \mapsto C(G_1) \f$
      - <tt> cell_handle1 operator()(cell_handle2) </tt> (read)
      - <tt> cell_handle1 operator[](cell_handle2) </tt> (write)
  
@@ -43,7 +46,6 @@
 
   \endcode
 */
-//----------------------------------------------------------------
 
 
 #include "Container/dummy-mapping.h"

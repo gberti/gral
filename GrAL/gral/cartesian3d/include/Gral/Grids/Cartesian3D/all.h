@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Gral/Grids/Cartesian3D/cartesian3d.h"
 #include "Gral/Grids/Cartesian3D/grid-functions.h"
 #include "Gral/Grids/Cartesian3D/partial-grid-functions.h"

@@ -16,6 +16,6 @@ Triangulation: #cells=1; #vertices=3
 E [0->1] length=1
 E [1->2] length=1.41421
 E [2->0] length=1
-F [0 1 ] area=1
-F [1 2 ] area=1.41421
-F [2 0 ] area=1
+F [0 1 ] volume=1
+F [1 2 ] volume=1.41421
+F [2 0 ] volume=1

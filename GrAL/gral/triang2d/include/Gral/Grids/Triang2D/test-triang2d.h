@@ -1,6 +1,11 @@
 #ifndef GRAL_GB_GRIDS_TEST_TRIANG2D_H
 #define GRAL_GB_GRIDS_TEST_TRIANG2D_H
 
+// $LICENSE
+
+/*! \file
+*/
+
 #include <iostream>
 
 #include "IO/control-device.h"

@@ -1,8 +1,9 @@
 
 // $LICENSE 
 
-/*!
-  \author Holger Kache, Guntram Berti
+/*! \file
+  
+    \author Holger Kache, Guntram Berti
  */
 
 extern "C" {

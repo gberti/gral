@@ -4,6 +4,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Gral/Partitioning/coarse-grid-from-partitioning.h"
 #include "Gral/Partitioning/collect-element-partitions.h"
 

@@ -3,6 +3,10 @@
 
 // $LICENSE
 
+/*! \file
+
+*/
+
 #include "Gral/Grids/Complex2D/complex2d.h"
 #include "Gral/Grids/Complex2D/grid-functions.h"
 #include "Gral/Grids/Complex2D/partial-grid-functions.h"

@@ -7,7 +7,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/grid-functors.h"
 
-//----------------------------------------------------------------
+
 /*! \defgroup boundarycompiter Boundary Component Iterators
 
   \brief A set of general iterators for the boundary of a (subset of) a 2D grid
@@ -51,11 +51,11 @@
    Could use partial specialization based on the 
    dimension of Grid to remove the syntactic 2D dependency
    in the name.
+   \todo Test
   
   \see Module \ref iterators
   \see Module \ref boundaryrange
 */
-//----------------------------------------------------------------
 
 /*----------------------------------------------------------------
 

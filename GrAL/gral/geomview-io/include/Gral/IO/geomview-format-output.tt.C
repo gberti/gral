@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Gral/IO/geomview-format-output.h"
 #include "Geometry/point-traits.h"
 

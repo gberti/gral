@@ -1,8 +1,9 @@
 
 // $LICENSE_NEC_2003
 
-/*! \file Test harness for \c cell_as_volume<>
+/*! \file 
 
+    Test harness for \c cell_as_volume<>
 */
 
 #include "Gral/Geometries/cell-as-volume.h"

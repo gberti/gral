@@ -16,6 +16,9 @@
 //----------------------------------------------------------------
 //  
 /*!  \defgroup connectors Connectors 
+
+     \ingroup distributedgrids
+
      \brief Abstractions for copying data between iterator ranges.
 
   \contents:

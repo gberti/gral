@@ -4,20 +4,15 @@
    An object of type \c Complex2D can represent a general two-dimensional 
    grid  with arbritrary simple polygons as cells.
 
-   By its implementation, it is not meant to be a high-performance
-   data structure. Rather, it is a working horse for testing most 
-   generic grid components.
+   Complex2D is not meant to be a high-performance data structure; 
+   rather, it is a "working horse" for testing most generic grid components.
    
-   The main header files a user may want to include are:
-   (under the path Gral/Grids/Complex2D)
-   -  complex2d.h for the grid and iterator definitions
-   -  stored-geometry.h for a simple grid geometry
-   -  grid-functions.h for total grid functions
-     (see $GrAL TotalGridFunction concept)
-   -  partial-grid-functions.h for partial grid functions
-     (see $GrAL PartialGridFunction concept)
-   -  construct.h for generic copy operations
-   -  enlarge.h for generic enlargment of grids (glueing grids together)
-   - boundary.h for boundary iteration
-   - all.h for all of the above
+  Start to browse the documentation for the \ref complex2dmodule module.
+  A convencience header is <tt>\ref Gral/Grids/Complex2D/all.h</tt>.
+ 
+*/
+
+/*! \defgroup complex2dmodule Components related to Complex2D
+
+     This is the top level module for Complex2D.
 */

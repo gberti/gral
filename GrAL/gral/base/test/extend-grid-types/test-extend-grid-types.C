@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include "Gral/Base/extend-grid-types.h"
 
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"

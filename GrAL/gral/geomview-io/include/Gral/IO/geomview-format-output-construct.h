@@ -3,17 +3,21 @@
 
 // $LICENSE_NEC
 
+/*! \file
+ */
+
+
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/IO/geomview-format-output.tt.C"
 #else
 
 /*! \brief ConstructGrid overload for OstreamOFF2DFmt
-  \ingroup complex2dformat
+
   \relates OstreamOFF2DFmt
   
-  \see Module \ref complex2dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
+  \see GrAL base module \ref complex2dformat
+  \see GrAL base module \ref copyoperations
+  \see Test in \ref test-geomview-output.C
  */
 template<class GRID, class GEOM>
 extern 
@@ -24,13 +28,14 @@ void ConstructGrid(OstreamOFF2DFmt& Out,
 
 
 /*! \brief ConstructGrid overload for OstreamOFF2DFmt
-  \ingroup complex2dformat
+
   \relates OstreamOFF2DFmt
   
   Dummy output geometry variable.
-  \see Module \ref complex2dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
+  \see GrAL base module \ref complex2dformat
+  \see GrAL base module \ref copyoperations
+  \see Test in \ref test-geomview-output.C
+
  */
 template<class GRID, class GEOM>
 inline void 

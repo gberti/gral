@@ -4,6 +4,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include <vector>   // STL
 
 #include "Config/compiler-config.h"
@@ -23,7 +26,7 @@
 //----------------------------------------------------------------
 /*! \defgroup enumsubranges Enumerated Grid Subranges
     \ingroup subranges 
-    \see     subranges
+
     \brief Subranges defined by the sequence of their members 
 
  \contents
@@ -56,6 +59,9 @@
  Aliases 'Element' and 'ElementIterator' are provided to ease the
  definition of template functions that are independent of the
  concrete element category (i.e. Vertex, Edge etc.)
+
+    \see     \ref subranges module 
+    \see Tests in \ref test-enumerated-subrange.C
 
   \todo the ranges do not allow \c ElementIterator(Range)
         constructor.

@@ -6,6 +6,9 @@
 #include "Gral/Base/element-handle.h"
 #include "Gral/Grids/Complex2D/complex2d.h"
 
+/*! \file
+ */
+
 class Triang3D;
 class Triang3D_Vertex;
 //class Triang3D_Edge;

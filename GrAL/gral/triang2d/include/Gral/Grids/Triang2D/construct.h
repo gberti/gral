@@ -7,16 +7,23 @@
 #include "Gral/Base/construct-grid.h"
 #include "Gral/Grids/Triang2D/triang2d.h"
 
+/*! \file 
+ */
 
-/*! copy-construct a Triang2D <dest> from another 2D grid <source_grid>
-   supporting 
-    - grid_types<>, 
-    - CellIterator, VertexIterator, VertexOnCellIterator,
-    - vertex_handle
-  This template is defined in generic/construct.C
+/*! \defgroup triang2dcopy Generic copy operations for Triang2D
+   
+    \ingroup triang2dmodule
+
+    Overloads of the templates in \ref Gral/Base/construct-grid.h
+    \see $GrALConstructGrid
+    \see Gral base module \ref copyoperations
 */
 
 
+/*! \brief Copy any grid \c srcG to \c  Triang2D, including geometry
+
+    \ingroup triang2dcopy
+ */
 template<class Geom, class G2, class Geom2>
 extern  void 
 ConstructGrid(Triang2D   & destG,
@@ -24,6 +31,10 @@ ConstructGrid(Triang2D   & destG,
 	      G2    const& srcG, 
 	      Geom2 const& srcGeom);
 
+/*! \brief Copy any grid \c srcG to \c  Triang2D, including geometry and mapping
+
+    \ingroup triang2dcopy
+ */
 template<class Geom, class G2, class Geom2, class VertexMap>
 extern void 
 ConstructGridV(Triang2D      & destG,
@@ -34,6 +45,10 @@ ConstructGridV(Triang2D      & destG,
 // VertexCorr  maps G2::vertex_handles to  G1::vertex_handles
 // for transfer of grid-related information, e.g. grid-functions.
 
+/*! \brief Copy any grid \c srcG to \c  Triang2D, including geometry and mapping
+
+    \ingroup triang2dcopy
+ */
 template<class Geom, class G2, class Geom2, class VertexMap, class CellMap>
 extern void 
 ConstructGridVC(Triang2D      & destG, 
@@ -45,6 +60,10 @@ ConstructGridVC(Triang2D      & destG,
 // CellCorr  maps G2::cell_handles to  G1::vertex_handles
 // for transfer of grid-related information, e.g. grid-functions.
 
+/*! \brief Copy any grid \c srcG to \c  Triang2D (without geometry)
+
+    \ingroup triang2dcopy
+ */
 template<class G2, class VertexMap, class CellMap>
 extern void 
 ConstructGrid0(Triang2D      & destG, 

@@ -1,10 +1,17 @@
-#include <fstream>
+
+// $LICENSE
+
+
+/*! \file
+ */
 
 #include "Gral/Grids/Cartesian3D/all.h"
 
 #include "Gral/Test/test-grid-functions.h"
 #include "Gral/Test/test-partial-grid-functions.h"
 #include "Utility/pre-post-conditions.h"
+
+#include <fstream>
 
 int main() {
   using namespace std;

@@ -11,6 +11,17 @@
 
 #else
 
+/*! \defgroup complex3dcopy Generic copy operations for Complex3D
+    \ingroup complex3dmodule
+
+    \see $GrALConstructGrid
+    \see Gral base module \ref copyoperations
+ */
+
+/*! \brief Copy any grid to Complex3D
+    \ingroup complex3dcopy
+    \see Test in \ref test-construct-complex3d.C
+ */
 template<class G_SRC, class VCORR, class CCORR>
 void ConstructGrid0(Complex3D     & G_dest,
 		    G_SRC    const& G_src,
@@ -20,6 +31,12 @@ void ConstructGrid0(Complex3D     & G_dest,
 
 #endif
 
+/*! \brief Copy any grid to Complex3D
+
+    This version copies also the geometry.
+    \ingroup complex3dcopy
+    \see Test in \ref test-construct-complex3d.C
+*/
 template<class G_SRC, class GEOM_SRC,
          class GEOM_DEST,
          class VCORR, class CCORR>

@@ -1,66 +1,93 @@
-/*!  \mainpage Index to <A HREF="http://www.math.tu-cottbus.de/~berti/gral"> GrAL </A>  Modules
+/*!  \mainpage Index to <A HREF="http://www.math.tu-cottbus.de/~berti/gral"> GrAL </A>  Packages
 
-     As GrAL is supposed to grow quite a bit, 
-     it is partitioned from the beginning
-     into more manageable units. 
-     Thus, one does not have to ``buy everything''.
+     GrAL is partitioned from the beginning
+     into manageable packages
+     with (hopefully) minimized dependencies.
+
 
     The recommended way of browsing the documentation 
-    is by (sub-) module hierarchy.
+    is by (sub-) package hierarchy.
 
     Here are the separate packages of GrAL:
-     <H2> Basic, non-grid related modules </H2>
+
+     <H2> Basic, non-grid related packages </H2>
    <UL>
-     <LI>  $gral-configuration Configuration module:
+     <LI>  $gral-configuration Configuration package:
            collect comman make targets and
            variable, compiler config header etc.
-     <LI>  $gral-utilities Utilities module: 
-           Very basic stuff used by most other modules.
-     <LI>  $gral-sequence  Sequence module: 
+     <LI>  $gral-utilities Utilities package: 
+           Very basic stuff used by most other packages.
+     <LI>  $gral-sequence  Sequence package: 
            Contains some stuff for handling containers,
            sequences and algorithms.
-     <LI>  $gral-external-control External Control module:
+     <LI>  $gral-external-control ExternalControl package:
       Controling runtime parameters in a uniform and hierarchical way.
-     <LI>  $gral-geometry         Geometry module:
+     <LI>  $gral-geometry         Geometry package:
            some geometric primitives, especially for 2D and 3D
-     <LI>  $gral-graphics-device Graphics Device module: Abstract interface
+     <LI>  $gral-graphics-device GraphicsDevice package: Abstract interface
          to graphics output, mainly geomview/OOGL at the moment.
-     <LI>  $gral-function-algebra Function Algebra module: 
+     <LI>  $gral-function-algebra FunctionAlgebra package: 
          An implemention of a function algebra, including function composition.
    </UL>
-   <H2> Proper GrAL Modules </H2> 
+
+   <H2> Proper GrAL packages </H2> 
    <UL>
       <LI> $GRALCONCEPTSTOP 'Intro and concepts documentation'
-      <LI> $gral-gral/base GrAL-Base module:
-         Basis generic data structures and algorithms. This module is used by all
-        other GrAL modules.
-      <LI> $gral-gral/testing GrAL-Testing module.
+  </UL>
+    <H3> Basic packages </H3>
+   <UL>	
+      <LI> $gral-gral/base GrAL-Base package:
+         Basis generic data structures and algorithms. This package is used by all
+        other GrAL packages.
+      <LI> $gral-gral/testing GrAL-Testing package.
            Used to test concrete grid components.
-      <LI> $gral-gral/complex2d GrAL-Complex2D module:
+    </UL>	
+	<H3> General unstructured grid data structures </H3>
+    <UL>		
+      <LI> $gral-gral/complex2d GrAL-Complex2D package:
        A simple 2D grid component for arbitrary polygonal cells
-     <LI>  $gral-gral/cartesian2d GrAL-Cartesian2D module:
-         A Cartesian grid component 
-      <LI> $gral-gral/triang2d GrAL-Triang2D module:
-         A grid component for 2D triangulations
-      <LI> $gral-gral/complex3d GrAL-Complex3D module:
+      <LI> $gral-gral/complex3d GrAL-Complex3D package:
          A grid component for 3D grids with arbitrary cells
-      <LI> $gral-gral/cartesian3d GrAL-Cartesian3D module:
-         A Cartesian grid component for 3D regular grids. 
-      <LI> $gral-gral/complexnd  GrAL-ComplexND module:
+      <LI> $gral-gral/complexnd  GrAL-ComplexND package:
          Unstructured grids of arbitrary dimension
-      <LI> $gral-gral/cartesiannd  GrAL-CartesianND module:
+     </UL>
+	<H3> Triangulation data structures </H3>
+     <UL>
+      <LI> $gral-gral/triang2d GrAL-Triang2D package:
+         A grid component for 2D triangulations
+      <LI> $gral-gral/triang3d GrAL-Triang3D package:
+         A grid component for 3D triangulations (tetrahedrizations)
+     </UL>
+        <H3> Cartesian grids </H3>
+     <UL>
+     <LI>  $gral-gral/cartesian2d GrAL-Cartesian2D package:
+         A Cartesian grid component 
+      <LI> $gral-gral/cartesian3d GrAL-Cartesian3D package:
+         A Cartesian grid component for 3D regular grids. 
+      <LI> $gral-gral/cartesiannd  GrAL-CartesianND package:
          Structured grids of arbitrary dimension
-      <LI> $gral-gral/partitioning GrAL-Partitioning module:
+      </UL>
+      <H3> Algorithmic packages </H3>
+      <UL>
+      <LI> $gral-gral/partitioning GrAL-Partitioning package:
           Generic components for grid partitioning.
-      <LI> $gral-gral/measurement  GrAL-Measurement module:
+      <LI> $gral-gral/geometry GrAL-Geometry package:
+           Geometric algorithms and data structures, like point location
+      <LI> $gral-gral/measurement  GrAL-Measurement package:
            Components for quantitative measure of grids, such as mesh quality measures
-      <LI> $gral-gral/distributed  GrAL-Distributed module:
+      </UL>
+        <H3> Data structures for distributed and hierarchical grids </H3>
+      <UL>
+      <LI> $gral-gral/distributed  GrAL-Distributed package:
           Generic components for distributed grids.
-      <LI> $gral-gral/hierarchical GrAL-Hierarchical module:
+      <LI> $gral-gral/hierarchical GrAL-Hierarchical package:
            Components for hierarchical grids
-      <LI> $gral-gral/gmv-io GrAL-GMV-IO module:
+      </UL>
+      <H3> I/O to various file formats</H3>
+      <UL>
+      <LI> $gral-gral/gmv-io GrAL-GMV-IO package:
         Components for output to GMV file format (3D and 2D versions).
-      <LI> $gral-gral/geomview-io GrAL-Geomview-IO module:
+      <LI> $gral-gral/geomview-io GrAL-Geomview-IO package:
         Components for output to OFF file format used by Geomview
    </UL>
 */

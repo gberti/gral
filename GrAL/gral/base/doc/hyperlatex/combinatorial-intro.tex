@@ -61,13 +61,15 @@
   co-dimension.
 
       
-  \begin{tabular}{lcc} \\ \hline
+  \begin{tabular}{lcc} 
+    \T\\ \hline
     \bf  k-Element &  \bf  Dimension &  \bf  Codimension  \\ \hline
     {\tt Vertex} &   0 &   -  \\
     {\tt Edge} &   1 &   -  \\ 
     {\tt Face} &   2 &   -  \\
     {\tt Facet} &   - &   1  \\
-    {\tt Cell} &   - &   0  \\ \hline \\
+    {\tt Cell} &   - &   0  
+    \T\\ \hline \\
   \end{tabular}
   
   Other common names are {\em node\/} (for vertex) and {\em volume\/} (for cell).
@@ -155,12 +157,12 @@
     we can implement (and use) the following iterators:
 
     \begin{tabular}{ll} 
-      \\
+      \T\\
       {\tt VertexOnCellIterator} &  {\tt Cell::FirstVertex()}  \\ 
       {\tt EdgeOnCellIterator} &   {\tt Cell::FirstEdge()} \\ 
       {\tt FacetOnCellIterator} &  {\tt Cell::FirstFacet()}  \\
-      {\tt CellOnCellIterator} &  {\tt Cell::FirstCell()} \\ 
-      \\
+      {\tt CellOnCellIterator} &  {\tt Cell::FirstCell()} 
+      \T\\  \\
     \end{tabular}
 
     The corresponding iterators for vertices have analogous names.

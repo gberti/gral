@@ -3,6 +3,10 @@
 
 // $LICENSE_NEC
 
+/*! \file
+
+ */
+
 #include "Gral/Grids/ComplexND/complexnd.h"
 #include "Gral/Grids/ComplexND/construct.C"
 

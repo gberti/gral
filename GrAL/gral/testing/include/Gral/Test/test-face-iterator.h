@@ -3,6 +3,13 @@
 
 // $LICENSE
 
+/*! \file  
+
+    Test of face iterators (models of $GrAL FaceIterator).
+
+*/
+
+
 #include <iostream>
 
 
@@ -11,9 +18,21 @@
 
 #else
 
+/*! \brief Test of face iterators
+
+    Models of $GrAL FaceIterator are tested.
+    
+    \ingroup sequenceiteratortest
+*/
 template<class G>
 bool test_face_iterator(G const& g, std::ostream & out);
 
+/*! \brief Test of face iterators
+
+    Models of $GrAL FaceIterator are tested.
+    
+    \ingroup sequenceiteratortest
+*/
 template<class G, class GT>
 bool test_face_iterator(G const& g, std::ostream & out, GT);
 

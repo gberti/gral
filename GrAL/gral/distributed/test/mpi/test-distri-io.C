@@ -1,3 +1,11 @@
+
+// $LICENSE
+
+/*! \file
+
+    Test distributed I/O
+ */
+
 #include <iostream>
 #include <fstream>
 

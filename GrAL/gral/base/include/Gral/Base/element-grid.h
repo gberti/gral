@@ -7,11 +7,16 @@
 #include "Utility/ref-ptr.h"
 
 /*! \brief View a k-dimensional grid element as a k-dimensional grid   
-   
+
+    \ingroup  subranges
+    \ingroup  elements
+    \ingroup  gridviews
+
     The element grid will contain exactly one cell.
 
    \todo We should wrap the element/iterator types instead of simply typedefing
    to the types of the underlying base grid.
+
    \todo Need facet types
    \todo Need boundary
 */

@@ -9,6 +9,7 @@
 //----------------------------------------------------------------
 /*! \defgroup geometricfunctors Geometric Function Objects
     \ingroup  functors 
+    \ingroup  geometricgridtools
 
   Function objects that map grid elements to geometric items.
   These are models of STL unary functions.
@@ -23,23 +24,22 @@
    - edge2length_map:  Edge   -> double
 
 
-  \see Module functors
+  \see \ref functors module
+  \see \ref geometricgridtools module
   \see $GrAL VertexGridGeometry
 */
 //----------------------------------------------------------------
 
 
-//----------------------------------------------------------------
-//                 vertex2coord_map
 /*! \brief Function object mapping vertices to coordinates 
-   \ingroup geometricfunctors
+    \ingroup geometricfunctors
+  
 
    \templateparams
    - Geom: grid-geometry type, model of $GrAL VertexGridGeometry
 
-   \see Module geometricfunctors
+   \see Module \ref geometricfunctors
 */
-//----------------------------------------------------------------
 
 template<class Geom>
 class vertex2coord_map {
@@ -68,17 +68,15 @@ inline vertex2coord_map<Geom> vertex2coord(const Geom& g)
 { return vertex2coord_map<Geom>(g);}
 
 
-//----------------------------------------------------------------
-//                 edge2length_map
+
 /*! \brief Function object mapping vertices to coordinates 
    \ingroup geometricfunctors
 
    \templateparams
    - Geom: grid-geometry type, model of $GrAL VertexGridGeometry
 
-   \see Module geometricfunctors
+   \see Module \ref geometricfunctors
 */
-//----------------------------------------------------------------
 template<class Geom>
 class edge2length_map {
 public:

@@ -39,10 +39,8 @@
      <tt> vertex_iterator_of_cell_set(grid_type const&) </tt>  will not compile.
      This can be changed by providing an adapted \c GT parameter.
 
-    \see  facet_iterator_of_cell_set
-    \see  edge_iterator_of_cell_set
-    
-     
+    \see \ref iterators module 
+    \see Test in \ref test-vertex-iterator-of-cell-set.C
 
     \note This is very similar to edge_iterator_of_cell_set and facet_iterator_of_cell_set.
     We could use a similar strategy as that one used for partial_grid_function.

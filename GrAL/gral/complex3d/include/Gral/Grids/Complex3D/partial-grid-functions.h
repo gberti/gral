@@ -6,4 +6,12 @@
 #include "Gral/Grids/Complex3D/complex3d.h"
 #include "Gral/Base/partial-grid-function-hash.h"
 
+/*! \defgroup complex3dpgf Partial grid functions for Complex3D
+ 
+    \ingroup complex3dmodule
+
+    This module reuses the generic implementation of partial_grid_function.
+
+*/
+
 #endif

@@ -1,5 +1,9 @@
+
+// $LICENSE_NEC
+
 /*! \file
-    Testing facet_iterator_of_cell_set<> 
+
+    Testing \c facet_iterator_of_cell_set
 */
 
 #include "Gral/Iterators/facet-iterator-of-cell-set.h"

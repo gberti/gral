@@ -3,11 +3,25 @@
 
 // $LICENSE
 
+/*! \file
+ */
 
 #include "Gral/Grids/Complex2D/complex2d.h"
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
 
+/*! \defgroup complex2dgf Total grid functions for Complex2D
+
+    \ingroup complex2dmodule
+
+    We specialize the grid_function template for the element types
+    of Complex2D.
+ */
+
+/*! \brief Specialization for Complex2D::Vertex
+    \ingroup complex2dgf
+    \see Module \ref complex2dgf
+ */
 template<class T>
 class grid_function<Vertex2D,T> 
   : public grid_function_vector<Vertex2D,T>
@@ -22,6 +36,10 @@ public:
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
 };
 
+/*! \brief Specialization for Complex2D::Vertex
+    \ingroup complex2dgf
+    \see Module \ref complex2dgf
+ */
 template<class T>
 class grid_function<Cell2D,T> 
   : public grid_function_vector<Cell2D,T>
@@ -36,6 +54,10 @@ public:
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
 };
 
+/*! \brief Specialization for Complex2D::Vertex
+    \ingroup complex2dgf
+    \see Module \ref complex2dgf
+ */
 template<class T>
 class grid_function<Edge2D,T> 
   : public grid_function_hash<Edge2D,T>

@@ -3,11 +3,38 @@
 
 // $LICENSE
 
+/*! \file  
+
+    Test of total grid functions
+    (models of $GrAL PartialGridFunction concept).
+
+ */
+
 #include <iostream>
 
+
+/*! \brief Test of total grid functions
+
+     Test models of the $GrAL TotalGridFunction concept.
+     \templateparams
+      - \c E is a model of $GrAL GridElement. A total grid function
+         defined on elements of type \c E is tested.
+    \ingroup gridfunctiontests
+
+    Example:
+    \code
+    MyGrid g;
+    typedef grid_types<MyGrid> gt;
+    // test total grid functions on vertices
+    test_grid_function<gt::Vertex>(g, std::cout);
+    \endcode
+
+    \ingroup gridfunctiontests
+*/
 template<class E>
 bool test_grid_functions(typename E::grid_type const& G, 
 			 std::ostream& out);
+
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Test/test-grid-functions.C"

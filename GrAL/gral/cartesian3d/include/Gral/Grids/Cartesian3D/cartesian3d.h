@@ -103,25 +103,27 @@ struct grid_types_Cartesian3D {
 
 
 /*! \brief 3D Cartesian grid class. 
+    \ingroup cartesian3dmodule
 
-    At present, this implements only a 
-    $GrAL Cell-VertexInputGridRange.
+    Model of 
+    $GrAL VertexGridRange,
+    $GrAL EdgeGridRange,
+    $GrAL FacetGridRange,
+    $GrAL CellGridRange,
+    $GrAL ArchetypedGrid.
   
-    \todo Implement the full set of grid elements and iterators,
-    in particular Edge and Facet types.
     \todo CartesianGrid3D(1,1,1) gives an error in cell_map
           (division by 0). Check this in index_map_nd<>.
     \todo Implement validity checks for iterators
  */
 class CartesianGrid3D : public grid_types_Cartesian3D {
 public:
-
   typedef Complex2D             archetype_type;
   typedef archetype_type const* archetype_iterator;
 
-  //! edge directions
+  //! \internal edge directions
   struct edge_direction   { enum dir { x  = 0, y  = 1, z = 2, size = 3 };};
-  //! facet directions
+  //! \internal facet directions
   struct  facet_direction { enum dir { xy = 0, xz = 1, yz= 2, size = 3 };};
 
 private:
@@ -181,6 +183,7 @@ private:
   };
 
 public:
+  //! Experimental: A geometry for the archetype
   typedef archetype_geom archetype_geom_type;
 
   friend class archetype_geom;
@@ -194,8 +197,8 @@ public:
   friend class VertexOnFacetIterator_Cartesian3D;
   friend class EdgeOnFacetIterator_Cartesian3D;
 public:
-  /*! \name Constructors */
   /*@{*/ 
+  /*! \name Constructors */
   //! Empty grid
   CartesianGrid3D();
   //! Grid with \f$ vx \times vy \times vz \f$ vertices.
@@ -212,17 +215,11 @@ public:
   unsigned dimension() const { return 3;}
   index_type vertex_size() const { return vertex_map.max_tuple() + index_type(1);}
   index_type cell_size()   const { return cell_map  .max_tuple() + index_type(1);}
-  /*! \name Element size functions */
-  /*@{*/ 
-  unsigned NumOfVertices() const { return vertex_map.max_flat_index()+1;}
-  unsigned NumOfCells   () const { return cell_map  .max_flat_index()+1;}
-  unsigned NumOfEdges   () const { return NumOfXDirEdges()+NumOfYDirEdges()+NumOfZDirEdges(); }
-  unsigned NumOfFacets  () const { return NumOfXYDirFacets()+NumOfXZDirFacets()+NumOfYZDirFacets();}
-  unsigned NumOfFaces   () const { return NumOfFacets();}
-  /*@}*/
 
-  /*! \name Sequence iteration */
   /*@{*/ 
+  /*! \name Sequence iteration 
+     \brief Allows for STL style iteration
+  */
   inline VertexIterator FirstVertex() const;
   inline EdgeIterator   FirstEdge()   const;
   inline FacetIterator  FirstFacet()  const;
@@ -233,29 +230,37 @@ public:
   inline FacetIterator  EndFacet()  const;
   inline FaceIterator   EndFace()   const;
   inline CellIterator   EndCell()   const;
+
+  unsigned NumOfVertices() const { return vertex_map.max_flat_index()+1;}
+  unsigned NumOfCells   () const { return cell_map  .max_flat_index()+1;}
+  unsigned NumOfEdges   () const { return NumOfXDirEdges()+NumOfYDirEdges()+NumOfZDirEdges(); }
+  unsigned NumOfFacets  () const { return NumOfXYDirFacets()+NumOfXZDirFacets()+NumOfYZDirFacets();}
+  unsigned NumOfFaces   () const { return NumOfFacets();}
   /*@}*/
 
-  /*! \name 1D element numbers
-       Number of vertices, cells along a grid dimension */
   /*@{*/ 
-  //! equal to vx arg of constructor
+  /*! \name Cartesian 1D element numbers
+       \brief Number of vertices, cells along a grid dimension 
+   */
+  //! equal to \c vx arg of constructor
   unsigned NumOfXVertices() const { return vertex_map.max_tuple()[0]+1;}
-  //! equal to vy arg of constructor
+  //! equal to \c vy arg of constructor
   unsigned NumOfYVertices() const { return vertex_map.max_tuple()[1]+1;}
-  //! equal to vz arg of constructor
+  //! equal to \c vz arg of constructor
   unsigned NumOfZVertices() const { return vertex_map.max_tuple()[2]+1;}
-  //! equal to NumOfXVertices()-1
+  //! equal to \c NumOfXVertices()-1
   unsigned NumOfXCells   () const { return cell_map.max_tuple()[0]+1  ;}
-  //! equal to NumOfYVertices()-1
+  //! equal to \c NumOfYVertices()-1
   unsigned NumOfYCells   () const { return cell_map.max_tuple()[1]+1  ;}
-  //! equal to NumOfZVertices()-1
+  //! equal to \c NumOfZVertices()-1
   unsigned NumOfZCells   () const { return cell_map.max_tuple()[2]+1  ;}
   /*@}*/
 
-  /*! \name Directional edge,facet element numbers
-       Number of Edges/Facets with a given direction.
-       Note that the meaning is different from NumOfXVertices() / NumOfXCells() etc. !! */
   /*@{*/ 
+  /*! \name Directional edge,facet element numbers
+      \brief Number of Edges/Facets having a given direction.
+      \note The meaning is different from NumOfXVertices() / NumOfXCells() etc. !! 
+  */
   unsigned NumOfXDirEdges() const { return NumOfDirEdges(edge_direction::x);}
   unsigned NumOfYDirEdges() const { return NumOfDirEdges(edge_direction::y);}
   unsigned NumOfZDirEdges() const { return NumOfDirEdges(edge_direction::z);}
@@ -268,18 +273,21 @@ public:
   /*@}*/
 
 
-  /*! \name Element map accessors.
-      Access to element maps, mapping flat indices to 3D and vice versa */
   /*@{*/ 
+  /*! \internal
+      \name Element map accessors.
+      Access to element maps, mapping flat indices to 3D and vice versa 
+  */
   index_map_type const& VertexMap()                   const { return vertex_map;}
   index_map_type const& CellMap()                     const { return cell_map;}
   index_map_type const& EdgeMap (edge_direction::dir dir)  const { return edge_maps [dir];}
   index_map_type const& FacetMap(facet_direction::dir dir) const { return facet_maps[dir];}
   /*@}*/
 
-  /*! \name direction extraction from handles and vice versa
-   */
   /*@{*/ 
+  /*! \name Index+direction / handle conversion
+      \brief direction/index extraction from handles and vice versa
+   */
   vertex_handle get_vertex_handle(index_type const& I) const { return VertexMap()(I);}
   index_type    get_index        (vertex_handle h)     const { return VertexMap()(h);}  
 
@@ -324,8 +332,10 @@ public:
 
   /*@}*/
 
-  /*! \name Checking functions */
- /*@{*/ 
+  /*@{*/ 
+  /*! \name Checking functions 
+     \brief Check handles for validity
+  */
   void cv(vertex_handle e) const { REQUIRE(valid(e), "",1);}
   bool valid(vertex_handle e) const { return (0 <= e && e < (int)NumOfVertices()); }
   void cv(edge_handle e) const { REQUIRE(valid(e), "",1);}
@@ -336,9 +346,10 @@ public:
   bool valid(cell_handle e) const { return (0 <= e && e < (int)NumOfCells()); }
   /*@}*/
 
+  /*@{*/ 
+
   /*! \name Archetype handling
    */
-  /*@{*/ 
   static archetype_type const& Archetype(int a) {
     REQUIRE(a == 0, "a = " << a,1);
     return *BeginArchetype();

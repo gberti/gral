@@ -3,6 +3,8 @@
 
 // $LICENSE_NEC
 
+/*! \file
+ */
 
 #include "Gral/Grids/Complex3D/construct-grid.h"
 

@@ -1,4 +1,9 @@
-/*! \file Test code for polygon1d::polygon
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+  Test code for polygon1d::polygon
 
 */
 

@@ -1,3 +1,11 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
+
 #include "Gral/Base/element-grid.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"

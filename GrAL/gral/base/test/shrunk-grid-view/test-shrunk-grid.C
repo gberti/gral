@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include "Gral/Views/shrunk-grid-view.h"
 
 #include "Gral/Grids/Complex3D/all.h"

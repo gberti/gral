@@ -3,6 +3,11 @@
 
 // $LICENSE_NEC
 
+/*! \file
+  
+    \ingroup complex3dmodule
+ */
+
 #include "Gral/Grids/Complex3D/complex3d.h"
 #include "Gral/Grids/Complex3D/grid-functions.h"
 #include "Gral/Grids/Complex3D/partial-grid-functions.h"

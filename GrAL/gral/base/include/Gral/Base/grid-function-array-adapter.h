@@ -8,8 +8,11 @@
 
 #include <iostream>
 
-/*! \brief Adapter for viewing arrays as grid function
+/*!\internal
+    \brief Adapter for viewing arrays as grid function
 
+    \ingroup gridfunctions
+  
    When adapting existing grid data structures to the GrAL
    interface, we often have to deal with array-based grid functions,
    for example vertex coordinates as an array of 3*nv doubles,
@@ -128,6 +131,7 @@ struct point_traits<gf_array_adapter::value_type<T,N> >
         
 
 /*! \brief Adapter for plain arrays to grid function interface
+    \ingroup gridfunctions
    
     The array is assumed to have the following layout:
     \f$ t_{0,1}, t_{0,2}, \ldots t_{0,N}, \ldots t_{M-1,1}, \ldots t_{M-1,N} \f$

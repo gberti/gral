@@ -13,7 +13,7 @@
 
 /*! \brief Output adapter for the GMV format (2D grids).
 
-    The <A HREF= "http://www-xdiv.lanl.gov/XCM/gmv/"> 
+    The <A TARGET=_parent HREF="http://www-xdiv.lanl.gov/XCM/gmv/"> 
     General Mesh Viewer </A> (GMV) is a versatile tool
     for viewing 3D meshes and fields defined on them.
 
@@ -24,11 +24,11 @@
     ConstructGrid(Out,MyGrid, MyGeom); 
     \endcode
 
-    See also test/gmv-output2d/test-gmv-output2d.C
+    Tests in \ref test-gmv-output2d.C
 
-    The support for the output of arbitrary grid functions is still
-    experimental.
-
+    \todo The output of arbitrary grid functions is not working well
+     for 2D grids, as vertex and cell grid functions cannot be mixed.
+     It works best if you output only cell-based grid function.
  */
 class OstreamGMV2DFmt : public OstreamGMVFmt_base {
   typedef OstreamGMV2DFmt    self;
@@ -59,10 +59,9 @@ protected:
 /*! \brief ConstructGrid overload for OstreamGMV2DFmt
 
   \relates OstreamGMV2DFmt
-  
-  \see Module \ref GMV2Dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
+
+  \see Test in \ref test-gmv-output2d.C 
+  \see Gral base module \ref copyoperations
  */
 template<class GRID,class GEOM>
 void ConstructGrid(OstreamGMV2DFmt& Out, 
@@ -76,10 +75,8 @@ void ConstructGrid(OstreamGMV2DFmt& Out,
   This takes an additional list of arbitrary grid functions 
   to be written to the GMV file.
 
-  \see Module \ref GMV2Dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
-  \see \ref test-gmv-output2d.C for an example
+  \see Test in \ref test-gmv-output2d.C 
+  \see Gral base module \ref copyoperations
  */
 template<class GRID,class GEOM, class GF, class MOREGFS>
 void ConstructGrid_GF(OstreamGMV2DFmt& Out, 

@@ -3,6 +3,12 @@
 
 // $LICENSE
 
+/*! \file  
+
+    Test of facet iterators (models of $GrAL FacetIterator).
+
+*/
+
 #include <iostream>
 
 
@@ -12,9 +18,21 @@
 
 #else
 
+/*! \brief Test of facet iterators
+
+    Models of $GrAL FacetIterator are tested.
+    
+    \ingroup sequenceiteratortest
+*/
 template<class G>
 bool test_facet_iterator(G const& g, std::ostream & out);
 
+/*! \brief Test of facet iterators
+
+    Models of $GrAL FacetIterator are tested.
+    
+    \ingroup sequenceiteratortest
+*/
 template<class G, class GT>
 bool test_facet_iterator(G const& g, std::ostream & out, GT);
 

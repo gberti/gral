@@ -23,17 +23,15 @@ distinguish between names relating to element dimension and element
 codimension\noteref{note-dim-codim}
     
 \begin{tabular}{lcc}
-  \\ 
-  \hline
+  \T \\   \hline
   \bf  k-Element &  \bf  Dimension &  \bf  Codimension  \\ 
   \hline
   {\tt Vertex} &   0 &   ~  \\ 
   {\tt Edge} &   1 &   ~  \\ 
   {\tt Face}\noteref{note-face}  &   2 &   ~  \\ 
   {\tt Facet} &   ~ &   1  \\ 
-  {\tt Cell} &   ~ &   0   \\ 
-  \hline
-  \\
+  {\tt Cell} &   ~ &   0   
+  \T \\   \hline  \\
 \end{tabular}
     
 This naming scheme allows for a dimension-independent
@@ -56,33 +54,28 @@ The only refinement is, in fact, that the anchor type is equal to the grid type.
 \conceptsubsection{Associated types}
 
 \begin{tabularx}{12cm}{llX}
-  \\ 
-  \hline
+  \T \\ \hline
   \bf  Name  &\bf  Expression  &\bf  Description   \\ 
   \hline
   Grid type &  {\tt E::grid\_type} &
   the same as {\tt E::anchor\_type}
   (defined in \sectionlink{\concept{Grid Entity}}{GridEntity})  
-  \\ 
-  \hline
-  \\
+  \T \\ \hline \\
 \end{tabularx}
 
 \conceptsubsection{Valid Expressions}
 \begin{tabular}{llll}
-  \\  
-  \hline
+  \T \\  \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
   \hline
-  Anchor  Grid &  {\tt e.TheGrid()} &  ~ &  {\tt grid\_type const\&}  \\ 
-  \hline 
-  \\
+  Anchor  Grid &  {\tt e.TheGrid()} &  ~ &  {\tt grid\_type const\&}  
+  \T \\   \hline \\
 \end{tabular}
 
 \conceptsubsection{Expression semantics}
 
 \T\begin{tabular}{p{2cm}p{3cm}lp{3cm}l}  \\ \hline
-\W\begin{tabular}{lllll} \\  \hline 
+\W\begin{tabular}{lllll} 
   \bf  Name     &
   \bf  Expression &
   \bf  Precondition&
@@ -94,9 +87,8 @@ The only refinement is, in fact, that the anchor type is equal to the grid type.
   {\tt grid\_type const\& g = e.TheGrid()}  &
   {\tt e} is valid &
   equivalent to  {\tt g = e.TheGrid()} &
-  ~  \\ 
-  \hline
-  \\
+  ~  
+  \T \\ \hline \\
 \end{tabular}
 
 \W\conceptsubsection{Complexity guarantees}

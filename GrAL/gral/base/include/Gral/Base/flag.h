@@ -5,16 +5,18 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
-/*! Representation of a  flag (tuple of incident elements, one of each dimension)
+/*! \brief Representation of a  flag (tuple of incident elements, one of each dimension)
 
   \ingroup elements
-  \see Module elements
+  \see elements module
 
   Flags are useful for local %incidence iteration, 
   using the switch operator. An example is found in 
-  Gral/Algorithms/calculate-vertex-stars.C.
+  <tt> \ref calculate-vertex-stars.C </tt>
 
-  Tests are in test/flag/test-flag.C .
+  Tests are in <tt> \ref test-flag.C </tt>
+
+  \todo Flags are implemented only for 2D and 3D.
  */
 
 template<class GRID, class DIM = typename grid_types<GRID>::dimension_tag> 

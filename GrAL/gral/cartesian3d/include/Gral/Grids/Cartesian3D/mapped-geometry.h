@@ -8,6 +8,7 @@
 namespace cartesian3d {
 
   /*! A mapped geometry for CartesianGrid3D
+     \ingroup cartesian3dmodule
 
      \templateparams
      - \c CoordMap
@@ -32,13 +33,21 @@ private:
   double dx,dy,dz;
 
 public:
+  //! Empty geometry
   mapped_geometry() : g(0) {}
+  //! Init with grid and mapping
   mapped_geometry(grid_type    const& gg,
 		  mapping_type const& ff = mapping_type())
     : g(&gg), f(ff)
     {
       init();
     }
+  /*! \brief  Delayed construction
+       
+      <tt> mapped_geometry<MAP> M; M.init(gg,ff); </tt>
+      <br> is equivalent to
+      <tt> mapped_geometry<MAP> M(gg,ff);</tt>
+   */
   void init(grid_type    const& gg,
 	    mapping_type const& ff = mapping_type())
     {
@@ -52,22 +61,31 @@ public:
   void rebind(grid_type    const& gg) { g = &gg; init();}
   void rebind(grid_type    const& gg,
 	      mapping_type const& ff) { init(gg,ff);}
- 
+
+  //! Dimension of embedding defined by the mapping
   unsigned space_dimension() const { return pt::Dim(coord(* (TheGrid().FirstVertex())));}
 
   //  coord_type coord(Vertex const& v) const { return f(x(v),y(v),z(v));}
+  //! Coordinate of vertex
   coord_type coord(Vertex const& v) const { 
     index_type i(v.index()); 
     return f(coord_type(x(i),y(i),z(i)));
   }
 
-  //! result is the mapping of the center of c in [0,1]^3
+  /*! Center of cell 
+      \note Result is the mapping of the center of \c c 
+       in unit coordinate defined in \f$[0,1]^3\f$.
+       In the case of a non-linear map, this is only an approximation 
+       to the real center.
+  */
   coord_type center(Cell const& c) const { 
     index_type i=c.index(); 
     return f(coord_type(x(i)+0.5*dx,y(i)+0.5*dy,z(i)+0.5*dz));
   }
 
+  //! Anchor grid
   grid_type    const& TheGrid() const { return *g;}
+  //! Mapping
   mapping_type const& TheMap()  const { return f;}
 
 private:

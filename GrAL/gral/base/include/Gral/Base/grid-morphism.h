@@ -6,8 +6,15 @@
 #include "Gral/Base/common-grid-basics.h"
 
 
-/*! grid vertex isomorphism 
+/*! \brief Grid vertex isomorphism 
+
+   Representation for a one-to-one mapping between vertices of 
+   two grids. Despite the name, this correspondence does not need
+   to come from a grid isomorphism.
+
    \ingroup gridmorphisms
+   \see \ref gridmorphisms module 
+
 
    \todo Specialize if both grids have consecutive handles
    \todo Make it independent of element being a vertex type
@@ -102,16 +109,20 @@ private:
 
 
 
-/*! grid cell isomorphism 
+/*! \brief Grid cell isomorphism 
+
+   Representation for a one-to-one mapping between vertices of 
+   two grids. Despite the name, this correspondence does not need
+   to come from a grid isomorphism.
+
    \ingroup gridmorphisms
+   \see  \ref gridmorphisms module
 
    \todo Specialize if grids have consecutive handles
    \todo Add support for inverse mapping
    \todo construct from vertex morphism
    \see vertex_morphism
- */
-
-
+*/
 template<class G_DEF, class G_IMG>
 class cell_morphism
 {

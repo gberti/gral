@@ -33,7 +33,7 @@ which is a model of \conceptlink{Grid Cell}{GridCell}.\\
 
 \conceptsubsection{Associated types}
 \begin{tabularx}{14cm}{llR} 
-  \\ \hline
+  \T \\ \hline
   \bf  Name  & \bf  Expression  &\bf  Description   \\
   \hline
    point type &
@@ -65,14 +65,13 @@ which is a model of \conceptlink{Grid Cell}{GridCell}.\\
    geometric type corresponding to cells 
    (if the grid type has combinatorial dimension $3$.)
    \par model of   STL \Stllink{Assignable} 
-   \\
-   \hline
+   \T \\   \hline
  \end{tabularx}
 
 \conceptsubsection{Valid Expressions}
  
 \begin{tabularx}{14cm}{RRRR}
-  \\ \hline
+  \T \\ \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  
   \\
   \hline
@@ -107,8 +106,7 @@ which is a model of \conceptlink{Grid Cell}{GridCell}.\\
    $3$-dimensional volume &
    \pcode{x = g.volume(c);} &
     & \type{real\_type}
-    \\
-  \hline
+    \T \\  \hline
 \end{tabularx}
 
 \conceptsubsection{Expression semantics}
@@ -122,8 +120,7 @@ the union of the geometric images of its lower-dimensional incidents.
 Note, however, that self-intersecting immersions are not excluded.
 
  \begin{tabularx}{15cm}{RRRRR} 
-   \\ 
-   \hline 
+   \T \\    \hline 
    \bf  Name    &
    \bf  Expression &
    \bf  Precondition&
@@ -145,8 +142,7 @@ Note, however, that self-intersecting immersions are not excluded.
     get the polygon corresponding to \pcode{f} &
     $\texorhtml{\partial}{\mbox{boundary of}}
       \mbox{\tt p} = \bigcup_{\mbox{\tt e} \prec \mbox{\tt f}} \mbox{\tt g.segment(e)}$
-      \\
-      \hline
+    \T \\      \hline
 \end{tabularx}
 
 \conceptsubsection{Invariants}

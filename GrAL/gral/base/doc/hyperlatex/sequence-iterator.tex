@@ -21,8 +21,8 @@ STL \stllink{Forward Iterator}{ForwardIterator}
 {\tt i, j} are  objects of type  {\tt I}
 
 \conceptsubsection{Associated types}
-\begin{tabularx}{12cm}{llR} \\
-  \hline
+\begin{tabularx}{12cm}{llR} 
+  \T \\ \hline
   \bf  Name  &\bf  Expression  &\bf  Description  \\ 
   \hline
   grid type  & 
@@ -43,15 +43,13 @@ STL \stllink{Forward Iterator}{ForwardIterator}
   value type  &
   {\tt I::value\_type} &
   synomym for {\tt I::element\_type}   
-  \\ 
-  \hline
-  \\
+  \T \\ \hline  \\
 \end{tabularx}
  
 
 \conceptsubsection{Valid Expressions}
-\begin{tabular}{llll} \\
-  \hline
+\begin{tabular}{llll} 
+  \T \\ \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
   \hline
   prefix increment  &
@@ -73,16 +71,14 @@ STL \stllink{Forward Iterator}{ForwardIterator}
   {\tt i.IsDone();} & 
   ~ &
   {\tt bool} 
-  \\ 
-  \hline
-  \\
+  \T \\ \hline  \\
 \end{tabular}
 
    
 \conceptsubsection{Expression semantics}
 
-\begin{tabularx}{15cm}{RlRRR} \\
-  \hline
+\begin{tabularx}{15cm}{RlRRR} 
+  \T \\ \hline
   \bf  Name     &
   \bf  Expression &
   \bf  Precondition&
@@ -113,9 +109,7 @@ STL \stllink{Forward Iterator}{ForwardIterator}
   ~ &  
   true iff {\tt i} is past-the-end. &
   ~ 
-  \\ 
-  \hline
-  \\
+  \T \\  \hline  \\
 \end{tabularx}
 
 \W\conceptsubsection{Complexity guarantees}
@@ -124,6 +118,12 @@ STL \stllink{Forward Iterator}{ForwardIterator}
 \sectionlink{\concept{Grid Vertex Iterator}}{GridVertexIterator}
 \\
 \sectionlink{\concept{Grid Edge Iterator}}{GridVertexIterator}
+\\
+\sectionlink{\concept{Grid Face Iterator}}{GridVertexIterator}
+\\
+\sectionlink{\concept{Grid Facet Iterator}}{GridVertexIterator}
+\\
+\sectionlink{\concept{Grid CellIterator}}{GridVertexIterator}
     
 \W\conceptsubsection{Models}
 

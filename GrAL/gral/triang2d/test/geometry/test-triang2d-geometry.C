@@ -1,7 +1,9 @@
 
 // LICENSE_NEC_2003
 
-/*! \file Test harness for stored_geometry_triang2d
+/*! \file 
+   
+    Test harness for stored_geometry_triang2d
 
 */
 
@@ -65,7 +67,7 @@ int main() {
       cout << "F [";
       for(gt::VertexOnFacetIterator vf(*f); ! vf.IsDone(); ++vf)
 	cout << vf.handle() << " ";
-      cout << "] area=" << Geom.area(*f) << endl;
+      cout << "] volume=" << Geom.volume(*f) << endl;
     }
   }
 

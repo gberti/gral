@@ -44,7 +44,8 @@ Analogous requirements take effect if `vertex' is replaced by another element ty
 
 \noindent
 \begin{tabularx}{12cm}{llX} \hline
-  \bf  Name  &\bf  Expression  &\bf  Description   \\ \hline
+  \bf  Name  &\bf  Expression  &\bf  Description   
+  \T \\ \hline
   handle type & 
   {\tt F::face\_handle} &
   type of the corresponding \sectionlink{\concept{Face Handle}}{GridVertexHandle} 
@@ -61,15 +62,14 @@ Analogous requirements take effect if `vertex' is replaced by another element ty
   vertex-on-face iterator &
   {\tt F::VertexIterator}&
   type of the corr. VertexOnFaceIterator
-  \\ 
-  \hline
+  \T \\   \hline
 \end{tabularx}
     
 \conceptsubsection{Valid Expressions}
 
 \noindent
-\begin{tabularx}{14cm}{RRRR} \\ 
-  \hline
+\begin{tabularx}{14cm}{RRRR} 
+  \T \\ \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type \\ 
   \hline
   handle & 
@@ -100,15 +100,13 @@ Analogous requirements take effect if `vertex' is replaced by another element ty
   {\tt F.NumOfVertices()} &
   ~ &
   {\tt int} 
-  \\
-  \hline
-  \\
+  \T \\  \hline  \\
 \end{tabularx}
  
 \T\begin{small}
 \conceptsubsection{Expression semantics}
-\begin{tabularx}{15cm}{XXXXX} \\
-  \hline
+\begin{tabularx}{15cm}{XXXXX} 
+  \T \\ \hline
   \bf  Name     &
   \bf  Expression &
   \bf  Precondition&
@@ -139,9 +137,7 @@ Analogous requirements take effect if `vertex' is replaced by another element ty
   {\tt f} is \link{valid}{valid}  &
   n is the number of vertices that are incident to {\tt f} &
   ~ 
-  \\ 
-  \hline
-  \\
+  \T \\ \hline  \\
 \end{tabularx}
 \T\end{small}
     

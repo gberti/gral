@@ -3,6 +3,8 @@
 
 // $LICENSE
 
+/*! \file
+ */
 
 #include "Gral/Partitioning/partitioning.h"
 

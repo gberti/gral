@@ -1,9 +1,7 @@
-
-// $LICENSE
-
 #ifndef GRAL_GB_BASE_GRID_FUNCTION_ADAPTER_H
 #define GRAL_GB_BASE_GRID_FUNCTION_ADAPTER_H
 
+// $LICENSE
 
 template<class CellMap>
 class facet_on_cell_grid_function

@@ -1,4 +1,9 @@
 
+// $LICENSE
+
+/*! \file
+ */
+
 #include "Gral/Partitioning/internal/metis-options.h"
 
 

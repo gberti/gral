@@ -54,36 +54,33 @@
 
     \conceptsubsection{Associated types} %\noteref{note-gridtypes}
 
-    \begin{tabular}{lll} \\
-      \hline
+    \begin{tabular}{lll} 
+     \T \\    \hline
       \bf  Name  &\bf  Expression  &\bf  Description   \\ 
       \hline
       base grid &
       {\tt  R::grid\_type}  &
       type of the  ranges' base grid \noteref{note-gridtypes}
-      \\ 
-      \hline
-      \\
+      \T \\       \hline      \\
     \end{tabular}
  
 
     \conceptsubsection{Valid Expressions }
-   \begin{tabular}{llll} \\
-     \hline
+   \begin{tabular}{llll} 
+     \T \\ \hline
        \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
        \hline
        base grid reference  &
        {\tt  r.TheGrid()}  &
        & 
-       {\tt  grid\_type const\&}  \\ 
-       \hline
-       \\
+       {\tt  grid\_type const\&} 
+       \T \\       \hline       \\
     \end{tabular}
 
    
     \conceptsubsection{Expression semantics }
-    \begin{tabularx}{14cm}{RRRRR} \\
-      \hline
+    \begin{tabularx}{14cm}{RRRRR} 
+      \T \\ \hline
       \bf  Name       &
       \bf  Expression &
       \bf  Precondition&
@@ -95,9 +92,8 @@
       {\tt G const\&  g = r.TheGrid()}  &
       {\tt r } has not been default constructed &
       get the grid {\tt  r} references  &
-      {\tt  \&g == \&(g.TheGrid())} {\tt == \&(r.TheGrid())}  \\ 
-    \hline
-    \\
+      {\tt  \&g == \&(g.TheGrid())} {\tt == \&(r.TheGrid())}  
+      \T \\     \hline    \\
   \end{tabularx}
 
   \W\conceptsubsection{Complexity guarantees }

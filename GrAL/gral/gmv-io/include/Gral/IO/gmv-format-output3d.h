@@ -21,6 +21,9 @@
 
 
 /*! \brief Output adapter for the GMV format.
+ 
+    \ingroup outputadapter
+    \see \ref outputadapter
 
     The <A HREF= "http://www-xdiv.lanl.gov/XCM/gmv/"> 
     General Mesh Viewer </A> (GMV) is a versatile tool
@@ -31,12 +34,21 @@
     OstreamGMV3DFmt Out("grid.gmv");
     ConstructGrid(Out,MyGrid, MyGeom); 
     \endcode
+    If you want to output also grid functions, use the following 
+    extended form:
+    \code
+    grid_function<MyVertex, double> gf1(MyGrid);
+    grid_function<MyCell,   int>    gf2(MyGrid);
+    // ...
 
-    See also test/gmv-output3d/test-gmv-output.C
+    OstreamGMV3DFmt Out("grid.gmv");
+    heterogeneous_list::BEGIN B;
+    ConstructGrid_GF(Out,MyGrid,MyGeom,
+                     (B, Out.pair("gf1",gf1), Out.pair("gf2",gf2)));
 
-    The support for the output of arbitrary grid functions is still
-    experimental.
+    \endcode
 
+    \see Test in  \ref test-gmv-output.C
 
    \todo support GMV's general cell type 
    (currently only tet, hex, prism and pyramid)
@@ -102,9 +114,8 @@ public:
 
   \relates OstreamGMV3DFmt
   
-  \see Module \ref GMV3Dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
+  \see Gral base module \ref copyoperations
+  \see \ref test-gmv-output.C for an example
  */
 template<class GRID,class GEOM>
 void ConstructGrid(OstreamGMV3DFmt& Out, 
@@ -113,14 +124,12 @@ void ConstructGrid(OstreamGMV3DFmt& Out,
 
 /*! \brief ConstructGrid overload for OstreamGMV2DFmt
 
-  \relates OstreamGMV2DFmt
+  \relates OstreamGMV3DFmt
 
   This takes an additional list of arbitrary grid functions 
   to be written to the GMV file.
 
-  \see Module \ref GMV2Dformat
-  \see Module \ref mutatingoperations
-  \see \ref ConstructGrid
+  \see Gral base module \ref copyoperations
   \see \ref test-gmv-output.C for an example
  */
 template<class GRID,class GEOM, class GF, class MOREGFS>

@@ -17,6 +17,7 @@
     which is a predicate deciding whether a $GrAL Facet is on the boundary.
     Then one could handle also internal boundaries, for example
     between two partitions.
+    \todo Test
 
     \see Module \ref boundaryrange
     \see Module \ref boundarycompiter
@@ -26,6 +27,7 @@
     \brief Count the number of boundary facets.
 
     Runtime is linear in the number of facets of \c G.
+    \see \ref boundaryalgorithms  module
  */    
 template<class GRID>
 int count_boundary_facets(GRID const& G);
@@ -34,6 +36,7 @@ int count_boundary_facets(GRID const& G);
     \brief Count the number of boundary components
 
     Runtime is linear in the number of facets of \c G.
+    \see \ref boundaryalgorithms  module
  */    
 template<class GRID>
 int count_boundary_components(GRID const& G);
@@ -41,7 +44,7 @@ int count_boundary_components(GRID const& G);
 
 /*! \ingroup boundaryalgorithms 
     \brief Find a facet for each component of the boundary of G
-  
+    \see \ref boundaryalgorithms  module
 */
 template<class GRID, class FACETSET>
 void find_boundary_component_germs(GRID const& G, FACETSET & C);
@@ -49,6 +52,7 @@ void find_boundary_component_germs(GRID const& G, FACETSET & C);
 /*! \ingroup boundaryalgorithms 
     \brief Find a facet for each component of the boundary of G,
     and number of boundary components and facets.
+    \see \ref boundaryalgorithms  module
   
 */
 template<class GRID, class FACETSET>

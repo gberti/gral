@@ -69,7 +69,10 @@ struct grid_types_Complex3D
   typedef vertex_on_edge_iterator<Complex3D> VertexOnEdgeIterator;
 };
 
+/*! \brief Class for representing general 3D unstructured grids
 
+    \ingroup complex3dmodule
+*/
 class Complex3D : public grid_types_Complex3D {
   typedef size_t size_type;
 
@@ -82,22 +85,27 @@ class Complex3D : public grid_types_Complex3D {
   size_type                   num_of_vertices;
 
  public:
+  //!
   Complex3D();
+  //!
   ~Complex3D();
-
-  void clear(); // make this an empty grid
-
+  //! make this an empty grid
+  void clear(); 
+  //@{ @name Dimension information
   enum { dim = 3};
   unsigned dimension() const { return dim;}  
-  size_type NumOfVertices() const { return num_of_vertices;}
-  size_type NumOfCells()    const { return cell_archetype.size();}
+  //@}
 
+  //@{ @name Sequence iteration
   inline VertexIterator FirstVertex() const;
   inline EdgeIterator   FirstEdge()   const;
   inline FacetIterator  FirstFace()   const;
   inline FacetIterator  FirstFacet()  const;
   inline CellIterator   FirstCell()   const;
 
+  size_type NumOfVertices() const { return num_of_vertices;}
+  size_type NumOfCells()    const { return cell_archetype.size();}
+  //@}
 
 private:
 
@@ -162,6 +170,7 @@ private:
   //     && (archetypes[a].NumOfCells() > 0));}
 
 public:
+  //@{ @name Archetype stuff
   inline
   archetype_type const& ArchetypeOf(Cell const&  c) const;
   archetype_type const& ArchetypeOf(cell_handle  c) const
@@ -173,6 +182,8 @@ public:
   archetype_iterator  BeginArchetype() const { return archetypes.begin();}
   archetype_iterator  EndArchetype()   const { return archetypes.end  ();}
   archetype_handle    handle(archetype_iterator it) const { return it - BeginArchetype();}
+  //@}
+
 }; // class Complex3D
 
 
@@ -224,7 +235,8 @@ public:
 };
 
 
-/*! \brief Cell type for Complex3D
+/*!\internal
+   \brief Cell type for Complex3D
 
     Model of $GrAL Cell, $GrAL CellIterator
  */
@@ -283,7 +295,8 @@ public:
 
 
 
-/*! \brief Vertex type for Complex3D
+/*! \internal 
+    \brief Vertex type for Complex3D
 
     Model of $GrAL GridVertex, $GrAL GridVertexIterator
  */
@@ -320,7 +333,8 @@ class Vertex_Complex3D : public elem_base_Complex3D {
 
 
 
-/*! \brief VertexOnCellIterator type for Complex3D
+/*!\internal
+    \brief VertexOnCellIterator type for Complex3D
 
     Model of $GrAL VertexOnCellIterator
  */
@@ -426,6 +440,9 @@ Cell_Complex3D::e(Cell_Complex3D::archgt::edge_handle le) const { return (EdgeOn
 
 // grid_types
 
+/*! \brief Specialization of the grid_types primary template
+    \ingroup complex3dmodule
+ */
 template<>
 struct grid_types<Complex3D> 
   : public grid_types_base<grid_types_Complex3D>

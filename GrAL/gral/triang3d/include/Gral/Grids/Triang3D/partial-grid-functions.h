@@ -6,13 +6,19 @@
 #include "Gral/Grids/Triang3D/element-traits.h"
 #include "Gral/Base/partial-grid-function-hash.h"
 
-//----------------------------------------------------------------
-//
-// This header is provided for conformity with other grid
-// implementations only. Partial grid functions for Triang3D
-// are fully generic.
-//
-//----------------------------------------------------------------
 
+/*! \file
+
+   This header is provided for conformity with other grid
+   implementations only. Partial grid functions for Triang3D
+   are fully generic.
+*/
+
+/*! \defgroup triang3dpgf Partial grid functions for Triang3D
+
+    \ingroup triang3dmodule
+
+    Reuse the implementation of $GrAL PartialGridFunction in partial_grid_function.
+ */
 
 #endif

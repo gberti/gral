@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include  "Gral/Geometries/grid-as-volume.h"
 
 #include "Gral/Grids/Cartesian2D/all.h"

@@ -34,8 +34,6 @@
   \see  \ref gridfunctions
 
 */
-//----------------------------------------------------------------
-
 
 template<class E, class T>
 class grid_function_vector {

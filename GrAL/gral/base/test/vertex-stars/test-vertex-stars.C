@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include "Gral/Algorithms/calculate-vertex-stars.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Base/flag.h"

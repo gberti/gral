@@ -1,5 +1,9 @@
+
+// $LICENSE_NEC
+
 /*! \file
-    Testing vertex_iterator_of_cell_set<> 
+ 
+    Testing \c vertex_iterator_of_cell_set
 */
 
 #include "Gral/Iterators/vertex-iterator-of-cell-set.h"

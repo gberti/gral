@@ -13,8 +13,11 @@
 \htmltitle{Documentation of the Grid Category Components}
 \title{Documentation of the Grid Category Components}
 \author{Guntram Berti}
-\htmladdress{\xlink{Guntram Berti}{mailto:berti@ccrl-nece.de}}
-\htmlattributes{TABLE}{BORDER}
+\htmladdress{\xlink{Guntram Berti}{http://www.ccrl-nece.de/staff/berti.html}}
+%\htmlattributes{TABLE}{BORDER}
+%\htmlattributes{BODY}{MARGIN-LEFT=8%}  % BGCOLOR="ff0000"}
+%\htmlattributes{BODY}{BACKGROUND=ff0000}
+
 \htmldepth{5}
 \htmldirectory{html}
 
@@ -81,13 +84,13 @@
 % doxygen does not make pages for functions
 % a solution would be to complement each function doc
 % with an ad-hoc group, which gets an own page.
-\newcommand{\gralfunctionlink}[2]{{\tt #1}} %{\xlink{#1}{\GRALINC{class#1}{#2}}}
-\newcommand{\gralclasslink}[2]{\xlink{#1}{\GRALINC{class#1}{#2}}}
-\newcommand{\gralstructlink}[2]{\xlink{#1}{\GRALINC{struct#1}{#2}}}
-\newcommand{\gralcodelink}[2]{\xlink{{\tt #1}}{\GRALINC{#1}{#2}}}
-\newcommand{\gralpagelink}[3]{\xlink{{\tt #1}}{\GRALINC{#2}{#3}}}
-\newcommand{\gralmodulelink}[1]{\xlink{{\tt #1}}{\GRALINC{index}{#1}}}
-\newcommand{\gralfilelink}[3]{\xlink{{\tt #1.#2}}{\GRALINC{#1\_8#2}{#3}}}
+\newcommand{\gralfunctionlink}[2]{\texttt{#1}} %{\xlink{#1}{\GRALINC{class#1}{#2}}}
+\newcommand{\gralclasslink}[2]{\xlink{\texttt{#1}}{\GRALINC{class#1}{#2}}}
+\newcommand{\gralstructlink}[2]{\xlink{\texttt{#1}}{\GRALINC{struct#1}{#2}}}
+\newcommand{\gralcodelink}[2]{\xlink{\texttt{#1}}{\GRALINC{#1}{#2}}}
+\newcommand{\gralpagelink}[3]{\xlink{\texttt{#1}}{\GRALINC{#2}{#3}}}
+\newcommand{\gralmodulelink}[1]{\xlink{\texttt{#1}}{\GRALINC{index}{#1}}}
+\newcommand{\gralfilelink}[3]{\xlink{\texttt{#1.#2}}{\GRALINC{#1\_8#2}{#3}}}
 
 % Links to STL concepts
 \newcommand{\stllink}[2]{\xlink{\concept{#1}}{\STLURL/#2.html}}
@@ -258,6 +261,7 @@ is called a grid entity, for example grid elements or grid functions.
 \input{cell-vertex-input-grid-range}
 \input{vertex-grid-range}
 \input{grid-with-boundary}
+\input{archetyped-grid}
 
 \T\end{small}
 

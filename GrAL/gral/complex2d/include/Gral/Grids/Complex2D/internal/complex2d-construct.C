@@ -5,6 +5,7 @@
 // $LICENSE
 
 
+
 #include <map> // STL
 
 #include "Gral/Grids/Complex2D/internal/copy.h"
@@ -14,26 +15,28 @@
 #include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"
 
-//----------------------------------------------------------------
-//
-//  Copy-construct a Complex2D from a right-hand side (srcG)
-//  that allows
-//  - iteration over vertices ( VertexIterator | FirstVertex() )
-//  - iteration over cells    ( CellIterator   | FirstCell() )
-//  - iteration over cell-vertices (VertexOnCellIterator | Cell::FirstVertex() )
-//  and a geometry (geom) that gives coordinates for each vertex.
-//  The additional connectivity information is then calculated
-//  (that is, neighbors of cells and adjacent cells of vertices)
-//
-//  This algorithm is essentially the same for reading a file from
-//  disk (storing vertex coordinates and indices of vertices for each cell)
-//  or, more general, for constructing the grid from a serialized representation
-//  (e.g. in message passing).
-//  Perhaps the best way to exploit this would be to write a grid mask
-//  for these serial versions, using one single template method for
-//  the copy-construction. This could then also be used for Enlarge(...)
-//  and future similar functions.
-//----------------------------------------------------------------
+
+/*! \file
+
+  \internal
+  Copy-construct a Complex2D from a right-hand side (srcG)
+  that allows
+  - iteration over vertices ( VertexIterator | FirstVertex() )
+  - iteration over cells    ( CellIterator   | FirstCell() )
+  - iteration over cell-vertices (VertexOnCellIterator | Cell::FirstVertex() )
+  and a geometry (geom) that gives coordinates for each vertex.
+  The additional connectivity information is then calculated
+  (that is, neighbors of cells and adjacent cells of vertices)
+
+  This algorithm is essentially the same for reading a file from
+  disk (storing vertex coordinates and indices of vertices for each cell)
+  or, more general, for constructing the grid from a serialized representation
+  (e.g. in message passing).
+  Perhaps the best way to exploit this would be to write a grid mask
+  for these serial versions, using one single template method for
+  the copy-construction. This could then also be used for Enlarge(...)
+  and future similar functions.
+*/
 
 
 //----------------------------------------------------------------

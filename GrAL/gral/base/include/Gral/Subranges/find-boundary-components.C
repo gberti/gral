@@ -11,6 +11,7 @@
 #include "Gral/Iterators/boundary-iterator.h"
 #include "Gral/Base/grid-functors.h"
 
+
 template<class GRID>
 int count_boundary_facets(GRID const& G)
 {

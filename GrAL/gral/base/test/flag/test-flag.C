@@ -1,4 +1,11 @@
 
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
+
 #include "Gral/Base/flag.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 

@@ -3,6 +3,10 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
+
 #include "Gral/Partitioning/metis-partitioning.h"
 #include "Gral/Partitioning/grid-to-metis.h"
 

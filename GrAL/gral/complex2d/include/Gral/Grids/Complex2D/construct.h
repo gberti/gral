@@ -4,12 +4,16 @@
 
 // $LICENSE
 
+/*! \file 
+ */
 
 /*! \defgroup complex2dcopy Generic copy operations for Complex2D
+   
+    \ingroup complex2dmodule
 
-    "Partial specializations" (overloads) of the templates in 
-    Gral/Base/construct-grid.h
-    \see $GrAL ConstructGrid
+    Overloads of the templates in \ref Gral/Base/construct-grid.h
+    \see $GrALConstructGrid
+    \see Gral base module \ref copyoperations
 */
 
 #include "Gral/Base/construct-grid.h"

@@ -8,6 +8,8 @@ namespace cartesian3d {
 
 /*! \brief A geometry for CartesianGrid3D 
     living on the integer lattice \f$ \Z^3 \f$
+   
+    \ingroup cartesian3dmodule
 
     Model of $GrAL VertexGridGeometry (immutable).
  */
@@ -27,15 +29,22 @@ private:
   grid_type const* g;
 
 public:
+  //! Construct over grid \c gg
   lattice_geometry(grid_type const& gg)
     : g(&gg)
     {}
 
+  //! Coordinate of vertex
   coord_type coord(gt::Vertex const& v) const { return v.index();}
-  
+
+  //@{
+  /*! \name Volume calculation
+     \brief Dimension-dependent volumes of the elements
+   */
   real volume(gt::Cell const&) const { return 1;}
   real volume(gt::Edge const&) const { return 1;}
   real volume(gt::Face const&) const { return 1;}
+  //@}
 };
 
 }; // namespace cartesian3d

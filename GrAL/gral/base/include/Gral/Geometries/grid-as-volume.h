@@ -15,7 +15,9 @@
 
 
 /*! \brief View to a grid as spatial volume
-
+    \ingroup geometricgridtools
+     \see \ref geometricgridtools module
+ 
     This view allows point-in-grid queries, as well as intersection tests with 
     arbitrary (convex) polytopes. 
     It operates under the assumption that the elements of the grid are mapped to

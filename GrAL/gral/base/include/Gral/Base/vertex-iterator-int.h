@@ -18,6 +18,7 @@ inline bool operator==(vertex_iterator_int<GT> const& lhs,
     based on vertices being numbered consecutively.
    
     \ingroup iterators
+    \see \ref iterators
  */
 
 template<class GT>

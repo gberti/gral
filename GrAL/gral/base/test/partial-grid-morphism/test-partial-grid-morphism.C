@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include "Gral/Base/partial-grid-morphism.h"
 
 #include "Gral/Grids/Cartesian2D/all.h"

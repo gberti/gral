@@ -14,8 +14,8 @@
 
   \ingroup elements
   \ingroup iterators
-  \see elements
-  \see iterators 
+  \see \ref elements  module
+  \see \ref iterators module
   \see generic_edge 
 
   \brief
@@ -25,6 +25,8 @@
    on top of a $GrAL Cell-VertexInputGridRange. 
 
   They are used for implementing facet-related members of Complex3D.
+
+  \todo Test
  */
 
 /*! \brief enclosing namespace for generic facet components

@@ -2,11 +2,16 @@
 
    This module contains data structures and algorithms for grid partitioning.
   
-   It is still very incomplete.
+   It is still very incomplete. Start browsing with the \ref partitioningmodule module.
 
-   The most interesting modules are
+*/
+
+/*! \defgroup partitioningmodule Tools for grid partitioning
+
+   The most interesting submodules are
     - \ref metispartitioning (interface to $Metis)
     - \ref partitioningds 
     - \ref partitioningpostproc
     - \ref quotientgrid
+
 */

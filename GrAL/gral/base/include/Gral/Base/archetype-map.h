@@ -11,7 +11,12 @@
 #include "Container/bijective-mapping.h"
 
 
-// G1 -> G2
+/*! \brief Mapping between the archetypes of two grids
+     
+   \ingroup gridarchetypes
+
+    This class holds isomorphisms between the archetypes of two grids of types \c G1 and \c G2.
+ */
 template<class G1, class G2>
 class archetype_map 
 {

@@ -55,6 +55,17 @@ namespace complex3d_detail {
 
 } // namespace complex3d_detail 
 
+/*! \defgroup complex3dboundary Boundary Ranges for Complex3D
+    \ingroup complex3dmodule 
+*/
+
+/*! \brief Specialization of the BoundaryRange primary template
+    \ingroup complex3dboundary
+
+    Model of $GrAL FacetGridRange.
+
+    \see Test in \ref test-boundary.C
+ */
 template<>
 class BoundaryRange<Complex3D> : public complex3d_detail::basic_grid_types
 {
@@ -67,23 +78,33 @@ private:
   facet_map_type facet_map;
 
 public:
+  //!
   BoundaryRange() {}
+  //!
   BoundaryRange(grid_type const& gg) : g(gg) { init();}
 
+  //! Anchor grid
   ref_ptr<grid_type const> TheGrid() const { return g;}
 
+  //!
   void init() 
   {
    nb_table_type nbs(*TheGrid(), -1);
    CalculateNeighborCells(nbs,*TheGrid(),facet_map, gt());
   }
 
+  //!
   FacetIterator FirstFacet() const;
+  //!
   FacetIterator EndFacet()   const;
+  //!
   unsigned NumOfFacets()     const { return facet_map.size();}
 }; // class BoundaryRange<Complex3D>
 
-
+/*! \brief Specialization of the grid_types primary template
+  
+   \ingroup complex3dboundary
+ */
 template<>
 struct grid_types<BoundaryRange<Complex3D> >
   : public complex3d_detail::basic_grid_types 

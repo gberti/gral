@@ -4,13 +4,15 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 /*! \defgroup quotientgrid Quotient grid Components
- 
+    \ingroup partitioningmodule
 */
 
-/*! file  \brief Dummy doc
- */
-/* \brief   Construct a coarse grid from a partitioning of a fine grid.
+
+/*! \brief   Construct a coarse grid from a partitioning of a fine grid.
   
   \ingroup quotientgrid
   
@@ -22,9 +24,10 @@
   fine grid (in Partition P) via the correspondences.
 
  
-  \parameter G : newly created grid, cells corresponding to partitions of Partitioning P.
-  \parameter coarse2fine_v:   maps created coarse vertices to corr. fine vertices
-  \parameter coarsecell2part: maps created coarse cells to partition numbers.
+  \param  G  (Output) Coarse grid with  cells corresponding to partitions of \c P
+  \param  P  (Input) Partitioning 
+  \param  coarse2fine_v  (Output)  maps created coarse vertices to corresponding fine vertices
+  \param coarsecell2part (Output)  maps created coarse cells to partition numbers.
 
 */
 

@@ -8,6 +8,21 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
 
+/*! \defgroup complex3dgf Total grid functions for Complex3D
+ 
+    \ingroup complex3dmodule
+
+    The specializations in this module are models of $GrAL TotalGridFunction.
+
+*/
+
+/*! \brief Specialization of the grid_function primary template
+    \ingroup complex3dgf
+    
+     Model of $GrAL TotalGridFunction
+
+     The implementation uses vectors.
+ */
 template<class T>
 class grid_function<Vertex_Complex3D, T>
   : public grid_function_vector<Vertex_Complex3D,T>
@@ -23,6 +38,13 @@ class grid_function<Vertex_Complex3D, T>
 };
 
 
+/*! \brief Specialization of the grid_function primary template
+    \ingroup complex3dgf
+    
+     Model of $GrAL TotalGridFunction
+
+     The implementation uses vectors.
+ */
 template<class T>
 class grid_function<Cell_Complex3D, T>
   : public grid_function_vector<Cell_Complex3D,T>
@@ -38,6 +60,13 @@ class grid_function<Cell_Complex3D, T>
 };
 
 
+/*! \brief Specialization of the grid_function primary template
+    \ingroup complex3dgf
+    
+     Model of $GrAL TotalGridFunction
+
+     The implementation uses hash tables.
+ */
 template<class T>
 class grid_function<Complex3D::Edge, T>
   : public grid_function_hash<Complex3D::Edge,T>
@@ -52,6 +81,13 @@ class grid_function<Complex3D::Edge, T>
 
 };
 
+/*! \brief Specialization of the grid_function primary template
+    \ingroup complex3dgf
+    
+     Model of $GrAL TotalGridFunction.
+
+     The implementation uses hash tables.
+ */
 template<class T>
 class grid_function<Complex3D::Facet, T>
   : public grid_function_hash<Complex3D::Facet,T>

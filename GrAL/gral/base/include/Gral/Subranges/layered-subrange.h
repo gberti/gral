@@ -17,6 +17,9 @@
   With layered subranges, it is possible to iterate
   efficiently over certain subranges, namely, unions of adjacent
   layers. This is useful e. g. for overlap ranges or the like.
+
+  \see \ref subranges module
+  \todo Test
 */
 //----------------------------------------------------------------
 
@@ -25,13 +28,12 @@
 //----------------------------------------------------------------
 /*! \brief  Layered vertex range 
    \ingroup layeredsubrange
-   \see Module \ref layeredsubrange
 
    A layered vertex range gives efficient access to consecutive
    layers of vertices.
+   \see Module \ref layeredsubrange
 
  */
-//----------------------------------------------------------------
 
 template<class Grid>
 class layered_vertex_range 

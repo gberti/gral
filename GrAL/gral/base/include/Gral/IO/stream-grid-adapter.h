@@ -7,7 +7,6 @@
 #include "Gral/Base/common-grid-basics.h"
 #include <iterator>
 
-//----------------------------------------------------------------
 /*! \defgroup streamgrid Adapter for serial 2D grid representation
     \ingroup gridio
     \see Module gridio
@@ -25,8 +24,10 @@
   
   This can be used to construct grids from files, message passing
   buffers, literal arrays and other sequentialized contexts.
+ 
+   \todo Test
 */
-//----------------------------------------------------------------
+
 
 template<class It>
 class stream_grid_mask;
@@ -41,7 +42,8 @@ class stream_geom_mask;
 //                 Vertex / VertexIterator
 //----------------------------------------------------------------
 
-/*! \ingroup  streamgrid
+/*! \internal
+    \ingroup  streamgrid
 
  */
 template<class It>
@@ -73,7 +75,8 @@ public:
 //----------------------------------------------------------------
 
 
-/*! \ingroup  streamgrid
+/*! \internal
+    \ingroup  streamgrid
 
  */
 template<class It>
@@ -117,7 +120,8 @@ public:
 //                 VertexOnCellIterator
 //----------------------------------------------------------------
 
-/*! \ingroup  streamgrid
+/*! \internal
+    \ingroup  streamgrid
 
  */
 template<class It>
@@ -153,8 +157,10 @@ public:
 //                         Grid
 //----------------------------------------------------------------
 
-/*! \ingroup  streamgrid
+/*! \brief Grid defined by an integer stream
 
+    \ingroup  streamgrid
+    \see \ref streamgrid module
  */
 template<class It>
 class stream_grid_mask {
@@ -192,8 +198,9 @@ public:
 };
 
 
-/*! \ingroup  streamgrid
+/*! \brief Creator function for stream_grid_mask
 
+   \ingroup  streamgrid
  */
 template<class It>
 inline
@@ -201,8 +208,9 @@ stream_grid_mask<It>
 StreamGridMask(int nv, int nc, It it)
 { return stream_grid_mask<It>(nv,nc,it);}
 
-/*! \ingroup  streamgrid
+/*!  \brief Creator function for stream_grid_mask
 
+    \ingroup  streamgrid
  */
 template<class It>
 inline
@@ -249,7 +257,10 @@ stream_grid_mask_cell<It>::FirstVertex() const
 { return VertexOnCellIterator(*the_grid,c,vertices);}
 
 
-/*! \ingroup streamgrid
+/*! \brief Geometry for stream_grid_mask 
+
+   \ingroup streamgrid
+   \see \ref streamgrid module
 
  */
 template<class It>
@@ -267,7 +278,9 @@ public:
   { return begin[v.handle() - v.TheGrid().offset()];}
 };
 
-/*! \ingroup streamgrid
+/*! \brief Creator function for stream_geom_mask 
+
+   \ingroup streamgrid
 
  */
 template<class It>

@@ -42,7 +42,8 @@ class boundary_range_edge_iterator;
 
 /*! \ingroup boundaryrange
     \brief Class representing the boundary of a grid.
-     
+
+    \see \ref boundaryrange module 
  */
 template<class GRID>
 class boundary_range_generic {
@@ -88,7 +89,8 @@ private:
 
 
 
-/*! \ingroup boundaryrange
+/*! \internal 
+    \ingroup boundaryrange
     \brief Iterator over vertices and edges of \e all boundary components of a grid.
      
  */
@@ -140,7 +142,8 @@ public:
 };
 
 
-/*! \ingroup boundaryrange
+/*! \internal
+    \ingroup boundaryrange
     \brief Iterator over the vertices of \e all boundary components of a grid.
      
  */
@@ -169,7 +172,8 @@ public:
 
 };
 
-/*! \ingroup boundaryrange
+/*! \internal 
+    \ingroup boundaryrange
     \brief Iterator over the edges of \e all boundary components of a grid.
      
  */

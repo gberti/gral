@@ -8,11 +8,13 @@
 
 
 /*! \defgroup overlappinggrids Overlapping Grids
+
     \brief Grids and grid functions augmented with %overlap ranges.
+
     \ingroup distributedgrids
 */
 
-//----------------------------------------------------------------
+
 /*! \brief Sequential grid augmented with an %overlap.
     \ingroup overlappinggrids
 
@@ -26,8 +28,6 @@
 
  \partof overlappinggrids
 */
-//----------------------------------------------------------------
-
 
 
 template<class CoarseGrid, class FineGrid>

@@ -1,3 +1,9 @@
+
+// $LICENSE
+
+/*! \file
+ */
+
 #include "Gral/Grids/Cartesian3D/all.h"
 
 

@@ -3,7 +3,14 @@
 
 // $LICENSE
 
+/*! \file  
+
+    Test of edge iterators (models of $GrAL EdgeIterator).
+
+*/
+
 #include <iostream>
+
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
@@ -11,9 +18,21 @@
 
 #else
 
+/*! \brief Test of edge iterators
+
+    Models of $GrAL EdgeIterator are tested.
+    
+    \ingroup sequenceiteratortest
+*/
 template<class G>
 bool test_edge_iterator(G const& g, std::ostream & out);
 
+/*! \brief Test of edge iterators
+
+    Models of $GrAL EdgeIterator are tested.
+    
+    \ingroup sequenceiteratortest
+*/
 template<class G, class GT>
 bool test_edge_iterator(G const& g, std::ostream & out, GT);
 

@@ -1,4 +1,11 @@
 
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
+
 #include "Gral/Views/restricted-component-view.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Geometries/cell-intersects-pred.h"

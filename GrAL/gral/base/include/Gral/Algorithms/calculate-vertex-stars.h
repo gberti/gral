@@ -11,7 +11,10 @@
 
     A vertex star is the set of higher-dimensional elements incident
     to the vertex.
+
+   \see \ref text-vertex-stars.C
  */
+
 
 /*! \brief Get a germ flag for the star of each vertex of G
    \ingroup calc_vertex_stars
@@ -33,6 +36,7 @@
    - GERMS: mapping of vertices to flags, for example
       \c grid_function<GRID::Vertex, flag<GRID> >
 
+   \see \ref text-vertex-stars.C
    \todo Works only for 2D meshes.
  */
 template<class GRID, class GERMS>

@@ -6,6 +6,11 @@
 #include "Gral/Base/common-grid-basics.h"
 #include <string>
 
+/*! \brief Result type for point location algorithms
+
+    \ingroup geometricgridtools
+    \see \ref geometricgridtools module 
+ */
 template<class GT, class COORD>
 class point_location_result {
 public:

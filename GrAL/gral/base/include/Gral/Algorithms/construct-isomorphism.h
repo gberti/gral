@@ -30,7 +30,7 @@
     Return value is true on successful construction,
     else false.
 
-   \see test-construct-isomorphism.C for an example
+   \see \ref test-construct-isomorphism.C for an example
 
     \bug It does not really try all possible isomorphisms.
     If an isomorphism of 2 cells does not extend to an isomorphism

@@ -22,7 +22,8 @@
     hence this approach works also with other element types.
 
 
-    \test in  test-facet-iterator-of-cell-set.C  
+    \see Test in \ref  test-facet-iterator-of-cell-set.C  
+    \see \ref iterators module  
     \see  vertex_iterator_of_cell_set
 
     

@@ -8,7 +8,7 @@ If you want to use GrAL, you typically want to use its generic
 components, but not necessarily its concrete grid data structures
 -- at least that's how it is intended.
 Therefore, you will need to create an interface layer 
-satisfiying the syntax specified in the \Sectionlink{Concepts} section.
+satisfying the syntax specified in the \Sectionlink{Concepts} section.
 Actual working code along the lines of this section 
 can be found in the \gralmodulelink{triang2d} module.
 
@@ -78,7 +78,7 @@ class Triang2D \{
 
   // typedef int vertex_handle; // simplest possibility
   typedef vertex_handle_int<Triang2D> vertex_handle;
-  typedef vrll_handle_int  <Triang2D> cell_handle;
+  typedef cell_handle_int  <Triang2D> cell_handle;
 
   class Vertex \{
      // to be continued ...
@@ -124,7 +124,7 @@ class Triang2D \{
 
 \};
 \end{example}
-(In pactice, we would have to define \texttt{FirstVertex()} outside
+(In practice, we would have to define \texttt{FirstVertex()} outside
 of \texttt{Triang2D::Cell}.)
 The class \texttt{Triang2D::Vertex} is of course very similar and 
 not shown here. 
@@ -158,7 +158,7 @@ class Triang2D \{
 \end{example}
 Now we have defined enough types to satisfy the 
 \Conceptlink{Cell-VertexInputGridRange} model.
-It suffices to serve a argument for a generic copy 
+It suffices to serve as argument for a generic copy 
 operation, see the  \Sectionlink{ConstructGrid} operation.
 
 It remains to fill in the \texttt{grid\_types<>} template:
@@ -178,7 +178,7 @@ struct grid_types<Triang2D> \{
 \end{Label}
 
 We can, however, support a larger portion of the GrAL interface.
-Even if we do not store edges, they are implicitely present
+Even if we do not store edges, they are implicitly present
 as sides of triangles, and we can define an \Conceptlink{Edge}
 type for \code{Triang2D}, as well as \Conceptlink{EdgeIterator}
 and {EdgeOnCellIterator}. The types \Conceptlink{Facet}
@@ -289,10 +289,15 @@ class Triang2D \{
   \};
 \};
 \end{example}
-BTW, the class \gralclasslink{facet\_set\_of\_cells\_iterator}{base}
+BTW, the class \gralclasslink{facet\_iterator\_of\_cell\_set}{base}
 can also be used for finding the facets of (the closure of)
 an arbitrary subset of the cells of any grid.
 
+\begin{Label}{triang2d-archetype}
+\introsubsubsection{Defining archetypes}
+
+To be written.  See \Conceptlink{ArchetypedGrid}.
+\end{Label}
 
 Now, our combinatorial layer is complete, 
 the iterators that are missing cannot be supported efficiently
@@ -446,7 +451,7 @@ we just include the generic \gralfilelink{partial-grid-function-hash}{h}{base}.
 \end{Label}
 
 If we just need a wrapper for read-only access to an existing
-dat structure, we are fine with what we have achieved so far.
+data structure, we are fine with what we have achieved so far.
 With the interface created above, we are able to use all generic
 algorithms on \code{Triang2D} which do not change the grid.
 Provided, of course, the incidence information supplied by 
@@ -519,10 +524,14 @@ and \gralfilelink{copy}{C}{triang2d}.
 To be written.
 
 \begin{Label}{triang2d-testing}
-\introsubsubsection{Testing the adaptation cless}
+\introsubsubsection{Testing the adaptation class}
 \end{Label}
 
-To be written. 
+Most parts of the GrAL interface (iterators, grid functions) can be tested using the 
+\gralmodulelink{testing} module.
 
-(Have a look at \gralfilelink{test-cartesian-iterators}{C}{cartesian2d},
-which uses the GrAL testing module.)
+For examples,
+have a look at \gralfilelink{test-triang2d-construct}{C}{triang2d},
+ \gralfilelink{test-triang2d-geometry}{C}{triang2d},
+and the \type{Triang2D}-specific 
+\gralfilelink{test-triang2d}{C}{triang2d} / \gralfilelink{test-triang2d}{h}{triang2d}.

@@ -10,7 +10,8 @@
 
 //-------------------------------------------------------------------------
 //
-/*! \defgroup writecomplex2d write_complex2d() functions
+/*! \internal
+   \defgroup writecomplex2d write_complex2d() functions
    \brief set of routines to write a grid in complex2d format.
    \ingroup complex2dformat
    \note
@@ -22,7 +23,9 @@
 //-------------------------------------------------------------------------
 
 
-/*! \ingroup writecomplex2d
+/*! \internal 
+
+    \ingroup writecomplex2d
     Sets offset to 0. <BR>
     Does not write any vertex coordinates
 
@@ -43,7 +46,8 @@ void write_complex2d(GRID const& G,  std::ostream& out, int offset,
                      VCORR & G2Out_v, CCORR & G2Out_c);
 
 
-/*! \ingroup writecomplex2d
+/*! \internal
+    \ingroup writecomplex2d
     Sets offset to 0. <BR>
     Does not write any vertex coordinates. <BR>
     Procuces a mapping from G to integer numbers, starting from 0 
@@ -56,15 +60,17 @@ void write_complex2d(GRID const& G,  std::ostream& out,
                      VCORR & G2Out_v, CCORR & G2Out_c);
 
 
-/*! \ingroup writecomplex2d
+/*! \internal 
+   \ingroup writecomplex2d
     
-  Sets offset to 0.
+    Sets offset to 0.
     \see Module \ref writecomplex2d
 */
 template<class GRID, class GEOM>
 void write_complex2d(GRID const& G, GEOM const& Geo, std::ostream& out);
 
-/*! \ingroup writecomplex2d
+/*! \internal
+    \ingroup writecomplex2d
 
     \see Module \ref writecomplex2d
 */

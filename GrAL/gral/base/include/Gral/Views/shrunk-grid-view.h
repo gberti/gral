@@ -14,7 +14,6 @@
 /*! \defgroup shrunk_grid_view A shrunk view of a grid
 
     \ingroup gridviews
-    \see gridviews module
 
     A shrunk (or imploded) view of a grid can be useful 
     for visualizing grid interior.
@@ -32,7 +31,8 @@
     Require(ShrunkG.NumOfCells() == G.NumOfCells(), "", 1);
     \endcode
 
-    \see test-shrunk-grid.C
+    \see Test in \ref test-shrunk-grid.C
+    \see \ref gridviews module
 
     \todo add Edge and Facet elements
  */

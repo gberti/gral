@@ -1,14 +1,14 @@
-/*! \mainpage Index of the GrAL GMV-IO Module
+/*! \mainpage Index of the GrAL GMV-IO Package
 
     This module contains components for writing 
     grids and grid functions in the format used  
-    by <A HREF="http://www-xdiv.lanl.gov/XCM/gmv/" TARGET=_parent> GMV </A>
+    by <A TARGET=_parent HREF="http://www-xdiv.lanl.gov/XCM/gmv/"> GMV </A>
     (General Mesh Viewer).
 
-    The classes a use might want to use are
+    The interesting classe are
     - OstreamGMV3DFmt for 3D output
     - OstreamGMV2DFmt for 2D output
 
-    See test-gmv-output.C
-    and test-gmv-output2d.C for examples.
+    See \ref test-gmv-output.C
+    and \ref test-gmv-output2d.C for examples.
 */

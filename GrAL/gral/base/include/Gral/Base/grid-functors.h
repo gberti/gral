@@ -26,7 +26,6 @@
 
 
  <b> Central operations: <b>
- ------------------
   - xxx2handle: <tt> <handle>  operator()(const <Element>&) const </tt>
   - handle2xxx: <tt> <Element> operator()(<handle>)         const </tt>
 
@@ -46,7 +45,7 @@
 
 
 */
-//----------------------------------------------------------------
+
 
 
 /*!  \defgroup predicates Grid predicates

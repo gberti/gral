@@ -10,7 +10,6 @@
 #include "Utility/ref-ptr.h"
 #include "Gral/Base/common-grid-basics.h"
 
-//----------------------------------------------------------------
 /*!  
    \brief Implements  a grid_function on hash-basis.
    \ingroup gridfunctions
@@ -40,7 +39,7 @@
   \see  grid_function_vector
   \see  \ref gridfunctions
 */
-//----------------------------------------------------------------
+
 
 template<class E, class T>
 class grid_function_hash_base {
@@ -157,6 +156,7 @@ public:
 /*!  
    \brief Implements a total grid_function on hash-basis.
    \ingroup gridfunctions
+   \see \ref gridfunctions module 
 */
 template<class E, class T> 
 class grid_function_hash

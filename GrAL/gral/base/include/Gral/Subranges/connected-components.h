@@ -21,6 +21,7 @@
     \ingroup subranges
     \ingroup combinatoric_grid_algorithms
     \ingroup gridviews
+    \see \ref combinatoric_grid_algorithms
 */
 namespace connected_components {
 
@@ -46,13 +47,14 @@ namespace connected_components {
       it gives access to the corresponding connected component of the grid,
       that is, all cells reachable from \f$ c \f$  via facet-cell incidences.
 
-    \ingroup gridviews
 
       \templateparams
         - \c GT :
            - \c typedef  Cell, cell_handle
            - \c typedef  CellOnCellIterator
 
+      \see \ref gridviews module
+      \see Test in \ref test-connected-components.C
       \todo Forward other element types  defined in GT::grid_type,
        define  iterator types  for them.
    */ 

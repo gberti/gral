@@ -4,6 +4,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Partitioning/collect-element-partitions.h"
 

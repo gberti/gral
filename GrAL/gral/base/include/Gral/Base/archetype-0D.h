@@ -6,12 +6,17 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/element-handle.h"
 
+/*! \brief  Support for 0-dimensional archetypes
+
+    \ingroup gridarchetypes
+
+    These archetypes are formally required e.g. to end recursions.
+*/
 namespace archetype_0D {
 
-/*! \brief  A 0-dimensional grid which can be used as archetype for regular 1-dimensional grids
+  /*! \brief A 0-dimensional grid which can be used as archetype for regular 1-dimensional grids
 
-*/
-
+  */
 class archetype_t {
   typedef archetype_t self;
 public:

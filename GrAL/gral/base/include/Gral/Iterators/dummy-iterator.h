@@ -8,9 +8,12 @@
 #include "Utility/pre-post-conditions.h"
 
 /*! \brief Dummy incidence iterators
-
+  \ingroup iterators
+  
    This can be used with generic components formally requiring certain iterators 
    which will not be used in the concrete case.
+
+   \see \ref iterators module
 */
 template<class ELEM, class ANCHOR>
 class dummy_incidence_iterator {

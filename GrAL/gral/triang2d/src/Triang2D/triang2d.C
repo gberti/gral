@@ -1,4 +1,9 @@
 
+// $LICENSE
+
+/*! \file
+*/
+
 #include "Gral/Grids/Triang2D/triang2d.h"
 
 #include <vector>

@@ -6,6 +6,18 @@
 #include "Gral/Grids/CartesianND/cartesiannd.h"
 #include "Gral/Base/grid-function-vector.h"
 
+/*!  \defgroup cartesianndgf Total grid functions for CartesianND
+ 
+      \ingroup cartesianndmodule
+
+      A partial specialization of the primary \c grid_function template is used.
+      \see $GrAL TotalGridFunction
+      \see Test in \ref test-cartesiannd-gf.C
+ */
+
+/*! \brief Specialization for elements of \c cartesiannd::grid<DIM>
+    \ingroup cartesianndgf
+ */
 template<unsigned DIM, unsigned K, class T>
 class grid_function<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM> ,K>, T >
   : public grid_function_vector<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>,K>, T >

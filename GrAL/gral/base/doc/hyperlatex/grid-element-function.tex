@@ -26,9 +26,9 @@ STL \stllink{Adaptable Unary Function}{AdaptableUnaryFunction}
 
 \noindent
 \begin{tabularx}{14cm}{llR}  
-  \hline
+  \T \hline
   \bf  Name  &\bf  Expression  &\bf  Description   \\ 
-  \hline
+  \T \hline
   element type  & 
   {\tt F::element\_type} &
   type of the underlying element, 
@@ -40,9 +40,7 @@ STL \stllink{Adaptable Unary Function}{AdaptableUnaryFunction}
   {\tt F::value\_type} &
   synomym for {\tt F::result\_type}   
   \par (from \stllink{Adaptable Unary Function}{AdaptableUnaryFunction})
-  \\ 
-  \hline
-  \\
+  \T \\   \hline  \\
 \end{tabularx}
     
 \conceptsubsection{Valid Expressions}
@@ -50,17 +48,15 @@ No new ones, besides those from
 \stllink{Adaptable Unary Function}{AdaptableUnaryFunction}
 
 \noindent
-\begin{tabular}{llll} \\
-  \hline
+\begin{tabular}{llll} 
+  \T \\  \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
   \hline
   function evaluation  &
   {\tt t = f(e);} &
   ~      &
   {\tt value\_type} 
-  \\ 
-  \hline
-  \\
+  \T \\   \hline  \\
 \end{tabular}
 
 \conceptsubsection{Expression semantics}
@@ -69,8 +65,8 @@ The semantics of function evaluation are more restrictive than those for
 see the notes below\noteref{note-evaluation}.
 
 \noindent
-\begin{tabularx}{14cm}{llRRR} \\
-  \hline
+\begin{tabularx}{14cm}{llRRR} 
+  \T \\  \hline
   \bf  Name       &
   \bf  Expression &
   \bf  Precondition&
@@ -83,9 +79,7 @@ see the notes below\noteref{note-evaluation}.
   {\tt e} is in the domain of {\tt f} &
   evaluate {\tt f} at the argument {\tt e} & 
   {\tt t} is equal to {\tt f(e)}\noteref{note-evaluation}
-  \\ 
-  \hline
-  \\
+  \T \\   \hline  \\
 \end{tabularx}
 
 \conceptsubsection{Invariants}

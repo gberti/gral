@@ -27,7 +27,10 @@ void ConstructCellCorrespondence(G1     const& g1,    // in
 }
 
 
-// dest = src modulo src2dest
+/*! \brief Copy gridfunction \c src to \c dest
+
+    \ingroup gridfunctions
+*/
 template<class GFsrc, class GFdest, class ElemCorr>
 void copy_grid_function(GFsrc    const& src,       // in 
 			GFdest        & dest,      // out

@@ -1,6 +1,11 @@
 #ifndef GRAL_GB_GMV_FMT_OUTPUT2D_TT
 #define GRAL_GB_GMV_FMT_OUTPUT2D_TT
 
+// $LICENSE_NEC
+
+/*! \file
+ */
+
 #include "Gral/IO/gmv-format-output2d.h"
 #include "Gral/Base/element-numbering.h"
 #include "Geometry/point-traits.h"

@@ -43,6 +43,8 @@
        // call generic algorithm
        algorithm_needing_cell_on_cell_adjacencies(g,xgt());
       \endcode
+
+    \see Test in \ref test-cell-on-cell-iterator.C
 */
 
 template<class G, 

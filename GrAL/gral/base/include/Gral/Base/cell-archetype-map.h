@@ -9,6 +9,8 @@
 /* \brief Map back and forth between elements and its archetype 
    counterparts in a given cell.
 
+   \ingroup gridarchetypes
+
    Mappings from grid elements to archetype elements typically
    involve  a local search over the cell. Mappings from
    ElementOnCell incidence iterators to archetype elements should

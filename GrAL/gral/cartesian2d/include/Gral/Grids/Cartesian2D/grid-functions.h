@@ -6,12 +6,13 @@
 #include "Gral/Grids/Cartesian2D/element-traits.h" 
 #include "Gral/Base/grid-function-vector.h"
 
-/*! \defgroup dummy Dummy group
-
+/*! \file
  */
 
 
 /*! \defgroup gridfunctionsreggrid2d Total grid functions for RegGrid2D
+
+    \ingroup cartesian2dmodule
 
     \see $GrAL TotalGridFunction
  */

@@ -1,3 +1,5 @@
+// $LICENSE_NEC
+
 #include "Gral/Subranges/connected-components.h"
 
 #include "Gral/Grids/Cartesian2D/all.h"
@@ -6,9 +8,9 @@
 
 #include <iostream>
 
-/*! \file Tests for connected_components
+/*! \file 
 
-
+   Tests for connected_components
 */
 
 int main() {

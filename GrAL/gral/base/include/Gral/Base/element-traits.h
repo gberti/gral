@@ -6,15 +6,15 @@
 // $LICENSE
 
 
+/*! \defgroup elementtraits Traits classes for grid elements
 
-
-
-//----------------------------------------------------------------
-/*!  \brief traits classes for enabling uniform treatment
-      of different element types (vertex, edge etc).
       \ingroup traits
+      \ingroup elements
 
-      Used for example in the class template grid_function<E,T>.
+      These traits classes enable uniform treatment
+      of different element types (vertex, edge etc).
+
+      Used for example in the class template <tt> grid_function <E,T> </tt>.
 
       This has to be specialized for concrete element classes, e.g.:
 
@@ -55,20 +55,45 @@
       };
       \endcode
 */
-//----------------------------------------------------------------
 
-
-
-
+/*! \brief Primary template to be specialized
+    \ingroup elementtraits
+ */
 template<class E>
 struct element_traits {};
 
 
+/*! \brief Tag for providing info on numbering of elements
+
+    \ingroup elementtraits
+
+    Define <tt> element_traits<MyElement>::consecutive_tag </tt> to be \c non_consecutive_tag
+    if this element type is not numbered consecutively.
+    (This is the default.)
+ */
 struct non_consecutive_tag {};
 
-template<int N>
+
+/*! \brief Tag for providing info on numbering of elements
+
+    \ingroup elementtraits
+
+    Define <tt> element_traits<MyElement>::consecutive_tag </tt> to be \c consecutive_integer_tag<OFFSET>
+    if this element type is  numbered consecutively starting from \c OFFSET:
+
+    \code
+      template<>
+      struct element_traits<MyVertex> 
+         : public element_traits_vertex_base<MyVertex::grid_type> 
+      {
+         typedef consecutive_integer_tag<0> consecutive_tag;
+         // ...
+      };
+    \endcode
+ */
+template<int OFFSET>
 struct consecutive_integer_tag 
-{ enum { offset = N }; };
+{ enum { offset = OFFSET }; };
 
 
 template<class GRID>
@@ -90,9 +115,8 @@ struct element_traits_base
 };
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<> for vertex types
-  \ingroup traits
-  \relates element_traits
+     of \c element_traits for vertex types
+  \ingroup elementtraits
 */
 template<class GRID>
 struct element_traits_vertex_base 
@@ -125,9 +149,9 @@ struct element_traits_vertex_base
 
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<> for edge types
-  \ingroup traits
-  \relates element_traits
+     of \c element_traits for edge types
+
+  \ingroup elementtraits
 */
 template<class GRID>
 struct element_traits_edge_base 
@@ -160,9 +184,9 @@ struct element_traits_edge_base
 };
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<> for face types
-  \ingroup traits
-  \relates element_traits
+     of \c element_traits for face types
+
+  \ingroup elementtraits
 */
 template<class GRID>
 struct element_traits_face_base 
@@ -196,9 +220,9 @@ struct element_traits_face_base
 
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<> for facet types
-  \ingroup traits
-  \relates element_traits
+     of \c element_trait for facet types
+
+  \ingroup elementtraits
 */
 template<class GRID>
 struct element_traits_facet_base 
@@ -232,9 +256,9 @@ struct element_traits_facet_base
 
 
 /*! \brief basic definition to derive from for actual specializations
-     of element_traits<> for cell types
-  \ingroup traits
-  \relates element_traits
+     of \c element_traits for cell types
+
+  \ingroup elementtraits
 */
 template<class GRID>
 struct element_traits_cell_base 

@@ -8,11 +8,9 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
-//----------------------------------------------------------------
 /*! \defgroup restrictedgridfunctions Restrictions of grid functions
    \ingroup gridfunctions  
 */
-//----------------------------------------------------------------
 
 template<class GF, class E_iter>
 class restr_gf_iterator_adapter;
@@ -30,14 +28,15 @@ inline bool operator< (restr_gf_iterator_adapter<GF,E_iter> const& ls,
 
 
 //----------------------------------------------------------------
-/*! \brief Wrapper class for E_iter type: Has value-type of GF 
-     instead of E_iter
+//----------------------------------------------------------------
+
+/*! \internal
+    \brief Wrapper class for E_iter type: Has value-type of GF   instead of E_iter
     \ingroup restrictedgridfunctions
  
    This class is used in restricted_grid_function_adapter to implement the
   container-level (STL-compliant) iterators over the stored items.
 */
-//----------------------------------------------------------------
 
 template<class GF, class E_iter>
 class restr_gf_iterator_adapter {

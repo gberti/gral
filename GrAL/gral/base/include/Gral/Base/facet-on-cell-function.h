@@ -7,6 +7,7 @@
 
 
 /*! \brief Associate data which each cell-facet incidence
+
     \ingroup gridfunctions
     
     This class can be used e.g. for 

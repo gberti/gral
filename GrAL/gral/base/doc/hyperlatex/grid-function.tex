@@ -48,7 +48,7 @@ where {\tt e} is in the range of {\tt f}.
 \conceptsubsection{Associated types}
 
 \begin{tabularx}{14cm}{llR}
-  \hline
+  \T  \hline
   \bf  Name  &\bf  Expression  &\bf  Description   \\ 
   \hline
   Grid type & 
@@ -66,14 +66,12 @@ where {\tt e} is in the range of {\tt f}.
   {\tt F::size\_type} &
   integral type capable of representing the possible sizes
   of the value sequence.
-  \\ 
-  \hline
-  \\
+  \T \\   \hline  \\
 \end{tabularx}
 
 \conceptsubsection{Valid Expressions}
 \begin{tabularx}{14cm}{RRll} 
-  \hline
+  \T \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\
   \hline
   Grid reference  &
@@ -95,16 +93,14 @@ where {\tt e} is in the range of {\tt f}.
   {\tt f.size();} &
   ~ &
   {\tt F::size\_type} 
-  \\ 
-  \hline
-  \\
+  \T \\   \hline  \\
 \end{tabularx}
 
 \T\begin{small}
 \conceptsubsection{Expression semantics}
 \W\begin{tabularx}{15cm}{RRRRR} 
 \T\begin{tabularx}{15cm}{>{\raggedright\arraybackslash}p{1.5cm}RRRR}
-  \hline
+  \T \hline
   \bf  Name     &
   \bf  Expression &
   \bf  Precondition&
@@ -136,9 +132,7 @@ where {\tt e} is in the range of {\tt f}.
   return size of value sequence &
   {\tt f.size() == 
     \xlink{distance}{\STLURL/distance.html} (f.begin(),f.end())}
-  \\ 
-  \hline
-  \\
+  \T \\   \hline  \\
 \end{tabularx}
 \T\end{small}
 

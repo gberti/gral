@@ -11,7 +11,8 @@
 
 
 
-/*! \brief helper class for facet_grid<FACETRANGE>
+/*! \internal
+    \brief helper class for facet_grid<FACETRANGE>
 
  */
 template<class FACETRANGE>
@@ -36,6 +37,7 @@ struct grid_types_facet_grid {
 
     \ingroup subranges   
     Model of $GrAL Cell-VertexInputGridRange
+    \see \ref subranges module
  */
 template<class FACETRANGE>
 class facet_grid

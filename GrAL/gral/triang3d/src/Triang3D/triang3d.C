@@ -1,6 +1,9 @@
 
 // $LICENSE_NEC_2003
 
+/*! \file
+ */
+
 #include "Gral/Grids/Triang3D/triang3d.h"
 #include "Gral/IO/stream-grid-adapter.h"
 

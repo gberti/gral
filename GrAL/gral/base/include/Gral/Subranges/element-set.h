@@ -5,8 +5,10 @@
 // $LICENSE
 
 
-/*! \brief Set of grid element. \e Incomplete!!
+/*! \internal
+    \brief Set of grid element. \e Incomplete!!
     \ingroup subranges
+    \see \ref subranges module
  */
 template<class E>
 class element_set {

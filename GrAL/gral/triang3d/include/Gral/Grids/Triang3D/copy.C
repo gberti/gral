@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Gral/Grids/Triang3D/copy.h"
 
 template<class Conn, class VtxCorr, class CellCorr>

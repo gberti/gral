@@ -4,8 +4,11 @@
 
 // $LICENSE
 
-/*! \defgroup partitioningpostproc Checking and improving partitionings
+/*! \file
+ */
 
+/*! \defgroup partitioningpostproc Checking and improving partitionings
+    \ingroup partitioningmodule
  */
 
 template<class GRID> class partitioning;

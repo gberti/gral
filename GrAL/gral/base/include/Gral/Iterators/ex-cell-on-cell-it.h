@@ -6,15 +6,13 @@
 
 #include "Gral/Base/grid-functions.h"
 
-//----------------------------------------------------------------
-//
 /*! \brief An iterator over all cells having at least one common vertex
     with a given cell.
     \ingroup iterators
     \see Module \ref iterators
     \see IndirectCellOnCellIterator
+    \todo Test
 */
-//----------------------------------------------------------------
 
 template<class Grid>
 class ExtendedCellOnCellIterator {

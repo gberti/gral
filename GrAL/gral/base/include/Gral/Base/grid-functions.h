@@ -34,7 +34,7 @@
  \endcode
 
  \see $GrAL TotalGridFunction concept.
-
+ \see \ref gridfunctions module
 */
 
 template<class E, class T>

@@ -5,7 +5,8 @@
 
 #include <iostream>
 
- 
+/*! \file
+ */ 
 
 
 /*! \brief Write a grid in Metis graph format, 

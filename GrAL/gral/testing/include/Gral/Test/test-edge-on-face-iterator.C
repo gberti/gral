@@ -6,8 +6,15 @@
 #include "Gral/Test/test-edge-on-face-iterator.h"
 #include "Utility/pre-post-conditions.h"
 
+template<class G, class GT>
+bool test_edge_on_face_iterator(G const& g, std::ostream & out, GT);
+
 template<class G>
 bool test_edge_on_face_iterator(G const& g, std::ostream & out)
+{  return test_edge_on_face_iterator(g, out, grid_types<G>()); }
+
+template<class G, class GT>
+bool test_edge_on_face_iterator(G const& g, std::ostream & out, GT)
 {
   typedef grid_types<G> gt;
   typedef typename gt::FaceIterator         FaceIterator;

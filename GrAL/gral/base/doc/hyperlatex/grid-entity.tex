@@ -76,22 +76,22 @@ STL \stllink{Equality Comparable}{EqualityComparable}
 \conceptsubsection{Associated types}
 
 \begin{tabular}{lll} 
-  \\ \hline
+  \T \\ \hline
   \bf  Name  & \bf  Expression  &\bf  Description   \\ \hline
   Grid type &  {\tt E::grid\_type} &
   type of the corresponding \sectionlinkshort{anchor grid}{Grid}   \\ 
   Anchor type &  {\tt E::anchor\_type} &
   type of the corresponding \footlink{anchor}{anchor}   \\ 
   handle type &  {\tt E::handle\_type} &
-  type of the corresponding \sectionlinkshort{element handle}{GridElementHandle}  \\ \hline
-  \\
+  type of the corresponding \sectionlinkshort{element handle}{GridElementHandle}  
+  \T \\ \hline \\
 \end{tabular}
 
 
 
 \conceptsubsection{Valid Expressions}
 \begin{tabular}{llll}
-  \\ \hline
+  \T \\ \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ \hline
   Anchor grid &  {\tt e.TheGrid()} & 
    ~ & 
@@ -104,15 +104,14 @@ STL \stllink{Equality Comparable}{EqualityComparable}
    Handle &  {\tt e.handle()} & 
    ~ & 
    {\tt handle\_type}
-   \\ \hline
-   \\
+   \T \\ \hline   \\
  \end{tabular}
  
  \conceptsubsection{Expression semantics}
  
  %\begin{tabular}{|p{2cm}|l|p{4cm}|p{4cm}|p{4cm}} \hline
  \begin{tabularx}{15cm}{XlXXX} 
-   \\ \hline 
+   \T \\ \hline 
    \bf  Name    &
    \bf  Expression &
    \bf  Precondition&
@@ -147,8 +146,7 @@ STL \stllink{Equality Comparable}{EqualityComparable}
      and 
      {\tt e1.TheAnchor() == e2.TheAnchor()}\noteref{note-grid-comparison}
   & ~
-   \\ \hline
-   \\ 
+   \T \\ \hline  \\ 
  \end{tabularx}
 
  \conceptsubsection{Refinements}

@@ -28,7 +28,8 @@ public:
 };
 
 
-/*! Specialization for 2D grid, boundary of cells -> 1D grid
+/*! \internal
+    \brief  Specialization for 2D grid, boundary of cells -> 1D grid
  */
 template<class E>
 class boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<2> > 
@@ -50,7 +51,8 @@ public:
 };
 
 
-/*! Specialization for 2D grid, boundary of cells -> 1D grid
+/*! \internal
+    \brief Specialization for 2D grid, boundary of cells -> 1D grid
  */
 template<class E>
 class boundary_grid_aux<E, cell_type_tag, grid_dim_tag<2> > 
@@ -93,7 +95,8 @@ public:
 
 
 
-/*! Specialization for 3D grid, boundary of cell -> 2D grid
+/*! \internal 
+    \brief Specialization for 3D grid, boundary of cell -> 2D grid
  */
 template<class E>
 class boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<3> > 
@@ -115,7 +118,8 @@ class boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<3> >
 };
 
 
-/*! Specialization for 3D grid, boundary of cell -> 2D grid
+/*! \internal
+    \brief Specialization for 3D grid, boundary of cell -> 2D grid
  */
 template<class E>
 class boundary_grid_aux<E, cell_type_tag, grid_dim_tag<3> > 
@@ -158,7 +162,8 @@ public:
 
 
 
-/*! Specialization for 3D grid, boundary of facet -> 1D grid
+/*! \internal
+    \brief Specialization for 3D grid, boundary of facet -> 1D grid
  */
 template<class E>
 class boundary_grid_types_aux<E, facet_type_tag, grid_dim_tag<3> > 
@@ -180,7 +185,8 @@ public:
 };
 
 
-/*! Specialization for 3D grid, boundary of facet -> 1D grid
+/*! \internal
+    \brief Specialization for 3D grid, boundary of facet -> 1D grid
  */
 template<class E>
 class boundary_grid_aux<E, facet_type_tag, grid_dim_tag<3> > 
@@ -220,7 +226,8 @@ public:
   bool IsOnBoundary(Facet               const&) const { return false;}
 };
 
-/*! Specialization for ND grid,  boundary of edge -> 0D grid (2-element vertex set)
+/*! \internal
+    \brief Specialization for ND grid,  boundary of edge -> 0D grid (2-element vertex set)
  */
 template<class E,class DIM>
 class boundary_grid_types_aux<E, edge_type_tag, DIM> 
@@ -239,7 +246,8 @@ public:
   // no facets: would be of dimension -1.
 };
 
-/*! Specialization for ND grid,  boundary of edge -> 0D grid (2-element vertex set)
+/*! \internal
+    \brief Specialization for ND grid,  boundary of edge -> 0D grid (2-element vertex set)
  */
 template<class E,class DIM>
 class boundary_grid_aux<E, edge_type_tag, DIM> 
@@ -272,12 +280,14 @@ public:
 
 
 
-/*! Boundary grid of a grid element.
+/*! \brief Boundary grid of a grid element.
    \ingroup boundary
-    \see boundary
 
    The grid's and element's dimensions are deduced at compile-time,
    in order to use the correct specialization of boundary_grid_aux.
+
+   \see \ref boundary module
+   \see Test in \ref test-boundary-grid.C
  */
 template<class E>
 class boundary_grid 

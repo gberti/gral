@@ -3,10 +3,11 @@
     This module contains components for testing
     grid implementations for syntactical and semantical correctness.
 
-    All tests are accessible by including Test/all.h.
+    All tests are accessible by including <tt> \ref all.h</tt>.
+    An overview over all test function can be found in the module \ref testfunctions.
 
-    Examples are found in the tests of $gral-gral/complex3d GrAL-Complex3D
-    (in test-complex3d-iterators.C)
-    and $gral-gral/cartesian2d cartesian2d 
-    (in test-cartesian-iterators.C) modules.
+    Examples are found in the tests of $gral-gral/complex3d Complex3D
+    (in \ref test-complex3d-iterators.C)
+    and $gral-gral/cartesian2d Cartesian2D 
+    (in \ref test-cartesian-iterators.C) modules.
 */

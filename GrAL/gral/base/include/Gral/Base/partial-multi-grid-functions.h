@@ -96,7 +96,7 @@ namespace detail {
    \f$ V(G) \cup E(G) \cup C(G) \mapsto T \f$ ( in the 2d case)
 
    These classes are  fully generic and do not need any further
-   specialization, because they build on grid_function<Elt,T>.
+   specialization, because they build on \c grid_function \c<Elt,T>.
 
    \see partial_partial_multi_grid_function<Grid,T>
    \see Module \ref gridfunctions

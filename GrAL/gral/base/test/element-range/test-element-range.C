@@ -1,3 +1,10 @@
+
+// $LICENSE_NEC
+
+/*! \file
+ 
+*/
+
 #include "Gral/Subranges/enumerated-subrange.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 

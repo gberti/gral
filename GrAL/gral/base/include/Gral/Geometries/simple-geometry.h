@@ -12,7 +12,8 @@
 /*! \brief Simple geometry, just storing vertex coordinates
 
     \ingroup  gridgeometries
-    \see \ref gridgeometries
+    \see \ref gridgeometries module
+    \todo Test
  */
 template<class GRID, class COORD> 
 class simple_geometry : public grid_types<GRID> {

@@ -1,3 +1,9 @@
+
+// $LICENSE
+
+/*! \file
+ */
+
 #include "Gral/Grids/Complex3D/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
 #include "Gral/Base/grid-morphism.h"

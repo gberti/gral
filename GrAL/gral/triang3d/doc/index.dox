@@ -1,29 +1,19 @@
-/*! \mainpage Index of the GrAL %Triang3D Grid Module
+/*! \mainpage Index of the GrAL %Triang3D Grid Package
 
    This module contains the concrete grid component Triang3D.
    An object of type Triang2D represents a three-dimensional triangulation.
    The only %incidence relation stored is cell-vertex %incidence,
-   in a simple integer array.
+   in a simple integer array, similar to the $gral-gral/triang2d GrAL-Triang2D package.
 
-   The module also serves as an example how to adapt a given
-   ``classical'' grid data structure to the GrAL interface.
-   Therefore, most things are kept simple, even if much shorter
-   implementations would be possible by reusing generic components
-   e.g. for defining iterators.
-
-   
-   The main classes one might use are:
-   (headers under the path Gral/Grids/Triang3D)
-   - Triang3D (triang3d.h): The combinatorial grid
-   - total grid function (see $GrAL TotalGridFunction concept, grid-functions.h)
-   - partial grid functions 
-     (see $GrAL PartialGridFunction concept, partial-grid-functions.h )
-   - ConstructGrid0(Triang3D,...) for copying an arbitrary grid into
-     a Triang3D grid (construct.h)
-   - stored_geometry_Triang3D for a simple geometry 
-     (see $GrAL VertexGridGeometry concept)
-   - all.h for all of the above.
+   Browse the documentation starting from the \ref triang3dmodule module.
+   A convenience header <tt> Gral/Grids/Triang3D/all.h </tt> includes all functionality 
+   related to Triang3D.
 
    \status 
    - switch operators have to be defined (for edges and vertices)
+*/
+
+
+/*! \defgroup triang3dmodule Components related to Triang3D
+
 */

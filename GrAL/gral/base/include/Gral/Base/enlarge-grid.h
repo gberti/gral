@@ -5,15 +5,17 @@
 // $LICENSE
 
 
-//----------------------------------------------------------------
 /*! \file
-   \brief  Attach (glue) a copy of srcG to G, identifying a given set of vertices.
-   \ingroup mutatingoperations
+ */
 
+/*! \defgroup enlargeoperations Generic grid enlargement operations
 
-   This file does \e not contain any actual function; rather, the following
-   functions
-   have to be implemented separately for each grid type <tt> G1 </tt>:
+    \brief  Attach (glue) a copy of \c srcG to \c G, identifying a given set of vertices.
+    \ingroup mutatingoperations
+    \see module mutatingoperations
+
+   This file does \e not contain any actual function; rather, the following  functions
+   have to be implemented separately for each grid type \c G1:
 
     - <tt> void EnlargeGrid()  </tt> 
     - <tt> void EnlargeGridV()  </tt> 
@@ -74,7 +76,7 @@
 
   \see  construct-grid.h
 */
-//----------------------------------------------------------------
+
 
 /*
 template<class G1, class G2, class Geom2, class VertexIdent>

@@ -3,6 +3,10 @@
 
 // $LICENSE 
 
+/*! \file
+ */
+
+
 /*! \brief  Data structure for using Metis partitioning routines with 
     different options.
     \ingroup metispartitioninginternal

@@ -3,9 +3,14 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 class metis_options;
 
 /*! \defgroup metispartitioning Converters to Metis Formats
+
+    \ingroup partitioningmodule
 
    This module contains various classes and functions to interface
    with the $Metis grid partitioning library.
@@ -18,6 +23,7 @@ class metis_options;
 /*! \brief Partition a grid using the Metis library
 
   \ingroup metispartitioning
+  \see Test in \ref test-metis-main.C
 
 */
 

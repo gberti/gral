@@ -1,3 +1,9 @@
+
+// $LICENSE
+
+/*! \file
+ */
+
 // GrAL Partitioning
 #include "Gral/Partitioning/metis-partitioning.h"
 
@@ -14,6 +20,7 @@
 
 // STD
 #include <fstream>
+#include <iostream>
 #include <algorithm>
 
 
@@ -35,6 +42,8 @@ int main() {
 
   MP.calculate_cell_partitioning(G,parts,np);
 
-  std::ofstream partfile( ("grid.complex2d." + as_string(np)).c_str());
+  std::ofstream partfile( ("grid.complex2d." + as_string(np) + ".out").c_str());
   std::copy(parts.begin(), parts.end(), std::ostream_iterator<int>(partfile, "\n"));
+  partfile.close();
+  //std::copy(parts.begin(), parts.end(), std::ostream_iterator<int>(std::cout, "\n"));
 } 

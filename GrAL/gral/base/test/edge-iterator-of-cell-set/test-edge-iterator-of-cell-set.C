@@ -1,5 +1,9 @@
+
+// $LICENSE_NEC
+
 /*! \file
-    Testing edge_iterator_of_cell_set<> 
+
+    Testing \c edge_iterator_of_cell_set 
 */
 
 #include "Gral/Iterators/edge-iterator-of-cell-set.h"

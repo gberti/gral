@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Gral/Grids/Triang2D/triang2d.h"
 #include "Gral/Grids/Triang2D/element-traits.h"
 
@@ -10,8 +13,16 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
 
+/*! \defgroup triang2dgf Total grid functions for Triang2D
+    \ingroup triang2dmodule
+ 
+    The specializations of grid_function in this group are
+    models of $GrAL TotalGridFunction.
+ */
 
-
+/*! \brief Specialization of the grid_function primary template for Triang2D::Vertex
+    \ingroup triang2dgf
+ */
 template<class T>
 class grid_function<Triang2D_Vertex, T> 
   : public grid_function_vector<Triang2D_Vertex, T> 
@@ -26,6 +37,9 @@ public:
 };
 
 
+/*! \brief Specialization of the grid_function primary template for Triang2D::Cell
+    \ingroup triang2dgf
+ */
 template<class T>
 class grid_function<Triang2D_Cell, T> 
   : public grid_function_vector<Triang2D_Cell, T> 
@@ -41,6 +55,12 @@ public:
 
 
 
+/*! \brief Specialization of the grid_function primary template for Triang2D::Edge
+
+    \ingroup triang2dgf
+
+    \note This class uses a hash-based implementation.
+ */
 template<class T>
 class grid_function<Triang2D::Edge, T> 
   : public grid_function_hash<Triang2D::Edge, T> 

@@ -40,7 +40,8 @@ The tables are to be understood in the following sense:
 Analogous requirements take effect if `vertex' is replaced by another element type.
 
 \noindent
-\begin{tabularx}{12cm}{llX} \hline
+\begin{tabularx}{12cm}{llX} 
+  \T \hline
   \bf  Name  &\bf  Expression  &\bf  Description   \\ \hline
   handle type & 
   {\tt F::facet\_handle} &
@@ -58,15 +59,14 @@ Analogous requirements take effect if `vertex' is replaced by another element ty
   vertex-on-facet iterator &
   {\tt F::VertexIterator}&
   type of the corr. VertexOnFacetIterator
-  \\ 
-  \hline
+  \T \\   \hline
 \end{tabularx}
     
 \conceptsubsection{Valid Expressions}
 
 \noindent
-\begin{tabularx}{14cm}{RRRR} \\ 
-  \hline
+\begin{tabularx}{14cm}{RRRR} 
+  \T \\ \hline
   \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type \\ 
   \hline
   handle & 
@@ -97,15 +97,13 @@ Analogous requirements take effect if `vertex' is replaced by another element ty
   {\tt F.NumOfVertices()} &
   ~ &
   {\tt int} 
-  \\
-  \hline
-  \\
+  \T \\  \hline  \\
 \end{tabularx}
  
 \T\begin{small}
 \conceptsubsection{Expression semantics}
-\begin{tabularx}{15cm}{XXXXX} \\
-  \hline
+\begin{tabularx}{15cm}{XXXXX} 
+  \T \\ \hline
   \bf  Name     &
   \bf  Expression &
   \bf  Precondition&
@@ -136,9 +134,7 @@ Analogous requirements take effect if `vertex' is replaced by another element ty
   {\tt f} is \link{valid}{valid}  &
   n is the number of vertices that are incident to {\tt f} &
   ~ 
-  \\ 
-  \hline
-  \\
+  \T \\ \hline  \\
 \end{tabularx}
 \T\end{small}
     

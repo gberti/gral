@@ -3,6 +3,10 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
+
 #include "Gral/Partitioning/grid-to-metis.h"
 #include "Gral/Base/common-grid-basics.h"
 
@@ -88,7 +92,7 @@ int  write_metis_mesh(GRID const& G, std::ostream& out)
   int              num( (*ci).NumOfVertices() );
   for ( ; !ci.IsDone(); ++ci ) {
     if ( (*ci).NumOfVertices() != num ) {
-      cerr << "Cells with different number of vertices detected!\n"
+      std::cerr << "Cells with different number of vertices detected!\n"
 	   << "This grid can't be converted to METIS mesh!\n"
 	   << "(Hint: try to convert to METIS graph, using write_metis_graph())\n";
       return 1;

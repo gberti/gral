@@ -11,9 +11,9 @@
 
   \ingroup elements
   \ingroup iterators
-  \see elements
-  \see iterators 
-  \see generic_facet
+  \see \ref elements module
+  \see \ref iterators module
+  \see \ref generic_facet
 
   \brief
    The components offer generic support for $GrAL Edge, 
@@ -22,6 +22,8 @@
    on top of a $GrAL Cell-VertexInputGridRange. 
 
    They are used for implementing %edge-related members of Complex3D.
+   
+   \todo Test
  */
 
 /*! \brief enclosing namespace for generic edge components

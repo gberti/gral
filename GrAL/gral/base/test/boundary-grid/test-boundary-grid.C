@@ -1,3 +1,7 @@
+/*! \file
+ 
+*/
+
 #include "Gral/Subranges/boundary-grid.h"
 
 #include "Gral/Grids/Cartesian2D/all.h"

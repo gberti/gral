@@ -1,29 +1,28 @@
-/*! \mainpage Index of the GrAL %Triang2D Grid Module
+/*! \mainpage Index of the GrAL %Triang2D Grid Package
 
-   This module contains the concrete grid component Triang2D.
+   This package contains the concrete grid component Triang2D.
    An object of type Triang2D represents a two-dimensional triangulation.
    The only %incidence relation stored is cell-vertex %incidence,
    in a simple integer array.
 
-   The module also serves as an example how to adapt a given
-   ``classical'' grid data structure to the GrAL interface.
+   The package also serves as an example how to implement a GrAL-conforming interface
+   for a "classical" grid data structure
+   (see $GrAL AdaptingToInterface tutorial).
    Therefore, most things are kept simple, even if much shorter
    implementations would be possible by reusing generic components
    e.g. for defining iterators.
 
    
-   The main classes one might use are:
-   (headers under the path Gral/Grids/Triang2D)
-   - Triang2D (triang2d.h): The combinatorial grid
-   - total grid function (see $GrAL TotalGridFunction concept, grid-functions.h)
-   - partial grid functions 
-     (see $GrAL PartialGridFunction concept, partial-grid-functions.h )
-   - ConstructGrid0(Triang2D,...) for copying an arbitrary grid into
-     a Triang2D grid (construct.h)
-   - stored_geometry_Triang2D for a simple geometry 
-     (see $GrAL VertexGridGeometry concept)
-   - all.h for all of the above.
+   Browse the documentation starting from the \ref triang2dmodule module.
+   A convenience header <tt> Gral/Grids/Triang2D/all.h </tt> includes all functionality 
+   related to Triang2D.
+
 
    \status 
-   - switch operators have to be defined (for edges and vertices)
+    Stable
+*/
+
+
+/*! \defgroup triang2dmodule Components related to Triang2D
+
 */

@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 // STD
 #include <iostream>
 #include <fstream>
@@ -16,11 +19,18 @@
 #include "Gral/Base/cell-iterator-int.h"
 
 
+/*! \defgroup outputadapter Output adapter for generic file I/O
+*/
+
 
 /*! \brief Output adapter for OFF/geomview file format
-    \ingroup output-adapter
+    
+    \ingroup outputadapter
 
-    \see Module \ref output-adapter
+    \see Module \ref outputadapter
+    \see GrAL base module \ref copyoperations
+    \see Test in \ref test-geomview-output.C
+
  */
 
 

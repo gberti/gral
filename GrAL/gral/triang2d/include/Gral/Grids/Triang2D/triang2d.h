@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Grids/Triang2D/grid-types.h"
@@ -27,20 +30,27 @@ struct grid_types_Triang2D :
 #define DEBUG_ONLY(code)  if(false) { code }
 #endif
 
-/*! \brief A simple grid class for triangulations.
+/*! \brief A simple grid class for 2D triangulations.
 
- This class may act as a wrapper with reference-semantics for
- a plain array containing the cell-vertex connectivity.
- Value semantics may be enforced by a call to the member 
- function DoCopy().
+   \ingroup triang2dmodule 
 
- A copy by assignment or copy-ctor will always entail
- value-semantics on the copied-to side, i.e. make a full copy.
+   Model of $GrAL VertexGridRange, $GrAL EdgeGridRange, $GrAL CellGridRange,
+   $GrAL ArchetypedGrid.
 
-  As this class also serves as a tutorial on how to adapt
-  existing data structures to GrAL, the technical level was kept
-  low, i.e. there are no complicated constructions for building
-  element and iterators types out of generic components.
+   This class may act as a wrapper with reference-semantics for
+   a plain array containing the cell-vertex connectivity.
+   Value semantics may be enforced by a call to the member 
+   function \c DoCopy().
+
+   A copy by assignment or copy-constructor will always entail
+   value-semantics on the copied-to side, i.e. make a full copy.
+
+    As this class also serves as a tutorial on how to adapt
+    existing data structures to GrAL (see also $GrAL AdaptingToInterface),
+    the technical level was kept low, i.e. there are no complicated 
+    constructions for building element and iterators types out of generic components.
+
+   \see Test in \ref test-triang2d-construct.C
 */
 
 
@@ -51,29 +61,77 @@ private:
   int  ncells;
   int  nvertices;
 public:
+
   enum { dim = 2};
   unsigned dimension() const { return dim;}
 
+  //@{
+  /*! \name Construction 
+   */
+  //! \brief Empty grid
   Triang2D() 
     : cells(0), owned(false), ncells(0), nvertices(0) {}
+  /*! \brief Construct using cell-vertex incidence information in \c c
+      \pre
+         - \c c is of size 3*nc, and <tt> c[3*n], c[3*n+1], c[3*n+2]</tt>
+            are the vertex indices of the cell no. \c n. 
+         -  The range of values in \c c is an interval \f$ [0,n_v[ \f$ for some  \f$n_v > 0\f$.
+      \post 
+         - <tt> NumOfCells() == nc </tt>
+         - <tt> NumOfVertices() </tt> is the number \f$n_v\f$ of different vertices in \c c.
+         - The data in \c is only referenced.
+   */
   Triang2D(int* c, int nc) 
     : cells(c), owned(false), ncells(nc) 
   { nvertices = calc_num_of_vertices(); }
+  /*!  \brief Construct using cell-vertex incidence information in \c c
+
+       \pre
+         - \c c is of size 3*nc, and <tt> c[3*n], c[3*n+1], c[3*n+2]</tt>
+            are the vertex indices of the cell no. \c n.  
+         -  \c c[n] \In \c [0,nv-1] for 0 \Le \c n \Lt 3*nc  
+       \post        
+         - <tt> NumOfCells() == nc </tt>
+         - <tt> NumOfVertices() == nv </tt>
+         - The data in \c is only referenced.
+
+   */
   Triang2D(int* c, int nc, int nv) 
     : cells(c), owned(false), ncells(nc), nvertices(nv) {} 
 
-  // make physical copy
+  /*! \brief  make physical copy of \c rhs
+   */
   Triang2D(Triang2D const& rhs);
+  /*! \brief  make physical copy of \c rhs
+   */
   Triang2D& operator=(Triang2D const& rhs);
 
   ~Triang2D();
+ 
 
-  /*! make a physical copy, if only referencing the grid,
-    thus gaining ownership of cells. */
+  /*! \brief  make a physical copy
+    \post
+      The storage pointing to the cells array is owned 
+  */
   void DoCopy();
-  /*! set this to the connectivity given by c.
-    Assume ownership of c *without* doing a copy. */
+  /*! \brief Initialize using the connectivity given by c.
+     
+      Assume ownership of c \e without doing a copy.
+      The typical example for this use is the following:
+      \code
+      {
+       // beginning of block
+        int * c = new int[3*nc];
+	// ... fill c somehow ...
+	Triang2D T;
+	T.Steal(c,nc,nv);
+        // DO NOT delete [] c in the sequel, it is owned by T
+       } // end of block, destructor of T will delete c
+       \endcode 
+ 
+  */
   void Steal(int* c, int nc, int nv);
+  //@}
 private:
   void clear(); 
   void do_copy();
@@ -94,6 +152,10 @@ public:
   friend class Triang2D_Cell;
   friend class Triang2D_Vertex;
 
+  //@{
+  /*! \name Sequence iteration
+      \todo STL-style EndXXX() 
+  */
   int NumOfCells   () const { return ncells   ;}
   int NumOfVertices() const { return nvertices;}
   int NumOfFaces()    const { return NumOfCells();}
@@ -103,20 +165,31 @@ public:
   inline FaceIterator   FirstFace()   const;
   inline FacetIterator  FirstFacet()  const;
   inline CellIterator   FirstCell()   const;
+  //@}
 
-
+  //@{
+  /*! \name Switch operator
+      \note \c switch_cell(edge,cell) cannot be implemented without CellOnCellIterator.
+   */
   inline void switch_vertex(Vertex      & v, Edge const& e) const;
   inline void switch_edge  (Vertex const& v, Edge      & e, Cell const& c) const;
   inline Vertex switched_vertex(Vertex const& v, Edge const& e) const;
   inline Edge   switched_edge  (Vertex const& v, Edge const& e, Cell const& c) const;
+  //@}
 
+  //@{
+  /*! \name Validity check
+       \todo Implement for edge handles
+   */
   bool valid(vertex_handle v) const { return 0 <= v && v < nvertices;}
   bool valid(cell_handle   c) const { return 0 <= c && c < ncells;}
+  //@}
 
-
-   /*! \name Archetype handling
-   */
   /*@{*/
+   /*! \name Archetype handling
+     
+       \see $GrAL ArchetypedGrid concept
+   */
   static archetype_type const& Archetype(archetype_handle a) {
     REQUIRE(a == 0, "a = " << a,1);
     return *BeginArchetype();

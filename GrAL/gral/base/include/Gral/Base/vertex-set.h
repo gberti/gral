@@ -17,6 +17,7 @@
 
 /*! \brief sorted vertex set of a grid element
     \ingroup elements  
+    \see \ref elements module 
     vertex_set can be used as keys in hash tables of elements.
 
     \todo specialize to vertex set of edges
