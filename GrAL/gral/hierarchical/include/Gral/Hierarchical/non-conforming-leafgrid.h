@@ -149,7 +149,7 @@ namespace octree {
 
     // types related to octree type
     typedef octree_type                          ogt;
-    typedef typename ogt::OctCell                OctCell;
+    typedef typename ogt::oct_cell_type          oct_cell_type;
   protected:
     ref_ptr<const grid_type> the_grid;
     level_handle             lev;
@@ -188,6 +188,13 @@ namespace octree {
     typedef nc_leafgrid_vertex_t    <ELEMENTBASE> self;
     typedef hierarchical::h_vertex_t<ELEMENTBASE> base;
   public:
+    typedef typename base::grid_type          grid_type;
+    typedef typename base::vertex_handle      vertex_handle;
+    typedef typename base::flat_vertex_type   flat_vertex_type;
+    typedef typename base::flat_vertex_handle flat_vertex_handle;
+    typedef typename base::level_handle       level_handle;
+
+
     nc_leafgrid_vertex_t() {} 
     nc_leafgrid_vertex_t(grid_type const& gg, vertex_handle hh) : base(gg, hh)
     { normalize(); }
@@ -250,10 +257,11 @@ struct element_traits<octree::nc_leafgrid_vertex_t
 {
   typedef element_traits_vertex_base<octree::non_conforming_leafgrid<OCTREE> > base;
   typedef typename octree::non_conforming_leafgrid<OCTREE>::Vertex Vertex;
-  typedef typename Vertex::flatgt flatgt;
-  typedef typename flatgt::Vertex flat_vertex_type;
-  typedef typename element_traits<flat_vertex_type>::hasher_type flat_hasher_type;
- 
+  typedef typename Vertex::flatgt                                  flatgt;
+  typedef typename flatgt::Vertex                                  flat_vertex_type;
+  typedef typename element_traits<flat_vertex_type>::hasher_type   flat_hasher_type;
+  typedef typename base::element_type                              element_type; 
+
   struct hasher_type : public base::hasher_type_elem_base {
     // this is a bad hasher
     // could multiply with (level() -coarsest_level())*FinestGrid().NumOfVertices()
@@ -269,10 +277,11 @@ struct element_traits<hierarchical::h_cell_t
   : public element_traits_cell_base< octree::non_conforming_leafgrid<OCTREE> >
 {
   typedef element_traits_cell_base<octree::non_conforming_leafgrid<OCTREE> > base;
+  typedef typename base::element_type                            element_type;
   typedef typename octree::non_conforming_leafgrid<OCTREE>::Cell Cell;
-  typedef typename Cell::flatgt flatgt;
-  typedef typename flatgt::Cell flat_cell_type;
-  typedef typename element_traits<flat_cell_type>::hasher_type flat_hasher_type;
+  typedef typename Cell::flatgt                                  flatgt;
+  typedef typename flatgt::Cell                                  flat_cell_type;
+  typedef typename element_traits<flat_cell_type>::hasher_type   flat_hasher_type;
  
   struct hasher_type : public base::hasher_type_elem_base {
     // this is a bad hasher
@@ -305,6 +314,7 @@ class grid_function<hierarchical::h_cell_t<
                                octree::nc_leafgrid_element_base_t<octree::non_conforming_leafgrid<OCTREE> > >,
                              T> base;
  public:
+  typedef typename base::grid_type grid_type;
   grid_function() {}
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g, T const& t) : base(g,t) {}
@@ -324,6 +334,7 @@ class grid_function<octree::nc_leafgrid_vertex_t<
                                 octree::nc_leafgrid_element_base_t<octree::non_conforming_leafgrid<OCTREE> > >
                              ,T> base;
  public:
+  typedef typename base::grid_type grid_type;
   grid_function() {}
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g, T const& t) : base(g,t) {}

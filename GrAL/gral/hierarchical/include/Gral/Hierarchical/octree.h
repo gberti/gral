@@ -25,6 +25,8 @@
     to a conventional octree.
 
     \note It is also possible to add coarser layers (refining the initial root layer) afterwards
+
+    \test test-octree.C
 */
 
 namespace octree {
@@ -95,7 +97,7 @@ public:
   // FIXME: partial_gf is no good impl. of a cell range. ElementIterator
   // is not guaranteed to traverse only Cells with value 'true'. (see deactivate(oct_cell_type)).
   typedef hier::hier_partial_grid_function<hier_cell_type, bool>  subrange_table_type;
-  typedef typename subrange_table_type::flat_gf_type          grid_range_type;
+  typedef typename subrange_table_type::flat_gf_type              grid_range_type;
 
   typedef typename grid_range_type::CellIterator ActiveLevelCellIterator;
 private:  
@@ -116,6 +118,10 @@ public:
   //! Construct with initial root layer \c C0
   Octree(flat_grid_type const& C0,
 	 pattern_grid_type   const& refpat);
+  Octree(ref_ptr<flat_grid_type const> C0,
+	 pattern_grid_type   const& refpat);
+  Octree(hier_grid_type const& H);
+
   // Octree(int nx_, int ny_, int nz_);
 
   /*! \brief Add the initial level.
@@ -127,18 +133,20 @@ public:
 
   ref_ptr<const self>               TheOctree() const { return ref_ptr<const self>(this);}
   ref_ptr<const hier_grid_type>     TheHierGrid() const { return ref_ptr<const hier_grid_type>(&levels);}
+  ref_ptr<const pattern_grid_type>  ThePatternGrid()  const { return TheHierGrid()->ThePatternGrid();}
   ref_ptr<const flat_grid_type>     LevelGrid(level_handle lev) const 
   { return ref_ptr<const flat_grid_type>(levels(lev));}
   ref_ptr<const grid_range_type>    ActiveRange(level_handle lev) const
   { return ref_ptr<const grid_range_type>(active_range(lev));}
 
+
   /*! \name Modifying operations
    */
   //@{
-  /*! \brief join the cells (i.e. subtree) beneath \c newLeaf, such that \newLeaf becomes a leaf.
+  /*! \brief join the cells (i.e. subtree) beneath \c newLeaf, such that \c newLeaf becomes a leaf.
       
-      \pre  <tt> is_leaf(c) == false </tt>
-      \post <tt> is_leaf(c) == true  </tt> 
+      \pre  <tt> isLeaf(c) == false </tt> \f$ \wedge \f$ </tt> coarsenable() </tt>
+      \post <tt> isLeaf(c) == true  </tt> 
   */
   void join_cells(oct_cell_type const& newLeaf);
 
@@ -160,6 +168,9 @@ public:
 
   //@}
 
+
+  //! check whether the octree can be coarsened with the current refinement/coarsening pattern
+  bool coarsenable() const { return TheHierGrid()->coarsenable();}
 
   /*! \name Operations on oct_cell_types
    */
@@ -231,8 +242,8 @@ public:
   bool valid(level_handle lev) const { return (levels.coarsest_level() <= lev && lev <= levels.finest_level());}
   void cv(level_handle lev) const 
   { REQUIRE(valid(lev), "lev=" << lev, 1); }
-private:
-
+  //private:
+public:
   /*! \brief mark the cell as active
    */
   void activate (oct_cell_type c) { active_range[c.level()][c] = true;}
