@@ -7,6 +7,7 @@
 #include "Geometry/affine-mapping.h"
 #include "Geometry/matrix.h"
 #include "Geometry/coords.h"
+#include "Geometry/matrix-algorithms.h"
 
 #include "Container/tuple.h"
 #include "Container/tuple-point-traits.h"
@@ -108,5 +109,32 @@ int main() {
     typedef tuple<double,3>   coord_t;
     test_mapping3d<matrix_t, coord_t>(cout);
     cout << "-------------" << endl;
+  }
+
+
+  {
+    typedef matrix<3,3,1>     matrix_t;
+    typedef tuple<double,3>   coord_t;
+    typedef affine_mapping<matrix_t, coord_t> mapping_t;
+    coord_t axis;
+    double  angle;
+
+    {
+      matrix_t R =   mapping_t::rotation3d(coord_t(1,0,0), M_PI/2.0).TheMatrix();
+      get_rotation_axis_angle(R, axis, angle);
+      cout << "axis=" << axis << "  angle=" << angle << endl;
+    }
+    {
+      matrix_t R =   mapping_t::rotation3d(coord_t(-1,0,0), M_PI/2.0).TheMatrix();
+      get_rotation_axis_angle(R, axis, angle);
+      cout << "axis=" << axis << "  angle=" << angle << endl;
+    }
+    {
+      matrix_t R =   mapping_t::rotation3d(coord_t(1,1,1), M_PI/2.0).TheMatrix();
+      get_rotation_axis_angle(R, axis, angle);
+      cout << "axis=" << axis << "  angle=" << angle << endl;
+    }
+
+
   }
 }
