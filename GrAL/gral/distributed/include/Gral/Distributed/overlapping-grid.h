@@ -44,9 +44,9 @@ public:
   //typedef overlap<fine_grid_type> overlap_type;
   typedef typename overlap_type::range_type_ref     range_type_ref;
 
-  //-------- owned DATA ---------------
 private:
 
+  //-------- owned DATA ---------------
   fine_grid_type     the_fine_grid;
   overlap_type       the_overlap;
 
@@ -61,30 +61,34 @@ public:
   
   OverlappingGrid() : the_coarse_grid(0) {} 
 
+  void init(const coarse_grid_type& cg) { set_coarse_grid(cg);}
+
+  void fine_grid_complete() { init_overlap(); }
+
+  void calc_dependent_information() { /*  none */ }
+
+private:
   void set_coarse_grid(const coarse_grid_type& cg)
     { the_coarse_grid = &cg;}
 
   void init_overlap() {
-    the_overlap.set_coarse_grid(*the_coarse_grid);
-    the_overlap.set_fine_grid(the_fine_grid);
+    the_overlap.init(TheCoarseGrid(), TheGrid());
   }
 
+public:
   //---------------------- component access ----------------------
 
   coarse_grid_type const& TheCoarseGrid() const { return *the_coarse_grid;}
 
-  //  fine_grid_type const& TheBaseGrid() const { return the_fine_grid;}
-  //  fine_grid_type&       TheBaseGrid()       { return the_fine_grid;}
   fine_grid_type const& TheGrid() const { return the_fine_grid;}
-  fine_grid_type&       TheGrid()       { return the_fine_grid;}
-
+  fine_grid_type      & TheGrid()       { return the_fine_grid;}
 
   overlap_type const& TheOverlap() const { return the_overlap;}
-  overlap_type&       TheOverlap()       { return the_overlap;}
+  overlap_type      & TheOverlap()       { return the_overlap;}
 
-  //range_type_ref   TheRange()   const { return the_overlap.local_range();}
-  //range_type_ref   OwnedRange() const { return the_overlap.local();}  
   range_type_ref   LocalRange() const { return the_overlap.local_range();}  
 };
+
+
 
 #endif
