@@ -68,7 +68,7 @@ struct type_name_traits<double> {
   static const char* name() { return "double";}
 };
 
-struct type_name_traits<string> {
+struct type_name_traits<std::string> {
   static const char* name() { return "string";}
 };
 
