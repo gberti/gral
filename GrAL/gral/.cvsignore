@@ -1,3 +1,5 @@
 doxy.log
 doxygen
 *.tmp
+ doxy.log 
+lib

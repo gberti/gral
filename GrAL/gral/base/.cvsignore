@@ -1,2 +1,4 @@
 doxy.cfg
  doxygen 
+ doxy.log 
+lib
