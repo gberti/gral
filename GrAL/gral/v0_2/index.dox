@@ -32,14 +32,20 @@
 
      <H2> Proper GrAL Modules </H2> 
       <LI> $GRALCONCEPTSTOP 'Intro and concepts documentation'
+   <LI> Basic stuff
+     <UL>
       <LI> $gral-gral/base GrAL-Base module:
-         Basis generic data structures and algorithms. This module is used by all
+         Basis generic data structures and algorithms. 
+         This module is used by all
         other GrAL modules.
       <LI> $gral-gral/testing GrAL-Testing module.
            Used to test concrete grid components.
+     </UL>
+     <LI> Concrete grid data structures
+      <UL>
       <LI> $gral-gral/complex2d GrAL-Complex2D module:
        A simple 2D grid component for arbitrary polygonal cells
-     <LI>  $gral-gral/cartesian2d GrAL-Cartesian2D module:
+      <LI>  $gral-gral/cartesian2d GrAL-Cartesian2D module:
          A Cartesian grid component 
       <LI> $gral-gral/triang2d GrAL-Triang2D module:
          A grid component for 2D triangulations
@@ -47,14 +53,24 @@
          A grid component for 3D grids with arbitrary cells
       <LI> $gral-gral/cartesian3d GrAL-Cartesian3D module:
          A Cartesian grid component for 3D regular grids. 
-      <LI> $gral-gral/partitioning GrAL-Partitioning module:
-          Generic components for grid partitioning.
-      <LI> $gral-gral/distributed  GrAL-Distributed module:
+      </UL>
+     
+      <LI> Distributed grids for parallel computing
+      <UL>
+       <LI> $gral-gral/partitioning GrAL-Partitioning module:
+          Generic components for grid partitioning, including
+          an interface to 
+          <A HREF="http://www.cs.umn.edu/~karypis/metis/"> Metis </A>.
+       <LI> $gral-gral/distributed  GrAL-Distributed module:
           Generic components for distributed grids.
+      </UL>
+      <LI> I/O to various formats
+      <UL>
       <LI> $gral-gral/gmv-io GrAL-GMV-IO module:
         Components for output to GMV file format (3D and 2D versions).
       <LI> $gral-gral/geomview-io GrAL-Geomview-IO module:
         Class for output to OFF format used by 
        <A HREF="http://www.geomview.org"> geomview</A>
+      </UL>
   </UL>
 */

@@ -63,7 +63,8 @@
 
 
     \ingroup gralbasemodules
-   
+
+   \brief Generic iterators over boundaries, closures etc.   
 
 */
 

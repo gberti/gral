@@ -52,37 +52,67 @@ class tp {};
  */
 enum grid_element_tag { vertex_tag, edge_tag, facet_tag, cell_tag };
 
-//! \ingroup elementtags
+/*! \brief Type tag for vertices 
+    \ingroup elementtags
+*/
 class vertex_type_tag {};
-//! \ingroup elementtags
+
+/*! \ingroup elementtags
+
+ */
 class edge_type_tag   {};
-//! \ingroup elementtags
+
+/*! \ingroup elementtags
+ */
 class facet_type_tag  {};
-//! \ingroup elementtags
+
+/*! \ingroup elementtags
+ */
 class cell_type_tag   {};
 
 
-//! \ingroup elementtags
+/*! \ingroup elementtags
+ */
 class edge2d_type_tag  : public edge_type_tag {};
-//! \ingroup elementtags
+
+/*! \ingroup elementtags
+ */
 class facet1d_type_tag : public facet_type_tag {};
-//! \ingroup elementtags
+
+/*! \ingroup elementtags
+ */
 class facet2d_type_tag : public facet_type_tag {};
-//! \ingroup elementtags
+
+/*! \ingroup elementtags
+ */
 class cell2d_type_tag  : public cell_type_tag {};
-//! \ingroup elementtags
+
+/*! \ingroup elementtags
+ */
 class cell3d_type_tag  : public cell_type_tag {};
 
 
+/*! Combinatorial grid dimension
+
+   \ingroup traits
+ */
 template<unsigned N>
 struct grid_dim_tag 
 {   enum {dim = N}; };
 
 
+/*! Combinatorial element dimension
+
+   \ingroup traits
+ */
 template<unsigned N>
 struct element_dim_tag 
 {   enum {dim = N}; };
 
+/*! Combinatorial element co-dimension
+
+   \ingroup traits
+ */
 template<unsigned N>
 struct element_codim_tag 
 {   enum {dim = N}; };
