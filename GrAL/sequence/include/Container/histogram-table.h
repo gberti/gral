@@ -2,6 +2,7 @@
 #define GRAL_GB_CONTAINER_HISTOGRAM_TABLE_H
 
 #include "Container/my-hash-map.h"
+#include "Utility/pre-post-conditions.h"
 
 namespace GrAL {
 
@@ -47,6 +48,8 @@ public:
       ++b;
     }
   }
+
+  void clear() { the_map.clear();}
   
   /*! \brief Write access. Returns 0 if key \k does not exist.
     \Note: This inserts a new entry if none exists for the key \c k.
@@ -60,7 +63,7 @@ public:
     return ik->second;
   }
 
-  //! Read-only access. Returns 0 if key \k does not exist.
+  //! Read-only access. Returns 0 if key \c k does not exist.
   size_type operator()(key_type const& k)
   {
     iterator ik = the_map.find(k);
@@ -81,14 +84,16 @@ public:
   const_iterator end()   const { return the_map.end();}
   //@}
 
-  //! return key with maximal number of entries 
+  //! returns key with maximal number of entries 
   key_type max_entry() const {
     REQUIRE_ALWAYS(! the_map.empty(), "max_entry() called with empty histogram!",1);
     size_type mx = 0;
     key_type res = begin()->first;
     for(const_iterator e = begin(); e != end(); ++e)
-      if((*e).second > mx)
+      if((*e).second > mx) {
+	mx  = (*e).second;
 	res = (*e).first;
+      }
     return res;
   }
 };
