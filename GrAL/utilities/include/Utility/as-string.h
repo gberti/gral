@@ -11,23 +11,9 @@
 //----------------------------------------------------------------
 
 
-// #ifdef __GNUC__
-#if defined(__GNUC__) && __GNUC_MINOR__ < 8
-
-#include <Iso-std/sstream.h>
-
-template<class T>
-inline  string as_string(const T& t)
-{
-  ostringstream s;
-  s << t;
-  return string(s.str());
-}
-
-#else
 
 #include <strstream.h>
-#include "mystring.h"
+#include <string>
 
 template<class T>
 inline string as_string(const T& t)
@@ -40,8 +26,5 @@ inline string as_string(const T& t)
  
   return string(copy);
 }
-
-#endif
-
 
 #endif
