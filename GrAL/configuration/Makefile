@@ -8,6 +8,11 @@ install-headers:
 	mkdir -p $(INSTALLHEADERS)/Config
 	cp include/Config/*.h $(INSTALLHEADERS)/Config
 
+install-config:
+	mkdir -p $(PREFIX)/configuration
+	cp -r defs $(PREFIX)/configuration/
+
+install: install-headers install-config
 
 new: libclean
 
