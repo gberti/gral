@@ -269,11 +269,19 @@ public:
 			 OBJ2 const& o2)
   {
     REQUIRE(o1.space_dimension() == o2.space_dimension(), "",1);
-    int sdim = o1.space_dimension();
-    polytope_directions<OBJ1> dirs1(o1);
-    polytope_directions<OBJ2> dirs2(o2);
     typedef typename OBJ1::coord_type coord_type;
     typedef algebraic_primitives<coord_type> ap;
+    typedef point_traits<coord_type>         pt;
+    int sdim = o1.space_dimension();
+
+    coord_type e1 = pt::Origin(sdim);
+    pt::x(e1) = 1; //ap::unit_vector(1);
+    line_projector<coord_type> p(e1);
+    if(disjoint(p(o1),p(o2)))
+      return false;
+
+    polytope_directions<OBJ1> dirs1(o1);
+    polytope_directions<OBJ2> dirs2(o2);
     typedef typename polytope_directions<OBJ1>::dir_sequence_iterator dir_seq_it_1;
     typedef typename polytope_directions<OBJ2>::dir_sequence_iterator dir_seq_it_2;
     for(int k = 0; k <= sdim -1; ++k) {
