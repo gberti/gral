@@ -31,14 +31,15 @@ install: install-headers
 # targets to generate documentation using doxygen
 
 doxy:  doxy1 installdox
-	rm -f doxy.cfg installdox.sh.tmp
+	rm -f doxy.cfg.tmp installdox.sh.tmp
 
 doxy1:
-	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxygen/"         > doxy.cfg
-	cat doxy.local.cfg                                      >> doxy.cfg
-	$(SCRIPTS)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg
+	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxygen/"         > doxy.cfg.tmp
+	cat doxy.local.cfg                                      >> doxy.cfg.tmp
+	$(SCRIPTS)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg.tmp
 	mkdir -p doxygen
-	(TEXINPUTS=$(TEXINPUTS):$(ROOT); export TEXINPUTS; doxygen doxy.cfg;)
+	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
+         doxygen doxy.cfg.tmp;)
 
 installdox:
 	$(SCRIPTS)/generate-installdox.pl -root $(ALLROOT) dependencies > installdox.sh.tmp;
