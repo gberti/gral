@@ -126,7 +126,7 @@ namespace hierarchical {
     cell_index_type sz = power(the_pattern.cell_size(), level_diff);
     cell_index_type offset = product(p.Flat().index(), sz);
     // assume vertex based arguments to subrange
-    return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), offset, offset+sz)); // -cell_index_type(1));
+    return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), offset, offset+sz+cell_index_type(1))); 
   }
 
 } // namespace hierarchical
