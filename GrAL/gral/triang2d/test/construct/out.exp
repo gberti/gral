@@ -1,49 +1,20 @@
 Testing T
-9 vertices,  8 cells.
+4 vertices,  2 cells.
 Vertex 0
 Vertex 1
 Vertex 2
 Vertex 3
-Vertex 4
-Vertex 5
-Vertex 6
-Vertex 7
-Vertex 8
-Cell 0 has 3  Vertices:  0 3 4 
-  Neighbors -1 5 1 
-  Edges:   No. 0 : (0,3),  No. 1 : (3,4),  No. 2 : (4,0), 
-Cell 1 has 3  Vertices:  0 4 1 
-  Neighbors 0 2 -1 
-  Edges:   No. 0 : (0,4),  No. 1 : (4,1),  No. 2 : (1,0), 
-Cell 2 has 3  Vertices:  1 4 5 
-  Neighbors 1 7 3 
-  Edges:   No. 0 : (1,4),  No. 1 : (4,5),  No. 2 : (5,1), 
-Cell 3 has 3  Vertices:  1 5 2 
-  Neighbors 2 -1 -1 
-  Edges:   No. 0 : (1,5),  No. 1 : (5,2),  No. 2 : (2,1), 
-Cell 4 has 3  Vertices:  3 6 7 
-  Neighbors -1 -1 5 
-  Edges:   No. 0 : (3,6),  No. 1 : (6,7),  No. 2 : (7,3), 
-Cell 5 has 3  Vertices:  3 7 4 
-  Neighbors 4 6 0 
-  Edges:   No. 0 : (3,7),  No. 1 : (7,4),  No. 2 : (4,3), 
-Cell 6 has 3  Vertices:  4 7 8 
-  Neighbors 5 -1 7 
-  Edges:   No. 0 : (4,7),  No. 1 : (7,8),  No. 2 : (8,4), 
-Cell 7 has 3  Vertices:  4 8 5 
-  Neighbors 6 -1 2 
-  Edges:   No. 0 : (4,8),  No. 1 : (8,5),  No. 2 : (5,4), 
+Cell 0 has 3  Vertices:  0 1 2 
+  Neighbors -1 -1 1 
+  Edges:   No. 0 : (0,1),  No. 1 : (1,2),  No. 2 : (2,0), 
+Cell 1 has 3  Vertices:  0 2 3 
+  Neighbors 0 -1 -1 
+  Edges:   No. 0 : (0,2),  No. 1 : (2,3),  No. 2 : (3,0), 
 ---------------------------------------------------
 ---------------------------------------------------
 
 
 
 Cell Neighbors
--1 5 1 
-0 2 -1 
-1 7 3 
-2 -1 -1 
--1 -1 5 
-4 6 0 
-5 -1 7 
-6 -1 2 
+-1 -1 1 
+0 -1 -1 

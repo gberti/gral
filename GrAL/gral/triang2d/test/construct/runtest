@@ -1,12 +1,26 @@
-#!/bin/csh
-./test-triang2d -nx 3 -ny 3 >& out
+#!/bin/sh
+
+out=out
+
+if ! ./test-triang2d-construct -f grid.complex2d > $out 2>&1
+then
+    echo "ERROR running test-triang2d-construct
+Output was:
+"
+cat $out
+echo "
+End output
+"
+else
 /bin/echo "\n"
-foreach i ( out )
-diff $i $i.exp
-if ($status) then 
+for i in out 
+do
+if ! diff $i $i.exp
+then
 /bin/echo "\t\t\t" ERROR in $i
 else
 /bin/echo "\t\t\t" $i OK
-endif
-end
+fi
+done
 /bin/echo "\n"
+fi
