@@ -108,12 +108,14 @@ template<class T> struct hash;
 /*! \brief Specialization of STL hash<> for vtuple2d<GRID>
     \relates vtuple_2d<GRID>
  */
-template<class GRID>
-struct hash<vtuple_2d<GRID> > {
-  enum { p = 37 };
-  size_t operator()(vtuple_2d<GRID> const& vt) const { 
-    return (p*vt.v[1] + (vt.v[0] % p));
-  }
-};
+namespace std {
+  template<class GRID>
+    struct hash<vtuple_2d<GRID> > {
+      enum { p = 37 };
+      size_t operator()(vtuple_2d<GRID> const& vt) const { 
+	return (p*vt.v[1] + (vt.v[0] % p));
+      }
+    };
+}
 
 #endif
