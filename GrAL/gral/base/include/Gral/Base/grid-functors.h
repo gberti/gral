@@ -100,6 +100,7 @@ public:
     REQUIRE((g!=0),"no grid!\n",1);
     return *g;
   }
+  bool bound() const { return g != 0;}
 };
 
 /*! \brief Creator function for cell2handle_map
@@ -143,6 +144,7 @@ public:
   grid_type const& TheGrid() const { 
     return *g;
   }
+  bool bound() const { return g != 0;}
 };
 
 /*! \brief Creator function for handle2cell_map
@@ -192,6 +194,7 @@ public:
     REQUIRE((g!=0),"no grid!\n",1);
     return *g;
   }
+  bool bound() const { return g != 0;}
 };
 
 /*! \brief Creator function for vertex2handle_map
@@ -237,6 +240,7 @@ public:
     REQUIRE((g!=0),"no grid!\n",1);
     return *g;
   }
+  bool bound() const { return g != 0;}
 };
 
 /*! \brief Creator function for handle2vertex_map
@@ -286,6 +290,7 @@ public:
     REQUIRE((g!=0),"no grid!\n",1);
     return *g;
   }
+  bool bound() const { return g != 0;}
 };
 
 /*! \brief Creator function for element2handle_map
@@ -343,6 +348,7 @@ public:
     REQUIRE((g!=0),"no grid!\n",1);
     return *g;
   }
+  bool bound() const { return g != 0;}
 };
 
 /*! \brief Creator function for handle2element_map
@@ -401,6 +407,7 @@ public:
     REQUIRE((g!=0),"no grid!\n",1);
     return *g;
   }
+  bool bound() const { return g != 0;}
 };
 
 /*! \brief Creator function for iscellinside_pred
@@ -440,6 +447,7 @@ public:
     REQUIRE((g!=0),"no grid!\n",1);
     return *g;
   }
+  bool bound() const { return g != 0;}
 };
 
 /*! \brief creator function for isonboundary_pred
