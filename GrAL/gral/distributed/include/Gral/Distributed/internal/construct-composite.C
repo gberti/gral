@@ -13,7 +13,7 @@
 
 #include "Container/bijective-mapping.h"
 
-#include "Gral/Algorithms/coarse-grid-from-partitioning.h"
+#include "Gral/Partitioning/coarse-grid-from-partitioning.h"
 
 #include "Gral/Distributed/dyn-overlap.h"
 #include "Gral/Distributed/construct-overlap.h"

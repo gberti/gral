@@ -10,7 +10,7 @@
 //----------------------------------------------------------------
 
 
-#include "Gral/Base/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-subrange.h"
 
 //----------------------------------------------------------------
 // 
@@ -48,7 +48,6 @@ template<class E>
 class overlap_ranges {
 public:
   typedef overlap_ranges<E> self;
-  MAKE_DEFAULT_OPS_SELF
   typedef element_traits<E>          et;
   typedef typename et::grid_type     grid_type;
   typedef grid_types<grid_type>      gt;
@@ -165,7 +164,6 @@ public:
 
 public:
   typedef dyn_overlap<CoarseGrid, FineGrid> self;
-  MAKE_DEFAULT_IO_OPS_SELF
 
 private:
   //----------- DATA ----------

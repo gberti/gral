@@ -14,8 +14,8 @@
 
 #include "Gral/Base/multi-grid-functions.h"
 #include "Gral/Subranges/layered-subrange.h"
-#include "Gral/Algorithms/adjacency-hulls.h"
-#include "Gral/Algorithms/reduction.h"
+#include "Gral/Algorithms/incidence-hulls.h"
+#include "Gral/Algorithms/sequence-copy.h"
 
 //----------------------------------------------------------------
 // 

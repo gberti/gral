@@ -2,7 +2,7 @@
 #define NMWR_GB_COMPOSITE_GRID_C
 
 #include "Gral/Distributed/composite-grid.h"
-#include "IO/iomgr.h"
+//#include "IO/iomgr.h"
 
 template<class Grid, class GF>
 void enumerate(const Grid& G, GF& f, int offset /* = 0 */)
@@ -33,7 +33,7 @@ void check_composite_grid(const CompositeGrid<CoarseG,FineG>& CG)
 
   grid_function<Cell,int> Num(CG.TheCoarseGrid());
   enumerate(CG.TheCoarseGrid(),Num,0);
-
+  /*  
   for(CellIterator C = CG.TheCoarseGrid().FirstCell(); ! C.IsDone(); ++C) {
     IOMgr::Info() << "-------------------------------------------------\n"
 		  << "checking cell " << Num(*C) << "\n\n";
@@ -61,8 +61,9 @@ void check_composite_grid(const CompositeGrid<CoarseG,FineG>& CG)
 
     }
     IOMgr::Info() << "-------------------------------------------------\n";
-      
+        
   }
+  */
 }
 
 

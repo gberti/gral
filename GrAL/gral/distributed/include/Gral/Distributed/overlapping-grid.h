@@ -33,7 +33,6 @@ template<class CoarseGrid, class FineGrid>
 class OverlappingGrid  {
 public:
   typedef OverlappingGrid<CoarseGrid,FineGrid> self;
-  MAKE_DEFAULT_OPS_SELF
   typedef FineGrid    fine_grid_type;
   typedef CoarseGrid  coarse_grid_type;
   //typedef grid_types<coarse_grid_type> cgt;

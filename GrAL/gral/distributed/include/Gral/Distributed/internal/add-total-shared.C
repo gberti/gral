@@ -10,7 +10,7 @@
 //----------------------------------------------------------------
 
 #include "Gral/Distributed/internal/add-total-shared.h"
-#include "Gral/element-sequence-references.h"
+#include "Gral/Base/element-sequence-references.h"
 
 //----------------------------------------------------------------
 //

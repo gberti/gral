@@ -24,7 +24,6 @@
 template<class E, class T, class DGrid>
 class overlapping_grid_function {
   typedef overlapping_grid_function<E,T,DGrid> self;
-  MAKE_DEFAULT_OPS_SELF
 public:
   typedef element_traits<E> et;
   typedef typename et::grid_type       base_grid_type;

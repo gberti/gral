@@ -56,7 +56,6 @@
 template<class E>
 class range_layers {
   typedef range_layers<E>            self;
-  MAKE_DEFAULT_OPS_SELF
 public:
   typedef element_traits<E>          et;
   typedef typename et::grid_type     grid_type;

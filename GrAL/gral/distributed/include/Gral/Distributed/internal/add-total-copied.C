@@ -31,7 +31,7 @@
 //  Ex^P = Ex^P \cup Hull_pat(sh_v,  inside) (inner hull)
 //
 //----------------------------------------------------------------
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 
 template <class Predicate>
 class my_unary_negate : 

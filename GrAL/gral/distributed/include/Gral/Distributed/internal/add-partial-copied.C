@@ -10,7 +10,7 @@
 //----------------------------------------------------------------
 
 #include "Gral/Distributed/internal/add-partial-copied.h"
-#include "Gral/partitioning.h"
+#include "Gral/Partitioning/partitioning.h"
 
 template<class Overlap,     class Partition, 
          class Part2Cell,
