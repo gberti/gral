@@ -1,4 +1,4 @@
-SUBDIRS = construct table gridfunction octree
+SUBDIRS = construct table gridfunction octree geometry
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
