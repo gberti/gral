@@ -1,2 +1,2 @@
 out 
-test-cartesian-iterators
+test-cartesian-iterators *.out 

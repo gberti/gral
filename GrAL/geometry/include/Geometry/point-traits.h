@@ -40,7 +40,8 @@ template<class POINT>
 struct point_traits_base 
 {
   typedef tag_unknown_dim dimension_tag;
-  typedef POINT Ptype;
+  typedef POINT  Ptype;
+
 };
 
 // TODO: let all point_traits for fixed dimension types inherit this.
@@ -93,6 +94,10 @@ struct point_traits_fixed_size_array :
   typedef component_type value_type;
   typedef dim_tag<DIM>::dimension_tag dimension_tag;
 
+  static void ConstructWithDim(unsigned d, Ptype&)
+    { REQUIRE(d == DIM, "Cannot construct! d = " << d 
+	      << ", DIM = " << DIM <<'\n',1);
+    }
   static unsigned Dim(const Ptype&) { return DIM;}
   static unsigned Dim() { return DIM;}
   
@@ -162,7 +167,8 @@ struct array_operators
 //----------------------------------------------------------------
 
 template<class P, class Q>
-inline void assign_point(P & p, Q const& q) 
+inline void assign_point(P      & p,
+			 Q const& q) 
 {
  typedef point_traits<P> ptP;
  typedef point_traits<Q> ptQ;

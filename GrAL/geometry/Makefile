@@ -6,10 +6,10 @@ include $(CONFIG)
 TARGET=all
 
 all:
-	(cd src; gmake all)
+	(cd src; $(MAKE) all)
 
 new: libclean
-	(cd src; gmake new)
+	(cd src; $(MAKE) new)
 
 compile:
 
@@ -28,6 +28,7 @@ install-headers:
 	cp include/Geometry/*.h $(INSTALLHEADERS)/Geometry
 	cp include/Geometry/*.C $(INSTALLHEADERS)/Geometry
 
+install: install-headers install-libs
 
 clean: stdclean
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
