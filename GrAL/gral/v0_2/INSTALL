@@ -20,7 +20,8 @@ Building it:
 1) Unpack the stuff:
 $ tar -xfv gral-src.tar
 
-This will create a directory GrAL (corresponds to GRALROOT in Makefiles).
+This will create a directory GrAL-0.2 
+(corresponds to GRALROOT in Makefiles).
 
 The preferred place to unpack the documentation is inside 
 the GrAL directory (creates doc/ directory).
@@ -36,9 +37,12 @@ the corresponding targets are disabled by default
 (see below).
 
 
-The following explanation refer to the case that you want to
-operate on all modules collectively (should be the normal case
-when starting).
+2a) Adapt the GRALROOT variable
+In the GRALROOT directory (see above), run
+$ gmake init
+
+This will make all occurences of GRALROOT in subdir
+Makefiles/mk.config's point to your GRALROOT.
 
 
 [ If you want to operate on individual modules, there are two choices:
@@ -48,7 +52,7 @@ when starting).
   b) Alternatively, add an argument GRALROOT=/path/to/GrAL to gmake calls.
 ]
 
-2) Then run from GRALROOT
+2b) Run from GRALROOT
 $ gmake new
 
 This builds some libraries (not all modules produce libraries).
