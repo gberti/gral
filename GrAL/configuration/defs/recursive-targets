@@ -73,6 +73,7 @@ check:
 	for i in $(SUBDIRS); \
 	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) check;\
 	echo "LEAVING  directory" $$i;cd ..; done
+
 check-force:
 	@set -e; \
 	for i in $(SUBDIRS); \
