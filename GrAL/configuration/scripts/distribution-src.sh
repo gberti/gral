@@ -1,6 +1,6 @@
 #! /bin/bash
 
-
+TAG=${1-HEAD}
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
 CVSREPO=`cat $cvswork/configuration/CVS/Root`;
@@ -12,7 +12,7 @@ mkdir ${ALLROOT};
 cd ${ALLROOT};
 for i in ${MODULES}
 do
- cvs -d ${CVSREPO} export -r HEAD $i;
+ cvs -d ${CVSREPO} export -r ${TAG} $i;
 done;
 mv gral/README .
 mv gral/LICENSE .

@@ -1,5 +1,6 @@
 #! /bin/bash
 
+TAG=${1-HEAD}
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules.sh`;
 TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
@@ -16,7 +17,7 @@ cd  ${ALLROOT};
 for i in ${TOPLEVELMODULES}
 do
  echo $i; 
- cvs -d ${CVSREPO} export -r HEAD $i;
+ cvs -d ${CVSREPO} export -r ${TAG} $i;
 done;
 
 for i in ${MODULES}
