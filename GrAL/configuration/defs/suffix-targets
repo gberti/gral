@@ -45,6 +45,28 @@ standard-test-check-clean-force:
 	(cd test; $(MAKE) new-check-clean-force)
 
 
+
+run-check:
+	@(out=$(EXEC).out; \
+          echo='echo -e'; \
+         if ! ./$(EXEC)  > $$out 2>&1 ; \
+         then \
+         $$echo "ERROR running $(EXEC) "; \
+         echo "Output was:"; \
+         cat $$out; \
+         $$echo " End output "; \
+         else \
+         $$echo "\n"; \
+         for i in  *.out; \
+         do \
+         if diff $$i $$i.exp; \
+         then  $$echo "\t\t\t" $$i OK; \
+         else  $$echo "\t\t\t" ERROR in $$i; \
+         fi ;\
+         done ;\
+         $$echo "\n"; \
+         fi)
+
 #####################################################################
 # This is the central place of specifying which files to clean
 # As every C++ compiler leaves different stuff behind when dealing
@@ -52,7 +74,8 @@ standard-test-check-clean-force:
 #####################################################################
 
 stdclean: moduleclean
-	@rm -f *~ *.o  *.d *.ti *.ii core core.*
+	@rm -f $(EXEC)
+	@rm -f *~ *.o  *.d *.ti *.ii core core.* out
 	@find . -name "*~" -exec rm {} \; -print
 	@rm -rf ti_files # KCC template DB
 	@rm -rf *.tmp
