@@ -4,18 +4,23 @@
 
 // $LICENSE
 
-//----------------------------------------------------------------
-//
-// void remove_orphanes(partitioning<GRID>& P):
-//
-//  make all partitions in P facet-connected, that is,
-//  for any cell c that has no other cell of the same partition
-//  as neighbor, change the partition of c to that of one of its
-//  neighbors.
-//
-//----------------------------------------------------------------
+/*! \defgroup partitioningpostproc Checking and improving partitionings
+
+ */
 
 template<class GRID> class partitioning;
+
+/*! Make all partitions in P facet-connected
+  \ingroup partitioningpostproc
+
+
+  Make all partitions in P facet-connected, that is,
+  for any cell c that has no other cell of the same partition
+  as neighbor, change the partition of c to that of one of its
+  neighbors.
+
+  \see check_partition_for_orphanes
+*/
 
 template<class GRID>
 extern void

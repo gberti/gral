@@ -4,24 +4,29 @@
 
 // $LICENSE
 
+/*! \defgroup quotientgrid Quotient grid Components
+ 
+*/
 
-//----------------------------------------------------------------
-//  
-//  Construct a coarse grid from a partitioning of a fine grid.
-//  The cells of the coarse grid correspond to the partitions of
-//  the fine grid. This works only for 2D grids (see implementation).
-//
-//  Note that there is no geometry constructed for the coarse grid.
-//  In principle, it may inherit a geometry from the partitioned
-//  fine grid (in Partition P) via the correspondences.
-//
-//  Meaning of Parameters:
-//  ---------------------
-//  out:
-//  G : newly created grid, cells corresponding to partitions of Partitioning P.
-//  coarse2fine_v:   maps created coarse vertices to corr. fine vertices
-//  coarsecell2part: maps created coarse cells to partition numbers.
-//----------------------------------------------------------------
+/*! file  \brief Dummy doc
+ */
+/* \brief   Construct a coarse grid from a partitioning of a fine grid.
+  
+  \ingroup quotientgrid
+  
+  The cells of the coarse grid correspond to the partitions of
+  the fine grid. This works only for 2D grids (see implementation).
+
+  Note that there is no geometry constructed for the coarse grid.
+  In principle, it may inherit a geometry from the partitioned
+  fine grid (in Partition P) via the correspondences.
+
+ 
+  \parameter G : newly created grid, cells corresponding to partitions of Partitioning P.
+  \parameter coarse2fine_v:   maps created coarse vertices to corr. fine vertices
+  \parameter coarsecell2part: maps created coarse cells to partition numbers.
+
+*/
 
 template<class CoarseGrid, class Partition, 
          class CoarseToFineVertex, class CoarseCellToPart>

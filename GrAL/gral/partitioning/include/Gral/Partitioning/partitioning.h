@@ -15,29 +15,13 @@
 #include "Utility/pre-post-conditions.h"
 
 //----------------------------------------------------------------
-//
-//  Data structure for representing a partitioning of a grid.
-//
-//  Contents:
-//  --------
-//  [1] template<class Grid> class partitioning;
-//  [2] template<class Partitioning, class CellMapping>
-//       void CreatePartitioning(Partitioning& P,     
-//		                 const CellMapping& f);
-//
-//  Description:
-//  -----------
-//  [1] provides mappings Range()     : int  --> { Cell }
-//                        partition() : Cell --> int 
-//  [2] constructs a k-way partitioning from a mapping 
-//      f : Cell --> {t1, ... tk} where ti are of an arbitrary type T.
-//      This is certainly the most basic way of constructing a
-//      grid partitioning.
-//
-//----------------------------------------------------------------
+/*! \defgroup partitioningds Data structures for grid partitionings
+ */
 
 
-// predicate object for membership in partition p
+/*! \brief predicate object for membership in partition p
+    \ingroup partitioningds
+ */
 template<class Ptng>
 class in_partition_pred {
 public:
@@ -66,6 +50,10 @@ public:
 };
 
 
+/*! \brief creator function for in_partition_pred 
+
+    \ingroup partitioningds
+ */
 template<class Ptng>
 inline in_partition_pred<Ptng>
 InPartition(int p, const Ptng& Pt)
@@ -75,6 +63,11 @@ InPartition(int p, const Ptng& Pt)
 //----------------------------------------------------------------
 //            [1] template<class Grid> class partitioning 
 //----------------------------------------------------------------
+
+/*! \brief Data structure for representing cell based partitioning
+
+    \ingroup partitioningds
+ */
 
 template<class Grid> 
 class partitioning {
@@ -183,8 +176,13 @@ private:
 
 
 //----------------------------------------------------------------
-//           Filter for selecting right cell of a facet
+//         
 //----------------------------------------------------------------
+
+/*! \brief  Filter for selecting correct cell of a facet
+
+    \ingroup partitioningds
+ */
 
 template<class GridPredicate>
 class inner_facet_selector {
@@ -203,16 +201,25 @@ public:
     { return ( pred(F.C1()) ? F.C1() : F.C2()); }
 };
 
+/*! \brief  Creator function for inner_facet_selector
+
+    \ingroup partitioningds
+ */
 template<class GridPredicate>
 inline inner_facet_selector<GridPredicate>
 InnerFacet(const GridPredicate& gp) 
 { return inner_facet_selector<GridPredicate>(gp); }
 
 
-//----------------------------------------------------------------
-//             
-//----------------------------------------------------------------
 
+/*! \brief  Mapping Vertices -> Set of partitions 
+
+    \ingroup partitioningds
+    
+    This data structure gives the set of partitions
+    a vertex belongs to (in a cell-based partitioning,
+    e.g. partitioning<Grid>).
+ */
 template<class Partition>
 class PartitionsByVertex {
 public:
@@ -248,10 +255,13 @@ public:
 };
 
 
-//----------------------------------------------------------------
-//             [2]  CreatePartitioning(...)
-//----------------------------------------------------------------
+/*! \brief  Create a partitioning<Grid> from the inverse image of a cell mapping
+    \ingroup partitioningds
 
+   Constructs a k-way partitioning from a mapping 
+   \f$ f : Cells(P.TheGrid()) \mapsto \{t_1, ... t_k\} \f$ 
+     where \f$t_i\f$ are of an arbitrary type T.
+*/
 template<class Partitioning, class CellMapping>
 extern void 
 CreatePartitioning(Partitioning& P,      // out
@@ -259,18 +269,20 @@ CreatePartitioning(Partitioning& P,      // out
 
 
 
-//----------------------------------------------------------------
-// int check_partition_for_orphanes(...)
-//
-// Returns the number of orphanes, that is, cells that are not
-// connected to their partitions via at least one neighbour.
-// Routine such as CreateCoarsePartitionGrid depend on a partition
-// without orphanes. Unluckily, some partitioning tools seem to create
-// partitions with orphanes.
-// NOTE: a partition consisting of only one cell will be NOT be counted
-// as orphane.
-//
-//----------------------------------------------------------------
+/*! \brief Returns the number of partition orphanes
+
+    \ingroup partitioningpostproc
+
+   Returns the number of orphanes, that is, cells that are not
+   connected to their partitions via at least one neighbour.
+   Routine such as CreateCoarsePartitionGrid depend on a partition
+   without orphanes. Unluckily, some partitioning tools seem to create
+   partitions with orphanes.
+
+ \note: A partition consisting of only one cell will be NOT be counted
+  as orphane.
+ \see remove_orphanes
+*/
 
 template<class Grid>
 extern
