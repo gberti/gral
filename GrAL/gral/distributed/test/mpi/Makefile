@@ -6,7 +6,7 @@ include $(CONFIG)
 IFLAGS  += $(MPI_INCLUDES)
 LDFLAGS += $(MPI_LIBRARIES)
 
-LOCALSOURCES =  test-distributed.C 
+LOCALSOURCES =  test-distributed.C test-distri-io.C 
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS =  $(LOCALSOURCES:%.C=%.d)
 LOCALTARGET = test-distributed
@@ -14,7 +14,7 @@ LOCALTARGET = test-distributed
 #MPIRUN=$(MPIPATH)/bin/mpirun
 #IFLAGS += -I$(MPIPATH)/include
 LDFLAGS +=  -R$(MOUSE)/lib 
-LIBS = -lgral-distributed -lgral-complex2d  -lexternal-control -lutilities
+LIBS = -lgral-distributed -lgral-complex2d -lgral-base -lexternal-control -lutilities
 
 
 
@@ -22,11 +22,8 @@ include $(DEPS)
 
 EXEC =  $(LOCALTARGET)
 
-mpitest.o:
-	$(CC) -c  $(MPI_INCLUDE) mpitest.C
 
-mpitest: mpitest.o
-	$(CC) -o mpitest mpitest.o $(MPI_LIBRARIES)
+
 
 
 
@@ -36,6 +33,10 @@ all : $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(LOCALOBJECTS)  $(LDFLAGS) $(LIBS) 
 
 #	$(CC) -o $(EXEC) $(LOCALOBJECTS) ./libmouse.a  $(LDFLAGS) $(LIBS) 
+
+test-distri-io: test-distri-io.o
+	$(CC) -o $@ $< $(LDFLAGS) $(LIBS)
+
 
 new-check-clean: new check clean
 

@@ -15,7 +15,7 @@
 #include "Utility/as-string.h"
 
 // Gral Base
-#include "Gral/IO/istream-grid-complex2d-fmt.h"
+#include "Gral/IO/complex2d-format.h"
 
 // Gral Complex2D
 #include "Gral/Grids/Complex2D/complex2d.h"

@@ -15,7 +15,7 @@
 #include "Gral/Grids/Complex2D/enlarge.h"
 #include "Gral/Grids/Complex2D/grid-functions.h"
 
-#include "Gral/IO/istream-grid-complex2d-fmt.h"   
+#include "Gral/IO/complex2d-format.h"
 //#include "Gral/Geometries/simple-geometry.h" 
 
 #include "Gral/Distributed/mpi-distributed-grid.h"
