@@ -85,19 +85,25 @@ namespace shrink_grid_view {
     };
 
 
-  template<class GRID, class element_tag>
-    struct map_types_for_grid_view { };
+  /*! \brief helper class to map element types of base grid to corresponding
+      types of grid_view. 
 
-  template<class GRID>
-    struct map_types_for_grid_view<GRID, vertex_type_tag> {
-      typedef shrink_grid_view::vertex_iterator<GRID> element_type;
-    };
-
-  template<class GRID>
-    struct map_types_for_grid_view<GRID, cell_type_tag> {
-      typedef shrink_grid_view::cell_iterator<GRID> element_type;
-    };
-
+      Repeated in grid_view as map_types.
+   */
+  namespace detail {
+    template<class GRID, class element_tag>
+      struct map_types_for_grid_view { };
+    
+    template<class GRID>
+      struct map_types_for_grid_view<GRID, vertex_type_tag> {
+	typedef shrink_grid_view::vertex_iterator<GRID> element_type;
+      };
+    
+    template<class GRID>
+      struct map_types_for_grid_view<GRID, cell_type_tag> {
+	typedef shrink_grid_view::cell_iterator<GRID> element_type;
+      };
+  } // namespace detail
 
   /*! \brief The combinatorial shrunk view
    */
@@ -122,8 +128,9 @@ namespace shrink_grid_view {
       vertex_iterator<GRID> FirstVertex() const;
       base_grid_type const& BaseGrid() const { return *g;}
 
+
       template<class element_tag>
-      struct map_types : public map_types_for_grid_view<GRID,element_tag> {};
+      struct map_types : public detail::map_types_for_grid_view<GRID,element_tag> {};
 
       ArchetypeIterator BeginArchetype() const 
 	{ return BaseGrid().BeginArchetype();}  
@@ -345,8 +352,10 @@ namespace shrink_grid_view {
       }
   };
 
-}
+} // namespace shrink_grid_view
 
+
+//----- traits classes in global sope: grid_types<>, element_traits<> ---------
 
 template<class GRID>
 class grid_types<shrink_grid_view::grid_view<GRID> > :
@@ -400,6 +409,7 @@ public:
 };
 
 
+
 namespace shrink_grid_view {
   /*! \brief adapter for grid functions on base grid
       
@@ -435,6 +445,6 @@ namespace shrink_grid_view {
       size_t             size() const { return et::size(*g);}
     };
 
-};
+} // namespace shrink_grid_view 
 
 #endif
