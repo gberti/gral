@@ -1,0 +1,45 @@
+
+External Control - Controlling Parameters from the Outside
+==========================================================
+
+Author: Guntram Berti
+        berti@math.tu-cottbus.de
+
+PURPOSE:
+--------
+The external control library contains classes
+for controling class parameters from the outside,
+e. g. by reading a parameter file.
+
+
+DEPENDENCIES:
+-------------
+
+  * a fairly decent C++ compiler
+
+  * Makefiles require gmake
+  
+  * building html from TeX requires hyperlatex
+    (http://www.cs.uu.nl/~otfried/Hyperlatex/)
+
+  * Utility headers from utility library
+
+BUILDING IT:
+------------
+
+$ gzcat external-control.tar.gz | tar -xvf - 
+$ cd external-control
+
+$ gmake new
+ (creates lib/libcontrol-device.a)
+
+$ gmake demos
+ (creates example application in demo/)
+
+$ gmake docs
+ (creates html/dvi in doc, doc/html_dir)
+ This requires the LaTeX package hyperlatex
+ (http://www.cs.uu.nl/~otfried/Hyperlatex/)
+
+
+ENJOY!
