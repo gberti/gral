@@ -11,7 +11,7 @@ protected:
 public:
   NA(int ii) : i(ii) {}
   NA& operator=(const NA& rs) {
-    cerr << "NA::operator=\n";
+    cout << "NA::operator=\n";
     if(this != &rs) {
       before_assignment();
       assign_values(rs);
@@ -22,7 +22,7 @@ public:
   }
 
   NA(const NA& rs) {
-    cerr << "NA::NA(const NA&)\n";
+    cout << "NA::NA(const NA&)\n";
     i = rs.i;
   }
 
@@ -46,7 +46,7 @@ public:
 
   OA(const OA& rs) : observer(rs), i(rs.i), na(rs.na) {}
   OA& operator=(const OA& rs) {
-    cerr << "OA::operator= called!\n";
+    cout << "OA::operator= called!\n";
     if(this != & rs) {
       observer::operator=(rs);
       i = rs.i;
@@ -58,13 +58,13 @@ public:
   virtual void notifier_assigned(const notifier* nt)
     {
       if (nt == (const notifier*)na) 
-	cerr << "OA: notifier == na (ok), ";
+	cout << "OA: notifier == na (ok), ";
       else
-	cerr << "OA: notifier != na, ";
+	cout << "OA: notifier != na, ";
       
-      cerr << " old value: " << i << " ";
+      cout << " old value: " << i << " ";
       i = na->get_i();
-      cerr << " new value: " << i << '\n';
+      cout << " new value: " << i << '\n';
      
     }
   // Normally it makes no sense to have more than one notifier ...
