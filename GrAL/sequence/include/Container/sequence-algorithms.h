@@ -1,14 +1,52 @@
 #ifndef GRAL_GB_SEQUENCE_ALGORITHMS_H
 #define GRAL_GB_SEQUENCE_ALGORITHMS_H
 
+// $LICENSE
 
 #include "Utility/pre-post-conditions.h"
 
 #include <iterator>
 #include <functional>
 #include <algorithm>
+#include <numeric>
 
 namespace sequence {
+
+  /*! \defgroup helperfunctors Helper functors for common tasks 
+      \ingroup  algorithms 
+  */
+
+  /*! \brief helper predicate for comparing pairs
+  
+       \ingroup helperfunctors
+  */
+  struct less_first  {
+    typedef bool result_type;
+    template<class Pair>
+    bool operator()(Pair const& p1, Pair const& p2) const { return p1.first < p2.first;}
+  };
+
+  /*! \brief helper predicate for comparing pairs
+  
+       \ingroup helperfunctors
+  */
+  struct less_second  {
+    typedef bool result_type;
+    template<class Pair>
+    bool operator()(Pair const& p1, Pair const& p2) const { return p1.second < p2.second;}
+  };
+
+  /*! \brief helper functor for getting size
+      
+       \ingroup helperfunctors
+   */
+  struct size_functor {
+    template<class T>
+    typename T::size_type operator()(T const& t) const { return t.size();}
+  };
+
+
+
 
   /*!
       \ingroup algorithms
@@ -37,25 +75,7 @@ namespace sequence {
     }
   }
 
-  /*! \brief helper predicate for comparing pairs
-  
-       \ingroup algorithms
-  */
-  struct less_first  {
-    typedef bool result_type;
-    template<class Pair>
-    bool operator()(Pair const& p1, Pair const& p2) const { return p1.first < p2.first;}
-  };
 
-  /*! \brief helper predicate for comparing pairs
-  
-       \ingroup algorithms
-  */
-  struct less_second  {
-    typedef bool result_type;
-    template<class Pair>
-    bool operator()(Pair const& p1, Pair const& p2) const { return p1.second < p2.second;}
-  };
 
   /*! \brief find iterator with maximum value in map
 
@@ -114,6 +134,17 @@ namespace sequence {
    return std::find(first,end,v) != end;
  }
 
+
+  /*! \brief Calculate sum of the sequence
+      \ingroup algorithms
+      \see test-sequence-algorithms.C
+   */ 
+  template <typename InputIterator>
+  inline typename std::iterator_traits<InputIterator>::value_type
+  sum(InputIterator first, InputIterator end) 
+  {
+    return std::accumulate(first,end, 0, std::plus<typename std::iterator_traits<InputIterator>::value_type>());
+  }
 
   /*! \brief The classic bubble sort.
 
