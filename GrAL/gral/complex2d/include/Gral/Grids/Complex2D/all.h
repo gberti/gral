@@ -10,4 +10,6 @@
 #include "Gral/Grids/Complex2D/enlarge.h"
 #include "Gral/Grids/Complex2D/boundary.h"
 
+#include "Gral/Grids/Complex2D/stored-geometry.h"
+
 #endif

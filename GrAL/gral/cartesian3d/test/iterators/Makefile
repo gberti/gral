@@ -15,7 +15,7 @@ include $(DEPS)
 
 
 
-LIBS = -lgral-cartesian3d -lgral-base
+LIBS = -lgral-cartesian3d -lgral-complex2d -lgral-base
 
 
 

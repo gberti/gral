@@ -33,12 +33,12 @@ private:
 
 public:
   TestComplex2D();
-  virtual void register_at(ControlDevice& Ctrl, const string& prefix);
+  virtual void register_at(ControlDevice& Ctrl, std::string const& prefix);
   virtual void register_at(ControlDevice& Ctrl) { register_at(Ctrl,"");}
 
   /*! \brief Test combinatorial and geometric functionality.
    */
   void test_complex2d_iterators(const Complex2D& CC,
 				const stored_geometry_complex2D& geom,
-				ostream& out);
+				std::ostream& out);
 };
