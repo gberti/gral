@@ -62,36 +62,64 @@ struct point_traits_fixed_dim
 };
 
 
-/*! \brief Point traits for real numbers
+
+/*! \brief Point traits for scalar types
     
  */
-template<class REAL>
-struct real_point_traits : public point_traits_base<REAL> { 
-  typedef REAL Ptype;
+
+
+template<class SCALAR>
+struct scalar_point_traits : public point_traits_base<SCALAR> { 
+  typedef SCALAR Ptype;
   typedef tag1D dimension_tag;
-  typedef REAL component_type;
+  typedef SCALAR component_type;
   typedef component_type value_type;
 
   enum { dimension = 1};
   static unsigned Dim(const Ptype&) { return 1;}
   static unsigned Dim() { return 1;}
   
-  static Ptype Origin(unsigned) { return REAL(0.0);}
-  static Ptype Origin()         { return REAL(0.0);}
+  static Ptype Origin(unsigned) { return component_type(0);}
+  static Ptype Origin()         { return component_type(0);}
   static component_type  x(const Ptype& p) {return p;}
   static component_type& x(      Ptype& p) {return p;}
-  static component_type  y(const Ptype&) {return component_type(0.0);}
-  static component_type  z(const Ptype&) {return component_type(0.0);}
+  static component_type  y(const Ptype&) {return component_type(0);}
+  static component_type  z(const Ptype&) {return component_type(0);}
 };
 
 template<>
 struct point_traits<float> 
-  : public real_point_traits<float> {};
+  : public scalar_point_traits<float> {};
 
 template<>
 struct point_traits<double> 
-  : public real_point_traits<double> {};
+  : public scalar_point_traits<double> {};
 
+
+template<>
+struct point_traits<signed char> 
+  : public scalar_point_traits<signed char> {};
+
+template<>
+struct point_traits<unsigned char> 
+  : public scalar_point_traits<unsigned char> {};
+
+template<>
+struct point_traits<signed short> 
+  : public scalar_point_traits<signed short> {};
+
+template<>
+struct point_traits<unsigned short> 
+  : public scalar_point_traits<unsigned short> {};
+
+
+template<>
+struct point_traits<int> 
+  : public scalar_point_traits<int> {};
+
+template<>
+struct point_traits<unsigned> 
+  : public scalar_point_traits<unsigned> {};
 
 
 
@@ -154,6 +182,12 @@ struct point_traits_fixed_size_array<ARRAY, COMPONENT, 2>
   static const component_type zero = 0;
 
 };
+
+/*
+template<class ARRAY, class COMPONENT>
+point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::componenent_type const
+point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::zero = 0;
+*/
 
 template<class ARRAY, unsigned N>
 struct array_operators 
