@@ -10,6 +10,8 @@
 #include "Utility/ref-ptr.h"
 #include "Utility/notifier.h"
 
+#include <iostream>
+
 /*! \brief Support for hierarchical grids
 
     \author Guntram Berti
@@ -48,6 +50,10 @@ namespace hierarchical {
     }
     */
   };
+
+  template<class HGrid, class FlatHandle>
+  std::ostream& operator<<(std::ostream& out, h_element_handle_t<HGrid, FlatHandle> h)
+  { return (out << h.level() << ' ' << h.flat_handle());}
 
   /*! \brief Hierarchical Cartesian grid
 
@@ -548,8 +554,9 @@ namespace hierarchical {
     void cb() const { REQUIRE(bound(), "", 1);}
     void cv() const { REQUIRE(valid(), "", 1);}
 
-    friend bool operator==(self const& lhs, self const& rhs)  { lhs.cb(); rhs.cb(); return lhs.ch == rhs.ch;}
-    friend bool operator!=(self const& lhs, self const& rhs)  { lhs.cb(); rhs.cb(); return lhs.ch != rhs.ch;}
+    friend bool operator==(self const& lhs, self const& rhs)  
+    { lhs.cb(); rhs.cb(); return (lhs.p == rhs.p) && (lhs.ch == rhs.ch);}
+    friend bool operator!=(self const& lhs, self const& rhs)  { return !(lhs == rhs);}
 
   }; // class h_cell_child_iterator_t<HGrid>
 
@@ -579,15 +586,17 @@ namespace hierarchical {
       : base(cc),  vc(cc.Flat().FirstVertex()) {}
 
     self&   operator++()       { cv(); ++vc; return  (*this);}
-    Vertex  operator*()  const { cv(); return Vertex(TheGrid(), handle());}
+    Vertex  operator*()  const { return get_vertex();}
     bool    IsDone()     const { cb(); return vc.IsDone();}
   
-    vertex_handle   handle() const { cv(); return vertex_handle(vc.handle(), level()); }
-  
+    Vertex get_vertex() const { cv(); return Vertex(TheGrid(),  vertex_handle(vc.handle(), level()));}
+    vertex_handle   handle() const { cv(); return get_vertex().handle();}
+
     temporary<Cell> TheCell()     const { cb(); return temporary<Cell>(Cell(TheGrid(), vc.TheAnchor(), level())) ;}
     temporary<Cell> TheAnchor()   const { cb(); return TheCell(); }
   
-    friend bool operator==(self const& lhs, self const& rhs) { lhs.cb(); rhs.cb(); return lhs.vc == rhs.vc;}
+    friend bool operator==(self const& lhs, self const& rhs) 
+    { lhs.cb(); rhs.cb(); return lhs.level() == rhs.level() && lhs.vc == rhs.vc;}
     friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
   
     bool valid() const { return bound() && vc.valid();}
