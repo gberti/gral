@@ -5,7 +5,7 @@ include $(CONFIG)
 all: html dvi
 
 html:
-	hyperlatex external-control.tex
+	hyperlatex-2.3.1 external-control.tex
 
 dvi:
 	latex  external-control.tex
