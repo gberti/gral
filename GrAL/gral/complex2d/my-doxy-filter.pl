@@ -1,7 +1,7 @@
 #! /opt/local/bin/perl -w
 
 $STL = "http://www.sgi.com/Technology/STL";
-$GRAL = "file:/home/berti/CVS-work/nmwrlib/doc/tex/html";
+$GRAL = "file:/home/berti/CVS-work/gral/base/doc/hyperlatex/html";
 
 while(<>) {
   s|\$GrAL[ ]+([a-z\-_A-Z0-9]+)|<A HREF="$GRAL/$1.html">$1</A>|g;
