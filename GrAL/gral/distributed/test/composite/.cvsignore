@@ -1,5 +1,6 @@
 *out
 test-composite
-out4x1 out4x1p1 
-out2x2 out2x2p1
+out2x2p2 out2x2p1
+out4x1p2 out4x1p1
+out4x2p2 out4x2p1
 grid.complex2d grid.part
