@@ -9,13 +9,21 @@
 \htmldepth{0}
 \htmldirectory{html_dir}
 
+
+\newcommand{\modulerootpath}{/home/berti/CVS-work/external-control}
+\newcommand{\moduleroot}[1]{\modulerootpath/#1}
+\newcommand{\doxyrootpath}{\modulerootpath/doxygen/html}
+\newcommand{\doxyfile}[1]{\doxyrootpath/{#1}.html}
+\newcommand{\doxyclass}[1]{\doxyrootpath/class\_{#1}.html}
+\newcommand{\classlink}[1]{\xlink{#1}{\doxyclass{#1}}}
+
 \begin{document}
  \section{Control Device: External Parameter Control}
  
- A first very basic abstraction concerns the control of parameters
+ A very important question is the control of parameters
  in a program. Almost every nontrivial class contributing to the
  overall behavior of a program contains some parameters, that should
- be modifiable at startup or at runtime, e.g. the size of a regular grid,
+ be modifiable at startup or at runtime, e.g. the size of a data structure,
  filename for input and output etc. All these classes play the role of a
  {\tt  controlable }, that is, they have some parameters to be 
  controled by some {\tt  ControlDevice } which is the counterpart.
@@ -23,13 +31,31 @@
 
  \begin{itemize}
  \item  a parameter file,
- \item  a GUI-dialog 
+ \item  a GUI-dialog,
  \item  an interactive shell like tcl or
  \item  command-line parameters.
  \end{itemize}
 
+A controlable could be for example a simple class like 
+\begin{verbatim}
+  class square : public controlable {
+  private:
+    double a, b; // sides
+  public:
+    square(ap = 0.0, bp = 0.0) : a(ap), b(bp) {}
+    // need some method for pulling in parameters a, b from file
+
+    // traditional solution:
+    void read(istream& in);
+
+    // 'controlable' solution: Let a ControlDevice know the details
+    // and do the work
+    virtual void register_at(ControlDevice&);
+  };
+\end{verbatim}
+
 \subsection{The interfaces}
-The basic interface  for {\tt controlable} looks like this:
+The basic interface  for {\tt \classlink{controlable}} looks like this:
 
 \begin{verbatim}
 class controlable {
@@ -41,7 +67,9 @@ public:
 };
 \end{verbatim}
     
-The other side ({\tt ControlDevice} has the following outlook:
+The ``other'' side ({\tt \classlink{ControlDevice}}) 
+which abstracts from the paramater input mechanism
+has the following outlook:
 
 \begin{verbatim}
 class ControlDevice  {
@@ -77,7 +105,7 @@ private:
    This is a name-value-pair ({\tt nm,value\_ref }). The name is used
     to reference the right variable from the outside (e.g. in a file or as
     label in a window), the value reference is used to change the underlying
-    variable. The interface of class {\tt  Mutator } follows:
+    variable. The interface of class {\tt  \classlink{Mutator} } follows:
     
 \begin{verbatim}
 class Mutator {
@@ -94,13 +122,13 @@ public:
     typed in at a window. A simple implementation of this interface is supplied
     by the following template:
 
-\begin{verbatim}
+\begin{example}
 template<class T>
 class TypedMutator : public Mutator {
 protected:
   T& v;
 public:
-  TypedMutator(T& vv) : v(vv) {}
+  \classlink{TypedMutator}(T& vv) : v(vv) {}
   T value() {return v;}
   vir1tual void read(istream& in)   { in >> v;}
   virtual void print(ostream& out) const 
@@ -108,51 +136,29 @@ public:
   virtual void print(ostream& out, const string& prefix = "") const 
     { out << prefix << v;}
 };
-\end{verbatim}
+\end{example}
 
-There are other {\tt  Mutators}, see  elsewhere  for more
-or the  header file . You can attach a (simple) Mutator
+There are other {\tt  Mutators}, see  the \classlink{Mutator} documentation. 
+You can attach a (simple) Mutator
 to  a variable like this:
 
-\begin{verbatim}
+\begin{example}
 ControlDevice Ctrl(GetFileControlDevice("myparameters.in"));
 ...
 double x;
     Ctrl.add("x",GetMutator(x));
     // RegisterAt(Ctrl,"x",x) is a synomym for the above.
-\end{verbatim}
+\end{example}
 
 The file {\tt  myparameters.in } could then contain the name-value-pair
 {\tt  x 0.43 }, and on {\tt  Ctrl.update() } the variable {\tt  x } 
 would be set
 to {\tt  0.43} . This example also shows how to create a {\tt  ControlDevice }
 More examples of how this works are found in an 
-example program  
+\xlink{example program}{\doxyfile{ex1\_C}}
 with a  sample input file.
 It shows also how to use other types of Mutators and how
 to build hierarchical (i.e. nested) name-value-structures.
 
 
-\subsection{Testing status \& reliability }
-
-\begin{itemize}
-\item  As this is intensively used, it should be considered rather
-  reliable ( for file and command-line devices).
-\end{itemize}
-
-\subsection{Bugs, shortcomings, ToDo}
-
-\begin{itemize}
- \item  The integration into a GUI will require some additional
-   functionality of {\tt  Mutator } (in spite of the claims 
-   made above ;-),
-   if we want to to select a (type-)specific input mode other 
-   than typing in a string,
-   for example we want to be able
-   to select a boolean flag by a button, 
-   to adjust a real number via a ruler etc.
- \item {\tt  ControlDevice } should issue warnings if the input
-   contains  unrecognised strings. 
- \end{itemize}
- 
-\end{document}
+ \end{document}

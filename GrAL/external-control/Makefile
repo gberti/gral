@@ -34,9 +34,14 @@ realclean: clean
 demo:
 	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
+doxy:
+	mkdir -p doxygen
+	doxygen doxy.cfg;
+
 docs:
 	(cd doc; $(MAKE) $(TARGET))
-
+	rm -f $(ROOT)/doxygen/html/external-control.html
+	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html
 
 tar:
 	(cd $(HOME)/tmp;\

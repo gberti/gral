@@ -22,7 +22,9 @@ DEPENDENCIES:
   * building html from TeX requires hyperlatex
     (http://www.cs.uu.nl/~otfried/Hyperlatex/)
 
-  * Utility headers from utility library
+  * "utilities" package 
+ 
+  * "configuration" package
 
 BUILDING IT:
 ------------
@@ -30,16 +32,35 @@ BUILDING IT:
 $ gzcat external-control.tar.gz | tar -xvf - 
 $ cd external-control
 
+Edit mk.config for the actual directory (ROOT),
+for the location of packages "utilities" and "configuration",
+and for desired compiler/architecture/debug-level
+(Variables CCNAME/ARCH/DEBUG)
+
 $ gmake new
- (creates lib/libcontrol-device.a)
+  OR (setting the variables CCNAME/ARCH/DEBUG on the command line)
+$ gmake new CCNAME=gcc ARCH=solaris DEBUG=opt
+  
+ (creates lib/ARCH/CCNAME/DEBUG/libcontrol-device.a)
+
 
 $ gmake demos
  (creates example application in demo/)
+  This requires libutilities.a from "utilities" package to be built.
 
 $ gmake docs
  (creates html/dvi in doc, doc/html_dir)
  This requires the LaTeX package hyperlatex
  (http://www.cs.uu.nl/~otfried/Hyperlatex/)
+
+$ gmake doxy
+  (creates doxygen/html documentation)
+  This requires doxygen installed
+  (http://www.stack.nl/~dimitri/doxygen/index.html)
+
+$ gmake install
+  (copies headers and library into $PREFIX/include and $PREFIX/lib)
+
 
 
 ENJOY!
