@@ -9,11 +9,12 @@
 //   
 //----------------------------------------------------------------
 
-#include "compiler-config.h"
+#include <vector.h>    // STL
 
-#include "vector.h"    // STL
+#include "Config/compiler-config.h"
 
-#include "Container/copy-traits.h"
+
+#include "Utility/copy-traits.h"
 #include "Utility/reference-count.h"
 
 
@@ -77,7 +78,6 @@ private:
   // connector_impl* impl;
 public: 
    typedef Connector self;
-  MAKE_DEFAULT_OPS_SELF
   Connector(connector_impl* im = 0)  :impl(im) {}
   void SendData() { impl->send_data();}
   void RecvData() { impl->recv_data();}
