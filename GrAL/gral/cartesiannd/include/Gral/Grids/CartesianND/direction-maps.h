@@ -85,9 +85,11 @@ namespace cartesiannd {
       incidence_table() : k(-1) {}
       // K = dimension of anchor
       void init(unsigned K);
-      incidences      & operator[](int m)        { return inc[m];}
-      incidences const& operator[](int m)  const { return inc[m];}
+      incidences      & operator[](int m)        { cv(m); return inc[m];}
+      incidences const& operator[](int m)  const { cv(m); return inc[m];}
       void print(std::ostream& out) const;
+
+      void cv(int m) const { REQUIRE(0 <= m && m < (int) inc.size(), " m=" << m,1);}
     };
     
     struct initializer {
@@ -100,6 +102,7 @@ namespace cartesiannd {
     static bool initialized() {  return (0 != the_initializer) && (dirs[0].size() > 0);}
 
     static void init() { if (!initialized()) the_initializer = new initializer();}
+    static void force_init() { the_initializer = new initializer();}
 
     static void init_() {
       init_dirs();
@@ -115,10 +118,14 @@ namespace cartesiannd {
 	incs[k].init(k);
     }
 
-    static unsigned num_of_directions(unsigned k) { return dirs[k].size();}
+    static unsigned num_of_directions(unsigned k) { cv_k(k);  return dirs[k].size();}
+
+ 
+    static void cv_k(unsigned k) { REQUIRE(0 <= k && k <= DIM, "k=" << k, 1);}
+    static void cv_m(unsigned k, unsigned m) { cv_k(k); REQUIRE( m < dirs[k].size(), "", 1);;}
 
     static vector_system const& num2vec(unsigned k, unsigned m)
-    { REQUIRE( m < dirs[k].size(), "", 1); return dirs[k][m];}
+    { cv_m(k,m); return dirs[k][m];}
 
     static unsigned  vec2num    (unsigned k, vector_system const& i)    { return vec2num_rec(k,i,DIM);}
     static unsigned  vec2num_rec(unsigned k, vector_system const& i, unsigned d);
@@ -206,9 +213,9 @@ namespace cartesiannd {
       offsets.resize(binomial_coeff(DIM,k) +1);
     }
     std::vector<unsigned>  offsets;
-    unsigned& operator[](unsigned m)       { return offsets[m];}
-    unsigned  operator[](unsigned m) const { return offsets[m];}
-    unsigned  operator()(unsigned m) const { return offsets[m];}
+    unsigned& operator[](unsigned m)       { cv(m); return offsets[m];}
+    unsigned  operator[](unsigned m) const { cv(m); return offsets[m];}
+    unsigned  operator()(unsigned m) const { cv(m); return offsets[m];}
     unsigned  size()   const { return offsets.size();}
     unsigned  beyond() const { return offsets.back();}
     
@@ -216,6 +223,7 @@ namespace cartesiannd {
       for(unsigned m = 0; m < offsets.size(); ++m)
 	out << offsets[m] << ' ';
     }
+    void cv(unsigned m) const { REQUIRE( m < offsets.size(), " m=" << m,1);}
   }; // class offset_table<DIM>
 
 
