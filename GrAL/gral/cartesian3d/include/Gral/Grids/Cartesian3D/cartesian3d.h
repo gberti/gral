@@ -350,12 +350,12 @@ struct grid_types<CartesianGrid3D>
 
 namespace STDEXT {
   template<class T> struct hash;
-  
-  
+
   template<>
   struct hash<Vertex_Cartesian3D> {
     size_t operator()(Vertex_Cartesian3D const& e) const { return e.handle();}
   };
+
   template<>
   struct hash<Cell_Cartesian3D> {
     size_t operator()(Cell_Cartesian3D const& e) const { return e.handle();}
@@ -366,7 +366,7 @@ template<>
 struct element_traits<Vertex_Cartesian3D>
   : public element_traits_vertex_base<CartesianGrid3D>
 {
-  typedef STDEXT::hash<Vertex_Cartesian3D> hasher_type;
+  struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>    consecutive_tag;
 };
 
@@ -374,7 +374,7 @@ template<>
 struct element_traits<Cell_Cartesian3D>
   : public element_traits_cell_base<CartesianGrid3D>
 {
-  typedef STDEXT::hash<Cell_Cartesian3D> hasher_type;
+  struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>  consecutive_tag;
 };
 
