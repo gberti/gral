@@ -1,3 +1,3 @@
 COPTFLAGS= -funroll-all-loops -O3 -ffast-math -fexpensive-optimizations \
-           -finline-limit=1000000
+           -finline-limit=1000000 -Drestrict=__restrict__
 CCOMP=gcc
