@@ -99,7 +99,7 @@ private:
 
 //--------------------- dimension dependend geometry parts --------------
 
-template<class CM, class GEOM, class DIM>
+template<class CM, class GEOM, unsigned DIM>
 class dd_mapped_geom_reg2d 
   : public mapped_geometry_reg2d_base<CM> 
 {
@@ -119,7 +119,7 @@ public:
 
 
 template<class CM, class GEOM>
-class dd_mapped_geom_reg2d<CM, GEOM, tag2D>
+class dd_mapped_geom_reg2d<CM, GEOM, 2>
   : public mapped_geometry_reg2d_base<CM> { 
   //   only useful if dim(coord_type) == 2 !
 
@@ -204,12 +204,12 @@ template<class CM>
 class mapped_geometry
   : 
   public  dd_mapped_geom_reg2d<CM, mapped_geometry<CM>,
-                               typename point_traits<typename CM::result_type>::dimension_tag>
+                               point_traits<typename CM::result_type>::dimension>
 {
   
 public:
   typedef dd_mapped_geom_reg2d<CM, mapped_geometry<CM>,
-                               typename point_traits<typename CM::result_type>::dimension_tag>
+                               point_traits<typename CM::result_type>::dimension>
   base;
 
   typedef typename base::Vertex Vertex;
@@ -232,7 +232,7 @@ public:
  
   mapped_geometry() {}
 
-  mapped_geometry(const RegGrid2D& gg, const CM& ff)
+  mapped_geometry(const RegGrid2D& gg, const CM& ff = CM())
     : base(ff,gg) {}
 
   mapped_geometry( const RegGrid2D& gg,  const CM& ff,
