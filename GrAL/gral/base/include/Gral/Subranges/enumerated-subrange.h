@@ -629,7 +629,7 @@ public:
    \ingroup enumsubranges
    \see enumsubranges
 
-  Model of $Gral GridVertex Range, $GrAL GridCellRange.<BR>
+  Model of $Gral GridVertex Range, $GrAL CellRange.<BR>
 
   This class has reference-semantics.
 

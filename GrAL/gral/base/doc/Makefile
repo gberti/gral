@@ -49,6 +49,7 @@ make-links:
           ln -s Vertex-On-CellIterator.html EdgeOnCellIterator.html; \
           ln -s Vertex-On-CellIterator.html VertexOnFacetIterator.html; \
           ln -s Vertex-On-CellIterator.html FacetOnCellIterator.html; \
+          ln -s Cell-On-CellIterator.html   CellOnCellIterator.html; \
           )) || echo "(ignored)"
 
 

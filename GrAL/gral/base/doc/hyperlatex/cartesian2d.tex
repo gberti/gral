@@ -6,16 +6,17 @@
 \needswork{This documentation is still incomplete!}
 
 \typesubsection{Description}
-The type \type{CartesianGrid2D}  is a model of \sectionlink{\concept{Grid}}{Grid}.
-It allows representation of Cartesian grids, that is, regular $m \times n$
-tensor product grids.
+The type \type{CartesianGrid2D} (typedef to \type{RegGrid2D})
+is a model of \sectionlink{\concept{Grid}}{Grid}.
+It allows representation of Cartesian grids, 
+that is, regular $m \times n$ tensor product grids.
 
 \typesubsection{Example}
 
 \begin{example}
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
-\gralclasslink{CartesianGrid2D}{RegGrid2D} R(10,10);  // 10x10 Cartesian grid
+\gralclasslink{RegGrid2D}{cartesian2d} R(10,10);  // 10x10 Cartesian grid
 assert(R.NumOfVertices() == 10*10);
 assert(R.NumOfCells()    == 9*9);
 typedef grid\_types<CartesianGrid2D> gt; // 'namespace' for CartesianGrid2D-related types 

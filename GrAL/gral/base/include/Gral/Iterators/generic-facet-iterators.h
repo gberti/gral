@@ -22,7 +22,7 @@
    The components offer generic support for $GrAL Facet, 
    $GrAL FacetIterator
    and $GrAL FacetOnCellIterator, 
-   on top of a $GrAL CellVertexInputGrid. 
+   on top of a $GrAL Cell-VertexInputGridRange. 
 
   They are used for implementing facet-related members of Complex3D.
  */

@@ -12,7 +12,7 @@
     \ingroup iterators
     
     \templateparams
-     - \c CellIt: Model of $GrAL GridCellIterator
+     - \c CellIt: Model of $GrAL CellIterator
      - \c CellIt::grid_type: Has \c Facet and \c Cell types.
      - \c CellIt::Cell: Model of $GrAL FacetRange
 

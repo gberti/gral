@@ -19,7 +19,7 @@
    The components offer generic support for $GrAL Edge, 
    $GrAL EdgeIterator,
    and $GrAL EdgeOnCellIterator, 
-   on top of a $GrAL CellVertexInputGrid. 
+   on top of a $GrAL Cell-VertexInputGridRange. 
 
    They are used for implementing %edge-related members of Complex3D.
  */

@@ -244,7 +244,7 @@ cell_seq_ref<Grid> CellSet(const Grid& G) { return cell_seq_ref<Grid>(G) ;}
   Only on construction time this iterator should be rather "lean".
    
   \b Template parameters:
-  - <tt> FacetRange </tt>: $GrAL GridFacetRange
+  - <tt> FacetRange </tt>: $GrAL FacetRange
 
   \see    Used by vertex_set_of_facets
   \todo   shallow copy / copy-on-write
