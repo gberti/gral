@@ -29,4 +29,6 @@ int main() {
   REQUIRE_ALWAYS(!seq::forall(a, a+sizeof(a)/sizeof(int), bind2nd(greater<int>(), 2)), "",1);
   REQUIRE_ALWAYS(!seq::forall(a, a+sizeof(a)/sizeof(int), bind2nd(greater<int>(), 3)), "",1);
 
+  REQUIRE_ALWAYS(seq::sum(a,a+sizeof(a)/sizeof(int)) == 6, " result=" << seq::sum(a,a+sizeof(a)/sizeof(int)),1);
+
 }
