@@ -17,7 +17,7 @@
   Template parameters:
    - G2: model of $GrAL Cell-VertexInputGridRange, i.e. must support
      - grid_types<>, 
-     - $GrAL GridCellIterator, $GrAL GridVertexIterator, $GrAL Vertex-On-CellIterator,
+     - $GrAL CellIterator, $GrAL VertexIterator, $GrAL Vertex-On-CellIterator,
      - vertex_handle
    - Geom2 : model of VertexGridGeometry
      - <tt> Geom2::coord(Vertex2) </tt>

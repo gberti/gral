@@ -6,6 +6,10 @@
 
 #include "Gral/Base/common-grid-basics.h"
 
+/*! \file facet-iterator.h
+
+*/
+
 //----------------------------------------------------------------
 //
 /*! \brief A generic iterator over the facets of a grid.

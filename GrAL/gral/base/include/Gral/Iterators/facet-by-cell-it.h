@@ -14,7 +14,7 @@
     \templateparams
      - \c CellIt: Model of $GrAL GridCellIterator
      - \c CellIt::grid_type: Has \c Facet and \c Cell types.
-     - \c CellIt::Cell: Model of $GrAL GridFacetRange
+     - \c CellIt::Cell: Model of $GrAL FacetRange
 
     <b> Implementation note: </b> <br>
     This uses a partial grid function to mark visited facets,

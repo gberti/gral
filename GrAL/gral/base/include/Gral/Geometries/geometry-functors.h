@@ -24,7 +24,7 @@
 
 
   \see Module functors
-  \see $GrAL GridGeometry
+  \see $GrAL VertexGridGeometry
 */
 //----------------------------------------------------------------
 

@@ -495,7 +495,7 @@ public:
    \ingroup enumsubranges
    \see enumsubranges
 
-  Model of $GrAL GridVertex Range, $GrAL GridCellRange.<BR>
+  Model of $GrAL GridVertex Range, $GrAL CellRange.<BR>
 
   This class has value-semantics, i.e. really stores
   the enumerated sequence.

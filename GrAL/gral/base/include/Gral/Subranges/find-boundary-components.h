@@ -4,6 +4,10 @@
 
 // $LICENSE
 
+/*! \file find-boundary-components.h
+    \see Module boundaryalgorithms
+ */
+
 /*! \defgroup boundaryalgorithms Algorithms for exploring Grid Boundaries
     \ingroup boundary
     

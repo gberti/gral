@@ -44,7 +44,7 @@ struct grid_types_Cartesian3D {
 /*! \brief 3D Cartesian grid class. 
 
     At present, this implements only a 
-    $GrAL CellVertexInputGrid.
+    $GrAL Cell-VertexInputGrid.
   
     \todo Implement the full set of grid elements and iterators,
     in particular Edge and Facet types.

@@ -14,7 +14,7 @@
     \ingroup complex2dformat
  
     Model of $GrAL Cell-VertexInputGridRange 
-    and  $GrAL VertexGeometry.
+    and  $GrAL VertexGridGeometry.
    
     \see Module \ref complex2dformat
  */
