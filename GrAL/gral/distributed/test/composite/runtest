@@ -1,5 +1,6 @@
 #!/bin/bash
 
+mkdir -p compgrid-out
 ./runtest2x2p1
 ./runtest2x2p2
 ./runtest4x1p1

@@ -1,7 +1,6 @@
 #!/bin/bash
 
 out=out4x2p2
-mkdir -p compgrid-out
 rm -f grid.complex2d grid.part $out
 cp    grid4x2.complex2d grid.complex2d
 cp    grid4x2.part.2    grid.part
