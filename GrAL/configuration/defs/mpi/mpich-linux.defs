@@ -1,0 +1,5 @@
+MPIPATH=/usr/lib/mpich
+
+MPIRUN=$(MPIPATH)/bin/mpirun
+MPI_INCLUDES= -I$(MPIPATH)/include
+MPI_LIBRARIES = -L$(MPIPATH)/lib  -lmpich 

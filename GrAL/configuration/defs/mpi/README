@@ -1,0 +1,3 @@
+Edit a file close to your system configuration,
+and link mpi.defs to it:
+ln -s <my_mpi.defs> mpi.defs
