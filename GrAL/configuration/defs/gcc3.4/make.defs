@@ -1,0 +1,14 @@
+# gcc/make.defs
+# Settings for gcc 3.4
+
+CCC      =  gcc3.4
+CCFLAGS += -Wall
+CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
+CCFLAGS += 
+CCFLAGS += -ftemplate-depth-35
+CCFLAGS += -DGRAL_HAS_SSTREAM
+LDFLAGS += -Xlinker -rpath -Xlinker $(HOME)/lib
+DEPEND    =$(CCC)
+DEPFLAGS += -MM $(CCFLAGS)
+
+
