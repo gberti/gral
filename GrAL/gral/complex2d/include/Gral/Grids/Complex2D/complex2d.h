@@ -210,11 +210,6 @@ struct complex2d_types {
   typedef CellOnCell2D_Iterator   CellOnCellIterator;
 
   typedef CellOnVertex2D_Iterator CellOnVertexIterator;
-
-  //  typedef local_cell_list::const_iterator locNeighbourIt;
-  // typedef local_vertex_list::const_iterator    locVertexIt;
-  //typedef locNeighbourIt local_cell_it;
-  //typedef locVertexIt    local_vertex_it;
 };
 
 
@@ -257,14 +252,6 @@ public:
   Complex2D(const Complex2D& rhs);
   Complex2D& operator=(const Complex2D& rhs);
   ~Complex2D();
-
-  void  construct(const vector<int>& descr,
-		  const vector<CoordType>& coords);
-
-  //--------------- I/O -----------------------
-
-  int read(istream& in, int offset = 1);  
-  void write(ostream& out, int offset = 1) const;
 
   //-------------- iteration ------------------
 
@@ -342,8 +329,6 @@ private:
 
   inline cell_handle   _new_cell(int num_of_v);
   inline vertex_handle _new_vertex(const CoordType& coo = CoordType());
-  //  void   _delete_cell  (const cell_handle&   c);
-  //  void   _delete_vertex(const vertex_handle& v);
 
   // make n1_it point to n2
   inline void set_neighbour(const FacetOnCellIterator& n1_it, const Cell& n2);
@@ -438,25 +423,6 @@ private:
 
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
-
-
-  // read CC from an input stream, p.e. a file
-  // the data format is quite easy:
-  //-------------------------
-  // nv # number of vertices
-  // nc # number of cells
-  //
-  // x_1  y_1  # coords of vertex 1 
-  // ....
-  // x_nv y_nv # coords of vertex nv
-  //
-  // nvc1 # # number of vertices of cell 1
-  //    vc1_1  ....  vc1_nvc1    # indices of vertices of cell 1 ( starting with 1)
-  // ....
-  // nvc_nc #  number of vertices of cell nc
-  //    vc1_1  ....  vc1_nvc_nc  # indices of vertices of cell nc ( starting with 1)
-  //-------------------------
-
 
 #include "Gral/Grids/Complex2D/internal/vertex-on-cell2d-it.h" 
 #include "Gral/Grids/Complex2D/internal/vertex2d-it.h"
