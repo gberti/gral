@@ -19,15 +19,6 @@
 */
 //----------------------------------------------------------------
 
-/*! \defgroup accessors Accessors, Function Objects and Iterator Adaptors
-    \ingroup sequences
-
-    This module defines custom function objects and iterators.
-    - get_first, get_second: Get first/second element of a pair.
-    - mapped_value_const_iterator<F,It>, mapped_value_iterator<F,It>:
-    Compose the value (dereference operator*) 
-    of an iterator It with a function F.
- */
 
 
 
@@ -56,7 +47,7 @@ struct get_first {
   value_type const& operator()(P const& p) const { return p.first;}
 };
 
-/*! \brief get second element of P. 
+/*! \brief get second element of pair. 
 
    \see get_first
    \ingroup  accessors
@@ -174,30 +165,33 @@ get2nd(It i) {
 //        iterator traits for the above templates
 //----------------------------------------------------------------
 
-// requires partial specialization -- disabled for the moment
-// template<class It, class F>
-// struct iterator_traits<mapped_value_const_iterator<It,F> >
-// {
-//   typedef iterator_traits<It> bt;
-//   typedef typename bt::iterator_category iterator_category;
-//   typedef typename bt::difference_type   difference_type;
+// requires partial specialization
 
-//   typedef typename F::result_type        value_type;
-//   typedef const value_type&              reference;
-//   typedef const value_type*              pointer;
-// };
+template<typename It> struct iterator_traits;
 
-// template<class It, class F>
-// struct iterator_traits<mapped_value_iterator<It,F> >
-// {
-//   typedef iterator_traits<It> bt;
-//   typedef typename bt::iterator_category iterator_category;
-//   typedef typename bt::difference_type   difference_type;
+template<class It, class F>
+struct iterator_traits<mapped_value_const_iterator<It,F> >
+{
+  typedef iterator_traits<It> bt;
+  typedef typename bt::iterator_category iterator_category;
+  typedef typename bt::difference_type   difference_type;
 
-//   typedef typename F::result_type        value_type;
-//   typedef value_type&                    reference;
-//   typedef value_type*                    pointer;
-// };
+  typedef typename F::result_type        value_type;
+  typedef const value_type&              reference;
+  typedef const value_type*              pointer;
+};
+
+template<class It, class F>
+struct iterator_traits<mapped_value_iterator<It,F> >
+{
+  typedef iterator_traits<It> bt;
+  typedef typename bt::iterator_category iterator_category;
+  typedef typename bt::difference_type   difference_type;
+
+  typedef typename F::result_type        value_type;
+  typedef value_type&                    reference;
+  typedef value_type*                    pointer;
+};
 
 
 #endif
