@@ -1,10 +1,10 @@
 #! /bin/sh
 
-cvswork=${CVSWORK-${HOME}/CVS-work}
+cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
 MODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
 
 
-cd ${HOME}/CVS-work;
+cd ${HOME}/CVS-work/GrAL;
 for i in ${MODULES}
 do
  cd $i;

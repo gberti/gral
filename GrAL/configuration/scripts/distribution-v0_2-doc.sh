@@ -6,7 +6,7 @@ echo `which perl`
 perl -v;
 
 TAG=${1-HEAD}
-cvswork=${CVSWORK-${HOME}/CVS-work}
+cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
 scripts=${cvswork}/configuration/scripts;
 MODULES=`$scripts/modules-v0_2.sh`;
 EXCLUDED=`$scripts/excluded-v0_2.sh`;

@@ -3,7 +3,7 @@
 source ${HOME}/.bashrc
 
 TAG=${1-HEAD}
-cvswork=${CVSWORK-${HOME}/CVS-work}
+cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
 MODULES=`$cvswork/configuration/scripts/modules-v0_2.sh`;
 EXCLUDED=`$cvswork/configuration/scripts/excluded-v0_2.sh`;
 TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel-v0_2.sh`;

@@ -1,7 +1,7 @@
 #! /bin/bash
 
 TAG=${1-HEAD}
-cvswork=${CVSWORK-${HOME}/CVS-work}
+cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
 scripts=${cvswork}/configuration/scripts;
 MODULES=`$scripts/modules.sh`;
 TOPLEVELMODULES=`$scripts/modules-toplevel.sh`;

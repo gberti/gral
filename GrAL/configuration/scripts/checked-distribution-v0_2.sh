@@ -2,7 +2,7 @@
 
 TAG=${1-HEAD}
 #TAG=v0_2
-cvswork=${CVSWORK-${HOME}/CVS-work}
+cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
 scripts=$cvswork/configuration/scripts/
 
 

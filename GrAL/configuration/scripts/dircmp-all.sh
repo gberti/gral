@@ -1,6 +1,6 @@
 #! /bin/bash
 
-cvswork=${CVSWORK-${HOME}/CVS-work}
+cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
 otherdir=$1
 MODULES=`$cvswork/configuration/scripts/modules.sh`;
 

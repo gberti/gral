@@ -1,7 +1,7 @@
 #! /bin/bash
 
 
-cvswork=${CVSWORK-${HOME}/CVS-work}
+cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
 MODULES=`$cvswork/configuration/scripts/modules.sh`;
 dopt=opt;
 dbg=${1-$dopt};

@@ -3,7 +3,7 @@
 # execute a command for all modules
 # example: do-all-cvswork.sh 'gmake clean'
 
-cvswork=${CVSWORK-${HOME}/CVS-work}
+cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
 MODULES=`$cvswork/configuration/scripts/modules.sh`;
 
 cd ${cvswork}
