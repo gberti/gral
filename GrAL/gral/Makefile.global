@@ -33,6 +33,13 @@ test:
         $(MAKE) test ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
+check:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) check ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
 
 # predoc  = generate docs
 # postdoc = install docs (replace dummy links)
