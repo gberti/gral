@@ -1,0 +1,7 @@
+# kai/opt/make.defs
+
+THISDIR = $(DEFDIR)
+include $(THISDIR)/../make.defs
+
+OPTFLAGS = +K2
+CCFLAGS  += $(OPTFLAGS)

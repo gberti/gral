@@ -1,0 +1,50 @@
+# default recursive targets,
+# to be included by Makefiles doing recursive make over subdirs
+
+
+
+
+TARGET=dummy # must be called with "gmake generic TARGET=<target>"
+
+generic:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) $(TARGET);\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+
+# Some special cases
+
+new:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+
+all:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) all;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+compile:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) compile;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+lib:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) lib;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+clean:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) clean;\
+	echo "LEAVING  directory" $$i;cd ..; done
+	rm -f *.o *~ *.flc core;
+
+

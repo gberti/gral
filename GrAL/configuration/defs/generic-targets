@@ -1,0 +1,63 @@
+# default recursive targets
+
+
+new:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+
+all:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) all;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+compile:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) compile;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+lib:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) lib;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+depend:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) depend;\
+	echo "LEAVING  directory" $$i;cd ..; done
+
+clean:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) clean;\
+	echo "LEAVING  directory" $$i;cd ..; done
+	rm -f *.o *~ *.flc core;
+
+
+
+runsed:
+	@set -e; \
+	$(NMWRROOT)/scripts/runsed-on-sources;\
+	for i in $(SUBDIRS); \
+	do (mv sedscr $$i; cd $$i;echo 'ENTERING directory' $$i;\
+	 $(MAKE) runsed;\
+	mv sedscr ..; echo "LEAVING  directory" $$i;cd ..) done
+
+
+#touch-depend:
+#	@set -e; \
+#	touch .depend;\
+#	for i in $(SUBDIRS); \
+#	do (cd $$i;echo 'ENTERING directory' $$i; touch .depend;\
+#	echo "LEAVING  directory" $$i;cd ..) done
+
+
+touch-depend:
+	touch .depend;\
+	find . -type d ! -name "CVS" -exec $(NMWRROOT)/scripts/touchdepend {} \; -print

@@ -1,0 +1,7 @@
+# mpich-linux-myrinet.defs
+
+MPI_INCLUDES =  -I/usr/local/mpich/ch_gm/include
+MPI_LIBRARY  =  -L/usr/local/mpich/ch_gm/lib\
+                -lmpich\
+                -L/usr/local/myri/lib/ -lgm  -lnsl -lm 
+MPIRUN = /usr/local/mpich/bin/mpirun

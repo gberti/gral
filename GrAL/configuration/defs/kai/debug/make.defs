@@ -1,0 +1,7 @@
+# kai/debug/make.defs
+
+THISDIR = $(COMPILERDIR)#
+include $(THISDIR)/../make.defs
+
+CCFLAGS  +=  +K0  -DNMWR_DEBUG 
+

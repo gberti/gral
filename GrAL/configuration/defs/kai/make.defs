@@ -1,0 +1,17 @@
+# kai/make.defs
+
+CCC      = KCC
+IFLAGS  += -I$(NMWRROOT)/include/KCC
+CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
+CCFLAGS += --restrict -DNMWR_PARTIAL_SPEC
+
+DEPEND=$(CCC)
+DEPFLAGS = -M
+
+# override AR in $(ARCH)/make.defs
+# WARNING: the contents of the archive will be
+# removed before archieving, so be sure to archive
+# all object files AT ONCE!
+AR = KCC
+ARFLGS = -o
+LIBCCFLAGS = --one_instantiation_per_object

@@ -1,0 +1,4 @@
+# linux/make.defs
+
+AR = ar
+ARFLGS = -rs

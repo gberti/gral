@@ -1,0 +1,8 @@
+# gcc/make.defs
+
+CCC       = g++
+CCFLAGS  += -Wall
+DEPEND    =$(CCC)
+DEPFLAGS += -MM $(CCFLAGS)
+
+
