@@ -39,8 +39,8 @@ private:
   const composite_grid_type*                                 the_composite;
   grid_function<CoarseCell, overlapping_grid_function<E,T,ovrlp_grid_type> > local_gfs;
 
-  list<Connector> the_senders;
-  list<Connector> the_receivers; // only for buffered send/receive necessary
+  std::list<Connector> the_senders;
+  std::list<Connector> the_receivers; // only for buffered send/receive necessary
 
 public:
   //--------------------------- construction -------------------------------

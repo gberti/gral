@@ -20,7 +20,7 @@
 
 class overlap_pattern {
 private:
- std::queue<grid_element_tag,deque<grid_element_tag> > q;
+ std::queue<grid_element_tag, std::deque<grid_element_tag> > q;
 public:
   overlap_pattern();
   overlap_pattern(std::string const& pat);

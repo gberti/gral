@@ -42,6 +42,8 @@
 
 
 int main(int argc, char* argv[]) {
+  using std::string;
+  using std::cout;
 
   typedef Complex2D                 fine_grid_type;
   typedef Complex2D                 coarse_grid_type;
@@ -56,14 +58,14 @@ int main(int argc, char* argv[]) {
 
   fine_grid_type MasterG;
   fine_geom_type MasterGeom(MasterG);
-  ifstream grd(gridfile.c_str());
+  std::ifstream grd(gridfile.c_str());
   IstreamComplex2DFmt InG(grd);
   ConstructGrid(MasterG, MasterGeom, InG, InG);
 
   //----- create partitioning ---------
 
   partitioning<fine_grid_type> Prtng(MasterG);
-  ifstream prt(partitionfile.c_str());
+  std::ifstream prt(partitionfile.c_str());
   Prtng.read_partition(prt);
   prt.close();
 
