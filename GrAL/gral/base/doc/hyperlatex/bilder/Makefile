@@ -41,7 +41,7 @@ cell-on-cell.ps: stop-sign.eps
 all: stop-sign.eps $(JPGFILES)
 
 clean:
-	rm -f *.eps *.ps *.aux *.log *.dvi
+	rm -f *.eps *.ps *.aux *.log *.dvi *~ 
 
 realclean: clean
 	rm -f $(JPGFILES) $(GIFFILES)

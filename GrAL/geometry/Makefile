@@ -14,6 +14,10 @@ compile:
 
 lib:
 
+test:
+
+demo:
+
 
 install:
 	mkdir -p $(INSTALLHEADERS)/Geometry
@@ -31,11 +35,6 @@ realclean: tarclean
 	(cd doc; gmake realclean)
 
 doxy:
-	mkdir -p doxygen
-	(TEXINPUTS=$(TEXINPUTS):$(ROOT); export TEXINPUTS; doxygen doxy.cfg;)
 
-
-
-dist: doc  tarclean tar
 
 .PHONY: demo test doc
