@@ -142,6 +142,7 @@ struct point_traits_for_coordN
 
 
   typedef typename dim_tag<N>::dimension_tag dimension_tag;
+  enum { dimension = N };
   typedef coordN<N>                      Ptype;
   typedef typename Ptype::component      component_type;
   typedef component_type                 value_type;
@@ -177,6 +178,7 @@ struct point_traits_for_coordN_2
   typedef Ptype::component          component_type;
   typedef component_type            value_type;
   typedef tag2D                     dimension_tag;
+  enum { dimension = 2 };
 
   static int LowerIndex(const Ptype&) { return 1;}
   static int UpperIndex(const Ptype&) { return 2;}
