@@ -74,7 +74,7 @@ public:
   typedef hier_grid_type                           hgt;
   typedef typename hgt::pattern_grid_type          pattern_grid_type;
   typedef typename hgt::level_handle               level_handle;
-  typedef typename hgt::hier_cell_type                   hier_cell_type;
+  typedef typename hgt::hier_cell_type             hier_cell_type;
   typedef typename hgt::CellChildIterator          HierCellChildIterator;
   typedef typename hgt::cart_subrange_type         flat_subrange_type;
   typedef typename flatgt::CellIterator            flat_cell_iterator;
@@ -88,6 +88,7 @@ public:
   typedef HierCellChildIterator OctCellChildIterator;
 
   typedef oct_cell_type               Cell;
+  typedef typename hgt::cell_handle   cell_handle;
   typedef OctCellChildIterator  CellChildIterator;
 
   typedef size_t size_type;
@@ -349,6 +350,7 @@ public:
     typedef typename base::octree_type octree_type;
     typedef typename base::gt        gt;
     typedef typename gt  ::Cell      Cell;
+    typedef typename gt  ::cell_handle cell_handle;
 
     typedef typename base::ogt      ogt;   
     typedef typename ogt::oct_cell_type   oct_cell_type;
@@ -375,6 +377,7 @@ public:
     self& operator++() {
       cv();  ++c; make_valid(); return *this;
     }
+    cell_handle handle() const { return cell_handle((*c).handle(),level());}
 
     flat_cell_type Flat() const { return *c;}
     bool valid() const { return ! IsDone() && on_leaf();}

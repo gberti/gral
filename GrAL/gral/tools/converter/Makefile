@@ -5,7 +5,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io \
+EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io gral/complex2d \
              external-control configuration utilities geometry sequence
 
 
@@ -27,7 +27,7 @@ LIBS = -lgral-base \
 
 LIBSGMV = -lgral-gmv-io
 LIBSOFF = -lgral-geomview-io
-
+LIBSDX  = -lgral-complex2d 
 
 new-check-clean: # new check clean1
 	$(MAKE) new
@@ -48,6 +48,9 @@ complex2d2gmv: complex2d2gmv.o
 
 complex2d2off: complex2d2off.o
 	$(CC) -o complex2d2off complex2d2off.o $(LDFLAGS) $(LIBSOFF) $(LIBS)
+
+complex2d2dx: complex2d2dx.o
+	$(CC) -o complex2d2dx complex2d2dx.o $(LDFLAGS) $(LIBSDX) $(LIBS)
 
 rungmv:
 	$(EXECGMV) -g grid.complex2d -o grid.gmv  -off 1
