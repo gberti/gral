@@ -80,7 +80,7 @@ such as Vertex Grid Range and Grid Cell Sequence.
    ~ & 
    {\tt VertexIterator} 
    \\
-   size of sequence  & 
+   size of sequence\noteref{note-size-of-sequence}  & 
    {\tt r.NumOfVertices()} & 
    ~ &
    {\tt size\_type} 
@@ -173,6 +173,13 @@ such as Vertex Grid Range and Grid Cell Sequence.
    O(V) (using \sectionlink{\concept{partial grid functions}}{PartialGridFunction}).
    Requiring to do this determination at time of construction of the range would 
    impose the cost of doing so also to clients not interested in this functionality.
+\item \notelabel{note-size-of-sequence} This functionality can always be implemented
+   in terms of the element iterators, in which case it is $O(n)$. In some cases,
+   there is no better implementation possible, for example, if edges or facets
+   are implicitely ordered by there vertex sets. Therefore, there is no guarantee
+   for a better complexity here.
+   In these cases, it is not always simple to provide an \tt{EndElement()}
+   past-the-end iterator, without compromising efficiency of iterator comparison.
  \end{enumerate}
   
 
