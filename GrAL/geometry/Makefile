@@ -19,7 +19,7 @@ test:
 demo:
 
 
-install:
+install-headers:
 	mkdir -p $(INSTALLHEADERS)/Geometry
 	cp include/Geometry/*.h $(INSTALLHEADERS)/Geometry
 

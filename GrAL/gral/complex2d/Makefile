@@ -16,13 +16,14 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
-install:
+install-headers:
 	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Complex2D
 	cp include/Gral/Grids/Complex2D/*.h  $(INSTALLHEADERS)/Gral/Grids/Complex2D
 	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
 	cp include/Gral/Grids/Complex2D/internal/*.h  $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
 	cp include/Gral/Grids/Complex2D/internal/*.C  $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
-	cp $(LIBDIR)/*.a $(INSTALLLIBRARIES)
+
+install: install-headers  install-libs
 
 clean:
 	(cd src;  $(MAKE) clean DEPS="")

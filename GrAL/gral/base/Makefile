@@ -16,7 +16,7 @@ lib:
 
 DIRS = Base Geometries IO Iterators Subranges
 SHELL=/bin/bash
-install:
+install-headers:
 	for i in $(DIRS);\
         do mkdir -p $(INSTALLHEADERS)/Gral/$$i; \
 	cp  include/Gral/$$i/*.{h,C} $(INSTALLHEADERS)/Gral/$$i;\
