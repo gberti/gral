@@ -28,11 +28,14 @@
 
 #include "Gral/Base/partial-multi-grid-functions.h"
 #include "Gral/Base/multi-grid-functions.h"
+#include "Gral/Algorithms/incidence-stencil.h"
 #include "Gral/Subranges/layered-subrange.h"
+#include "Gral/Subranges/enumerated-subrange.h"
 #include "Container/function-adapter.h"
 #include "Utility/ref-ptr.h"
 
 #include <iostream>
+#include <vector>
 
 namespace GrAL {
 
@@ -189,6 +192,14 @@ void mark_on_vertices(VertexIt    seed,         //!< in : vertex seed set
  mark_on_vertices<gt>(seed, vertex_seq, cell_seq, visited, adj_queue, level, inside, end);
 }
 
+template<class GRID, class GT = grid_types<GRID> >
+struct incidence_hull_cfg {
+  typedef GRID              grid_type;
+  typedef GT                gt;
+  typedef incidence_stencil stencil_type;
+};
+
+
 
 /*! \brief Calculate incidence hull
 
@@ -196,52 +207,71 @@ void mark_on_vertices(VertexIt    seed,         //!< in : vertex seed set
 
     \see \ref test-incidence-hulls.C
 */
-template<class RANGE, class STENCIL, class GT>
+template<class CFG>
 class incidence_hull
 {
 public:
-  typedef RANGE                  range_type;
-  typedef STENCIL                stencil_type;
-  typedef typename GT::grid_type grid_type;
-  typedef typename GT::Vertex    Vertex;
-  typedef typename GT::Cell      Cell;
+  typedef typename CFG::grid_type    grid_type;
+  typedef typename CFG::stencil_type stencil_type;
+  typedef typename CFG::gt           gt;
+  typedef typename gt::grid_type grid_type;
+  typedef typename gt::Vertex    Vertex;
+  typedef typename gt::Cell      Cell;
 
-  typedef layered_vertex_range<grid_type>  vertex_range;
-  typedef layered_cell_range<grid_type>    cell_range;
+  typedef layered_vertex_range<grid_type>          vertex_range;
+  typedef layered_cell_range<grid_type>            cell_range;
   typedef typename vertex_range::range_type_ref    vertex_layer_type;
   typedef typename cell_range::range_type_ref      cell_layer_type;
 
-  typedef typename vertex_range::VertexIterator rgeVertexIterator;
-  typedef typename cell_range  ::CellIterator   rgeCellIterator;
+  //typedef typename vertex_range::VertexIterator rgeVertexIterator;
+  //typedef typename cell_range  ::CellIterator   rgeCellIterator;
+  typedef typename vertex_range::VertexIterator LayerVertexIterator;
+  typedef typename cell_range  ::CellIterator   LayerCellIterator;
 
   enum  periodic_flag { periodic, non_periodic};
 private: 
   vertex_range v_layers;
   cell_range   c_layers;
   partial_multi_grid_function<grid_type, int> visited;
-  //multi_grid_function<grid_type, int> visited;
+  std::vector<int> celllevel2layer;
+  std::vector<int> vertexlevel2layer;
+  stencil_type the_stencil;
+  int          far_distance_;
 public:
-  incidence_hull() {}
-  incidence_hull(range_type const& seed, stencil_type const& stencil, periodic_flag p_flag = non_periodic);
-  template<class PRED>
-  incidence_hull(range_type const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
+  incidence_hull() : far_distance_(-1) {}
+  template<class RANGE>
+  incidence_hull(RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag = non_periodic);
+  template<class RANGE, class PRED>
+  incidence_hull(RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
 
-  void init   (range_type const& seed, stencil_type const& stencil, periodic_flag p_flag = non_periodic);
-  template<class PRED>
-  void init   (range_type const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
+  template<class RANGE>
+  void init   (RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag = non_periodic);
+  template<class RANGE, class PRED>
+  void init   (RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
 
+  void clear();
+  bool empty() const { return NumOfVertexLayers() == 0 && NumOfCellLayers() == 0;}
 
-  template<class PRED>
-  void compute(range_type const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
+  template<class RANGE, class PRED>
+  void compute(RANGE const& seed, stencil_type const& stencil, periodic_flag p_flag, PRED pred);
+
+  template<class RANGE>
+  void add_seed_range     (RANGE const& seed);
+  template<class RANGE>
+  void add_seed_range_incr(RANGE const& seed);
+
+  template<class RANGE>
+  void remove_seed_range(RANGE const& seed);
+
 
   grid_type    const& TheGrid()  const { return v_layers.TheGrid();}
   vertex_range const& vertices() const { return v_layers;}
   cell_range   const& cells   () const { return c_layers;}
 
-  rgeVertexIterator FirstVertex() const { return v_layers.FirstVertex();}
-  rgeVertexIterator EndVertex()   const { return v_layers.EndVertex();}
-  rgeCellIterator   FirstCell()   const { return c_layers.FirstCell();}
-  rgeCellIterator   EndCell()     const { return c_layers.EndCell();}
+  LayerVertexIterator FirstVertex() const { return v_layers.FirstVertex();}
+  LayerVertexIterator EndVertex()   const { return v_layers.EndVertex();}
+  LayerCellIterator   FirstCell()   const { return c_layers.FirstCell();}
+  LayerCellIterator   EndCell()     const { return c_layers.EndCell();}
 
 
   /*! \name Element levels
@@ -257,57 +287,107 @@ public:
   int level(Cell   const& c) const { return visited(c);}
   //@}
 
+  int layer(Vertex const& v) const { return vertexlevel2layer[level(v)];}
+  int layer(Cell   const& c) const { return celllevel2layer  [level(c)];}
+  
+  template<class CFG2>
+  class contains_pred_type {
+  private:
+    ref_ptr<incidence_hull<CFG2> const> h;
+  public:
+    contains_pred_type(        incidence_hull const& hh) : h(hh) {}
+    contains_pred_type(ref_ptr<incidence_hull const> hh) : h(hh) {}
+      
+    template<class E>
+    bool operator()(E const& e) const { return h->contains(e);}
+  };
+
+  contains_pred_type<CFG> contains_pred() const { return contains_pred_type<CFG>(*this);}
+
+  template<class E>
+  bool contains(E const& e) const { return visited.defined(e);}
+
+  /*! \name Distance function interface
+      \brief Hull interpreted as discrete distance function.
+      
+      If the element is not inside the hull, \c far_distance() is returned.
+
+  */
+  //@{
+  int operator()(Vertex const& v) const { return (visited.defined(v) ? layer(v)-1 : far_distance_);}
+  int operator()(Cell   const& c) const { return (visited.defined(c) ? layer(c)-1 : far_distance_);}
+  int  far_distance() const { return far_distance_;}
+  void set_far_distance(int f) { far_distance_ = f;}
+  //@}
+
+  int NumOfVertexLayers() const { return v_layers.NumOfLayers();}
+  int NumOfCellLayers  () const { return c_layers.NumOfLayers();}
   temporary<vertex_layer_type> vertices(int i) const { return temporary<vertex_layer_type>(v_layers.Layer(i));}
   temporary<cell_layer_type  > cells   (int i) const { return temporary<cell_layer_type  >(c_layers.Layer(i));}
 
 }; // class incidence_hull
 
 
-template<class RANGE, class STENCIL, class GT>
-incidence_hull<RANGE, STENCIL, GT>::incidence_hull
-(typename incidence_hull<RANGE, STENCIL, GT>::range_type const& seed,
- typename incidence_hull<RANGE, STENCIL, GT>::stencil_type const& stencil,
- typename incidence_hull<RANGE, STENCIL, GT>::periodic_flag p_flag)
+template<class CFG>
+template<class RANGE>
+incidence_hull<CFG>::incidence_hull
+(RANGE const& seed,
+ typename incidence_hull<CFG>::stencil_type const& stencil,
+ typename incidence_hull<CFG>::periodic_flag p_flag)
   : v_layers(seed.TheGrid()), 
     c_layers(seed.TheGrid()),
-    visited(seed.TheGrid(), 0)
+    visited (seed.TheGrid(), 0),
+    far_distance_(-1)
 {
-  compute(seed, stencil, p_flag, constant<typename GT::Cell, bool>(true));
+  compute(seed, stencil, p_flag, constant<typename gt::Cell, bool>(true));
 }
 
-template<class RANGE, class STENCIL, class GT>
-template<class PRED>
-incidence_hull<RANGE, STENCIL, GT>::incidence_hull
-(typename incidence_hull<RANGE, STENCIL, GT>::range_type const& seed,
- typename incidence_hull<RANGE, STENCIL, GT>::stencil_type const& stencil,
- typename incidence_hull<RANGE, STENCIL, GT>::periodic_flag p_flag,
+template<class CFG>
+template<class RANGE, class PRED>
+incidence_hull<CFG>::incidence_hull
+(RANGE const& seed,
+ typename incidence_hull<CFG>::stencil_type const& stencil,
+ typename incidence_hull<CFG>::periodic_flag p_flag,
  PRED pred)
   : v_layers(seed.TheGrid()), 
     c_layers(seed.TheGrid()),
-    visited(seed.TheGrid(), 0)
+    visited(seed.TheGrid(), 0),
+    far_distance_(-1)
 {
   compute(seed, stencil, p_flag, pred);
 }
 
-template<class RANGE, class STENCIL, class GT>
-void incidence_hull<RANGE, STENCIL, GT>::init
-(typename incidence_hull<RANGE, STENCIL, GT>::range_type   const& seed,
- typename incidence_hull<RANGE, STENCIL, GT>::stencil_type const& stencil,
- typename incidence_hull<RANGE, STENCIL, GT>::periodic_flag p_flag)
+template<class CFG>
+void incidence_hull<CFG>::clear()
+{
+  v_layers.clear();
+  c_layers.clear();
+  visited.clear();
+  celllevel2layer.clear();
+  vertexlevel2layer.clear();
+  // far_distance_ = -1;
+}
+
+template<class CFG>
+template<class RANGE>
+void incidence_hull<CFG>::init
+(RANGE const& seed,
+ typename incidence_hull<CFG>::stencil_type const& stencil,
+ typename incidence_hull<CFG>::periodic_flag p_flag)
 {
   v_layers.set_grid(seed.TheGrid());
   c_layers.set_grid(seed.TheGrid());
   visited .set_grid(seed.TheGrid(), 0);
-  compute(seed, stencil, p_flag, constant<typename GT::Cell, bool>(true) );
+  compute(seed, stencil, p_flag, constant<typename gt::Cell, bool>(true) );
 }
 
 
-template<class RANGE, class STENCIL, class GT>
-template<class PRED>
-void incidence_hull<RANGE, STENCIL, GT>::init
-(typename incidence_hull<RANGE, STENCIL, GT>::range_type   const& seed,
- typename incidence_hull<RANGE, STENCIL, GT>::stencil_type const& stencil,
- typename incidence_hull<RANGE, STENCIL, GT>::periodic_flag p_flag,
+template<class CFG>
+template<class RANGE, class PRED>
+void incidence_hull<CFG>::init
+(RANGE const& seed,
+ typename incidence_hull<CFG>::stencil_type  const& stencil,
+ typename incidence_hull<CFG>::periodic_flag p_flag,
  PRED pred)
 {
   v_layers.set_grid(seed.TheGrid());
@@ -317,32 +397,34 @@ void incidence_hull<RANGE, STENCIL, GT>::init
 }
 
  
-template<class RANGE, class STENCIL, class GT>
-template<class PRED>
-void incidence_hull<RANGE, STENCIL, GT>::compute
-(typename incidence_hull<RANGE, STENCIL, GT>::range_type const& seed,
- typename incidence_hull<RANGE, STENCIL, GT>::stencil_type const& stencil,
- typename incidence_hull<RANGE, STENCIL, GT>::periodic_flag p_flag,
+template<class CFG>
+template<class RANGE, class PRED>
+void incidence_hull<CFG>::compute
+(RANGE const& seed,
+ typename incidence_hull<CFG>::stencil_type const& stencil,
+ typename incidence_hull<CFG>::periodic_flag p_flag,
  PRED pred)
 {
-  int  level = 1;
-  int  cnt   = 1; 
+  the_stencil = stencil;
+  typedef grid_types<RANGE> rgt;
+  int  lev = 1;
+  int  cnt = 1; 
   bool end = false;
   stencil_type s = stencil;
   if(s.front() == vertex_tag) {
     s.pop();
     v_layers.append_layer();
-    for(typename range_type::VertexIterator v=seed.FirstVertex(); !v.IsDone(); ++v) {
+    for(typename rgt::VertexIterator v=seed.FirstVertex(); !v.IsDone(); ++v) {
       v_layers.append(*v);
-      visited[*v] = level;
+      visited[*v] = lev;
     }
     while(!end && cnt > 0) { 
       stencil_type s2 = s;
-      mark_on_vertices<GT>(v_layers.LastLayer().FirstVertex(),
+      mark_on_vertices<gt>(v_layers.LastLayer().FirstVertex(),
 			   v_layers, c_layers,
 			   visited,
 			   s2,
-			   level,
+			   lev,
 			   pred,
 			   end);
       if(p_flag == non_periodic)
@@ -352,17 +434,17 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
   else if(s.front() == cell_tag) {
     s.pop();
     c_layers.append_layer();
-    for(typename range_type::CellIterator c=seed.FirstCell(); !c.IsDone(); ++c) {
+    for(typename rgt::CellIterator c=seed.FirstCell(); !c.IsDone(); ++c) {
       c_layers.append(*c);
-      visited[*c] = level;
+      visited[*c] = lev;
     }
     while( ! end && cnt > 0) { 
       stencil_type s2 = s;
-      mark_on_cells<GT>(c_layers.LastLayer().FirstCell(),
+      mark_on_cells<gt>(c_layers.LastLayer().FirstCell(),
 			v_layers, c_layers,
 			visited,
 			s2,
-			level,
+			lev,
 			pred,
 			end);
       if(p_flag == non_periodic)
@@ -370,16 +452,147 @@ void incidence_hull<RANGE, STENCIL, GT>::compute
     }
   } // if cell_tag
   else {
-     std::cerr << "Incidence hull: Unsupported element type: " << s.front() <<  ::std::endl;
+     std::cerr << "Incidence hull: Unsupported element type: " << s.front() <<  std::endl;
   }
   // remove possible empty layers
-  if(p_flag == periodic) {
-    if(v_layers.NumOfLayers() > 0 && v_layers.LastLayer().NumOfVertices() == 0)
-      v_layers.remove_layer();
-    if(c_layers.NumOfLayers() > 0 &&c_layers.LastLayer().NumOfCells() == 0)
-      c_layers.remove_layer();
+  if(v_layers.NumOfLayers() > 0 && v_layers.LastLayer().NumOfVertices() == 0)
+    v_layers.remove_layer();
+  if(c_layers.NumOfLayers() > 0 && c_layers.LastLayer().NumOfCells() == 0)
+    c_layers.remove_layer();
+
+  // init level<->layer conversion
+  // note that positions which do not correspond to level numbers remain unassigned.
+  if(NumOfVertexLayers() > 0) {
+    vertexlevel2layer.clear();
+    vertexlevel2layer.resize(level(* v_layers.LastLayer().FirstVertex()) + 1, -1);
+    for(int layer = 1; layer <= NumOfVertexLayers(); ++layer) {
+      vertexlevel2layer[level(* vertices(layer)->FirstVertex())] = layer;
+    }
+  }
+
+  if(NumOfCellLayers() > 0) {
+    celllevel2layer  .clear();
+    celllevel2layer  .resize(level(* c_layers.LastLayer().FirstCell())   + 1, -1);
+    for(int layer = 1; layer <= NumOfCellLayers(); ++layer) {
+      celllevel2layer[level(*cells(layer)->FirstCell())] = layer;
+    }
+  }
+
+  if(far_distance_ == -1) {
+    far_distance_ = 1 + std::max( (vertexlevel2layer.empty() ? 0 : vertexlevel2layer.back()),
+				  (celllevel2layer  .empty() ? 0 : celllevel2layer  .back()));
+  }
+
+} 
+
+
+
+
+template<class CFG>
+template<class RANGE>
+void incidence_hull<CFG>::add_seed_range_incr(RANGE const& range)
+{
+  //FIXME: invalidates layers!
+  // level2layer does not change, as the same stencil is used.
+  typedef grid_types<RANGE> rgt;
+  if(!range.empty()) {
+    incidence_hull<CFG> range_hull(range, the_stencil, non_periodic, constant<typename gt::Cell, bool>(true)); 
+    for(LayerVertexIterator v(range_hull.FirstVertex()); !v.IsDone(); ++v)
+      // if( ! visited.defined(*v) || (*this)(*v) > range_hull(*v))
+      if( (*this)(*v) > range_hull(*v))
+	visited[*v] = range_hull.visited(*v);
+    for(LayerCellIterator   c(range_hull.FirstCell()); !c.IsDone(); ++c)
+      if( (*this)(*c) > range_hull(*c))
+	visited[*c] = range_hull.visited(*c);
   }
 }
+
+template<class CFG>
+template<class RANGE>
+void incidence_hull<CFG>::add_seed_range(RANGE const& range)
+{
+  // could be done much more economically.
+  typedef grid_types<RANGE> rgt;
+  if(!range.empty()) {
+    if(the_stencil.front() == vertex_tag) {
+      enumerated_subrange<grid_type> union_range(range.TheGrid()); 
+      typedef grid_types<enumerated_vertex_range<grid_type> > egt;
+      partial_grid_function<typename gt::Vertex, bool> in_old_range(union_range.TheGrid(), false);
+      if(NumOfVertexLayers() > 0) {
+	for(LayerVertexIterator v(* vertices(1)); !v.IsDone(); ++v) {
+	  in_old_range[*v] = true;
+	  union_range.push_back(*v);
+	}
+      }
+      for(typename rgt::VertexIterator v(range.FirstVertex()); ! v.IsDone(); ++v)
+	if(! in_old_range(*v))
+	  union_range.push_back(*v);
+
+      clear();
+      compute(union_range, the_stencil, non_periodic, constant<typename gt::Cell, bool>(true));
+    }
+    else if(the_stencil.front() == cell_tag) {
+      enumerated_subrange<grid_type> union_range(range.TheGrid()); 
+      typedef grid_types<enumerated_cell_range<grid_type> > egt;
+      partial_grid_function<typename gt::Cell, bool> in_old_seed(union_range.TheGrid(), false);
+      if(NumOfCellLayers() > 0) {
+	for(LayerCellIterator c(* cells(1)); !c.IsDone(); ++c) {
+	  in_old_seed[*c] = true;
+	  union_range.push_back(*c);
+	}
+      }
+      for(typename rgt::CellIterator v(range.FirstCell()); ! v.IsDone(); ++v)
+	if(! in_old_seed(*v))
+	  union_range.push_back(*v);
+      clear();
+      compute(union_range, the_stencil, non_periodic, constant<typename gt::Cell, bool>(true));
+    }  
+  }
+}
+
+
+
+
+template<class CFG>
+template<class RANGE>
+void incidence_hull<CFG>::remove_seed_range(RANGE const& range)
+{
+  // could be done much more economically.
+  typedef grid_types<RANGE> rgt;
+  if(! range.empty()) {
+    if(the_stencil.front() == vertex_tag) {
+      if(NumOfVertexLayers() > 0) {
+	enumerated_subrange<grid_type> diff(range.TheGrid());
+	typedef grid_types<enumerated_vertex_range<grid_type> > egt;
+	partial_grid_function<typename gt::Vertex, bool> in_range(range.TheGrid(), false);
+	for(typename rgt::VertexIterator v(range); !v.IsDone(); ++v)
+	  in_range[*v] = true;
+	for(typename egt::VertexIterator v(* vertices(1)); ! v.IsDone(); ++v)
+	  if(! in_range(*v))
+	    diff.push_back(*v);
+	clear();
+	compute(diff, the_stencil, non_periodic, constant<typename gt::Cell, bool>(true));
+      }
+    }
+    else if(the_stencil.front() == cell_tag) {
+      if(NumOfCellLayers() > 0) {
+	enumerated_subrange<grid_type> diff(range.TheGrid());
+	typedef grid_types<enumerated_cell_range<grid_type> > egt;
+	partial_grid_function<typename gt::Cell, bool> in_range(range.TheGrid(), false);
+	for(typename rgt::CellIterator c(range); !c.IsDone(); ++c)
+	  in_range[*c] = true;
+	for(typename egt::CellIterator c(* cells(1)); ! c.IsDone(); ++c)
+	  if(! in_range(*c))
+	    diff.push_back(*c);
+	clear();
+	compute(diff, the_stencil, non_periodic, constant<typename gt::Cell, bool>(true));
+      }
+    }  
+  }
+}
+
+
+
 
 } // namespace GrAL 
 
