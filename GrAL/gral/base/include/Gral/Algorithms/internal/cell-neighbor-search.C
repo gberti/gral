@@ -54,7 +54,8 @@ void CalculateNeighborCells(NBF           &  NB,
 			    CGT      const&)
 {
 
-  typedef typename CGT::CellIterator        CellIt;
+  //  typedef typename CGT::CellIterator        CellIt;
+  typedef typename CELLSET::CellIterator    CellIt;
   typedef typename CGT::Cell                Cell;
   typedef typename CGT::FacetOnCellIterator FacetOnCellIt;
 
@@ -63,7 +64,7 @@ void CalculateNeighborCells(NBF           &  NB,
   typedef vertex_set<typename CGT::Facet>    vtuple;
   // must be equal to FACETMAP::key_type 
 
-  CellIt c(cell_set);
+  CellIt c(cell_set.FirstCell());
   for(; !c.IsDone(); ++c){
     Cell C(*c);
     FacetOnCellIt f(C);
