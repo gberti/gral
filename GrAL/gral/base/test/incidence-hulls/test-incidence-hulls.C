@@ -50,12 +50,14 @@ int main() {
   c_layers.append(seed_c);
 
   int level = 1;
+  bool dummy = false;
   mark_on_cells<gt>(c_layers.LastLayer().FirstCell(),
 		    v_layers, c_layers,
 		    visited,
 		    s,
 		    level,
-		    constant<gt::Cell, bool>(true));
+		    constant<gt::Cell, bool>(true),
+		    dummy);
 
   cout << "Seed cell: " << seed_c.index() << endl;
   for(unsigned i = 1; i <= c_layers.NumOfLayers(); ++i) {
