@@ -5,10 +5,11 @@
 // $LICENSE
 
 #include "Container/my-hash-map.h" // STL adapted
-
 #include "Utility/pre-post-conditions.h"
+
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/grid-function-hash.h"
+#include "Gral/Base/map-element-iter-names.h"
 
 //----------------------------------------------------------------
 // 
@@ -61,74 +62,6 @@ private:
 };
 
 
-template<class EIt, class ER, class element_tag>
-struct map_element_iter_name {};
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, vertex_type_tag>
-{ 
-  typedef EIt VertexIterator;
-  VertexIterator FirstVertex() const { 
-    return VertexIterator(((ER const*)(this))->FirstElement());
-  }
-  unsigned NumOfVertices() const {
-    return (static_cast<ER const*>(this))->size();
-  }
-};
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, edge_type_tag>
-{ 
-  typedef EIt EdgeIterator;
-  EdgeIterator FirstEdge() const { 
-    return (static_cast<ER const*>(this))->FirstElement();
-  }
-  unsigned NumOfEdges() const {
-    return (static_cast<ER const*>(this))->size();
-  }
-};
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, facet_type_tag>
-{ 
-  typedef EIt FacetIterator;
-  FacetIterator FirstFacet() const { 
-    return (static_cast<ER const*>(this))->FirstElement();
-  }
-  unsigned NumOfFacets() const {
-    return (static_cast<ER const*>(this))->size();
-  }
-};
-
-// choose edge AND facet in 2D 
-// if types Edge and Facet coincide.
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, edge2d_type_tag> : 
-  public map_element_iter_name<EIt, ER, edge_type_tag>,
-  public map_element_iter_name<EIt, ER, facet_type_tag> {};
-
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, cell_type_tag>
-{ 
-  typedef EIt CellIterator;
-  CellIterator FirstCell() const { 
-    return (static_cast<ER const*>(this))->FirstElement();
-  }
-  unsigned NumOfCells() const {
-    return (static_cast<ER const*>(this))->size();
-  }
-};
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, cell2d_type_tag>
-  : public map_element_iter_name<EIt, ER, cell_type_tag> {};
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, cell3d_type_tag>
-  : public map_element_iter_name<EIt, ER, cell_type_tag> {};
-
 
 template<class E, class T>
 class partial_grid_function 
@@ -154,6 +87,11 @@ public:
     : base_gf(gg), default_value(T()) {} 
   partial_grid_function(const grid_type& gg, const T& dflt)
     : base_gf(gg), default_value(dflt)  {}
+
+  void init(grid_type const& gg, T const& t) {
+    set_grid(gg);
+    set_default(t);
+  }
   
   //----------------- data access operators -------------------------   
 
@@ -180,6 +118,7 @@ public:
     return ((*i).second);
     //    return (table[e]);
   }
+
 
   const T& get_default() const { return default_value;}
   void set_default(const T& t) { default_value = t;}
