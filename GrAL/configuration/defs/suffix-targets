@@ -83,6 +83,7 @@ RELPATH=../../..#
 ADDRELPATH=.#
 RELROOT=$(RELPATH)/$(ADDRELPATH)#
 
+DOXYGEN=$(shell which doxygen)
 doxy:
 	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(ALLROOT) -binpath $(LOCALBINPATH) \
         $(DOXYCFG)/doxy.paths.cfg                  > doxy.cfg.tmp
@@ -93,7 +94,7 @@ doxy:
 	cp $(CONFIGURATION)/doxycfg/header.html .
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
-         doxygen doxy.cfg.tmp;)
+         $(DOXYGEN) doxy.cfg.tmp;)
 	rm -f footer.html header.html
 	rm -f doxy.cfg.tmp 
 

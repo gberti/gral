@@ -68,7 +68,6 @@ public:
 
 private:
   struct holder: public  counted_obj {
-      // ~holder() { delete T_ptr; }
     ~holder() { copy_traits<T>::destroy(T_ptr); }
     T *T_ptr;
   };
