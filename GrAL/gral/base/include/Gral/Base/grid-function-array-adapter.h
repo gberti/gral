@@ -37,6 +37,8 @@ namespace gf_array_adapter {
   class value_proxy {
     T* f; // start address of xyz values of a vertex
     friend class value_type<T,N>;
+
+    value_proxy<T,N> & operator=(value_proxy<T,N>  const&);
   public:
     value_proxy(T* ff) : f(ff) {}
     inline void operator=(value_type<T,N> const& frc);
@@ -79,16 +81,18 @@ namespace gf_array_adapter {
     T f[1];
   public:
     value_type() {}
-    value_type(value_proxy<T,1> p)            { init(p.f);}
-    value_type(T const* f)               { init(f);}
+    value_type(value_proxy<T,1> p)    { init(p.f);}
+    value_type(T const* ff)           { init(ff);}
+    value_type(T t)                   { f[0] = t;}
+
     value_type& operator=(value_proxy<T,1> p) { init(p.f); return *this;}
 
 
     T const& operator()(int i) const { check_range(i); return f[i];}
     T const& operator[](int i) const { check_range(i); return f[i];}
     T      & operator[](int i)       { check_range(i); return f[i];}
-    operator T const& () const { return f[0];}
-    operator T       &()       { return f[0];}
+    operator T const&() const { return f[0];}
+    operator T      &()       { return f[0];}
 
     void check_range(int i) const {
       REQUIRE( 0 <= i && i < 1, "i = " << i << " out of range!\n",1);
@@ -103,7 +107,7 @@ namespace gf_array_adapter {
 
   template<class T, unsigned N>
   inline void value_proxy<T,N>::operator=(value_type<T,N> const& p)
-  { for(int i = 0; i < N; ++i) f[i] = p[i]; }
+  { for(int i = 0; i < (int)N; ++i) f[i] = p[i]; }
 
   template<class T, unsigned N>
   inline
@@ -185,7 +189,7 @@ public:
 
   value_proxy operator[](element_type const& v) 
     { return value_proxy(f + N*v.handle());}
-  value_type  operator()(element_type const& v) const 
+  const value_type operator()(element_type const& v) const 
     { return value_type(f + N*v.handle());}
 
 };

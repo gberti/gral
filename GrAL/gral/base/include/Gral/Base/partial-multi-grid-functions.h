@@ -1,0 +1,137 @@
+#ifndef GRAL_BASE_GB_PARTIAL_MULTI_GRIDFUNCTIONS_H
+#define GRAL_BASE_GB_PARTIAL_MULTI_GRIDFUNCTIONS_H
+
+// $LICENSE
+
+#include "Config/compiler-config.h"
+#include "Gral/Base/common-grid-basics.h"
+
+
+
+
+namespace detail {
+
+  template<class Grid, class T, int GD, int ED>
+  class partial_multi_gf_aux  : public partial_multi_gf_aux<Grid,T,GD,ED-1>
+  {
+  public:
+    typedef Grid grid_type;
+  private:
+    typedef typename grid_types<Grid>::element_d<ED>::type element_type;
+    typedef partial_multi_gf_aux<Grid,T,GD,ED-1>           base;
+
+    // partial_grid_function<element_type, T> f;
+    partial_grid_function<typename grid_types<Grid>::element_d<ED>::type, T> f;
+
+  public:
+    typedef typename base::value_type value_type;
+
+    partial_multi_gf_aux() {}
+    partial_multi_gf_aux(Grid const& g) : base(g), f(g) {}
+    partial_multi_gf_aux(Grid const& g, T const& t) : base(g,t), f(g,t) {}
+
+    using base::operator();
+    using base::operator[];
+    //  using base::ElementFunction_();
+    T  operator()(element_type const& e) const { return f(e);}
+    T& operator[](element_type const& e)       { return f[e];}
+
+    grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
+    grid_type const& TheGrid() const { return f.TheGrid();} 
+
+    void set_value_ (value_type const& t) { base::set_value_(t);  f.set_value(t);}
+    void set_default(value_type const& t) { base::set_default(t); f.set_default(t);}
+    void set_grid_(grid_type const& g)    { base::set_grid_(g);   f.set_grid(g);}
+
+ };
+
+  // end recursion
+  template<class Grid, class T, int GD>
+  class partial_multi_gf_aux<Grid, T, GD, 0> 
+  {
+  public:
+    typedef Grid grid_type;
+  private:
+    typedef typename grid_types<Grid>::Vertex  element_type;
+    typedef partial_grid_function<element_type, T> elem_gf_type;
+
+    elem_gf_type f;
+  public:
+    typedef T                                      value_type;
+    typedef typename elem_gf_type::reference       reference;
+    typedef typename elem_gf_type::const_reference const_reference;
+
+    partial_multi_gf_aux() {}
+    partial_multi_gf_aux(Grid const& g) : f(g) {}
+    partial_multi_gf_aux(Grid const& g, T const& t) :  f(g,t) {}
+
+
+    T  operator()(element_type const& e) const { return f(e);}
+    T& operator[](element_type const& e)       { return f[e];}
+
+    grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
+    grid_type const& TheGrid() const { return f.TheGrid();} 
+
+    void set_value_ (value_type const& t) { f.set_value(t);}
+    void set_default(value_type const& t) { f.set_default(t);}
+    void set_grid_(grid_type const& g)    { f.set_grid(g);}
+
+    const_reference get_default() { return f.get_default();}
+  };
+  
+
+  
+
+} // namespace detail
+
+
+
+
+/*! \brief Total grid function defined on all element types of <Grid>.
+    \ingroup gridfunctions
+
+   partial_multi_grid_function<Grid,T> defines a mapping
+   \f$ V(G) \cup E(G) \cup C(G) \mapsto T \f$ ( in the 2d case)
+
+   These classes are  fully generic and do not need any further
+   specialization, because they build on grid_function<Elt,T>.
+
+   \see partial_partial_multi_grid_function<Grid,T>
+   \see Module \ref gridfunctions
+*/
+//----------------------------------------------------------------
+
+
+template<class Grid, class T>
+class partial_multi_grid_function : public detail::partial_multi_gf_aux<Grid, T,  
+									grid_types<Grid>::dim, 
+									grid_types<Grid>::dim>
+{
+  typedef detail::partial_multi_gf_aux<Grid, T,  
+			       grid_types<Grid>::dim, 
+			       grid_types<Grid>::dim> base;
+
+public: 
+  typedef Grid grid_type;
+  typedef T    value_type;
+
+  partial_multi_grid_function() {}
+  partial_multi_grid_function(const grid_type& g) :  base(g) {}
+  partial_multi_grid_function(const grid_type& g, T const& t) :  base(g,t) {}
+
+  template<class E>
+  grid_function<E,T> const& ElementFunction() const { return ElementFunction_(E());}
+
+  template<class E>
+  unsigned size() const { return ElementFunction<E>().size();}
+  
+  void set_value(value_type const& t) { set_value_(t);}
+  void set_grid(grid_type const& g)   { set_grid_(g);}
+  void set_grid(grid_type const& g, value_type const& t) { set_grid_(g); set_value(t); }
+
+};
+
+
+
+
+#endif
