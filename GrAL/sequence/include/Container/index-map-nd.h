@@ -4,6 +4,7 @@
 // $LICENSE
 
 #include "Container/tuple.h"
+#include "Container/tuple-point-traits.h"
 #include "Utility/pre-post-conditions.h"
 
 /*! \brief Map between \f$ [l_0,b_0[ \times [l_1,b_1[ \times \cdots \times [l_{N-1},b_{N-1}[ \subset \Z^N \f$ 
