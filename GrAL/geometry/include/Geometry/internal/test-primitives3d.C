@@ -104,11 +104,11 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
   out << inv[0] << "  " << inv[1] << "  " << inv[2] << '\n';
 
   out<< "ap::condition(e[0],e[1],e[2],ap::Norm_frobenius()) = "
-     <<  ap::condition(e[0],e[1],e[2],ap::Norm_frobenius()) << "\n";
+     <<  ap::condition(e[0],e[1],e[2],typename ap::Norm_frobenius()) << "\n";
   out<< "ap::condition(e[0],e[1],e[2],ap::Norm_1()) = "
-     <<  ap::condition(e[0],e[1],e[2],ap::Norm_1()) << "\n";
+     <<  ap::condition(e[0],e[1],e[2],typename ap::Norm_1()) << "\n";
   out<< "ap::condition(e[0],e[1],e[2],ap::Norm_infinity()) = "
-     <<  ap::condition(e[0],e[1],e[2],ap::Norm_infinity()) << "\n";
+     <<  ap::condition(e[0],e[1],e[2],typename ap::Norm_infinity()) << "\n";
 
   POINT a[3];
   for(int i = 0; i < 3; ++i) {
@@ -132,11 +132,11 @@ void test_algebraic_primitives3d<POINT>::do_tests(std::ostream& out)
       << ap::matrixnorm_infinity(a[0],a[1],a[2]) << '\n';
 
   out<< "ap::condition(a[0],a[1],a[2],ap::Norm_frobenius()) = "
-     <<  ap::condition(a[0],a[1],a[2],ap::Norm_frobenius()) << "\n";
+     <<  ap::condition(a[0],a[1],a[2],typename ap::Norm_frobenius()) << "\n";
   out<< "ap::condition(a[0],a[1],a[2],ap::Norm_1()) = "
-     <<  ap::condition(a[0],a[1],a[2],ap::Norm_1()) << "\n";
+     <<  ap::condition(a[0],a[1],a[2],typename ap::Norm_1()) << "\n";
   out<< "ap::condition(a[0],a[1],a[2],ap::Norm_infinity()) = "
-     <<  ap::condition(a[0],a[1],a[2],ap::Norm_infinity()) << "\n";
+     <<  ap::condition(a[0],a[1],a[2],typename ap::Norm_infinity()) << "\n";
 
 
 
