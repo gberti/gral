@@ -408,7 +408,7 @@ round_tuple(tuple<T,N> const& a)
   tuple<T,N> res;
   for(unsigned i = 0; i < N; ++i)
     // round not defined in <cmath> ??
-    res[i] = ceil(a[i]+0.5);
+    res[i] = ceil(a[i]-0.5);
   return res;
 }
 
