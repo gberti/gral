@@ -4,4 +4,4 @@ include $(THISDIR)/../make.defs
 MPI_INCLUDES =-I/opt/local/lib/mpich/include
 MPI_LIBRARY = -R/opt/local/lib -L/opt/local/lib/mpich/lib/solaris/ch_p4  -lmpi -lsocket -lnsl -lm
 
-CCFLAGS  = -g -DDEBUG -Wall  
+CCFLAGS  += -g -DDEBUG
