@@ -67,7 +67,7 @@ int main() {
     typedef enumerated_subrange<CartesianGrid2D> range_type;
     range_type  SR(R2x2);
     for(rgt::CellIterator c(R2x2); ! c.IsDone(); ++c)
-      if( ((*c).ll().x + (*c).ll().y) % 2 == 0)
+      if( ((*c).ll().x() + (*c).ll().y()) % 2 == 0)
 	SR.append_cell(c.handle());
     // should be done automatically!
     SR.init();
