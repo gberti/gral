@@ -1,0 +1,176 @@
+Short guide to building and installing GrAL v0.2
+=================================================
+
+
+Building it:
+------------
+------------
+
+0) Environment:
+---------------
+
+   - Version 0.2 works with g++ 2.95 (tested on Solaris and RH Linux),
+     2.96 (RH Linux), and 3.0.1 (RH Linux).
+     In principle, any fairly standard compliant C++ compiler
+     should do (Exception: Hash tables are used as if in namespace std)
+
+   - Makefiles require GNU make. 
+     (Seems to be the only way to portable makefiles)
+
+   - Some scripts require Perl. 
+     (Not needed for the following steps)
+
+1) Unpack the stuff:
+--------------------
+$ tar -xfv gral-src.tar
+
+This will create a directory GrAL-0.2 
+(corresponds to GRALROOT in Makefiles).
+
+The preferred place to unpack the documentation is inside 
+the GrAL directory (creates doc/ directory).
+
+Most global configuration is found in configuration/ .
+You might want to look into configuration/defs/make.defs
+and configuration/defs/suffix-targets.
+Here, you can set globally compiler and architecture
+(needed to select appropriate options).
+
+Some modules use 3rd party software, 
+the corresponding targets are disabled by default
+(see below).
+
+
+2a) Adapt the GRALROOT variable
+-------------------------------
+In the GRALROOT directory (see above), run
+$ gmake init
+
+This will make all occurences of GRALROOT in subdir
+Makefiles/mk.config's point to your GRALROOT.
+
+
+[ If you want to operate on individual modules, there are two choices:
+  a)  Edit in mk.config the variable GRALROOT 
+     to point to the top level directory in the tar file (i.e. GrAL/). 
+     [This should hopefully be the only thing to edit in each module ...]
+  b) Alternatively, add an argument GRALROOT=/path/to/GrAL to gmake calls.
+]
+
+2b) Make libraries:
+-------------------
+Run from GRALROOT
+$ gmake [DEBUG=debug|opt]
+        [CCNAME=gcc/gcc3]
+This builds some libraries (not all modules produce libraries),
+which are written to <module>/lib/<ARCH>/<CCNAME>/<DEBUG>/.
+
+  -  If DEBUG=opt, optimized version are built.
+  -  CCNAME selects a C++ compiler, default is CCNAME=gcc.
+     If you select a different one (currently only gcc3 for
+     gcc 3.x supported), you will probalby have to adapt the CCC variable
+     for the actual compiler binary, either by editing
+     configuration/defs/<CCNAME>/make.defs,
+     or by passing CCC=<path/to/compiler> to make on the command line.
+     There are two different variables CCNAME and CCC, because CCNAME
+     is used to build pathnames, and CCC might contain absolute paths
+     to compiler binaries.
+     By adding subdirectories configuration/defs/<CCNAME> analogously to
+     those alre
+
+3) Install it:
+--------------
+To install the headers and libraries (not every module
+produces a library) in one central place, 
+either edit the PREFIX variable in configuration/defs/make.defs,
+or call gmake with an additional PREFIX=/your/prefix argument, 
+e.g. PREFIX=~/lib/gral/ :
+
+$ gmake install [PREFIX=/your/prefix]
+
+This will copy libraries and header files to PREFIX/lib/
+and PREFIX/include, resp.
+
+
+4) Build tests:
+---------------
+4a) To only build tests, call
+$ gmake test 
+
+4b) To perform the checks, call
+$ gmake check 
+
+
+4') To build & check at once, do
+$ gmake test-check-clean 
+(will clean after check, so it does not need so much
+ temporary disk space)
+
+
+If you want to check also the correct installation of GrAL under PREFIX,
+use the commandline 
+$ gmake test PREFIX=</your/prefix> DEVELOP=user
+
+This looks for include files and libraries under PREFIX.
+
+
+
+Notes on using GrAL parts depending 3rd party libraries
+-------------------------------------------------------
+-------------------------------------------------------
+
+These are disabled by default.
+
+- If you want to test also  MPI-related stuff,
+  use the above with setting WITHMPI=true,
+  or set this variable in gral/distributed/mk.config
+- If you want to test Metis related stuff (in gral/partitioning),
+  set WITHMETIS=true on the command line or in
+  gral/partitioning/mk.config (here you have also to adapt
+  some paths pointing to Metis)
+
+
+Documentation 
+-------------
+-------------
+
+Documentation is available separately on the GrAL home page.
+If unpacked in GrAL/, the file GrAL/index.html points to the
+right location.
+
+
+In case you want to build it from sources,
+note the following:
+
+Code documentation needs doxygen
+-> http://www.stack.nl/~dimitri/doxygen/index.html
+
+Concept documentation (in gral/base/doc/hyperlatex) 
+needs Hyperlatex 2.3.1 
+-> http://www.cs.uu.nl/~otfried/Hyperlatex/
+(Does NOT work with the newest version of hyperlatex! 
+ This will be corrected in future versions of GrAL.)
+
+To build the documentation, type
+$ gmake doc
+
+(to make entire docs)
+
+or
+$ gmake doxy 
+
+(to make only source code docs).
+
+This creates in each module docs in doxygen/html.
+The file gral/doxygen/html/index.html points to all module
+documentations.
+
+
+
+Enjoy!
+
+Feedback:
+---------
+
+I welcome your suggestions, bug reports, constructive criticism etc!
+Please write to berti@ccrl-nece.de

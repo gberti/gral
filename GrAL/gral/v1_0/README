@@ -1,0 +1,76 @@
+
+  GrAL - The Grid Algorithms Library 
+  ==================================
+
+     Version 0.2, November 2001
+
+  Copyright (c) 1997-2001  Guntram Berti,
+  C&C Research Laboratories, NEC Europe Ltd.
+  Rathausallee 10, 53757 St. Augustin, Germany.
+  See the file LICENSE for details.
+
+       The home page of GrAL is  
+  http://www.math.tu-cottbus/~berti/gral
+
+   The author can be contacted at
+        berti@ccrl-nece.de
+
+See the file INSTALL for the installation procedure.
+
+GrAL has been split into several modules, some of 
+which have nothing to do with grids per se.
+See the file MODULES for a short description of 
+the individual modules.
+
+Many common makefile definitions and configuration settings
+have been factored out and can be found in the configuration
+module.
+
+The documentation is available separately,
+but it can also be extracted from the sources.
+See the file INSTALL for details.
+Please note that the documentation is still incomplete.
+
+If you have questions, suggestions, found a bug,
+helpful criticism, or even want to contribute,
+do not hesitate to contact me!
+
+ACKNOWLEDGMENTS
+----------------
+
+The GrAL was developed during my work at the group
+Numerical Mathematics and Scientific Computing (NMWR)
+at TU Cottbus, Germany, headed by Prof. Bader.
+Special thanks go to my colleagues, in particular
+Klaus-Dieter Krannich for porting to the SP-2 and 
+many helpful criticism and discussions,
+and Klaus Schenk, who was the first user in the context
+of a Finite Volume solver for the 2D Euler equations.
+
+
+I am grateful to my new employer 
+(C&C Research Labs, NEC Europe Ltd)
+to allow me to continue work on GrAL.
+
+
+FUTURE PLANS
+------------
+
+The GrAL currently contains only a part of the components
+I have implemented. I am working on merging the following
+into GrAL (that means, modularizing  and documenting it):
+
+- hierarchical grids and multigrid
+- grid refinement 
+- simple FEM system (2D Poisson equation)
+- simple FV solver  (2D Euler/Two-component Euler/Advection equation)
+
+
+----------------------------------------------------------
+
+
+
+
+
+
+
