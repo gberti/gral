@@ -81,18 +81,19 @@ public:
 };
 
 
-/*! \brief Copy an overlap range
+/*! \brief Copy an overlap range to output adapter
     \ingroup overlapds
-     This is a specialization of copy_overlap_ranges.
+     This is a specialization of CopyOverlapRanges 
+     for copying to a overlap_range_output adapter.
 */
 template
 < class SrcRange, 
   class E, 
   class Filter
 >
-void copy_overlap_ranges(SrcRange                const& src,
-                         overlap_range_output<E>      & dest, 
-                         Filter                  const& f)
+void CopyOverlapRanges(overlap_range_output<E>      & dest, 
+                       SrcRange                const& src,
+                       Filter                  const& f)
 { dest.copy_from(src,f);}
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
