@@ -15,7 +15,7 @@
 #include <vector.h> 
 
 #include "Utility/pre-post-conditions.h"
-#include "Geometry/point3.h"
+#include "Gral/Grids/Complex2D/point.h"
 
 #include "Gral/Base/common-grid-basics.h"
 
@@ -434,6 +434,7 @@ public:
 
   friend_for_input(Complex2D& cc) : _cc(cc) {}
 
+  void clear() { _cc.clear();}
   boundary_facet_list&    boundary()  {return _cc._boundary;} 
   vertex_list_complex2d& _vertices()  {return _cc._vertices;}
   cell_list_complex2d&   _cells()     {return _cc._cells;}
