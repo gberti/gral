@@ -50,7 +50,8 @@ run:
 	$(MPIRUN) -v -np $(NP) -machinefile ./mpihosts $(GDB)  test-distributed
 
 check:
-	./runtest $(MPIRUN)
+	./runtest    $(MPIRUN)
+	./runtest-io $(MPIRUN)
 
 
 
