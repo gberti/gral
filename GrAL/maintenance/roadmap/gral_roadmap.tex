@@ -11,8 +11,15 @@
 \usepackage{url}
 \usepackage{cite}
 \usepackage{color}
+\usepackage{xspace}
+
+\usepackage{amsfonts}
+\usepackage{euler}
 
 \newcommand{\Revision}{$Revision$}
+\newcommand{\GrAL}{$GrAL$\xspace}
+\newcommand{\note}[1]{\emph{#1}}
+
 % indentation 
 \settextfraction{0.9}
 %\setlength{\topmargin}{-2cm}
@@ -33,6 +40,8 @@ $<$putanowr@twins.pk.edu.pl$>$\\
 %In¿ynierii L±dowej (L5)\\
 %Politechnika Krakowska
 %$<$putanowr@twins.pk.edu.pl$>$\\
+Guntram Berti\\
+\url{<berti@ccrl-nece.de>}
 }
 \title{GrAL development roadmap}
 \date{\Revision\\%
@@ -44,19 +53,77 @@ $<$putanowr@twins.pk.edu.pl$>$\\
 \tableofcontents
 \section{GrAL overview}
 \emph{FIXME: some general GrAL intro}
+
 \section{Future directions}
-\emph{FIXME: Short summary of GrAL future development}
+
+\subsection{Concepts}
+Some of the \GrAL concepts need to be refined or to be redefined more precisely.
+Also, new concepts need to be introduced, for example for Cartesian grids or grid geometries.
+
+\begin{itemize}
+\item Distinguish first class grids, grid sub ranges, and grid views in \texttt{grid\_types}.
+Introduce types \texttt{base\_grid\_type} and \texttt{bottom\_grid\_type}.
+\item Introduce taxonomy for grid geometries, 
+for instance Cartesian geometry / linear geometry / non-linear (curvilinear) geometry
+\item Create concepts for archetype geometries (ie. geometries for grid archetypes), for specifying local
+coordinates on cells (needed or at least useful for FEM).
+\item Create concepts for Cartesian grids 
+(essentially this means to formalize stuff found in \texttt{CartesianGridND}).
+\item $\ldots$
+\end{itemize}
+
+\subsection{Components}
+
+\begin{itemize}
+\item Implement concept checking
+\item Implement test code for each component 
+\item Hierarchical unstructured grids
+\item Distributed hierarchical grids
+\item $\ldots$
+\end{itemize}
+
 \section{GrAL core functionality}
   \subsection{Grid functions algebra and calculus}
-  Module providing algebraic operations on grid functions (+ - * /)
-  and module providing basic calculus operation (gradient, divergence, curl,
-  etc.)
+
+  \begin{itemize}
+  \item Module providing algebraic operations on grid functions (+ - * /).
+  \item Module providing basic calculus operation (gradient, divergence, curl, etc.)
+    This requires first a geometric grid function or field, that is, a function
+    which can be evaluated at each geometric point, not just at grid elements. This is 
+    a continuous concept, in contrast to grid functions which are discrete (combinatorial)
+    concepts. This concept is not (yet) defined in \GrAL, but one implementation is
+     in the gral/geometry module (\texttt{geometric\_field}). 
+     This is based on cell-wise interpolators which operate on local coordinates (to make this work
+     generically, we probably need the archetype geometry concept mentioned above).
+     So (\texttt{geometric\_field}) implements a piece-wise defined function.
+     Typically, an interpolator is a finite element type interpolation scheme.
+    \end{itemize}
+
   \subsection{Support for curved geometries}
+   A special case of curved geometries is implementing them via cell-wise interpolation of local coordinates,
+   as mentioned before. A different type of curvilinear geometry would be the composition of a linear geometry with 
+   an analytically defined mapping. 
+   Basically, measurement operations like \texttt{volume()} have to be implemented differently
+   for non-linear geometries. Because in general we need to use numerical approximations for such
+   operations, the question pops up whether these approximations are a part of the geometry?
+   Probably yes.
+
 
 \section{GrAL plug-ins}
 \subsection{Grid generators}
 A valuable extension of GrAL library would be a module providing interface
 to some grid generation tools, e.g. Triangle, NetGen, GRUMMP. 
+This is a twofold problem. First, we have to provide a way to describe the geometry
+(domains) these tools work on in a \GrAL way, and second,
+we have to adapt the output of the mesh generators to the GrAL interface
+(which is probably easier).
+The first problem can be solved for a number of mesh generators which expect their 
+input as a sort of (general) grid, e.g. Triangle. Other representations (CSG) may be 
+more difficult or at least require to leave/extend the current scope of \GrAL.
+Therefore, it may be wise to start with the simpler case 
+(a-geometric-domain\--is-just-another-grid).
+
+
 
 \subsection{Storage formats}
 One point where GrAL library can be visibly enhanced is wider support
@@ -69,17 +136,22 @@ can be often easier than providing a fully fledged grid data structure adapter.
 The more file formats is supported by GrAL library, the bigger chances that 
 more users will pick it as a basis for their projects.
 
+
 Some formats to be supported:
 \begin{itemize}
  \item HDF5
  \item XML based format proposed by Adaptive Software Project
- \item formats for FEM packages: ANSYS, FEAP
+ \item formats for FEM packages: ANSYS, FEAP. 
+   Unfortunately, there seems to be no common format understood by all commercial FEM
+   applications.
 \end{itemize}
 
 \subsubsection{Grid file format recognition tools}
 One useful addition to GrAL library would be a facility to recognize file
 formats. This facility would allow an automatic choice of a proper module for
 I/O operations.
+\note{Should this some sort of plugin/dynamic linking? 
+This may be difficult to combine with templates.}
 
 \subsubsection{Improvement of GrAL complex2d-format}
 GrAL complex2d-format comes in two flavours: 0-bases and 1-based numbering.
@@ -93,11 +165,20 @@ in the first line of file as a kind of file meta-data:
 12 15
 .......
 \end{verbatim}
+
+\note{GB: I would argue to abolish 1-based files alltogether.}
+
 \subsubsection{GrAL complex3d-format}
 Provide classes OstreamComplex3D and IstreamComplex3D.
+
+\note{There is no corresponding file format in \GrAL up to now.}
+
 \subsubsection{Tutorial}
 Much needed would be a tutorial explaining step by step programming classes
 for I/O (especially archetype concept).
+\note{We could extend the example already in the \GrAL docu about \texttt{Triang2D}.}
+
+
 \subsection{Grid structure adapters}
 
 Though GrAL library provides lot of functionality for grid manipulations,
@@ -119,7 +200,10 @@ Candidates for grid structure adapters:
   \item GTS (GNU Triangulated Surface) data structures
   \item Boost Graph Library
   \item CGAL ?
+  \item Qhull
+  \item perhaps other useful libraries, like mesh partitioning 
 \end{itemize}
+
 
 \section{GrAL development tools}
 This point concentrates on software engineering side of building GrAL.
@@ -324,7 +408,7 @@ etc. will be hidden behind GrAL interface.
    of successful command line environments - the already mentioned t{\tt
    textutils} or closer to GrAL GMT (The Generic Mapping Tools)
    \url{http://gmt.soest.hawaii.edu/}.
-   \item{The frequency of use of such tools will be low and their usefulness
+   \item {\it The frequency of use of such tools will be low and their usefulness
    dubious. They may end up playing an ornamental role.}\\ Well, these tools are
    not a panacea for grid processing. The whole point in this exercise lies in
    providing suitably grained environment for grid processing, as illustrated
