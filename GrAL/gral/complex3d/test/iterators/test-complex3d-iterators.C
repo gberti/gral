@@ -14,7 +14,8 @@
 
 int main(int argc, char* argv[]) {
   using namespace std;
-  
+  using cartesian3d::CartesianGrid3D;
+
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"map.in","main");
 
   int nx = 3, ny = 3, nz = 3; 

@@ -14,10 +14,11 @@
 
 int main() {
   using namespace std;
+  using namespace cartesian3d;
  
   // create Cartesian grid & geometry
-  typedef CartesianGrid3D            reg_grid_type;
-  typedef grid_types<reg_grid_type>  rgt; 
+  typedef CartesianGrid3D                           reg_grid_type;
+  typedef grid_types<reg_grid_type>                 rgt; 
   typedef coordN<3>                                 coord_type;
   typedef stdext::identity<coord_type>              mapping_type;
   typedef mapped_geometry_cartesian3d<mapping_type> reg_geom_type;

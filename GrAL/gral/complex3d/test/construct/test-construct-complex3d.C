@@ -7,6 +7,7 @@
 
 int main() {
   using std::cout;  
+  using cartesian3d::CartesianGrid3D;
 
   CartesianGrid3D R(3,3,3);
   Complex3D       G;

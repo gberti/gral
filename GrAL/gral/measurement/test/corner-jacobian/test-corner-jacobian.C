@@ -47,6 +47,8 @@ struct point_traits<tuple<T,N> >
 
 int main(int argc, char* argv[]) {
   using std::cout;
+  using cartesian3d::CartesianGrid3D;
+  using cartesian3d::mapped_geometry_cartesian3d;
 
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"map.in","main");
   double wf = 0.0;// warping factor.
