@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_STREAM_GRID_MASK_H
-#define NMWR_GB_STREAM_GRID_MASK_H
+#ifndef NMWR_GB_STREAM_GRID_ADAPTER_H
+#define NMWR_GB_STREAM_GRID_ADAPTER_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -12,20 +12,22 @@
 #include "Grids/grid-types.h"
 
 //----------------------------------------------------------------
-//
-//  Grid-like iterator from a flat integer data stream encoding
-//  local vertices of cells as follows:
-//  cells / vertices are implicitely numerated 0 ... nc-1 / nv-1
-//  The integer sequence contains the values
-//  NV_0                  ( # vertices of cell 0)
-//  LV1_0  ... LV1_NV_0   ( global numbers of the NV_0 vertices of cell 0)
-//   ....   
-//  NV_nc_1               ( # vertices of cell nc-1)
-//  LVnc_1 ... LVnc_NV_nc ( global numbers of the NV_nc vertices of cell nc-1)
-//  
-// This can be used to construct grid from files, message passing
-// buffers and other sequentialized contexts.
-//
+/*! \defgroup streamgrid Adapter for serial grid representation
+
+  \brief  Grid-like iterator from a flat integer data stream.
+
+  The format of the serial representation is as follows:
+  - Cells / vertices are implicitely numerated 0 ... nc-1 / nv-1
+  - The integer sequence contains the values
+    - NV_0                  ( # vertices of cell 0)
+    - LV1_0  ... LV1_NV_0   ( global numbers of the NV_0 vertices of cell 0) <BR>
+      ....    <BR>
+      NV_nc_1               ( # vertices of cell nc-1)
+    - LVnc_1 ... LVnc_NV_nc ( global numbers of the NV_nc vertices of cell nc-1)
+  
+  This can be used to construct grids from files, message passing
+  buffers and other sequentialized contexts.
+*/
 //----------------------------------------------------------------
 
 template<class It>
@@ -41,6 +43,9 @@ class stream_geom_mask;
 //                 Vertex / VertexIterator
 //----------------------------------------------------------------
 
+/*! \ingroup  streamgrid
+
+ */
 template<class It>
 class stream_grid_mask_vertex {
   typedef stream_grid_mask_vertex<It> self;
@@ -68,6 +73,9 @@ public:
 //----------------------------------------------------------------
 
 
+/*! \ingroup  streamgrid
+
+ */
 template<class It>
 class stream_grid_mask_cell {
   typedef stream_grid_mask_vertex_on_cell<It> VertexOnCellIterator;
@@ -107,6 +115,9 @@ public:
 //                 VertexOnCellIterator
 //----------------------------------------------------------------
 
+/*! \ingroup  streamgrid
+
+ */
 template<class It>
 class stream_grid_mask_vertex_on_cell {
   typedef stream_grid_mask<It>         grid_type;
@@ -138,6 +149,9 @@ public:
 //                         Grid
 //----------------------------------------------------------------
 
+/*! \ingroup  streamgrid
+
+ */
 template<class It>
 class stream_grid_mask {
 private:
@@ -174,12 +188,18 @@ public:
 };
 
 
+/*! \ingroup  streamgrid
+
+ */
 template<class It>
 inline
 stream_grid_mask<It>
 StreamGridMask(int nv, int nc, It it)
 { return stream_grid_mask<It>(nv,nc,it);}
 
+/*! \ingroup  streamgrid
+
+ */
 template<class It>
 inline
 stream_grid_mask<It>
@@ -192,8 +212,6 @@ StreamGridMask(int nv, int nc, It it, int off)
 //----------------------------------------------------------------
 
 
-// with partial specialization, we could do this directly
-// for grid_types
 template<class It>
 struct grid_types_help_stream_grid_mask  {
   typedef stream_grid_mask<It> Grid;
@@ -208,15 +226,9 @@ struct grid_types_help_stream_grid_mask  {
 
 };
 
-#define DEFINE_GRID_TYPES_FOR_STREAM_MASK(I) \
-struct grid_types<stream_grid_mask< I > > \
- : public grid_types_help_stream_grid_mask< I > {};
-
-#ifdef NMWR_PARTIAL_SPEC
 template<class It>
 struct grid_types<stream_grid_mask< It > > 
  : public grid_types_help_stream_grid_mask< It > {};
-#endif
 
 
 template<class It>
@@ -233,7 +245,9 @@ stream_grid_mask_cell<It>::FirstVertex() const
 { return VertexOnCellIterator(*the_grid,c,vertices);}
 
 
+/*! \ingroup streamgrid
 
+ */
 template<class It>
 class stream_geom_mask {
 private:
@@ -249,6 +263,9 @@ public:
   { return begin[v.handle() - v.TheGrid().offset()];}
 };
 
+/*! \ingroup streamgrid
+
+ */
 template<class It>
 inline
 stream_geom_mask<It>
