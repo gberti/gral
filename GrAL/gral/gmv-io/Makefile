@@ -28,6 +28,8 @@ install-headers:
 	cp  include/Gral/$$i/*.C $(INSTALLHEADERS)/Gral/$$i || echo "no .C files in dir"; \
         done;
 
+install: install-headers install-libs
+
 clean: stdclean
 	(cd doc;  $(MAKE) clean DEPS="" ALLROOT=$(ALLROOT))
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;

@@ -19,7 +19,6 @@ compile:
 lib:
 
 DIRS = IO
-#SHELL=/bin/bash
 
 install-headers:
 	for i in $(DIRS);\
@@ -27,6 +26,8 @@ install-headers:
 	cp  include/Gral/$$i/*.h $(INSTALLHEADERS)/Gral/$$i || echo "no .h files in dir"; \
 	cp  include/Gral/$$i/*.C $(INSTALLHEADERS)/Gral/$$i || echo "no .C files in dir"; \
         done;
+
+install: install-headers install-libs
 
 clean: stdclean
 	(cd doc;  $(MAKE) clean DEPS="" ALLROOT=$(ALLROOT))
