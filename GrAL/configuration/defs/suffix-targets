@@ -44,11 +44,12 @@ standard-test-check-clean:
 standard-test-check-clean-force:
 	(cd test; $(MAKE) new-check-clean-force)
 
-
+CHECKER=$(HOME)/bin/valgrind --leak-check=yes
 
 run-check:
 	@(out=$(EXEC).out; \
           echo='echo -e'; \
+         rm -f *.out; \
          if ! ./$(EXEC)  > $$out 2>&1 ; \
          then \
          $$echo "ERROR running $(EXEC) "; \
@@ -56,6 +57,7 @@ run-check:
          cat $$out; \
          $$echo " End output "; \
          else \
+         $(CHECKER) ./$(EXEC) > $$out.valgrind 2>&1 ; \
          $$echo "\n"; \
          for i in  *.out; \
          do \
@@ -171,7 +173,7 @@ local-doxy:
 	cp $(DOXYHEADER) .
 	cp $(DOXYFOOTER) .
 	mkdir -p doxygen
-	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
+	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(DOXYCFG):$(CONFIGURATION)/tex; export TEXINPUTS; \
          $(DOXYGEN) doxy.cfg.tmp;)
 	rm -f footer.html header.html
 	rm -f doxy.cfg.tmp 
