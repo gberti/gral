@@ -10,6 +10,8 @@
 #include "Utility/algebraic-operators.h"
 #include "Utility/relational-operators.h"
 
+#include <cmath>
+
 // 'internal' class 
 template<class T, unsigned N>
 class tuple_base {
@@ -79,12 +81,12 @@ class tuple : public tuple_base<T,N> {
   }
   template<class U>
   tuple(tuple<U,N> const& rhs) 
-   { for(int i = 0; i < N; ++i) X[i] = rhs[i];}
+   { for(unsigned i = 0; i < N; ++i) X[i] = T(rhs[i]);}
 
-  tuple<T,N> operator-() const { tuple<T,N> res; for(int i = 0; i < N; ++i) res[i] = -X[i]; return res;}
+  tuple<T,N> operator-() const { tuple<T,N> res; for(int i = 0; i < (int)N; ++i) res[i] = -X[i]; return res;}
   
-  tuple<T,N>& operator+=(tuple<T,N> const& rhs) { for(int i = 0; i < N; ++i) X[i] += rhs[i]; return *this;}
-  tuple<T,N>& operator*=(T a)                   { for(int i = 0; i < N; ++i) X[i] *= a;      return *this;}
+  tuple<T,N>& operator+=(tuple<T,N> const& rhs) { for(int i = 0; i < (int)N; ++i) X[i] += rhs[i]; return *this;}
+  tuple<T,N>& operator*=(T a)                   { for(int i = 0; i < (int)N; ++i) X[i] *= a;      return *this;}
 };
 
 template<class T>
@@ -393,6 +395,22 @@ ceil_tuple(tuple<T,N> const& a)
     res[i] = ceil(a[i]);
   return res;
 }
+/*! \brief component-wise rounding to next integer
+
+    \f$ (a_0, \ldots, a_{N-1}) \mapsto (\lceil a_0-0.5\rceil, \ldots, \lceil a_{N-1}-0.5\rceil) \f$
+
+*/
+template<class T, unsigned N>
+inline
+tuple<T,N>
+round_tuple(tuple<T,N> const& a)
+{ 
+  tuple<T,N> res;
+  for(unsigned i = 0; i < N; ++i)
+    // round not defined in <cmath> ??
+    res[i] = ceil(a[i]+0.5);
+  return res;
+}
 
 
 
@@ -411,6 +429,21 @@ does_divide(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 
 
 
+/*! \brief Restrict (clamp) a tuple to a box
+
+    \c clamp_tuple(low,high,p) is the point nearest to \c p within \c [low,high].
+
+*/
+template<class T, unsigned N>
+inline
+tuple<T,N>
+clamp_tuple(tuple<T,N> const& low, tuple<T,N> const& high, tuple<T,N> const p)
+{ 
+  tuple<T,N> res;
+  for(unsigned i = 0; i < N; ++i)
+    res[i] = (p[i] < low[i] ? low[i] : ( high[i] < p[i] ? high[i] : p[i]));
+  return res;
+}
 
 
 #endif
