@@ -25,6 +25,7 @@ endif
 ifndef DEBUG
 export DEBUG  =debug#    # opt, debug
 endif
+
 ifndef DEVELOP
 export DEVELOP=develop# # develop, user
 endif
@@ -74,10 +75,12 @@ export LIBPATH:=$(DEFPATH)#
 
 # The includes and libs of the current module
 ifdef ROOT
+ifeq ($(DEVELOP),develop)
 export INCDIR   =$(ROOT)/include#
 export LIBDIR   =$(ROOT)/lib/$(LIBPATH)#
 IFLAGS  += -I$(INCDIR)
 LDFLAGS += -L$(LIBDIR)
+endif
 endif
 
 

@@ -4,7 +4,10 @@ Short guide to building and installing GrAL v0.2
 
 Building it:
 ------------
+------------
+
 0) Environment:
+---------------
 
    - Version 0.2 works with g++ 2.95 (tested on Solaris and RH Linux),
      2.96 (RH Linux), and 3.0.1 (RH Linux).
@@ -18,6 +21,7 @@ Building it:
      (Not needed for the following steps)
 
 1) Unpack the stuff:
+--------------------
 $ tar -xfv gral-src.tar
 
 This will create a directory GrAL-0.2 
@@ -38,6 +42,7 @@ the corresponding targets are disabled by default
 
 
 2a) Adapt the GRALROOT variable
+-------------------------------
 In the GRALROOT directory (see above), run
 $ gmake init
 
@@ -52,14 +57,29 @@ Makefiles/mk.config's point to your GRALROOT.
   b) Alternatively, add an argument GRALROOT=/path/to/GrAL to gmake calls.
 ]
 
-2b) Run from GRALROOT
-$ gmake new
+2b) Make libraries:
+-------------------
+Run from GRALROOT
+$ gmake [DEBUG=debug|opt]
+        [CCNAME=gcc/gcc3]
+This builds some libraries (not all modules produce libraries),
+which are written to <module>/lib/<ARCH>/<CCNAME>/<DEBUG>/.
 
-This builds some libraries (not all modules produce libraries).
-These are written to <module>/lib/<ARCH>/<CCNAME>/<DEBUG>/.
+  -  If DEBUG=opt, optimized version are built.
+  -  CCNAME selects a C++ compiler, default is CCNAME=gcc.
+     If you select a different one (currently only gcc3 for
+     gcc 3.x supported), you will probalby have to adapt the CCC variable
+     for the actual compiler binary, either by editing
+     configuration/defs/<CCNAME>/make.defs,
+     or by passing CCC=<path/to/compiler> to make on the command line.
+     There are two different variables CCNAME and CCC, because CCNAME
+     is used to build pathnames, and CCC might contain absolute paths
+     to compiler binaries.
+     By adding subdirectories configuration/defs/<CCNAME> analogously to
+     those alre
 
 3) Install it:
-
+--------------
 To install the headers and libraries (not every module
 produces a library) in one central place, 
 either edit the PREFIX variable in configuration/defs/make.defs,
@@ -73,29 +93,30 @@ and PREFIX/include, resp.
 
 
 4) Build tests:
-
+---------------
 4a) To only build tests, call
-$ gmake test [PREFIX=/your/prefix]
+$ gmake test 
 
 4b) To perform the checks, call
-$ gmake check [PREFIX=/your/prefix]
+$ gmake check 
 
 
 4') To build & check at once, do
-$ gmake test-check-clean [PREFIX=/your/prefix]
+$ gmake test-check-clean 
 (will clean after check, so it does not need so much
  temporary disk space)
 
-This checks also the correct installation of GrAL under PREFIX.
 
-[ You can also build the tests without prior installation,
-  by saying
-  $ gmake test-check-clean DEVELOP=develop
-  Then include and link paths are into the module directories
-  themselves.
-]
+If you want to check also the correct installation of GrAL under PREFIX,
+use the commandline 
+$ gmake test PREFIX=</your/prefix> DEVELOP=user
+
+This looks for include files and libraries under PREFIX.
+
+
 
 Notes on using GrAL parts depending 3rd party libraries
+-------------------------------------------------------
 -------------------------------------------------------
 
 These are disabled by default.
@@ -110,6 +131,7 @@ These are disabled by default.
 
 
 Documentation 
+-------------
 -------------
 
 Documentation is available separately on the GrAL home page.
