@@ -8,8 +8,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Grids/Complex2D/complex2d.h"
 
-#include "Gral/Iterators/edge-on-cell-iterator.h"
-#include "Gral/Iterators/facet-on-cell-iterator-by-vtx-set.h"
+#include "Gral/Iterators/generic-edge-iterators.h"
+#include "Gral/Iterators/generic-facet-iterators.h"
 
 class Complex3D;
 
@@ -44,6 +44,8 @@ struct grid_types_Complex3D_base {
   typedef VertexOnCellIterator_Complex3D VertexOnCellIterator;
 
   typedef Cell_Complex3D_base cell_base_type;
+
+  typedef grid_dim_tag<3> dimension_tag;
 };
 
 
@@ -105,7 +107,7 @@ private:
   // set dependent information
   void calculate_dependent();
 
-  // modofying functions (used in ConstructGrid())
+  // modifying functions (used in ConstructGrid())
   vertex_handle add_vertex() { return (num_of_vertices++);}
   cell_handle   add_cell(archetype_handle a)
     { 
@@ -192,6 +194,7 @@ class Cell_Complex3D_base : public elem_base_Complex3D
   cell_handle h;
  public:
   Cell_Complex3D_base() {}
+  explicit
   Cell_Complex3D_base(grid_type const& gg) : base(gg), h(0) {}
   Cell_Complex3D_base(grid_type const& gg, cell_handle hh) : base(gg), h(hh) {}
 protected:
@@ -229,6 +232,7 @@ class Cell_Complex3D
   typedef gt::VertexOnCellIterator VertexOnCellIterator;
  public:
   Cell_Complex3D() {}
+  explicit
   Cell_Complex3D(grid_type const& gg, cell_handle hh = 0) { init(gg,hh);}
 
 
@@ -268,6 +272,7 @@ class Vertex_Complex3D : public elem_base_Complex3D {
   vertex_handle h;
  public:
   Vertex_Complex3D() {}
+  explicit
   Vertex_Complex3D(grid_type const& gg) : base(gg), h(0) {}
   Vertex_Complex3D(grid_type const& gg, vertex_handle hh) : base(gg), h(hh) {}
 
@@ -303,6 +308,7 @@ class VertexOnCellIterator_Complex3D : public elem_base_Complex3D {
   int         lv;
  public:
   VertexOnCellIterator_Complex3D() {}
+  explicit
   VertexOnCellIterator_Complex3D(Cell const& cc, int llv = 0) 
     : base(cc.TheGrid()), c(cc.handle()),  lv(llv) {}
 
@@ -401,23 +407,33 @@ namespace std {
 template<>
 struct element_traits<Vertex_Complex3D>
   : public element_traits_vertex_base<Complex3D>
-{ typedef std::hash<Vertex_Complex3D> hasher_type; };
+{ 
+  typedef std::hash<Vertex_Complex3D> hasher_type; 
+  typedef consecutive_integer_tag<0>         consecutive_tag;
+};
 
 template<>
 struct element_traits<Complex3D::Edge>
   : public element_traits_edge_base<Complex3D>
-{ typedef Complex3D::Edge::edge_hasher_type hasher_type; };
+{ 
+  typedef Complex3D::Edge::edge_hasher_type hasher_type; 
+};
 
 
 template<>
 struct element_traits<Complex3D::Facet>
   : public element_traits_facet_base<Complex3D>
-{ typedef Complex3D::Facet::facet_hasher_type hasher_type; };
+{ 
+  typedef Complex3D::Facet::facet_hasher_type hasher_type; 
+};
 
 template<>
 struct element_traits<Cell_Complex3D>
   : public element_traits_cell_base<Complex3D>
-{ typedef std::hash<Cell_Complex3D> hasher_type; };
+{ 
+  typedef std::hash<Cell_Complex3D>  hasher_type; 
+  typedef consecutive_integer_tag<0> consecutive_tag;
+};
 
 #endif
 
