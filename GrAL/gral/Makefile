@@ -2,13 +2,20 @@ export CONFIG:=$(shell pwd)/mk.config
 #unexport PWD
 include $(CONFIG)
 
-SUBDIRS =  base complex2d distributed partitioning cartesian2d testing
+SUBDIRS =  base complex2d distributed partitioning cartesian2d testing \
+           gmv-io cartesian3d complex3d
 
 #include $(ALLROOT)/configuration/defs/recursive-targets
 
 TARGET=all
 
 all:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) all CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
 
 new: libclean
 	@set -e; \
@@ -65,6 +72,27 @@ module-check:
 doc: doc-recursive
 predoc: predoc-recursive
 postdoc: postdoc-recursive
+
+
+additional-doxy: doxy-recursive
+additional-installdox: installdox-recursive
+
+doxy-recursive:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) doxy CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+installdox-recursive:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) installdox CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
 
 doc-recursive: predoc-recursive postdoc-recursive
 
