@@ -1,5 +1,5 @@
 
-ALLROOT=$(shell pwd)
+GRALROOT=$(shell pwd)
 SUBDIRS= configuration utilities external-control sequence geometry \
          graphics-device function-algebra gral
 
@@ -7,62 +7,62 @@ SUBDIRS= configuration utilities external-control sequence geometry \
 new:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) new ALLROOT=$(ALLROOT) DEVELOP=develop CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) new GRALROOT=$(GRALROOT) DEVELOP=develop CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
 clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) clean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
 realclean:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) realclean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) realclean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
 all:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) all ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) all GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
 install:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) install ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) install GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
 test:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) test ALLROOT=$(ALLROOT) TARGET=new DEVELOP=user CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) test GRALROOT=$(GRALROOT) TARGET=new DEVELOP=user CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 check:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) check ALLROOT=$(ALLROOT) DEVELOP=user DEPS='' CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) check GRALROOT=$(GRALROOT) DEVELOP=user DEPS='' CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 test-check-clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) test-check-clean ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) test-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
@@ -73,15 +73,15 @@ test-check-clean:
 doxy:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) doxy ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) doxy GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 installdox:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) installdox ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) installdox GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 doc: predoc postdoc
@@ -89,13 +89,13 @@ doc: predoc postdoc
 predoc:	
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) predoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) predoc GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 postdoc:
 	@set -e; \
         (for i in $(SUBDIRS); \
-        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) postdoc ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) postdoc GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)

@@ -37,7 +37,7 @@ install: install-headers install-libs
 
 
 clean: stdclean
-	(cd doc;  $(MAKE) clean DEPS="" ALLROOT=$(ALLROOT))
+	(cd doc;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
 	rm -f doxy.tags doxy.log
 

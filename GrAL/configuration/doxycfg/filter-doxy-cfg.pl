@@ -17,7 +17,7 @@ chop($perlpath = <WHICH>);
 
 while (<>) {
  # $_ =~ 
-   s|\$ALLROOT|$allroot|g;
+   s|\$GRALROOT|$allroot|g;
    s|\$PERL_PATH|$perlpath|g;
    s|\$BIN_ABSPATH|$binpath|g;
   print;

@@ -5,7 +5,7 @@ include $(CONFIG)
 SUBDIRS =  base complex2d distributed partitioning cartesian2d testing \
            gmv-io geomview-io cartesian3d complex3d triang2d measurement
 
-#include $(ALLROOT)/configuration/defs/recursive-targets
+#include $(GRALROOT)/configuration/defs/recursive-targets
 
 TARGET=all
 
@@ -13,7 +13,7 @@ all:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) all CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) all CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -21,7 +21,7 @@ new: libclean
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) new CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) new CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -29,7 +29,7 @@ generic:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) $(TARGET) CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) $(TARGET) CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -41,7 +41,7 @@ install-headers:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) install CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) install CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -52,7 +52,7 @@ clean: stdclean
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) clean DEPS='' CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) clean DEPS='' CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -62,7 +62,7 @@ realclean: stdclean
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) realclean DEPS='' CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) realclean DEPS='' CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
@@ -70,7 +70,7 @@ test:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) test CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) test CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -78,7 +78,7 @@ check:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) check CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) check CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -88,7 +88,7 @@ test-check-clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) test-check-clean CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) test-check-clean CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -105,7 +105,7 @@ doxy-recursive:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) doxy CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) doxy CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -113,7 +113,7 @@ installdox-recursive:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) installdox CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) installdox CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -124,7 +124,7 @@ predoc-recursive:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) predoc CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) predoc CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
@@ -132,7 +132,7 @@ postdoc-recursive:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) postdoc CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        $(MAKE) postdoc CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 

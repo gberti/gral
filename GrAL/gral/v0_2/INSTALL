@@ -20,7 +20,7 @@ Building it:
 1) Unpack the stuff:
 $ tar -xfv gral-src.tar
 
-This will create a directory GrAL (corresponds to ALLROOT in Makefiles).
+This will create a directory GrAL (corresponds to GRALROOT in Makefiles).
 
 The preferred place to unpack the documentation is inside 
 the GrAL directory (creates doc/ directory).
@@ -42,13 +42,13 @@ when starting).
 
 
 [ If you want to operate on individual modules, there are two choices:
-  a)  Edit in mk.config the variable ALLROOT 
+  a)  Edit in mk.config the variable GRALROOT 
      to point to the top level directory in the tar file (i.e. GrAL/). 
      [This should hopefully be the only thing to edit in each module ...]
-  b) Alternatively, add an argument ALLROOT=/path/to/GrAL to gmake calls.
+  b) Alternatively, add an argument GRALROOT=/path/to/GrAL to gmake calls.
 ]
 
-2) Then run from ALLROOT
+2) Then run from GRALROOT
 $ gmake new
 
 This builds some libraries (not all modules produce libraries).

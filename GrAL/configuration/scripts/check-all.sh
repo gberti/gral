@@ -18,10 +18,10 @@ do
 for i in ${MODULES}
 do
  cd $i;
- gmake clean  ALLROOT=${HOME}/tmp/${CHECKDIR}
- gmake new    ALLROOT=${HOME}/tmp/${CHECKDIR}
- gmake test   ALLROOT=${HOME}/tmp/${CHECKDIR}  TARGET=new-check-clean
- gmake clean  ALLROOT=${HOME}/tmp/${CHECKDIR} 
+ gmake clean  GRALROOT=${HOME}/tmp/${CHECKDIR}
+ gmake new    GRALROOT=${HOME}/tmp/${CHECKDIR}
+ gmake test   GRALROOT=${HOME}/tmp/${CHECKDIR}  TARGET=new-check-clean
+ gmake clean  GRALROOT=${HOME}/tmp/${CHECKDIR} 
  cd ${HOME}/tmp/${CHECKDIR};
 done;
 cd ..;

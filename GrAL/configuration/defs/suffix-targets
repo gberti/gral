@@ -98,7 +98,7 @@ additional-doc: additional-predoc additional-postdoc
 # doxygen specific targets
 
 DOXYGEN=$(shell which doxygen)
-DOCROOT=$(ALLROOT)
+DOCROOT=$(GRALROOT)
 DOXYPATH=doxygen/html
 DOXYCFG=$(CONFIGURATION)/doxycfg/
 DOXYHEADER=$(DOXYCFG)/header.html
@@ -116,13 +116,13 @@ additional-doxy:
 additional-installdox:
 
 doxy: additional-doxy
-	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(ALLROOT) -binpath $(LOCALBINPATH) \
+	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(GRALROOT) -binpath $(LOCALBINPATH) \
         $(DOXYCFG)/doxy.paths.cfg                  > doxy.cfg.tmp
 	echo "@INCLUDE_PATH = $(DOXYCFG)"         >> doxy.cfg.tmp
 	cat doxy.local.cfg                        >> doxy.cfg.tmp
 	echo "STRIP_FROM_PATH = $(ROOT)/include/ $(ROOT)/"   >> doxy.cfg.tmp
 	cat dependencies*                            > doxy.deps.tmp
-	$(DOXYCFG)/generate-doxycfg.pl -root $(ALLROOT) doxy.deps.tmp   >> doxy.cfg.tmp
+	$(DOXYCFG)/generate-doxycfg.pl -root $(GRALROOT) doxy.deps.tmp   >> doxy.cfg.tmp
 	cp $(DOXYHEADER) .
 	cp $(DOXYFOOTER) .
 	mkdir -p doxygen

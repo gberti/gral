@@ -5,11 +5,11 @@ cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
 CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
-ALLROOT=GrAL
+GRALROOT=GrAL
 cd ${HOME}/tmp;
-rm -rf ${ALLROOT};
-mkdir ${ALLROOT};
-cd ${ALLROOT};
+rm -rf ${GRALROOT};
+mkdir ${GRALROOT};
+cd ${GRALROOT};
 for i in ${MODULES}
 do
  cvs -d ${CVSREPO} export -r ${TAG} $i;
@@ -34,7 +34,7 @@ find . -name "*.C" -exec ${cvswork}/configuration/scripts/replace-license.pl {} 
 
 
 cd ..;
-tar cf gral-src.tar ${ALLROOT};
+tar cf gral-src.tar ${GRALROOT};
 gzip -f gral-src.tar;
-rm -rf ${ALLROOT};
+rm -rf ${GRALROOT};
 

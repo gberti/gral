@@ -40,7 +40,7 @@ clean: stdclean
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
 	rm -f doxy.tags doxy.log
 
-# 	(cd doc;  $(MAKE) clean DEPS="" ALLROOT=$(ALLROOT))
+# 	(cd doc;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 
 tarclean: clean
 	rm -rf lib/

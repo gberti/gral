@@ -14,12 +14,12 @@ CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
 
 TMP=${HOME}/tmp;
-ALLROOT=${TMP}/modules;
+GRALROOT=${TMP}/modules;
 DOC=doc
 cd ${HOME}/tmp; 
-rm -rf ${ALLROOT};
-mkdir -p  ${ALLROOT};
-cd  ${ALLROOT};
+rm -rf ${GRALROOT};
+mkdir -p  ${GRALROOT};
+cd  ${GRALROOT};
 
 echo "####################################"
 echo "Exporting modules ${TOPLEVELMODULES}"
@@ -45,32 +45,32 @@ rm -rf gral/v0_2
 
 for i in ${MODULES}
 do
- cd ${ALLROOT}/$i;
- gmake predoc ALLROOT=${ALLROOT}
+ cd ${GRALROOT}/$i;
+ gmake predoc GRALROOT=${GRALROOT}
 done;
 
 for i in ${MODULES}
 do
- cd ${ALLROOT}/$i;
- gmake postdoc ALLROOT=${ALLROOT} DOCROOT=../ 
+ cd ${GRALROOT}/$i;
+ gmake postdoc GRALROOT=${GRALROOT} DOCROOT=../ 
 done;
 
 
-mkdir ${ALLROOT}/${DOC};
-cd ${ALLROOT}/${DOC};
+mkdir ${GRALROOT}/${DOC};
+cd ${GRALROOT}/${DOC};
 for i in ${MODULES}
 do
   mkdir -p $i
-  (cd ${ALLROOT}/$i; gmake copydoc DOCDEST=${ALLROOT}/${DOC}/$i)
+  (cd ${GRALROOT}/$i; gmake copydoc DOCDEST=${GRALROOT}/${DOC}/$i)
 done;
-cd ${ALLROOT};
+cd ${GRALROOT};
 
 
 tar cf gral-doc.tar ./${DOC}
 gzip -f gral-doc.tar;
 mv gral-doc.tar.gz ..;
 cd ..;
-#rm -rf ${ALLROOT};
+#rm -rf ${GRALROOT};
 
 
 

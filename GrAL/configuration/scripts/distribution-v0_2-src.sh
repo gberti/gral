@@ -9,11 +9,11 @@ EXCLUDED=`$cvswork/configuration/scripts/excluded-v0_2.sh`;
 TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel-v0_2.sh`;
 CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
-ALLROOT=GrAL-0.2
+GRALROOT=GrAL-0.2
 cd ${HOME}/tmp;
-rm -rf ${ALLROOT};
-mkdir ${ALLROOT};
-cd ${ALLROOT};
+rm -rf ${GRALROOT};
+mkdir ${GRALROOT};
+cd ${GRALROOT};
 for i in ${TOPLEVELMODULES}
 do
  cvs -d ${CVSREPO} export -r ${TAG} $i;
@@ -50,7 +50,7 @@ find . -name "*.C" -exec ${cvswork}/configuration/scripts/replace-license.pl {} 
 
 
 cd ..;
-tar cf gral-src.tar ${ALLROOT};
+tar cf gral-src.tar ${GRALROOT};
 gzip -f gral-src.tar;
-rm -rf ${ALLROOT};
+rm -rf ${GRALROOT};
 
