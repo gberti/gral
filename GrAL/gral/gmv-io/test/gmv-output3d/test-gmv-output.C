@@ -28,21 +28,21 @@ int main() {
 
   {
     c3d::CartesianGrid3D R(2,2,2);
-    c3d::mapped_geometry_cartesian3d<mapping_type> GeomR(R, mapping_type());
+    c3d::mapped_geometry<mapping_type> GeomR(R, mapping_type());
     OstreamGMV3DFmt Out("2x2x2.out");
     ConstructGrid(Out,R,GeomR);
   }
 
   {
     c3d::CartesianGrid3D R(5,3,2);
-    c3d::mapped_geometry_cartesian3d<mapping_type> GeomR(R, mapping_type());
+    c3d::mapped_geometry<mapping_type> GeomR(R, mapping_type());
     OstreamGMV3DFmt Out("5x3x2.out");
     ConstructGrid(Out,R,GeomR);
   } 
 
   {
     c3d::CartesianGrid3D R(3,3,3);
-    c3d::mapped_geometry_cartesian3d<mapping_type> GeomR(R, mapping_type());
+    c3d::mapped_geometry<mapping_type> GeomR(R, mapping_type());
     grid_function<gt::Cell,   int> gf1(R,1);
     grid_function<gt::Vertex, int> gf2(R,2);
     OstreamGMV3DFmt Out("3x3x3.out");

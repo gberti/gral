@@ -37,7 +37,7 @@ struct dimension_dependent_primitives<point, variable_dimension_tag>
 int main(int argc, char* argv[]) {
   using std::cout;
   using cartesian3d::CartesianGrid3D;
-  using cartesian3d::mapped_geometry_cartesian3d;
+  using cartesian3d::mapped_geometry;
 
   ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"map.in","main");
   double wf = 0.0;// warping factor.
@@ -51,9 +51,8 @@ int main(int argc, char* argv[]) {
 
   typedef CartesianGrid3D                           reg_grid_type;
   typedef point                                     coord_type;
-  //  typedef lattice_geometry_cartesian3d   geom_type;
   typedef warping3d<coord_type>                     mapping_type;
-  typedef mapped_geometry_cartesian3d<mapping_type> reg_geom_type;
+  typedef mapped_geometry<mapping_type> reg_geom_type;
   typedef simple_geometry<Complex3D,coord_type>     geom_type;
   typedef grid_types<CartesianGrid3D>               reggt;
   typedef Complex3D                                 grid_type;
