@@ -9,6 +9,7 @@
 
 #include <iostream>
 
+using namespace std;
 
 template<class MAP>
 void test_map(MAP const& map, std::ostream& out)
