@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-/*! \brief dummy mapping to substitute for an unneeded container parameter.
+/*! \brief dummy container to substitute for an unneeded container parameter.
  
   sample use: see Grids/Algorithms/find-boundary-components.h
 */

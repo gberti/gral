@@ -46,8 +46,11 @@
 
 
  \todo
- There should also be a corresponding domain-class and 
- perhaps an inverse-mapping class : T2 --> P(T1)
+   There should also be a corresponding domain-class and 
+   perhaps an inverse-mapping class : T2 --> P(T1)
+ \todo
+    Test directory for partial_mapping
+
 */
 //----------------------------------------------------------------
 
