@@ -17,3 +17,11 @@ ri1:   owned
 ri2:   owned
 rci:   owned
 rci2:  owned
+Noisy::Noisy(1)
+Noisy::Noisy(2)
+Noisy::Noisy(3)
+Noisy::Noisy(Noisy(4))
+Noisy::~Noisy(4)
+Noisy::~Noisy(3)
+Noisy::~Noisy(2)
+Noisy::~Noisy(1)
