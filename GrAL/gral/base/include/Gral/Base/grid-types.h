@@ -6,6 +6,8 @@
 
 #include "Gral/Base/type-tags.h"
 
+template<class ELEM, class ANCHOR>
+class dummy_incidence_iterator;
 
 //----------------------------------------------------------------
 /*! \brief Empty traits class for parameterized namespaces associated 
@@ -184,7 +186,8 @@ namespace grid_types_detail
   template<class GT> struct incidence_iterator_aux<GT, edge_type_tag, vertex_type_tag>
   { typedef typename GT::EdgeOnVertexIterator type;};
   template<class GT> struct incidence_iterator_aux<GT, edge_type_tag, edge_type_tag>
-  { typedef typename GT::EdgeOnEdgeIterator type;};
+  // { typedef typename GT::EdgeOnEdgeIterator type;};
+  { typedef dummy_incidence_iterator<typename GT::Edge, typename GT::Edge> type;};
   template<class GT> struct incidence_iterator_aux<GT, edge_type_tag, face_type_tag>
   { typedef typename GT::EdgeOnFaceIterator type;};
   template<class GT> struct incidence_iterator_aux<GT, edge_type_tag, facet_type_tag>
@@ -396,6 +399,7 @@ public:
 
 
 
+#include "Gral/Iterators/dummy-iterator.h"
 
 
 #endif
