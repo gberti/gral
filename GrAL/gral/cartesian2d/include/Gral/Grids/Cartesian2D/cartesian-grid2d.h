@@ -2,34 +2,30 @@
 #define NMWR_GB_CARTESIAN_GRID_2D_H
 
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
-
-
-/** @author  Guntram Berti
-    @memo    Regular Grid in 2D, conforming to the Iterator-Interface.
-    @see     <A HREF="/home/berti/LIB-develop/include/Grids/Reg2D/index.html"> index </A>
-    @see     <A HREF="/home/berti/LIB-develop/doc/index.html"> overview </A>
-    */
-
+// $LICENSE
 
 
 #include <algobase.h> // for min/max
+#include <string>
+
 
 #include "Utility/pre-post-conditions.h"
-#include "mystring.h"
-#include "Grids/common-grid-basics.h" 
-#include "Grids/Reg2D/index-map.h"
+
+#include "Gral/Base/common-grid-basics.h" 
+#include "Gral/Grids/Cartesian2D/index-map.h"
 
 
- 
+/*! \brief A two-dimensional cartesian grid type
+
+    RegGrid2D implements the full kernel interface.
+ */ 
+
 class RegGrid2D {
 public:
+  //@{ 
+  // typedef int dummy;
+  //@} dummy group (work around)
+
   typedef xmjr_indexmap2D indexmap_type;
   // iteration is done in y-direction.
   // replacing this with ymjr_... would yield a regular grid
@@ -37,7 +33,7 @@ public:
   typedef  indexmap_type::index_type index_type; // 2D-integer index
 
 private:
-  /// DATA 
+  // DATA 
   index_type ll_,ur_;   // integer coordinates of lower left and upper right vertices
                         // ll does not have to be (0,0)
   int xpoints, ypoints; // number of vertices in x and y direction
@@ -54,12 +50,13 @@ private:
 
 public:
 
-  /// Constructors  
+  /*! @name Constructors  */
+  //@{ 
   RegGrid2D(int pts = 2) // default: 1 cell, 4 vertices
     :ll_(0,0), ur_(pts-1,pts-1),
      xpoints(pts), ypoints(pts)
     { init_maps(ll_,ur_);}
-  /// 
+ 
   RegGrid2D(int x, int y) 
     : ll_(0,0), ur_(x-1,y-1),
       xpoints(x), ypoints(y)
@@ -70,12 +67,15 @@ public:
       xpoints(urx - llx +1), 
       ypoints(ury - lly +1)
     { init_maps(ll_,ur_);}
+
   RegGrid2D(const index_type& LL, const index_type& UR)
     :  ll_(LL), ur_(UR),
        xpoints(UR.x - LL.x +1), 
        ypoints(UR.y - LL.y +1)
     { init_maps(ll_,ur_);}
+  //@}
 
+private:
   void init_maps(const index_type& ll,
 		 const index_type& ur)
     { 
@@ -85,13 +85,16 @@ public:
       yedge_index_map  = indexmap_type(ll,index_type(ur.x,  ur.y-1)); 
     }
 
-  // access to shape information
+public:
+  /*! @name access to shape information */
+  //@{  
   const index_type& ll() const { return ll_;}
   const index_type& ur() const { return ur_;}
   int llx() const { return ll_.x;}
   int lly() const { return ll_.y;}
   int urx() const { return ur_.x;}
   int ury() const { return ur_.y;}
+  //@}
 
 private:
   
@@ -102,23 +105,23 @@ private:
 
 
   // static DATA:  2D-increments for local neighbour offsets
-  static index_type side_offset_[4];
+  static index_type side_offset_  [4];
   static index_type corner_offset_[4];  
-  static index_type direction_[4];  
+  static index_type direction_    [4];  
   static index_type side_vertex_1_[4];
   static index_type side_vertex_2_[4];
 
   // names for I/O
-  static string  side_name_[4];
-  static string  corner_name_[4];
+  static std::string  side_name_  [4];
+  static std::string  corner_name_[4];
 
 public:
   // map strings to side-/corner-enum and vice versa
   // this recognises different spellings, e.g. "S", "s", "South", "south".
-  static int get_side(const string& nm);
-  static int get_corner(const string& nm);
-  static string side_name(int side) { return side_name_[side-1];} // returns "S", "N" etc.
-  static string corner_name(int corner) { return corner_name_[corner-1];} // returns "SW", "NW" etc.
+  static int get_side(const std::string& nm);
+  static int get_corner(const std::string& nm);
+  static std::string side_name(int side) { return side_name_[side-1];} // returns "S", "N" etc.
+  static std::string corner_name(int corner) { return corner_name_[corner-1];} // returns "SW", "NW" etc.
 
   static int invalid_side();
   static int invalid_corner();
@@ -162,7 +165,7 @@ public:
   class CellOnCellIterator;
 
 
-  //////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------
   //
   // now the definitions of local classes:
   // Elements: Vertex, Edge, Cell,
@@ -171,16 +174,17 @@ public:
   //                      CellOnCellIterator,
   //                      VertexOnVertexIterator
   //
-  //////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------
 
 
-  //////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------
   //
   // ELEMENTS (VERTEX, EDGE, CELL)
   //
-  //////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------
  
-  ///
+  /*! @name Element classes */
+  //@{ 
   class elem_base { // common base for vertex, edge, cell
   public:
     typedef RegGrid2D grid_type;
@@ -216,8 +220,8 @@ public:
     int y() const { return _v.y;}
  
     
-    VertexOnVertexIterator FirstVertex() const;
-    VertexOnVertexIterator EndVertex() const;
+    inline VertexOnVertexIterator FirstVertex() const;
+    inline VertexOnVertexIterator EndVertex() const;
     inline VertexOnVertexIterator FirstNeighbour() const;
     inline VertexOnVertexIterator EndNeighbour() const;
     inline CellOnVertexIterator   FirstCell() const;
@@ -355,6 +359,8 @@ public:
     EdgeOnCellIterator   EndEdge()        const;
     EdgeOnCellIterator   FirstFacet()     const;
     EdgeOnCellIterator   EndFacet()       const;
+    CellOnCellIterator   FirstCell()      const;
+    CellOnCellIterator   EndCell()   const;
     CellOnCellIterator   FirstNeighbour() const;
     CellOnCellIterator   EndNeighbour()   const;
 
@@ -432,29 +438,33 @@ public:
     /// DATA 
     vertex_base llv; /// lower left vertex
   };
+  //@}
   
 
-  //////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------
   //
   //           ITERATORS
   //
-  //////////////////////////////////////////////////////////////
+  //-----------------------------------------------------------
  
 
-  ///////////////////////////////////////////
-  //                                       //
-  //        SEQUENCE ITERATORS             //
-  //                                       //
-  ///////////////////////////////////////////
+  //-----------------------------------------------------------
+  //                                      
+  //        SEQUENCE ITERATORS             
+  //                                       
+  //-----------------------------------------------------------
  
-
+  /*! @name sequence iterators */
+  //@{ 
   class seq_iterator_base {
   public:
     typedef RegGrid2D grid_type;
     typedef RegGrid2D anchor_type;
 
     typedef seq_iterator_base base;
+    seq_iterator_base()                   : _g(0) {}
     seq_iterator_base(const grid_type* g) : _g(g) {}
+    seq_iterator_base(const grid_type& g) : _g(&g) {}
 
      grid_type const& TheGrid() const {
       REQUIRE((_g != 0),"No Grid!\n",1);
@@ -468,10 +478,11 @@ public:
   //------------------- VERTEX ITERATOR ----------------------
    
   class VertexIterator : public seq_iterator_base {
-  public:
     typedef VertexIterator self;
+  public:
     VertexIterator() : base(0) {} 
     VertexIterator(const Grid* g) : base(g), v(g->MinVertexNum()) {}
+    VertexIterator(const Grid& g) : base(g), v(g .MinVertexNum()) {}
     VertexIterator(const Grid& g, vertex_handle vv) : base(&g), v(vv) {}
     VertexIterator(vertex_handle vv, const Grid* g) : base(g), v(vv) {}
     self& operator++() {
@@ -494,6 +505,12 @@ public:
     operator bool() const { return !IsDone();} 
     vertex_handle GlobalNumber() const { return v;}
     vertex_handle handle      () const { return v;}
+
+    friend bool operator==(self const& lhs, self const& rhs)
+    {
+      REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing vertices with different grids!\n",1);
+      return (lhs.v == rhs.v);
+    }
   private:
     vertex_handle v;
   };
@@ -502,18 +519,28 @@ public:
   //-------------------- EDGE  ITERATOR ----------------------
 
   class EdgeIterator : public seq_iterator_base {
-  public:
     typedef EdgeIterator self;
+  public:
+    EdgeIterator() {}
+    EdgeIterator(Grid const& g) : base(g), e(g.MinEdgeNum()) {}
     EdgeIterator(int ee,const Grid* g) 
       : base(g), e(ee)  {}
+
     self& operator++() { e++; return(*this);}
     self operator++(int) { self tmp(*this); ++(*this); return tmp;}
     Edge operator*() const { return TheGrid().get_edge(e);}
-    operator Edge()  const { return (this->operator*());}
     bool IsDone()    const { return ( e >= TheGrid().NumOfEdges());}
-    operator bool() const { return !IsDone();} 
-    edge_handle GlobalNumber() const { return e;}
+
+    //  operator Edge()  const { return (this->operator*());}
+    //  operator bool() const { return !IsDone();} 
+    //  edge_handle GlobalNumber() const { return e;}
     edge_handle handle      () const { return e;}
+
+    friend bool operator==(self const& lhs, self const& rhs)
+    {
+      REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing edges with different grids!\n",1);
+      return (lhs.e == rhs.e);
+    }
   private:
     edge_handle e;
   };
@@ -522,25 +549,32 @@ public:
   //-------------------- CELL  ITERATOR ----------------------
 
   class CellIterator : public seq_iterator_base {
-  public:  
     typedef CellIterator self;
+  public:  
     CellIterator() : base(0), c(-1) {}
+    CellIterator(const Grid& g) : base(&g), c(g.MinCellNum()) {}
     CellIterator(int cc, const Grid* g) : base(g), c(cc) {} 
     CellIterator(const Grid& g, int cc) : base(&g), c(cc) {} 
-    CellIterator(const Grid& g) : base(&g), c(0) {}
  
     self& operator++() { c++; return (*this);}
     self  operator++(int)  { self tmp(*this); ++(*this); return tmp;}
     Cell  operator*() const { return TheGrid().cell(c);}
-    operator Cell()   const { return TheGrid().cell(c);}
+    // operator Cell()   const { return TheGrid().cell(c);}
     bool  IsDone()    const { return (c > TheGrid().MaxCellNum());}
-    //operator bool() const { return !IsDone();} 
-    cell_handle GlobalNumber() const { return c;}
+    // operator bool() const { return !IsDone();} 
+    // cell_handle GlobalNumber() const { return c;}
     cell_handle handle      () const { return c;}
+
+    friend bool operator==(self const& lhs, self const& rhs)
+    {
+      REQUIRE((&(lhs.TheGrid()) == &(rhs.TheGrid())), "Comparing cells with different grids!\n",1);
+      return (lhs.c == rhs.c);
+    }
+
   private:
     cell_handle c;
   };
-
+  //@}
 
 
   ///////////////////////////////////////////
@@ -549,12 +583,16 @@ public:
   //                                       //
   ///////////////////////////////////////////
   
+  /*! @name incidence iterators */
+  //@{ 
   class inc_iterator_base {
   public:
     typedef RegGrid2D grid_type;
   
     typedef inc_iterator_base base;
+    inc_iterator_base() : _g(0) {}
     inc_iterator_base(const grid_type* g) : _g(g) {}
+    inc_iterator_base(const grid_type& g) : _g(&g) {}
 
     grid_type const& TheGrid() const {
       REQUIRE((_g != 0),"No Grid!\n",1);
@@ -574,19 +612,29 @@ public:
     typedef Vertex value_type;
     typedef Vertex element_type;
 
+    VertexOnVertexIterator() {}
+    VertexOnVertexIterator(Vertex const& vv) { *this = vv.FirstVertex(); }
     VertexOnVertexIterator(int v, const Vertex& vv, const Grid* g) 
       : base(g), _v(v), _vv(vv)  {}
     self& operator++() {_v = _vv.next_neighbour(_v); return (*this);}
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
     Vertex  operator*() const { return (_vv.vertex(_v));}
-    operator Vertex()   const { return this->operator*();}
+    // operator Vertex()   const { return this->operator*();}
     bool    IsDone()    const { return (_v > 4);}
-    operator bool() const { return !IsDone();} 
+    // operator bool() const { return !IsDone();} 
 
     Vertex const& TheVertex()  const { return _vv;}
     Vertex const& TheAnchor()  const { return _vv;}
 
     int LocalNumber()   const { return _v;}
+
+    friend bool operator==(self const& lhs, self const& rhs)
+    {
+      REQUIRE((lhs.TheVertex() == rhs.TheVertex()), 
+              "Comparing VertexOnVertexIterator with different vertex anchors!\n",1);
+      return (lhs._v == rhs._v);
+    }
+
   private:
     int _v; // [1 , _c.NumOfVertices()]
     Vertex _vv;
@@ -601,17 +649,26 @@ public:
     typedef Cell   value_type;
     typedef Cell   element_type;
 
+    CellOnVertexIterator() {}
+    CellOnVertexIterator(Vertex const& vv) { *this = vv.FirstCell();}
     CellOnVertexIterator(int c, const Vertex& vv, const Grid* g) 
       :  base(g), _c(c), _vv(vv) {}
     self& operator++() {_c = _vv.next_cell(_c); return (*this);}
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
     Cell operator*() const { return (_vv.cell(_c));}
     bool    IsDone()    const { return (_c > 4);}
-    operator bool() const { return !IsDone();} 
+    // operator bool() const { return !IsDone();} 
     int LocalNumber()   const { return _c;}
 
     Vertex const& TheVertex()  const { return _vv;}
     Vertex const& TheAnchor()  const { return _vv;}
+
+    friend bool operator==(self const& lhs, self const& rhs)
+    {
+      REQUIRE((lhs.TheVertex() == rhs.TheVertex()), 
+              "Comparing CellOnVertexIterator with different vertex anchors!\n",1);
+      return (lhs._c == rhs._c);
+    }
   private:
     int _c; // [1 , _c.NumOfVertices()]
     Vertex _vv;
@@ -627,17 +684,17 @@ public:
     typedef Vertex value_type;
     typedef Vertex element_type;
 
-
-    VertexOnCellIterator( Cell::corner vv, const Cell& cc, const Grid* g) 
-      : base(g), v(vv), c(cc)  {}
+    VertexOnCellIterator() {}
     VertexOnCellIterator(const Cell& cc)
       : base(& cc.TheGrid()), v(Cell::SW), c(cc)  {}
+    VertexOnCellIterator( Cell::corner vv, const Cell& cc, const Grid* g) 
+      : base(g), v(vv), c(cc)  {}
     self& operator++() { ++((int&)v); return (*this);}
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
     Vertex  operator*() const { return (c.vertex(v));}
-    operator Vertex()   const { return this->operator*();}
+    // operator Vertex()   const { return this->operator*();}
     bool    IsDone()    const { return (v > c.NumOfVertices());}
-    operator bool() const { return !IsDone();} 
+    // operator bool() const { return !IsDone();} 
     int LocalNumber()   const { return v;}
 
     vertex_handle   handle() const { return c.vertex(v).handle();}
@@ -647,6 +704,13 @@ public:
 
     Cell const& TheCell()     const { return c;}
     Cell const& TheAnchor()   const { return c;}
+
+    friend
+    bool operator==(self const& lhs, self const& rhs)
+    { 
+      REQUIRE( (lhs.c == rhs.c), "Comparing VertexOnCellIterators with different anchor cells!\n",1);
+      return ((int) lhs.v == (int) rhs.v);
+    }
 
   private:
     Cell::corner v; 
@@ -665,6 +729,8 @@ public:
     typedef Edge element_type;
     typedef Cell anchor_type;
 
+    EdgeOnCellIterator() {}
+    EdgeOnCellIterator(Cell const& cc) { *this = cc.FirstEdge();}
     EdgeOnCellIterator( Cell::side ee, const Cell& cc, const Grid* g)
       :  base(g), e(ee), c(cc) {}
     self& operator++() { ++((int&)e); return (*this);}
@@ -687,6 +753,13 @@ public:
     Cell const&  TheCell()   const { return c;}
     Cell const&  TheAnchor()   const { return c;}
 
+    friend
+    bool operator==(self const& lhs, self const& rhs)
+    { 
+      REQUIRE( (lhs.c == rhs.c), "Comparing EdgeOnCellIterators with different anchor cells!\n",1);
+      return ((int) lhs.e == (int) rhs.e);
+    }
+
   private:
     Cell::side e;  
     Cell c;
@@ -704,6 +777,8 @@ public:
     typedef Cell element_type;
     typedef Cell value_type;
     
+    CellOnCellIterator() {}
+    CellOnCellIterator(Cell const& cc) { *this = cc.FirstCell();}
     CellOnCellIterator(const EdgeOnCellIterator& F) : base(F), nb(F.e), c(F.c) 
       {
 	while( ! IsDone() && c.IsOnBoundary(nb))
@@ -722,28 +797,34 @@ public:
       return (*this);
     }
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
-    Cell  operator*() const 
-    { return TheCell().neighbour(nb);}
+    Cell  operator*() const  { return TheCell().neighbour(nb);}
 
-    operator Cell()   const { return this->operator*();}
+    // operator Cell()   const { return this->operator*();}
     Edge facet()      const { return c.edge(LocalNumber());}
     bool  IsDone()    const { return (nb > 4);}
-    operator bool() const { return !IsDone();} 
+    // operator bool() const { return !IsDone();} 
     Cell::side LocalNumber()  const { return nb;}
 
     Cell const&  TheCell()   const { return c;}
     Cell const&  TheAnchor() const { return c;}
+
+    friend bool operator==(self const& lhs, self const& rhs)  { 
+      REQUIRE( (lhs.c == rhs.c), "Comparing CellOnCellIterators with different anchor cells!\n",1);
+      return ((int) lhs.nb == (int) rhs.nb);
+    }
   private:
     Cell::side nb;  // [1 , c.NumOfNeighbours()]
     Cell c;
   };
   typedef CellOnCellIterator CellNeighbourIterator;
+  //@}
 
   //----------------------------------------------------------------------- 
   //---------------  Operations of RegGrid2D  ----------------------------- 
   //----------------------------------------------------------------------- 
 
-  /// Size operations ///
+  /*! @name Size operations */
+  //@{ 
 
   int NumOfVertices() const { return TheVertexMap().range_size();}
   int NumOfEdges()    const { return (NumOfXEdges() + NumOfYEdges());}
@@ -760,7 +841,7 @@ public:
   int NumOfBoundaryEdges()    const { return (2*(xpoints-1 + ypoints-1));}
   int NumOfBoundaryFacets()   const { return NumOfBoundaryEdges();}
   int NumOfBoundaryCells()    const { return (2*(xpoints-1 + ypoints-1) -4);}
-
+  //@}
 
   int Offset(const Vertex&) const {return TheVertexMap().n0();}
   int Offset(const Edge&  ) const {return TheXEdgeMap().n0();}
@@ -770,16 +851,25 @@ public:
   int NumXpoints() const { return xpoints;}
   int NumYpoints() const { return ypoints;}
   
+  /*! @name Sequence iteration */
+  //@{ 
   VertexIterator FirstVertex() const { return VertexIterator(MinVertexNum(),this);}
   EdgeIterator   FirstEdge()   const { return EdgeIterator(MinEdgeNum(),this);}
   EdgeIterator   FirstFacet()  const { return EdgeIterator(MinEdgeNum(),this);}
   CellIterator   FirstCell()   const { return CellIterator(MinCellNum(),this);}
+  //@}
 
-
+  /*! @name Element validity tests */
+  //@{ 
   inline bool IsValid(const vertex_base& v) const { return TheVertexMap().IsInRange(v);}
   inline bool IsValidCellBase(const vertex_base& v) const { 
     return TheCellMap().IsInRange(v);
   }
+  bool IsValid(const Cell& C)     const;
+  //@}
+
+  /*! @name Boundary tests */
+  //@{ 
   bool IsOnBoundary(const Vertex& V) const { return IsOnBoundary(V.base());}
   inline bool IsOnBoundary(const vertex_base&) const;
   inline bool IsOnBoundary(const Edge&   E) const;
@@ -787,13 +877,7 @@ public:
 
   bool IsInside(const CellIterator& C) const;
   bool IsInside(const Cell& C)    const;
-  bool IsValid(const Cell& C)     const;
-
-  vertex_handle handle(const Vertex& V) const { return vertex_num(V.x(),V.y());} 
-  vertex_handle handle(const VertexIterator& V) const { return V.GlobalNumber();}
-  vertex_handle handle(const VertexOnCellIterator& V) const { return handle(*V);}
-  edge_handle   handle(const Edge& E)   const { return edge_num(E);}
-  cell_handle   handle(const Cell& C)   const { return cell_num(C);}
+  //@}
 
 
   friend class SubrangeReg2D;
@@ -809,7 +893,13 @@ public:
   friend class EdgeOnCellIterator;
   friend class CellOnCellIterator;
 
-  /// transformations between different element representations
+  /*! @name element to handle mappings */
+  //@{ 
+  vertex_handle handle(const Vertex& V) const { return vertex_num(V.x(),V.y());} 
+  vertex_handle handle(const VertexIterator& V) const { return V.GlobalNumber();}
+  vertex_handle handle(const VertexOnCellIterator& V) const { return handle(*V);}
+  edge_handle   handle(const Edge& E)   const { return edge_num(E);}
+  cell_handle   handle(const Cell& C)   const { return cell_num(C);}
 
   // vertex_handle  <-> Vertex
   vertex_handle vertex_num(int x, int y)     const { return TheVertexMap().number(x,y);}
@@ -836,10 +926,10 @@ public:
   Cell   cell(cell_handle c)    const { return Cell(get_cell_llv(c),this);}
   Cell   cell(vertex_base llv)  const { return Cell(llv,this);}
   Cell   cell(int llx, int lly) const { return Cell(vertex_base(llx,lly),this);}
+  //@}
  
-
-  // intervals for element handles
-
+  /*! @name intervals for element handles */
+  //@{ 
   vertex_handle MinVertexNum() const { return  TheVertexMap().n0();}
   vertex_handle MaxVertexNum() const { return  TheVertexMap().nmax();}
   vertex_handle MinNum(const Vertex&) const { return MinVertexNum();}
@@ -854,7 +944,7 @@ public:
   cell_handle MaxCellNum() const { return TheCellMap().nmax();}
   cell_handle MinNum(const Cell&) const { return MinCellNum();}
   cell_handle MaxNum(const Cell&) const { return MaxCellNum();}
-
+  //@}
 };
 
 
@@ -1006,6 +1096,16 @@ RegGrid2D::Cell::EndNeighbour() const
 { return CellOnCellIterator(invalid_side,*this,_g);}
 
 
+inline 
+RegGrid2D::CellOnCellIterator   
+RegGrid2D::Cell::FirstCell() const 
+{ return FirstNeighbour();}
+
+inline 
+RegGrid2D::CellOnCellIterator   
+RegGrid2D::Cell::EndCell() const 
+{ return EndNeighbour();}
+
 inline
 void RegGrid2D::Cell::FlipEdge(const Vertex& v, Edge& e) const {
   REQUIRE(((v == e.V1()) || (v == e.V2())),
@@ -1015,7 +1115,7 @@ void RegGrid2D::Cell::FlipEdge(const Vertex& v, Edge& e) const {
     ++w;
   REQUIRE( (*w == v), "FlipEdge(v,e): v not on cell!\n",1);
   Vertex v2 = e.FlippedVertex(v);
-  e =  (w.CyclicSucc() == v2 ? Edge(v,*(w.CyclicPred())) : Edge(v,*(w.CyclicSucc())));
+  e =  (*(w.CyclicSucc()) == v2 ? Edge(v,*(w.CyclicPred())) : Edge(v,*(w.CyclicSucc())));
 }
 
 
@@ -1084,13 +1184,8 @@ inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 
 
 
-////////////////////////////////////
-//
-//  parameterized namespace
-//  associated with RegGrid2D
-//
-////////////////////////////////////
-
+/*! \brief specialization of grid_types template for RegGrid2D
+ */
 struct grid_types<RegGrid2D> {
 
   typedef RegGrid2D             Grid;
@@ -1139,6 +1234,6 @@ struct grid_types<RegGrid2D> {
   static bool is_cell_inside(grid_type const& G, Cell const& c) { return (G.IsInside(c));}
 };
 
-#include "Grids/Reg2D/element-traits.h"
+#include "Gral/Grids/Cartesian2D/element-traits.h"
 
 #endif
