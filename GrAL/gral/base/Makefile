@@ -45,7 +45,14 @@ doc: doxy concepts
 
 
 tar: 
-	(cd ..; tar cf gral-base.tar base; gzip gral-base.tar)
+	(cd $(HOME)/tmp;\
+         rm -rf gral/base;\
+         cvs -d /home/nmwr/CVS export -r HEAD gral/base; \
+         (cd gral/base;\
+          gmake doc ROOT=$(HOME)/tmp/gral/base;\
+          gmake tarclean;) \
+         tar cf gral-base.tar gral/base;\
+        )
 
 dist: doc  tarclean tar
 
