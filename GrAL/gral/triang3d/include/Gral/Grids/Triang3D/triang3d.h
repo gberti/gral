@@ -165,10 +165,14 @@ public:
   int NumOfVertices() const { return nvertices;}
 
   inline VertexIterator FirstVertex() const;
+  inline VertexIterator EndVertex()   const;
+
   inline EdgeIterator   FirstEdge()   const;
   inline FaceIterator   FirstFace()   const;
   inline FacetIterator  FirstFacet()  const;
+
   inline CellIterator   FirstCell()   const;
+  inline CellIterator   EndCell()     const;
   //@}
 
   //@{
@@ -391,6 +395,11 @@ Triang3D::VertexIterator
 Triang3D::FirstVertex() const { return VertexIterator(*this);}
 
 inline
+Triang3D::VertexIterator
+Triang3D::EndVertex() const { return VertexIterator(*this, NumOfVertices());}
+
+
+inline
 Triang3D::EdgeIterator
 Triang3D::FirstEdge() const { return EdgeIterator(*this);}
 
@@ -405,6 +414,10 @@ Triang3D::FirstFace()  const { return FacetIterator(*this);}
 inline
 Triang3D::CellIterator
 Triang3D::FirstCell() const { return CellIterator(*this);}
+
+inline
+Triang3D::CellIterator
+Triang3D::EndCell() const { return CellIterator(*this, NumOfCells());}
 
 //inline 
 //void Triang3D::switch_vertex(Triang3D::Vertex & v, Triang3D::Edge const& e) const
