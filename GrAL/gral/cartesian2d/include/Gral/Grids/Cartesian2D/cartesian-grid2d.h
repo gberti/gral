@@ -1429,7 +1429,6 @@ struct grid_types<cartesian2d::RegGrid2D> {
   typedef grid_type::archetype_type     archetype_type;
   typedef grid_type::archetype_handle   archetype_handle;
   typedef grid_type::archetype_iterator archetype_iterator;
-  typedef archetype_iterator            ArchetypeIterator; 
   typedef grid_types<archetype_type>    archgt;
 };
 

@@ -307,7 +307,6 @@ struct grid_types<cartesian2d::SubrangeReg2D> {
   typedef  gt::archetype_type     archetype_type;
   typedef  gt::archetype_handle   archetype_handle;
   typedef  gt::archetype_iterator archetype_iterator;
-  typedef  archetype_iterator     ArchetypeIterator; 
   typedef  grid_types<archetype_type>    archgt;
 
 };

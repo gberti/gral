@@ -404,7 +404,6 @@ struct grid_types<Complex3D>
   : public grid_types_Complex3D
 {
   typedef grid_type::archetype_iterator archetype_iterator;
-  typedef archetype_iterator            ArchetypeIterator;
 
   typedef facet_handle          face_handle;
   typedef Facet                 Face;

@@ -33,7 +33,7 @@ void ConstructGrid0(Complex3D     & G_dest,
   typedef typename sgt::archetype_type arch_src_t;
   typedef vertex_morphism<arch_src_t, arch_dest_t> arch_morphism;
   std::vector<arch_morphism> morphism;
-  typename sgt::ArchetypeIterator arch_src = G_src.BeginArchetype(); 
+  typename sgt::archetype_iterator arch_src = G_src.BeginArchetype(); 
   for(; arch_src != G_src.EndArchetype() ; ++arch_src) {
     gt::archetype_handle a = G_dest.add_archetype();
     morphism.push_back(arch_morphism(*arch_src,G_dest.Archetype(a)));

@@ -19,7 +19,7 @@ find_non_incident_facet_edge_pairs()
   // for each facet of each cell, we find edges of the same cell
   // not incident to the facet.
   // It suffices to do so for each archetype once.
-  for(typename gt::ArchetypeIterator  
+  for(typename gt::archetype_iterator  
       a = TheGrid().BeginArchetype();
       a != TheGrid().EndArchetype(); 
       ++a) {

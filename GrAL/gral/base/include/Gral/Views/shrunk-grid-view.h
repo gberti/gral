@@ -80,11 +80,11 @@ namespace shrink_grid_view {
       typedef typename bgt::cell_handle cell_handle;
       typedef vertex_handle_t<GRID>     vertex_handle;
 
-      typedef typename bgt::dimension_tag     dimension_tag;
-      typedef typename bgt::archetype_type    archetype_type;
-      typedef typename bgt::archetype_handle  archetype_handle;
-      typedef typename bgt::ArchetypeIterator ArchetypeIterator;
-      typedef typename bgt::archgt            archgt;
+      typedef typename bgt::dimension_tag      dimension_tag;
+      typedef typename bgt::archetype_type     archetype_type;
+      typedef typename bgt::archetype_handle   archetype_handle;
+      typedef typename bgt::archetype_iterator archetype_iterator;
+      typedef typename bgt::archgt             archgt;
     };
 
 
@@ -118,12 +118,12 @@ namespace shrink_grid_view {
       typedef grid_view<GRID>        self;
       typedef local_grid_types<GRID> gt;
     public:
-      typedef typename gt::ArchetypeIterator ArchetypeIterator;
-      typedef typename gt::archetype_type    archetype_type;
-      typedef typename gt::archetype_handle  archetype_handle;
-      typedef typename gt::base_grid_type    base_grid_type;
-      typedef typename gt::Cell              Cell;
-      typedef typename gt::cell_handle       cell_handle;
+      typedef typename gt::archetype_iterator archetype_iterator;
+      typedef typename gt::archetype_type     archetype_type;
+      typedef typename gt::archetype_handle   archetype_handle;
+      typedef typename gt::base_grid_type     base_grid_type;
+      typedef typename gt::Cell               Cell;
+      typedef typename gt::cell_handle        cell_handle;
     private:
       base_grid_type const* g; // ref
 
@@ -147,9 +147,9 @@ namespace shrink_grid_view {
       template<class element_tag>
       struct map_types : public detail::map_types_for_grid_view<GRID,element_tag> {};
 
-      ArchetypeIterator BeginArchetype() const 
+      archetype_iterator BeginArchetype() const 
 	{ return BaseGrid().BeginArchetype();}  
-      ArchetypeIterator EndArchetype() const 
+      archetype_iterator EndArchetype() const 
 	{ return BaseGrid().EndArchetype();}
       archetype_type const& ArchetypeOf(Cell const& c) const
 	{ return BaseGrid().ArchetypeOf(c.BaseCell()); }

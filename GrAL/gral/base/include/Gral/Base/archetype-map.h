@@ -24,8 +24,8 @@ class archetype_map
   typedef typename gt2::archetype_type   archetype2_type;
 
   typedef typename gt1::Cell Cell1;
-  typedef typename gt1::ArchetypeIterator Arch1Iterator;
-  typedef typename gt2::ArchetypeIterator Arch2Iterator;
+  typedef typename gt1::archetype_iterator Arch1Iterator;
+  typedef typename gt2::archetype_iterator Arch2Iterator;
 
 private:
   typedef partial_grid_morphism<archetype1_type, archetype2_type>

@@ -42,11 +42,11 @@ void ConstructGrid(OstreamGMV3DFmt& Out,
                     std::pair<morphism_type, int> > 
     phi;
 
-  for(typename gt::ArchetypeIterator a = G.BeginArchetype();
+  for(typename gt::archetype_iterator a = G.BeginArchetype();
       a != G.EndArchetype(); ++a) {
     bool found = false;
     int cnt_a = 0; // could be GMV::archetype_handle
-    for(GMV3D::ArchetypeIterator a_gmv = Out.BeginArchetype();
+    for(GMV3D::archetype_iterator a_gmv = Out.BeginArchetype();
 	a_gmv != Out.EndArchetype(); ++a_gmv, ++cnt_a) {
       morphism_type phi_a(*a,*a_gmv);
       found = construct_isomorphism(*a,*a_gmv, phi_a);

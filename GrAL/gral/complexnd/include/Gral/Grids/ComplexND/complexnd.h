@@ -125,7 +125,6 @@ namespace complexnd {
     typedef ComplexND<D-1>             archetype_type;
     typedef grid_types<archetype_type> archgt;
     typedef typename std::vector<archetype_type>::const_iterator  archetype_iterator;
-    typedef archetype_iterator ArchetypeIterator; // deprecate
   }; 
 
   // primary template
@@ -183,7 +182,6 @@ namespace complexnd {
     typedef ComplexND<0>               archetype_type;
     typedef grid_types<archetype_type> archgt;
     typedef std::vector<archetype_type>::const_iterator  archetype_iterator;
-    typedef archetype_iterator ArchetypeIterator; // deprecate
   }; // grid_types_ComplexND<0>
 
 
@@ -255,7 +253,6 @@ namespace complexnd {
     typedef ComplexND<ANY>             archetype_type;
     typedef grid_types<archetype_type> archgt;
     typedef std::vector<archetype_type>::const_iterator  archetype_iterator;
-    typedef archetype_iterator ArchetypeIterator; // deprecate
   };  // grid_types_ComplexND<ANY>
 
 

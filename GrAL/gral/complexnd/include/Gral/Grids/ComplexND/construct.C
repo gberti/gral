@@ -10,14 +10,14 @@ namespace complexnd  {
   void ConstructGrid0_0(ComplexND<0>& g, G_SRC const& g_src, PHI& phi) {
     typedef grid_types<ComplexND<0> > gt;
     typedef grid_types<G_SRC>         srcgt;
-    /*
+    
     g.incidences[0].resize(g_src.NumOfVertices());
     unsigned vcnt = 0;
     for(typename srcgt::VertexIterator v(g_src); ! v.IsDone(); ++v) {
       phi[v.handle()] = typename gt::vertex_handle(vcnt);
       ++vcnt;
     }
-    */
+   
   }
 
   template<int D, class G_SRC, class PHI>
@@ -38,7 +38,7 @@ namespace complexnd  {
       // copy archetypes
       typedef vertex_morphism<typename srcgt::archetype_type, typename gt::archetype_type> arch_morphism;
       std::vector<arch_morphism>  morphism;
-      for(typename srcgt::ArchetypeIterator a_src(g_src.BeginArchetype()); a_src != g_src.EndArchetype(); ++a_src) {
+      for(typename srcgt::archetype_iterator a_src(g_src.BeginArchetype()); a_src != g_src.EndArchetype(); ++a_src) {
 	typename gt::archetype_handle a = g.add_archetype();
 	morphism.push_back(arch_morphism(*a_src,g.Archetype(a)));
 	ConstructGrid0(g.Archetype(a), *a_src,  morphism.back());
