@@ -46,4 +46,26 @@ int main() {
   cout << "-M0=\n" << -1.0*M0 << endl;
   cout << "-M0=\n" << M0*-1.0 << endl;
 
+  cout << "det(M0)=" << mt0::det(M0)       << endl;
+  cout << "M0^T=\n"  << mt0::transpose(M0) << endl;
+  cout << "M0^-1=\n" << mt0::inverse  (M0) << endl;
+
+  cout << "det(M1)=" << mt1::det(M1)       << endl;
+  cout << "M1^T=\n"  << mt1::transpose(M1) << endl;
+  cout << "M1^-1=\n" << mt1::inverse  (M1) << endl;
+
+
+
+  {
+    matrix<3,3,1> N(0.0);
+    typedef matrix_traits<matrix<3,3,1> > mt;
+    N(1,2) = -1;
+    N(2,1) = 1;
+    N(3,3) = 1;
+    cout << "N=\n"    << N << endl;
+    cout << "det(N)=" << mt::det(N)       << endl;
+    cout << "N^T=\n"  << mt::transpose(N) << endl;
+    cout << "N^-1=\n" << mt::inverse  (N) << endl;
+  }
+
 }
