@@ -1,9 +1,13 @@
-PREFIX=$(HOME)/lib/gral
-INSTALLHEADERS=$(PREFIX)/include
+export CONFIG:=$(PWD)/mk.config
+unexport PWD
+include $(CONFIG)
 
-install:
+
+
+install-headers:
 	mkdir -p $(INSTALLHEADERS)/Config
 	cp include/Config/*.h $(INSTALLHEADERS)/Config
+
 
 new:
 
@@ -12,3 +16,5 @@ test:
 doc:
 
 demo:
+
+clean: stdclean

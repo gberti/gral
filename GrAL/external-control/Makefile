@@ -16,11 +16,13 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
-install:
+install-headers:
 	mkdir -p $(INSTALLHEADERS)/IO
 	mkdir -p $(INSTALLLIBRARIES)
 	cp include/IO/*.h $(INSTALLHEADERS)/IO
-	cp $(LIBDIR)/*.a $(INSTALLLIBRARIES)
+
+install: install-headers install-libs
+
 
 clean:
 	(cd src;  $(MAKE) clean DEPS="")
@@ -31,14 +33,20 @@ clean:
 realclean: clean
 	rm -rf lib/$(ARCH)/
 
+test:
+
 demo:
 	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
+
+
+doc: doxy tex
 
 doxy:
 	mkdir -p doxygen
 	doxygen doxy.cfg;
 
-docs:
+
+tex:
 	(cd doc; $(MAKE) $(TARGET))
 	rm -f $(ROOT)/doxygen/html/external-control.html
 	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html
@@ -50,4 +58,4 @@ tar:
          tar -cf external-control.tar external-control; \
          rm -rf external-control/;)
 
-.PHONY: demo
+.PHONY: demo test doc

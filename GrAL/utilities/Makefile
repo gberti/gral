@@ -17,13 +17,15 @@ compile:
 lib:
 	(cd src; $(MAKE) lib)
 
-install:
+#install-libs generic
+
+install-headers:
 	mkdir -p $(INSTALLHEADERS)/Utility
 	mkdir -p $(INSTALLHEADERS)/Forward
-	mkdir -p $(INSTALLLIBRARIES)
 	cp include/Utility/*.h $(INSTALLHEADERS)/Utility
 	cp include/Forward/*.h $(INSTALLHEADERS)/Forward
-	cp $(LIBDIR)/*.a $(INSTALLLIBRARIES)
+
+install: install-headers install-libs
 
 clean:
 	(cd src;  $(MAKE) clean DEPS="")

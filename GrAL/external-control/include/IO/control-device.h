@@ -21,6 +21,10 @@
      e.g. they may be 
      - read from a file
      - set interactively via a GUI or a command interpreter
+
+     \todo
+      Fix the memory leak in control_device_impl::add(std::string const&, Mutator* m).
+      (The space m points to is not lost forever.)
 */
 
 

@@ -15,7 +15,7 @@ compile:
 lib:
 
 
-install:
+install-headers:
 	mkdir -p $(INSTALLHEADERS)/Container
 	cp include/Container/*.h $(INSTALLHEADERS)/Container
 
