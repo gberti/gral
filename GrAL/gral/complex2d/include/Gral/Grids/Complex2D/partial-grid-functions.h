@@ -12,15 +12,10 @@
 
 
 
-#include "my-hash-map.h" // STL 
+#include "Container/my-hash-map.h" // STL 
 
+#include "Gral/Base/partial-grid-function-hash.h"
 
-#include "Grids/Complex2D/element-traits.h"
-#include "Grids/partial-grid-function-hash.h"
-
-
-#include "Grids/Complex2D/partial-grid-functions-spec-macro.h"
-
-
+#include "Gral/Grids/Complex2D/element-traits.h"
 
 #endif
