@@ -57,8 +57,8 @@ void test_locator(LOCATOR const& Loc, IT begin, IT end, std::ostream& out)
 	out << "bucket " << (*b).index() << ": ";
 	for(unsigned c = 0; c < (*Loc.TheBuckets())(*b).size(); ++c)
 	  out << Cell(Loc.TheGrid(), (*Loc.TheBuckets())(*b)[c]).index() << ", ";
+	out << "\n";
       }
-      out << "\n";
     }
 
     for(IT i = begin; i != end; ++i) {
@@ -71,7 +71,7 @@ void test_locator(LOCATOR const& Loc, IT begin, IT end, std::ostream& out)
 	out << " not found in grid";
       out << std::endl;
     }
-
+    out << "\n\n";
 }
 
 int main()
@@ -120,18 +120,21 @@ int main()
   }
 
   {
-    matrix_type  A(1.0); A(0,1) = -1.0;  // left rotation by Pi/4, stretch by sqrt(2)
+    matrix_type  A(1.0); A(0,1) = -1.0;  // left rotation by \pi/4, stretch by sqrt(2)
     mapping_type M(A);
     grid_type R(it(0,0), it(11,11));
     geom_type GeomR(R, it(0,0), it(1,1), M);
     
     point_locator<grid_type, geom_type, gt> Locator(R,GeomR);
     Locator.init();
-    
+    Locator.set_search_region_growth(6.0);    
+
     typedef coord_type ct;
     coord_type P[] = { ct(0.0,0.0),  ct(-1.0,0.0), ct(1.0,1.0), 
 		       ct(0.0, 0.5), ct(0,1.0), ct(0.0,5.0), 
-		       ct(-0.5,9.5), ct(-9.5,9.5), ct(-9.5,0.5)};
+		       ct(-0.5,9.5), ct(-9.5,9.5), ct(-9.5,0.5),
+                       ct(5.0,5.0), ct(6.0, 4.0), ct(7.0,3.0), ct(8.0, 2.0), 
+		       ct(9.0, 1.0), ct(10.0,1.0), ct(11.0, -1.0)};
 
     test_locator(Locator, P, P + sizeof(P)/sizeof(ct), cout);
   }
