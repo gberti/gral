@@ -74,7 +74,7 @@ public:
   void cb()    const { REQUIRE(bound(), "",1);}
   void rebind(grid_type    const& gg) { g = &gg; ll = g->ll(); ur = g->ur(); init();}
   void rebind(grid_type    const& gg,
-	      mapping_type const& ff) { f = ff; rebing(gg);}
+	      mapping_type const& ff) { f = ff; rebind(gg);}
 
   const mapping_type&  TheMapping() const { return f;}
   
@@ -216,6 +216,7 @@ public:
   typedef dd_mapped_geom_reg2d<CM, mapped_geometry<CM>,
                                point_traits<typename CM::result_type>::dimension>
   base;
+  using base::basic_geom;
 
   typedef typename base::Vertex Vertex;
   typedef typename base::Edge   Edge;
