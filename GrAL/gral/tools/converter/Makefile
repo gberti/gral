@@ -5,7 +5,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-DEPMODULES+= gral/base gral/gmv-io gral/geomview-io \
+EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io \
              external-control configuration utilities geometry sequence
 
 

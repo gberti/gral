@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-ALLDEPMODULES += gral/cartesian2d gral/testing
+EXTRA_DEPMODULES += gral/cartesian2d gral/testing
 LOCALSOURCES =  test-facet-iterator-of-cell-set.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)

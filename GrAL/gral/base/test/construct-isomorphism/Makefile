@@ -13,7 +13,7 @@ EXEC =  $(TARGETS)
 
 include $(DEPS)
 
-DEPMODULES+= gral/cartesian2d gral/cartesian3d gral/complex2d geometry
+EXTRA_DEPMODULES+= gral/cartesian2d gral/cartesian3d gral/complex2d geometry
 
 LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-base -lgral-complex2d 
 

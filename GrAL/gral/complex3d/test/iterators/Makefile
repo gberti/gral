@@ -11,7 +11,7 @@ DEPS = $(LOCALSOURCES:%.C=%.d)
 TARGETS = test-complex3d-iterators
 EXEC =  $(TARGETS)
 
-DEPMODULES += gral/cartesian3d
+EXTRA_DEPMODULES += gral/cartesian3d
 include $(DEPS)
 
 

@@ -1,6 +1,6 @@
 # gral/tools/converter
 
-ALLDEPMODULES+= gral/base gral/complex2d \
+EXTRA_DEPMODULES+= gral/base gral/complex2d \
              external-control configuration utilities geometry sequence
 
 PWD=$(shell pwd)

@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-ALLDEPMODULES+= gral/cartesian3d
+EXTRA_DEPMODULES+= gral/cartesian3d
 SOURCES =  test-construct-complex3d.C
 OBJECTS =  $(SOURCES:%.C=%.o)
 DEPS     = $(SOURCES:%.C=%.d)

@@ -12,7 +12,7 @@ EXEC =  test-edge-facet-intersection
 
 include $(DEPS)
 
-DEPMODULES+= gral/measurement gral/complex3d gral/complex2d gral/cartesian3d geometry external-control
+EXTRA_DEPMODULES+= gral/measurement gral/complex3d gral/complex2d gral/cartesian3d geometry external-control
 
 LIBS = -lgral-cartesian3d -lgral-complex3d -lgral-complex2d -lgral-base\
        -lgeometry -lexternal-control -lutilities

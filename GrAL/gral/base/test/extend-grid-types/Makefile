@@ -4,7 +4,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-ALLDEPMODULES += gral/cartesian2d gral/complex2d gral/cartesian3d gral/complex3d geometry
+EXTRA_DEPMODULES += gral/cartesian2d gral/complex2d gral/cartesian3d gral/complex3d geometry
 LOCALSOURCES =  test-extend-grid-types.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)

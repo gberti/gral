@@ -14,7 +14,7 @@ EXEC =  $(TARGETS)
 
 include $(DEPS)
 
-DEPMODULES+= gral/cartesian2d 
+EXTRA_DEPMODULES+= gral/cartesian2d 
 
 LIBS = -lgral-geomview-io -lgral-cartesian2d -lgral-base 
 
