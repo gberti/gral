@@ -22,6 +22,8 @@ public:
   typedef typename mapping_type::result_type coord_type;
   typedef CartesianGrid3D grid_type;
   typedef grid_types<grid_type> gt;
+  typedef gt::index_type        index_type;
+  typedef gt::Cell              Cell;
   typedef gt::Vertex            Vertex;
 
 private:
@@ -32,30 +34,45 @@ private:
 public:
   mapped_geometry() : g(0) {}
   mapped_geometry(grid_type    const& gg,
-		  mapping_type const& ff)
+		  mapping_type const& ff = mapping_type())
     : g(&gg), f(ff)
     {
       init();
     }
   void init(grid_type    const& gg,
-	    mapping_type const& ff)
+	    mapping_type const& ff = mapping_type())
     {
       g = &gg; 
       f = ff;
       init();
     }
 
-  double x(Vertex const& v) const { return dx * v.index()[0];}
-  double y(Vertex const& v) const { return dy * v.index()[1];}
-  double z(Vertex const& v) const { return dz * v.index()[2];}
+
   
   //  coord_type coord(Vertex const& v) const { return f(x(v),y(v),z(v));}
-  coord_type coord(Vertex const& v) const { return f(coord_type(x(v),y(v),z(v)));}
+  coord_type coord(Vertex const& v) const { 
+    index_type i(v.index()); 
+    return f(coord_type(x(i),y(i),z(i)));
+  }
+
+  //! result is the mapping of the center of c in [0,1]^3
+  coord_type center(Cell const& c) const { 
+    index_type i=c.index(); 
+    return f(coord_type(x(i)+0.5*dx,y(i)+0.5*dy,z(i)+0.5*dz));
+  }
 
   grid_type    const& TheGrid() const { return *g;}
   mapping_type const& TheMap()  const { return f;}
 
 private:
+  double x(index_type i) const { return dx*i[0];}
+  double y(index_type i) const { return dy*i[1];}
+  double z(index_type i) const { return dz*i[2];}
+
+  double x(Vertex const& v) const { return x(v.index());}
+  double y(Vertex const& v) const { return y(v.index());}
+  double z(Vertex const& v) const { return z(v.index());}
+
   void init()
     {
       dx = 1.0 / g->NumOfXCells();
