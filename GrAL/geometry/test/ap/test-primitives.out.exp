@@ -113,3 +113,7 @@ plane intersection: 0.5 0.5 0
 line does intersect plane
 ray does intersect triangle
 plane intersection: 0.5 0.5 0 
+ap::basis_completion(1 0 0 ) = 0 0 -1 ; 0 -1 0 
+ap::basis_completion(1 0 0 ; 0 1 0 ) = 0 0 1 
+ap::basis_completion(1 1 0 ) = 0 0 -1 ; 1 -1 0 
+ap::basis_completion(1 1 0 ; 0 1 1 ) = 1 -1 1 
