@@ -1,0 +1,11 @@
+/*! \mainpage Configuration Module Index
+
+   The configuration module is used by all other modules
+   in the GrAL package. It contains
+   
+   - common Makefile parts,
+   - configuration information for 3rd party software (e.g. MPI)
+   - doxygen related information
+   - compiler configuration  in compiler-config.h
+
+*/

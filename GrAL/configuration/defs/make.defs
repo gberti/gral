@@ -7,12 +7,21 @@
 
 # configuration parameters
 # may be overrun in mk.config files
-ifndef  ARCH
-export ARCH   =solaris#  # solaris, linux
+
+#/*! \file  make Variables:
+#  - ARCH: define architecture, possible values: solaris, linux 
+#  - CCNAME:  compiler name, used in paths, possible values: kai, gcc
+# */
+
+ifndef ARCH
+export ARCH   =solaris#  
 endif
+
+#//! compiler name, used in paths, possible values: kai, gcc
 ifndef CCNAME
-export CCNAME =gcc#      # kai, gcc
+export CCNAME =gcc#      
 endif
+
 ifndef DEBUG
 export DEBUG  =debug#    # opt, debug
 endif
@@ -22,7 +31,7 @@ endif
 
 # here some utility scripts can be found,
 # typically for collective operations on all modules
-export SCRIPTS=$(ALLROOT)/maintenance/scripts
+export SCRIPTS=$(CONFIGURATION)/scripts
 
 # targets for tree makefiles (directory makefiles calling subdir makefiles) 
 export RECURSIVETARGETS=$(CONFIGURATION)/defs/recursive-targets

@@ -38,12 +38,12 @@ doxy:  doxy1 installdox
 DOCROOT=$(ALLROOT)
 DOXYPATH=doxygen/html
 doxy1:
-	$(CONFIGURATION)/doxygen/filter-doxy-cfg.pl -root $(ALLROOT) \
-        $(CONFIGURATION)/doxygen/doxy.paths.cfg                  > doxy.cfg.tmp
-	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxygen/"        >> doxy.cfg.tmp
+	$(CONFIGURATION)/doxycfg/filter-doxy-cfg.pl -root $(ALLROOT) \
+        $(CONFIGURATION)/doxycfg/doxy.paths.cfg                  > doxy.cfg.tmp
+	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxycfg/"        >> doxy.cfg.tmp
 	cat doxy.local.cfg                                      >> doxy.cfg.tmp
 	$(SCRIPTS)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg.tmp
-	cp $(CONFIGURATION)/doxygen/footer.html .
+	cp $(CONFIGURATION)/doxycfg/footer.html .
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
          doxygen doxy.cfg.tmp;)
