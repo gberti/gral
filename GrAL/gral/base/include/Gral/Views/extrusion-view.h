@@ -404,7 +404,10 @@ struct element_traits<extrusion_view::vertex_iterator_t<GRID2D> >
   typedef element_traits_vertex_base<extrusion_view::grid<GRID2D> > base;
 
   struct hasher_type {
-    unsigned operator()(extrusion_view::vertex_iterator_t<GRID2D> const& e) const {
+    typedef extrusion_view::vertex_iterator_t<GRID2D> key_type;
+    typedef key_type                                  argument_type;
+    typedef size_t                                    result_type;
+    size_t operator()(key_type const& e) const {
       typedef element_traits<typename grid_types<GRID2D>::Vertex> bet;
       typename bet::hasher_type bh;
       return bh(e.Base()) * e.handle().second;
