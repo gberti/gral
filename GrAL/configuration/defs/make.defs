@@ -44,10 +44,10 @@ export RECURSIVETARGETS=$(CONFIGURATION)/defs/recursive-targets
 # Path for installation 
 export PREFIX=$(HOME)/lib/gral#
 
-# Modulse required by current module
-ifndef DEPMODULES
-export DEPMODULES= $(shell cat $(ROOT)/dependencies)
-endif
+# Modules required by current module
+export ALLDEPMODULES += $(shell cat $(ROOT)/dependencies 2>/dev/null)
+# make DEPMODULES unique
+export DEPMODULES=$(sort $(ALLDEPMODULES))
 
 # exporting PDW could give trouble in subdir Makefiles
 # which try to give default values to other variables such as CONFIG
