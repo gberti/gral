@@ -16,7 +16,7 @@
 
 template<class POINT>
 struct dimension_dependent_primitives_2d 
-  : public basic_algebraic_primitives<POINT> 
+  : public virtual basic_algebraic_primitives<POINT> 
 {
 
   static double det2(const POINT& p1, const POINT& p2)

@@ -16,7 +16,7 @@
 
 template<class POINT>
 struct dimension_dependent_primitives_3d 
-  : public basic_algebraic_primitives<POINT> {
+  : public virtual basic_algebraic_primitives<POINT> {
 
   /*! \brief returns the determinant of the matrix (p1,p2,p3)
    */
