@@ -1,0 +1,21 @@
+/*! \mainpage Index of the GrAL Cartesian2D Grid Module
+
+   This module contains the concrete grid component RegGrid2D.
+   An object of type RegGrid2D represents a finite Cartesian grid.
+   Hence, there is no explicit incidence information stored, all
+   iterator functionality is implemented via index calculations.
+
+   
+   The main classes one might use are:
+   (headers under the path Gral/Grids/Cartesian2D)
+   -  RegGrid2D (cartesian-grid2d.h): The combinatorial grid
+   -  stored_geometry_reg2d (stored-geometry.h):
+       A simple grid geometry with stored vertex coordinates
+   -  mapped_geometry_reg2d (mapped-geometry.h): 
+        A grid geometry using a mapping from a default embedding in \f$ [0,1]^2 \f$
+   - total grid function (see $GrAL TotalGridFunction concept, grid-functions.h)
+   - partial grid functions 
+     (see $GrAL PartialGridFunction concept, partial-grid-functions.h )
+   - BoundaryRange<RegGrid2D> (boundary.h) for boundary iteration
+   - all.h for all of the above.
+*/
