@@ -31,18 +31,27 @@ install: install-headers
 # targets to generate documentation using doxygen
 
 doxy:  doxy1 installdox
-	rm -f doxy.cfg.tmp installdox.sh.tmp
 
+#	rm -f doxy.cfg.tmp installdox.sh.tmp
+
+
+DOCROOT=$(ALLROOT)
+DOXYPATH=doxygen/html
 doxy1:
-	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxygen/"         > doxy.cfg.tmp
+	$(CONFIGURATION)/doxygen/filter-doxy-cfg.pl -root $(ALLROOT) \
+        $(CONFIGURATION)/doxygen/doxy.paths.cfg                  > doxy.cfg.tmp
+	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxygen/"        >> doxy.cfg.tmp
 	cat doxy.local.cfg                                      >> doxy.cfg.tmp
 	$(SCRIPTS)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg.tmp
+	cp $(CONFIGURATION)/doxygen/footer.html .
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
          doxygen doxy.cfg.tmp;)
+	rm footer.html
 
 installdox:
-	$(SCRIPTS)/generate-installdox.pl -root $(ALLROOT) dependencies > installdox.sh.tmp;
+	$(SCRIPTS)/generate-installdox.pl -root $(DOCROOT) -path $(DOXYPATH)\
+          dependencies > installdox.sh.tmp;
 	chmod ugo+x ./installdox.sh.tmp;
 	./installdox.sh.tmp
 
