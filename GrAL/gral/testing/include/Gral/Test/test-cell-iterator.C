@@ -16,6 +16,8 @@ bool test_cell_iterator(G const& g, std::ostream & out)
   for(CellIterator v(g); ! v.IsDone(); ++v, ++cnt) {
     typename gt::cell_handle h = v.handle();
     typename gt::Cell vv(v.TheGrid(), h);
+    //    typename gt::Cell vv(v.TheGrid(), v.handle());
+
     REQUIRE_ALWAYS(vv == *v, "Cell constructed from handle differs!\n",1);
 
   }
