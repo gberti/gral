@@ -87,13 +87,16 @@ private:
 public:
   std::string const& name(int a) const
     { return (*(data.names))(a); }
-  typedef StaticData::archetype_table::const_iterator ArchetypeIterator;
-  ArchetypeIterator BeginArchetype() const { return data.archetypes->begin();}
-  ArchetypeIterator EndArchetype()   const { return data.archetypes->end();}
+  typedef StaticData::archetype_table::const_iterator archetype_iterator;
+  archetype_iterator BeginArchetype() const { return data.archetypes->begin();}
+  archetype_iterator EndArchetype()   const { return data.archetypes->end();}
 
 };
 
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/IO/gmv-format-output3d.tt.C"
+#else
 
 /*! \brief ConstructGrid overload for OstreamGMV3DFmt
 
@@ -126,8 +129,6 @@ void ConstructGrid_GF(OstreamGMV3DFmt& Out,
 		      GEOM const& GEO,
 		      heterogeneous_list::List<GF,MOREGFS> GFS);
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/IO/gmv-format-output3d.tt.C"
 #endif
 
 
