@@ -92,6 +92,7 @@ int main() {
 
   {
     cartesiannd::grid<2> R(it2(2,2));
+    typedef grid_types<cartesiannd::grid<2> > gt;
     cout << "Grid 2x2 vertices:\n";
     R.print(cout);
     print_grid(R, cout);
@@ -131,10 +132,23 @@ int main() {
       cout << "v=[" << v.index() << "] ";
     } while ( v != v_first);
     cout << endl;
+
+    cout << "Testing vertex_index_low/high: " << endl;
+    cout << "Cells: " << endl;
+    for(gt::CellIterator c(R); ! c.IsDone(); ++c)
+      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+    cout << "Edges: " << endl;
+    for(gt::EdgeIterator c(R); ! c.IsDone(); ++c)
+      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+    cout << "Vertices: " << endl;
+    for(gt::VertexIterator c(R); ! c.IsDone(); ++c)
+      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+
   }
 
   {
     cartesiannd::grid<3> R(it3(2,2,2));
+    typedef grid_types<cartesiannd::grid<3> > gt;
     cout << "Grid 2x2x2 vertices:\n";
     R.print(cout);
     print_grid(R, cout);
@@ -161,6 +175,21 @@ int main() {
     test_facet_on_cell_iterator(R,cout);
 
     test_cell_on_cell_iterator(R,cout);
+
+    cout << "Testing vertex_index_low/high: " << endl;
+    cout << "Cells: " << endl;
+    for(gt::CellIterator c(R); ! c.IsDone(); ++c)
+      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+    cout << "Facets: " << endl;
+    for(gt::FacetIterator c(R); ! c.IsDone(); ++c)
+      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+    cout << "Edges: " << endl;
+    for(gt::EdgeIterator c(R); ! c.IsDone(); ++c)
+      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+    cout << "Vertices: " << endl;
+    for(gt::VertexIterator c(R); ! c.IsDone(); ++c)
+      cout << (*c).vertex_index_low() << "; " << (*c).vertex_index_high() << endl; 
+
   }
 
   
