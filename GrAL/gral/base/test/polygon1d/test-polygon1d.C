@@ -1,3 +1,7 @@
+/*! \file Test code for polygon1d::polygon
+
+*/
+
 #include "Gral/Base/polygon.h"
 #include "Gral/Test/test-iterators.h"
 
@@ -14,6 +18,7 @@ int main() {
   test_vertex_iterator(p, *out);
   test_cell_iterator  (p, *out);
   test_vertex_on_cell_iterator(p, *out);
+  test_facet_on_cell_iterator (p, *out);
 
   checkgt<gt>(*out);
 }
