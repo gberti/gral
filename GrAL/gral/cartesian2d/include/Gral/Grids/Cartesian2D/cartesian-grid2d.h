@@ -16,6 +16,8 @@
 
 #include "Gral/Grids/Cartesian2D/index-map.h"
 
+#include "Gral/Grids/ComplexND/complexnd.h"
+
 
 namespace cartesian2d {
 
@@ -113,6 +115,7 @@ public:
   index_type cell_size()   const { return ur_ - ll_;}
   //@}
 
+
 private:
   
   const indexmap_type& TheVertexMap() const {return vertex_index_map;}
@@ -133,6 +136,22 @@ private:
   static std::string  corner_name_[4];
 
 public:
+  typedef complexnd::ComplexND<1> archetype_type;
+  typedef archetype_type const*   archetype_iterator;
+  typedef unsigned                archetype_handle;
+private:
+  // static data.
+  // TODO: move all of the above into this class
+  class SD {
+  public:
+    SD();
+
+    typedef RegGrid2D grid_type;
+    grid_type::archetype_type the_archetype[1];
+  };
+  static SD sd;
+public:
+
   // map strings to side-/corner-enum and vice versa
   // this recognises different spellings, e.g. "S", "s", "South", "south".
   static int get_side(const std::string& nm);
@@ -1074,6 +1093,23 @@ public:
     { Cell sc(c); switch_cell(e,sc); return sc;}
   //@}
 
+  /*! \name Archetype handling
+   */
+  /*@{*/ 
+  static archetype_iterator BeginArchetype() { return sd.the_archetype; }
+  static archetype_iterator EndArchetype()   { return sd.the_archetype+1; }
+  static archetype_type const& Archetype(archetype_handle = 0) { return *BeginArchetype();} 
+  static archetype_type const& ArchetypeOf (Cell const&)  
+    { return *BeginArchetype();}
+  static archetype_type   const& ArchetypeOf (cell_handle) 
+    { return *BeginArchetype();}
+  static archetype_handle        archetype_of(cell_handle) 
+    { return 0;}
+  static archetype_handle        archetype_of(Cell const&) 
+    { return 0;}
+  static unsigned NumOfArchetypes() { return 1;}
+  /*@}*/
+
 };
 
 
@@ -1371,6 +1407,12 @@ struct grid_types<cartesian2d::RegGrid2D> {
   static bool is_cell_inside(grid_type const& G, cell_handle c) { return (c !=G.invalid_cell());}
   static bool is_cell_valid (grid_type const& G, Cell const& c) { return (G.IsValid(c));}
   static bool is_cell_inside(grid_type const& G, Cell const& c) { return (G.IsInside(c));}
+
+  typedef grid_type::archetype_type     archetype_type;
+  typedef grid_type::archetype_handle   archetype_handle;
+  typedef grid_type::archetype_iterator archetype_iterator;
+  typedef archetype_iterator            ArchetypeIterator; 
+  typedef grid_types<archetype_type>    archgt;
 };
 
 

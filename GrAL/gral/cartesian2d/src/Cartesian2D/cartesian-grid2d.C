@@ -7,6 +7,17 @@ namespace cartesian2d {
 
 typedef RegGrid2D::index_type index_type;
 
+
+// static data
+RegGrid2D::SD RegGrid2D::sd;
+
+// constructur for static data
+RegGrid2D::SD::SD()
+{
+  // this works as long as we use a cyclic order for VertexOnCell iteration
+  the_archetype[0] = archetype_type(complexnd::polygon(4));
+}
+
 index_type  RegGrid2D::side_offset_[4] = { index_type(0,-1),  // S
 					   index_type(1,0),   // E
 					   index_type(0,1),   // N
