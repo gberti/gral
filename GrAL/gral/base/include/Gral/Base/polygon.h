@@ -20,14 +20,15 @@ namespace polygon1d {
     typedef vertex_handle_int<polygon> vertex_handle;
     typedef cell_handle_int  <polygon> cell_handle;
  
-    typedef vertex_iterator_int<polygon, grid_types_p1d> VertexIterator;
-    typedef cell_iterator_int<polygon, grid_types_p1d>   CellIterator;
+    typedef vertex_iterator_int<grid_types_p1d>  VertexIterator;
+    typedef cell_iterator_int  <grid_types_p1d>  CellIterator;
     typedef VertexIterator Vertex;
     typedef CellIterator   Cell;
 
    
     typedef VertexOnCellIterator1d     VertexOnCellIterator;
 
+    // Cell <-> Edge, Facet <-> Vertex
     typedef vertex_handle              facet_handle;
     typedef cell_handle                edge_handle;
     typedef Vertex                     Facet;
@@ -39,6 +40,11 @@ namespace polygon1d {
 
   };
 
+  /*! A 1D grid class
+   
+     An object of type polygon represents a simple polygon.
+
+  */
   class polygon : public grid_types_p1d {
   private:
     unsigned nv;
@@ -48,12 +54,19 @@ namespace polygon1d {
     unsigned NumOfVertices() const { return nv;}
     unsigned NumOfCells()    const { return nv;}
 
-    unsigned NumOfVertices(Cell const&) const { return 2;}
+    unsigned NumOfEdges()  const { return NumOfCells();}
+    unsigned NumOfFacets() const { return NumOfVertices();}
 
     VertexIterator FirstVertex() const;
     CellIterator   FirstCell()   const;
 
+    EdgeIterator  FirstEdge()  const { return FirstCell();}
+    FacetIterator FirstFacet() const { return FirstVertex();}
+
+    unsigned NumOfVertices(Cell const&) const { return 2;}
+    unsigned NumOfFacets  (Cell const&) const { return 2;}
   };
+
 
   class VertexOnCellIterator1d : public grid_types_p1d {
     typedef VertexOnCellIterator1d self;
