@@ -97,6 +97,7 @@ public:
                                          PartBdFacetIterator;
   typedef typename cell_range_rf::CellIterator RangeCellIterator;
 
+  typedef typename grid_function<Cell,int>::const_iterator const_iterator;
 private:
   //----------- DATA ---------------
   //  const Grid*                        the_grid; // referenced
@@ -104,11 +105,12 @@ private:
   std::vector<cell_range>      ranges;
   grid_function<Cell,int>      the_partitions;
 
+  mutable bool ranges_up_to_date;
 public:
   //---------------------- construction -----------------------------
 
   //  partitioning(const grid_type& g) : the_grid(&g), the_partitions(g) {
-  partitioning(grid_type& g) : the_grid(&g), the_partitions(g) {
+  partitioning(grid_type& g) : the_grid(&g), the_partitions(g), ranges_up_to_date(false) {
     for(CellIterator c = TheGrid().FirstCell(); ! c.IsDone(); ++c) {
      the_partitions[*c] = -1;
     }
@@ -117,6 +119,7 @@ public:
   int add_partition() {
     ranges.push_back(cell_range(TheGrid())); 
     return (ranges.size() -1);
+    ranges_up_to_date = false;
   }
 
   void add_cell(int i, const Cell& c) {
@@ -132,15 +135,29 @@ public:
   void create_vertex_partitions();
 
   // handle with care -- leaves class in an inconsistent state!!
-  void set_partition(const Cell& c, int p) { the_partitions[c] = p;}
+  void set_partition(const Cell& c, int p) { the_partitions[c] = p;    ranges_up_to_date = false;}
+  int& operator[]   (const Cell& c)        { return the_partitions[c]; ranges_up_to_date = false;}
+
+  int  operator()   (const Cell& c)   const { return the_partitions(c);}
+
+  const_iterator begin() const { return the_partitions.begin();}
+  const_iterator end()   const { return the_partitions.end();}
 
   // re-establish consistent state after several set_partition() calls
   void calculate_ranges();
+  void update_ranges() const {
+    if (! ranges_up_to_date) {
+       const_cast<self *>(this)->calculate_ranges();  
+       ranges_up_to_date = true;
+    } 
+  }
 
   // eine Kr"ucke ... falls das Gitter sich "andert (vergr"ossert)
   void update() {
-    if ((unsigned)TheGrid().NumOfCells() != the_partitions.size())
+    if ((unsigned)TheGrid().NumOfCells() != the_partitions.size()) {
       the_partitions.resize(TheGrid().NumOfCells());
+      ranges_up_to_date = false;
+    }
   }
 
   //---------------------- data access  -----------------------------
@@ -149,8 +166,9 @@ public:
   grid_type&       TheGrid()       { return *the_grid;}
 
   cell_range_rf Range(int i) const { 
+    update_ranges();
     REQUIRE( ((0 <= i ) && i < (int)ranges.size()), "i out of range: " << i << '\n',1);
-   return(cell_range_rf(ranges[i].range()));
+    return(cell_range_rf(ranges[i].range()));
   }
 
   int partition(const Cell& C) const { return the_partitions(C);}
@@ -158,13 +176,13 @@ public:
     int q = the_partitions(F.C1());
     return (q != p ? q :  the_partitions(F.C2()));
   }
-  unsigned NumOfPartitions() const { return ranges.size();}
+  unsigned NumOfPartitions() const { update_ranges(); return ranges.size();}
 
 
   PartBdVertexIterator FirstBdVertex(int p) const {
     return PartBdVertexIterator(find_bd_facet(p), InPartition(p,*this));
   }
-  PartBdFacetIterator FirstBdFacet(int p) const {
+  PartBdFacetIterator FirstBdFacet(int p) const { 
     return PartBdFacetIterator(find_bd_facet(p), InPartition(p,*this));
   }
 

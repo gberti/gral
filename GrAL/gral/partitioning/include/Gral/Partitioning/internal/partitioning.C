@@ -12,6 +12,7 @@
 // STD
 #include <string>
 #include <iostream>
+#include <algorithm>
 #include <ctype.h> // for isdigit()
 
 #include "Container/partial-mapping.h"
@@ -41,7 +42,7 @@ void partitioning<Grid>::read_partition(std::istream& in)
  if(isdigit(c)) {
    while(in && ! C.IsDone()) {
      in >> p;
-     int np = NumOfPartitions();
+     int np = ranges.size()-1; //NumOfPartitions();
      for( int pp = 0; pp <= p - np; ++pp)
        add_partition();
      // if( part_nums(p) == -1) {
@@ -79,6 +80,15 @@ void partitioning<Grid>::read_partition(std::istream& in)
 template<class Grid> 
 void partitioning<Grid>::calculate_ranges() 
 {
+  int max_partition = -1;
+  for(CellIterator C = TheGrid().FirstCell(); !C.IsDone(); ++C) {
+    REQUIRE(the_partitions(*C) >= 0, "partition of cell = " << the_partitions(*C),1);
+    max_partition = std::max(max_partition, the_partitions(*C));
+  }
+  ranges.clear();
+  if(max_partition >= 0)
+    ranges.resize(max_partition+1);
+
   for(int i = 0; i < (int)ranges.size(); ++i)
     ranges[i] = cell_range(TheGrid()); // empty
   for(CellIterator C = TheGrid().FirstCell(); !C.IsDone(); ++C)
