@@ -11,6 +11,11 @@
     Return value is true on successful construction,
     else false.
 
+    \bug It does not really try all possible isomorphisms.
+    If an isomorphism of 2 cells does not extend to an isomorphism
+    of the whole grid, it does not try other isomorphisms of the same
+    pair of cell. Thus, it cannot construct an isomorphism of a
+    Cartesian 2x1 grid to a 1x2 grid.
 */
 template<class GRID1, class GRID2, 
          class GT1,   class GT2,
