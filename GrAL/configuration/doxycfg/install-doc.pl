@@ -24,11 +24,15 @@ while(<>) {
   s|%STL|$STL|g;
   s|%Metis|$METIS|g;
   s|%METIS|$METIS|g;
+  s|<a href=\"%GRALCONCEPTS|<a TARGET=_parent  HREF=\"$GRALCONCEPTS|g;
   s|%GRALCONCEPTS\"|$GRALCONCEPTS\"|g;
   s|%GRALCONCEPTS/|$GRALCONCEPTS/|g;
   s|%GRALINDEX\"|$GRALINDEX\"|g;
   s|%GRALCONCEPTSTOP\"|$GRALCONCEPTSTOP\"|g;
   s|%ROOT|$ROOT|g;
   s|%DOXYPATH|$DOXYPATH|g;
+  s|GRALPROTECT||g;
+  s|\"memItemLeft\"[ ]+nowrap|\"memItemLeft\" |g;
+  s|class[ ]+([a-z_A-Z][a-z_A-Z0-9]*),|class&nbsp;$1,|g;
   print;
 }
