@@ -653,10 +653,24 @@ namespace complexnd {
     void incr() { ++h;}
   }; // class element_base_t<GRID,D,CD>
 
+  // checking templates fo ensure dimensions are consistent
+  template<int D1, int D2> struct check_same_number {};
+  template<int D>          struct check_same_number<D,D>   { typedef int ok;};
+
+  // general case with fixed dimensions: OK <=> D_GRID = D_ELEM + CD_ELEM
+  template<int D_GRID, int D_ELEM, int CD_ELEM> struct check_consistence
+  { typedef typename check_same_number<D_GRID, D_ELEM+CD_ELEM>::ok ok;};
+  // case with runtime dimensions: OK if at least one of D_ELEM, CD_ELEM = ANY
+  template<int D_ELEM, int CD_ELEM> struct check_consistence<ANY, D_ELEM, CD_ELEM> {};
+  template<int D_ELEM             > struct check_consistence<ANY, D_ELEM, ANY    > { typedef int ok;};
+  template<            int CD_ELEM> struct check_consistence<ANY, ANY   , CD_ELEM> { typedef int ok;};
+  template<                       > struct check_consistence<ANY, ANY   , ANY    > { typedef int ok;};
 
   // primary template. At least one of D and CD are fixed (!= ANY)
   template<class GRID, int D, int CD> // = GRID::dim - D>
   class element_t : public element_base_t<GRID,D,CD> {
+    // enum { d1 = GRID::dim, d2 = D+CD};
+    typedef typename check_consistence<GRID::dim,D,CD>::ok ok_type;
     typedef element_t     <GRID,D,CD> self;
     typedef element_base_t<GRID,D,CD> base;
     typedef typename base::grid_type grid_type;
@@ -1231,7 +1245,7 @@ struct element_traits<complexnd::element_t<complexnd::ComplexND<D>, 1, D-1> >
 // face
 template<int D>
 struct element_traits<complexnd::element_t<complexnd::ComplexND<D>, 2, D-2> > 
-  : public element_traits_edge_base<complexnd::ComplexND<D> >
+  : public element_traits_face_base<complexnd::ComplexND<D> >
 {
   typedef element_traits_face_base<complexnd::ComplexND<D> >  base;
   typedef consecutive_integer_tag<0>                          consecutive_tag;
@@ -1353,7 +1367,7 @@ template<>
 struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>, 2, complexnd::ANY> > 
   : public element_traits_face_base<complexnd::ComplexND<complexnd::ANY> >
 {
-  typedef element_traits_edge_base<complexnd::ComplexND<complexnd::ANY> >  base;
+  typedef element_traits_face_base<complexnd::ComplexND<complexnd::ANY> >  base;
   typedef consecutive_integer_tag<0>                 consecutive_tag;
   typedef base::hasher_type_elem_base                hasher_type;
 };
@@ -1372,9 +1386,9 @@ struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>,
 // spec. cell for ANY
 template<>
 struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>, complexnd::ANY, 0 > >
-  : public element_traits_facet_base<complexnd::ComplexND<complexnd::ANY> >
+  : public element_traits_cell_base<complexnd::ComplexND<complexnd::ANY> >
 {
-  typedef element_traits_edge_base<complexnd::ComplexND<complexnd::ANY> >  base;
+  typedef element_traits_cell_base<complexnd::ComplexND<complexnd::ANY> >  base;
   typedef consecutive_integer_tag<0>                 consecutive_tag;
   typedef base::hasher_type_elem_base                hasher_type;
 };
