@@ -9,7 +9,7 @@ for i in ${MODULES}
 do
  cd $i;
  echo ">>>>>>>>>> Updating $i:"
- cvs update;
+ cvs update -d;
  cd ${cvswork}
 done;
 
