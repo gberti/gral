@@ -1,0 +1,29 @@
+/*! \mainpage Index of the GrAL Complex3D Grid Module
+
+   This module contains the concrete grid component Complex3D.
+   An object of type \c Complex3D can represent a general three-dimensional 
+   grid  with arbitrary polytopes as cells.
+
+   Complex3D stores  only cell-vertex incidences.
+   It supports vertex, edge, facet, cell types and the 
+   corresponding sequence iterators, as well as cell-based incidence
+   iteration, and vertex-on-facet iteration.
+   Edge and facet sequence iterators are \e fat
+   iterators which maintain an internal table of already visited elements.
+
+   For each cell, an index to a 2D archetype of the cell's surface
+   grid is stored. This (still experimental) archetype technique
+   accounts for a economic storage of grids with different cell types.
+   It is also the key for implementing generic grid copy operations.
+
+   The main header files a user may want to include are:
+   (under the path Gral/Grids/Complex3D)
+   -  complex3d.h for the grid and iterator definitions
+   -  grid-functions.h for total grid functions
+     (see $GrAL TotalGridFunction concept)
+   -  partial-grid-functions.h for partial grid functions
+     (see $GrAL PartialGridFunction concept)
+   - construct.h for generic copy operations
+   - all.h for getting all of the above at once
+
+*/
