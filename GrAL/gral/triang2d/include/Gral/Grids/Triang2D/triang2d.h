@@ -467,7 +467,7 @@ class Triang2D_FacetIterator
 {
   typedef facet_iterator_of_cell_set<Triang2D_Cell> base;
  public: 
-  Triang2D_FacetIterator() : base(CellIterator()) {}
+  Triang2D_FacetIterator() {} 
   Triang2D_FacetIterator(CellIterator  const& c) : base(c) {}
   Triang2D_FacetIterator(grid_type const& g) : base(CellIterator(g)) {}
 };
