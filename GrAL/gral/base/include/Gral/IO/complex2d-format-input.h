@@ -58,6 +58,7 @@ protected:
     copy_coords(rhs);
   }
   virtual void init()        const;
+  virtual void init(std::string const& file) { base::init(file);}
   virtual bool initialized() const;
   virtual void read_coords() const;
   virtual void copy_coords(self const& rhs)
