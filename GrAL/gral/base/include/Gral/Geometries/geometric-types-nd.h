@@ -48,6 +48,7 @@ template<class GEOM, class GT, class E>
 class polytope_aux_dim<GEOM,GT,E,1> : public polytope_aux_dim<GEOM,GT,E,0> {
   typedef polytope_aux_dim<GEOM,GT,E,0> base;
 public:
+  using base::TheGeom;
   polytope_aux_dim() {}
   polytope_aux_dim(GEOM const&         geo, E const& ee) : base(geo,ee) {}
   polytope_aux_dim(ref_ptr<GEOM const> geo, E const& ee) : base(geo,ee) {}
@@ -105,6 +106,7 @@ class polytope_aux : public polytope_aux_dim<GEOM,GT,E, element_traits<E>::dim> 
   typedef element_traits<E> et;
   typedef E                 element_type;
   typedef typename GEOM::coord_type coord_type;
+  using base::TheGeom;
 
   polytope_aux() {}
   polytope_aux(geom_type const&         geo, element_type const& ee) : base(geo,ee) {}
@@ -158,7 +160,7 @@ public:
   polytope_directions_aux(object_type const& obj) : base(obj) 
     {
       for(typename ot::EdgeIterator e = obj.FirstEdge(); ! e.IsDone(); ++e) {
-	dirs[1].push_back(obj.directions(*e));
+	base::dirs[1].push_back(obj.directions(*e));
       }
     }
 };
@@ -174,7 +176,7 @@ public:
   polytope_directions_aux(object_type const& obj) : base(obj) 
     {
       for(typename ot::FaceIterator f = obj.FirstFace(); ! f.IsDone(); ++f) {
-	dirs[2].push_back(obj.directions(*f));
+	base::dirs[2].push_back(obj.directions(*f));
       }
     }
 };
@@ -234,6 +236,7 @@ class polytope_directions<polytope<GEOM,E,GT> > // detail::polytope_aux<GEOM, GT
   typedef typename base::coord_type coord_type;
   typedef algebraic_primitives<coord_type> ap;
   typedef typename base::dir_sequence dir_sequence;
+  using base::dirs;
 public:
 
   polytope_directions(object_type const& obj) : base(obj) 
