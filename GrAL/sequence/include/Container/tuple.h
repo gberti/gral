@@ -67,8 +67,8 @@ class tuple : public tuple_base<T,N> {
   using base::begin;
   using base::end;
   tuple() {}
-  tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
-  tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
+  explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
+  explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
   tuple(const_iterator b, const_iterator /*e */)
   { 
     // REQUIRE(((e-b) == N),
@@ -105,8 +105,8 @@ class tuple<T,2> : public tuple_base<T,2> {
   using base::end;
 
   tuple() {}
-  tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
-  tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
+  explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
+  explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
   tuple(const_iterator b, const_iterator /*e */)
   { 
     for(iterator it = begin(); it != end(); ++it,++b) 
@@ -149,8 +149,8 @@ class tuple<T,3> : public tuple_base<T,3> {
   using base::end;
 
   tuple() {}
-  tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
-  tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
+  explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
+  explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
   tuple(const_iterator b, const_iterator /*e */)
   { 
     for(iterator it = begin(); it != end(); ++it,++b) 
