@@ -13,7 +13,7 @@
 #include "Gral/Grids/Complex2D/point.h"
 
 #include "Gral/Base/common-grid-basics.h"
-
+#include "Gral/Base/element-handle.h"
 
 // many, many forward declarations ...
 
@@ -157,16 +157,18 @@ struct edge_handle_complex2d {
 };
 
 
-template<class T> class hash;
-struct hash<edge_handle_complex2d> {
-public:
-  typedef edge_handle_complex2d argument_type;
-  typedef size_t                result_type;
-
-  size_t operator()(const edge_handle_complex2d& e) const
-    { return (6*e.c + e.le);}
-};
-
+namespace std {
+  template<class T> class hash;
+  struct hash<edge_handle_complex2d> {
+  public:
+    typedef edge_handle_complex2d argument_type;
+    typedef size_t                result_type;
+    
+    size_t operator()(const edge_handle_complex2d& e) const
+      { return (6*e.c + e.le);}
+  };
+  
+} // namespace std
 
 struct complex2d_types { 
   typedef Complex2D Complex;
@@ -180,10 +182,13 @@ struct complex2d_types {
   typedef Cell2D    Face;
 
 
-  typedef int                     cell_handle;
-  typedef int                     vertex_handle;
-  typedef edge_handle_complex2d   edge_handle;
-  typedef edge_handle_complex2d   facet_handle;
+  typedef vertex_handle_int<Complex2D> vertex_handle;
+  typedef cell_handle_int<Complex2D>   cell_handle;
+  typedef edge_handle_complex2d        edge_handle;
+  typedef edge_handle_complex2d        facet_handle;
+
+  // typedef int vertex_handle;
+  //typedef int cell_handle;
 
   // sequence iterators
   typedef Vertex2D_Iterator       GridVertexIterator;
@@ -579,16 +584,17 @@ struct hash_cell2d {
   void operator=(hash_cell2d const&) {} // suppress warnings about statement w/o effect
 };
 
-template<class T>
-struct hash;
-
-struct hash<Vertex2D> 
-  : public hash_vertex2d {};
-struct hash<Edge2D> 
-  : public hash_edge2d {};
-struct hash<Cell2D> 
-  : public hash_cell2d {};
-
+namespace std {
+  template<class T>
+    struct hash;
+  
+  struct hash<Vertex2D> 
+    : public hash_vertex2d {};
+  struct hash<Edge2D> 
+    : public hash_edge2d {};
+  struct hash<Cell2D> 
+    : public hash_cell2d {};
+}
 
 #include "Gral/Grids/Complex2D/element-traits.h"
 
