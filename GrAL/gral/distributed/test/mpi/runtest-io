@@ -1,0 +1,32 @@
+#!/bin/bash
+MPIRUN=$1
+
+rm -f grid.complex2d grid.part
+cp    grid4x2.complex2d grid.complex2d
+cp    grid4x2.p.2x1     grid.part
+mkdir -p distributed-output
+
+if ! ${MPIRUN} -v -np 2 -machinefile ./mpihosts test-distri-io > out4x2 2>&1 
+then
+/bin/echo "ERROR running test-distri-io!  Output was:
+";
+cat out4x2
+/bin/echo "
+End output
+";
+else
+ mv distributed-output/dg.0.coarse distributed-output/dg.coarse 
+ rm -f distributed-output/dg.*.coarse
+ for i in `ls distributed-output/`
+ do 
+  c=`echo $i | perl -p -e "s/dg/compgrid/g"`
+  # echo $i $c
+  if diff distributed-output/$i composite-input/$c
+  then 
+   echo "         distributed-output/$i OK "
+  else
+   echo "ERROR in distributed-output/$i"
+  fi
+ done
+fi
+

@@ -13,7 +13,6 @@ LOCALTARGET = test-distributed
 #MPIPATH=/usr/lib/mpich
 #MPIRUN=$(MPIPATH)/bin/mpirun
 #IFLAGS += -I$(MPIPATH)/include
-LDFLAGS +=  -R$(MOUSE)/lib 
 LIBS = -lgral-distributed -lgral-complex2d -lgral-base -lexternal-control -lutilities
 
 
@@ -29,10 +28,10 @@ EXEC =  $(LOCALTARGET)
 
 new: clean all
 
-all : $(LOCALOBJECTS)
-	$(CC) -o $(EXEC) $(LOCALOBJECTS)  $(LDFLAGS) $(LIBS) 
+all : test-distributed test-distri-io
 
-#	$(CC) -o $(EXEC) $(LOCALOBJECTS) ./libmouse.a  $(LDFLAGS) $(LIBS) 
+test-distributed: test-distributed.o
+	$(CC) -o $@ $< $(LDFLAGS) $(LIBS)
 
 test-distri-io: test-distri-io.o
 	$(CC) -o $@ $< $(LDFLAGS) $(LIBS)
@@ -48,7 +47,7 @@ clean: stdclean
 
 NP=2
 run:
-	$(MPIRUN) -v -np $(NP) -machinefile ./mpihosts $(GDB)  $(LOCALTARGET)   
+	$(MPIRUN) -v -np $(NP) -machinefile ./mpihosts $(GDB)  test-distributed
 
 check:
 	./runtest $(MPIRUN)
