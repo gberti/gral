@@ -11,14 +11,14 @@ IstreamComplex2DFmt_base::IstreamComplex2DFmt_base()
 
 IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::string const& file, int off)    
   : offset(off),
-    in(new std::ifstream(file.c_str())),
-    checked_in(in),
-    is_in_owned(true),
+    // in(new std::ifstream(file.c_str())),
+    //checked_in(in),
+    // is_in_owned(true),
     nv_nc_read(false),
     cell_iter_instance(false)
 
 {
- 
+  init(file);
 }
 
 IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::istream& is, int off)
@@ -38,7 +38,7 @@ IstreamComplex2DFmt_base::~IstreamComplex2DFmt_base()
 
 void IstreamComplex2DFmt_base::copy(IstreamComplex2DFmt_base const& rhs)
   { 
-    REQUIRE( !rhs.is_in_owned , "cannot copy istream!",1);
+    REQUIRE_ALWAYS( !rhs.is_in_owned , "cannot copy istream!",1);
     in = rhs.in;
     checked_in = checked_istream(in);
     is_in_owned = false;
@@ -54,7 +54,7 @@ void IstreamComplex2DFmt_base::copy(IstreamComplex2DFmt_base const& rhs)
 void IstreamComplex2DFmt_base::init(std::string const& file) 
 {
   std::ifstream * fin = new std::ifstream(file.c_str());
-  REQUIRE( fin->is_open(), "Could not open file " << file << '\n',1);
+  REQUIRE_ALWAYS( fin->is_open(), "Could not open file \"" << file << "\"\n",1);
   in = fin;
   checked_in = checked_istream(in);
   is_in_owned = true;
