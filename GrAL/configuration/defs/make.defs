@@ -48,9 +48,27 @@ export PREFIX=$(HOME)/lib/gral#
 endif
 
 # Modules required by current module
-export ALLDEPMODULES += $(shell cat $(ROOT)/dependencies 2>/dev/null)
-# make DEPMODULES unique
-export DEPMODULES=$(sort $(ALLDEPMODULES))
+# A module depends on 
+# a) the modules listed in 'dependencies'
+# b) the dependencies of those modules
+#
+# To get b), we loop through the dependencies of the modules listed in dependencies file
+# In theory, we should continue recursively until no new dependencies are added
+# In practice, one hop should do ... can always add another one.
+
+# first level dependencies from a)
+DEPMODULES_0_ = $(shell  cat  $(ROOT)/dependencies 2>/dev/null) $(EXTRA_DEPMODULES)
+DEPMODULES_0  = $(sort $(DEPMODULES_0_)) # make DEPMODULES_0_ unique
+DEPMODULES_0_PATHS = $(addsuffix /dependencies,$(addprefix $(GRALROOT)/,$(DEPMODULES_0)))
+
+# second level dependencies from b)
+DEPMODULES_1_ = $(DEPMODULES_0) $(shell $(CONFIGURATION)/scripts/cat-with-space.sh  $(DEPMODULES_0_PATHS) 2>/dev/null)
+DEPMODULES_1  = $(sort $(DEPMODULES_1_))
+
+# could add third level here
+
+export DEPMODULES = $(DEPMODULES_1)
+
 
 # exporting PDW could give trouble in subdir Makefiles
 # which try to give default values to other variables such as CONFIG
@@ -103,7 +121,7 @@ include $(COMPILERDIR)/make.defs
 export DEFDIR     :=$(CONFIGURATION)/defs/$(DEFPATH)#  
 #include $(DEFDIR)/make.defs
 
-
+CCFLAGS += $(ADDCCFLAGS)
 
 # if developing code, use include and libraries
 # of other (`peer') modules directly (because of frequent 
