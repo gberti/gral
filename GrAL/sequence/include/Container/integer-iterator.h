@@ -8,8 +8,11 @@ namespace GrAL {
 
 
 /*! \brief View an integral type as iterator
+
+   \ingroup accessors
    
    \todo support full random-access iterator interface
+ 
 */
 template<class INT, class C=INT>
 class integer_iterator {
@@ -30,11 +33,8 @@ public:
 template<class INT, class C>
 inline bool operator==(integer_iterator<INT, C> i1, integer_iterator<INT, C> i2) { return *i1 == *i2;}
 
-
-  //#ifndef GRAL_INCLUDES_RELOPS
 template<class INT, class C>
 inline bool operator!=(integer_iterator<INT, C> i1, integer_iterator<INT, C> i2) { return *i1 != *i2;}
-  //#endif
 
 } // namespace GrAL 
 

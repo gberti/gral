@@ -7,17 +7,26 @@
 
 #include <functional>
 
+/*! \brief Things still missing from C++ standard
+
+    Probably we should use $boost instead.
+ */
 namespace stdext {
 
+  /*! \brief Identity function
+   */
   template <class T>
-  struct identity : public ::std::unary_function<T, T> {
+  struct identity : public std::unary_function<T, T> {
     const T& operator()(const T& x) const { return x; }
   };
 
-  // stolen from SGI STL 
+  /*! \brief Composition of two Adaptable Unary Functions
+
+  stolen from SGI STL 
+  */
   template <class _Operation1, class _Operation2>
   class unary_compose
-    : public ::std::unary_function<typename _Operation2::argument_type,
+    : public std::unary_function<typename _Operation2::argument_type,
 				 typename _Operation1::result_type> 
   {
   protected:
@@ -32,6 +41,10 @@ namespace stdext {
     }
   };
   
+  /*! \brief Composition of two Adaptable Unary Functions
+
+      Stolen from SGI STL 
+  */
   template <class _Operation1, class _Operation2>
   inline unary_compose<_Operation1,_Operation2> 
   compose1(const _Operation1& __op1, const _Operation2& __op2)
@@ -39,9 +52,13 @@ namespace stdext {
     return unary_compose<_Operation1,_Operation2>(__op1, __op2);
   }
   
+  /*! \brief Composition of two  Adaptable Unary Functions and a Adaptable Binary Function
+
+    Stolen from SGI STL 
+  */
   template <class _Operation1, class _Operation2, class _Operation3>
   class binary_compose
-    : public ::std::unary_function<typename _Operation2::argument_type,
+    : public std::unary_function<typename _Operation2::argument_type,
 				 typename _Operation1::result_type> {
   protected:
     _Operation1 _M_op1;
@@ -57,6 +74,10 @@ namespace stdext {
     }
   };
   
+  /*! \brief Composition of two Adaptable Unary Functions and a Adaptable Binary Function
+
+    Stolen from SGI STL 
+  */
   template <class _Operation1, class _Operation2, class _Operation3>
   inline binary_compose<_Operation1, _Operation2, _Operation3> 
   compose2(const _Operation1& __op1, const _Operation2& __op2, 
