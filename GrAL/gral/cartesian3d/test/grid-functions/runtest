@@ -13,7 +13,7 @@ End output
 "
 else
 /bin/echo "\n"
-for i in  *.out
+for i in  *out
 do
 if diff $i $i.exp
 then 
