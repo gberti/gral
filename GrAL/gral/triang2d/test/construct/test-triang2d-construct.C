@@ -17,6 +17,8 @@
 #include "Gral/Grids/Triang2D/all.h"
 #include "Gral/Grids/Triang2D/test-triang2d.h"
 
+#include "Gral/Test/all.h"
+
 #include "Gral/IO/complex2d-format-input.h"
 #include "Gral/IO/complex2d-format-output.h"
 #include "Gral/Algorithms/cell-neighbor-search.h"
@@ -69,6 +71,10 @@ int main(int argc, char* argv[]) {
   bijective_mapping<int,int> vcorr;
   dummy_mapping<int,int>     ccorr;
   ConstructGridVC(T,GeomT, Gsrc, Gsrc, vcorr,ccorr);
+
+  test_vertex_iterator(T, cout);
+  test_cell_iterator  (T, cout);
+  test_vertex_on_cell_iterator(T, cout);
 
   OstreamComplex2DFmt Gout(gridfile_nm +".out");
   ConstructGrid(Gout, T, GeomT);

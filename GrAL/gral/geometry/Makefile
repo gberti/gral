@@ -6,10 +6,12 @@ include $(CONFIG)
 TARGET=all
 
 all:
-	(cd src; $(MAKE) all)
+
+#	(cd src; $(MAKE) all)
 
 new: libclean
-	(cd src; $(MAKE) new)
+
+#	(cd src; $(MAKE) new)
 
 
 compile:

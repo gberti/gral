@@ -3,6 +3,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 
 SUBDIRS = boundary-grid  \
+          cell-as-volume \
           cell-on-cell-iterator \
           cell-on-vertex-iterator \
           connected-components \

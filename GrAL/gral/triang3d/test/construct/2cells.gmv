@@ -1,0 +1,11 @@
+gmvinput ascii
+nodev 5
+0 0 0
+1 0 0
+0 1 0
+0 0 1
+1 1 1
+cells 2
+tet 4 1 2 3 4 
+tet 4 2 4 3 5 
+endgmv

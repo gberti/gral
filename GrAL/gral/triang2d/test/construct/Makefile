@@ -5,7 +5,7 @@ CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 
-EXTRA_DEPMODULES +=  external-control utilities
+EXTRA_DEPMODULES +=  external-control utilities gral/testing
 
 SOURCES =  test-triang2d-construct.C
 OBJECTS =  $(SOURCES:%.C=%.o)

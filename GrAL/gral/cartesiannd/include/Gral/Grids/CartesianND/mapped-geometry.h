@@ -102,7 +102,7 @@ namespace cartesiannd {
   template<class CARTGRID, class MAP>
     template<class COORD>
     typename mapped_geometry<CARTGRID,MAP>::location_result_type
-    typename mapped_geometry<CARTGRID,MAP>::locate(COORD const& pp) const 
+    mapped_geometry<CARTGRID,MAP>::locate(COORD const& pp) const 
     {
       REQUIRE( (f_inverse != 0), "Must specifiy inverse mapping!", 1);
       coord_type p; assign_point(p,pp);
