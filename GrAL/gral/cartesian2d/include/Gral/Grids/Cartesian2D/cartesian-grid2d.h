@@ -531,6 +531,7 @@ public:
     Vertex V(int i)    const { return vertex(corner(i));}
     Vertex V       (archgt::Vertex const& lV) const { return V(lV.handle());}
     vertex_handle v(archgt::Vertex const& lV) const { return V(lV).handle();}
+    vertex_handle v(archgt::vertex_handle lv) const { return V(lv).handle();}
  
     /// information for these calculations could go into
     /// some static tables of RegGrid2D
@@ -867,6 +868,7 @@ public:
     bool    IsDone()    const { cb(); return (v >= c.NumOfVertices());}
     // operator bool() const { return !IsDone();} 
     int LocalNumber()   const { cv(); return v;}
+    int local_handle()  const { cv(); return v;}
 
     vertex_handle   handle() const { cv(); return c.vertex(v).handle();}
 
@@ -898,7 +900,8 @@ public:
     typedef EdgeOnCellIterator self;
     friend class CellOnCellIterator;
     friend class RegGrid2D;
-
+    typedef grid_types<RegGrid2D::archetype_type> archgt; 
+    typedef archgt::Cell archetype_cell;
   public:
     typedef Edge value_type;
     typedef Edge element_type;
@@ -930,6 +933,7 @@ public:
 
     Cell const&  TheCell()     const { cb(); return c;}
     Cell const&  TheAnchor()   const { cb(); return c;}
+    archetype_cell ArchetypeCell() const { return archetype_cell(TheGrid().ArchetypeOf(c), e);}
 
     friend
     bool operator==(self const& lhs, self const& rhs)
