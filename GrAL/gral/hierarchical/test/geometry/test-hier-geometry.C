@@ -15,9 +15,6 @@
 
 #include <iostream>
 
-template<class T, unsigned N>
-struct point_traits<tuple<T,N> > : public point_traits_fixed_size_array<tuple<T,N>, T, N> {};
-
 
 template<class GRID, class GEOM>
 void test_hier_geom(GRID const& root,
