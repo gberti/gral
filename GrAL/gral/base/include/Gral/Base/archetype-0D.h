@@ -14,7 +14,7 @@ namespace archetype_0D {
 class archetype_t {
 public:
   enum { dim = 0 };
-
+  typedef grid_dim_tag<0> dimension_tag;  
   unsigned dimension() const { return 0;}
   
   struct VertexIterator {
@@ -103,7 +103,6 @@ public:
 template<>
 struct grid_types<archetype_0D::archetype_t> : public grid_types_base<archetype_0D::archetype_t> 
 {
-  typedef grid_dim_tag<0> dimension_tag;  
 };
 
 template<>
