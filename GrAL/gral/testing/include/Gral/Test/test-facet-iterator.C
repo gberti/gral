@@ -9,10 +9,10 @@
 namespace GrAL {
 
 template<class G, class GT>
-bool test_facet_iterator(G const& g, ::std::ostream & out, GT);
+bool test_facet_iterator(G const& g, std::ostream & out, GT);
 
 template<class G>
-bool test_facet_iterator(G const& g, ::std::ostream & out)
+bool test_facet_iterator(G const& g, std::ostream & out)
 {
   return test_facet_iterator(g, out, grid_types<G>());
 }
