@@ -1,4 +1,4 @@
-SUBDIRS = iterators #construct 
+SUBDIRS = iterators construct 
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config

@@ -5,8 +5,9 @@
 
 #include <iostream>
 
-template<class GRID, class E>
-bool test_grid_functions(GRID const& G, std::ostream& out);
+template<class E>
+bool test_grid_functions(typename E::grid_type const& G, 
+			 std::ostream& out);
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Test/test-grid-functions.C"

@@ -4,8 +4,7 @@
 #include "Gral/Grids/Complex3D/all.h"
 #include "Gral/Grids/Cartesian3D/cartesian3d.h"
 
-#include "Gral/Test/test-iterators.h"
-#include "Gral/Test/test-grid-functions.h"
+#include "Gral/Test/all.h"
 
 #include "Utility/pre-post-conditions.h"
 #include "IO/control-device.h"
@@ -34,6 +33,11 @@ int main(int argc, char* argv[]) {
   test_grid_functions<gt::Edge  >(G,cout);
   test_grid_functions<gt::Facet >(G,cout);
   test_grid_functions<gt::Cell  >(G,cout);
+
+  test_partial_grid_functions<gt::Vertex>(G,cout);
+  test_partial_grid_functions<gt::Edge  >(G,cout);
+  test_partial_grid_functions<gt::Facet >(G,cout);
+  test_partial_grid_functions<gt::Cell  >(G,cout);
 
 
   test_vertex_iterator(G, cout);
