@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-#include <vector.h>    // STL
+#include <vector>    // STL
 
 #include "Config/compiler-config.h"
 
@@ -265,7 +265,7 @@ private:
   // should use iterator_traits here, but work only with
   // partial specialization.
   typedef typename SenderIt::value_type sender_value_type;
-  vector<sender_value_type>  buffer;
+  std::vector<sender_value_type>  buffer;
 
   typedef range_connector<SenderIt,ReceiverIt>  conn_base;
 public:
@@ -293,7 +293,7 @@ private:
   // should use iterator_traits here, but work only with
   // partial specialization.
   typedef typename SenderIt::value_type sender_value_type;
-  vector<sender_value_type>  buffer;
+  std::vector<sender_value_type>  buffer;
 
   typedef range_connector<SenderIt,ReceiverIt>  conn_base;
 public:

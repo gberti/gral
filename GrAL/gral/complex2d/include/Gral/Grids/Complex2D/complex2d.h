@@ -6,8 +6,8 @@
 // $LICENSE
 
 
-#include <list.h>
-#include <vector.h> 
+#include <list>
+#include <vector> 
 
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Grids/Complex2D/point.h"
@@ -50,7 +50,7 @@ class vertex_base {
 public:
   typedef point2 CoordType;
 
-  typedef vector<int> cell_list;
+  typedef std::vector<int> cell_list;
 private:
 
   //--- DATA ------
@@ -86,8 +86,8 @@ private:
 
 class cell2d_connectivity {
 public:
-  typedef vector<int> vertex_list;
-  typedef vector<int> cell_list;
+  typedef std::vector<int> vertex_list;
+  typedef std::vector<int> cell_list;
 
   //private:
   //-------------- DATA -----------
@@ -133,8 +133,8 @@ private:
 
 
 
-typedef vector<cell2d_connectivity>   cell_list_complex2d;
-typedef vector<vertex_base>           vertex_list_complex2d;
+typedef std::vector<cell2d_connectivity>   cell_list_complex2d;
+typedef std::vector<vertex_base>           vertex_list_complex2d;
 
 struct edge_handle_complex2d {
   int c;  // cell
@@ -254,7 +254,7 @@ struct complex2d_types {
     Its $GrAL Facet type is a typedef to its $GrAL Edge type.
  */
 class Complex2D : public complex2d_types  {
-  typedef list<EdgeOnCell2D_Iterator>  boundary_facet_list;
+  typedef std::list<EdgeOnCell2D_Iterator>  boundary_facet_list;
   typedef vertex_list_complex2d        v_list;
   typedef cell_list_complex2d          c_list;
 

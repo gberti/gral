@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-#include <vector.h>   // STL
+#include <vector>   // STL
 
 // Gral Base
 #include "Gral/Base/common-grid-basics.h"
@@ -95,7 +95,7 @@ private:
   //----------- DATA ---------------
   //  const Grid*                        the_grid; // referenced
   Grid*                        the_grid; // referenced
-  vector<cell_range>           ranges;
+  std::vector<cell_range>      ranges;
   grid_function<Cell,int>      the_partitions;
 
 public:
@@ -230,7 +230,7 @@ public:
   typedef Partition                     partitioning_type;
 private:
   Partition const* the_partitioning;
-  grid_function<Vertex, vector<int> > vertex_partitions;
+  grid_function<Vertex, std::vector<int> > vertex_partitions;
 
 public:
   //----------- construction --------------------
@@ -246,7 +246,7 @@ public:
  
   //------------- iteration ---------------------
 
-  typedef typename vector<int>::const_iterator PartitionOfVertexIterator;
+  typedef typename std::vector<int>::const_iterator PartitionOfVertexIterator;
  
   PartitionOfVertexIterator begin(Vertex const& v) const 
     { return vertex_partitions(v).begin();}

@@ -50,8 +50,8 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   vertex_corr_map VertexCorr(G_src.NumOfVertices());
 
   typedef bijective_mapping<src_cell_handle,cell_handle> cell_corr_map;
-  //  typedef vector<cell_handle> cell_corr_map; 
- cell_corr_map CellCorr(G_src.NumOfCells());
+
+  cell_corr_map CellCorr(G_src.NumOfCells());
 
   EnlargeGrid(G,G_src,Geo_src, Iv, VertexCorr, CellCorr);
 }
@@ -127,7 +127,6 @@ void EnlargeGrid(Complex2D& G,                 // in/out
 
   typedef vtuple_2d<Complex2D> vtuple;
   typedef std::map<vtuple, FacetOnCellIterator, std::less<vtuple> > FacetTable;
-  //typedef map<vtuple_2d, Facet, less<vtuple_2d> > FacetTable;
   FacetTable facet_id; // facets contained in Iv
 
   // range(Iv) \subset V_h(G) : vertices that are identified

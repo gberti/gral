@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-#include <vector.h>   // STL
+#include <vector>   // STL
 
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
@@ -310,7 +310,7 @@ public:
 
   //---------- own types ----------------------
 
-  typedef vector<elt_handle>                    elt_sequence;
+  typedef std::vector<elt_handle>               elt_sequence;
   typedef elt_sequence                          container_type;
   typedef typename elt_sequence::const_iterator seq_iterator;
   typedef typename elt_sequence::const_iterator const_iterator;
@@ -526,8 +526,8 @@ public:
   typedef tp<Cell>   tpC;
 
   //---------- own types ----------------------
-  typedef vector<vertex_handle> vertex_sequence;
-  typedef vector<cell_handle>   cell_sequence;
+  typedef std::vector<vertex_handle> vertex_sequence;
+  typedef std::vector<cell_handle>   cell_sequence;
   typedef typename vertex_sequence::const_iterator v_iterator;
   typedef typename cell_sequence  ::const_iterator c_iterator;
 

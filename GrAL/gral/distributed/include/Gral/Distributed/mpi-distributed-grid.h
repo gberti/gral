@@ -4,6 +4,7 @@
 
 // $LICENSE
 
+#include <vector>
 #include <mpi.h>
 
 #include "Gral/Base/grid-functions.h"
@@ -59,7 +60,7 @@ private:
 
   MPI_Comm                                   the_communicator;
   grid_function<CoarseCell,int>              cell2rank;
-  vector<CoarseCell>                         rank2cell;
+  std::vector<CoarseCell>                    rank2cell;
   int                                        my_rank;
   CoarseCell                                 my_cell;
   bool                                       initialized;

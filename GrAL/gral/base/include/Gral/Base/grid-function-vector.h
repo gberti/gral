@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-#include <vector.h> // STL
+#include <vector> // STL
 
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Base/common-grid-basics.h"
@@ -39,7 +39,7 @@ template<class E, class T>
 class grid_function_vector {
 public:
   // container types
-  typedef vector<T>                      table_type;
+  typedef std::vector<T>                 table_type;
   typedef typename table_type::size_type size_type;
 
   // grid types

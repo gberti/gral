@@ -2,10 +2,11 @@
 #define NMWR_GB_GEOM_PRIMITIVES_FOR_COMPLEX_H
 
 
-
 // $LICENSE
+
 #include "Config/compiler-config.h"
 
+#include <algorithm>
 #include "Geometry/algebraic-primitives.h"
 
 #include "Gral/Base/common-grid-basics.h"
@@ -97,7 +98,7 @@ public:
       VertexOnCellIterator w = vc; 
       ++w;
       for(; !w.IsDone(); ++w)
-        diam2 = max(diam2, ap::distance2(coord(*vc),coord(*w)));
+        diam2 = std::max(diam2, ap::distance2(coord(*vc),coord(*w)));
     }
     return sqrt(diam2);
   }

@@ -123,7 +123,7 @@ private:
 
   struct cell_vertex_incidence_map {
   private:
-    vector<vertex_handle>::iterator pc;
+    std::vector<vertex_handle>::iterator pc;
   public:
     cell_vertex_incidence_map(Complex3D & G, cell_handle c)
       : pc(G.cells.begin() + G.offset[c]) {}

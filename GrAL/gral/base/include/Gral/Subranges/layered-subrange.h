@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-
+#include <vector>
 #include "Gral/Subranges/enumerated-subrange.h"
 
 //----------------------------------------------------------------
@@ -43,7 +43,7 @@ public:
 
 private:
   //---   DATA  ----
-  vector<int> layers;
+  std::vector<int> layers;
 
 public:
   layered_vertex_range() {}
@@ -106,7 +106,7 @@ public:
 
 private:
   //---   DATA  ----
-  vector<int> layers;
+  std::vector<int> layers;
 
 public:
   layered_cell_range() {}

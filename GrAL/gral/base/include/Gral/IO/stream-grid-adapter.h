@@ -5,6 +5,7 @@
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
+#include <iterator>
 
 //----------------------------------------------------------------
 /*! \defgroup streamgrid Adapter for serial grid representation
@@ -256,7 +257,7 @@ class stream_geom_mask {
 private:
   It begin;
 public:
-  typedef iterator_traits<It>         traits;
+  typedef std::iterator_traits<It>    traits;
   typedef typename traits::value_type coord_type;
 
   stream_geom_mask(It b) : begin(b) {}

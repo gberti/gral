@@ -4,6 +4,8 @@
 
 
 #include <algorithm>
+#include <vector>
+
 #include <fstream.h>
 
 // External control
@@ -54,7 +56,7 @@ int main(int argc, char* argv[]) {
 
    
   int NCC = 4;
-  vector<Complex2D> CC(NCC);
+  std::vector<Complex2D> CC(NCC);
   
   testout << "constructing Complex2D CC[0] from file " << grid_file << "\n";
   
@@ -110,14 +112,14 @@ int main(int argc, char* argv[]) {
 
 
   // textual output
-
-   vector<Complex2D>::const_iterator CCi;
-  for(CCi = CC.begin(); CCi != CC.end()-Ncases; ++CCi) { 
-    testout << "Testing CC[" << CCi - CC.begin() << "]\n";
-    T.test_complex2d_iterators(*CCi,geometry_type(*CCi),testout);
-    testout << "---------------------------------------------------\n"
-	    << "---------------------------------------------------\n\n";
-  }
+   
+   std::vector<Complex2D>::const_iterator CCi;
+   for(CCi = CC.begin(); CCi != CC.end()-Ncases; ++CCi) { 
+     testout << "Testing CC[" << CCi - CC.begin() << "]\n";
+     T.test_complex2d_iterators(*CCi,geometry_type(*CCi),testout);
+     testout << "---------------------------------------------------\n"
+	     << "---------------------------------------------------\n\n";
+   }
 
   partial_grid_function<gt::Vertex, int> pgfv(CC[1]);
   typedef partial_grid_function<gt::Vertex, int>::VertexIterator pgfVertexIterator;

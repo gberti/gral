@@ -61,10 +61,10 @@ private:
   const distributed_grid_type*      the_distributed;
   ovrlp_grid_function               the_local_gf;
 
-  list<Connector> shared_senders;
-  list<Connector> shared_receivers; // only for buffered send/receive necessary
-  list<Connector> exposed_senders;
-  list<Connector> copied_receivers; // only for buffered send/receive necessary
+  std::list<Connector> shared_senders;
+  std::list<Connector> shared_receivers; // only for buffered send/receive necessary
+  std::list<Connector> exposed_senders;
+  std::list<Connector> copied_receivers; // only for buffered send/receive necessary
 
   bool added_on_shared;
   bool sync_on_shared;

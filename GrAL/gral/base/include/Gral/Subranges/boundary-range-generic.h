@@ -10,7 +10,7 @@
 #include "Gral/Base/grid-functors.h"
 #include "Gral/Subranges/find-boundary-components.h"
 
-#include "list.h"
+#include <list>
 
 //----------------------------------------------------------------
 /*! \defgroup boundaryrange Generic Grid Boundary Range
@@ -57,9 +57,9 @@ class boundary_range_generic {
   typedef boundary_range_edge_iterator<GRID>   EdgeIterator;
   typedef boundary_range_edge_iterator<GRID>   FacetIterator;
 
-  typedef typename list<Facet>::const_iterator germ_iterator;
+  typedef typename std::list<Facet>::const_iterator germ_iterator;
 private:
-  list<Facet> component_germs;
+  std::list<Facet> component_germs;
   grid_type const* g;
   bool initialized;
 public:

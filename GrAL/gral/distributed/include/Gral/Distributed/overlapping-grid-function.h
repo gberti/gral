@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-#include <vector.h>
+#include <vector>
 
 #include "Config/compiler-config.h"
 #include "Gral/Base/grid-functions.h"

@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-#include <vector.h>
+#include <vector>
 
 #include "Config/compiler-config.h"
 #include "Gral/Base/common-grid-basics.h"
@@ -48,7 +48,7 @@ private:
   local_grid_function    data;           // owned
 
   /*
-  vector<combine_type_tag>  combine_types;
+  std::vector<combine_type_tag>  combine_types;
 
   combine_type_tag combine_type(const comm_range& cr) const 
     { return combine_types[cr.layer_type];}

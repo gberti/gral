@@ -4,7 +4,7 @@
 
 // $LICENSE
 
-
+#include <vector>
 #include "Gral/Subranges/enumerated-subrange.h"
 
 //----------------------------------------------------------------
@@ -48,7 +48,6 @@ public:
   typedef typename et::handle_type   element_handle;
   typedef E                          Element;
 
-  //  typedef vector<element_handle>               element_seq;
   typedef enumerated_element_range<E>          element_seq;
   typedef enumerated_element_range<E>          range_type;
   typedef typename element_seq::iterator       e_iterator;

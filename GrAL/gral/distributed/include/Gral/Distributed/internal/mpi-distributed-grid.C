@@ -6,6 +6,7 @@
 #include "Gral/Distributed/mpi-distributed-grid.h"
 #include "Gral/Distributed/grid-to-mpi-graph.h"
 
+#include <vector>
 #include "Container/operators.h"
 
 // #include "IO/iomgr.h"
@@ -39,7 +40,7 @@ template<class CoarseG, class FineG>
 void  MPIDistributedGrid<CoarseG,FineG>::coarse_grid_complete()
 {
   cell2rank.set_grid(the_coarse);
-  rank2cell = vector<CoarseCell>(the_coarse.NumOfCells());
+  rank2cell = std::vector<CoarseCell>(the_coarse.NumOfCells());
 
   the_ovrlp_grid.init(TheCoarseGrid());
   init();
