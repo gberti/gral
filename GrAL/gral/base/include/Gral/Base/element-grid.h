@@ -12,6 +12,8 @@
 
    \todo We should wrap the element/iterator types instead of simply typedefing
    to the types of the underlying base grid.
+   \todo Need facet types
+   \todo Need boundary
 */
 template<class E> class element_grid;
 
