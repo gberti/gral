@@ -4,6 +4,13 @@ SUBDIRS= configuration utilities external-control sequence geometry \
          graphics-device function-algebra gral
 
 
+all:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) all GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+
 clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
@@ -20,12 +27,6 @@ realclean:
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
-all:
-	@set -e; \
-        (for i in $(SUBDIRS); \
-        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) all GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
-        echo "LEAVING  directory" $$i;cd ..; done)
 new:
 	@set -e; \
         (for i in $(SUBDIRS); \
@@ -55,11 +56,13 @@ check:
         $(MAKE) check GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-new-check-clean:
+new-check-clean: new test-check-clean
+
+test-check-clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) new-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
+        $(MAKE) test-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
