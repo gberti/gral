@@ -8,68 +8,68 @@
 #include "Utility/pre-post-conditions.h"
 #include "Geometry/coords.h"
 
-template<unsigned M, unsigned N, unsigned offset>
+template<unsigned M, unsigned N, int offset>
 struct fixed_row_mjr_subcriptor {
   static int index(unsigned i, unsigned j) { 
     REQUIRE( (offset <= i && i <= M + offset -1
 	     && offset <= i && i <= N + offset -1),
 	     "fixed_row_mjr_subcriptor<" << M << ',' << N << ',' << offset << '>'
 	     << " : index (" << i << ',' << j << ") out of range!",1);
-    return (i-offset)*N + j;
+    return (i-offset)*N + j-offset;
   }
 };
 
  // public vector_space_category<matrix<N,M> >, 
-template<unsigned M, unsigned N>
+template<unsigned M, unsigned N, int OFF = 1>
 class matrix :  public coordN<N*M> {
 public:
   typedef coordN<N*M> base_vec;
-  typedef fixed_row_mjr_subcriptor<M,N,1> subscriptor;
+  typedef fixed_row_mjr_subcriptor<M,N,OFF> subscriptor;
   typedef typename base_vec::component component;
   
   matrix() {}
   matrix(component c) : base_vec(c) {}
 
   component& operator()(unsigned i, unsigned j) 
-    { return base_vec::operator[](subscriptor::index(i,j));}
+    { return base_vec::operator[](1+subscriptor::index(i,j));}
 
   const component& operator()(unsigned i, unsigned j) const
-    { return base_vec::operator[](subscriptor::index(i,j));}
+    { return base_vec::operator[](1+subscriptor::index(i,j));}
 
-  matrix<M,N>& operator +=(const matrix<M,N>& rs) 
+  matrix<M,N,OFF>& operator +=(const matrix<M,N,OFF>& rs) 
     { base_vec::operator+=(rs); return *this;}
 
-  matrix<M,N>& operator -=(const matrix<M,N>& rs) 
+  matrix<M,N,OFF>& operator -=(const matrix<M,N,OFF>& rs) 
     { base_vec::operator-=(rs); return *this;}
 
-  matrix<M,N>& operator *=(const component& rs)
+  matrix<M,N,OFF>& operator *=(const component& rs)
     { base_vec::operator*=(rs); return *this;}
 
 };
 
 
-template<unsigned N, unsigned M>
-inline matrix<M,N> operator+(const matrix<M,N>& ls, const matrix<M,N> rs)
-{ matrix<M,N> tmp(ls); return (tmp += rs);}
+template<unsigned N, unsigned M, int OFF>
+inline matrix<M,N,OFF> operator+(const matrix<M,N,OFF>& ls, const matrix<M,N,OFF> rs)
+{ matrix<M,N,OFF> tmp(ls); return (tmp += rs);}
 
  
-template<unsigned N, unsigned M>
-inline matrix<M,N> operator-(const matrix<M,N>& ls, const matrix<M,N> rs)
-{ matrix<M,N> tmp(ls); return (tmp -= rs);}
+template<unsigned N, unsigned M, int OFF>
+inline matrix<M,N,OFF> operator-(const matrix<M,N,OFF>& ls, const matrix<M,N,OFF> rs)
+{ matrix<M,N,OFF> tmp(ls); return (tmp -= rs);}
 
-template<unsigned N, unsigned M>
-inline matrix<M,N> operator*(const matrix<M,N>& ls, coord_N_component rs)
-{ matrix<M,N> tmp(ls); return (tmp *= rs);}
+template<unsigned N, unsigned M, int OFF>
+inline matrix<M,N,OFF> operator*(const matrix<M,N,OFF>& ls, coord_N_component rs)
+{ matrix<M,N,OFF> tmp(ls); return (tmp *= rs);}
 
 // commutative multiplication of component required !!!
-template<unsigned N, unsigned M>
-inline matrix<M,N> operator*( coord_N_component ls, const matrix<M,N>& rs)
-{ matrix<M,N> tmp(rs); return (tmp *= ls);}
+template<unsigned N, unsigned M, int OFF>
+inline matrix<M,N,OFF> operator*( coord_N_component ls, const matrix<M,N,OFF>& rs)
+{ matrix<M,N,OFF> tmp(rs); return (tmp *= ls);}
 
 
 
 
-template<unsigned K, unsigned L, unsigned M>
+template<unsigned K, unsigned L, unsigned M, int OFF>
 inline void mul(matrix<K,M>& res,
 		const matrix<K,L>& ls, const matrix<L,M>& rs)
 {
@@ -81,7 +81,7 @@ inline void mul(matrix<K,M>& res,
     }
 }
 
-template<unsigned K, unsigned L, unsigned M>
+template<unsigned K, unsigned L, unsigned M, int OFF>
 inline matrix<K,M> operator*(const matrix<K,L>& ls, const matrix<L,M>& rs)
 { 
   matrix<K,M> res;
@@ -90,9 +90,9 @@ inline matrix<K,M> operator*(const matrix<K,L>& ls, const matrix<L,M>& rs)
 }
 
 
-template<unsigned N, unsigned M>
+template<unsigned N, unsigned M, int OFF>
 inline void mul(coordN<N> & res,
-		const matrix<M,N>& ls, const coordN<N>& rs) 
+		const matrix<M,N,OFF>& ls, const coordN<N>& rs) 
 {
   for(unsigned i = 1; i <= M; i++) {
     res[i] = 0.0;
@@ -101,8 +101,8 @@ inline void mul(coordN<N> & res,
   }
 }
 
-template<unsigned N, unsigned M>
-inline coordN<M> operator*(const matrix<M,N>& ls, const coordN<N>& rs) 
+template<unsigned N, unsigned M, int OFF>
+inline coordN<M> operator*(const matrix<M,N,OFF>& ls, const coordN<N>& rs) 
 {
   coordN<M> res;
   mul(res,ls,rs);
@@ -112,8 +112,8 @@ inline coordN<M> operator*(const matrix<M,N>& ls, const coordN<N>& rs)
 
 //----------------------- IO ------------------------------------
 
-template<unsigned N, unsigned M>
-inline std::ostream& operator<<(std::ostream& out, const matrix<M,N>& rs)
+template<unsigned N, unsigned M, int OFF>
+inline std::ostream& operator<<(std::ostream& out, const matrix<M,N,OFF>& rs)
 {
   for(unsigned i = 1; i<= M; i++) {
     for(unsigned j = 1; j <= N; j++)
@@ -123,8 +123,8 @@ inline std::ostream& operator<<(std::ostream& out, const matrix<M,N>& rs)
   return out;
 }
 
-template<unsigned N, unsigned M>
-inline std::istream& operator>>(std::istream& in, matrix<M,N>& rs)
+template<unsigned N, unsigned M, int OFF>
+inline std::istream& operator>>(std::istream& in, matrix<M,N,OFF>& rs)
 {
   for(unsigned i = 1; i<= M; i++) {
     for(unsigned j = 1; j <= N; j++)
