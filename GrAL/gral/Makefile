@@ -49,9 +49,22 @@ module-clean:
 	rm -f doxy.tags doxy.log
 
 clean: stdclean
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) clean DEPS='' CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
 
-realclean: clean
+
+realclean: stdclean
 	rm -rf doxygen/
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) realclean DEPS='' CONFIG=$(ALLROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+
 
 test:
 	@set -e; \
