@@ -41,8 +41,12 @@ make-links:
           ln -s VertexGridRange.html EdgeRange.html;\
           ln -s VertexGridRange.html FacetRange.html;\
           ln -s VertexGridRange.html CellRange.html;\
+          ln -s VertexGridRange.html CellGridRange.html;\
+          ln -s VertexGridRange.html FacetGridRange.html;\
+          ln -s VertexGridRange.html EdgeGridRange.html;\
           ln -s Vertex-On-CellIterator.html VertexOnCellIterator.html; \
           ln -s Vertex-On-CellIterator.html EdgeOnCellIterator.html; \
+          ln -s Vertex-On-CellIterator.html VertexOnFacetIterator.html; \
           ln -s Vertex-On-CellIterator.html FacetOnCellIterator.html; \
           ))
 
