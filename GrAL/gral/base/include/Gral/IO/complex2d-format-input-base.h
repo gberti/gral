@@ -105,7 +105,7 @@ public:
 };
 
 /*! \brief Vertex iterator for IstreamComplex2DFmt_base
-7    \ingroup complex2dformat
+    \ingroup complex2dformat
 
     Model of $GrAL VertexIterator
 

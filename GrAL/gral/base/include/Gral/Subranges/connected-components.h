@@ -227,7 +227,7 @@ namespace connected_components {
 
 
 
-  /*! Iterator over the connected components of a grid.
+  /*! \brief Iterator over the connected components of a grid.
 
        Access via component_list::const_iterator;
   */

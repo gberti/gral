@@ -8,6 +8,8 @@
     The recommended way of browsing the documentation 
     is by (sub-) package hierarchy.
 
+    All components of GrAL are found in the namespace <tt> GrAL </tt>.
+
     Here are the separate packages of GrAL:
 
      <H2> Basic, non-grid related packages </H2>

@@ -22,36 +22,28 @@ namespace GrAL {
 
      \brief Abstractions for copying data between iterator ranges.
 
-  \contents:
-  - completely abstract: class connector_impl; 
-  - partially abstract:
-    \c template<class SenderIt, class ReceiverIt> <BR> 
-    \c class range_connector;
-  - concrete:
-     - \c template<class SenderIt, class ReceiverIt> <BR>
-       \c class copy_range_connector;
-     - \c template<class SenderIt, class ReceiverIt> <BR>
-       \c class copy_range_connector;
+     The classes in this module 
+     abstract from the data transport mechanism used
+     (message passing or just simple in-core copy),
+     allowing a more generic implementation of distributed data structures,
+     such as distributed grid functions.
 
-  \description:
-  The classes in this module allow distributed data structures (dds),
-  such as distributed grid functions,
-  to ignore the data transport mechanism used
-  (message passing or just simple in-core copy).
-  On the other hand, the data transport
-  handler can ignore details of data storage in the dds.
-
-
+     On the other hand, the data transport
+     handler simply operates on logically linear ranges 
+     and can thus ignore details of data storage in the distributed
+     data structure.
 */
 //----------------------------------------------------------------
 
 
 
 //----------------------------------------------------------------
-/*! \brief abstract base for data connectors (letter class)
-   \ingroup connectors
- */
 //----------------------------------------------------------------
+
+/*! \internal 
+    \brief abstract base for data connectors (\e letter class)
+    \ingroup connectors
+ */
 
 class connector_impl {
 public:
@@ -66,14 +58,17 @@ public:
   virtual ~connector_impl();
 };
 
-/*! \brief specialization of copy_traits for connector_impl
+/*! \internal
+    \brief specialization of copy_traits for connector_impl
  */
 template<>
 struct copy_traits<connector_impl> : public copy_traits_base<connector_impl> {
   static connector_impl* clone(connector_impl const& c) { return c.clone();}
 };
 
-/*! \brief Envelope class for connector_impl
+/*! \brief Abstract data connector 
+
+   Envelope class for \c connector_impl
    \ingroup connectors
  */
 class Connector {
@@ -90,6 +85,10 @@ public:
   void RecvDataEnd()   { impl->recv_data_end();}
 };
 
+
+//----------------------------------------------------------------
+//----------------------------------------------------------------
+
 /*! \defgroup connectorfunctions  Connector function objects
     \brief Function objects for parameterization of
      foreach(begin,end,function) - type algorithms
@@ -97,10 +96,10 @@ public:
    \ingroup connectors
 */
 
-/*! \brief send data associated to connector
+/*! \brief Send data associated to connector
   \ingroup connectorfunctions
 
-  If [b,e) is a range of Connector s, then
+  If <tt>[b,e)</tt> is a range of a Connector, then
   \code
   foreach(b,e,ConnectorSendData);
   \endcode
@@ -119,7 +118,7 @@ class ConnectorSendData {
   void operator()(connector_impl* C) const { C->send_data();}
 };
 
-/*! \brief begin to send data associated to connector
+/*! \brief Begin to send data associated to connector
   \ingroup connectorfunctions
   \see ConnectorSendData
  */
@@ -129,7 +128,7 @@ class ConnectorSendBegin {
   void operator()(connector_impl* C) const { C->send_data_begin();}
 };
 
-/*! \brief  finish to send data associated to connector
+/*! \brief  Finish to send data associated to connector
   \ingroup connectorfunctions
   \see ConnectorSendData
  */
@@ -139,7 +138,7 @@ class ConnectorSendEnd {
   void operator()(connector_impl* C) const { C->send_data_end();}
 };
 
-/*! \brief receive data associated to connector
+/*! \brief Receive data associated to connector
   \ingroup connectorfunctions
   \see ConnectorSendData
  */
@@ -159,7 +158,7 @@ class ConnectorRecvBegin {
   void operator()(connector_impl* C) const { C->recv_data_begin();}
 };
 
-/*! \brief finish to receive data associated to connector
+/*! \brief Finish to receive data associated to connector
   \ingroup connectorfunctions
   \see ConnectorSendData, ConnectorRecvData
  */
@@ -171,11 +170,12 @@ class ConnectorRecvEnd {
 
 
 //----------------------------------------------------------------
+//----------------------------------------------------------------
+
 /*! \brief  connector that operates on a range
      \ingroup connectors
 
  */
-//----------------------------------------------------------------
 
 template<class SenderIt, class ReceiverIt>
 class range_connector : public connector_impl {

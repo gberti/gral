@@ -7,12 +7,14 @@
 
 namespace GrAL {
 
-/*! Predicate to decide whether a cell intersects a geometric
+/*! \brief Predicate to (approximately) decide whether a cell is contained a geometric
     body (volume) or not.
  
  
-    The predicate checks if any vertex of the cell is contained
-    in the given volume.
+    The predicate checks whether all vertices of the cell are contained
+    in the given volume. The answer is guaranteed to be correct 
+    only if both the cell and the volume are convex.
+
     In principle, a much more sophisticated test is possible.
     This could be driven by a policy parameter.
     For example, we could use cell subdivision in order to get
@@ -20,6 +22,7 @@ namespace GrAL {
 
     \ingroup  geometricgridtools
     \see \ref geometricgridtools module
+
     \todo We should also look into the 
     <A HREF="http://www.emis.de/journals/AMUC/_contributed/algo2000/schmelzer.ps.gz"> cogeometry concept </A>
     \todo Test   
@@ -60,7 +63,11 @@ public:
     }
 };
 
-/*!
+/*! \brief Predicate to decide whether a cell intersects a geometric
+    body (volume) or not.
+
+    \ingroup  geometricgridtools
+    \see \ref geometricgridtools module
 
 */
 template<class VOLUME, 
