@@ -221,6 +221,38 @@ struct complex2d_types {
 #include "Gral/Grids/Complex2D/internal/cell-on-vertex2d-it.h"
 #include "Gral/Grids/Complex2D/internal/edge-on-cell2d-it.h"
 
+/*! \brief General 2D grid class
+
+    An object of type Complex2D can represent a general two-dimensional
+    grid of homogeneous dimension. 
+    The cells can be arbitrary simple polygons. 
+    The vertex sets of facets must be unique, else the facet-cell incidence
+    relation will not be calculated correctly.
+       
+
+    Complex2D is a model of $GrAL Grid-With-Boundary,
+    $GrAL  VertexRange, $GrAL EdgeRange,
+    $GrAL  FacetRange, and $GrAL CellRange.
+
+    Its $GrAL Cell type (Cell2D) is a model of $GrAL VertexRange,
+    $GrAL EdgeRange, and $GrAL CellRange. 
+    That is, there are types for the $GrAL GridIncidenceIterator's 
+    \c VertexOnCellIterator (model of $GrAL VertexOnCellIterator),
+    \c EdgeOnCellIterator (model of $GrAL EdgeOnCellIterator),
+    and \c CellOnCellIterator (model of $GrAL CellOnCellIterator).
+
+    Its $GrAL Vertex type (Vertex2D) is a model of 
+    $GrAL CellRange.
+    That is, there is a type \c CellOnVertexIterator 
+    (model of $GrAL CellOnVertexIterator).
+
+    Its $GrAL Edge type (Edge2D) is a model of 
+    $GrAL VertexRange and $GrAL CellRange.
+    That is, there are types \c VertexOnEdgeIterator
+    and \c CellOnEdgeIterator.
+
+    Its $GrAL Facet type is a typedef to its $GrAL Edge type.
+ */
 class Complex2D : public complex2d_types  {
   typedef list<EdgeOnCell2D_Iterator>  boundary_facet_list;
   typedef vertex_list_complex2d        v_list;
@@ -248,14 +280,18 @@ public:
   typedef vertex_base::CoordType    CoordType;
  
   //--------------- constructors --------------
+  //@{ @name Constructors 
   Complex2D() {}
   Complex2D(const Complex2D& rhs);
   Complex2D& operator=(const Complex2D& rhs);
   ~Complex2D();
-
+  //@}
+private:
+  void clear();
+public:
   //-------------- iteration ------------------
 
-  // STL half-open ranges : Vertices = [FirstVertex, EndVertex)
+  //@{ @name STL half-open ranges
   inline VertexIterator   FirstVertex() const;
   inline VertexIterator   EndVertex()   const;
 
@@ -267,23 +303,15 @@ public:
 
   inline CellIterator     FirstCell()    const;
   inline CellIterator     EndCell()      const;
+  //@}
 
+  //@{ @name Boundary iteration
   // boundary iteration -- still somewhat incomplete.
   // there could be access to the 1D boundary grid as a whole,
   // and to its connected components as entities of their own.
   inline BoundaryFacetIterator  FirstBoundaryFacet() const;
   inline BoundaryFacetIterator  FirstBoundaryEdge () const;
   inline BoundaryVertexIterator FirstBoundaryVertex() const; // works only for one bd. component!
-
-
-  //---------------- size information ------------
-
-  int NumOfVertices() const  {return (_vertices.size());}
-  int NumOfEdges()    const  // only correct for genus = genus(S2) -1
-    {return (NumOfCells() == 0 ? 0 : -2 + NumOfVertices() + NumOfCells() + NumOfBoundaryComponents());}
-  int NumOfFacets()   const { return NumOfEdges();}
-  int NumOfFaces()    const  {return NumOfCells();}
-  int NumOfCells()    const  {return (_cells.size());}
 
   int NumOfBoundaryVertices() const { return NumOfBoundaryFacets();}
   int NumOfBoundaryFacets() const { return (_boundary.size());}
@@ -292,10 +320,22 @@ public:
   // int NumOfBoundaryCells() const 
   //   { return NumOfBoundaryFacets() - # cells w. multiple bd}
   int NumOfBoundaryComponents() const { return 1;} // not always correct, of course !!!
+  //@}
+
+  //---------------- size information ------------
+
+  //@{ @name Size information
+  int NumOfVertices() const  {return (_vertices.size());}
+  int NumOfEdges()    const  // only correct for genus = genus(S2) -1
+    {return (NumOfCells() == 0 ? 0 : -2 + NumOfVertices() + NumOfCells() + NumOfBoundaryComponents());}
+  int NumOfFacets()   const { return NumOfEdges();}
+  int NumOfFaces()    const  {return NumOfCells();}
+  int NumOfCells()    const  {return (_cells.size());}
+  //@}
   
   //-----------------------------------------------------
-
-  // invalid cell_handle for marking "outside"
+  //@{ @name Boundary predicates
+  //! invalid cell_handle for marking "outside"
   cell_handle outer_cell_handle() const { return cell_handle(-1);}
 
   //  inline bool IsOnBoundary(CellNeighbourIterator const& nb) const;
@@ -304,11 +344,16 @@ public:
 
   bool IsInside(cell_handle c) const { return (c != outer_cell_handle());}
   bool IsInside(const Cell& c) const { return IsInside(c.handle());}
+  //@}
 
-  // extracting geometrical information -- move to geometry ?
+  /** @name geometry 
+      \todo: Remove this functionality (It's the job of geometry classes).
+   */
+  //@{ 
   inline const CoordType& Coord(const Vertex& v)   const;
   inline       CoordType& Coord(const Vertex& v);
-
+  //@}
+  
 private:
   friend class friend_for_input; // work-around class
   friend class Vertex2D;
@@ -344,10 +389,10 @@ private:
   }
 
 public:
-  void clear();
 
   //------------------------- elements -> handles ------------------
 
+  //@{ @name Element <-> Handle conversion
   inline cell_handle   handle(Cell                  const& C) const;
   inline cell_handle   handle(CellIterator          const& c) const;
   inline cell_handle   handle(CellNeighbourIterator const& c) const;
@@ -367,7 +412,7 @@ public:
   Cell   cell  (const cell_handle&   c) const { return Cell(c,*this);}
   inline Edge   edge  (const edge_handle& e) const;
   inline Edge   facet (const edge_handle& e) const;
-
+  //@}
 };
 
 
