@@ -27,9 +27,7 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Cartesian2D
-	cp include/Gral/Grids/Cartesian2D/*.h  $(INSTALLHEADERS)/Gral/Grids/Cartesian2D
+install-headers: std-install-headers
 
 install: install-headers  install-libs
 

@@ -4,11 +4,7 @@ include $(CONFIG)
 
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Gral/Test
-	cp include/Gral/Test/*.h $(INSTALLHEADERS)/Gral/Test
-	cp include/Gral/Test/*.C $(INSTALLHEADERS)/Gral/Test
-
+install-headers: std-install-headers
 
 new: libclean
 

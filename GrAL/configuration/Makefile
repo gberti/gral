@@ -4,9 +4,7 @@ include $(CONFIG)
 
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Config
-	cp include/Config/*.h $(INSTALLHEADERS)/Config
+install-headers: std-install-headers
 
 install-config:
 	mkdir -p $(PREFIX)/configuration

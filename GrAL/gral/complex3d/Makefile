@@ -25,13 +25,7 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Complex3D
-	cp include/Gral/Grids/Complex3D/*.h  $(INSTALLHEADERS)/Gral/Grids/Complex3D
-	cp include/Gral/Grids/Complex3D/*.C  $(INSTALLHEADERS)/Gral/Grids/Complex3D
-#	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Complex3D/internal
-#	cp include/Gral/Grids/Complex3D/internal/*.h  $(INSTALLHEADERS)/Gral/Grids/Complex3D/internal
-#	cp include/Gral/Grids/Complex3D/internal/*.C  $(INSTALLHEADERS)/Gral/Grids/Complex3D/internal
+install-headers: std-install-headers
 
 install: install-headers  install-libs
 

@@ -17,10 +17,8 @@ lib:
 	(cd src; $(MAKE) lib)
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/IO
-	mkdir -p $(INSTALLLIBRARIES)
-	cp include/IO/*.h $(INSTALLHEADERS)/IO
+install-headers: std-install-headers
+
 
 install: install-headers install-libs
 

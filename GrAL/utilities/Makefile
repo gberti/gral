@@ -24,11 +24,8 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Utility
-	mkdir -p $(INSTALLHEADERS)/Forward
-	cp include/Utility/*.h $(INSTALLHEADERS)/Utility
-	cp include/Forward/*.h $(INSTALLHEADERS)/Forward
+install-headers: std-install-headers
+
 
 install: install-headers install-libs
 

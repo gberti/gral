@@ -26,12 +26,8 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-install-headers:
-	(cd include/Gral; \
-          mkdir -p $(INSTALLHEADERS)/Gral/;\
-         find . -name "*.h" -exec cp -P {} $(INSTALLHEADERS)/Gral \; ; \
-         find . -name "*.C" -exec cp -P {} $(INSTALLHEADERS)/Gral \; ; \
-        )
+install-headers: std-install-headers
+
 install: install-headers install-libs
 
 

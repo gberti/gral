@@ -25,10 +25,7 @@ check: standard-check
 
 test-check-clean: standard-test-check-clean
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/GraphicsDevice
-	mkdir -p $(INSTALLLIBRARIES)
-	cp include/GraphicsDevice/*.h $(INSTALLHEADERS)/GraphicsDevice
+install-headers: std-install-headers
 
 install: install-headers install-libs
 

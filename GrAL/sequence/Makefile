@@ -22,10 +22,7 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Container
-	cp include/Container/*.h $(INSTALLHEADERS)/Container
-	cp include/Container/*.C $(INSTALLHEADERS)/Container
+install-headers: std-install-headers
 
 clean: stdclean
 	(cd test; $(MAKE) clean DEPS="")

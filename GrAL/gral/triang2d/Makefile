@@ -26,9 +26,7 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Triang2D
-	cp include/Gral/Grids/Triang2D/*.h  $(INSTALLHEADERS)/Gral/Grids/Triang2D
+install-headers: std-install-headers
 
 install: install-headers  install-libs
 

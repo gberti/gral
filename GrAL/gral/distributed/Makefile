@@ -26,11 +26,7 @@ test-check-clean: standard-test-check-clean
 
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Gral/Distributed/internal
-	cp include/Gral/Distributed/*.h  $(INSTALLHEADERS)/Gral/Distributed
-	cp include/Gral/Distributed/internal/*.h  $(INSTALLHEADERS)/Gral/Distributed/internal
-	cp include/Gral/Distributed/internal/*.C  $(INSTALLHEADERS)/Gral/Distributed/internal
+install-headers: std-install-headers
 
 install: install-headers  install-libs
 

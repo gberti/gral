@@ -26,12 +26,8 @@ test-check-clean: standard-test-check-clean
 
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Complex2D
-	cp include/Gral/Grids/Complex2D/*.h  $(INSTALLHEADERS)/Gral/Grids/Complex2D
-	mkdir -p $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
-	cp include/Gral/Grids/Complex2D/internal/*.h  $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
-	cp include/Gral/Grids/Complex2D/internal/*.C  $(INSTALLHEADERS)/Gral/Grids/Complex2D/internal
+install-headers: std-install-headers
+
 
 install: install-headers  install-libs
 

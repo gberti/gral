@@ -25,13 +25,9 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-DIRS = Measurement
-install-headers:
-	for i in $(DIRS);\
-        do mkdir -p $(INSTALLHEADERS)/Gral/$$i; \
-	cp  include/Gral/$$i/*.h $(INSTALLHEADERS)/Gral/$$i || echo "no .h files in dir"; \
-	cp  include/Gral/$$i/*.C $(INSTALLHEADERS)/Gral/$$i || echo "no .C files in dir"; \
-        done;
+
+install-headers: std-install-headers
+
 
 clean: stdclean
 	(cd test; $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))

@@ -24,11 +24,7 @@ check: standard-check
 test-check-clean: standard-test-check-clean
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Gral/Partitioning/internal
-	cp include/Gral/Partitioning/*.h  $(INSTALLHEADERS)/Gral/Partitioning
-	cp include/Gral/Partitioning/internal/*.C \
-           $(INSTALLHEADERS)/Gral/Partitioning/internal
+install-headers: std-install-headers
 
 install: install-headers  install-libs
 

@@ -71,7 +71,15 @@ install-libs:
 	mkdir -p $(PREFIX)/lib/$(LIBPATH)
 	cp $(ROOT)/lib/$(LIBPATH)/lib*  $(PREFIX)/lib/$(LIBPATH)  || echo "No libs found."
 
+std-install-headers:
+	(cd include;\
+         mkdir -p $(INSTALLHEADERS); \
+         cp -R . $(INSTALLHEADERS);)
+	@(find $(INSTALLHEADERS) -name CVS -exec /bin/rm -rf {} \; \
+           > /dev/null 2>&1 || echo '')
+
 install: install-headers 
+
 
 
 ########################################################

@@ -23,10 +23,7 @@ check: standard-check
 
 test-check-clean: standard-test-check-clean
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/Geometry
-	cp include/Geometry/*.h $(INSTALLHEADERS)/Geometry
-	cp include/Geometry/*.C $(INSTALLHEADERS)/Geometry
+install-headers: std-install-headers
 
 install: install-headers install-libs
 

@@ -17,10 +17,7 @@ lib:
 	(cd src; $(MAKE) lib)
 
 
-install-headers:
-	mkdir -p $(INSTALLHEADERS)/FunctionAlgebra
-	mkdir -p $(INSTALLLIBRARIES)
-	cp include/FunctionAlgebra/*.h $(INSTALLHEADERS)/FunctionAlgebra
+install-headers: std-install-headers
 
 install: install-headers install-libs
 
