@@ -4,39 +4,35 @@ include $(CONFIG)
 TARGET=all
 
 all:
-	(cd src; $(MAKE) all)
 
 new:
-	(cd src; $(MAKE) new)
 
 
 compile:
-	(cd src; $(MAKE) compile)
 
 lib:
-	(cd src; $(MAKE) lib)
+
 
 install:
-	mkdir -p $(INSTALLHEADERS)/IO
+	mkdir -p $(INSTALLHEADERS)/Container
 	mkdir -p $(INSTALLLIBRARIES)
-	cp include/IO/*.h $(INSTALLHEADERS)/IO
-	cp $(LIBDIR)/*.a $(INSTALLLIBRARIES)
+	cp include/Container/*.h $(INSTALLHEADERS)/Container
 
 clean:
-	(cd src;  $(MAKE) clean DEPS="")
-	(cd demo; $(MAKE) clean DEPS="")
+	(cd test; $(MAKE) clean DEPS="")
 	(cd doc;  $(MAKE) clean DEPS="")
 	rm -f *~ include/*~ include/*/*~
 
 realclean: clean
 	rm -rf lib/$(ARCH)/
+	rm -rf doxygen/
 
 test:
 	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 doxy:
 	mkdir -p doxygen
-	doxygen doxy.cfg;
+	(TEXINPUTS=$(TEXINPUTS):$(PWD); export TEXINPUTS; doxygen doxy.cfg;)
 
 docs:
 	(cd doc; $(MAKE) $(TARGET))

@@ -1,0 +1,54 @@
+/*! \mainpage Index of the Sequences Package
+   
+   This package contains components related to sequences (in the STL  sense),
+   such as containers, algorithms, or adapters.
+
+*/
+
+/*! \defgroup sequences  The Set of Sequence Components
+
+    This module contains some sub modules related to sequences.
+*/
+
+
+/*! \defgroup mappings Components for mappings
+    \ingroup sequences 
+
+    This module contains some sub-modules related to the 
+    representation of mappings.
+*/
+
+
+/*
+   \section bijectivemapping  Bijective mapping
+    A set of class templates related to representation of
+   bijective mappings: 
+   - class \ref bijective_mapping<T1,T2> : A one-to-one mapping
+   - class \ref inverse_mapping<T1,T2> : Inverse of a bijective_mapping
+   - class \ref domain_of_bijective_mapping<T1,T2>: 
+     domain of definition of  a  bijective mapping
+   - class \ref range_of_bijective_mapping<T1,T2>: 
+       range (image) of a bijective mapping.
+
+   \see bijective-mapping.h
+
+
+  \section partialmapping Partial mapping
+
+  - class partial_mapping<T1,T2>: Mapping with a default value,
+     thus defined on all item of type T1.
+
+
+  \section Mapped iterators
+
+  Some iterator adaptors:
+   - class \ref mapped_value_const_iterator<F,It>:
+         Applies F to value of <TT> It::operator* </TT>
+        (const version)
+   - class \ref mapped_value_iterator<F,It>:
+         Applies F to value of <TT> It::operator* </TT> 
+        (non-const version)
+    
+
+     
+*/
