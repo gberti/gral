@@ -119,7 +119,7 @@ namespace hierarchical {
   template<class HGRID, class FLATGEOM>
   void hier_geometry<HGRID, FLATGEOM>::update_root_geom()
   {
-    root_geom.make_own(new flat_geometry_type(* TheGrid()->FlatGrid(0), *root_geom));
+    root_geom.make_shared(new flat_geometry_type(* TheGrid()->FlatGrid(0), *root_geom));
 		       
 					  
   }

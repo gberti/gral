@@ -15,7 +15,7 @@ namespace hierarchical {
 
   template<class HGRID, class GE>
   hier_grid_table<HGRID,GE>::hier_grid_table(typename hier_grid_table<HGRID,GE>::hier_grid_type const& gg) 
-    : base(&gg),  g(&gg)
+    : base(&gg),  g(gg)
   {
     init(*g);
   }
@@ -31,7 +31,7 @@ namespace hierarchical {
   template<class T>
   hier_grid_table<HGRID,GE>::hier_grid_table(typename hier_grid_table<HGRID,GE>::hier_grid_type const& gg,
 					     T const& t)
-    : base(&gg),  g(&gg)
+    : base(&gg),  g(gg)
   {
     init(*g, t);
   }
@@ -51,7 +51,7 @@ namespace hierarchical {
   {
     if(g != 0)
       clear();
-    g = &gg;
+    g = ref_ptr<hier_grid_type const>(gg);
     base::set_grid(&gg);
     init(*g);
   }
@@ -69,7 +69,7 @@ namespace hierarchical {
   void hier_grid_table<HGRID,GE>::clear()
   {
     entities.clear();
-    g = static_cast<hier_grid_type const*>(0);
+    g.clear();
   }
 
 

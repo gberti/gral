@@ -429,9 +429,9 @@ namespace hierarchical {
     level_handle             lev;
   public:
     h_element_base_t() {}
-    explicit h_element_base_t(grid_type const* hgg)
-      : hg(hgg), lev(hgg->finest_level())  {}
-    h_element_base_t(grid_type const* hgg, level_handle lv)
+    explicit h_element_base_t(grid_type const& hgg)
+      : hg(hgg), lev(hgg.finest_level())  {}
+    h_element_base_t(grid_type const& hgg, level_handle lv)
       : hg(hgg), lev(lv)  {}
     explicit h_element_base_t(ref_ptr<const grid_type> hgg)
       : hg(hgg), lev(hgg->finest_level())  {}
@@ -496,9 +496,9 @@ namespace hierarchical {
     //using base::bound;
 
     h_vertex_t() {}
-    h_vertex_t(grid_type const& gg, vertex_handle hh) : base(&gg, hh.level()), h(hh.flat_handle()) {}
-    h_vertex_t(grid_type const& gg, flat_vertex_type   f, level_handle lev) : base(&gg,lev), h(f.handle()) {}
-    h_vertex_t(grid_type const& gg, flat_vertex_handle f, level_handle lev) : base(&gg,lev), h(f) {}
+    h_vertex_t(grid_type const& gg, vertex_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
+    h_vertex_t(grid_type const& gg, flat_vertex_type   f, level_handle lev) : base(gg,lev), h(f.handle()) {}
+    h_vertex_t(grid_type const& gg, flat_vertex_handle f, level_handle lev) : base(gg,lev), h(f) {}
     h_vertex_t(ref_ptr<grid_type const> gg, vertex_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
     h_vertex_t(ref_ptr<grid_type const> gg, flat_vertex_type   f, level_handle lev) : base(gg,lev), h(f.handle()) {}
     h_vertex_t(ref_ptr<grid_type const> gg, flat_vertex_handle f, level_handle lev) : base(gg,lev), h(f) {}
@@ -603,9 +603,9 @@ namespace hierarchical {
     //using base::bound;
 
     h_cell_t() {}
-    h_cell_t(grid_type const& gg, cell_handle hh) : base(&gg, hh.level()), h(hh.flat_handle()) {}
-    h_cell_t(grid_type const& gg, flat_cell_type   f, level_handle lev) : base(&gg,lev), h(f.handle()) {}
-    h_cell_t(grid_type const& gg, flat_cell_handle f, level_handle lev) : base(&gg,lev), h(f) {}
+    h_cell_t(grid_type const& gg, cell_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
+    h_cell_t(grid_type const& gg, flat_cell_type   f, level_handle lev) : base(gg,lev), h(f.handle()) {}
+    h_cell_t(grid_type const& gg, flat_cell_handle f, level_handle lev) : base(gg,lev), h(f) {}
     h_cell_t(ref_ptr<grid_type const> gg, cell_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
     h_cell_t(ref_ptr<grid_type const> gg, flat_cell_type   f, level_handle lev) : base(gg,lev), h(f.handle()) {}
     h_cell_t(ref_ptr<grid_type const> gg, ref_ptr<flat_cell_type const>  f, level_handle lev) : base(gg,lev), h(f->handle()) {}
@@ -719,9 +719,9 @@ namespace hierarchical {
     //using base::bound;
 
     h_element_t() {}
-    h_element_t(grid_type const& gg, element_handle hh) : base(&gg, hh.level()), h(hh.flat_handle()) {}
-    h_element_t(grid_type const& gg, flat_element_type   f, level_handle lev) : base(&gg,lev), h(f.handle()) {}
-    h_element_t(grid_type const& gg, flat_element_handle f, level_handle lev) : base(&gg,lev), h(f) {}
+    h_element_t(grid_type const& gg, element_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
+    h_element_t(grid_type const& gg, flat_element_type   f, level_handle lev) : base(gg,lev), h(f.handle()) {}
+    h_element_t(grid_type const& gg, flat_element_handle f, level_handle lev) : base(gg,lev), h(f) {}
     h_element_t(ref_ptr<grid_type const> gg, element_handle hh) : base(gg, hh.level()), h(hh.flat_handle()) {}
     h_element_t(ref_ptr<grid_type const> gg, flat_element_type   f, level_handle lev) : base(gg,lev), h(f.handle()) {}
     h_element_t(ref_ptr<grid_type const> gg, ref_ptr<flat_element_type const>  f, level_handle lev) : base(gg,lev), h(f->handle()) {}

@@ -161,7 +161,7 @@ namespace octree {
     void set(level_handle newlev) { lev = newlev;}
   public:
     nc_leafgrid_element_base_t() {}
-    nc_leafgrid_element_base_t(grid_type const* g, level_handle l = g->TheOctree()->finest_level())
+    nc_leafgrid_element_base_t(grid_type const& g, level_handle l = g.TheOctree()->finest_level())
       : the_grid(g), lev(l) {}
     nc_leafgrid_element_base_t(ref_ptr<const grid_type> g, level_handle l = g->TheOctree()->finest_level())
       : the_grid(g), lev(l) {}
