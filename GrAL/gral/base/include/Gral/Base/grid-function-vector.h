@@ -102,7 +102,7 @@ public:
   }
   void set_grid(const grid_type& gg) { set_grid(ref_ptr<grid_type const>(gg));}
 
-  void rebind(ref_ptr<grid_type const> gg) {
+  void rebind(ref_ptr<grid_type const> gg, T t = T()) {
     g = gg;
     size_type old_size = table.size();
     size_type new_size = et::size(*g);
@@ -111,11 +111,11 @@ public:
     else if (old_size < new_size) {
       table.reserve(new_size);
       for(unsigned i = 0; i < new_size - old_size; ++i)
-        table.push_back(T());
+        table.push_back(t);
     }
     ENSURE( (table.size() == et::size(*g)), "", 1);
   }
-  void rebind(const grid_type& gg) { rebind(ref_ptr<grid_type const>(gg), t);}
+  void rebind(const grid_type& gg, T t = T()) { rebind(ref_ptr<grid_type const>(gg),t);}
 
   // temporary function to handle enlarge grids 'by hand'
   // (should be automatic by an observer/notifier mechanism)
