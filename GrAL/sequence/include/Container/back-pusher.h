@@ -9,6 +9,7 @@ class back_pusher {
 private:
   CONTAINER* cont;
 public:
+  back_pusher() : cont(0) {}
   back_pusher(CONTAINER& c) : cont(&c) {}
 
   void read(std::istream& in)
