@@ -6,6 +6,7 @@
 
 #include <algorithm>
 #include "Geometry/point-traits.h"
+#include <boost/limits.hpp>
 
 /*! \brief An axisparallel box for arbitrary coordinate types.
 
@@ -17,7 +18,7 @@
     A box can be used as a function, mapping [0,1]^d to the convex
     hull of its min and max corner, in the obvious way.
 
-    \todo add default constructor with proper initialization 
+    \see Tested in test-box.C 
  */
 
 
@@ -26,14 +27,16 @@ template<class coord>
 class box {
   typedef box<coord>          self;
   typedef point_traits<coord> pt;
+  typedef typename pt::component_type scalar_type;
 private:
   coord minc, maxc;
 public:
-  // box() // empty box: minc[] = + \infty, maxc[i] = -\infty
-    // => |= works correctly
+  box() : minc( std::numeric_limits<scalar_type>::infinity()),
+	  maxc(-std::numeric_limits<scalar_type>::infinity())
+  {}    // => |= works correctly
   box(const coord& cmin) : minc(cmin), maxc(cmin) {}
-  box(const coord& cmin, const coord& cmax) : minc(cmin), maxc(cmin) 
-    { *this |= cmax; }
+  box(const coord& cmin, const coord& cmax) : minc(cmin), maxc(cmax) 
+  {}
 
   const coord& the_min() const { return minc;}
   const coord& the_max() const { return maxc;}
@@ -66,7 +69,13 @@ public:
   }
   
   // bool element(const coord& p) const;
-  // bool empty() const;
+  bool empty() const {
+    bool res = false;
+    for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) 
+      res = res || (minc[i] > maxc[i]);
+    return res;
+  }
+
 
   // intersection
   // self& operator &=(self const&);
