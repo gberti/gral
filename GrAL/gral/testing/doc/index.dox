@@ -1,4 +1,4 @@
-/*! \mainpage Index of the GrAL Testing Module
+/*! \mainpage Index of the GrAL Testing Package
 
     This module contains components for testing
     grid implementations for syntactical and semantical correctness.

@@ -1,4 +1,4 @@
-/*! \mainpage Index of the GrAL ComplexND Grid Module
+/*! \mainpage Index of the GrAL ComplexND Grid Package
 
     <tt>complexnd::ComplexND<N></tt> implemenents an N-dimensional unstructured grid.
     The dimension can either be set at compile time, or at runtime using <tt> N=complexnd::ANY</tt>.

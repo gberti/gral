@@ -29,5 +29,6 @@ while(<>) {
   s|%GRALCONCEPTSTOP\"|$GRALCONCEPTSTOP\"|g;
   s|%ROOT|$ROOT|g;
   s|%DOXYPATH|$DOXYPATH|g;
+  s|GRALPROTECT||g;
   print;
 }

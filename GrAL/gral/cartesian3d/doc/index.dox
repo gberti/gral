@@ -1,4 +1,4 @@
-/*! \mainpage Index of the GrAL Cartesian3D Grid Module
+/*! \mainpage Index of the GrAL Cartesian3D Grid Package
 
    This module contains the concrete grid component CartesianGrid3D.
    An object of type CartesianGrid3D represents a finite Cartesian grid.

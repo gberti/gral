@@ -3,6 +3,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include <vector>
 
 #include "Gral/IO/complex2d-format-input-base.h"

@@ -4,6 +4,9 @@
 
 // $LICENSE
 
+/*! \file
+ */
+
 #include "Container/dummy-container.h"
 #include "Gral/Subranges/find-boundary-components.h"
 

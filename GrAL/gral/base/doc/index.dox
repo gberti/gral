@@ -3,7 +3,7 @@
   
    This packages is used by all other parts of the GrAL.
 
-   See $GRALCONCEPTSTOP here for an introduction into the concepts of GrAL.
+   You may want to look at an $GRALCONCEPTSTOP introduction into the concepts of GrAL.
 
    See \ref gralbasemodules for an overview of components. <BR>
    <EM> Note: This categorization is no yet very complete. </EM>

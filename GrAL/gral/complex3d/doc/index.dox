@@ -1,4 +1,4 @@
-/*! \mainpage Index of the GrAL Complex3D Grid Module
+/*! \mainpage Index of the GrAL Complex3D Grid Package
 
    This module contains the concrete grid component Complex3D.
    An object of type \c Complex3D can represent a general three-dimensional 

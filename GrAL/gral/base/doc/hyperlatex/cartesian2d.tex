@@ -16,7 +16,7 @@ that is, regular $m \times n$ tensor product grids.
 \begin{example}
 #include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
-\gralclasslink{RegGrid2D}{cartesian2d} R(10,10);  // 10x10 Cartesian grid
+\gralclassinnslink{RegGrid2D}{cartesian2d}{cartesian2d} R(10,10);  // 10x10 Cartesian grid
 assert(R.NumOfVertices() == 10*10);
 assert(R.NumOfCells()    == 9*9);
 typedef grid\_types<CartesianGrid2D> gt; // 'namespace' for CartesianGrid2D-related types 

@@ -1,4 +1,4 @@
-/*! \mainpage Index of the GrAL Complex2D Grid Module
+/*! \mainpage Index of the GrAL Complex2D Grid Package
 
    This module contains the concrete grid component Complex2D.
    An object of type \c Complex2D can represent a general two-dimensional 
