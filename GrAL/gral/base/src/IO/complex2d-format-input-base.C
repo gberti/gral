@@ -4,25 +4,28 @@ IstreamComplex2DFmt_base::IstreamComplex2DFmt_base()
   : offset(0),
     in(0),
     checked_in(in),
-    is_in_owned(false) 
+    is_in_owned(false),
+    nv_nc_read(false)
 {}
 
 IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::string const& file, int off)    
   : offset(off),
     in(new std::ifstream(file.c_str())),
     checked_in(in),
-    is_in_owned(true)
+    is_in_owned(true),
+    nv_nc_read(false)
 {
-  init();
+ 
 }
 
 IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::istream& is, int off)
   : offset(off),
     in(&is),
     checked_in(&is),
-    is_in_owned(false)
+    is_in_owned(false),
+    nv_nc_read(false)
 {
-  init();
+ 
 }
 
 IstreamComplex2DFmt_base::~IstreamComplex2DFmt_base() 
@@ -52,7 +55,13 @@ void IstreamComplex2DFmt_base::init(std::string const& file)
   init();
 }  
 
-void IstreamComplex2DFmt_base::init()
+void IstreamComplex2DFmt_base::init() const
 {
-  In() >> nv >> nc;
+  if(! nv_nc_read) {
+    In() >> nv >> nc;
+    nv_nc_read = true;
+  }
 }
+
+bool IstreamComplex2DFmt_base::initialized() const
+{ return nv_nc_read; }
