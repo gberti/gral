@@ -40,10 +40,15 @@ demo:
 	(cd demo; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 
-doc: doxy tex
+#doc: doxy tex
+
+additional-predoc: tex
+
+additional-postdoc:
+	(cd doc;  $(MAKE) postdoc-local)
+	rm -f $(ROOT)/doxygen/html/external-control.html
+	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html
 
 tex:
 	(cd doc; $(MAKE) html)
-	rm -f $(ROOT)/doxygen/html/external-control.html
-	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html
 

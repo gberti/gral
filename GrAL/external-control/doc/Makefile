@@ -7,6 +7,9 @@ all: html dvi
 html:
 	hyperlatex-2.3.1 external-control.tex
 
+postdoc-local:
+	./install-doc.pl -allroot $(RELROOT) -stl $(STLURL) html_dir/external-control.html
+
 dvi:
 	latex  external-control.tex
 

@@ -38,10 +38,20 @@ test:
 	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 
+# depth + 1
+ADDRELPATH=..#
 
-concepts:
+additional-predoc:
 	(cd doc; gmake concepts)
 
-doc: doxy concepts
+additional-postdoc: 
+	(../bin/install-doc.pl -root $(RELROOT) \
+                               -path doxygen/html \
+                               -stl $(STLURL) \
+                               -gral $(RELROOT)/gral/base/doc/hyperlatex/html\
+         doxygen/html/*.html)
+	(cd doc; gmake install-doc)
+
+
 
 

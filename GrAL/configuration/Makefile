@@ -22,3 +22,4 @@ demo:
 clean: stdclean
 
 realclean: clean
+	rm -rf doxygen

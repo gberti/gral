@@ -2,9 +2,17 @@ CONFIG=../mk.config
 
 include $(CONFIG)
 
+gen-paths:
+	./gen-tex-paths.pl  > hyperlatex/paths.tex
 
-concepts:
+
+
+install-doc:
+	./install-doc.pl -stl $(STLURL) -gralroot "../../.."  hyperlatex/html/*.html
+
+concepts: gen-paths
 	(cd hyperlatex;\
+           rm -f html/*; \
           (cd bilder; gmake all; gmake clean);\
           hyperlatex-2.3.1 top; \
           cp $(HOME)/WWW/icons/*.xbm html/;\
@@ -18,6 +26,9 @@ concepts:
           ln -s VertexGridRange.html EdgeRange.html;\
           ln -s VertexGridRange.html FacetRange.html;\
           ln -s VertexGridRange.html CellRange.html;\
+          \n -s Vertex-On-CellIterator.html VertexOnCellIterator.html; \
+          \n -s Vertex-On-CellIterator.html EdgeOnCellIterator.html; \
+          \n -s Vertex-On-CellIterator.html FacetOnCellIterator.html; \
           ))
 
 clean:

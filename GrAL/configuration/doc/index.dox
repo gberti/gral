@@ -3,9 +3,25 @@
    The configuration module is used by all other modules
    in the GrAL package. It contains
    
-   - common Makefile parts,
-   - configuration information for 3rd party software (e.g. MPI)
-   - doxygen related information
-   - compiler configuration  in compiler-config.h
+   - common Makefile parts in \c defs 
+      - general variables in \c defs/make.defs.
+        Variables a user might want to change are
+        - ARCH: architecture, e.g. \c solaris or \c linux
+        - CCNAME: used compiler, e.g. \c kai or \c gcc (Note: CCNAME is
+          used in a path and does not have to be the name of the 
+          actual c++ compiler)    
+        - DEBUG: choose debug or optimization mode, choices are 
+          \c debug or \c opt
+      - generic targets in \c defs/suffix-targets
+      - recursive targets in \c defs/recursive-targets
+      - architecture dependend stuff in \c defs/<ARCH>/make.defs
+      - compiler dependend stuff in \c defs/<CCNAME>/make.defs,
+        \c defs/<CCNAME>/<DEBUG>/make.defs
+   - doxygen related information in \c doxygen/
+   - compiler configuration  in \c compiler-config.h
+   - utility scripts for maintenance in \c scripts/
+   - configuration information for 3rd party software 
+     - MPI in \c defs/mpi
 
+  \todo could use autoconf or something like that.
 */

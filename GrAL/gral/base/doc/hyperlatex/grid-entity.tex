@@ -9,8 +9,8 @@ separate sub-concepts, notably \sectionlink{\concept{ Grid Element }}{GridElemen
 \sectionlink{\concept{Grid Sequence Iterator}}{GridSequenceIterator},
 and \conceptlink{Grid Incidence Iterator}{GridIncidenceIterator}.
 Its purpose is to bundle some fundamental properties, much like the STL concepts
-\xlink{Assignable}{http://www.sgi.com/Technology/STL/Assignable.html} and 
-\xlink{Equality Comparable}{http://www.sgi.com/Technology/STL/EqualityComparable.html}
+\Stllink{Assignable} and
+\stllink{Equality Comparable}{EqualityComparable}
 which it refines.
 
 The fundamental property captured by {\em Grid Entity\/} is binding to a 
@@ -23,7 +23,7 @@ which are unique only within a single grid.
 Conceptually, a grid is the owner of its entities; 
 an entities lifetime cannot exceed that of
 its anchor grid. 
-Also, an grid entity need  not be necessarily permanently stored,
+Also, a grid entity needs  not necessarily to be stored permanently,
 it may be constructed only temporarily, 
 for example a
 \concept{Grid Iterator}
@@ -32,9 +32,9 @@ or a
 obtained by dereferencing a  Grid Iterator.
 
 \conceptsubsection{Refinement of}
-STL \xlink{ Assignable }{http://www.sgi.com/Technology/STL/Assignable.html}
+STL \Stllink{Assignable}
 \\
-STL \xlink{Equality Comparable}{http://www.sgi.com/Technology/STL/EqualityComparable.html}
+STL \stllink{Equality Comparable}{EqualityComparable}
 
 
 \conceptsubsection{Notation}

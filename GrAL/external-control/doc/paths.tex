@@ -1,0 +1,7 @@
+
+\newcommand{\modulerootpath}{ALLROOT/external-control}
+%\newcommand{\moduleroot}[1]{\modulerootpath/#1}
+\newcommand{\doxyrootpath}{\modulerootpath/doxygen/html}
+\newcommand{\doxyfile}[1]{\doxyrootpath/{#1}.html}
+\newcommand{\doxyclass}[1]{\doxyrootpath/class\_{#1}.html}
+\newcommand{\classlink}[1]{\xlink{#1}{\doxyclass{#1}}}

@@ -3,8 +3,8 @@
 
 CVSREPO=/home/nmwr/CVS;
 cvswork=${CVSWORK-${HOME}/CVS-work}
-#MODULES=`$cvswork/configuration/scripts/modules.sh`;
-MODULES="configuration configuration utilities"
+MODULES=`$cvswork/configuration/scripts/modules.sh`;
+#MODULES="configuration configuration utilities"
 
 TMP=${HOME}/tmp;
 ALLROOT=${TMP}/modules;
@@ -21,13 +21,13 @@ done;
 for i in ${MODULES}
 do
  cd ${ALLROOT}/$i;
- gmake doxy1 ALLROOT=${ALLROOT}
+ gmake predoc ALLROOT=${ALLROOT}
 done;
 
 for i in ${MODULES}
 do
  cd ${ALLROOT}/$i;
- gmake installdox ALLROOT=${ALLROOT} DOCROOT=../ 
+ gmake postdoc ALLROOT=${ALLROOT} DOCROOT=../ 
 done;
 
 
@@ -36,7 +36,7 @@ cd ${ALLROOT}/Docs;
 for i in ${MODULES}
 do
   mkdir -p $i
-  cp ${ALLROOT}/$i/doxygen/html/* $i
+  cp -r ${ALLROOT}/$i/doxygen/ $i
 done;
 cd ${ALLROOT};
 

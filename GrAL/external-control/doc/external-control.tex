@@ -10,12 +10,7 @@
 \htmldirectory{html_dir}
 
 
-\newcommand{\modulerootpath}{/home/berti/CVS-work/external-control}
-\newcommand{\moduleroot}[1]{\modulerootpath/#1}
-\newcommand{\doxyrootpath}{\modulerootpath/doxygen/html}
-\newcommand{\doxyfile}[1]{\doxyrootpath/{#1}.html}
-\newcommand{\doxyclass}[1]{\doxyrootpath/class\_{#1}.html}
-\newcommand{\classlink}[1]{\xlink{#1}{\doxyclass{#1}}}
+\input{paths}
 
 \begin{document}
  \section{Control Device: External Parameter Control}
@@ -26,7 +21,7 @@
  be modifiable at startup or at runtime, e.g. the size of a data structure,
  filename for input and output etc. All these classes play the role of a
  {\tt  controlable }, that is, they have some parameters to be 
- controled by some {\tt  ControlDevice } which is the counterpart.
+ controled by some {\tt  \classlink{ControlDevice}} which is the counterpart.
  A {\tt  ControlDevice } could be, for example,
 
  \begin{itemize}

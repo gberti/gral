@@ -4,27 +4,22 @@
    such as containers, algorithms, or adapters.
 
   \b Note:
-   This package is by no means complete or sophisticated. 
+   This package is by no means complete nor sophisticated. 
    Its purpose is simply to satisfy the
    needs of other packages in an admittedly rather ad hoc way.   
    Some problems addressed here are now solved much more generally
    by other, dedicated libraries, for example
    <A HREF="http://www.zib.de/weiser/vtl/"> VTL </A> (View Template Library).
 
-   This documentation is still incomplete.
+  <EM> This documentation is still very incomplete. </EM>
 
    
 */
 
 
-/*! \defgroup sequences  The Set of All Sequence Components
-
-    This module contains all sub modules contained in the package.
-*/
 
 
 /*! \defgroup containers  Components for Containers
-    \ingroup sequences
 
    This module contains classes and sub-modules implementing 
    STL conforming container data structures
@@ -33,7 +28,6 @@
 
 
 /*! \defgroup algorithms  Algorithms on Sequences
-    \ingroup sequences    
 
    This module contains algorithms on sequences, 
    mostly slight variations on STL algorithms for convenience.
@@ -42,7 +36,6 @@
 
 
 /*! \defgroup mappings Components for Mappings
-    \ingroup sequences 
 
     This module contains some sub-modules related to the 
     representation of mappings.
@@ -51,7 +44,6 @@
 
 
 /*! \defgroup accessors Accessors, Function Objects and Iterator Adaptors
-    \ingroup sequences
 
     This module defines custom function objects and iterators.
     - get_first, get_second: Get first/second element of a pair.

@@ -9,7 +9,7 @@ lets a \sectionlink{\concept{Grid Range}}{GridRange}
 be seen as a sequence of the iterators element type.
 
 \conceptsubsection{Refinement of}
-STL \xlink{Forward iterator}{http://www.sgi.com/Technology/STL/ForwardIterator.html}
+STL \stllink{Forward Iterator}{ForwardIterator}
 \noteref{note-forward}
 \\
 \sectionlink{\concept{Grid Entity}}{GridEntity}
@@ -133,7 +133,7 @@ STL \xlink{Forward iterator}{http://www.sgi.com/Technology/STL/ForwardIterator.h
   \notelabel{note-forward}
   For the existing models, this is currently only partially implemented: postfix increment is missing
   (it is inefficient because of the temporary object involved), and
-  \xlink{{\tt iterator\_traits<>}}{http://www.sgi.com/Technology/STL/iterator_traits.html} 
+  \xlink{{\tt iterator\_traits<>}}{\STLPATH{iterator_traits}} 
   is not (yet) specialized.
   However, the main property of Forward Iterator, namely support of multiple passes,
   is satisfied.

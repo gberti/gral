@@ -15,7 +15,7 @@ clobber:   realclean
 
 stdclean: moduleclean
 	rm -f *~ *.o  *.d *.ti *.ii
-	rm -f *.rpo     # Gnu template repositories
+	find . -name "*~" -exec rm {} \; -print
 	rm -rf ti_files # KCC template DB
 	rm -f .nfs*     # NFS garbage
 	rm -f *.tmp
@@ -30,14 +30,23 @@ install: install-headers
 
 # targets to generate documentation using doxygen
 
-doxy:  doxy1 installdox
+doc: predoc postdoc
 
-#	rm -f doxy.cfg.tmp installdox.sh.tmp
+predoc:  doxy additional-predoc
+postdoc: installdox additional-postdoc
+
+# hook for module-specific additional docs
+additional-predoc:
+additional-postdoc:
+
 
 
 DOCROOT=$(ALLROOT)
 DOXYPATH=doxygen/html
-doxy1:
+RELPATH=../../..#
+ADDRELPATH=#
+RELROOT=$(RELPATH)/$(ADDRELPATH)
+doxy:
 	$(CONFIGURATION)/doxycfg/filter-doxy-cfg.pl -root $(ALLROOT) \
         $(CONFIGURATION)/doxycfg/doxy.paths.cfg                  > doxy.cfg.tmp
 	echo "@INCLUDE_PATH = $(CONFIGURATION)/doxycfg/"        >> doxy.cfg.tmp
@@ -48,12 +57,14 @@ doxy1:
 	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
          doxygen doxy.cfg.tmp;)
 	rm footer.html
+	rm -f doxy.cfg.tmp 
 
 installdox:
-	$(SCRIPTS)/generate-installdox.pl -root $(DOCROOT) -path $(DOXYPATH)\
+	$(SCRIPTS)/generate-installdox.pl -root $(RELROOT) -path $(DOXYPATH)\
           dependencies > installdox.sh.tmp;
 	chmod ugo+x ./installdox.sh.tmp;
 	./installdox.sh.tmp
+	rm -f installdox.sh.tmp
 
 # suffix rules
 

@@ -29,6 +29,13 @@ realclean: clean
 test:
 
 
-doc: doxy
+additional-postdoc: install-doc
+
+install-doc:
+	(./bin/install-doc.pl -root $(RELROOT) \
+                             -path  $(DOXYPATH) \
+                             -stl $(STLURL) \
+                             -gral $(RELROOT)/gral/base/doc/hyperlatex/html \
+        doxygen/html/*.html)
 
 

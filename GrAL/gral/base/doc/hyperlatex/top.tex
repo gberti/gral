@@ -26,12 +26,8 @@
 \newcommand{\makepath}[3]{{#1}#2#3}
 \newcommand{\img}[1]{\makepath{\htmlimgpath}{#1}{\htmlimgsuffix}}
 
-% Pfade
-\newcommand{\NMWRROOT}{../}
-\newcommand{\NMWRINC}[1]{\NMWRROOT/include/#1}
-\newcommand{\STLURL}{http://www.sgi.com/Technology/STL}
-\newcommand{\STLPATH}[1]{\STLURL/#1}
-\newcommand{\traitsURL}{}
+% Paths - generated file
+\input{paths}
 
 %\T\parindent0cm
 %\T\parskip0.25cm
@@ -77,7 +73,7 @@
   \link{#1}[\footnote{see page  \pageref{glossary-#2}}]{glossary-#2}}
 \newcommand{\Glossarylinkfoot}[1]{\glossarylinkfoot{#1}}
 
-\newcommand{\nmwrcodelink}[2]{\xlink{{\tt #1}}{\NMWRINC{#2}/#1}}
+\newcommand{\gralcodelink}[2]{\xlink{{\tt #1}}{\GRALINC{#2}{#1}}}
 \newcommand{\stllink}[2]{\xlink{\concept{#1}}{\STLURL/#2.html}}
 \newcommand{\stltypelink}[2]{\xlink{\type{#1}}{\STLURL/#2.html}}
 \newcommand{\Stllink}[1]{\stllink{#1}{#1}}
