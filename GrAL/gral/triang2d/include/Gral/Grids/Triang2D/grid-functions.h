@@ -23,10 +23,6 @@ public:
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
-
-  T&       operator[](Triang2D_Vertex     const& v)       { return table[v.handle()];}
-  T const& operator()(Triang2D_Vertex     const& v) const { return table[v.handle()];}
-  T& operator[](Triang2D_VertexOnCellIterator const& v) { return table[v.handle()];}
 };
 
 
@@ -41,9 +37,6 @@ public:
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
-
-  T      & operator[](Triang2D_Cell const& c)       { return table[c.handle()];}
-  T const& operator()(Triang2D_Cell const& c) const { return table[c.handle()];}
 };
 
 
