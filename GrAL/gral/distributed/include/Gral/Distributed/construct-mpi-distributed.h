@@ -26,7 +26,8 @@
 */    
 //----------------------------------------------------------------
 
-template<class CG, class FG, class FGEOM, class MG, class GEOM, class TRAFO>
+template<class CG, class FG, class FGEOM, class MG, class GEOM, 
+         class VCORRLOC, class TRAFO, class VCORR, class CCORR>
 void
 ConstructMPIDistributedFromMaster
 (
@@ -35,13 +36,13 @@ ConstructMPIDistributedFromMaster
  partitioning<MG>                   & Prtng,           // IN:  contains partitioning & master
  GEOM                         const & MasterGeom,      // IN:  geometry for master grid
  overlap_pattern              const & ovlp_pattern,    // IN:  logical dscr. of overlap
- bijective_mapping<int,int>         & per_v_1,         // IN:  mapping of periodic bd 
+ VCORRLOC                           & per_v_1,         // IN:  mapping of periodic bd 
                                                        //  (optional, may be empty)
- bijective_mapping<int,int>         & per_v_2,         //  inverse of per_v_1
+ VCORRLOC                           & per_v_2,         //  inverse of per_v_1
  TRAFO                        const & T1,              // IN: geometric transf. corr. to per_v_1
  TRAFO                        const & T2,              //  inverse of T1
- bijective_mapping<int, int>        & master2distr_v,  //  map vertices of master to those of DistrG
- bijective_mapping<int, int>        & master2distr_c   //  same for cells
+ VCORR                              & master2distr_v,  //  map vertices of master to those of DistrG
+ CCORR                              & master2distr_c   //  same for cells
 );
 
 
@@ -54,7 +55,8 @@ ConstructMPIDistributedFromMaster
 */    
 //----------------------------------------------------------------
 
-template<class CG, class FG, class FGEOM, class MG, class GEOM>
+template<class CG, class FG, class FGEOM, class MG, class GEOM,
+         class VCORR, class CCORR>
 inline void
 ConstructMPIDistributedFromMaster
 (
@@ -63,12 +65,14 @@ ConstructMPIDistributedFromMaster
  partitioning<MG>                   & Prtng,           // IN:  contains partitioning & master
  GEOM                         const & MasterGeom,      // IN:  geometry for master grid
  overlap_pattern              const & ovlp_pattern,    // IN:  logical dscr. of overlap
- bijective_mapping<int, int>        & master2distr_v,  //  map vertices of master to those of DistrG
- bijective_mapping<int, int>        & master2distr_c   //  same for cells
+ VCORR                               & master2distr_v,  //  map vertices of master to those of DistrG
+ CCORR                               & master2distr_c   //  same for cells
 )
 
 {
-  bijective_mapping<int,int> per_v_1, per_v_2;
+  typedef grid_types<MG> mgt;
+  typedef typename  mgt::vertex_handle master_v_h;
+  bijective_mapping<master_v_h,master_v_h> per_v_1, per_v_2;
   typedef typename GEOM::coord_type coord_type;
   std::identity<coord_type> T1, T2;
   ConstructMPIDistributedFromMaster(DistrG, DistrGeom,
