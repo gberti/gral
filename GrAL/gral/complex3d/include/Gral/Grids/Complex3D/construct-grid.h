@@ -12,6 +12,18 @@ void ConstructGrid0(Complex3D     & G_dest,
 		    VCORR         & v_corr,
 		    CCORR    const& c_corr);
 
+template<class G_SRC, class GEOM_SRC,
+         class GEOM_DEST,
+         class VCORR, class CCORR>
+inline
+void ConstructGridVC (Complex3D     & G_dest,
+		      GEOM_DEST     & Geom_dest,
+		      G_SRC    const& G_src,
+		      GEOM_SRC const& Geom_src,
+		      VCORR         & v_corr,
+		      CCORR    const& c_corr)
+{ ConstructGridVC_generic(G_dest,Geom_dest, G_src, Geom_src, vcorr, ccorr); }
+
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
 #include "Gral/Grids/Complex3D/construct-grid.C"
