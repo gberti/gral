@@ -567,6 +567,11 @@ public:
   typedef typename gt::Cell                 Cell;
   typedef typename gt::Vertex               Vertex;
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
+
+  typedef typename gt::archetype_type     archetype_type;
+  typedef typename gt::archetype_handle   archetype_handle;
+  typedef typename gt::archetype_iterator archetype_iterator;
+
   typedef tp<Vertex> tpV;
   typedef tp<Cell>   tpC;
 
@@ -680,6 +685,15 @@ public:
   const grid_type& TheGrid() const { return *the_grid;}
   cell_handle   handle(const Cell& C)   const { return TheGrid().handle(C);}
   vertex_handle handle(const Vertex& V) const { return TheGrid().handle(V);}
+
+  archetype_iterator BeginArchetype() const { return TheGrid().BeginArchetype();}
+  archetype_iterator EndArchetype()   const { return TheGrid().EndArchetype();}
+  unsigned NumOfArchetypes() const { return TheGrid().NumOfArchetypes();}
+  archetype_type const& ArchetypeOf(Cell const& c) const { return TheGrid().ArchetypeOf(c);}
+  archetype_type const& ArchetypeOf(cell_handle c) const { return TheGrid().ArchetypeOf(c);}
+  archetype_handle archetype_of(Cell const& c) const { return TheGrid().archetype_of(c);}
+  archetype_handle archetype_of(cell_handle c) const { return TheGrid().archetype_of(c);}
+  archetype_type const& Archetype(archetype_handle a) const { return TheGrid().Archetype(a);}
 };
   
 
@@ -715,6 +729,10 @@ public:
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
   typedef tp<Vertex> tpV;
   typedef tp<Cell>   tpC;
+
+  typedef typename gt::archetype_type     archetype_type;
+  typedef typename gt::archetype_handle   archetype_handle;
+  typedef typename gt::archetype_iterator archetype_iterator;
 
   //---------- own types ----------------------
 
@@ -771,6 +789,16 @@ public:
   grid_type const& TheGrid() const { return vertices.TheGrid();}
   cell_handle   handle(const Cell& C)   const { return TheGrid().handle(C);}
   vertex_handle handle(const Vertex& V) const { return TheGrid().handle(V);}
+
+  archetype_iterator BeginArchetype() const { return TheGrid().BeginArchetype();}
+  archetype_iterator EndArchetype()   const { return TheGrid().EndArchetype();}
+  unsigned NumOfArchetypes() const { return TheGrid().NumOfArchetypes();}
+  archetype_type const& ArchetypeOf(Cell const& c) const { return TheGrid().ArchetypeOf(c);}
+  archetype_type const& ArchetypeOf(cell_handle c) const { return TheGrid().ArchetypeOf(c);}
+  archetype_handle archetype_of(Cell const& c) const { return TheGrid().archetype_of(c);}
+  archetype_handle archetype_of(cell_handle c) const { return TheGrid().archetype_of(c);}
+  archetype_type const& Archetype(archetype_handle a) const { return TheGrid().Archetype(a);}
+
 };
   
 
@@ -791,6 +819,7 @@ struct grid_types_esr : public GT {
   typedef enumerated_subrange<Grid>           edge_range_type;
   typedef enumerated_subrange<Grid>           facet_range_type;
   typedef enumerated_subrange<Grid>           cell_range_type;
+
   typedef typename range_type::VertexIterator VertexIterator;
   typedef typename range_type::EdgeIterator   EdgeIterator;
   typedef typename range_type::FacetIterator  FacetIterator;
