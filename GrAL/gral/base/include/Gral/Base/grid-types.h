@@ -309,7 +309,7 @@ template<class X> struct has_Vertex;
  
 GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_HAS_MEMBER);
 
-#undef HAS_MEMBER
+#undef DEFINE_HAS_MEMBER
 
 /*! Print out which types are supported by a \c grid_types<> specialization 
 
