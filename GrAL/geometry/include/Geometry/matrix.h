@@ -9,6 +9,8 @@
 #include "Geometry/coords.h"
 #include "Geometry/matrix-traits.h"
 
+namespace GrAL {
+
 template<unsigned M, unsigned N, int offset>
 struct fixed_row_mjr_subcriptor {
   static int index(unsigned i, unsigned j) { 
@@ -202,7 +204,7 @@ inline matrix<N,N,OFF> operator*(coord_N_component ls, const matrix<N,N,OFF>& rs
     \ingroup matrixalg
 */
 template<unsigned N, unsigned M, int OFF>
-inline std::ostream& operator<<(std::ostream& out, const matrix<M,N,OFF>& rs)
+inline ::std::ostream& operator<<(::std::ostream& out, const matrix<M,N,OFF>& rs)
 {
   for(unsigned i = OFF; i< M+OFF; i++) {
     for(unsigned j = OFF; j < N+OFF; j++)
@@ -216,7 +218,7 @@ inline std::ostream& operator<<(std::ostream& out, const matrix<M,N,OFF>& rs)
     \ingroup matrixalg
 */
 template<unsigned N, unsigned M, int OFF>
-inline std::istream& operator>>(std::istream& in, matrix<M,N,OFF>& rs)
+inline ::std::istream& operator>>(::std::istream& in, matrix<M,N,OFF>& rs)
 {
   for(unsigned i = OFF; i< M+OFF; i++) {
     for(unsigned j = OFF; j < N+OFF; j++)
@@ -238,18 +240,20 @@ struct matrix_traits<matrix<M,N,OFF> >
   typedef double component_type;
   
   static int LowerRowIndex()  { return OFF;}
-  static int UpperRowIndex()  { return OFF+M;}
+  static int UpperRowIndex()  { return OFF+M-1;}
   static int LowerColIndex()  { return OFF;}
-  static int UpperColIndex()  { return OFF+N;}
+  static int UpperColIndex()  { return OFF+N-1;}
   static int LowerRowIndex(matrix_type const&)  { return OFF;}
-  static int UpperRowIndex(matrix_type const&)  { return OFF+M;}
+  static int UpperRowIndex(matrix_type const&)  { return OFF+M-1;}
   static int LowerColIndex(matrix_type const&)  { return OFF;}
-  static int UpperColIndex(matrix_type const&)  { return OFF+N;}
+  static int UpperColIndex(matrix_type const&)  { return OFF+N-1;}
 
   // matrix_type identity();
   // template<class P>
   // matrix_type scaling(P s);
 };
+
+} // namespace GrAL
 
 
 #endif
