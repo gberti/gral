@@ -101,17 +101,17 @@ namespace complexnd {
   template class element_iterator_t<Complex3D,   1,  2>; // Edge
   template class element_iterator_t<Complex3D,   2,  1>; // Face = Facet
   template class element_iterator_t<Complex3D,   3,  0>; // Cell
-  typedef element_t<Complex2D,   0,  3>  Vertex3D;
-  typedef element_t<Complex2D,   1,  2>  Edge3D;
-  typedef element_t<Complex2D,   2,  1>  Face3D;
-  typedef element_t<Complex2D,   3,  0>  Cell3D;
+  typedef element_t<Complex3D,   0,  3>  Vertex3D;
+  typedef element_t<Complex3D,   1,  2>  Edge3D;
+  typedef element_t<Complex3D,   2,  1>  Face3D;
+  typedef element_t<Complex3D,   3,  0>  Cell3D;
 
 
 
   // Fixed dim: incidence iterators for 1D grid
   template class incidence_iterator_t<Complex1D, 0, 0, 1, 1>; // VertexOnVertex
-  template class incidence_iterator_t<Complex1D, 0, 1, 0, 1>; // VertexOnCell
-  template class incidence_iterator_t<Complex1D, 1, 0, 1, 0>; // CellOnVertex
+  template class incidence_iterator_t<Complex1D, 0, 1, 1, 0>; // VertexOnCell
+  template class incidence_iterator_t<Complex1D, 1, 0, 0, 1>; // CellOnVertex
   template class incidence_iterator_t<Complex1D, 1, 1, 0, 0>; // CellOnCell
 
   // Fixed dim: incidence iterators for 2D grid
