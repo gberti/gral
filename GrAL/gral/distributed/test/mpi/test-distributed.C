@@ -1,7 +1,9 @@
 #include <iostream.h>
 #include <fstream.h>
+#include <vector>
 
 #include <mpi.h>
+
 
 #include "IO/control-device.h"
 #include "Container/bijective-mapping.h"    
@@ -141,6 +143,7 @@ int main(int argc, char* argv[]) {
   for(RgeVertexIterator V = MpiG.LocalRange().FirstVertex(); ! V.IsDone(); ++V)
     dgfv[*V] = (*V).handle();
 
+  // check copy constructor, assigment, vector<dgf>
   distr_grid_function<Cell,  int,distr_grid_type> dgfc_copy(dgfc);
   distr_grid_function<Vertex,int,distr_grid_type> dgfv_copy(dgfv);
   for(RgeCellIterator   C = MpiG.LocalRange().FirstCell();   ! C.IsDone(); ++C) {
@@ -153,12 +156,25 @@ int main(int argc, char* argv[]) {
   dgfc_copy2 = dgfc;
   distr_grid_function<Vertex,int,distr_grid_type> dgfv_copy2;
   dgfv_copy2 = dgfv;
+  std::vector<distr_grid_function<Cell,  int,distr_grid_type> > dgfc_copy_vec(2);
+  std::vector<distr_grid_function<Vertex,int,distr_grid_type> > dgfv_copy_vec(2);
+  for(int i = 0; i < 2; ++i) {
+    dgfc_copy_vec[i] = dgfc;
+    dgfv_copy_vec[i] = dgfv;
+  }
+
   for(RgeCellIterator   C = MpiG.LocalRange().FirstCell();   ! C.IsDone(); ++C) {
-    REQUIRE_ALWAYS( (dgfc(*C) == dgfc_copy2(*C)), "copy not identical!\n",1);
+    REQUIRE_ALWAYS( (dgfc(*C) == dgfc_copy2      (*C)), "copy not identical!\n",1);
+    REQUIRE_ALWAYS( (dgfc(*C) == dgfc_copy_vec[0](*C)), "copy not identical!\n",1);
+    REQUIRE_ALWAYS( (dgfc(*C) == dgfc_copy_vec[1](*C)), "copy not identical!\n",1);
   }
   for(RgeVertexIterator V = MpiG.LocalRange().FirstVertex(); ! V.IsDone(); ++V) {
-    REQUIRE_ALWAYS( (dgfv(*V) == dgfv_copy2(*V)), "copy not identical!\n",1);
+    REQUIRE_ALWAYS( (dgfv(*V) == dgfv_copy2      (*V)), "copy not identical!\n",1);
+    REQUIRE_ALWAYS( (dgfv(*V) == dgfv_copy_vec[0](*V)), "copy not identical!\n",1);
+    REQUIRE_ALWAYS( (dgfv(*V) == dgfv_copy_vec[1](*V)), "copy not identical!\n",1);
   }
+
+
 
   // put # adj local cells on dgfv2
   distr_grid_function<Vertex,int,distr_grid_type> dgfv2(MpiG,0);
