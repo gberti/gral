@@ -48,7 +48,7 @@ struct dimension_dependent_primitives_2d
   static POINT normed_normal(const POINT& p)
     {
       POINT q(normal_with_same_length(p));
-      return (q/norm(q));
+      return (q/norm_2(q));
     }
 
   static void transpose(POINT & p, POINT & q) {
