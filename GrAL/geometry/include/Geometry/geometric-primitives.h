@@ -32,8 +32,8 @@ class triangle {
   typedef P coord_type;
   typedef coord_type const& const_ref;
   // coord_type const& p_0, p_1, p_2;
-  // coord_type  p_0, p_1, p_2;
- const_ref  p_0, p_1, p_2;
+  coord_type  p_0, p_1, p_2;
+  // const_ref  p_0, p_1, p_2;
 public:
   triangle(coord_type const& P0, 
 	   coord_type const& P1,
@@ -50,15 +50,34 @@ public:
   typedef P coord_type;
   P p_0, dir_;
 public:
+  ray() {}
   ray(P const& pp0, P const& ddir) : p_0(pp0), dir_(ddir) {}
   coord_type const& p0() const { return p_0;}  
+  coord_type        p1() const { return p_0 + dir_;}
   coord_type const& dir() const { return dir_;}
   coord_type operator()(double t) const { return p_0 + t*dir_;}
 };
 
-/*
-template<class P> class line {};
-*/
+
+template<class P> class line
+{ 
+public:
+  typedef P coord_type;
+  P p_0, dir_;
+
+  typedef algebraic_primitives<coord_type> ap;
+public:
+  line() {}
+  line(P const& pp0, P const& ddir) : p_0(pp0), dir_(ddir) {}
+  line(ray<P> const& r)     : p_0(r.p0()), dir_(r.dir()) {}
+  line(segment<P> const& s) : p_0(s.p0()), dir_(s.p1() -s.p0()) {}
+  coord_type const& p0() const { return p_0;}  
+  coord_type const& dir() const { return dir_;}
+  coord_type operator()(double t) const { return p_0 + t*dir_;}
+  
+  void normalize() { ap::normalize(dir_);}
+};
+
 
 template<class P>
 struct geom_traits<segment<P> > {
@@ -83,8 +102,16 @@ struct geom_traits<triangle<P> > {
 template<class P>
 struct geom_traits<ray<P> > {
   typedef typename ray<P>::coord_type coord_type;
-  // typedef triangle<P>    const_ref;
   typedef ray<P>    const& const_ref;
+  static coord_type const& p0 (const_ref T) { return T.p0();}
+  static coord_type const& dir(const_ref T) { return T.dir();}
+
+};
+
+template<class P>
+struct geom_traits<line<P> > {
+  typedef typename line<P>::coord_type coord_type;
+  typedef line<P>   const& const_ref;
   static coord_type const& p0 (const_ref T) { return T.p0();}
   static coord_type const& dir(const_ref T) { return T.dir();}
 
