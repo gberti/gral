@@ -87,8 +87,8 @@ namespace gf_array_adapter {
     T const& operator()(int i) const { check_range(i); return f[i];}
     T const& operator[](int i) const { check_range(i); return f[i];}
     T      & operator[](int i)       { check_range(i); return f[i];}
-    operator T () const { return f[0];}
-    operator T&()       { return f[0];}
+    operator T const& () const { return f[0];}
+    operator T       &()       { return f[0];}
 
     void check_range(int i) const {
       REQUIRE( 0 <= i && i < 1, "i = " << i << " out of range!\n",1);
