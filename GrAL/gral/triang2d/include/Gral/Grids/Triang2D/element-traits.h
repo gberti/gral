@@ -17,7 +17,8 @@ template<>
 struct element_traits<Triang2D_Vertex> 
   : public element_traits_vertex_base<Triang2D> 
 { 
-  struct hasher_type : public hasher_type_base<Triang2D, Triang2D_Vertex> {
+  typedef element_traits_vertex_base<Triang2D> base;
+  struct hasher_type : public base::hasher_type_elem_base { 
     size_t operator()(Triang2D_Vertex const& v) const { return v.handle();}
   };
   // vertices are numbered consecutively 
@@ -28,7 +29,8 @@ template<>
 struct element_traits<Triang2D_Cell> 
   : public element_traits_cell_base<Triang2D> 
 { 
-  struct hasher_type : public hasher_type_base<Triang2D, Triang2D_Cell> {
+  typedef element_traits_cell_base<Triang2D> base;
+  struct hasher_type : public base::hasher_type_elem_base { 
     size_t operator()(Triang2D_Cell const& c) const { return c.handle();}
   };
   // cells are numbered consecutively
@@ -41,8 +43,9 @@ template<>
 struct element_traits<Triang2D::Edge> 
   : public element_traits_edge_base<Triang2D> 
 {
+  typedef element_traits_edge_base<Triang2D> base;
   struct hasher_type : public grid_types_base_Triang2D, 
-		       public hasher_type_base<Triang2D, Triang2D_Cell> {
+		       public base::hasher_type_elem_base { 
     enum { p= 37};
     size_t operator()(Triang2D::Edge const& e) const { 
       vertex_handle v1 = e.V1().handle();
