@@ -470,7 +470,9 @@ public:
   class VertexIterator : public seq_iterator_base {
   public:
     typedef VertexIterator self;
+    VertexIterator() : base(0) {} 
     VertexIterator(const Grid* g) : base(g), v(g->MinVertexNum()) {}
+    VertexIterator(const Grid& g, vertex_handle vv) : base(&g), v(vv) {}
     VertexIterator(vertex_handle vv, const Grid* g) : base(g), v(vv) {}
     self& operator++() {
       ++v;
@@ -524,6 +526,7 @@ public:
     typedef CellIterator self;
     CellIterator() : base(0), c(-1) {}
     CellIterator(int cc, const Grid* g) : base(g), c(cc) {} 
+    CellIterator(const Grid& g, int cc) : base(&g), c(cc) {} 
     CellIterator(const Grid& g) : base(&g), c(0) {}
  
     self& operator++() { c++; return (*this);}
@@ -531,7 +534,7 @@ public:
     Cell  operator*() const { return TheGrid().cell(c);}
     operator Cell()   const { return TheGrid().cell(c);}
     bool  IsDone()    const { return (c > TheGrid().MaxCellNum());}
-    operator bool() const { return !IsDone();} 
+    //operator bool() const { return !IsDone();} 
     cell_handle GlobalNumber() const { return c;}
     cell_handle handle      () const { return c;}
   private:
