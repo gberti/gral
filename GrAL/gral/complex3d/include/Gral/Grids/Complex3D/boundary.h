@@ -14,6 +14,7 @@
 
 #include "Container/my-hash-map.h"
 
+#include "Gral/Grids/Complex2D/grid-functions.h"
 #include "Gral/Grids/Complex3D/complex3d.h"
 #include "Gral/Grids/Complex3D/grid-functions.h"
 
