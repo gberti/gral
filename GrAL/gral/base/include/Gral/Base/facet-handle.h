@@ -15,19 +15,22 @@
 #include <stdlib.h>
 
 //----------------------------------------------------------------
-// template<class CHandle>
-// struct facet_handle;
-//
-// A generic facet handle defined by a pair (c,lf) where
-// c is a cell handle, lf is an integer giving the local
-// number of the facet on the cell c: lf \in [0, Cell(c).NumOfFacets()]
-//
-// On construction, one has to take care that only one of two 
-// possible handles for an interior facet is ever created.
-// Else two handle denoting the same facet could compare not equal.
-// This generally requires access to cell neighbors, i.e. a grid 
-// with CellOnCellIterator defined.
-//
+/*!
+ \brief A generic facet handle defined by a (cell handle, local facet) pair.
+ \ingroup elements
+
+ In the pair (c,lf)  c is a cell handle, 
+ lf is an integer giving the local
+ number of the facet on the cell c: lf \in [0, Cell(c).NumOfFacets()]
+
+ On construction, one has to take care that only one of two 
+ possible handles for an interior facet is ever created.
+ Else two handle denoting the same facet could compare not equal.
+ This generally requires access to cell neighbors, i.e. a grid 
+ with CellOnCellIterator defined.
+
+ \see \ref hash<facet_handle>
+*/
 //----------------------------------------------------------------
 
 
@@ -43,30 +46,43 @@ struct facet_handle {
   int local_facet() const { return lf;}
 };
 
-
+/*! \relates facet_handle
+ */
 template<class CHandle>
 inline
 bool operator== (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& rs)
    { return ((ls.c == rs.c) && (ls.lf == rs.lf)); }
 
+/*! \relates facet_handle
+ */
 template<class CHandle>
 inline
 bool operator<  (facet_handle<CHandle> const& ls, facet_handle<CHandle> const& rs)
   { return ((ls.c < rs.c)  || ((ls.c == rs.c) &&  (ls.lf < rs.lf))); }
 
+/*! \relates facet_handle
+ */
 template<class CHandle>
 inline
 ostream& operator<< ( ostream& out, facet_handle<CHandle> const& e)
  { return (out << e.c << ' ' << e.lf);}
 
+/*! \relates facet_handle
+ */
 template<class CHandle>
 inline
 istream& operator>> ( istream& in,  facet_handle<CHandle>     & e)
  { return (in >> e.c >> e.lf);}
 
+/*! \relates facet_handle
+ */
 inline size_t hash_facet_handle(facet_handle<int> const& h)
 { return (8*h.c + h.lf);}
 
+/*! \brief Specialization of STL hash<> template.
+
+  \relates facet_handle
+ */
 template<class T> class hash;
 struct hash<facet_handle<int> > {
 public:

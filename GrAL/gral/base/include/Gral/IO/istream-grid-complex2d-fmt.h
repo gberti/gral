@@ -22,37 +22,49 @@
 #include "Gral/Base/Algorithms/write-complex2d.h"
 
 //----------------------------------------------------------------
-// IstreamComplex2DFmt -- a grid mask for grids 
-// stored in a file in complex2d-format.
-//
-// SAMPLE USAGE:
-// ifstream gridfile("my.complexd");
-// IstreamComplex2DFmt Gfile(gridfile,1); // 1-offset
-// ConstructGrid(G,Gfile,Gfile);
-//
-// WARNING: The constructor modifies the stream, therefore NEVER
-// do the following:
-// ConstructGrid(G, IstreamComplex2DFmt(in),
-//                  IstreamComplex2DFmt(in));
-//
-// The complex2d format:
-// -------------------------
-// nv # number of vertices
-// nc # number of cells
-//
-// x_1  y_1  # coords of vertex 1 
-// ....
-// x_nv y_nv # coords of vertex nv
-//
-// nvc1 # # number of vertices of cell 1
-//    vc1_1  ....  vc1_nvc1    # indices of vertices of cell 1 ( starting with 1)
-// ....
-// nvc_nc #  number of vertices of cell nc
-//    vc1_1  ....  vc1_nvc_nc  # indices of vertices of cell nc ( starting with 1)
-//
+/*! \defgroup complex2dformat Complex2D-Format I/O Adapter 
+  \brief A grid interface for a file in complex2d-format.
+  \ingroup io
+
+ \example
+ \code
+ ifstream gridfile("my.complexd");
+ IstreamComplex2DFmt Gfile(gridfile,1);  // 1 == offset
+ ConstructGrid(G,Gfile,Gfile);
+ \endcode 
+
+ \warning
+ The constructor modifies the stream, therefore \e never
+ do the following:
+ \code
+ ConstructGrid(G, IstreamComplex2DFmt(in),
+                  IstreamComplex2DFmt(in));
+ 
+ \endcode
+
+ <b> The complex2d format: </b>
+ \code
+ nv // number of vertices
+ nc // number of cells
+
+ x_1  y_1  // coords of vertex 1 
+ ....
+ x_nv y_nv // coords of vertex nv
+
+ nvc1 //  number of vertices of cell 1
+    vc1_1  ....  vc1_nvc1   // indices of vertices of cell 1 ( starting with 1)
+ ....
+ nvc_nc //  number of vertices of cell nc
+    vc1_1  ....  vc1_nvc_nc // indices of vertices of cell nc ( starting with 1)
+ \endcode
+*/
 //----------------------------------------------------------------
 
+/*! \brief Output adapter for Complex2D Format
+    \ingroup complex2dformat
 
+    \see Module \ref complex2dformat
+ */
 class OstreamComplex2DFmt {
 protected:
   ostream * out;
@@ -68,6 +80,14 @@ public:
   ostream& Out() { return *out;}
 };
 
+/*! \brief ConstructGrid overload for OstreamComplex2DFmt
+  \ingroup complex2dformat
+  \relates OstreamComplex2DFmt
+  
+  \see Module \ref complex2dformat
+  \see Module \ref mutatingoperations
+  \see \ref ConstructGrid
+ */
 template<class GRID, class GEOM>
 void ConstructGrid(OstreamComplex2DFmt& Out, 
                    GRID const& G, GEOM const& Geom)
@@ -75,6 +95,15 @@ void ConstructGrid(OstreamComplex2DFmt& Out,
   write_complex2d(G, Geom, Out.Out());
 }
 
+/*! \brief ConstructGrid overload for OstreamComplex2DFmt
+  \ingroup complex2dformat
+  \relates OstreamComplex2DFmt
+  
+  Dummy output geometry variable.
+  \see Module \ref complex2dformat
+  \see Module \ref mutatingoperations
+  \see \ref ConstructGrid
+ */
 template<class GRID, class GEOM>
 void ConstructGrid(OstreamComplex2DFmt& Out, 
                    OstreamComplex2DFmt&, // dummy output geom
@@ -88,6 +117,14 @@ void ConstructGrid(OstreamComplex2DFmt& Out,
 class VertexIterator_istream_complex2d;
 class CellIterator_istream_complex2d;
 class VertexOnCellIterator_istream_complex2d;
+
+/*! \brief Input adapter for Complex2D Format
+    \ingroup complex2dformat
+ 
+    Model of $GrAL Cell-VertexInputGridRange
+   
+    \see Module \ref complex2dformat
+ */
 
 class IstreamComplex2DFmt 
 {
@@ -140,7 +177,14 @@ public:
   CellIterator   FirstCell()   const;
 };
 
+/*! \brief Vertex iterator for IstreamComplex2DFmt
+    \ingroup complex2dformat
 
+    Model of $GrAL GridVertexIterator
+
+    \see Module \ref complex2dformat
+    \see IstreamComplex2DFmt
+ */
 class VertexIterator_istream_complex2d 
 {
   typedef  IstreamComplex2DFmt grid_type;
@@ -190,6 +234,14 @@ public:
 };
 
 
+/*! \brief Cell iterator for IstreamComplex2DFmt
+    \ingroup complex2dformat
+
+    Model of $GrAL GridCellIterator
+
+    \see Module \ref complex2dformat
+    \see IstreamComplex2DFmt
+ */
 class CellIterator_istream_complex2d {
   typedef  IstreamComplex2DFmt grid_type;
   typedef  CellIterator_istream_complex2d     self;
@@ -225,6 +277,14 @@ public:
 
 
 
+/*! \brief VertexOnCell iterator for IstreamComplex2DFmt
+    \ingroup complex2dformat
+
+    Model of $GrAL Vertex-On-CellIterator
+
+    \see Module \ref complex2dformat
+    \see IstreamComplex2DFmt
+ */
 class VertexOnCellIterator_istream_complex2d {
   typedef  IstreamComplex2DFmt      grid_type;
   typedef  VertexIterator_istream_complex2d        Vertex;
@@ -297,6 +357,14 @@ CellIterator_istream_complex2d::FirstVertex() const
 { return VertexOnCellIterator_istream_complex2d(*g,nv,c); }
 
 
+/*! \brief Specialization of  \c grid_types  for IstreamComplex2DFmt
+    \ingroup complex2dformat
+
+
+    \see Module \ref complex2dformat
+    \see Module \ref traits (\c grid_types)
+    \see IstreamComplex2DFmt
+ */
 struct grid_types<IstreamComplex2DFmt>
 {
   typedef IstreamComplex2DFmt             grid_type;

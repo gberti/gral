@@ -13,52 +13,51 @@
 #include "Gral/Base/grid-functors.h"
 
 //----------------------------------------------------------------
-//
-//  A general iterator for the boundary of a (subset of) a 2D grid
-//  described by a predicate on cells.
-//  
-//  Contents:
-//  ---------
-//  [1] class BoundaryComponentIterator<Grid,CellPred>;
-//  [2] class BoundaryComponentVertexIterator<Grid,CellPred>;
-//  [3] class BoundaryComponentEdgeIterator<Grid,CellPred>;
-//
-//  Description:
-//  ------------
-//  [1] class BoundaryComponentIterator<Grid,CellPred>
-//    This class takes a seed-triple (V,E,C) of pairwise
-//    adjacent vertex V, edge E and cell C, and a predicate "inside",
-//    where it is supposed that E "lies on the boundary" with
-//    respect to "inside" : 
-//        inside(E.C1()) != inside(E.C2()),
-//    and C == E.Ci() <=> inside(C) == true.
-//  BoundaryComponentIterator2D<> steps through the  vertices, edges 
-//  and adjacent cells of the connected boundary component of E.
-//  NOTE: if there are more than one boundary component, this
-//  iterator will visit only that one containing E!
-//
-//  [2], [3] : These are just wrappers for [1] that provide the correct
-//   operator* . An analogue for cells would have to check if the
-//   current cell changed when incrementing the base iterator [1].
-//
-//  Constraints on template parameters:
-//  -----------------------------------
-//   - Grid: grid_types<Grid> is defined.
-//   - CellPred: model of unary function Cell --> bool:
-//       bool operator()(Cell) const
-//
-//  Preconditions:
-//  -------------
-//  - inside(E.C1()) != inside(E.C2())
-//
-//  ToDo:
-//  -----
-//  - A 3D analogue requires more work, as the boundary isn't
-//    linearly ordered any more.
-//  - There could be used partial specialization based on the 
-//    dimension of Grid to remove the syntactic 2D dependency
-//    in the name.
-//
+/*! \defgroup boundarycompiter Boundary Component Iterators
+  \brief A set of general iterators for the boundary of a (subset of) a 2D grid
+         described by a predicate on cells.
+  \ingroup iterators
+  
+  \contents
+   - class BoundaryComponentIterator<Grid,CellPred>;
+   - class BoundaryComponentVertexIterator<Grid,CellPred>;
+   - class BoundaryComponentEdgeIterator<Grid,CellPred>;
+
+  \description
+   - class BoundaryComponentIterator2D<Grid,CellPred>:
+    This class takes a seed-triple (V,E,C) of pairwise
+    incident vertex V, edge E and cell C, and a predicate "inside",
+    where it is supposed that E "lies on the boundary" with
+    respect to "inside" 
+    (<tt> inside(E.C1()) != inside(E.C2()) </tt>)
+    and <tt> C == E.Ci()</tt>  \f$ \iff\f$ <tt>inside(C) == true </tt>. <BR>
+    BoundaryComponentIterator2D steps through the  vertices, edges 
+    and adjacent cells of the connected boundary component of E. <BR>
+    \b Note: if there is more than one boundary component, this
+      iterator will visit only that one containing E!
+   -  BoundaryComponentVertexIterator2D and BoundaryComponentEdgeIterator2D
+   are just wrappers forBoundaryComponentIterator2D  
+   that provide the correct   \c operator* . <BR> 
+   An analogon for cells would have to check if the
+   current cell changed when incrementing the base iterator.
+
+   \templateparams
+   - Grid: grid_types<Grid> is defined.
+   - CellPred: model of Unary Function Cell --> bool: <BR>
+    <tt> bool operator()(Cell) const </tt>
+
+
+   \todo
+   A 3D analogue requires more work, as the boundary isn't
+   linearly ordered any more.
+   \todo
+   Could use partial specialization based on the 
+   dimension of Grid to remove the syntactic 2D dependency
+   in the name.
+  
+  \see Module \ref iterators
+  \see Module \ref boundaryrange
+*/
 //----------------------------------------------------------------
 
 /*----------------------------------------------------------------
@@ -80,6 +79,13 @@ BoundaryComponentIterator_ND<tag3d> { ... code for 3D ...};
 
 ----------------------------------------------------------------*/
 
+/*! \brief Iterator visiting vertices and edges of a boundary component
+    of a 2D grid 
+    \ingroup boundarycompiter
+  
+   \see Module boundarycompiter
+   \see boundary_range_generic
+ */
 template<class Grid, class CellPred = iscellinside_pred<Grid> >
 class BoundaryComponentIterator2D {
 protected:
@@ -101,9 +107,9 @@ protected:
 public:
   //----------  construction ------------------------------
   BoundaryComponentIterator2D() : done(true) {}
-  // precondition: E1 is boundary facet, i.e.
-  // inside(E1.C1()) != inside(E1.C2())
 
+  /*! \pre ins(E1.C1()) != ins(E1.C2()) (that is, E1 is boundary facet)
+   */
   BoundaryComponentIterator2D(const Edge&   E1, const CellPred& ins)
     : inside(ins),
       V(E1.V2()), 
@@ -160,6 +166,14 @@ private:
 };
 
 
+/*! \brief Iterator visiting the vertices  of a boundary component
+    of a 2D grid 
+    \ingroup boundarycompiter
+  
+   \see Module boundarycompiter
+   \see boundary_range_generic
+   \see BoundaryComponentIterator2D
+ */
 template<class Grid, class CellPred = iscellinside_pred<Grid> >
 class BoundaryComponentVertexIterator2D 
   : public  BoundaryComponentIterator2D<Grid,CellPred> 
@@ -181,6 +195,14 @@ public:
 };
 
 
+/*! \brief Iterator visiting the edges of a boundary component
+    of a 2D grid 
+    \ingroup boundarycompiter
+  
+   \see Module boundarycompiter
+   \see boundary_range_generic
+   \see BoundaryComponentIterator2D
+ */
 template<class Grid, class CellPred = iscellinside_pred<Grid> >
 class BoundaryComponentEdgeIterator2D 
   : public  BoundaryComponentIterator2D<Grid,CellPred>

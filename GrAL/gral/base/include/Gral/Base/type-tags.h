@@ -50,8 +50,11 @@ template<class T>
 class tp {};
 
 /*! \defgroup elementtags Element tags
+    \ingroup  traits
  */
-//! \ingroup elementtags
+
+/*! \ingroup elementtags
+ */
 enum grid_element_tag { vertex_tag, edge_tag, facet_tag, cell_tag };
 
 //! \ingroup elementtags

@@ -18,12 +18,18 @@
 #include "list.h"
 
 //----------------------------------------------------------------
-//
-//  These classes generically implement grid boundary ranges.
-//  Initalization time is O(|F|), F is the facet set of the grid.
-//  Storage is O(|Cb|), where Cb is the number of boundary components.
-//  This works only for 2D, as it uses the 2D-component iterators.
-//
+/*! \defgroup boundaryrange Generic Grid Boundary Range
+    \ingroup subranges   
+ 
+   \brief Classes implementing generically a  grid boundary range.
+
+   Initalization time is \f$ O(|F|) \f$, \f$ F \f$ is the facet set of the grid.
+   Storage is \f$ O(|Cb|) \f$ , where \f$ Cb \f$ is the number of boundary components.
+
+   This works only for 2D, as it uses the 2D-component iterators.
+
+   \see Module boundarycompiter
+*/
 //----------------------------------------------------------------
 
 
@@ -37,7 +43,10 @@ template<class GRID>
 class boundary_range_edge_iterator;
 
 
-
+/*! \ingroup boundaryrange
+    \brief Class representing the boundary of a grid.
+     
+ */
 template<class GRID>
 class boundary_range_generic {
   typedef boundary_range_generic<GRID> self;
@@ -82,6 +91,10 @@ private:
 
 
 
+/*! \ingroup boundaryrange
+    \brief Iterator over vertices and edges of \e all boundary components of a grid.
+     
+ */
 template<class GRID>
 class boundary_range_iterator
 {
@@ -130,6 +143,10 @@ public:
 };
 
 
+/*! \ingroup boundaryrange
+    \brief Iterator over the vertices of \e all boundary components of a grid.
+     
+ */
 template<class GRID>
 class boundary_range_vertex_iterator {
   typedef GRID                grid_type;
@@ -155,6 +172,10 @@ public:
 
 };
 
+/*! \ingroup boundaryrange
+    \brief Iterator over the edges of \e all boundary components of a grid.
+     
+ */
 template<class GRID>
 class boundary_range_edge_iterator {
   typedef GRID                grid_type;

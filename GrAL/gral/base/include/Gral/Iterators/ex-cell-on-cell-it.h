@@ -13,9 +13,12 @@
 
 //----------------------------------------------------------------
 //
-// An iterator over all cells having at least one common vertex
-// with a given cell.
-//
+/*! \brief An iterator over all cells having at least one common vertex
+    with a given cell.
+    \ingroup iterators
+    \see Module \ref iterators
+    \see IndirectCellOnCellIterator
+*/
 //----------------------------------------------------------------
 
 template<class Grid>
@@ -85,6 +88,16 @@ private:
 
 // only non-direct neighbours (not facet-to-facet)
 
+//----------------------------------------------------------------
+//
+/*! \brief An iterator over all cells having at least one vertex
+  but no facet in common with a given cell.
+
+    \ingroup iterators
+    \see Module \ref iterators
+    \see ExtendedCellOnCellIterator
+*/
+//----------------------------------------------------------------
 template<class Grid>
 class IndirectCellOnCellIterator {
 private:
@@ -103,6 +116,9 @@ public:
   bool IsDone()  const { return ext.IsDone();}
 };
 
+/*! Test function for ExtendedCellOnCellIterator
+   \relates ExtendedCellOnCellIterator
+ */
 template<class Grid>
 extern void test_extended_cell_on_cell_iterator(const Grid& g);
 

@@ -22,6 +22,11 @@ bool operator< (vtuple_2d<GRID> const& ls, vtuple_2d<GRID> const& rs);
 template<class GRID>
 bool operator== (vtuple_2d<GRID> const& ls, vtuple_2d<GRID> const& rs);
 
+/*! \brief Vertex set of a facet with comparision and hashing
+  \ingroup elements  
+
+  \see  \c hash<vtuple2d<GRID> >
+ */
 template<class GRID>
 struct vtuple_2d {
     typedef grid_types<GRID>           gt;
@@ -74,7 +79,6 @@ struct vtuple_2d {
 };
 
 
-
 template<class GRID>
 inline
 bool operator< (vtuple_2d<GRID> const& ls, vtuple_2d<GRID> const& rs)
@@ -89,6 +93,10 @@ bool operator== (vtuple_2d<GRID> const& ls, vtuple_2d<GRID> const& rs)
 // helper function for calculate_neighbour_cells()
 // get the vertices corresponding to a facet f
 
+/*! \brief creator function for vtuple_2d<GRID> 
+ 
+    \relates vtuple_2d
+ */
 template<class EdgeOnCellIterator>
 inline vtuple_2d<typename EdgeOnCellIterator::grid_type> 
 get_vertices(EdgeOnCellIterator const& f)
@@ -102,6 +110,9 @@ get_vertices(EdgeOnCellIterator const& f)
 
 template<class T> struct hash;
 
+/*! \brief Specialization of STL hash<> for vtuple2d<GRID>
+    \relates vtuple_2d<GRID>
+ */
 template<class GRID>
 struct hash<vtuple_2d<GRID> > {
   enum { p = 37 };

@@ -17,19 +17,24 @@
 
 //----------------------------------------------------------------
 // 
-// supply a generic base for partial grid functions.
-// This template assumes that a hash function is associated with
-// a element_handle type via element_traits<E>.
-//
-// The main difference between a partial grid function and a
-// hashed total grid function is the handling of read access to
-// undefined item: in the total version this is flagged as error
-// (program termination!), whereas for the partial version a
-// default value (which can be manipulated seperately) is returned.
-//
+/*!  \class partial_grid_function
+   \brief Implements a total grid_function on hash-basis.
+   \ingroup gridfunctions
+
+ This class template supplies a generic implementation
+ for partial grid functions - no partial specializations
+ to the element type E are required.
+
+ This template assumes that a hash function is associated with
+ an element_handle type via element_traits<E>.
+
+*/
 //----------------------------------------------------------------
 
 
+/* Generic element iterator for partial grid functions 
+   Could be a nested class of partial_grid_function
+*/
 template<class E, class T>
 class ElementIterator_generic_pgf 
  : public grid_function_hash_base<E,T>::base_cit 

@@ -14,23 +14,26 @@
 #include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
-//
-// template<class Grid, class T> class  multi_grid_function;
-// template<class Grid, class T> class  partial_multi_grid_function;
-//
-// These are grid functions defined on all element types of <Grid>.
-// T is a user-selected type.
-// multi_grid_function<Grid,T> defines a mapping
-// V(G) \cup E(G) \cup C(G) -> T ( in the 2d case)
-//
-// These classes are fully generic and do not need any further
-// specialization, because they build on grid_function<Elt,T>.
-//
-//----------------------------------------------------------------
-
-//----------------------------------------------------------------
 //                   multi_grid_function
 //----------------------------------------------------------------
+
+/*! \brief Total grid function defined on all element types of <Grid>.
+    \ingroup gridfunctions
+
+   multi_grid_function<Grid,T> defines a mapping
+   \f$ V(G) \cup E(G) \cup C(G) \mapsto T \f$ ( in the 2d case)
+
+   These classes are  fully generic and do not need any further
+   specialization, because they build on grid_function<Elt,T>.
+
+   \todo
+    Extend to 3D: <tt>operator()(Facet const&)</tt>
+
+   \see partial_multi_grid_function<Grid,T>
+   \see Module \ref gridfunctions
+*/
+//----------------------------------------------------------------
+
 
 
 template<class Grid, class T>
@@ -86,6 +89,23 @@ public:
 //----------------------------------------------------------------
 //                partial_multi_grid_function
 //----------------------------------------------------------------
+/*! \brief Partial grid function defined on all element types of <Grid>.
+    \ingroup gridfunctions
+
+   partial_multi_grid_function<Grid,T> defines a mapping
+   \f$ V(G) \cup E(G) \cup C(G) \mapsto T \f$ ( in the 2d case)
+
+   These classes are  fully generic and do not need any further
+   specialization, because they build on partial_grid_function<Elt,T>.
+
+   \todo
+    Extend to 3D: <tt>operator()(Facet const&)</tt>
+
+   \see multi_grid_function<Grid,T>
+   \see Module \ref gridfunctions
+*/
+//----------------------------------------------------------------
+
 
 template<class Grid, class T>
 class partial_multi_grid_function {
@@ -128,15 +148,5 @@ public:
 
 };
 
-
-/*
-template<class E, class T>
-inline bool operator==(const grid_function<E,T>&,const grid_function<E,T>&)
-{ return false;}
-
-template<class E, class T>
-inline bool operator<(const grid_function<E,T>&,const grid_function<E,T>&)
-{ return false;}
-*/
 
 #endif

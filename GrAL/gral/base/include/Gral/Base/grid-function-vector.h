@@ -15,11 +15,28 @@
 #include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
-//  
-// The class grid_function_vector<E,T> implements
-// a grid_function on vector-basis. This should be used if
-// elements of type E are numbered consecutively. 
-//
+/*! \brief Implements a grid_function on vector-basis.
+  \ingroup gridfunctions 
+ 
+  This can be used if
+  elements of type E are numbered consecutively. 
+
+  \b Example:
+  \code
+  class MyVertex; // vertex_handle is consecutive integer
+  
+  template<class T>
+  class grid_function<MyVertex, T> 
+   : public grid_function_vector<MyVertex,T> 
+  {
+    // repeat constructors
+  };
+  \endcode
+
+  \see grid_function_hash
+  \see  \ref gridfunctions
+
+*/
 //----------------------------------------------------------------
 
 

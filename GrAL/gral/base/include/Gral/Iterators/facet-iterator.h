@@ -13,14 +13,18 @@
 
 //----------------------------------------------------------------
 //
-// A generic iterator over the facets of a grid.
-// This works by iterating over the cells of the grid
-// and over the facets of the cells, skipping facets
-// that already have been visited from the other side, 
-// i.e. the opposite cell. To this end we require the 
-// cells to be ordered by a relation < and define that
-// facets will be visited from the smaller cells.
-//
+/*! \brief A generic iterator over the facets of a grid.
+  \ingroup iterators
+
+  This works by iterating over the cells of the grid
+  and over the facets of the cells, skipping facets
+  that already have been visited from the other side, 
+  i.e. the opposite cell. To this end we require the 
+  cells to be ordered by a relation < and define that
+  facets will be visited from the smaller cells.
+
+  \partof Module iterators
+*/
 //----------------------------------------------------------------
 
 template<class FacOnCellIt>

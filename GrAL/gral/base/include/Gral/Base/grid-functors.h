@@ -8,60 +8,74 @@
 //   http://math-s.math.tu-cottbus.de/NMWR
 //   
 //----------------------------------------------------------------
+
 #include "compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
-//
-//  Here some function objects  are defined, that map between 
-//  combinatorial grid types, define predicates on grid elements
-//  and so on.
-//  They are models of STL unary functions.
-//  They are useful for adapting element iterators and algorithms.
-//
-//  Contents:
-//  --------
-//  [1a] template<class G> class cell2handle_map;
-//  [1b] template<class G> class handle2cell_map;
-//  [2a] template<class G> class vertex2handle_map;
-//  [2b] template<class G> class handle2vertex_map;
-//  [3a] template<class G> class element2handle_map
-//  [3b] template<class G> class handle2element_map
-//
-//  [4]  template<class G> class iscellinside_pred;
-//  [5a] template<class G> class cell_nb_degree; 
-//  [5b] template<class G> class cell_vtx_degree;
-//  [6]  template<class Cell> class cell_is_nb_pred;
-//
-// Central operations:
-// ------------------
-// [1a,2a,3a]: <handle>  operator()(const <Element>&) const
-// [1b,2b,3b]: <Element> operator()(<handle>)         const
-//
-// [4]    cell -> bool, F(C) = true <=> C is a "real" cell of G
-// [5a,b] cell -> int
-//   [5a] F(C) = # neighbor cells of C
-//   [5b] F(C) = # vertices of C
-//
-// Constraints on template parameters:
-// ----------------------------------
-//  - G is a combinatorial grid.
-//    * grid_types<G> is defined and contains
-//      + [1]: typedef Cell,   cell_handle
-//      + [2]: typedef Vertex, vertex_handle
-//    * conversion functions
-//      [1a] cell_handle   handle(const Cell&)    const;
-//      [1b] Cell          cell  (cell_handle)    const;  
-//      [2a] vertex_handle handle(const Vertex&)  const;
-//      [2b] Vertex        vertex (vertex_handle) const;  
+/*! \defgroup element2handle  Element <-> Handle conversion function objects
+    \ingroup  functors
+
+  Here some function objects  are defined that map between 
+  combinatorial grid types and their handle types
+  They are models of STL Adaptable Unary Function.
+
+  \b Contents:
+  -  template<class G> class cell2handle_map;
+  -  template<class G> class handle2cell_map;
+  -  template<class G> class vertex2handle_map;
+  -  template<class G> class handle2vertex_map;
+  -  template<class G> class element2handle_map;
+  -  template<class G> class handle2element_map;
+
+
+ <b> Central operations: <b>
+ ------------------
+  - xxx2handle: <tt> <handle>  operator()(const <Element>&) const </tt>
+  - handle2xxx: <tt> <Element> operator()(<handle>)         const </tt>
+
+
+ <b> Template parameters: </b>
+  - G is a combinatorial grid.
+    - grid_types<G> is defined and contains
+      - [1]: typedef Cell,   cell_handle
+      - [2]: typedef Vertex, vertex_handle
+    - conversion functions
+      [1a] cell_handle   handle(const Cell&)    const;
+      [1b] Cell          cell  (cell_handle)    const;  
+      [2a] vertex_handle handle(const Vertex&)  const;
+      [2b] Vertex        vertex (vertex_handle) const;  
+
+
+
+
+*/
 //----------------------------------------------------------------
 
 
-//----------------------------------------------------------------
-//                  [1a]  cell2handle_map
-//----------------------------------------------------------------
+/*!  \defgroup predicates
+     \ingroup functors
 
+  \b Contents:
+  - template<class G> class isonboundary_pred; <BR>
+    edge->bool, facet->bool, F(e) = true <=> e is on the boundary of G.
+  - template<class G> class iscellinside_pred; <BR>
+    cell -> bool, F(C) = true <=> C is a "real" cell of G
+  - template<class Cell> class cell_is_nb_pred;
+    C x C -> bool, F(C,N) = true <=> C and N are adjacent. 
+   
+ */
+
+
+
+
+
+/*!  \brief Map cells to their handles
+     \ingroup element2handle
+
+     Model of Adaptable Unary Function  Cell -> handle
+*/
 
 template<class G>
 struct cell2handle_map {
@@ -92,14 +106,23 @@ public:
   }
 };
 
+/*! \brief Creator function for cell2handle_map
+  \ingroup element2handle
+  \relates cell2handle_map
+ */
 template<class G>
 inline cell2handle_map<G> cell2handle(const G& g) 
 { return cell2handle_map<G>(g);}
 
-//----------------------------------------------------------------
-//                 [1b]  handle2cell_map
-//----------------------------------------------------------------
 
+
+
+
+/*!  \brief Map handles to corresponding cells
+     \ingroup element2handle
+
+     Model of Adaptable Unary Function handle -> Cell.
+*/
 template<class G>
 struct handle2cell_map {
   typedef G                          grid_type;
@@ -126,6 +149,10 @@ public:
   }
 };
 
+/*! \brief Creator function for handle2cell_map
+  \ingroup element2handle
+  \relates handle2cell_map
+*/
 template<class G>
 inline handle2cell_map<G> handle2cell(const G& g) 
 { return handle2cell_map<G>(g);}
@@ -137,6 +164,12 @@ inline handle2cell_map<G> handle2cell(const G& g)
 //                [2a]  vertex2handle_map
 //----------------------------------------------------------------
 
+
+/*!  \brief Map vertices to their handles
+     \ingroup element2handle
+
+     Model of Adaptable Unary Function  vertex -> handle
+*/
 template<class G>
 struct vertex2handle_map {
   typedef G                            grid_type;
@@ -165,6 +198,10 @@ public:
   }
 };
 
+/*! \brief Creator function for vertex2handle_map
+  \ingroup element2handle
+  \relates vertex2handle_map
+ */
 template<class G>
 inline vertex2handle_map<G> vertex2handle(const G& g) 
 { return vertex2handle_map<G>(g);}
@@ -174,6 +211,12 @@ inline vertex2handle_map<G> vertex2handle(const G& g)
 //                  [2b]  handle2vertex_map
 //----------------------------------------------------------------
 
+
+/*!  \brief Map handles to corresponding vertices
+     \ingroup element2handle
+
+     Model of Adaptable Unary Function  handle -> Vertex
+*/
 template<class G>
 struct handle2vertex_map {
   typedef G                            grid_type;
@@ -200,6 +243,10 @@ public:
   }
 };
 
+/*! \brief Creator function for handle2vertex_map
+  \ingroup element2handle
+  \relates handle2vertex_map
+ */
 template<class G>
 inline handle2vertex_map<G> handle2vertex(const G& g) 
 { return handle2vertex_map<G>(g);}
@@ -210,6 +257,12 @@ inline handle2vertex_map<G> handle2vertex(const G& g)
 //                [3a]  element2handle_map
 //----------------------------------------------------------------
 
+/*!  \brief Map elements to their handles
+     \ingroup element2handle
+
+     Model of Adaptable Unary Function  Element -> handle <BR>
+     This is more general than vertex2handle_map or cell2handle2_map.
+*/
 template<class E>
 struct element2handle_map {
   typedef element_traits<E>            et;
@@ -239,10 +292,18 @@ public:
   }
 };
 
+/*! \brief Creator function for element2handle_map
+  \ingroup element2handle
+  \relates element2handle_map
+ */
 template<class E>
 inline element2handle_map<E> element2handle(const E& e) 
 { return element2handle_map<E>(e.TheGrid());}
 
+/*! \brief Creator function for element2handle_map
+  \ingroup element2handle
+  \relates element2handle_map
+*/
 template<class E, class G>
 inline element2handle_map<E> element2handle(const tp<E>&, const G& g) 
 { return element2handle_map<E>(g);}
@@ -252,6 +313,13 @@ inline element2handle_map<E> element2handle(const tp<E>&, const G& g)
 //                  [3b]  handle2element_map
 //----------------------------------------------------------------
 
+/*!  \brief Map handles to corresponding elements
+     \ingroup element2handle
+
+     Model of Adaptable Unary Function  handle -> Element <BR>
+     This is more general than handle2vertex_map or handle2cell_map.
+
+*/
 template<class E>
 struct handle2element_map {
   typedef element_traits<E>            et;
@@ -281,10 +349,18 @@ public:
   }
 };
 
+/*! \brief Creator function for handle2element_map
+  \ingroup element2handle
+  \relates handle2element_map
+ */
 template<class E>
 inline handle2element_map<E> handle2element(const E& e) 
 { return handle2element_map<E>(e.TheGrid());}
 
+/*! \brief Creator function for handle2element_map
+  \ingroup element2handle
+  \relates handle2element_map
+ */
 template<class E,class G>
 inline handle2element_map<E> handle2element(const tp<E>&, const G& g) 
 { return handle2element_map<E>(g);}
@@ -295,6 +371,15 @@ inline handle2element_map<E> handle2element(const tp<E>&, const G& g)
 //                  [4] iscellinside_pred
 //----------------------------------------------------------------
 
+/*! \brief Predicate returning true iff a Cell is not an `outer' cell
+    \ingroup predicates
+    
+    An outer cell is an artificial cell denoting the outside of a grid.
+    For each valid cell c of a grid, F(c) is true.
+
+    <b> Template parameters: </b>
+    - G: $GrAL Grid-With-Boundary
+ */
 template<class G>
 class iscellinside_pred {
 private:
@@ -322,16 +407,20 @@ public:
   }
 };
 
-
+/*! \brief Creator function for iscellinside_pred
+  \ingroup predicates
+ */
 template<class G>
 inline iscellinside_pred<G>
 IsCellInside(const G& g) { return iscellinside_pred<G>(g);}
 
 
-//----------------------------------------------------------------
-//                  [4] iscellinside_pred
-//----------------------------------------------------------------
-
+/*! \brief Predicate returning true iff a Edge/Facet is on the boundary
+    
+    <b> Template parameters: </b>
+    - G: $GrAL Grid-With-Boundary
+    \ingroup predicates
+ */
 template<class E>
 class isonboundary_pred {
   typedef element_traits<E>         et;
@@ -357,13 +446,20 @@ public:
   }
 };
 
-
+/*! \brief creator function for isonboundary_pred
+    \ingroup predicates
+    \relates isonboundary_pred
+ */
 template<class G>
 inline 
 isonboundary_pred<typename G::Edge>
 IsEdgeOnBoundary(const G& g) 
 { return isonboundary_pred<typename grid_types<G>::Edge>(g);} 
 
+/*! \brief creator function for isonboundary_pred
+    \ingroup predicates
+    \relates isonboundary_pred
+ */
 template<class G>
 inline
 isonboundary_pred<typename G::Facet>
@@ -371,10 +467,23 @@ IsFacetOnBoundary(const G& g)
 { return isonboundary_pred<typename grid_types<G>::Facet>(g);} 
 
 
-//----------------------------------------------------------------
-//                  [5a] cell_nb_degree
-//----------------------------------------------------------------
 
+/*! \defgroup  degreefunctors
+    \ingroup functors
+  
+    \b Contents:   
+   - template<class G> class cell_nb_degree; <BR>
+     F(C) = Number of neighbors of C
+   - template<class G> class cell_vtx_degree; <BR>
+     F(C) = Number of vertices of C
+ */
+
+
+/*! \brief Functor giving number of neighbors of a Cell
+   \ingroup degreefunctors
+   
+   
+ */
 template<class G>
 class cell_nb_degree {
 public:
@@ -391,14 +500,18 @@ public:
 
 };
 
-
+/*! \brief creator function for cell_nb_degree
+   \relates cell_nb_degree
+ */
 template<class G>
 inline cell_nb_degree<G>
 CellNbDegree(const G& g) { return cell_nb_degree<G>();}
 
-//----------------------------------------------------------------
-//                  [5b] cell_vtx_degree
-//----------------------------------------------------------------
+/*! \brief Functor giving number of vertices of a Cell
+   \ingroup degreefunctors
+   
+   
+ */
 
 template<class G>
 class cell_vtx_degree {
@@ -416,6 +529,9 @@ public:
 };
 
 
+/*! \brief creator function for cell_vtx_degree
+   \relates cell_vtx_degree
+ */
 template<class G>
 inline cell_vtx_degree<G>
 CellVertexDegree(const G& g) { return cell_vtx_degree<G>();}
@@ -426,6 +542,14 @@ CellVertexDegree(const G& g) { return cell_vtx_degree<G>();}
 //                  [6] cell_is_nb_pred
 //----------------------------------------------------------------
 
+/*! \brief Predicate returning true iff two cells are neighbors
+    \ingroup predicates
+    
+    <b> Template parameters: </b>
+    - G: $GrAL GridRange
+    - G::Cell : CellGridRange 
+
+ */
 template<class Cell>
 class cell_is_nb_pred {
 public:
@@ -453,7 +577,9 @@ public:
   grid_type const& TheGrid() const { return C.TheGrid();}
 };
 
-
+/*! \brief Creator function for cell_is_nb_pred
+    \ingroup predicates
+ */
 template<class Cell>
 cell_is_nb_pred<Cell> IsNeighbourCell(const Cell& rs)
 { return cell_is_nb_pred<Cell>(rs); }

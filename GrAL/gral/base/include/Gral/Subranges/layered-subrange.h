@@ -13,20 +13,29 @@
 #include "Gral/Base/enumerated-subrange.h"
 
 //----------------------------------------------------------------
-// template<class Grid> class layered_vertex_range;
-// template<class Grid> class layered_cell_range;
-//
-// A layered range is a range which additionally defines layers,
-// i.e. consecutive subranges. Therefore it is possible to iterate
-// efficiently over certain subranges, namely, unions of adjacent
-// layers. This is useful e. g. for overlap ranges or the like.
-//
+/*! \defgroup layeredsubrange Layered Grid Subrange
+    \ingroup subranges
+
+   Ranges which additionally define layers,
+   i.e. consecutive subranges. 
+
+  With layered subranges, it is possible to iterate
+  efficiently over certain subranges, namely, unions of adjacent
+  layers. This is useful e. g. for overlap ranges or the like.
+*/
 //----------------------------------------------------------------
 
 
 
 //----------------------------------------------------------------
-//                 layered vertex range 
+/*! \brief  Layered vertex range 
+   \ingroup layeredsubrange
+   \see Module \ref layeredsubrange
+
+   A layered vertex range gives efficient access to consecutive
+   layers of vertices.
+
+ */
 //----------------------------------------------------------------
 
 template<class Grid>
@@ -80,10 +89,17 @@ private:
 };
 
 
-//----------------------------------------------------------------
-//                   layered cell range
-//----------------------------------------------------------------
 
+//----------------------------------------------------------------
+/*! \brief  Layered cell range 
+   \ingroup layeredsubrange
+   \see Module \ref layeredsubrange
+
+   A layered cell range gives efficient access to consecutive
+   layers of cells.
+
+ */
+//----------------------------------------------------------------
 
 template<class Grid>
 class layered_cell_range 

@@ -13,13 +13,21 @@
 
 
 //-------------------------------------------------------------------------
-//                   mapped iterators and sequences 
+/*! \file
+    \brief mapped iterators and sequences 
+*/
 //-------------------------------------------------------------------------
 
-// range [b,e)  --> IsDone()
-// requires random access (ra) container, 
-// is stable with respect 
-// to container changes that invalidate iterators
+/*! \brief Maps STL-style random-access iterator (range [b,e) pairs) 
+    to IsDone()-style iterator
+    \ingroup iterators
+     
+    \b Template parameters:
+    - C; container with begin()/end(), and random-access
+
+    The class is stable with respect 
+    to container changes that invalidate iterators.
+*/
 template<class C, class F>
 class mapped_element_ra_seq_iterator {
   int b;
@@ -52,7 +60,19 @@ public:
   bool operator==(const self& rs) const { return (b == rs.b);}
 };
 
-// range [b,e)  --> IsDone()
+
+
+
+
+/*! \brief Maps STL-style Forward Iterator (range [b,e) pairs) 
+    to IsDone()-style iterator
+    \ingroup iterators
+     
+    \b Template parameters:
+    - SeqIt: Forward Iterator
+    - F: Adaptable Unary Function, defined on SeqIt::value_type
+
+*/
 template<class SeqIt, class F>
 class mapped_element_seq_iterator {
   SeqIt b;
@@ -81,7 +101,14 @@ public:
 };
 
 
-// It.IsDone() --> IsDone()
+/*! \brief Maps  IsDone()-style iterators by composing with function object
+    \ingroup iterators
+
+    Template parameters:
+    - F: Adaptable Unary Function, 
+    <tt>result_type</tt> is a $GrAL GridElement type.
+    - It: Iterator with IsDone()
+ */
 template<class It, class F>
 class mapped_element_iterator {
 private:
@@ -108,6 +135,14 @@ public:
 };
 
 
+/*! \brief A cell sequence defined by another cell sequence and a mapping
+    \ingroup subranges
+
+    <b> Template parameters: </b>
+    - G: $Gral CellGridRange
+    - F: Adaptable Unary Function,
+    <tt>result_type</tt> is a $GrAL GridCell type.
+ */
 template<class G, class F>
 class mapped_cell_sequence {
 private:
@@ -128,7 +163,10 @@ public:
   unsigned     NumOfCells() const { return (g->NumOfCells()); }
 };
 
-
+/*! \brief creator function for mapped_cell_sequence
+    \ingroup subranges
+    \relates mapped_cell_sequence
+*/
 template<class G, class F>
 inline mapped_cell_sequence<G,F> map_cell_sequence(const G& g, const F& f)
 { return mapped_cell_sequence<G,F>(g,f); }

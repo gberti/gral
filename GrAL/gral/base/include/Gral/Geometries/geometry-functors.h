@@ -12,38 +12,38 @@
 #include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
-// 
-//  Function objects that map grid elements to geometric items.
-//  These are models of STL unary functions.
-//
-//  Contents:
-//  --------
-//  [1] template<class Geom> class vertex2coord_map;
-//  [2] template<class Geom> class edge2length_map;
-//
-//  Central operations:
-//  ------------------
-//  <geom_item> operator()(const Element&) const;
-//  [1]  Vertex -> coord_type 
-//  [2]  Edge   -> double
-//
-//  Constraints on template parameters:
-//  -----------------------------------
-//  - Geom is a grid-geometry type:
-//    typedef grid_type, [1]: coord_type
-//    [1]: coord_type coord(Vertex)
-//    [2]: double     length(Edge) 
-//
-//  Example:
-//  -------
-//
-//  Remarks:
-//  -------
+/*! \defgroup geometricfunctors Geometric Function Objects
+    \ingroup  functors 
+
+  Function objects that map grid elements to geometric items.
+  These are models of STL unary functions.
+
+  \b  Contents:
+  - template<class Geom> class vertex2coord_map;
+  - template<class Geom> class edge2length_map;
+
+  <b> Central operations: </b>
+  <geom_item> <tt> operator()(const Element&) const; </tt>
+   - vertex2coord_map: Vertex -> coord_type 
+   - edge2length_map:  Edge   -> double
+
+
+  \see Module functors
+  \see $GrAL grid-geometries
+*/
 //----------------------------------------------------------------
 
 
 //----------------------------------------------------------------
-//               [1]  vertex2coord_map
+//                 vertex2coord_map
+/*! \brief Function object mapping vertices to coordinates 
+   \ingroup geometricfunctors
+
+   \templateparams
+   - Geom: grid-geometry type, model of $GrAL VertexGridGeometry
+
+   \see Module geometricfunctors
+*/
 //----------------------------------------------------------------
 
 template<class Geom>
@@ -64,16 +64,26 @@ public:
   const result_type& operator()(const Vertex& v) const { return geom->coord(v);}
 };
 
+/*! \brief Creator function for vertex2coord_map
+    \ingroup geometricfunctors
+    \relates vertex2coord_map
+ */
 template<class Geom>
 inline vertex2coord_map<Geom> vertex2coord(const Geom& g)
 { return vertex2coord_map<Geom>(g);}
 
 
 //----------------------------------------------------------------
-//               [2]  edge2length_map
+//                 edge2length_map
+/*! \brief Function object mapping vertices to coordinates 
+   \ingroup geometricfunctors
+
+   \templateparams
+   - Geom: grid-geometry type, model of $GrAL VertexGridGeometry
+
+   \see Module geometricfunctors
+*/
 //----------------------------------------------------------------
-
-
 template<class Geom>
 class edge2length_map {
 public:
@@ -91,6 +101,10 @@ public:
   result_type operator()(const Edge& e) const { return geom->length(e);}
 };
 
+/*! \brief Creator function for edge2length_map
+    \ingroup geometricfunctors
+    \relates edge2length_map
+ */
 template<class Geom>
 inline edge2length_map<Geom> edge2length(const Geom& g) 
 { return edge2length_map<Geom>(g);}

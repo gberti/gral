@@ -10,35 +10,40 @@
 //----------------------------------------------------------------
 
 //----------------------------------------------------------------
-//
-//  traits classes for enabling uniform treatment
-//  of different element types (vertex, edge etc),
-//  for example in the template class grid_function<E,T>.
-//  This has to be specialized for concrete element classes.
-//
+/*!  \brief traits classes for enabling uniform treatment
+      of different element types (vertex, edge etc).
+      \ingroup traits
+
+      Used for example in the class template grid_function<E,T>.
+
+      This has to be specialized for concrete element classes, e.g.:
+      \code
+      class MyVertex;
+      struct element_traits<MyVertex> {
+        typedef  grid_type;
+        typedef  element_type;
+        typedef  ElementIterator;
+        typedef  element_handle;
+        typedef  hasher_type;
+        typedef  element_type_tag;
+
+        static ElementIterator FirstElement(const grid_type& g);
+        static unsigned        size        (const grid_type& g);
+        static handle_type     handle      (element_type const& e);
+      };
+      \endcode
+*/
 //----------------------------------------------------------------
 
 
 template<class E>
-struct element_traits {
+struct element_traits {};
 
-  /*
-  typedef  grid_type;
-  typedef  element_type;
-  typedef  ElementIterator;
-  typedef  element_handle;
-  typedef  hasher_type;
-  typedef  element_type_tag;
-
-  static ElementIterator FirstElement(const grid_type& g);
-  static unsigned        size        (const grid_type& g);
-  static handle_type     handle      (element_type const& e);
-  */
-};
-
-// basic definition to derive from for actual specializations
-// of element_traits<>
-
+/*! \brief basic definition to derive from for actual specializations
+     of element_traits<>
+  \ingroup traits
+  \relates element_traits
+*/
 template<class GRID>
 struct element_traits_vertex_base {
   typedef GRID                           grid_type;
@@ -54,6 +59,11 @@ struct element_traits_vertex_base {
   static handle_type     handle      (element_type const& e)    { return e.handle();}
 };
 
+/*! \brief basic definition to derive from for actual specializations
+     of element_traits<>
+  \ingroup traits
+  \relates element_traits
+*/
 template<class GRID>
 struct element_traits_edge2d_base {
   typedef GRID grid_type;
@@ -69,6 +79,11 @@ struct element_traits_edge2d_base {
   static handle_type     handle      (element_type const& e)    { return e.handle();}
 };
 
+/*! \brief basic definition to derive from for actual specializations
+     of element_traits<>
+  \ingroup traits
+  \relates element_traits
+*/
 template<class GRID>
 struct element_traits_cell_base {
   typedef GRID grid_type;
@@ -84,6 +99,12 @@ struct element_traits_cell_base {
   static handle_type     handle      (element_type const& e)    { return e.handle();}
 };
 
+
+/*! \brief basic definition to derive from for actual specializations
+     of element_traits<>
+  \ingroup traits
+  \relates element_traits
+*/
 template<class GRID>
 struct element_traits_cell2d_base
   : public element_traits_cell_base<GRID>

@@ -13,10 +13,20 @@
 
 //----------------------------------------------------------------
 // 
-//  Iteration over the facets of a set of cells.
-//  This uses a partial grid function to mark visited facets,
-//  hence this approach works also with other element types.
-//
+/*! \brief  Iterator over the facets of a set of cells.
+    \ingroup iterators
+    
+    \templateparams
+     - \c CellIt: Model of $GrAL GridCellIterator
+     - \c CellIt::grid_type: Has \c Facet and \c Cell types.
+     - \c CellIt::Cell: Model of $GrAL GridFacetRange
+
+    <b> Implementation note: </b> <br>
+    This uses a partial grid function to mark visited facets,
+    hence this approach works also with other element types.
+
+    
+*/
 //----------------------------------------------------------------
 
 template<class CellIt>

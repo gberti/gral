@@ -11,45 +11,74 @@
 
 
 //----------------------------------------------------------------
-//
-//   The functions EnlargeGrid[...] attach a copy of srcG to G.
-//
-//   CONTENTS:
-//   ---------
-//    [1] void EnlargeGridV() 
-//    [2] void EnlargeGridVC()
-//
-//   PARAMETERS:
-//   -----------
-//   * G1: This template is specialized for concrete types of G1.
-//   * G2, Geom2: same as for ConstructGrid family.
-//   * Iv gives a rule which vertices are to be identified: 
-//     Iv is a injective mapping  V_h(G_src) -|-> V_h(G)
-//
-//   PRECONDITIONS:
-//   --------------
-// 
-//   The following preconditions must hold:
-//     G_src \neq \emptyset (contains at least one cell)
-//     dom(Iv) \subset V_h(Bd(G_src))
-//     ran(Iv) \subset V_h(Bd(G))
-//    or more specifically:
-//     \exists F_1, ... ,F_k \in F(Bd(G)) : 
-//         ran(Iv) = \union_{i=1}^k V(F_i)
-//     \exists F_1, ... ,F_k \in F(Bd(G_src)) :
-//         dom(Iv) = \union_{i=1}^n V(F_i)
-//     Iv may be empty, in which case the result will not be connected.
-//
-// POSTCONDITIONS:
-// ---------------
-//
-//   The following postconditions will hold:
-//      G' is the value of G after execution, and 
-//      G' = G  \cup G_src
-//      |C(G')| = |C(G)| + |C(G_src)|, 
-//      |V(G')| = |V(G)| + |V(G_src)| - |dom(Iv)|
-//
-//
+/*! \file
+   \brief  Attach (glue) a copy of srcG to G, identifying a given set of vertices.
+   \ingroup mutatingoperations
+
+
+   This file does \e not contain any actual function; rather, the following
+   functions
+   have to be implemented separately for each grid type <tt> G1 </tt>:
+
+    - <tt> void EnlargeGrid()  </tt> 
+    - <tt> void EnlargeGridV()  </tt> 
+    - <tt> void EnlargeGridVC() </tt>
+
+     \code
+      template<class G1, class G2, class Geom2, class VertexIdent>
+      void
+      EnlargeGrid(G1               & destG,     // in/out
+	          G2          const& srcG,      // in
+	          Geom2       const& srcGeom,   // in
+	          VertexIdent const& Iv);       // in
+
+       template<class G1, class G2, class Geom2, class VertexIdent,
+                class VertexMap, class CellMap>
+       void
+       EnlargeGridVC(G1               & destG,       // in/out
+        	     G2          const& srcG,        // in
+	             Geom2       const& srcGeom,     // in
+	             VertexIdent const& Iv,          // in  src -> dest
+	             VertexMap        & VertexCorr,  // out src -> dest
+	             CellMap          & CellCorr);   // out src -> dest
+      \endcode 
+
+   <b> Template parameters: </b>
+    - G1: The functions are overloaded for concrete types of G1.
+    - G2, Geom2: same as for ConstructGrid family.
+    - Iv gives a rule which vertices are to be identified: <BR>
+      Iv is a injective mapping  \f$ V(srcG) \mapsto V(G) \f$
+
+   \b Preconditions:
+ 
+   The following preconditions must hold:
+     - \f$ G_{src} \neq \emptyset \f$ (contains at least one cell)
+     - \f$ \dom(Iv) \subset V(\Bd(G_{src})) \f$
+     - \f$ \ran(Iv) \subset V(\Bd(G)) \f$
+
+    or more specifically:
+
+    - \f$ \exists F_1, ... ,F_k \in F(\Bd(G)) : 
+           \ran(Iv) = \bigcup_{i=1}^k V(F_i) \f$
+    - \f$ \exists F_1, ... ,F_k \in F(\Bd(G_src)) :
+           \dom(Iv) = \bigcup_{i=1}^n V(F_i) \f$
+     
+    \f$ Iv \f$ may be empty, in which case the result will not be connected.
+
+ \b Postconditions:
+
+   The following postconditions will hold
+   (G' is the value of G after execution):
+    - \f$ G' = G  \cup G_{src} \f$
+    - \f$ |C(G')| = |C(G)| + |C(G_{src})| \f$
+    - \f$ |V(G')| = |V(G)| + |V(G_src)| - |dom(Iv)| \f$
+
+  \todo
+   <tt> EnlargeGrid() </tt>, <tt> EnlargeGridV() </tt> can be defined
+   \e fully generically in terms of <tt> EnlargeGridVC() </tt>
+
+  \see  construct-grid.h
+*/
 //----------------------------------------------------------------
 
 /*

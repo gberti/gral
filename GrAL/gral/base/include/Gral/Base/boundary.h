@@ -24,7 +24,7 @@
 
      VertexIterator FirstVertex() const;
      EdgeIterator   FirstEdge()   const;
-     FacetIerator   FirstFacet()  const;
+     FacetIterator  FirstFacet()  const;
 
      BoundaryRange(const Grid&);
    };
@@ -36,6 +36,7 @@ template<class Grid>
 class BoundaryRange {};
 
 /*! \brief creator function for BoundaryRange
+  \relates BoundaryRange
  */
 template<class Grid>
 inline

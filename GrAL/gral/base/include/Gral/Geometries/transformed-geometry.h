@@ -14,11 +14,24 @@
 
 //----------------------------------------------------------------
 // 
-// Grid geometry transformed by a mapping.
-// Only function is currently transformation of vertices --
-// every other geometric primitives depends on the nature of
-// the transformation, i.e linear or non-linear.
-//
+/*! \brief Grid geometry transformed by a mapping.
+   \ingroup geometries
+
+   The only function is currently transformation of vertices --
+   every other geometric primitives depends on the nature of
+   the transformation, i.e linear or non-linear.
+ 
+   \templateparams
+   - Geom: Model of $GrAL VertexGridGeometry
+   - Trafo: Model of Unary Function <BR>
+    (<tt>Geom::coord_type -> Trafo::result_type</tt>)
+
+   \todo 
+   Extend approach to yield transformed (i.e., curved) segments,
+   polygons etc.
+
+  \see Module geometries
+*/  
 //----------------------------------------------------------------
 
 template<class Geom, class Trafo>
@@ -43,8 +56,12 @@ public:
 
 };
 
+/*! \brief Creator function for transformed_geom<Geom,Trafo>
+    \relates transformed_geom<Geom,Trafo>
+ */
 template<class Geom, class Trafo>
 transformed_geom<Geom, Trafo>
+inline
 TransformGeom(Geom const& geom, Trafo const& f)
 { return transformed_geom<Geom, Trafo>(geom,f);}
 

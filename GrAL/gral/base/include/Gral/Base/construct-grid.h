@@ -11,69 +11,76 @@
 
 
 //----------------------------------------------------------------
-// copy-construct a grid destG from another 2D grid srcG
-//
-// CONSTRAINTS on template parameters:
-// -----------
-// * G1: category grid. These template functions are specialized 
-//    for concrete types of G1.
-// * G2: category grid, must support
-//   - grid_types<>, 
-//   - CellIterator, VertexIterator, VertexOnCellIterator,
-//   - vertex_handle
-// * Geom2 : category grid geometry
-//   - coord(Vertex2)
-// * VertexMap: category map V(G2) -> V(G1)
-//   - vertex_handle1 operator()(vertex_handle2) (read)
-//   - vertex_handle1 operator[](vertex_handle2) (write)
-// * CellMap: category map C(G2) -> C(G1)
-//   - cell_handle1 operator()(cell_handle2) (read)
-//   - cell_handle1 operator[](cell_handle2) (write)
-//
-//----------------------------------------------------------------
-/*
-template<class G1, class G2, class Geom2>
-extern void 
-ConstructGrid(G1         & destG,
-	      G2    const& srcG, 
-	      Geom2 const& srcGeom);
+/*! \brief copy-construct a grid destG from another 2D grid srcG
+    \ingroup mutatingoperations
+  The template functions must be overloaded with respect to
+  the `destination' parameter G1.
 
-template<class G1, class G2, class Geom2, class VertexMap>
-extern void 
-ConstructGridV(G1            & destG, 
-	       G2       const& srcG,
-	       Geom2    const& srcGeom,
-	       VertexMap     & VCorrG2_G1); 
-// VertexCorr  maps G2::vertex_handles to  G1::vertex_handles
-// for transfer of grid-related information, e.g. grid-functions.
+  Template parameters:
+   - G2: model of $GrAL CellVertexInputGrid, i.e. must support
+     - grid_types<>, 
+     - $Gral CellIterator, $Gral VertexIterator, $Gral VertexOnCellIterator,
+     - vertex_handle
+   - Geom2 : model of VertexGridGeometry
+     - Geom2::coord(Vertex2)
+   - VertexMap:  map V(G2) -> V(G1)
+      - vertex_handle1 operator()(vertex_handle2) (read)
+      - vertex_handle1 operator[](vertex_handle2) (write)
+   - CellMap: map C(G2) -> C(G1)
+     - cell_handle1 operator()(cell_handle2) (read)
+     - cell_handle1 operator[](cell_handle2) (write)
+ 
+  The following template functions have to be implemented
+  separately for each special type of G1:
 
-template<class G1, class G2, class Geom2, class VertexMap, class CellMap>
-extern void 
-ConstructGridVC(G1            & destG, 
-		G2       const& srcG,
-		Geom2    const& srcGeom,
-		VertexMap     & VCorrG2_G1,
-		CellMap       & CCorrG2_G1); 
-// CellCorr  maps G2::cell_handles to  G1::vertex_handles
-// for transfer of grid-related information, e.g. grid-functions.
+  \code
+  template<class G1, class G2, class Geom2>
+  extern void 
+  ConstructGrid(G1         & destG,
+	        G2    const& srcG, 
+	        Geom2 const& srcGeom);
+
+  template<class G1, class G2, class Geom2, class VertexMap>
+  extern void 
+  ConstructGridV(G1            & destG, 
+	         G2       const& srcG,
+	         Geom2    const& srcGeom,
+	         VertexMap     & VCorrG2_G1); 
+
+  // VertexCorr  maps G2::vertex_handles to  G1::vertex_handles
+  // for transfer of grid-related information, e.g. grid-functions.
+
+  template<class G1, class G2, class Geom2, class VertexMap, class CellMap>
+  extern void 
+  ConstructGridVC(G1            & destG, 
+	   	  G2       const& srcG,
+		  Geom2    const& srcGeom,
+		  VertexMap     & VCorrG2_G1,
+		  CellMap       & CCorrG2_G1); 
+  // CellCorr  maps G2::cell_handles to  G1::vertex_handles
+  // for transfer of grid-related information, e.g. grid-functions.
 
 
-// construct without geometry
-template<class G1, class G2, class VertexMap, class CellMap>
-extern void 
-ConstructGrid0(G1            & destG, 
-	       G2       const& srcG,
-	       VertexMap     & VCorrG2_G1,
-	       CellMap       & CCorrG2_G1); 
+  // construct without geometry
+  template<class G1, class G2, class VertexMap, class CellMap>
+  extern void 
+  ConstructGrid0(G1            & destG, 
+	         G2       const& srcG,
+	         VertexMap     & VCorrG2_G1,
+	         CellMap       & CCorrG2_G1); 
 
+  \endcode
 */
+//----------------------------------------------------------------
+
+
 #include "Container/dummy-mapping.h"
 #include "Container/partial-mapping.h"
 
 template<class G1, class G2>
 inline void 
-ConstructGrid0(G1            & destG, 
-	       G2       const& srcG)
+ConstructGrid0(G1      & destG, 
+	       G2 const&  srcG)
 {
   typedef grid_types<G2>                         gt2;
   typedef typename gt2::cell_handle              cell_handle_2;

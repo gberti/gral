@@ -13,15 +13,26 @@
 #include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
-//  facet_handle_corr - map facet handle of a source grid to that
-//                      of a target grid.
-//  It is assumed a facet handle is a pair (c,lf) of cell_handle
-//  and local facet number, as is the case for the facet_handle<>
-//  template ( Gral/Base/facet-handle.h )
-//  This class is rather ad hoc in that it assumes that the 
-//  corr. facet of the target has the same local number with
-//  respect to the corresponding cell.
-//
+/*!  \brief Mapping of facet handle of a source grid to that
+     of a target grid.
+  \ingroup gridmappings
+
+  It is assumed a facet handle is a pair (c,lf) of cell_handle
+  and local facet number, as is the case for the facet_handle<>
+  template.
+
+  The source and target grids are of the same type <tt> G </tt>
+
+  <b> Template parameters </b>
+   - \c VCorr: currently not used
+   - \c CCorr: Unary Function of \c G::cell_handle to \c G::cell_handle
+   - G: $GrAL FacetGridRange
+
+  \b Limitations: <BR>
+  This class is rather ad hoc in that it assumes that the 
+  corr. facet of the target has the same local number with
+  respect to the corresponding cell.
+*/
 //----------------------------------------------------------------
 
 

@@ -10,6 +10,9 @@
 //----------------------------------------------------------------
 
 
+/*! \brief Set of grid element. \e Incomplete!!
+    \ingroup subranges
+ */
 template<class E>
 class element_set {
   /*

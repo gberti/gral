@@ -12,28 +12,42 @@
 
 #include "compiler-config.h"
 #include "Geometry/algebraic-primitives.h"
-#include "IO/iomgr.h"
 
 //----------------------------------------------------------------
 //
-// Generic geometric types for combinatorial grid elements.
-//
-// Contents:
-// ---------
-// [1] template<class Edge, class geom> class segment;
-// [2] template<class Edge, class geom> class polygon;
-//
-// These geometric types assume a linear geometry, segments
-// are straight lines.
-//
-// The classes can be specialized to concrete grid elements, 
-// in order to remove layers of indirection or use  additional
-// knowledge.
-// They MUST be specialized if the underlying assumptions (linearity)
-// are violated.
-//
+/*! \defgroup geometrictypes Geometric types
+    \ingroup geometries
+
+    Generic geometric types for combinatorial grid elements.
+
+   \b Contents:
+    - template<class Edge, class geom> class Segment;
+    - template<class Edge, class geom> class Polygon2d;
+
+   These geometric types assume a linear geometry, segments
+   are straight lines.
+
+   The classes can be specialized to concrete grid elements, 
+   in order to remove layers of indirection or use  additional
+   knowledge. <BR>
+   They MUST be specialized if the underlying assumptions (linearity)
+   are violated.
+
+   \see Module \ref geometries
+   \see Module \ref geometricfunctors
+*/
 //----------------------------------------------------------------
 
+
+/*! \brief  Geometric segment corresponding to combinatorial edge
+   \ingroup geometrictypes
+    
+   \templateparams
+    - Edge: $GrAL GridEdge
+    - geom: $GrAL VertexGridGeometry
+
+   \see Module \ref geometrictypes
+*/
 template<class Edge, class geom>
 class Segment {
   typedef typename geom::coord_type coord_type;
@@ -55,6 +69,17 @@ private:
 
 template<class Face, class geom> class Polygon2d;
 
+/*! \brief Iterator over vertices of Polygon2d
+   \ingroup geometrictypes
+
+   \templateparams
+   (same as for Polygon2d<Face,geom>)
+   - Face $GrAL GridFace
+   - geom $GrAL VertexGridGeometry
+
+   \see Polygon2d
+   \see Module \ref geometrictypes
+ */
 template<class Face, class geom>
 class vertex_iterator_Polygon2d {
 private:
@@ -71,12 +96,21 @@ public:
   self& operator++() { ++i; return *this;}
   value_type /*const&*/  operator*() const;
   
-  friend bool operator== __STL_NULL_TMPL_ARGS (self  const& lhs, 
-					       self const& rhs);
-  friend bool operator<  __STL_NULL_TMPL_ARGS (self const& lhs, self const& rhs);
-  };
+  friend bool operator== <> (self const& lhs, self const& rhs);
+  friend bool operator<  <> (self const& lhs, self const& rhs);
+};
 
 
+/*! \brief  Geometric polygon corresponding to geometric face
+   \ingroup geometrictypes
+
+   \templateparams
+   (same as for vertex_iterator_Polygon2d<Face,geom>)
+   - Face $GrAL GridFace
+   - geom $GrAL VertexGridGeometry
+   \see vertex_iterator_Polygon2d<Face,geom>
+   \see Module \ref geometrictypes
+ */
 template<class Face, class geom>
 class Polygon2d {
 public:
@@ -104,22 +138,16 @@ public:
 
   int               NumOfVertices() const {return _f.NumOfVertices();}
   coord_type /*const&*/ V(int i) const {
-    // IOMgr::Info() << "V(" << i << ")" << endl;
     Vtx v = _f.V(i);
-    // IOMgr::Info() << "Vertex v = " << v << endl;
-    // IOMgr::Info() << "TheGeometry() : " << endl;
-    // IOMgr::Info() << &(TheGeometry()) << endl;
     coord_type vv = TheGeometry().coord(v);
-    // IOMgr::Info() << "vv = " << vv << endl;
     return vv;
-    //    return TheGeometry().coord(_f.V(i));
   }
   coord_type /*const&*/ Vertex(int i) const {return V(i);} 
 
 
   //--------------------- geometric functions ------------------------
 
-  /// mass center of the vertices
+  //! mass center of the vertices
   coord_type barycenter() const 
     { 
       coord_type c(pt::Origin(pt::Dim(V(1)))); //TheGeometry().space_dimension()));
@@ -128,7 +156,7 @@ public:
       return (c/(double)NumOfVertices());
     }
 
-  /// center of inertia
+  //! center of inertia
   coord_type center() const
     {
      coord_type c;
@@ -137,25 +165,15 @@ public:
      return c;
     }
 
-  // this works even for general simple polygons
+  //! Area calcultation works for general simple polygons
   double    area() const {
-    // IOMgr::Info() << "PolygonArea" << endl;
-    // IOMgr::Info() << "TheGeometry() " << (void*)(& TheGeometry()) << endl;
     double a = 0.0;
     for(int i = 3; i<= NumOfVertices(); ++i) {
-      // IOMgr::Info() << "PolygonArea: i = " << i << endl;
-
       coord_type v1(V(1));
-      // IOMgr::Info() << v1 << endl;
       coord_type vi_1(V(i-1));
-      // IOMgr::Info() << vi_1 << endl;
       coord_type vi(V(i));
-      // IOMgr::Info() << "algebra::signed_3_area() " << endl;
-      // IOMgr::Info() << (void*) &(algebra::signed_triangle_area) << endl;
       a += algebra::signed_triangle_area(v1,vi_1,vi);
-      // a += algebra::signed_triangle_area(V(1),V(i-1),V(i));
     }
-    // IOMgr::Info() << "PolygonArea: done" << endl;
     return (a > 0 ? a : -a);
   }
 
@@ -169,6 +187,9 @@ inline
 vertex_iterator_Polygon2d<Face,geom>::value_type 
 vertex_iterator_Polygon2d<Face,geom>::operator*() const { return p->V(i);}
 
+/*! \ingroup geometrictypes
+    \relates  vertex_iterator_Polygon2d
+ */
 template<class Face, class geom>
 inline 
 bool operator==  (vertex_iterator_Polygon2d<Face,geom> const& lhs, 
@@ -178,6 +199,9 @@ bool operator==  (vertex_iterator_Polygon2d<Face,geom> const& lhs,
   return (lhs.i == rhs.i);
 }
 
+/*! \ingroup geometrictypes
+    \relates  vertex_iterator_Polygon2d
+ */
 template<class Face, class geom>
 inline 
 bool  operator< (vertex_iterator_Polygon2d<Face,geom> const& lhs, 

@@ -9,46 +9,50 @@
 //   
 //----------------------------------------------------------------
 
+/*! \defgroup elementseqviews Views of Grids as Element Sequences
+    \ingroup subranges
+
+  Here adapters for grids are defined, that let a grid be viewed as
+  a container of vertices, edges and so on.
+ 
+  \b Contents:
+  \code
+      template<class Grid> class vertex_seq_ref;
+      template<class Grid> vertex_seq_ref<Grid> VertexSet(const Grid&);
+    
+      template<class Grid> class edge_seq_ref;
+      template<class Grid> edge_seq_ref<Grid>   EdgeSet(const Grid&);
+
+      template<class Grid> class cell_seq_ref;
+      template<class Grid> cell_seq_ref<Grid>   CellSet(const Grid&);
+  \endcode 
+
+
+  \b Description:
+
+  Three different usage levels are supported:
+
+  -# explicitely use the element category:
+      - Vertex, VertexIterator
+      - FirstVertex(), NumOfVertices()
+  -# use only the grid-context:
+      - FirstElement(), NumOfElements(), 
+      - TheGrid()
+      - grid_type, Element, ElementIterator
+  -# fully STL conforming generic container:
+      - begin() / end(),
+      - size(), empty()
+      - const_iterator, value_type
+*/
+//-----------------------------------------------------------------------
 
 
 //-----------------------------------------------------------------------
-//  
-//  Here adapters for grids are defined, that let a grid be viewed as
-//  a container of vertices, edges and so on.
-// 
-//  Contents:
-//  ---------
-//  [1] template<class Grid> class vertex_seq_ref;
-//      template<class Grid> vertex_seq_ref<Grid> VertexSet(const Grid&);
-//  [2] template<class Grid> class edge_seq_ref;
-//      template<class Grid> edge_seq_ref<Grid>   EdgeSet(const Grid&);
-//  [3] template<class Grid> class cell_seq_ref;
-//      template<class Grid> cell_seq_ref<Grid>   CellSet(const Grid&);
-//  [4] template<class FacetRange> class vertex_set_of_facets
-//  [5] template<class FacetRange> class vertex_set_of_cells
-// 
-//  Description:
-//  ------------
-//
-//  Three different usage levels are supported:
-//
-//  1) explicitely use the element category:
-//      FirstVertex(), NumOfVertices()
-//      Vertex, VertexIterator
-//  2) use only the grid-context:
-//      FirstElement(), NumOfElements(), 
-//      TheGrid()
-//      grid_type, Element, ElementIterator
-//  3) fully STL conforming generic container:
-//       begin() / end(),
-//       size(), empty()
-//       const_iterator, value_type
-//
-//-----------------------------------------------------------------------
-
-
-//-----------------------------------------------------------------------
-//                   [1]  vertex_seq_ref
+//                       vertex_seq_ref
+/*!  \brief View of a grid as sequence of vertices
+     \ingroup elementseqviews
+     \see elementseqviews
+ */
 //-----------------------------------------------------------------------
 
 template<class Grid>
@@ -93,13 +97,24 @@ public:
   const_iterator end()   const { return g->EndVertex();  }
 };
 
+/*! \brief creator function for vertex_seq_ref
+    \ingroup  elementseqviews
+
+    \relates  vertex_seq_ref
+    \see elementseqviews
+*/
 template<class Grid>
 inline
 vertex_seq_ref<Grid> VertexSet(const Grid& G) { return vertex_seq_ref<Grid>(G) ;}
 
 
 //-----------------------------------------------------------------------
-//                     [2] edge_seq_ref
+//                       edge_seq_ref
+
+/*!  \brief View of a grid as sequence of edges
+     \ingroup elementseqviews
+     \see elementseqviews
+ */
 //-----------------------------------------------------------------------
 
 
@@ -145,13 +160,25 @@ public:
   const_iterator end()   const { return g->EndEdge();  }
 };
 
+/*! \brief creator function for edge_seq_ref
+    \ingroup  elementseqviews
+    \relates  edge_seq_ref
+     \see elementseqviews
+ */
 template<class Grid>
 inline
 edge_seq_ref<Grid> EdgeSet(const Grid& G) { return edge_seq_ref<Grid>(G) ;}
 
 
 //-----------------------------------------------------------------------
-//                    [3] cell_seq_ref
+//                     cell_seq_ref
+
+/*!  \brief View of a grid as sequence of cells
+     \ingroup elementseqviews
+
+     \todo what's up with <tt> end() </tt> ?
+     \see elementseqviews
+ */
 //-----------------------------------------------------------------------
 
 template<class Grid>
@@ -197,19 +224,38 @@ public:
 };
 
 
+/*! \brief creator function for cell_seq_ref
+    \ingroup  elementseqviews
+    \relates  cell_seq_ref
+    \see elementseqviews
+ */
 template<class Grid>
 inline
 cell_seq_ref<Grid> CellSet(const Grid& G) { return cell_seq_ref<Grid>(G) ;}
 
 
+
+
 //-----------------------------------------------------------------------
-//                     [4] vertex_set_of_facets 
+//                      vertex_set_of_facets_iterator
+
+/*! \brief Iterator over the vertex set of a set of grid facets.
+  \ingroup iterators
+
+  This is a "fat" iterator due to the table keeping track of already
+  visited vertices, so either we must be careful with copying or
+  there should be some shallow copy semantics (copy-on-write ?)
+
+  Only on construction time this iterator should be rather "lean".
+   
+  \b Template parameters:
+  - <tt> FacetRange </tt>: $GrAL GridFacetRange
+
+  \see    Used by vertex_set_of_facets
+  \todo   shallow copy / copy-on-write
+*/
 //-----------------------------------------------------------------------
 
-// this is a "fat" iterator due to the table keeping track of already
-// visited vertices, so either we must be careful with copying or
-// there should be some shallow copy semantics (copy-on-write ?)
-// Only on construction time this iterator should be rather "lean".
 template<class FacetRange>
 class vertex_set_of_facets_iterator {
 public:
@@ -270,6 +316,23 @@ private:
 
 
 
+//-----------------------------------------------------------------------
+//                      vertex_set_of_facets
+/*! \brief View to the vertex set of a set of grid facets.
+    \ingroup subranges 
+   
+    The main work is done by vertex_set_of_facets_iterator
+
+    <b> Template parameters: </b>
+      - FacetRange: $GrAL GridFacetRange 
+        (same as in vertex_set_of_facets_iterator)
+
+    \see vertex_set_of_facets_iterator
+    \see vertex_set_of_cells
+
+*/
+//-----------------------------------------------------------------------
+
 template<class FacetRange>
 class vertex_set_of_facets {
 public:
@@ -287,6 +350,10 @@ public:
   //  VertexIterator EndVertex()   const { return VertexIterator(???);}
 };
 
+/*! \brief creator function for vertex_set_of_facets
+    \ingroup subranges
+    \relates vertex_set_of_facets
+*/
 template<class FacetRange>
 inline vertex_set_of_facets<FacetRange> 
 VerticesOfFacets(const FacetRange& FR) 
@@ -294,7 +361,23 @@ VerticesOfFacets(const FacetRange& FR)
 
 
 //-----------------------------------------------------------------------
-//                     [5] vertex_set_of_cells
+//                      vertex_set_of_cells_iterator
+
+/*! \brief Iterator over the vertex set of a set of grid cells.
+  \ingroup iterators
+
+  This is a "fat" iterator due to the table keeping track of already
+  visited vertices, so either we must be careful with copying or
+  there should be some shallow copy semantics (copy-on-write ?)
+
+  Only on construction time this iterator should be rather "lean".
+   
+  \b Template parameters:
+  - <tt> CellRange </tt>: $GrAL GridCellRange
+
+  \see    Used by vertex_set_of_cells
+  \todo   shallow copy / copy-on-write
+*/
 //-----------------------------------------------------------------------
 
 template<class CellRange>
@@ -359,6 +442,23 @@ private:
 };
 
 
+//-----------------------------------------------------------------------
+//                      vertex_set_of_cells
+/*! \brief View to the vertex set of a set of grid cells
+    \ingroup subranges 
+   
+    The main work is done by vertex_set_of_cells_iterator
+
+    <b> Template parameters: </b>
+      - FacetRange: $GrAL GridCellRange 
+        (same as in vertex_set_of_cells_iterator)
+
+    \see vertex_set_of_cells_iterator
+    \see vertex_set_of_facets
+
+*/
+//-----------------------------------------------------------------------
+
 template<class CellRange>
 class vertex_set_of_cells {
 public:
@@ -376,6 +476,10 @@ public:
   //  VertexIterator EndVertex()   const { return VertexIterator(???);}
 };
 
+/*! \brief creator function for vertex_set_of_cells
+    \ingroup subranges
+    \relates vertex_set_of_cells
+ */
 template<class CellRange>
 inline vertex_set_of_cells<CellRange> 
 VerticesOfCells(const CellRange& CR) 
@@ -383,7 +487,22 @@ VerticesOfCells(const CellRange& CR)
 
 
 //-----------------------------------------------------------------------
-//                     [6] facets_span_of_vertices
+//                     facets_span_of_vertices_iterator
+
+/*! \brief Iterator over facets incident to a set of grid vertices
+    \ingroup iterators
+
+   <b> Model of </b>
+    - $GrAL GridVertexIterator
+  
+   <b> Template parameters </b>
+    - VertexRange: $GrAL VertexGridRange
+
+   \see facets_span_of_vertices
+   \see Module \ref iterators
+
+   \todo   shallow copy / copy-on-write
+*/
 //-----------------------------------------------------------------------
 
 template<class VertexRange>
@@ -470,6 +589,29 @@ private:
   }
 };  
 
+//-----------------------------------------------------------------------
+//                     facets_span_of_vertices
+
+/*! \brief View of range of facets incident to a set of grid vertices
+    \ingroup subranges
+
+    A view of type facets_span_of_vertices contains all facets 
+    incident to a cell incident to a vertex of the underlying vertex
+    range.
+  
+    <b> Model of </b>
+     - $GrAL FacetGridRange
+
+   <b> Template parameters </b>
+    - VertexRange: \GrAL GridVertexRange
+    (same as for facets_span_of_vertices_iterator)
+
+   \see facets_span_of_vertices_iterator
+   \see Module \ref subranges
+
+*/
+//-----------------------------------------------------------------------
+
 template<class VertexRange>
 class facet_span_of_vertices {
 public:
@@ -494,6 +636,10 @@ public:
   grid_type const& TheGrid() const { return vertices->TheGrid();}
 };
 
+/*! \brief creator function for facet_span_of_vertices
+    \ingroup subranges
+    \relates facet_span_of_vertices
+*/
 template<class VertexRange>
 inline facet_span_of_vertices<VertexRange>
 FacetSpanOfVertices(VertexRange const& vr)

@@ -19,43 +19,40 @@
 #include "Gral/Base/Iterators/facet-by-cell-it.h"
 
 //----------------------------------------------------------------
-//
-//  This file contains template classes for storage of grid
-//  subranges that work by enumerating the elements.
-//
-// CONTENTS:
-// --------
-//  
-// [1]  template<class E, class HIt> class element_range_ref;
-// [1a]  template<class Grid, class HIt> class vertex_range_ref;
-// [1b]  template<class Grid, class HIt> class facet_range_ref;
-// [1c]  template<class Grid, class HIt> class cell_range_ref;
-// [2]  template<class E> class enumerated_element_range;
-// [2a]  template<class Grid> class enumerated_vertex_range;
-// [2b]  template<class Grid> class enumerated_facet_range;
-// [2c]  template<class Grid> class enumerated_cell_range;
-// [3] template<class Grid> class enumerated_subrange;
-// [4] template<class Grid, class vit, class cit>
-//     class enumerated_subrange_ref;
-// [5] template<class Grid, class CellIt>
-//     void ConstructSubrangeFromCells(...);
-//
-// Description:
-// -----------
-//
-// [1] - [1c]:
-//   references to (enumerated) element ranges.
-//   HIt is an (random access) iterator with value type 
-//   element_handle, as is provided e.g. by classes [2] - [2c]
-//   The range is referenced by the half-open range [b,e) (b,e : HIt)
-// [2] - [2c]
-//   classes that store sequences of element handles and give
-//   iteration access to the corresponding elements.
-//
-// Aliases 'Element' and 'ElementIterator' are provided to ease the
-// definition of template functions that are independent of the
-// concrete element category (i.e. Vertex, Edge etc.)
-//
+/*! \defgroup enumsubranges Enumerated Grid Subranges
+    \ingroup subranges 
+    \see     subranges
+    \brief Subranges defined by the sequence of their members 
+
+ \contents
+  - Classes with reference semantics: <BR>
+    References to (enumerated) element ranges.
+    HIt is an (random access) iterator with value type 
+    element_handle, as is provided e.g. by classes [2] - [2c]
+    The range is referenced by the half-open range [b,e) (b,e : HIt)
+    -  template<class E, class HIt> class element_range_ref;
+    -  template<class Grid, class HIt> class vertex_range_ref;
+    -  template<class Grid, class HIt> class facet_range_ref;
+    -  template<class Grid, class HIt> class cell_range_ref;
+    -  template<class Grid, class vit, class cit>
+       class enumerated_subrange_ref;
+  - Classes with value semantics: <BR>
+    classes that store sequences of element handles and give
+    iteration access to the corresponding elements.
+     -  template<class E> class enumerated_element_range;
+     -  template<class Grid> class enumerated_vertex_range;
+     -  template<class Grid> class enumerated_facet_range;
+     -  template<class Grid> class enumerated_cell_range;
+     - template<class Grid> class enumerated_subrange;
+   - Algorithms
+     - template<class Grid, class CellIt>
+       void \ref ConstructSubrangeFromCells;
+
+
+ Aliases 'Element' and 'ElementIterator' are provided to ease the
+ definition of template functions that are independent of the
+ concrete element category (i.e. Vertex, Edge etc.)
+*/
 //----------------------------------------------------------------
 
 
@@ -79,6 +76,18 @@ template<class Grid> class enumerated_cell_range;
 
 //----------------------------------------------------------------
 //                       element_range_ref
+/*! \brief reference to a (possibly subset of) element range
+   \ingroup enumsubranges
+
+   The dimension of the element remains unspecified.
+   See vertex_range_ref, facet_range_ref, cell_range_ref
+   for specializations.
+
+   \todo:
+   Derive edge_range_ref. This needs specialization on the
+   grid dimension, to prevent a clash with facet_range_ref
+   in 2D.
+ */
 //----------------------------------------------------------------
 
 template<class E, class R>
@@ -149,13 +158,13 @@ public:
   const_iterator begin() const { return (the_range->begin() + ebeg);}
   const_iterator end()   const { return (the_range->begin() + eend);}
 
-  MAKE_DEFAULT_OPS_SELF
 };
 
 
 //----------------------------------------------------------------
-//     vertex_range_ref / facet_range_ref / cell_range_ref
-//                    (reference semantics)
+/*! \brief Reference to a (possibly subset of) vertex range.
+    \ingroup enumsubranges
+ */
 //----------------------------------------------------------------
 
 template<class Grid, class R>
@@ -182,6 +191,12 @@ public:
 };
 
 
+
+//----------------------------------------------------------------
+/*! \brief Reference to a (possibly subset of) facet range.
+    \ingroup enumsubranges
+ */
+//----------------------------------------------------------------
 template<class Grid, class R>
 class facet_range_ref
   : public element_range_ref<typename grid_types<Grid>::Facet, R>
@@ -204,7 +219,11 @@ public:
 
 };
 
-
+//----------------------------------------------------------------
+/*! \brief Reference to a (possibly subset of) cell range.
+    \ingroup enumsubranges
+ */
+//----------------------------------------------------------------
 template<class Grid, class R>
 class cell_range_ref
   : public element_range_ref<typename grid_types<Grid>::Cell, R>
@@ -241,6 +260,14 @@ public:
 
 //----------------------------------------------------------------
 //              enumerated_element_range (value semantics)
+/*!  \brief Subrange of a grid element range, 
+     defined by listing its members.
+
+     \ingroup enumsubranges
+     \see Module enumsubranges
+     \see enumerated_vertex_range, enumerated_edge_range, 
+     enumerated_facet_range, enumerated_cell_range,
+*/
 //----------------------------------------------------------------
 
 
@@ -325,7 +352,9 @@ public:
 //     vertex_range / facet_range / cell_range (value semantics)
 //----------------------------------------------------------------
 
-
+/*! \brief Vertex subrange of a grid, defined by listing the member vertices
+    \ingroup enumsubranges
+ */        
 template<class Grid>
 class enumerated_vertex_range 
   : public enumerated_element_range<typename grid_types<Grid>::Vertex>
@@ -351,6 +380,9 @@ public:
 };
 
 
+/*! \brief Facet subrange of a grid, defined by listing the member facets
+    \ingroup enumsubranges
+ */        
 template<class Grid>
 class enumerated_facet_range 
   : public enumerated_element_range<typename grid_types<Grid>::Facet>
@@ -375,6 +407,10 @@ public:
 
 };
 
+/*! \brief cell subrange of a grid, defined by listing the member cells
+    \ingroup enumsubranges
+
+ */        
 template<class Grid>
 class enumerated_cell_range 
   : public enumerated_element_range<typename grid_types<Grid>::Cell>
@@ -414,16 +450,21 @@ element_range_ref<E,R>:: element_range_ref(const enumerated_element_range<E>& er
 
 //----------------------------------------------------------------
 //
-// template<class Grid> class enumerated_subrange;
-//
-// A grid subrange that is a simple enumeration of its elements.
-// This class has value-semantics, i.e. really stores
-// the enumerated sequence.
-// There is no check if the different element ranges are consistent,
-// i.e. if the sequence of vertices is exactly the set of adjacent
-// vertices to the sequence of cells. This has to be ensured at
-// construction time, see ConstructSubrange(...) below.
-//
+/*!  A grid subrange that is a simple enumeration of its elements.
+   \ingroup enumsubranges
+   \see enumsubranges
+
+  Model of $GrAL GridVertex Range, $GrAL GridCellRange.<BR>
+
+  This class has value-semantics, i.e. really stores
+  the enumerated sequence.
+
+  There is no check if the different element ranges are consistent,
+  i.e. if the sequence of vertices is exactly the set of adjacent
+  vertices to the sequence of cells. This has to be ensured at
+  construction time, for example by using \ref ConstructSubrange.
+  
+*/
 //----------------------------------------------------------------
 
 template<class Grid>
@@ -540,6 +581,22 @@ public:
 };
   
 
+//----------------------------------------------------------------
+//
+/*!  A grid subrange  view that is a simple enumeration of its elements.
+   \ingroup enumsubranges
+   \see enumsubranges
+
+  Model of $Gral GridVertex Range, $GrAL GridCellRange.<BR>
+
+  This class has reference-semantics.
+
+  There is no check if the different element ranges are consistent,
+  i.e. if the sequence of vertices is exactly the set of adjacent
+  vertices to the sequence of cells. This has to be ensured by
+  the underlying grid range.
+  
+*/
 template<class Grid>
 class enumerated_subrange_ref {
   typedef enumerated_subrange_ref<Grid> self;
@@ -667,10 +724,20 @@ enable this when partial specialization is available:
 
 #ifdef NMWR_PARTIAL_SPEC
 
+/*! Partial specializaton of grid_types traits for enumerated_subrange<Grid>.
+    \ingroup traits enumsubranges
+
+    \see Module traits
+ */
 template<class Grid>
 struct grid_types<enumerated_subrange<Grid> >
  :  public grid_types_esr<Grid> {};
 
+/*! Partial specializaton of grid_types traits for enumerated_subrange_ref<Grid>
+    \ingroup traits enumsubranges
+
+    \see Module traits
+ */
 template<class Grid>
 struct grid_types<enumerated_subrange_ref<Grid> >
  :  public grid_types_esr_ref<Grid> {};
@@ -682,24 +749,29 @@ struct grid_types<enumerated_subrange_ref<Grid> >
 
 
 //----------------------------------------------------------------
-//  ConstructSubrangeFromCells
-//
-//  This template function constructs an enumerated subrange 
-//  over a Grid G from  a set of cells described by the range of
-//  CellIt Cit.
+/*! \brief Construct an enumerated subrange from  a set of cells
+   \ingroup enumsubranges   
+
+   \templateparams
+    - Range: (a possible type is  enumerated_subrange)
+       - Model of $GrAL GridCellRange
+       - \c Range::append_cell(cell_handle) 
+       - \c Range::append_vertex(vertex_handle)
+    - CellIt: $GrAL GridCellIterator
+
+ */
 //----------------------------------------------------------------
 
 
   
 template<class Range, class CellIt>
 void ConstructSubrangeFromCells
- (Range& R,   // out: the subrange to be constructed
-  //  const Grid&         G,          // in : base  grid
-  CellIt              Cit);        // in : range(Cit) is the cell subrange 
+ (Range  & R,     // OUT: the subrange to be constructed
+  CellIt   Cit);  // IN : range(Cit) is the cell subrange 
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Base/generic/enumerated-subrange.C"
+#include "Gral/Base/enumerated-subrange.C"
 #endif
 
 

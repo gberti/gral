@@ -15,21 +15,33 @@
 #include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
-//  
-// The class grid_function_hash_base<E,T> implements
-// a grid_function on hash-basis. This can be used if
-// arrays are not possible or for partial grid functions.
-//
-// Access operations have slightly different semantics for
-// total and partial grid-functions, so corresponding derivations
-//  grid_function_hash      and
-//  partial_grid_function_hash 
-// are provided.
-//
-// Optimization:
-//  could be   hash_table<element_handle,T>
-//  instead of hash_table<Element,       T>
-//
+/*!  
+   \brief Implements  a grid_function on hash-basis.
+   \ingroup gridfunctions
+
+  This can be used if arrays are not possible,
+  or for partial grid functions.
+
+  Access operations have slightly different semantics for
+  total and partial grid-functions, so corresponding derivations
+  grid_function_hash  and
+  partial_grid_function_hash 
+  are provided.
+
+  The main difference between a partial grid function and a
+  hashed total grid function is the handling of read access to
+  undefined item: in the total version this is an error
+  (program termination in debug mode!), whereas for the partial version a
+  default value (which can be manipulated seperately) is returned.
+
+ \todo
+  \b Optimization:
+  Could use  <tt> hash_table<element_handle,T> </tt>
+  instead of <tt> hash_table<Element,T> </tt>
+
+  \see  grid_function_vector
+  \see  \ref gridfunctions
+*/
 //----------------------------------------------------------------
 
 template<class E, class T>
@@ -96,9 +108,6 @@ public:
 
   //------------- Container interface ------------------------
 
-  //  difficulties (with g++) if these definitions
-  //  are done at beginning of class.
-
   unsigned size() const { return table.size();}  
 
   typedef typename table_type::iterator base_it;
@@ -137,6 +146,10 @@ public:
 //------------------------------------------------------------------------------
 
 
+/*!  
+   \brief Implements a total grid_function on hash-basis.
+   \ingroup gridfunctions
+*/
 template<class E, class T> 
 class grid_function_hash
   : public grid_function_hash_base<E,T>
