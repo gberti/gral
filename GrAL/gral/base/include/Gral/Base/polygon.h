@@ -16,6 +16,7 @@ namespace GrAL {
 
 namespace polygon1d  { 
   
+  class VertexOnVertexIterator1d;
   class VertexOnCellIterator1d;
   class CellOnVertexIterator1d;
   class polygon;
@@ -32,7 +33,7 @@ namespace polygon1d  {
     typedef VertexIterator Vertex;
     typedef CellIterator   Cell;
 
-   
+    typedef VertexOnVertexIterator1d   VertexOnVertexIterator;
     typedef VertexOnCellIterator1d     VertexOnCellIterator;
     typedef CellOnVertexIterator1d     CellOnVertexIterator;
 
@@ -43,6 +44,8 @@ namespace polygon1d  {
     typedef Cell                       Edge;
     typedef VertexIterator             FacetIterator;
     typedef CellIterator               EdgeIterator;
+
+    typedef VertexOnVertexIterator     FacetOnVertexIterator;
 
     typedef VertexOnCellIterator       FacetOnCellIterator;
     typedef VertexOnCellIterator       VertexOnEdgeIterator;
@@ -80,6 +83,13 @@ namespace polygon1d  {
     EdgeIterator  FirstEdge()  const { return FirstCell();}
     FacetIterator FirstFacet() const { return FirstVertex();}
 
+
+    unsigned NumOfVertices(Vertex const&) const { return 2;}
+    unsigned NumOfEdges   (Vertex const&) const { return 2;}
+    unsigned NumOfFaces   (Vertex const&) const { return 2;}
+    unsigned NumOfFacets  (Vertex const&) const { return 2;}
+    unsigned NumOfCells   (Vertex const&) const { return 2;}
+
     unsigned NumOfVertices(Cell const&) const { return 2;}
     unsigned NumOfFacets  (Cell const&) const { return 2;}
 
@@ -93,6 +103,45 @@ namespace polygon1d  {
     inline Cell   switched_cell  (Vertex const& v, Cell const& c) const;
 
   };
+
+
+
+  class VertexOnVertexIterator1d : public grid_types_p1d {
+    typedef VertexOnVertexIterator1d self;
+  private:
+    Vertex    v;
+    unsigned  h;
+  public:
+    VertexOnVertexIterator1d() {}
+    explicit VertexOnVertexIterator1d(Vertex const& vv, unsigned hh = 0) : v(vv), h(hh) {}
+
+    self& operator++() { cv(); ++h; return *this;}
+    Vertex operator*() const { cv(); return Vertex(TheGrid(),handle());} 
+    vertex_handle handle() const { 
+      cv(); 
+      int vh = v.handle();
+      return (h == 0 ? vertex_handle(prev(vh)) : vertex_handle(next(vh)));
+    }
+    unsigned prev(int vh) const { return (vh == 0 ? TheGrid().NumOfVertices() -1 : vh-1);}
+    unsigned next(int vh) const { return (vh+1)%TheGrid().NumOfVertices();}
+
+    bool IsDone() const { cb(); return h >= 2;}
+
+    Vertex      const& TheVertex() const { cb(); return v;}
+    Vertex      const& TheAnchor() const { cb(); return v;}
+    grid_type   const& TheGrid()   const { cb(); return v.TheGrid();}
+
+    friend bool operator==(self const& lhs, self const& rhs) { lhs.cb(); rhs.cb(); return (lhs.h == rhs.h);}
+    friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
+
+    bool bound() const { return v.valid();}
+    bool valid() const { return bound() && h < 2;}
+    void cb() const { REQUIRE(bound(), "", 1);}
+    void cv() const { REQUIRE(valid(), "h=" << h, 1);}
+  };
+
+
+
 
 
   class VertexOnCellIterator1d : public grid_types_p1d {
@@ -126,6 +175,7 @@ namespace polygon1d  {
     void cb() const { REQUIRE(bound(), "", 1);}
     void cv() const { REQUIRE(valid(), "h=" << h, 1);}
   };
+
 
 
 
