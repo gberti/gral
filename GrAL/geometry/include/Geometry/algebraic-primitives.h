@@ -9,6 +9,8 @@
 #include "Utility/pre-post-conditions.h"
 #include "Geometry/point-traits.h"
 
+#include <vector>
+
 //----------------------------------------------------------------
 //
 //  this file contains some generic implementations for 
@@ -127,6 +129,39 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
   static  scalar angle(const POINT& p, const POINT& q)
     {return acos(cos_of_angle(p,q));}
 
+  /*! \brief Complete the vector system \c dirs with linearly independent vectors
+
+      If \c dirs contains \em k linearly independent vectors, the union of \c dirs and the result
+      \c basis_completion(dirs) will form a basis of \f$ \R^n \f$. 
+
+
+  static std::vector<POINT> basis_completion(std::vector<POINT> const& dirs) {
+    unsigned n = pt::Dim(dirs[0]);
+    std::vector<POINT> res(n-dirs.size(), pt::Origin(n));
+    unsigned ld = pt::LowerIndex(dirs[0]);
+    unsigned k = 0;
+    unsigned ej = 0;
+    while(k < n-dirs.size()) {
+      // find the next unit vector which makes an angle of more than (1+\eps) Pi/4
+      // with all dirs[i]. There must be at least n-dirs.size() of these.
+      scalar max_cos_angle = 0;
+      do {
+	// check unit vector ej
+	res[k][ld+ej] = 1;
+	max_cos_angle = 0;
+	for(unsigned i = 0; i < dirs.size(); ++i)
+	  max_cos_angle = std::max(max_cos_angle, fabs(dot(res[k], dirs[i])/norm_2(dirs[i]) ));
+	res[k][ld+ej] = 0;
+	++ej;
+      } while(max_cos_angle > 1.01/sqrt(2.0) && ej < n);
+      ENSURE(max_cos_angle <=  1.01/sqrt(2.0), 
+	     "did not find independent vector! max_cos_angle=" << max_cos_angle,1);  
+      res[k][ld+ej-1] = 1;
+      ++k;
+    }
+    return res;
+  }
+  */
 };
 
 
