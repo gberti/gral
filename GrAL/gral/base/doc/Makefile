@@ -8,7 +8,8 @@ gen-paths:
 
 
 install-doc:
-	./install-doc.pl -stl $(STLURL) -gralroot "../../.."  hyperlatex/html/*.html
+	./install-doc.pl -stl $(STLURL) \
+         hyperlatex/html/*.html
 
 concepts: gen-paths latex make-links
 
