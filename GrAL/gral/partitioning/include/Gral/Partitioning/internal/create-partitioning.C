@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/partitioning.h"
+#include "Grids/Partitioning/partitioning.h"
 #include "Container/partial-mapping.h"
 
 template<class Partitioning, class CellMapping>

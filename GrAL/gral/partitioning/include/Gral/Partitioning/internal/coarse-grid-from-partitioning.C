@@ -9,12 +9,12 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Algorithms/coarse-grid-from-partitioning.h"
-#include "Grids/Algorithms/collect-element-partitions.h"
+#include "Grids/Partitioning/coarse-grid-from-partitioning.h"
+#include "Grids/Partitioning/collect-element-partitions.h"
 
-#include "Grids/stream-grid-mask.h"
+#include "Grids/IO/stream-grid-mask.h"
 
-#include "Grids/Algorithms/construct-grid.h"
+#include "Grids/Base/construct-grid.h"
 
 
 //----------------------------------------------------------------

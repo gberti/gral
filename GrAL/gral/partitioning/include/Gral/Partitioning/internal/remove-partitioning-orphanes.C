@@ -9,8 +9,8 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Algorithms/remove-partitioning-orphanes.h"
-#include "Grids/partitioning.h"
+#include "Grids/Partitioning/remove-partitioning-orphanes.h"
+#include "Grids/Partitioning/partitioning.h"
 
 template<class GRID>
 void

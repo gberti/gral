@@ -49,7 +49,7 @@ collect_facet_partitions(const Partition& P,                    // in
 { collect_facet_partitions(P,partitions_of_facet, true);}
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Algorithms/collect-element-partitions.C"
+#include "Gral/Partitioning/internal/collect-element-partitions.C"
 #endif
 
 #endif

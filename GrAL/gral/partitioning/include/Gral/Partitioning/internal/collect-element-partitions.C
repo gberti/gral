@@ -9,8 +9,8 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/common-grid-basics.h"
-#include "Grids/Algorithms/collect-element-partitions.h"
+#include "Grids/Base/common-grid-basics.h"
+#include "Grids/Partitioning/collect-element-partitions.h"
 
 
 template<class Partition, class Vtx2PartMap>

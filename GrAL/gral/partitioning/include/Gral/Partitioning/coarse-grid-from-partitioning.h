@@ -37,7 +37,7 @@ ConstructCoarsePartitionGrid(CoarseGrid& G,      // out
 			     CoarseCellToPart  & coarsecell2part); // out
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Algorithms/coarse-grid-from-partitioning.C"
+#include "Gral/Partitioning/internal/coarse-grid-from-partitioning.C"
 #endif
   
 #endif

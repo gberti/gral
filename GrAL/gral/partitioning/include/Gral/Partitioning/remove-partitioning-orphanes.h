@@ -27,7 +27,7 @@ extern void
 remove_orphanes(partitioning<GRID>& P);
 
 #ifdef  NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Algorithms/generic/remove-partitioning-orphanes.C"
+#include "Gral/Partitioning/internal/remove-partitioning-orphanes.C"
 #endif
 
 

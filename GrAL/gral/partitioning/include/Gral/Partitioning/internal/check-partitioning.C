@@ -1,7 +1,7 @@
 #ifndef NMWR_GB_CHECK_PARTITIONING_C
 #define NMWR_GB_CHECK_PARTITIONING_C
 
-#include "Grids/partitioning.h"
+#include "Gral/Partitioning/partitioning.h"
 
 
 // return the number of orphanes, that is, cells that are not

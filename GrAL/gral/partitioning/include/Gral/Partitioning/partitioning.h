@@ -9,12 +9,14 @@
 //   
 //----------------------------------------------------------------
 
-#include "vector.h"   // STL
+#include <vector.h>   // STL
 
-#include "Grids/common-grid-basics.h"
-#include "Grids/enumerated-subrange.h"
-#include "Grids/boundary-iterator.h"
+// Gral Base
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Iterators/boundary-iterator.h"
 
+// Utility
 #include "Utility/pre-post-conditions.h"
 
 //----------------------------------------------------------------
@@ -281,13 +283,9 @@ int
 check_partition_for_orphanes(partitioning<Grid> const& P);
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Grids/Algorithms/create-partitioning.C"
-
-// these are directly instantiated for Complex2D in the library libgrid.a
-// in an experimental attempt to cut down compilation time.
-
-//#include "Grids/generic/partitioning.C"
-//#include "Grids/generic/check-partitioning.C"
+#include "Gral/Partitioning/internal/create-partitioning.C"
+#include "Gral/Partitioning/internal/partitioning.C"
+#include "Gral/Partitioning/internal/check-partitioning.C"
 #endif
 
 #endif
