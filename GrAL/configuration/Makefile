@@ -17,6 +17,8 @@ test:
 
 check:
 
+test-check-clean:
+
 doc:
 	mkdir -p doxygen/html
 	echo "# dummy file" > doxygen/configuration.tags
