@@ -2,6 +2,33 @@
 // $LICENSE
 
 
+/*! \file test-construct-main.C
+    \brief Test cases for \c Complex2D
+
+    <H4> Degenerate Test Cases </H4>
+    <TABLE BORDER BGCOLOR="#FFFFF0">
+     <TR ALIGN=CENTER> <TH> file </TH>  <TH> description </TH>  <TH> outcome </TH> </TR>
+     <TR ALIGN=CENTER> <TD>  <A HREF="case1.grid"> case1.grid </A> </TD> 
+	<TD> loop (1 Vertex, 1 Cell) </TD> <TD> normals broken</TD>
+      <TR ALIGN=CENTER> <TD>  <A HREF="case2.grid"> case2.grid </A> </TD> 
+	<TD> loop (1 Vertex, 2 Cells) </TD> <TD> normals broken </TD>
+      <TR ALIGN=CENTER> <TD>  <A HREF="case3.grid"> case3.grid </A> </TD> 
+	<TD> 2gon (2 V, 1 C) </TD> <TD> Cells nb of itself </TD>
+      <TR ALIGN=CENTER> <TD>  <A HREF="case4.grid"> case4.grid </A> </TD> 
+	<TD> 2gon + outside (2V, 2C) </TD> <TD> Cells are nb. of themselves </TD>
+      <TR ALIGN=CENTER> <TD>  <A HREF="case5.grid"> case5.grid </A> </TD>
+	<TD> one %triangle (3V, 1C)</TD> <TD> OK</TD>
+      <TR ALIGN=CENTER> <TD>  <A HREF="case6.grid"> case6.grid </A> </TD> 
+	<TD> %triangle + outside (3V, 2C)</TD> <TD> OK </TD>
+      <TR ALIGN=CENTER> <TD>  <A HREF="case7.grid"> case7.grid </A> </TD> 
+	<TD> 2 triangles w. one common vertex (5V, 2C) </TD>  <TD> OK</TD>
+      <TR ALIGN=CENTER> <TD>  <A HREF="case8.grid"> case8.grid </A> </TD> 
+      <TD> same with outside (5V, 3C)</TD> <TD> shared vertex has 4 cells (should be 3)</TD>
+    </TABLE>
+    
+   <H4> Good test cases </H4>
+      <LI> <A HREF="grid.in"> grid.in </A> simple 2x2 (4 cells) regular grid
+*/
 
 #include <algorithm>
 #include <vector>
