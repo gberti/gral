@@ -3,6 +3,7 @@
 TAG=${1-HEAD}
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules-v0_2.sh`;
+EXCLUDED=`$cvswork/configuration/scripts/excluded-v0_2.sh`;
 CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
 ALLROOT=GrAL-0.2
@@ -14,6 +15,10 @@ for i in ${MODULES}
 do
  cvs -d ${CVSREPO} export -r ${TAG} $i;
 done;
+for i in ${EXCLUDED}
+do
+ rm -rf $i
+done;
 mv gral/v0_2/README  .
 mv gral/LICENSE      .
 mv gral/v0_2/MODULES .
@@ -23,6 +28,8 @@ mv gral/Makefile.global ./Makefile
 
 rm -rf configuration/scripts
 rm -f  gral/TODO.html
+rm -rf gral/v0_1 gral/v0_2
+
 
 # assume docs will be installed under ./doc
 mv gral/index-global.html ./index.html 
