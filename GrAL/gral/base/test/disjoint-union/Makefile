@@ -1,4 +1,4 @@
-# gral/base/test/construct-isomorphism
+# gral/base/test/disjoint-union
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
@@ -8,14 +8,14 @@ include $(CONFIG)
 LOCALSOURCES =  $(shell ls *.C)
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-construct-isomorphisms
+TARGETS = test-disjoint-union
 EXEC =  $(TARGETS)
 
 include $(DEPS)
 
-DEPMODULES+= gral/cartesian2d gral/cartesian3d gral/complex2d geometry
+DEPMODULES+= gral/cartesian2d gral/complex2d gral/testing geometry
 
-LIBS = -lgral-cartesian3d -lgral-cartesian2d -lgral-base -lgral-complex2d 
+LIBS = -lgral-cartesian2d -lgral-complex2d  -lgral-base
 
 
 
@@ -27,7 +27,7 @@ new : clean all
 all : $(TARGETS)
 
 
-test-construct-isomorphisms: $(LOCALOBJECTS)
+test-disjoint-union: $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:

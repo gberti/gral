@@ -2,9 +2,10 @@ CONFIG=$(shell pwd)/../../mk.config
 include  $(CONFIG)
 
 
-LOCALSOURCES= complex2d-format-input-base.C complex2d-format-output.C
+LOCALSOURCES= $(shell ls *.C) 
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
+DEPMODULES+= gral/complex2d geometry
 
 OBJDIR=obj.tmp
 
