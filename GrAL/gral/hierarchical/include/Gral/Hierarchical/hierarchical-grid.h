@@ -233,6 +233,7 @@ namespace hierarchical {
 
     index_type parent_cell_index(index_type ch, level_handle lev) const 
     { cv(lev); cv(lev-1); return quotient(ch,  the_pattern.cell_size());}
+
     hier_cell_type  Parent(hier_cell_type const& ch) const 
     {
       cv(ch.level()); 
