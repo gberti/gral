@@ -149,5 +149,7 @@ inline void Cell2D::FlipEdge(const Vertex2D& v, Edge2D& e) const
   e._e = f;
 }
 
+inline Cell2D::archetype_type const& 
+Cell2D::TheArchetype() const { return TheGrid().ArchetypeOf(*this);}
 
 #endif

@@ -57,6 +57,7 @@ public:
   }
   int NumOfEdges()      const {return NumOfVertices();}
   int NumOfFacets()     const {return NumOfVertices();}
+  int NumOfCells()      const {return NumOfNeighbours();} 
   int NumOfNeighbours() const; 
 
   inline void FlipEdge(const Vertex& v,  Edge& e) const;
@@ -64,6 +65,8 @@ public:
 
   Complex const& TheGrid() const {return (*_cc);}
   cell_handle    handle()  const { return _pos;}
+
+  archetype_type const& TheArchetype() const;
 
   //---------------- comparision --------------------
 
