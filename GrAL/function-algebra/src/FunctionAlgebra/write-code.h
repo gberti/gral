@@ -31,9 +31,9 @@ inline P makepoint(int dim, std::string const& coords)
 #else
       std::ostrstream s; 
 #endif
- in  << coords;
+ s  << coords;
  P p(dim, point::no_init);
- in >> p;
+ s >> p;
  return p;
 }
 
