@@ -6,6 +6,7 @@ include $(CONFIG)
 TARGET=all
 
 all:
+	(cd src; $(MAKE) all)
 
 new: libclean
 	(cd src; $(MAKE) new)
@@ -40,8 +41,7 @@ realclean: tarclean
 	(cd doc; $(MAKE) realclean)
 
 test:
-
-#	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
+	(cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 
 doc: 
