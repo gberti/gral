@@ -80,16 +80,7 @@ public:
 
     self& operator++()     { ++v; return (*this); }
     self  operator++(int)  { self tmp(*this); ++(*this); return tmp;}
-    // random access: use IndexMap of underlying grid!
-    //  self& operator +=(const index_type& ij) {
-    //  v+= TheMap().offset(ij);
-    //  return *this;
-    //}
     Vertex   operator*() const { return TheRange().vertex(v);} 
-    // random access
-    //    Vertex operator()(int     friend bool operator!=(const self& ls, const self& rs) { return !(ls == rs);}i, int j) const { 
-    //  return TheGrid().vertex(v + TheMap().offset(i,j));
-    //}
     
     bool     IsDone()    const { return  (v > TheRange().MaxVertexNum());}
     friend bool operator==(const self& ls, const self& rs) { return (ls.v == rs.v);}
@@ -126,10 +117,6 @@ public:
       return *this;
     }
     Cell   operator*() const { return TheRange().cell(c);} 
-    // random access
-    // Cell operator()(int i, int j) const { 
-    //  return TheGrid().cell(c + TheMap().offset(i,j));
-    //}
     
     bool     IsDone()    const { return  (c > TheRange().MaxCellNum());}
     friend bool operator==(const self& ls, const self& rs) { return (ls.c == rs.c);}
