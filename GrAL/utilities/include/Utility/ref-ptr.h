@@ -205,15 +205,15 @@ public:
 private:
   template<class U>
   void copy(ref_ptr<U> const& rhs) { 
+    /*
     owned_ = false;
     ptr = rhs.get();
-    /*
+    */
     owned_ = rhs.owned();
     if(owned_)
       ptr= new T(*rhs);
     else 
       ptr = rhs.get();
-    */
   }
   void clear()  { if(owned_) delete ptr; ptr = 0;}
 public:
