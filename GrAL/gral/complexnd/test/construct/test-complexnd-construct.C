@@ -181,10 +181,16 @@ int main() {
   test_cell_iterator          (C, std::cout);
   test_vertex_on_cell_iterator(C, std::cout);
 
-  unsigned tri[3][2] = { {0, 1}, {1,2}, {2,0}};
+  int tri[3][2] = { {0, 1}, {1,2}, {2,0}};
   ComplexND<1> triangle(tri, 3);
   cout << "ComplexND<1> triangle incidences:" << endl;
   print_incidences(triangle, cout);
+
+  int edg[1][2] = { {0,1} };
+  ComplexND<1> edges(edg, 1);
+  cout << "ComplexND<1> single edge incidences:" << endl;
+  print_incidences(edges, cout);
+
 
   ComplexND<ANY> C_any(2);
   vertex_morphism<ComplexND<2>, ComplexND<ANY> > Phi_any(C,C_any);
