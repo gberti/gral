@@ -30,8 +30,8 @@ namespace complex3d_detail {
     typedef facet_on_cell_function<gt::grid_type, gt::cell_handle> nb_table_type;
 
     typedef STDHASH::hash_map<vertex_set<gt::Facet>, 
-				gt::FacetOnCellIterator,
-				STDEXT::hash<vertex_set<gt::Facet> > > facet_map_type;
+			      gt::FacetOnCellIterator,
+			      STDEXT::hash<vertex_set<gt::Facet> > > facet_map_type;
 
     typedef BdFacetIterator                         FacetIterator;
     typedef BdFacetIterator                         FaceIterator;
