@@ -16,6 +16,7 @@ struct fixed_dimension_tag    {};
 struct variable_dimension_tag {};
 
 struct tag_unknown_dim {};
+//struct tag_runtime_dim {};
 struct tag1D : public fixed_dimension_tag {};
 struct tag2D : public fixed_dimension_tag {};
 struct tag3D : public fixed_dimension_tag {};

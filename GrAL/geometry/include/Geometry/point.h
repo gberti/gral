@@ -141,6 +141,7 @@ struct point_traits<point>
   typedef double                 component_type;
   typedef variable_dimension_tag dimension_tag;
 
+
   static unsigned Dim      (const Ptype& p) { return p.dim();}
   static int      LowerIndex(const Ptype&)   {return 1;}
   static int      UpperIndex(const Ptype& p) {return Dim(p);}
