@@ -334,6 +334,8 @@ struct grid_types_elem_grid
 
   typedef typename basegt::VertexOnCellIterator VertexOnCellIterator;
   typedef typename basegt::EdgeOnCellIterator   EdgeOnCellIterator;
+
+  typedef grid_dim_tag<element_traits<E>::dim>  dimension_tag;
 };
 
 } // namespace detail
