@@ -1,0 +1,32 @@
+CartesianGrid2D(2,2,2)
+1 cells
+8 vertices
+
+CartesianGrid2D(2,2,3)
+2 cells
+12 vertices
+
+CartesianGrid2D(2,3,2)
+2 cells
+12 vertices
+
+CartesianGrid2D(2,3,3)
+4 cells
+18 vertices
+
+CartesianGrid2D(3,2,2)
+2 cells
+12 vertices
+
+CartesianGrid2D(3,2,3)
+4 cells
+18 vertices
+
+CartesianGrid2D(3,3,2)
+4 cells
+18 vertices
+
+CartesianGrid2D(3,3,3)
+8 cells
+27 vertices
+
