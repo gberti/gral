@@ -5,9 +5,10 @@
 // $LICENSE
 
 // STD
-#include <iostream.h>
-#include <fstream.h>
-#include <string.h>
+#include <iostream>
+#include <fstream>
+#include <string>
+
 // STL
 #include <iterator.h>
 #include <vector.h>
@@ -65,17 +66,17 @@
  */
 class OstreamComplex2DFmt {
 protected:
-  ostream * out;
+  std::ostream * out;
   bool      owned;
 public: 
-  OstreamComplex2DFmt(ostream& ot) 
+  OstreamComplex2DFmt(std::ostream& ot) 
     : out(&ot), owned(false) {}
-  OstreamComplex2DFmt(string const& nm) 
-    : out(new ofstream(nm.c_str())), owned(true) {}
+  OstreamComplex2DFmt(std::string const& nm) 
+    : out(new std::ofstream(nm.c_str())), owned(true) {}
   ~OstreamComplex2DFmt()
   { if(owned) delete out;}
 
-  ostream& Out() { return *out;}
+  std::ostream& Out() { return *out;}
 };
 
 /*! \brief ConstructGrid overload for OstreamComplex2DFmt
@@ -160,20 +161,20 @@ public:
 
 private:
   //------------- DATA -------------
-  istream * in;
+  std::istream * in;
   int   nv;
   int   nc;
   int   offset;
-  vector<coord_type> coords;
+  std::vector<coord_type> coords;
 public:
 
   //  IstreamComplex2DFmt(string const& file, int off = 0);
-  IstreamComplex2DFmt(istream& is, int off = 0)
+  IstreamComplex2DFmt(std::istream& is, int off = 0)
    : offset(off)
     {
       in = &is;
       (*in) >> nv >> nc;
-      coords = vector<coord_type>(nv);
+      coords = std::vector<coord_type>(nv);
       for(int v = 0; v < nv; ++v)
 	(*in) >> coords[v];
    }
