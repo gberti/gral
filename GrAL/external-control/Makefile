@@ -1,4 +1,4 @@
-export CONFIG:=$(PWD)/mk.config
+export CONFIG:=$(shell pwd)/mk.config
 include $(CONFIG)
 
 TARGET=all

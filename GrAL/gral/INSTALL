@@ -12,10 +12,15 @@ Building it:
 
    - Makefiles require GNU make.
 
-   - Some scripts require Perl. (Not needed for the folling steps)
+   - Some scripts require Perl. (Not needed for the following steps)
 
 1) Unpack the stuff:
-$ tar -xfv <gral>.tar
+$ tar -xfv gral-all.tar
+
+This will create a directory GrAL (corresponds to ALLROOT in Makefiles).
+
+The preferred place to unpack the documentation is inside 
+the GrAL directory (creates doc/ directory).
 
 Most global configuration is found in configuration/ .
 You might want to look into configuration/defs/make.defs
@@ -23,22 +28,21 @@ and configuration/defs/suffix-targets.
 Here, you can set globally compiler and architecture
 (needed to select appropriate options).
 
-In each module directory, there is a file mk.config.
-[These should hopefully be the only files to edit ...]
+The following explanation refer to the case that you want to
+operate on all modules collectively (should be the normal case
+when starting).
+If you want to operate on individual modules, there are two choices:
+a)  Edit in mk.config the variable ALLROOT 
+   to point to the top level directory in the tar file (i.e. GrAL/). 
+   [This should hopefully be the only thing to edit in each module ...]
+b) Alternatively, add an argument ALLROOT=/path/to/GrAL
 
-Near the top, edit the variable ALLROOT to point to the
-top level directory in the tar file. 
-Alternatively, add an argument ALLROOT=/path/to/top/dir 
-to the calls to gmake below.
 
-
-2) Then run for each module
+2) Then run from ALLROOT
 $ gmake new
 
-and possibly
-
-$ gmake test
-
+This builds some libraries (not all modules produce libraries).
+These are written to <module>/lib/<ARCH>/<CCNAME>/<DEBUG>/.
 
 3) Install it:
 
@@ -54,28 +58,47 @@ This will copy libraries and header files to PREFIX/lib/
 and PREFIX/include, resp.
 
 
+4) Build tests:
+
+From ALLROOT call
+$ gmake test
+
+
+
 
 Documentation 
 -------------
 
 Documentation is available separately on the GrAL homepage.
+If unpacked in GrAL/, the file GrAL/index.html points to the
+right location.
+
 
 In case you want to build it from sources,
 note the following:
 
 Code documentation needs doxygen
-(http://www.stack.nl/~dimitri/doxygen/index.html)
+-> http://www.stack.nl/~dimitri/doxygen/index.html
 
 Concept documentation (in gral/base/doc/hyperlatex) 
-needs Hyperlatex 2.3.1
-(http://www.cs.uu.nl/~otfried/Hyperlatex/)
-
+needs Hyperlatex 2.3.1 
+-> http://www.cs.uu.nl/~otfried/Hyperlatex/
+(Does NOT work with the newest version of hyperlatex! 
+ This will be corrected in future versions of GrAL.)
 
 To build the documentation, type
 $ gmake doc
 
+(to make entire docs)
+
 or
 $ gmake doxy 
+
+(to make only source code docs).
+
+This creates in each module docs in doxygen/html.
+The file gral/doxygen/html/index.html points to all module
+documentations.
 
 
 
@@ -85,4 +108,4 @@ Feedback:
 ---------
 
 I welcome your suggestions, bug reports, constructive criticism etc!
-Please write to berti@math.tu-cottbus.de
+Please write to berti@math.tu-cottbus.de.
