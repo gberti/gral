@@ -9,12 +9,13 @@
 //   http://math-s.math.tu-cottbus.de/NMWR
 //   
 //----------------------------------------------------------------
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 
-#include "Grids/common-grid-basics.h"
 #include "Geometry/algebraic-primitives.h"
-#include "Grids/Complex2D/complex2d.h"
-#include "Grids/geometric-types.h" 
+
+#include "Gral/Base/common-grid-basics.h"
+#include "Gral/Geometries/geometric-types.h" 
+#include "Gral/Grids/Complex2D/complex2d.h"
 
 
 struct stored_geometry_complex2D_base

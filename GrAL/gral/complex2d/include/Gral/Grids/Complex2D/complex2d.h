@@ -8,7 +8,6 @@
 //   TU Cottbus - Germany
 //   http://math-s.math.tu-cottbus.de/NMWR
 //
-//   $Id$ 
 //----------------------------------------------------------------
 
 
@@ -18,8 +17,7 @@
 #include "Utility/pre-post-conditions.h"
 #include "Geometry/point3.h"
 
-#include "Grids/common-grid-basics.h"
-#include "Work-around/default-operators.h"
+#include "Gral/Base/common-grid-basics.h"
 
 
 // many, many forward declarations ...
@@ -53,7 +51,6 @@ class CellOnVertex2D_Iterator;
 
 
 
-//template <class  POINT>
 class vertex_base {
 public:
   typedef point2 CoordType;
@@ -140,13 +137,6 @@ private:
 
 
 
-#include "Work-around/default-operators.h"
-
-MAKE_DEFAULT_OPS(vertex_base,"vertex_base")
-MAKE_DEFAULT_OPS(cell2d_connectivity,"cell2d_connectivity")
-
-#undef  MAKE_DEFAULT_OPS 
-
 
 typedef vector<cell2d_connectivity>   cell_list_complex2d;
 typedef vector<vertex_base>           vertex_list_complex2d;
@@ -230,11 +220,11 @@ struct complex2d_types {
 
 
 
-#include "vertex2d.h"
-#include "cell2d.h"
-#include "cell-on-cell2d-it.h"
-#include "cell-on-vertex2d-it.h"
-#include "edge-on-cell2d-it.h"
+#include "Gral/Grids/Complex2D/internal/vertex2d.h"
+#include "Gral/Grids/Complex2D/internal/cell2d.h"
+#include "Gral/Grids/Complex2D/internal/cell-on-cell2d-it.h"
+#include "Gral/Grids/Complex2D/internal/cell-on-vertex2d-it.h"
+#include "Gral/Grids/Complex2D/internal/edge-on-cell2d-it.h"
 
 class Complex2D : public complex2d_types  {
   typedef list<EdgeOnCell2D_Iterator>  boundary_facet_list;
@@ -468,23 +458,23 @@ private:
   //-------------------------
 
 
-#include "vertex-on-cell2d-it.h" 
-#include "vertex2d-it.h"
-#include "cell2d-it.h"
+#include "Gral/Grids/Complex2D/internal/vertex-on-cell2d-it.h" 
+#include "Gral/Grids/Complex2D/internal/vertex2d-it.h"
+#include "Gral/Grids/Complex2D/internal/cell2d-it.h"
 
-#include "edge2d.h"
-#include "edge2d-it.h"
-#include "vertex-on-edge2d-it.h"
-#include "cell-on-edge2d-it.h"
-#include "boundary-facet-it.h"
-#include "boundary-vertex-iterator.h"
+#include "Gral/Grids/Complex2D/internal/edge2d.h"
+#include "Gral/Grids/Complex2D/internal/edge2d-it.h"
+#include "Gral/Grids/Complex2D/internal/vertex-on-edge2d-it.h"
+#include "Gral/Grids/Complex2D/internal/cell-on-edge2d-it.h"
+#include "Gral/Grids/Complex2D/internal/boundary-facet-it.h"
+#include "Gral/Grids/Complex2D/internal/boundary-vertex-iterator.h"
 
-#include "cell-on-cell2d-it.inline.C"
-#include "edge-on-cell2d-it.inline.C"
-#include "vertex2d.inline.C"
-#include "edge2d.inline.C"
-#include "cell2d.inline.C"
-#include "complex2d.inline.C"
+#include "Gral/Grids/Complex2D/internal/cell-on-cell2d-it.C"
+#include "Gral/Grids/Complex2D/internal/edge-on-cell2d-it.C"
+#include "Gral/Grids/Complex2D/internal/vertex2d.C"
+#include "Gral/Grids/Complex2D/internal/edge2d.C"
+#include "Gral/Grids/Complex2D/internal/cell2d.C"
+#include "Gral/Grids/Complex2D/internal/complex2d.C"
 
 
 //-----------------------------------------------------------------------------
@@ -575,6 +565,6 @@ struct hash<Cell2D>
   : public hash_cell2d {};
 
 
-#include "Grids/Complex2D/element-traits.h"
+#include "Gral/Grids/Complex2D/element-traits.h"
 
 #endif

@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Complex2D/internal/copy.h"
+#include "Gral/Grids/Complex2D/internal/copy.h"
 
 template<class Conn, class VtxCorr, class CellCorr>
 void copy_cells(Complex2D& G, 

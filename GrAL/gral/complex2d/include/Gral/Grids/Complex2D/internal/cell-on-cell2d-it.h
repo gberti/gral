@@ -11,8 +11,8 @@
 //----------------------------------------------------------------
 
 
-#include "Grids/Complex2D/complex2d.h"
-#include "Grids/Complex2D/edge-on-cell2d-it.h"
+#include "Gral/Grids/Complex2D/complex2d.h"
+#include "Gral/Grids/Complex2D/internal/edge-on-cell2d-it.h"
 
 class CellOnCell2D_Iterator : public complex2d_types {
   typedef CellOnCell2D_Iterator   self;

@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "Grids/Complex2D/complex2d.h"
+#include "Gral/Grids/Complex2D/complex2d.h"
 
 //----------------------------------------------------------------
 //  !! intended for use in other functions only, 
@@ -40,7 +40,7 @@ void copy_cells(Complex2D& G,
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "../generic/copy.C"
+#include "Gral/Grids/Complex2D/internal/copy.C"
 #endif
 
 #endif

@@ -11,7 +11,7 @@
 //----------------------------------------------------------------
 
 #include "Utility/pre-post-conditions.h"
-#include "Grids/Complex2D/complex2d.h"
+#include "Gral/Grids/Complex2D/complex2d.h"
 
 class EdgeOnCell2D_Iterator : public complex2d_types {
   friend class CellOnCell2D_Iterator;

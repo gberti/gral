@@ -1,7 +1,7 @@
 #ifndef NMWR_GB_CELL_ON_EDGE2D_IT_H
 #define NMWR_GB_CELL_ON_EDGE2D_IT_H
 
-#include "Grids/Complex2D/complex2d.h"
+#include "Gral/Grids/Complex2D/complex2d.h"
 
 class CellOnEdge2D_Iterator : public complex2d_types {
   typedef CellOnEdge2D_Iterator self;

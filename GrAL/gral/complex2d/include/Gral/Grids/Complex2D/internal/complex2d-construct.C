@@ -10,9 +10,9 @@
 //----------------------------------------------------------------
 
 
-#include "map.h" // STL
+#include <map> // STL
 
-#include "Grids/Complex2D/internal/copy.h"
+#include "Gral/Grids/Complex2D/internal/copy.h"
 
 #include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"

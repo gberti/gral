@@ -19,8 +19,8 @@
 //
 //----------------------------------------------------------------
 
-#include "Grids/element-traits.h"
-#include "Grids/Complex2D/complex2d.h"
+#include "Gral/Base/element-traits.h"
+#include "Gral/Grids/Complex2D/complex2d.h"
 
 
 template<class E> 

@@ -1,7 +1,7 @@
 #ifndef NMWR_GB_EDGE2D_INLINE_H
 #define NMWR_GB_EDGE2D_INLINE_H
 
-#include "Grids/Complex2D/edge2d.h"
+#include "Gral/Grids/Complex2D/internal/edge2d.h"
 
 inline VertexOnEdge2D_Iterator Edge2D::FirstVertex() const
 { return VertexOnEdge2D_Iterator(*this); }

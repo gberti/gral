@@ -9,20 +9,20 @@
 //   
 //----------------------------------------------------------------
 
-#include "map.h"  // STL
+#include <map>  // STL
 
 #include "Container/bijective-mapping.h"
 #include "Container/set-primitives.h"
 #include "Container/container-adapter.h"
 #include "Container/function-adapter.h"
 
-#include "Grids/grid-functors.h"
-#include "Grids/mapped-iterators.h"
+#include "Gral/Base/grid-functors.h"
+#include "Gral/Base/mapped-iterators.h"
+#include "Gral/Base/vtuple2d.h"
 
-#include "Grids/Complex2D/enlarge.h"
-#include "Grids/Complex2D/internal/copy.h"
-#include "Grids/Complex2D/internal/adjacency.h"
-#include "Grids/Complex2D/vtuple.h"
+#include "Gral/Grids/Complex2D/enlarge.h"
+#include "Gral/Grids/Complex2D/internal/copy.h"
+#include "Gral/Grids/Complex2D/internal/adjacency.h"
 
 
 template<class G2, class Geom2, class VertexIdent,
@@ -130,8 +130,8 @@ void EnlargeGrid(Complex2D& G,                 // in/out
 
   //--- (3) set facet table --------------------------------
 
-
-  typedef map<vtuple_2d, FacetOnCellIterator, less<vtuple_2d> > FacetTable;
+  typedef vtuple_2d<Complex2D> vtuple;
+  typedef map<vtuple, FacetOnCellIterator, less<vtuple> > FacetTable;
   //typedef map<vtuple_2d, Facet, less<vtuple_2d> > FacetTable;
   FacetTable facet_id; // facets contained in Iv
 
@@ -148,7 +148,7 @@ void EnlargeGrid(Complex2D& G,                 // in/out
     for(cv = V.FirstCell(); ! cv.IsDone(); ++cv) {
       FacetOnCellIterator fcv; 
       for(fcv = (*cv).FirstFacet(); ! fcv.IsDone(); ++fcv) {
-	vtuple_2d vtf = get_vertices(fcv);
+	vtuple vtf = get_vertices(fcv);
         if (is_subset(vtf.begin(),vtf.end(), Iv.range())) {
 	  if( G.IsOnBoundary(fcv)) {
 	    // NOTE: all vertices on boundary does not imply facet on boundary!
