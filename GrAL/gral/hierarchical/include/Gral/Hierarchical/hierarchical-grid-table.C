@@ -31,8 +31,10 @@ namespace hierarchical {
   void hier_grid_table<HGRID,GE>::clear()
   {
     entities.clear();
-    g = 0;
+    g = static_cast<hier_grid_type const*>(0);
   }
+
+
 
   template<class HGRID, class GE>
   void hier_grid_table<HGRID,GE>::update()
@@ -56,14 +58,14 @@ namespace hierarchical {
        entities.init(g->grids->structure(), entity_initializer(&hier_grid_type::FlatGrid, g));
        where entitiy_initializer is e.g.
        struct entity_initializer { 
-          const_ptr<hier_grid_type> g; 
-	  const_ptr<flat_grid_type> operator()(level_handle lev) const { return g->FlatGrid(lev);}
+          ref_ptr<const hier_grid_type> g; 
+	  ref_ptr<const flat_grid_type> operator()(level_handle lev) const { return g->FlatGrid(lev);}
        }; 
     */ 
     entities.init_begin_index(g->table()->begin_index()); 
     for(level_handle lev = g->coarsest_level(); lev <= g->finest_level(); ++lev)
       // FIXME: do not copy large grid entities!
-      entities.push_back(grid_entity_type(g->FlatGrid(lev)));
+      entities.push_back(grid_entity_type(* g->FlatGrid(lev)));
   }
 
   template<class HGRID, class GE>
@@ -72,7 +74,7 @@ namespace hierarchical {
   {
     REQUIRE_ALWAYS( (finest_level() < g->finest_level()), "",1);
     level_handle newlev = g->next_finer_level(finest_level());
-    entities.push_back(grid_entity_type(g->FlatGrid(newlev)));
+    entities.push_back(grid_entity_type(* g->FlatGrid(newlev)));
     return newlev;
   }
 
@@ -82,7 +84,7 @@ namespace hierarchical {
   {
     REQUIRE_ALWAYS( (coarsest_level() > g->coarsest_level()), "",1);
     level_handle newlev = g->next_coarser_level(coarsest_level());
-    entities.push_front(grid_entity_type(g->FlatGrid(newlev)));
+    entities.push_front(grid_entity_type(* g->FlatGrid(newlev)));
     return newlev;
   }
 

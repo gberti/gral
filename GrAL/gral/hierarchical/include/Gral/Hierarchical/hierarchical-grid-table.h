@@ -3,7 +3,7 @@
 
 // $LICENSE_NEC
 
-#include "Utility/const-ptr.h"
+#include "Utility/ref-ptr.h"
 
 namespace hierarchical {
 
@@ -60,13 +60,14 @@ namespace hierarchical {
     // this type essentially must be a bivector<>
     typedef typename hier_grid_type::table_type_template<GE>::type  table_type;
     table_type                entities;
-    const_ptr<hier_grid_type> g;
+    ref_ptr<const hier_grid_type> g;
   public:
     hier_grid_table();
     hier_grid_table(hier_grid_type const& gg);
     // pass additional initializer as constructor arg. to grid entity levels
     //template<class T>
     //hier_grid_table(hier_grid_type const& gg, T const& initializer);
+
     void set_grid  (hier_grid_type const& gg);
     void clear();
 
@@ -81,7 +82,7 @@ namespace hierarchical {
     //! get the finest level
     level_handle  finest_level()   const { return level_handle(entities.back_index());}
 
-    const_ptr<hier_grid_type> TheGrid() const { return g;}
+    ref_ptr<const hier_grid_type> TheGrid() const { return g;}
   private:
     void init(hier_grid_type const& gg);
   public:

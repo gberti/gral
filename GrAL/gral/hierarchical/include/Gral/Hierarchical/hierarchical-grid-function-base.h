@@ -51,8 +51,8 @@ namespace hierarchical {
     //! get in sync with grid: add/remove missing/superflous levels
     void update();
 
-    const_ptr<hier_grid_type> TheGrid () const { return gfs.TheGrid();}
-    const_ptr<hier_grid_type> TheHGrid() const { return gfs.TheGrid();}
+    ref_ptr<const hier_grid_type> TheGrid () const { return gfs.TheGrid();}
+    ref_ptr<const hier_grid_type> TheHGrid() const { return gfs.TheGrid();}
 
     reference       operator[](element_type const& e)       { return gfs[e.level()][e.Flat()];}
     const_reference operator()(element_type const& e) const { return gfs(e.level())(e.Flat());}
