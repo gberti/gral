@@ -49,9 +49,20 @@ module-clean:
 	rm -f doxy.tags doxy.log
 
 clean: stdclean
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) clean DEPS='' CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
 
 realclean: clean
 	rm -rf doxygen/
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) realclean DEPS='' CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
 
 test:
 	@set -e; \
@@ -69,7 +80,7 @@ check:
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
--test-check-clean:
+test-check-clean:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $$i;echo 'ENTERING directory' $$i;\
