@@ -81,8 +81,12 @@ DOCROOT=$(ALLROOT)
 DOXYPATH=doxygen/html
 DOXYCFG=$(CONFIGURATION)/doxycfg/
 RELPATH=../../..#
-ADDRELPATH=#
+#ADDRELPATH=#
+ifdef $(ADDRELPATH)
 RELROOT=$(RELPATH)/$(ADDRELPATH)
+else
+RELROOT=$(RELPATH)
+endif
 
 doxy:
 	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(ALLROOT) -binpath $(LOCALBINPATH) \
@@ -91,10 +95,11 @@ doxy:
 	cat doxy.local.cfg                        >> doxy.cfg.tmp
 	$(DOXYCFG)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg.tmp
 	cp $(CONFIGURATION)/doxycfg/footer.html .
+	cp $(CONFIGURATION)/doxycfg/header.html .
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
          doxygen doxy.cfg.tmp;)
-	rm footer.html
+	rm -f footer.html header.html
 	rm -f doxy.cfg.tmp 
 
 installdox:
