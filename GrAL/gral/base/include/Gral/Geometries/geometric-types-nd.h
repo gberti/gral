@@ -96,15 +96,16 @@ public:
 template<class GEOM, class GT, class E>
 class polytope_aux : public polytope_aux_dim<GEOM,GT,E, element_traits<E>::dim> // element_dimension_tag::dim>
 {
+
   typedef polytope_aux_dim<GEOM,GT,E, element_traits<E>::dim> // element_dimension_tag::dim>  
                             base;
+ public:
   typedef GEOM              geom_type;
   typedef GT                gt;
   typedef element_traits<E> et;
   typedef E                 element_type;
   typedef typename GEOM::coord_type coord_type;
 
-public:
   polytope_aux() {}
   polytope_aux(geom_type const&         geo, element_type const& ee) : base(geo,ee) {}
   polytope_aux(ref_ptr<geom_type const> geo, element_type const& ee) : base(geo,ee) {}
