@@ -8,24 +8,24 @@
 
 #include "Utility/pre-post-conditions.h"
 
-class A {
+class testA {
 public:
-  virtual A* clone() const = 0;
-  virtual ~A() {}
+  virtual testA* clone() const = 0;
+  virtual ~testA() {}
   virtual void do_mut() = 0;
   virtual void do_const() const = 0;
 };
 
-class D : public A {
+class testD : public testA {
   int i;
 public:
-  D(int ii = 0) : i(ii) {}
-  D(D const& rhs) : i(rhs.i) 
+  testD(int ii = 0) : i(ii) {}
+  testD(testD const& rhs) : i(rhs.i) 
   { cerr << "D::D(D const&) called, i = " << i << "\n";}
-  virtual ~D() { cerr << "D::~D() called, i = " << i << "\n";}
-  virtual  D*  clone() const {
+  virtual ~testD() { cerr << "D::~D() called, i = " << i << "\n";}
+  virtual  testD*  clone() const {
     cerr << "D::clone() called , i = " << i << "\n";
-    return new D(*this);
+    return new testD(*this);
   }
   virtual void do_mut() {++i;} 
   virtual void do_const() const {}
@@ -33,8 +33,8 @@ public:
 };
 
 template<>
-struct copy_traits<A> {
-  static A* clone(A const& a) { return a.clone();}
+struct copy_traits<testA> {
+  static testA* clone(testA const& a) { return a.clone();}
 };
 
 int main() {
@@ -43,10 +43,11 @@ int main() {
   {
     copy_on_write_ptr<int> p = new int(1);
     int i = *p;
+    REQUIRE_ALWAYS((i==1), "Different value of i = " << i << "\n",1);
     copy_on_write_ptr<int> q = p;
     copy_on_write_ptr<int> r = p;
     
-    REQUIRE( (*p == *q), "" , 1);
+    REQUIRE_ALWAYS( (*p == *q), "" , 1);
     cout << "*p = " << *p << "  *q = " << *q << "  *r = " << *r << endl;
     *q = 2;
     cout << "*p = " << *p << "  *q = " << *q << "  *r = " << *r << endl;
@@ -59,9 +60,9 @@ int main() {
 
 
     // test abstract class as template parameter
-    copy_on_write_ptr<A> pA1(new D(1));
-    copy_on_write_ptr<A> pA2 = pA1;
-    copy_on_write_ptr<A> pA3 = pA1;
+    copy_on_write_ptr<testA> pA1(new testD(1));
+    copy_on_write_ptr<testA> pA2 = pA1;
+    copy_on_write_ptr<testA> pA3 = pA1;
 
     cerr << "-> pA1->do_mut() \n"; 
     pA1->do_mut();
