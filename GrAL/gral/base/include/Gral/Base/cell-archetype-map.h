@@ -12,10 +12,12 @@ namespace GrAL {
 
    \ingroup gridarchetypes
 
-   Mappings from grid elements to archetype elements typically
-   involve  a local search over the cell. Mappings from
-   ElementOnCell incidence iterators to archetype elements should
-   avoid this searching. 
+   Mappings from grid elements incident to a cell to corresponding elements
+   of the cell archetype elements involve  a local search over the cell. 
+   Mappings from ElementOnCell incidence iterators to archetype elements 
+   often can avoid this searching. 
+
+   \todo Support other element types than Vertex.
  */
 
 template<class GRID>
