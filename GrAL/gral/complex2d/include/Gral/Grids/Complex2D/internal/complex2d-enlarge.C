@@ -171,12 +171,10 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   // under question into the range [new_end,end), where new_end is the
   // return value of remove. Then container.erase(new_end,end) does the job.
 
-  FacetOnCellIterator dummy;
   gg.boundary().
     erase(remove_if(gg.boundary().begin(),gg.boundary().end(), 
 		    is_element_of(get2nd_c(facet_id.begin()),
-				  get2nd_c(facet_id.end()),
-				  &dummy)),
+				  get2nd_c(facet_id.end()))),
 	  gg.boundary().end());
   
 
