@@ -3,6 +3,7 @@
 
 #include "Gral/Grids/ComplexND/complexnd.h"
 #include "Gral/Base/grid-morphism.h"
+#include "Gral/Base/construct-grid.h"
 
 namespace complexnd  {
 
@@ -21,8 +22,8 @@ namespace complexnd  {
   }
 
 
-  template<int D, class G_SRC, class PHI>
-  void ConstructGrid0_dispatched(ComplexND<D>& g, G_SRC const& g_src, PHI& phi) {
+  template<int D, class G_SRC, class VCORR, class CCORR>
+  void ConstructGrid0_dispatched(ComplexND<D>& g, G_SRC const& g_src, VCORR& v_corr, CCORR& c_corr) {
 
     typedef grid_types<G_SRC>         srcgt;
     typedef grid_types<ComplexND<D> > gt;
@@ -30,8 +31,8 @@ namespace complexnd  {
     // copy vertices
     g.incidences[0].resize(g_src.NumOfVertices());
     unsigned vcnt = 0;
-    for(typename srcgt::VertexIterator v(g_src.FirstVertex()); ! v.IsDone(); ++v) {
-      phi[v.handle()] = typename gt::vertex_handle(vcnt);
+    for(typename srcgt::VertexIterator v_src(g_src.FirstVertex()); ! v_src.IsDone(); ++v_src) {
+      v_corr[v_src.handle()] = typename gt::vertex_handle(vcnt);
       ++vcnt;
     }
 
@@ -50,7 +51,7 @@ namespace complexnd  {
       for(typename srcgt::CellIterator c_src(g_src.FirstCell()); ! c_src.IsDone(); ++c_src) {
 	typename srcgt::archetype_handle a = g_src.archetype_of(c_src.handle());
 	typename gt   ::cell_handle      c = g.add_cell(a);
-	// phi[c] = c_src.handle();    
+	c_corr[c_src.handle()] = c;
 	g.incidences[g.dimension()][c].resize(g.dimension()+1);
 	g.incidences[g.dimension()][c][0].resize(g_src.Archetype(a).NumOfVertices());
 	typedef grid_types<typename srcgt::archetype_type> srcarchgt;
@@ -58,7 +59,7 @@ namespace complexnd  {
 	typename srcgt    ::VertexOnCellIterator vc_src(*c_src);        
 	for( ; !vc_src.IsDone(); ) { // ++lv, ++vc_src) {
 	  // morphism[a](*lv) is a vertex_handle of c's archetype
-	  g.incidences[g.dimension()][c][0][morphism[a](lv.handle())] = phi(vc_src.handle());
+	  g.incidences[g.dimension()][c][0][morphism[a](lv.handle())] = v_corr(vc_src.handle());
 	  ++lv;
 	  ++vc_src;
 	}
@@ -70,11 +71,12 @@ namespace complexnd  {
   }
 
 
+  // force choice of correct specialization - partial ordering of functions unreliable
   template<int D>
   struct dispatch {
-    template<class G_SRC, class PHI>
-    static void construct(ComplexND<D>& g, G_SRC const& g_src, PHI & phi) 
-    { ConstructGrid0_dispatched(g,g_src,phi);}
+    template<class G_SRC, class VCORR, class CCORR>
+    static void construct(ComplexND<D>& g, G_SRC const& g_src, VCORR& v_corr, CCORR& c_corr)
+    { ConstructGrid0_dispatched(g,g_src,v_corr, c_corr);}
   };
 
   template<>
@@ -82,22 +84,31 @@ namespace complexnd  {
     template<class G_SRC, class PHI>
     static void construct(ComplexND<0>& g, G_SRC const& g_src, PHI & phi) 
     { ConstructGrid0_0(g,g_src,phi);}
+    template<class G_SRC, class VCORR, class CCORR>
+    static void construct(ComplexND<0>& g, G_SRC const& g_src, VCORR& v_corr, CCORR& c_corr)
+    { ConstructGrid0_0(g,g_src,v_corr);}
   };
 
-  /*
-  class archetype_0D;
-  template<class PHI>
-  void ConstructGrid0(ComplexND<0>& g, archetype_0D const& g_src, PHI& phi) {
-    // g.xxx();
-    ConstructGrid0_0(g, g_src, phi);
-  }
-  */
-
-  template<int D, class G_SRC, class PHI>
-  void ConstructGrid0(ComplexND<D>& g, G_SRC const& g_src, PHI& phi) 
-  { dispatch<D>::construct(g,g_src,phi);}
 
 } // namespace complexnd
+
+
+// global namespace 
+template<int D, class G_SRC, class VCORR, class CCORR>
+void ConstructGrid0(complexnd::ComplexND<D>& g, G_SRC const& g_src, VCORR& v_corr, CCORR& c_corr)
+{ complexnd::dispatch<D>::construct(g,g_src, v_corr, c_corr);}
+
+
+template<int D, class GEOM_DEST,
+	 class G_SRC,  class GEOM_SRC,
+	 class VCORR,  class CCORR>
+void ConstructGridVC (complexnd::ComplexND<D> & G_dest,
+		      GEOM_DEST               & Geom_dest,
+		      G_SRC              const& G_src,
+		      GEOM_SRC           const& Geom_src,
+		      VCORR                   & v_corr,
+		      CCORR                   & c_corr)
+{ ConstructGridVC_generic(G_dest, Geom_dest, G_src, Geom_src, v_corr, c_corr);}
 
 
 #endif
