@@ -30,8 +30,8 @@ void test_hier_geom(GRID const& root,
   typedef grid_types<cart_grid_type> cgt;
   typedef hierarchical::hgrid_cartesian<cart_grid_type> hier_grid_type;
   typedef hier_grid_type                                hgt;
-  typedef typename hgt::HierCell                        HierCell;
-  typedef typename hgt::HierVertex                      HierVertex;
+  typedef typename hgt::hier_cell_type                  hier_cell_type;
+  typedef typename hgt::hier_vertex_type                hier_vertex_type;
   typedef typename hgt::level_handle                    level_handle;
   typedef typename hier_grid_type::element_base_type    element_base_type;
   typedef hierarchical::hier_geometry<hier_grid_type,
@@ -52,7 +52,7 @@ void test_hier_geom(GRID const& root,
   for(level_handle lev = H.coarsest_level(); lev <= H.finest_level(); ++lev) {
     out << "Level " << lev << ":\n";
     for(typename cgt::VertexIterator v = H.FlatGrid(lev)->FirstVertex(); !v.IsDone(); ++v) {
-      HierVertex hv(H,*v,lev);
+      hier_vertex_type hv(H,*v,lev);
       out << hv.Flat().index() << " @ " << HGeom.coord(hv) << "\n";
     }
     out << "\n";

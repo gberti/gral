@@ -82,11 +82,12 @@ namespace octree {
     ref_ptr<const octree_type>    TheOctree() const { return the_oct;}
     ref_ptr<const hier_grid_type> TheHierGrid() const { return TheOctree()->TheHierGrid();}
 
-    // TODO:  reuse archetype stuff from underlying flat grid
-    // FIXME: there are no archetypes for 2D grids!
+    // reuse archetypes from flat grid.
+    // NOTE: this assumes that flat_grid has static archetypes!
     typedef typename flatgt::archetype_type     archetype_type;
     typedef typename flatgt::archetype_handle   archetype_handle;
     typedef typename flatgt::archetype_iterator archetype_iterator;
+    typedef grid_types<archetype_type>          archgt;               
 
     static archetype_iterator BeginArchetype()  { return flat_grid_type::BeginArchetype();}
     static archetype_iterator EndArchetype()    { return flat_grid_type::EndArchetype();}
@@ -129,6 +130,7 @@ namespace octree {
   public:
     typedef LEAFGRID                             grid_type;
     typedef grid_type                            leaf_grid_type;
+    // shouldn't this be grid_types<LEAFGRID> ??
     typedef grid_type                            gt;
     typedef typename grid_type::octree_type      octree_type;
     typedef typename octree_type::hier_grid_type hier_grid_type;
@@ -189,13 +191,13 @@ namespace octree {
     nc_leafgrid_vertex_t() {} 
     nc_leafgrid_vertex_t(grid_type const& gg, vertex_handle hh) : base(gg, hh)
     { normalize(); }
-    nc_leafgrid_vertex_t(grid_type const& gg, FlatVertex         f, level_handle lev) : base(gg,f,lev)
+    nc_leafgrid_vertex_t(grid_type const& gg, flat_vertex_type   f, level_handle lev) : base(gg,f,lev)
     { normalize(); }
     nc_leafgrid_vertex_t(grid_type const& gg, flat_vertex_handle f, level_handle lev) : base(gg,f,lev)
     { normalize(); }
     nc_leafgrid_vertex_t(ref_ptr<grid_type const> gg, vertex_handle hh) : base(gg, hh)
     { normalize(); }
-    nc_leafgrid_vertex_t(ref_ptr<grid_type const> gg, FlatVertex         f, level_handle lev) : base(gg,f,lev)
+    nc_leafgrid_vertex_t(ref_ptr<grid_type const> gg, flat_vertex_type   f, level_handle lev) : base(gg,f,lev)
     { normalize(); }
     nc_leafgrid_vertex_t(ref_ptr<grid_type const> gg, flat_vertex_handle f, level_handle lev) : base(gg,f,lev)
     { normalize();}
@@ -249,8 +251,8 @@ struct element_traits<octree::nc_leafgrid_vertex_t
   typedef element_traits_vertex_base<octree::non_conforming_leafgrid<OCTREE> > base;
   typedef typename octree::non_conforming_leafgrid<OCTREE>::Vertex Vertex;
   typedef typename Vertex::flatgt flatgt;
-  typedef typename flatgt::Vertex FlatVertex;
-  typedef typename element_traits<FlatVertex>::hasher_type flat_hasher_type;
+  typedef typename flatgt::Vertex flat_vertex_type;
+  typedef typename element_traits<flat_vertex_type>::hasher_type flat_hasher_type;
  
   struct hasher_type : public base::hasher_type_elem_base {
     // this is a bad hasher
@@ -269,8 +271,8 @@ struct element_traits<hierarchical::h_cell_t
   typedef element_traits_cell_base<octree::non_conforming_leafgrid<OCTREE> > base;
   typedef typename octree::non_conforming_leafgrid<OCTREE>::Cell Cell;
   typedef typename Cell::flatgt flatgt;
-  typedef typename flatgt::Cell FlatCell;
-  typedef typename element_traits<FlatCell>::hasher_type flat_hasher_type;
+  typedef typename flatgt::Cell flat_cell_type;
+  typedef typename element_traits<flat_cell_type>::hasher_type flat_hasher_type;
  
   struct hasher_type : public base::hasher_type_elem_base {
     // this is a bad hasher

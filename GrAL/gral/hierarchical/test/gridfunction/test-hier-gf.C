@@ -16,11 +16,11 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
   typedef hierarchical::hgrid_cartesian<flat_grid_type> hier_grid_type;
   typedef hier_grid_type                                hgt;
   typedef typename hgt::level_handle                    level_handle;
-  typedef typename hgt::HierCell                        HierCell; 
+  typedef typename hgt::hier_cell_type                        hier_cell_type; 
 
   hier_grid_type H(root,pattern);
-  hierarchical::hier_grid_function        <HierCell, int> Hgf (H, 0);
-  hierarchical::hier_partial_grid_function<HierCell, int> Hpgf(H, 0);
+  hierarchical::hier_grid_function        <hier_cell_type, int> Hgf (H, 0);
+  hierarchical::hier_partial_grid_function<hier_cell_type, int> Hpgf(H, 0);
 
   
   H   .add_finer_level();
@@ -31,14 +31,14 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
   Hgf .add_coarser_level(-1);
   Hpgf.add_coarser_level(-1);
 
-  hierarchical::hier_grid_function        <HierCell, int> Hgf2 (Hgf);
-  hierarchical::hier_partial_grid_function<HierCell, int> Hpgf2(Hpgf);
+  hierarchical::hier_grid_function        <hier_cell_type, int> Hgf2 (Hgf);
+  hierarchical::hier_partial_grid_function<hier_cell_type, int> Hpgf2(Hpgf);
 
   for(level_handle lev = H.coarsest_level(); lev <= H.finest_level(); ++lev) {
     out << "Level " << lev << ":\n";
     for(typename cgt::CellIterator c(* H.FlatGrid(lev)); !c.IsDone(); ++c) {
       out << (*c).index() << ": " << Hgf(lev)(*c) << " = ";
-      HierCell hc(H,*c,lev);
+      hier_cell_type hc(H,*c,lev);
       out << Hgf(hc) << " = "
 	  << Hpgf(hc) << " = "
 	  << Hgf2(hc) << " = "
@@ -52,11 +52,11 @@ void test_hier_gf(GRID const& root, GRID const& pattern, std::ostream& out)
 // explicit instantiation to make sure all members are compilable
 namespace hierarchical { 
   template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
-  typedef hgrid_cartesian<cartesian3d::CartesianGrid3D>::HierCell HierCell;
-  template class hier_grid_function<HierCell, int>;
+  typedef hgrid_cartesian<cartesian3d::CartesianGrid3D>::hier_cell_type hier_cell_type;
+  template class hier_grid_function<hier_cell_type, int>;
 
-  template class hier_grid_function_base<HierCell, int, grid_function>;
-  template class hier_grid_function_base<HierCell, int, partial_grid_function>;
+  template class hier_grid_function_base<hier_cell_type, int, grid_function>;
+  template class hier_grid_function_base<hier_cell_type, int, partial_grid_function>;
 }
 
 

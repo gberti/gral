@@ -37,19 +37,19 @@ int main() {
     typedef grid_types<cart_grid_type> cgt;
     typedef octree::Octree<cartesian2d::CartesianGrid2D> octree_type;
     typedef octree::Octree<cartesian2d::CartesianGrid2D> octgt;
-    typedef octree_type::OctCell              OctCell;
+    typedef octree_type::oct_cell_type              oct_cell_type;
     typedef octree_type::OctCellChildIterator OctCellChildIterator ;
 
     cart_grid_type root(3,3);
     cart_grid_type ref_pattern(3,3); // 2x1 cells!
     octree::Octree<cartesian2d::CartesianGrid2D>  oct(root,ref_pattern);
-    hierarchical::hier_partial_grid_function<OctCell, int> material(* (oct.TheHierGrid()), 0);
+    hierarchical::hier_partial_grid_function<oct_cell_type, int> material(* (oct.TheHierGrid()), 0);
 
     print_state(oct, cout);
 
     int lev = oct.finest_level();
     for(cgt::CellIterator c(* oct.LevelGrid(lev)); ! c.IsDone(); ++c) {
-      OctCell oc(* (oct.TheHierGrid()), *c, lev);
+      oct_cell_type oc(* (oct.TheHierGrid()), *c, lev);
       if(oct.isLeaf(oc)) {
 	cout << "Splitting cell " << (*c).index() << " => ";
 	oct.split_cell(oc);
@@ -67,7 +67,7 @@ int main() {
 
     lev = oct.finest_level() -1;
     for(cgt::CellIterator c(* oct.LevelGrid(lev)); ! c.IsDone(); ++c) {
-      OctCell oc(* (oct.TheHierGrid()), *c, lev);
+      oct_cell_type oc(* (oct.TheHierGrid()), *c, lev);
       if(oct.isBranch(oc)) {
 	cout << "Joining cell " << (*c).index() << " => ";
 	oct.join_cells(oc); 
@@ -94,7 +94,7 @@ int main() {
 
     lev = oct.coarsest_level();
     for(cgt::CellIterator c(* oct.LevelGrid(lev)); ! c.IsDone(); ++c) {
-      OctCell oc(* (oct.TheHierGrid()), *c, lev);
+      oct_cell_type oc(* (oct.TheHierGrid()), *c, lev);
       if(oct.isBranch(oc)) {
 	cout << "Joining cell " << (*c).index() << " => ";
 	oct.join_cells(oc); 

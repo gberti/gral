@@ -72,19 +72,19 @@ public:
   typedef hier_grid_type                           hgt;
   typedef typename hgt::pattern_grid_type          pattern_grid_type;
   typedef typename hgt::level_handle               level_handle;
-  typedef typename hgt::HierCell                   HierCell;
+  typedef typename hgt::hier_cell_type                   hier_cell_type;
   typedef typename hgt::CellChildIterator          HierCellChildIterator;
-  typedef typename flatgt::CellIterator            FlatCellIterator;
-  typedef typename flatgt::Cell                    FlatCell;
+  typedef typename flatgt::CellIterator            flat_cell_iterator;
+  typedef typename flatgt::Cell                    flat_cell_type;
 
   typedef octree_element_base_t<flat_grid_type, flatgt> element_base_type;
   typedef leaf_cell_iterator_t<element_base_type>       LeafCellIterator;
 
   //FIXME: these should be separate types instead of typedefs
-  typedef HierCell              OctCell;
+  typedef hier_cell_type              oct_cell_type;
   typedef HierCellChildIterator OctCellChildIterator;
 
-  typedef OctCell               Cell;
+  typedef oct_cell_type               Cell;
   typedef OctCellChildIterator  CellChildIterator;
 
   typedef size_t size_type;
@@ -93,8 +93,8 @@ public:
   //typedef hier_grid_table<active_grid_range_type>  subrange_table_type;
 
   // FIXME: partial_gf is no good impl. of a cell range. ElementIterator
-  // is not guaranteed to traverse only Cells with value 'true'. (see deactivate(OctCell)).
-  typedef hier::hier_partial_grid_function<HierCell, bool>  subrange_table_type;
+  // is not guaranteed to traverse only Cells with value 'true'. (see deactivate(oct_cell_type)).
+  typedef hier::hier_partial_grid_function<hier_cell_type, bool>  subrange_table_type;
   typedef typename subrange_table_type::flat_gf_type          grid_range_type;
 
   typedef typename grid_range_type::CellIterator ActiveLevelCellIterator;
@@ -140,7 +140,7 @@ public:
       \pre  <tt> is_leaf(c) == false </tt>
       \post <tt> is_leaf(c) == true  </tt> 
   */
-  void join_cells(OctCell const& newLeaf);
+  void join_cells(oct_cell_type const& newLeaf);
 
   /*! \brief split the leaf cell \c oldLeaf, and add new layer if necessary.
 
@@ -151,7 +151,7 @@ public:
      
    */ 
 
-  void split_cell(OctCell const& oldLeaf); 
+  void split_cell(oct_cell_type const& oldLeaf); 
 
   /*! \brief add a new coarser level
       \pre the current coarsest level can be coarsened with the refinement pattern
@@ -161,18 +161,18 @@ public:
   //@}
 
 
-  /*! \name Operations on OctCells
+  /*! \name Operations on oct_cell_types
    */
   //@{
   /*! \brief true if \c is part of the octree
    */
-  bool isActive(HierCell const& c) const { return active_range(c.level())(c);}
+  bool isActive(hier_cell_type const& c) const { return active_range(c.level())(c);}
   /*! A cell is a leaf if there are no sons, that is, 
     all child cells are inactive.
  
     \note If only some of the children are inactive, the cell is not a leaf.
     */
-  bool isLeaf(HierCell const& c)   const 
+  bool isLeaf(hier_cell_type const& c)   const 
     { 
       return isActive(c) 
 	&& (c.level() == finest_level() 
@@ -180,15 +180,15 @@ public:
     }
   /*! \brief True if \c is active but not a leaf.
   */
-  bool isBranch(HierCell const& c) const
+  bool isBranch(hier_cell_type const& c) const
   {
     return isActive(c) && ! isLeaf(c);
   }
 
   //! return the level of \c c
-  level_handle  level(HierCell c)   const { return c.level();}
+  level_handle  level(hier_cell_type c)   const { return c.level();}
   //! return the youngest ancestor of \c subLeaf which is in the octree (i.e. is a leaf).
-  OctCell leaf_ancestor(HierCell subLeaf) const;
+  oct_cell_type leaf_ancestor(hier_cell_type subLeaf) const;
   //@}
 
   /*! \name Level navigation
@@ -235,17 +235,17 @@ private:
 
   /*! \brief mark the cell as active
    */
-  void activate (OctCell c) { active_range[c.level()][c] = true;}
+  void activate (oct_cell_type c) { active_range[c.level()][c] = true;}
   /*! \brief unmark the cell as active
       \todo This works only if the default value is false!
    */
-  void deactivate (OctCell c) { active_range[c.level()].undefine(c); }
+  void deactivate (oct_cell_type c) { active_range[c.level()].undefine(c); }
   //! mark the cell as active and leaf
-  void make_leaf  (OctCell c) { active_range[c.level()][c] = true;}
+  void make_leaf  (oct_cell_type c) { active_range[c.level()][c] = true;}
   //! mark the cell as an internal octcell (active, but no leaf)
-  void make_branch(OctCell c) { active_range[c.level()][c] = true;}
+  void make_branch(oct_cell_type c) { active_range[c.level()][c] = true;}
 
-  void join_cells_rec(OctCell const& newLeaf);
+  void join_cells_rec(oct_cell_type const& newLeaf);
 
 }; // class Octree
 
@@ -268,10 +268,10 @@ private:
     typedef typename hgt::flat_grid_type         flat_grid_type;
     typedef typename hgt::flatgt                 flatgt;
     typedef typename hgt::level_handle           level_handle;
-    // typedef typename hgt::FlatCell               FlatCell;
+    // typedef typename hgt::flat_cell_type               flat_cell_type;
 
     // typedef typename octree_type::OctVertex      Vertex;
-    typedef typename ogt::OctCell        OctCell;
+    typedef typename ogt::oct_cell_type        oct_cell_type;
 
     typedef typename gt::Cell            Cell;
 
@@ -317,11 +317,11 @@ private:
     typedef typename gt  ::Cell      Cell;
 
     typedef typename base::ogt      ogt;   
-    typedef typename ogt::OctCell   OctCell;
+    typedef typename ogt::oct_cell_type   oct_cell_type;
     typedef typename ogt::ActiveLevelCellIterator ActiveLevelCellIterator;
 
     typedef typename base::hgt       hgt;
-    typedef typename hgt::FlatCell   FlatCell;
+    typedef typename hgt::flat_cell_type   flat_cell_type;
 
   private:
     ActiveLevelCellIterator c;
@@ -342,7 +342,7 @@ private:
       cv();  ++c; make_valid(); return *this;
     }
 
-    FlatCell Flat() const { return *c;}
+    flat_cell_type Flat() const { return *c;}
     bool valid() const { return ! IsDone() && on_leaf();}
     void cv()    const { REQUIRE( (bound() && valid()), "", 1);}
   private:
@@ -357,7 +357,7 @@ private:
       }
     }
     void make_valid_c() { while(!c.IsDone() && ! on_leaf()) ++c;}
-    bool on_leaf() const { return ! c.IsDone() && TheOctree()->isLeaf(OctCell(* TheHierGrid(), *c, level()));}
+    bool on_leaf() const { return ! c.IsDone() && TheOctree()->isLeaf(oct_cell_type(* TheHierGrid(), *c, level()));}
   }; // class leaf_cell_iterator_t<BASE>
 
 
