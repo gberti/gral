@@ -4,8 +4,10 @@ include $(CONFIG)
 
 
 concepts:
-	(cd hyperlatex; hyperlatex-2.3.1 top; \
-         cp $(HOME)/WWW/icons/*.xbm html/;\
+	(cd hyperlatex;\
+          (cd bilder; gmake all; gmake clean);\
+          hyperlatex-2.3.1 top; \
+          cp $(HOME)/WWW/icons/*.xbm html/;\
          (cd html; rm -f bilder; ln -s ../bilder ./; \
           ln -s GridVertex.html  Vertex.html;\
           ln -s GridEdge.html   Edge.html;\

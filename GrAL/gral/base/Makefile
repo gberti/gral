@@ -49,8 +49,8 @@ tar:
          rm -rf gral/base;\
          cvs -d /home/nmwr/CVS export -r HEAD gral/base; \
           (cd gral/base;\
-            gmake doc; \
-            gmake tarclean; \
+            gmake doc 'CONFIG=/home/berti/tmp/gral/base/mk.config'; \
+            gmake tarclean 'CONFIG=/home/berti/tmp/gral/base/mk.config'; \
            ); \
          tar cf gral-base.tar gral/base; \
          cvs -d /home/nmwr/CVS release gral/base;\
