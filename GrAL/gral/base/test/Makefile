@@ -3,6 +3,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 
 SUBDIRS = boundary-grid  \
+          boundary-range-nd \
           cell-as-volume \
           cell-on-cell-iterator \
           cell-on-vertex-iterator \
@@ -26,6 +27,7 @@ SUBDIRS = boundary-grid  \
           restricted-component-view \
           shrunk-grid-view \
           vertex-iterator-of-cell-set  \
+          vertex-on-vertex-iterator \
           vertex-stars 
 
 
