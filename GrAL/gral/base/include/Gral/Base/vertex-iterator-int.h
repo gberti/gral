@@ -16,6 +16,92 @@ template<class GT>
 inline bool operator==(vertex_iterator_int<GT> const& lhs, 
 		       vertex_iterator_int<GT> const& rhs);
 
+// mixin for vertex-on-vertex-iteration
+
+// default: no VertexOnVertexIterator defined
+template<class GT, unsigned HASVTXONVTX>
+class vertex_iterator_int_vov_aux {};
+
+// default: no EdgeOnVertexIterator defined
+template<class GT, unsigned HASEDGEONVTX>
+class vertex_iterator_int_eov_aux {};
+
+// default: no FaceOnVertexIterator defined
+template<class GT, unsigned HASFACEONVTX>
+class vertex_iterator_int_fov_aux {};
+
+// default: no FacetOnVertexIterator defined
+template<class GT, unsigned HASFACETONVTX>
+class vertex_iterator_int_fctov_aux {};
+
+// default: no CellOnVertexIterator defined
+template<class GT, unsigned HASCELLONVTX>
+class vertex_iterator_int_cov_aux {};
+
+
+// specialization: VertexOnVertexIterator defined
+template<class GT>
+class vertex_iterator_int_vov_aux<GT,1>
+{
+  typedef vertex_iterator_int<GT> vertex_iter_type;
+  vertex_iter_type const& to_derived() const { return static_cast<vertex_iter_type const&>(*this);}
+public:
+  typedef typename GT::VertexOnVertexIterator VertexOnVertexIterator;
+  VertexOnVertexIterator FirstVertex() const { return VertexOnVertexIterator(to_derived());}
+  unsigned NumOfVertices() const { return to_derived().TheGrid().NumOfVertices(to_derived());}
+};
+
+// specialization: EdgeOnVertexIterator defined
+template<class GT>
+class vertex_iterator_int_eov_aux<GT,1>
+{
+  typedef vertex_iterator_int<GT> vertex_iter_type;
+  vertex_iter_type const& to_derived() const { return static_cast<vertex_iter_type const&>(*this);}
+public:
+  typedef typename GT::EdgeOnVertexIterator EdgeOnVertexIterator;
+  EdgeOnVertexIterator FirstEdge() const { return EdgeOnVertexIterator(to_derived());}
+  unsigned NumOfEdges() const { return to_derived().TheGrid().NumOfEdges(to_derived());}
+};
+
+// specialization: FaceOnVertexIterator defined
+template<class GT>
+class vertex_iterator_int_fov_aux<GT,1>
+{
+  typedef vertex_iterator_int<GT> vertex_iter_type;
+  vertex_iter_type const& to_derived() const { return static_cast<vertex_iter_type const&>(*this);}
+public:
+  typedef typename GT::FaceOnVertexIterator FaceOnVertexIterator;
+  FaceOnVertexIterator FirstFace() const { return FaceOnVertexIterator(to_derived());}
+  unsigned NumOfFaces() const { return to_derived().TheGrid().NumOfFaces(to_derived());}
+};
+
+// specialization: FacetOnVertexIterator defined
+template<class GT>
+class vertex_iterator_int_fctov_aux<GT,1>
+{
+  typedef vertex_iterator_int<GT> vertex_iter_type;
+  vertex_iter_type const& to_derived() const { return static_cast<vertex_iter_type const&>(*this);}
+public:
+  typedef typename GT::FacetOnVertexIterator FacetOnVertexIterator;
+  FacetOnVertexIterator FirstFacet() const { return FacetOnVertexIterator(to_derived());}
+  unsigned NumOfFacets() const { return to_derived().TheGrid().NumOfFacets(to_derived());}
+};
+
+
+// specialization: CellOnVertexIterator defined
+template<class GT>
+class vertex_iterator_int_cov_aux<GT,1>
+{
+  typedef vertex_iterator_int<GT> vertex_iter_type;
+  vertex_iter_type const& to_derived() const { return static_cast<vertex_iter_type const&>(*this);}
+public:
+  typedef typename GT::CellOnVertexIterator CellOnVertexIterator;
+  CellOnVertexIterator FirstCell() const { return CellOnVertexIterator(to_derived());}
+  unsigned NumOfCells() const { return to_derived().TheGrid().NumOfCells(to_derived());}
+};
+
+
+
 /*! Generic vertex / vertex iterator type,
     based on vertices being numbered consecutively.
    
@@ -24,7 +110,14 @@ inline bool operator==(vertex_iterator_int<GT> const& lhs,
  */
 
 template<class GT>
-class vertex_iterator_int : public GT {
+class vertex_iterator_int : 
+    public GT,
+    public vertex_iterator_int_vov_aux  <GT, has_VertexOnVertexIterator<GT>::result>,
+    public vertex_iterator_int_eov_aux  <GT,   has_EdgeOnVertexIterator<GT>::result>,
+    public vertex_iterator_int_fov_aux  <GT,   has_FaceOnVertexIterator<GT>::result>,
+    public vertex_iterator_int_fctov_aux<GT,  has_FacetOnVertexIterator<GT>::result>,
+    public vertex_iterator_int_cov_aux  <GT,   has_CellOnVertexIterator<GT>::result>
+ {
   typedef vertex_iterator_int< GT>   self;
   typedef GT                         gt;
 public:
@@ -36,7 +129,7 @@ protected:
 public:
   vertex_iterator_int() : g(0), v(-1) {}
   explicit 
-  vertex_iterator_int(grid_type const&         gg, int vv = 0) : g(&gg), v(vv) {}
+  vertex_iterator_int(grid_type const&         gg, int vv = 0) : g(gg), v(vv) {}
   explicit 
   vertex_iterator_int(ref_ptr<grid_type const> gg, int vv = 0) : g(gg), v(vv) {}
 
