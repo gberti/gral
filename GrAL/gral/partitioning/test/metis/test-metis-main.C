@@ -6,6 +6,7 @@
 
 // GrAL Partitioning
 #include "Gral/Partitioning/metis-partitioning.h"
+#include "Gral/Partitioning/partitioning.h"
 
 // GrAL Complex2D
 #include "Gral/Grids/Complex2D/complex2d.h"
@@ -22,7 +23,7 @@
 #include <fstream>
 #include <iostream>
 #include <algorithm>
-
+#include <iterator>
 
 int main() {
   using namespace GrAL;
@@ -39,7 +40,8 @@ int main() {
 
   MetisPartitioning MP;
   int np = 2;
-  grid_function<gt::Cell, int> parts(G);
+  //  grid_function<gt::Cell, int> parts(G);
+  partitioning<grid_type> parts(G);
 
   MP.calculate_cell_partitioning(G,parts,np);
 
