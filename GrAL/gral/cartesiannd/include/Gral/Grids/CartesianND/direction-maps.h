@@ -92,7 +92,7 @@ namespace cartesiannd {
     
     struct initializer {
       initializer() { 
-	std::cout << "initializer delta_map<" << DIM << ">" << std::endl;  
+	// std::cout << "initializer delta_map<" << DIM << ">" << std::endl;  
 	delta_map<DIM>::init_();
       }
     };
@@ -179,7 +179,9 @@ namespace cartesiannd {
     }
 
     std::vector<index_map_type>  maps;
-    unsigned num_of_maps() const { return maps.size();}
+    unsigned num_of_maps()       const { return maps.size();}
+    unsigned num_of_directions() const { return maps.size();}
+    
   
     index_map_type      & operator[](int m)       { return maps[m];}
     index_map_type const& operator[](int m) const { return maps[m];}
@@ -203,6 +205,8 @@ namespace cartesiannd {
     unsigned& operator[](unsigned m)       { return offsets[m];}
     unsigned  operator[](unsigned m) const { return offsets[m];}
     unsigned  operator()(unsigned m) const { return offsets[m];}
+    unsigned  size()   const { return offsets.size();}
+    unsigned  beyond() const { return offsets.back();}
     
     void print(std::ostream& out) const { 
       for(unsigned m = 0; m < offsets.size(); ++m)
