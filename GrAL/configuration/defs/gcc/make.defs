@@ -4,7 +4,7 @@
 CCC      =  g++
 CCFLAGS += -Wall 
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
-CCFLAGS += -DNMWR_PARTIAL_SPEC
+CCFLAGS += 
 CCFLAGS += -ftemplate-depth-35
 
 DEPEND    =$(CCC)
