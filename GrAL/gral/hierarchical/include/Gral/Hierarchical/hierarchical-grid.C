@@ -129,6 +129,23 @@ namespace hierarchical {
     return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), offset, offset+sz+cell_index_type(1))); 
   }
 
+  template<class Grid, class GT>
+  template<class ELEMENTBASE, class FLATELEM>
+  temporary<typename hgrid_cartesian<Grid,GT>::cart_subrange_type>
+  hgrid_cartesian<Grid,GT>::descendants(h_element_t<ELEMENTBASE, FLATELEM> const& p,
+					typename hgrid_cartesian<Grid,GT>::level_handle lev) const 
+  {
+    unsigned level_diff = lev - p.level();
+    REQUIRE(level_diff >= 0, "leveldiff=" << level_diff,1);
+    cell_index_type   sz = power(the_pattern.cell_size(), level_diff);
+    vertex_index_type low    = product(p.Flat().vertex_index_low(), sz);
+    vertex_index_type beyond = product(p.Flat().vertex_index_high(), sz) + vertex_index_type(1);
+    // assume vertex based arguments to subrange
+    return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), low, beyond));
+  }
+
+
+
 } // namespace hierarchical
 
 #endif
