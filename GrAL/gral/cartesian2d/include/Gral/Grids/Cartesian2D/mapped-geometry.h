@@ -53,17 +53,17 @@ public:
   mapped_geometry_reg2d_base(const CoordMap& ff, const RegGrid2D& gg) 
     : f(ff), g(&gg), ll(gg.ll()), ur(gg.ur())
     { 
-      dx = (ur.x - ll.x != 0 ? 1.0 / (ur.x -ll.x) 
+      dx = (ur.x() - ll.x() != 0 ? 1.0 / (ur.x() -ll.x()) 
 	    : 0.0);
-      dy = (ur.y - ll.y != 0 ? 1.0 / (ur.y -ll.y) 
+      dy = (ur.y() - ll.y() != 0 ? 1.0 / (ur.y() -ll.y()) 
 	    : 0.0);
     }
   mapped_geometry_reg2d_base(const CoordMap& ff, const RegGrid2D& gg,
 				 const index_type& LL, const index_type& UR) 
     : f(ff), g(&gg), ll(LL), ur(UR) {
-      dx = (ur.x - ll.x != 0 ? 1.0 / (ur.x -ll.x) 
+      dx = (ur.x() - ll.x() != 0 ? 1.0 / (ur.x() -ll.x()) 
 	    : 0.0);
-      dy = (ur.y - ll.y != 0 ? 1.0 / (ur.y -ll.y) 
+      dy = (ur.y() - ll.y() != 0 ? 1.0 / (ur.y() -ll.y()) 
 	    : 0.0);
   }
   //@}
@@ -88,8 +88,8 @@ public:
 
 private:
   // canonical embedding into the unit 2-cube [0,1]x[0,1]
-  double unit_xcoord(const Vertex& v)  const { return (v.x() -ll.x) *dx;}
-  double unit_ycoord(const Vertex& v)  const { return (v.y() -ll.y) *dy;}
+  double unit_xcoord(const Vertex& v)  const { return (v.x() -ll.x()) *dx;}
+  double unit_ycoord(const Vertex& v)  const { return (v.y() -ll.y()) *dy;}
 
   double dx,dy;
   CoordMap f;  // should this be a reference?
