@@ -38,32 +38,32 @@ void check_composite_grid(const CompositeGrid<CoarseG,FineG>& CG)
   grid_function<Cell,int> Num(CG.TheCoarseGrid());
   enumerate(CG.TheCoarseGrid(),Num,0);
   for(CellIterator C = CG.TheCoarseGrid().FirstCell(); ! C.IsDone(); ++C) {
-    std::cerr << "-------------------------------------------------\n"
+    std::cout << "-------------------------------------------------\n"
 		  << "checking cell " << Num(*C) << "\n\n";
     for(NeighbourIterator Nb = CG.FirstNeighbour(*C); ! Nb.IsDone(); ++Nb) {
-       std::cerr << "   |CopiedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+       std::cout << "   |CopiedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).vertices(*C ).copied() .size() << " = "
 		    <<  CG.Overlap(*C).vertices(*Nb ).exposed() .size() << " = "
 		    << "|ExposedVertices(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-       std::cerr << "   |CopiedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+       std::cout << "   |CopiedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).cells(*C ).copied() .size() << " = "
 		    <<  CG.Overlap(*C).cells(*Nb ).exposed() .size() << " = "
 		    << "|ExposedCells(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-       std::cerr << "   |SharedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+       std::cout << "   |SharedVertices(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).vertices(*C ).shared() .size() << " = "
 		    <<  CG.Overlap(*C).vertices(*Nb ).shared() .size() << " = "
 		    << "|SharedVertices(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
       
-       std::cerr << "   |SharedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
+       std::cout << "   |SharedCells(" << Num(*Nb) << "," << Num(*C) << ")| = " 
 		    <<  CG.Overlap(*Nb).cells(*C ).shared() .size() << " = "
 		    <<  CG.Overlap(*C).cells(*Nb ).shared() .size() << " = "
 		    << "|SharedCells(" << Num(*C ) << "," << Num(*Nb) << ")|\n"; 
 
 
     }
-     std::cerr << "-------------------------------------------------\n";
+     std::cout << "-------------------------------------------------\n";
 
   }
   
