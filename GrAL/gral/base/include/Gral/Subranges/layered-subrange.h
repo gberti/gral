@@ -50,6 +50,8 @@ public:
   layered_vertex_range(const grid_type& g) : base(g) {}
 
   void append_layer() { layers.push_back(TheContainer().size());}
+  //FIXME: should either make sure that last layer is empty or remove cells!
+  void remove_layer() { layers.pop_back();} 
 
   //---------------------- iteration  -------------------------------
 
@@ -74,7 +76,7 @@ public:
 
   range_type_ref AllLayers() const { return range();}
   range_type_ref LastLayer() const { return Layer(NumOfLayers());}
-
+  
   
 private:
   
@@ -113,6 +115,8 @@ public:
   layered_cell_range(const grid_type& g) : base(g) {}
 
   void append_layer() { layers.push_back(TheContainer().size());}
+  //FIXME: should either make sure that last layer is empty or remove cells!
+  void remove_layer() { layers.pop_back();} 
 
   //---------------------- iteration  -------------------------------
 

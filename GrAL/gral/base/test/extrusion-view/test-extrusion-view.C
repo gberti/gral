@@ -12,26 +12,13 @@
 
 template class extrusion_view::grid<Complex2D>;
 
-template<class A, class R>
-class constant {
-public:
-  typedef A argument_type;
-  typedef R result_type;
-private:
-  result_type r;
-public:
-  constant() {}
-  constant(result_type rr) : r(rr) {}
-
-  result_type operator()(argument_type const&) const { return r;}
-};
 
 int main() {
   using namespace std;
 
     typedef grid_types<extrusion_view::grid<Complex2D> > exgt;
     typedef coordN<3> ext_coord_type;
-    typedef constant<exgt::Vertex,  ext_coord_type> mapping_type;
+    typedef constant<exgt::Vertex, ext_coord_type> mapping_type;
     mapping_type f(ext_coord_type(0,0,1));
 
   {

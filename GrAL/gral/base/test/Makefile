@@ -2,12 +2,32 @@
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 
-SUBDIRS = cell-on-cell-iterator connected-components element-range enumerated-subrange \
-          boundary-grid  construct-isomorphism  flag partial-grid-morphism \
-          disjoint-union vertex-stars shrunk-grid-view \
-          vertex-iterator-of-cell-set  edge-iterator-of-cell-set facet-iterator-of-cell-set \
-          extend-grid-types polygon1d \
-          extrusion-view grid-as-volume geometric-types
+SUBDIRS = boundary-grid  \
+          cell-on-cell-iterator \
+          cell-on-vertex-iterator \
+          connected-components \
+          construct-isomorphism  \
+          disjoint-union \
+          edge-iterator-of-cell-set \
+          element-grid \
+          element-range \
+          enumerated-subrange \
+          extend-grid-types \
+          extrusion-view \
+          facet-iterator-of-cell-set \
+          flag \
+          geometric-types \
+          grid-as-volume \
+          incidence-hulls \
+          multi-grid-function \
+          partial-grid-morphism \
+          polygon1d \
+          restricted-component-view \
+          shrunk-grid-view \
+          vertex-iterator-of-cell-set  \
+          vertex-stars 
+
+
 
 
 include  $(CONFIG)
