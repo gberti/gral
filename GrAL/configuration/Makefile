@@ -11,6 +11,8 @@ install-headers:
 
 new: libclean
 
+all:
+
 test:
 
 doc:

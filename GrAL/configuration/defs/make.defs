@@ -45,8 +45,9 @@ export RECURSIVETARGETS=$(CONFIGURATION)/defs/recursive-targets
 export PREFIX=$(HOME)/lib/gral#
 
 # Modulse required by current module
+ifndef DEPMODULES
 export DEPMODULES= $(shell cat $(ROOT)/dependencies)
-
+endif
 
 # exporting PDW could give trouble in subdir Makefiles
 # which try to give default values to other variables such as CONFIG
@@ -113,3 +114,5 @@ IFLAGS += $(LOCAL_IFLAGS)
 ifdef PROFILING
 include $(CONFIGURATION)/defs/$(CCNAME)/profiling.defs
 endif
+
+.PHONY: test
