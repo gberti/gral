@@ -3,6 +3,9 @@
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/Grids/Complex3D/all.h"
 
+#include "Geometry/affine-mapping.h"
+#include "Geometry/matrix.h"
+
 #include "Gral/Base/grid-morphism.h"
 #include "Gral/Base/partial-grid-morphism.h"
 
@@ -34,10 +37,11 @@ int main() {
     typedef grid_types<cart_grid_type> gt;
     typedef gt::vertex_index_type      it;
     typedef cartesiannd::default_coord<cart_grid_type>::type coord_type;
-    typedef stdext::identity<coord_type>                     mapping_type;
+    typedef matrix<2,2,0>                                       matrix_type;
+    typedef affine_mapping<matrix_type, coord_type>             mapping_type;
     typedef cartesiannd::mapped_geometry<cart_grid_type, mapping_type>  geometry_type;
     cart_grid_type R(it(2,2));
-    geometry_type  GeomR(R);
+    geometry_type  GeomR(R, mapping_type::identity());
     //  complexnd  ::ComplexND<2> G;
     typedef grid_types<Complex2D> gtc;
     Complex2D G;
