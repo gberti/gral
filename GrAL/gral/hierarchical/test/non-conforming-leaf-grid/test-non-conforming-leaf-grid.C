@@ -10,6 +10,7 @@
 
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
+#include "Gral/Grids/CartesianND/all.h"
 
 #include "Gral/IO/geomview-format-output.h"
 #include "Gral/IO/gmv-format-output2d.h"
@@ -36,33 +37,35 @@ void print_state(OCTREE const& oct, std::ostream& out)
 
 // explicit instantiations
 namespace octree {
-  typedef Octree<cartesian2d::CartesianGrid2D> octree2d_type;
-  typedef Octree<cartesian3d::CartesianGrid3D> octree3d_type;
+  typedef Octree<cartesiannd::grid<2> > octree2d_type;
+  typedef Octree<cartesiannd::grid<3> > octree3d_type;
+
+  //  typedef Octree<cartesian2d::CartesianGrid2D> octree2d_type;
+  //  typedef Octree<cartesian3d::CartesianGrid3D> octree3d_type;
 
   template class non_conforming_leafgrid<octree2d_type>;
   typedef non_conforming_leafgrid<octree2d_type> leafgrid2d;
-  // template class non_conforming_leafgrid<octree3d_type>;
- 
+  template class non_conforming_leafgrid<octree3d_type>;
+  typedef non_conforming_leafgrid<octree3d_type> leafgrid3d;
+
   typedef non_conforming_leafgrid<octree2d_type>::element_base_type elem_base2d_type;
-  // typedef non_conforming_leafgrid<octree3d_type>::element_base_type elem_base3d_type;
+  typedef non_conforming_leafgrid<octree3d_type>::element_base_type elem_base3d_type;
 
   
   template class hierarchical::h_vertex_t<elem_base2d_type>;
+  template class hierarchical::h_vertex_t<elem_base3d_type>;
   // cannot instantiate this, because CellChildIterator is not defined.
   // template class hierarchical::h_cell_t  <elem_base2d_type>;
-  template class hierarchical::h_vertex_on_cell_iterator_t  <elem_base2d_type>;
+
+  template class hierarchical::h_incidence_iterator_t<elem_base2d_type, vertex_type_tag, cell_type_tag>;
+  template class hierarchical::h_incidence_iterator_t<elem_base3d_type, vertex_type_tag, cell_type_tag>;
+
   typedef  leafgrid2d::CellIterator CellIterator2d;
-  //  template class vertex_iterator_of_cell_set<CellIterator2d, leafgrid2d>;
+  template class vertex_iterator_of_cell_set<CellIterator2d, leafgrid2d>;
+  typedef  leafgrid3d::CellIterator CellIterator3d;
+  template class vertex_iterator_of_cell_set<CellIterator3d, leafgrid3d>;
 }
 
-
-template<class T, unsigned N>
-struct point_traits<tuple<T,N> > : public point_traits_fixed_size_array<tuple<T,N>, T, N> {};
-/*
-template<class T>
-static
-T  point_traits<tuple<T,2> >::z(tuple<T,2> const&) { return 0;}
-*/
 
 double f(tuple<double,2> X) {
  typedef  point_traits<tuple<double, 2> > pt;
@@ -101,13 +104,14 @@ int main() {
     typedef cart::CartesianGrid2D               cart_grid_type;
     typedef tuple<double,2>                     coord_type;
     */
-    namespace cart = cartesian3d;
-    typedef cart::CartesianGrid3D               cart_grid_type;
+    namespace cart = cartesiannd; // cartesian3d;
+    //typedef cart::CartesianGrid3D               cart_grid_type;
+    typedef cartesiannd::grid<3>                cart_grid_type;
     typedef tuple<double,3>                     coord_type;
 
     typedef grid_types<cart_grid_type>          cgt;
     typedef stdext::identity<coord_type>        mapping_type;
-    typedef cart::mapped_geometry<mapping_type> cart_geom_type;
+    typedef cart::mapped_geometry<cart_grid_type, mapping_type> cart_geom_type;
    
 
     typedef octree::Octree<cart_grid_type>               octree_type;
@@ -174,9 +178,10 @@ int main() {
     ConstructGrid(GMVOut,L,Geom);
     */
 
+    /*
     OstreamGMV3DFmt GMVOut("leaf3d.gmv");
     ConstructGrid(GMVOut,L,Geom);
-
+    */
   }
   
 }

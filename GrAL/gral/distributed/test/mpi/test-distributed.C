@@ -189,7 +189,7 @@ int main(int argc, char* argv[]) {
 
 
   for(RgeCellIterator C = MpiG.LocalRange().FirstCell(); ! C.IsDone(); ++C)
-    for(fgt::VertexOnCellIterator VC = (*C).FirstVertex(); ! VC.IsDone(); ++VC) {
+    for(fgt::VertexOnCellIterator VC(*C); ! VC.IsDone(); ++VC) {
       dgfv2[*VC]  += 1;
     }
   

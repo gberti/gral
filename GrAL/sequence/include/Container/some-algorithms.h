@@ -35,6 +35,8 @@ InputIt next(InputIt i, unsigned n)
     However, as a filter rather operates on the
     corresponding value_type, this version seems to be 
     more natural.
+
+   \todo Use std::transform(b,e,dest,f) instead.
 */
 template<class InputIt, class OutputIt, class Filter>
 inline
