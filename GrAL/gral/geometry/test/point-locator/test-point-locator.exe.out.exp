@@ -1,0 +1,48 @@
+Bucket grid: [0 0,1 1]
+Bucket histogram:
+1 cells: 1 buckets.
+0 0: in cell 0 0
+-1 0:  not in grid
+1 1: in cell 0 0
+0.5 0.5: in cell 0 0
+1 0: in cell 0 0
+0 1: in cell 0 0
+Bucket grid: [0 0,10 10]
+Bucket histogram:
+3 cells: 5 buckets.
+4 cells: 20 buckets.
+5 cells: 5 buckets.
+6 cells: 40 buckets.
+7 cells: 5 buckets.
+9 cells: 25 buckets.
+0 0: in cell 0 0
+-1 0: in cell 0 0
+1 1:  projected to 0 1
+0 0.5: in cell 0 0
+0 1: in cell 0 0
+0 5: in cell 4 0
+-0.5 9.5: in cell 9 0
+-9.5 9.5: in cell 9 9
+-9.5 0.5: in cell 0 9
+Bucket grid: [0 0,10 10]
+Bucket histogram:
+1 cells: 6 buckets.
+2 cells: 9 buckets.
+3 cells: 3 buckets.
+4 cells: 3 buckets.
+5 cells: 11 buckets.
+6 cells: 5 buckets.
+7 cells: 8 buckets.
+8 cells: 5 buckets.
+9 cells: 12 buckets.
+10 cells: 6 buckets.
+12 cells: 5 buckets.
+0 0: in cell 0 0
+-1 0:  projected to -1 1
+1 1: in cell 0 0
+0 0.5: in cell 0 0
+0 1: in cell 0 0
+0 5: in cell 2 2
+-0.5 9.5: in cell 4 4
+-9.5 9.5: in cell 0 9
+-9.5 0.5:  not in grid
