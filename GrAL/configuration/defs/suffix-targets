@@ -76,29 +76,38 @@ additional-doc: additional-predoc additional-postdoc
 
 # doxygen specific targets
 
+DOXYGEN=$(shell which doxygen)
 DOCROOT=$(ALLROOT)
 DOXYPATH=doxygen/html
 DOXYCFG=$(CONFIGURATION)/doxycfg/
+DOXYHEADER=$(DOXYCFG)/header.html
+DOXYFOOTER=$(DOXYCFG)/footer.html
 RELPATH=../../..#
 ADDRELPATH=.#
 RELROOT=$(RELPATH)/$(ADDRELPATH)#
 
-DOXYGEN=$(shell which doxygen)
-doxy:
+CONCEPTPATH=gral/base/doc/hyperlatex/html#
+GRALCONCEPTS=$(RELROOT)/$(CONCEPTPATH)#
+
+# hooks to define in modules if necessary (e.g. recursive doxy)
+additional-doxy:
+additional-installdox:
+
+doxy: additional-doxy
 	$(DOXYCFG)/filter-doxy-cfg.pl  -root $(ALLROOT) -binpath $(LOCALBINPATH) \
         $(DOXYCFG)/doxy.paths.cfg                  > doxy.cfg.tmp
 	echo "@INCLUDE_PATH = $(DOXYCFG)"         >> doxy.cfg.tmp
 	cat doxy.local.cfg                        >> doxy.cfg.tmp
 	$(DOXYCFG)/generate-doxycfg.pl -root $(ALLROOT)  dependencies >> doxy.cfg.tmp
-	cp $(CONFIGURATION)/doxycfg/footer.html .
-	cp $(CONFIGURATION)/doxycfg/header.html .
+	cp $(DOXYHEADER) .
+	cp $(DOXYFOOTER) .
 	mkdir -p doxygen
 	(TEXINPUTS=$(TEXINPUTS):$(ROOT):$(CONFIGURATION)/tex; export TEXINPUTS; \
          $(DOXYGEN) doxy.cfg.tmp;)
 	rm -f footer.html header.html
 	rm -f doxy.cfg.tmp 
 
-installdox:
+installdox: additional-installdox
 	$(DOXYCFG)/generate-installdox.pl -root $(RELROOT) -path $(DOXYPATH)\
           dependencies > installdox.sh.tmp;
 	chmod ugo+x ./installdox.sh.tmp;
@@ -108,7 +117,7 @@ installdox:
             -root $(RELROOT) \
             -path $(DOXYPATH) \
             -stl $(STLURL) \
-            -gralconcepts $(RELROOT)/gral/base/doc/hyperlatex/html \
+            -gralconcepts $(GRALCONCEPTS) \
           $(DOXYPATH)/*.html
 
 DOCDEST=/dev/null
