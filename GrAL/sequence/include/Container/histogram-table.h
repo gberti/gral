@@ -37,7 +37,7 @@ public:
   template<class IT>
   histogram_table(IT b, IT e) 
   {
-    init();
+    init(b,e);
   }
   
   template<class IT>
