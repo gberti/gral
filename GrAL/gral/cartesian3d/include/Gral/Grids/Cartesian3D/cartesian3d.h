@@ -226,6 +226,11 @@ public:
   inline FacetIterator  FirstFacet()  const;
   inline FaceIterator   FirstFace()   const;
   inline CellIterator   FirstCell()   const;
+  inline VertexIterator EndVertex() const;
+  inline EdgeIterator   EndEdge()   const;
+  inline FacetIterator  EndFacet()  const;
+  inline FaceIterator   EndFace()   const;
+  inline CellIterator   EndCell()   const;
   /*@}*/
 
   /*! \name 1D element numbers
@@ -829,19 +834,29 @@ public:
 
 inline Vertex_Cartesian3D
 CartesianGrid3D::FirstVertex() const { return Vertex(*this);}
+inline Vertex_Cartesian3D
+CartesianGrid3D::EndVertex()   const { return Vertex(*this, vertex_handle(NumOfVertices()));}
 
 inline Edge_Cartesian3D
 CartesianGrid3D::FirstEdge() const { return Edge(*this);}
+inline Edge_Cartesian3D
+CartesianGrid3D::EndEdge()   const { return Edge(*this, edge_handle(NumOfEdges()));}
 
 
 inline CartesianGrid3D::Face
 CartesianGrid3D::FirstFace() const { return Face(*this);}
+inline CartesianGrid3D::Face
+CartesianGrid3D::EndFace()   const { return Face(*this, face_handle(NumOfFaces()));}
 
 inline Facet_Cartesian3D
 CartesianGrid3D::FirstFacet() const { return Facet(*this);}
+inline Facet_Cartesian3D
+CartesianGrid3D::EndFacet()   const { return Facet(*this, facet_handle(NumOfFacets()));}
 
 inline Cell_Cartesian3D
 CartesianGrid3D::FirstCell() const { return Cell(*this);}
+inline Cell_Cartesian3D
+CartesianGrid3D::EndCell()   const { return Cell(*this,cell_handle(NumOfCells()));}
 
 
 // inline functions of Cell_Cartesian3D

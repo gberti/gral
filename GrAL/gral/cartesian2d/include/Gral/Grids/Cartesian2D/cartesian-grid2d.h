@@ -940,6 +940,10 @@ public:
   EdgeIterator   FirstEdge()   const { return EdgeIterator(MinEdgeNum(),this);}
   EdgeIterator   FirstFacet()  const { return EdgeIterator(MinEdgeNum(),this);}
   CellIterator   FirstCell()   const { return CellIterator(MinCellNum(),this);}
+  VertexIterator EndVertex() const { return VertexIterator(MaxVertexNum()+1,this);}
+  EdgeIterator   EndEdge()   const { return EdgeIterator(MaxEdgeNum()+1,this);}
+  EdgeIterator   EndFacet()  const { return EdgeIterator(MaxEdgeNum()+1,this);}
+  CellIterator   EndCell()   const { return CellIterator(MaxCellNum()+1,this);}
   //@}
 
   /*! @name Element validity tests */
