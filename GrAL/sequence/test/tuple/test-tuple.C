@@ -49,4 +49,28 @@ int main() {
     REQUIRE_ALWAYS( (t1 >  t4), "",1);
     REQUIRE_ALWAYS( (t4 <  t1), "",1);
   }
+
+  {
+    typedef tuple<int,2> TI;
+    typedef tuple<float, 2> TF;    
+
+    REQUIRE_ALWAYS(product (TI(1,2), TI(3,4)) == TI(3,8), "",1);
+    REQUIRE_ALWAYS(quotient(TI(3,8), TI(3,4)) == TI(1,2), "",1);
+
+    REQUIRE_ALWAYS(floor_tuple(TF(0.5, 0.5)) == TF(0.0, 0.0), "",1);
+    REQUIRE_ALWAYS(ceil_tuple (TF(0.5, 0.5)) == TF(1.0, 1.0), "",1);
+    REQUIRE_ALWAYS(round_tuple(TF(0.6, 0.6)) == TF(1.0, 1.0), "",1);
+    REQUIRE_ALWAYS(round_tuple(TF(0.4, 0.4)) == TF(0.0, 0.0), "",1);
+    
+    REQUIRE_ALWAYS( does_divide(TI(2,3), TI(2,6)), "", 1);
+    REQUIRE_ALWAYS(!does_divide(TI(2,3), TI(2,5)), "", 1);
+
+    REQUIRE_ALWAYS(clamp_tuple(TI(0,0), TI(1,1), TI(0,0))  == TI(0,0), "res == " << clamp_tuple(TI(0,0), TI(1,1), TI(0,0)), 1);
+    REQUIRE_ALWAYS(clamp_tuple(TI(0,0), TI(1,1), TI(0,1))  == TI(0,1), "", 1);
+    REQUIRE_ALWAYS(clamp_tuple(TI(0,0), TI(1,1), TI(1,1))  == TI(1,1), "", 1);
+    REQUIRE_ALWAYS(clamp_tuple(TI(0,0), TI(1,1), TI(-1,1)) == TI(0,1), "", 1);
+    REQUIRE_ALWAYS(clamp_tuple(TI(0,0), TI(1,1), TI(-1,-1)) == TI(0,0), "", 1);
+    REQUIRE_ALWAYS(clamp_tuple(TI(0,0), TI(1,1), TI(-1,2)) == TI(0,1), "", 1);
+    REQUIRE_ALWAYS(clamp_tuple(TI(0,0), TI(1,1), TI(2,2))  == TI(1,1), "", 1);
+  }
 }
