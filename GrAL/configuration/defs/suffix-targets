@@ -11,6 +11,7 @@ clobber:   realclean
 # clean: stdclean
 stdclean: moduleclean
 	rm -f *.rpo *.d *.ti *.ii
+	rm -rf ti_files # KCC template DB
 
 .SUFFIXES: .C .cc .d .f
 
