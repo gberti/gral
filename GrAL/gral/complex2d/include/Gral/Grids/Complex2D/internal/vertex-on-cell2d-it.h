@@ -49,7 +49,7 @@ public:
   bool IsDone() const { return (lv == C.NumOfVertices());}
   operator bool() const { return !IsDone();}
 
-  int LocalNumber() const { return (lv+1);}
+  int local_handle() const { return (lv);}
 
 
   //------- anchors ---------------------

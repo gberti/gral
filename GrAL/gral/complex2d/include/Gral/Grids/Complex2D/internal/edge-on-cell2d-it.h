@@ -73,7 +73,7 @@ public:
  
   bool IsDone() const {return ((lf < 0) || (lf >= TheCell().NumOfEdges()));}
   operator bool() const { return !IsDone();}
-  int LocalNumber() const { return (lf+1);}
+  int local_handle() const { return lf;}
 
   inline vertex_handle v1() const;
   inline vertex_handle v2() const;

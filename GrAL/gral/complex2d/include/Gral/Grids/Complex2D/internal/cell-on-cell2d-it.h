@@ -54,7 +54,7 @@ public:
 
   bool IsDone()      const { return _f.IsDone();}
   operator    bool() const { return !IsDone();}
-  int  LocalNumber() const { return _f.LocalNumber(); }
+  int local_handle() const { return _f.local_handle();}
 
   Cell             TheCell()  const { return(_f.TheCell());}
   Complex2D const& TheGrid()  const { return(_f.TheGrid());}

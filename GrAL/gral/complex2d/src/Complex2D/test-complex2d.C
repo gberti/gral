@@ -172,7 +172,7 @@ void TestComplex2D::test_complex2d_iterators(const Complex2D& CC,
 	out << "  Edges:  ";
 	 gt::EdgeOnCellIterator e((*c).FirstEdge());
 	for(; ! e.IsDone(); ++e) {
-	  out << " No. " << e.LocalNumber() << " : ("
+	  out << " No. " << e.local_handle() << " : ("
 	      << geom.coord((*e).V1()) << ","
 	      << geom.coord((*e).V2()) << "), ";
 	}
