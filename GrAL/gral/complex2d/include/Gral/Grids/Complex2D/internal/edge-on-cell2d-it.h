@@ -16,6 +16,7 @@ class EdgeOnCell2D_Iterator : public complex2d_types {
   friend class Edge2D_Iterator;
 
   typedef EdgeOnCell2D_Iterator   self;
+  typedef archgt::Cell            archetype_cell;
 private:
   //----- DATA --------
   Cell            C;  // anchor
@@ -86,6 +87,8 @@ public:
 
   anchor_type const&  TheAnchor() const { return C;}
   Complex     const&  TheGrid()   const { return C.TheGrid();}
+
+  archetype_cell ArchetypeCell() const { return archetype_cell(C.TheArchetype(),lf);}
 
   //----------------- comparison  -----------------------
 
