@@ -1,15 +1,14 @@
 
 // $LICENSE
 
-#include "mystring.h"
 #include "GraphicsDevice/rgb-color.h"
 
-void rgb_color::print(ostream& out) const {
+void rgb_color::print(std::ostream& out) const {
   out << _r << ' ' << _g << ' ' << _b;
 }
 
-void rgb_color::read(istream& in) {
+void rgb_color::read(std::istream& in) {
   in >> _r >> _g >> _b;
 }
 
-string wrap_rgb_color::key() const { return "color";}
+std::string wrap_rgb_color::key() const { return "color";}

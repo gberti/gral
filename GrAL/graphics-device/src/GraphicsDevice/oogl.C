@@ -1,16 +1,8 @@
 
 // $LICENSE
 
-/*----------------------------------------------------------------------------
-    oogl.C		write routines for different geometric figures
-
-    by Heiko Schwierz, BTU-Cottbus, torus@math.tu-cottbus.de
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        July 4, 1997
------------------------------------------------------------------------------*/
 /*
-  Hirarchie der Elemente
+  Hierarchie der Elemente
 
 
   Basic Elements
@@ -36,8 +28,8 @@
 #include <math.h>
 #include <iomanip.h>
 #include <fstream.h>
-#include "mystring.h"
-#include "Visualization/colormap.h"
+#include <string>
+//#include "Visualization/colormap.h"
 
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/oogl.h"
@@ -57,18 +49,19 @@
 #include "GraphicsDevice/letter.h"
 //#include "GraphicsDevice/word.h"
 
-#include "RFunction/RFunction.h"
+#include "GraphicsDevice/transformation.h"
+#include "GraphicsDevice/graphics-device.h"
 
-GraphicsDevice OOGLDevice(ostream& out) {
+GraphicsDevice OOGLDevice(std::ostream& out) {
   out << setprecision(9);
   return GraphicsDevice(new oogl(&out));
 }
  
 
-GraphicsDevice OOGLDevice(const string& name) {
-  string name1 = name + ".oogl";
+GraphicsDevice OOGLDevice(const std::string& name) {
+  std::string name1 = name + ".oogl";
   // should be replaced by FileDevice or so.
-  ofstream* out = new ofstream(name1.c_str());
+  std::ofstream* out = new std::ofstream(name1.c_str());
   (*out) << setprecision(9);
   return GraphicsDevice(new oogl(out));
 }
@@ -79,6 +72,9 @@ oogl::oogl(ostream* out) : rendering_language(out)
   //the_stream() << "(normalization world keep)\n"
   //       << "(bbox-draw world no)\n";
 }
+
+oogl * oogl::clone() const { return new oogl(*this);}
+
 
 void oogl::pause(double seconds) 
 { the_stream() << "\n(sleep-for " << seconds << ")\n";} 
@@ -151,14 +147,14 @@ void oogl::begin_transformation(const Transformation& T)
 
 void oogl::write_transformation(const Transformation& T) 
 {
- mat4 M(T.GetMat4());
+ Transformation::matrix4_type M(T.GetMat4());
  int i,k;
  the_stream() << "INST \n"
 	      << "  transform {\n";
   for(i=0;i<4;i++) {
     the_stream() << "    ";
     for(k=0;k<4;k++)
-      the_stream() << M[k][i] << " "; // transpose of M !!
+      the_stream() << M(k,i) << " "; // transpose of M !!
     the_stream() << '\n';
   }
   the_stream() << "  }\n"

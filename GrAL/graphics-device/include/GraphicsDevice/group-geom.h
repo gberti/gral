@@ -4,14 +4,7 @@
 // $LICENSE
 
 
-/*----------------------------------------------------------------------------
-    
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        July 4, 1997
------------------------------------------------------------------------------*/
-
-#include "list.h"
+#include <list>
 
 #include "GraphicsDevice/geom.h"
 
@@ -22,17 +15,16 @@ class geom_group : public geom {
   typedef geom_group self;
 public:
   geom_group() {}
+  virtual self * clone() const { return new self(*this); }
+
+  virtual void write_geom_to(rendering_language& L) const;
+
   self& add_geom(const RenderableGeom& g) { geoms.push_back(g); return *this;}
-  virtual void write_geom_to(rendering_language& L) const {
-    L.begin_block();
-    for(list<RenderableGeom>::const_iterator g = geoms.begin(); g != geoms.end(); ++g)
-      L.filter(*g);
-    L.end_block();
-  }
-  friend geom_group& operator<<(geom_group& grp, const RenderableGeom& g) 
-    {  return grp.add_geom(g);}
+
+  //  friend geom_group& operator<<(geom_group& grp, const RenderableGeom& g) 
+  //   {  return grp.add_geom(g);}
 private:
-  list<RenderableGeom> geoms;
+  std::list<RenderableGeom> geoms;
 };
 
 #endif

@@ -1,19 +1,22 @@
 
 // $LICENSE
 
-/*----------------------------------------------------------------------------
-    segment.C		init a new segment
-
-    by Heiko Schwierz, BTU-Cottbus, torus@math.tu-cottbus.de
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        July 4, 1997
------------------------------------------------------------------------------*/
 #include "GraphicsDevice/segment.h"
 
-RenderableGeom RSegment(const point& c1, const point& c2)
+void geom_segment_list::write_geom_to(rendering_language& L) const 
+{ 
+  L.begin_block();
+  typedef list<geom_segment>::const_iterator cit;
+  for (cit i=LI.begin();i!=LI.end();++i) {
+    L.write_segment((*i));
+  }
+  L.end_block();
+}
+
+RenderableGeom RSegment(RenderableGeom::coord_type const& c1, 
+                        RenderableGeom::coord_type const& c2)
 { return RenderableGeom(new geom_segment(c1,c2));}
 
-RenderableGeom RSegment_1(const point& c1, const point& c2)
-{ return RenderableGeom(new geom_segment(c1,c2));}
+//RenderableGeom RSegment_1(RenderableGeom::coord_type const& c1, RenderableGeom::coord_type const& c2)
+//{ return RenderableGeom(new geom_segment(c1,c2));}
 

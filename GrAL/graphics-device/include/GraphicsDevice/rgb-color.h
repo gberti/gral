@@ -1,8 +1,9 @@
-#ifndef NMWR_GB_GRAPHICSDEVICE_RGB_GRAPHICSDEVICE_COLOR_H
-#define NMWR_GB_GRAPHICSDEVICE_RGB_GRAPHICSDEVICE_COLOR_H
+#ifndef NMWR_GB_GRAPHICSDEVICE_RGB_COLOR_H
+#define NMWR_GB_GRAPHICSDEVICE_RGB_COLOR_H
 
-#include "Geometry/point3d.h"
-#include "forward/string.h"
+//#include "Geometry/point3d.h"
+#include <string>
+#include <iostream>
 
 class rgb_color {
 private:
@@ -15,12 +16,12 @@ public:
   double g() const {return _g;}
   double b() const {return _b;}
 
-  friend istream& operator>>(istream& in,  rgb_color& rs) { rs.read(in); return in;}
-  friend ostream& operator<<(ostream& out, const rgb_color& rs) { rs.print(out); return out;}
-  void print(ostream& out) const;
-  void read(istream& in) ;
+  friend std::istream& operator>>(std::istream& in,  rgb_color& rs) { rs.read(in); return in;}
+  friend std::ostream& operator<<(std::ostream& out, const rgb_color& rs) { rs.print(out); return out;}
+  void print(std::ostream& out) const;
+  void read(std::istream& in) ;
 
-  operator Point3D() const { return Point3D(_r,_g,_b);}
+  //  operator Point3D() const { return Point3D(_r,_g,_b);}
 
   static rgb_color white() { return rgb_color(1,1,1);}
   static rgb_color black() { return rgb_color(0,0,0);}
@@ -39,9 +40,10 @@ class wrap_rgb_color : public rgb_color {
 public:
   wrap_rgb_color() {}
   wrap_rgb_color(const rgb_color& c) : rgb_color(c) {}
-  string key() const;
-  void  print(ostream& out) const { rgb_color::print(out);}
-  friend ostream& operator<<(ostream& out ,const wrap_rgb_color& c) 
+  std::string key() const;
+
+  void  print(std::ostream& out) const { rgb_color::print(out);}
+  friend std::ostream& operator<<(std::ostream& out ,const wrap_rgb_color& c) 
     { c.print(out); return out;}
 };
 

@@ -1,22 +1,33 @@
 
 // $LICENSE
 
-/*----------------------------------------------------------------------------
-    word.C		write a word with list of letters
-
-    by Heiko Schwierz, BTU-Cottbus, torus@math.tu-cottbus.de
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        July 4, 1997
------------------------------------------------------------------------------*/
 
 #include <math.h>
 
 #include "GraphicsDevice/word.h"
 #include "GraphicsDevice/letter.h"
-#include "GraphicsDevice/transform.h"
-
+#include "GraphicsDevice/calc-transformations.h"
 #include "Geometry/algebraic-primitives.h"
+
+void geom_word::init(std::string           const& ss, 
+                     geom_word::coord_type const& cc1) 
+{
+  str=ss;
+  c[0]=cc1;
+  c[1]=cc1+coord_type(str.length(),0,0);
+  c[2]=cc1+coord_type(0,1,0);
+}
+
+void geom_word::init(std::string           const& ss,
+                     geom_word::coord_type const& cc1,
+                     geom_word::coord_type const& cc2,
+                     geom_word::coord_type const& cc3) 
+{
+  str=ss;
+  c[0]=cc1;
+  c[1]=cc2;
+  c[2]=cc3;
+}
 
 void geom_word::write_geom_to(rendering_language& L) const
 {
@@ -66,7 +77,7 @@ void geom_word::write_geom_to(rendering_language& L) const
    } 
    for(int j=0;j<(int)str.length();j++){
      char ch=str[j];
-     Letter=Transform(b_l,b_r,t_l)(TF0(RLetter(ch,point(x,y,0))));
+     Letter= TransformRectangle(b_l,b_r,t_l)(TF0(RLetter(ch,point(x,y,0))));
      L.filter(Letter);
      x=x+1;
      if (ch=='\n') {y=y-1.2;x=0;}
@@ -74,10 +85,14 @@ void geom_word::write_geom_to(rendering_language& L) const
  L.end_block();
 }
 
-RenderableGeom RWord(const string& str, const point& c1, 
-		     const point& c2, const point& c3)
+extern RenderableGeom RWord(std::string                const& str, 
+                            RenderableGeom::coord_type const& c1,  //< lower left
+                            RenderableGeom::coord_type const& c2,  //< lower right
+                            RenderableGeom::coord_type const& c3) //< upper left
 {return RenderableGeom(new geom_word(str,c1,c2,c3));}
 
-RenderableGeom RWord_1(const string& str, const point& c1, 
-		     const point& c2, const point& c3)
-{return RenderableGeom(new geom_word(str,c1,c2,c3));}
+extern RenderableGeom RWord_1(std::string                const& str, 
+                              RenderableGeom::coord_type const& c1,  //< lower left
+                              RenderableGeom::coord_type const& c2,  //< lower right
+                              RenderableGeom::coord_type const& c3) //< upper left
+{ return RenderableGeom(new geom_word(str,c1,c2,c3));}

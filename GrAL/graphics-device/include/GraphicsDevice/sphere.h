@@ -3,37 +3,40 @@
 
 // $LICENSE
 
-
-/*----------------------------------------------------------------------------
-    sphere.h		class to create a sphere
-
-    by Heiko Schwierz, BTU-Cottbus, torus@math.tu-cottbus.de
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        July 4, 1997
------------------------------------------------------------------------------*/
 #include "GraphicsDevice/geom.h"
-
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
 
+/*! \brief A geometric sphere
+   
+   \ingroup geometricshape
+   \see RSphere()
+ */
 class geom_sphere : public geom {
 private:
-  double r; // radius
-  point m;  // midpoint
+  typedef geom_sphere self;
+  double     r; // radius
+  coord_type m;  // midpoint
 protected:
-  void init(double rr, const point& mm) {r=rr;m=mm;}
+  void init(double rr, coord_type const& mm) {r=rr;m=mm;}
 public:
-  geom_sphere(double rr, const point& mm) {init(rr,mm);}
-  double radius()   const { return r;}
-  point  midpoint() const { return m;}
-  void   write_geom_to(rendering_language& L) const 
+  geom_sphere(double rr, coord_type const& mm) {init(rr,mm);}
+  virtual self * clone() const { return new self(*this); }
+
+  virtual void   write_geom_to(rendering_language& L) const 
   { L.write_sphere(*this);}
+
+  double             radius()   const { return r;}
+  coord_type const&  midpoint() const { return m;}
 };
 
 
-extern RenderableGeom RSphere(double r, const point& m);
+/*! \brief Creator function for geometric sphere
+
+   \ingroup geometricshape
+ */
+extern RenderableGeom RSphere(double r,  RenderableGeom::coord_type const& m);
 
 
 #endif

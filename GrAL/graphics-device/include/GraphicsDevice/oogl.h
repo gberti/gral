@@ -22,6 +22,8 @@ private:
 public:
   oogl(ostream* out);
   oogl() : rendering_language() {}
+  virtual oogl* clone() const;
+
   virtual void begin_transformation(const Transformation&) ;
   virtual void end_transformation() ;
   virtual void begin_attribute(const Attribute&) ;

@@ -33,7 +33,7 @@ private:
   Transformation          T; 
   Attribute               A;
 
-  geometry*  geometry() const {return g.operator->();}
+  geom const*  geometry() const {return g.operator->();}
 protected:
   virtual void init();
 public:
@@ -47,11 +47,9 @@ public:
   virtual Transformation  trafo() const;
   virtual Attribute       attr()  const;
 
+  typedef geom::coord_type  coord_type;
   virtual void write_geom_to(rendering_language&) const;
 };
 
-#include "Work-around/default-operators.h"
-
-MAKE_DEFAULT_OPS(RenderableGeom,"RenderableGeom");
 
 #endif

@@ -3,43 +3,50 @@
 
 // $LICENSE
 
-
-/*----------------------------------------------------------------------------
-    circle.h		class to create a circle
-
-    by Heiko Schwierz, BTU-Cottbus, torus@math.tu-cottbus.de
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        August 6, 1997
------------------------------------------------------------------------------*/
 #include "GraphicsDevice/geom.h"
-
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
 
+/*! \brief A geometric circle
+    \ingroup geometricshape
+    \todo This is an ellipse, rename!
+    \see RCircle()
+    \see REllipse()
+ */
 class geom_circle : public geom {
 private:
-  point m;  // midpoint of the circle
-  double r1,r2; // Radien von Kreis/Ellipse
+  typedef geom_circle self;
+  coord_type m; //< midpoint of the circle
+  double r1,r2; //< Radii of ellipse in x/y directions
 protected:
-  void init(const point& cc, double rr) {m=cc;r1=rr;r2=rr;}
-  void init(const point& cc, double rr1, double rr2) {m=cc;r1=rr1;r2=rr2;}
+  void init(coord_type const& cc, double rr) {m=cc;r1=rr;r2=rr;}
+  void init(coord_type const& cc, double rr1, double rr2) {m=cc;r1=rr1;r2=rr2;}
 public:
-  geom_circle(const point& cc, double rr) {init(cc,rr);}
-  geom_circle(const point& cc, double rr1, double rr2) {init(cc,rr1,rr2);}
+  geom_circle(coord_type const& cc, double rr) {init(cc,rr);}
+  geom_circle(coord_type const& cc, double rr1, double rr2) {init(cc,rr1,rr2);}
+  virtual self * clone() const { return new self(*this); }
 
-  point midpoint() const {return m;}
+  virtual void   write_geom_to(rendering_language& L) const 
+  { L.write_circle(*this);}
+
+  coord_type const& midpoint() const {return m;}
   double radius1() const {return r1;}
   double radius2() const {return r2;}
 
-  void   write_geom_to(rendering_language& L) const 
-  { L.write_circle(*this);}
 };
 
 
-extern RenderableGeom RCircle(const point& c1, double r);
-extern RenderableGeom REllipse(const point& c1, double r1, double r2);
+/*!  \brief Creator function for geometric circle
+    \ingroup geometricshape
+ */
+extern RenderableGeom RCircle(RenderableGeom::coord_type const& c1, double r);
+
+/*! \brief Creator function for geometric ellipse
+    \ingroup geometricshape
+ */
+extern RenderableGeom REllipse(RenderableGeom::coord_type const& c1, 
+                               double r1, double r2);
 
 
 #endif

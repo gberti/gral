@@ -12,9 +12,10 @@
    Example:
    \code
    GraphicsDevice Dev;
+   typedef RenderableGeom::coord_type coord_t;
    Dev << BeginGroup("Tree") 
-       << BeginAttribute(Attribute::green()) << RSphere(1,point(0,0,2)) << EndAttribute
-       << BeginAttribute(Attribute::black()) << RCylinder(0.5, 1.2)     << EndAttribute
+       << BeginAttribute(Attribute::green()) << RSphere(1,coord_t(0,0,2)) << EndAttribute
+       << BeginAttribute(Attribute::black()) << RCylinder(0.5, 1.2)       << EndAttribute
        << EndGroup;
    \endcode
    
@@ -79,6 +80,7 @@ BeginGroup(const string& name)
 /*! \ingroup renderermanip1 */
 inline void begin_attribute(const Attribute& A, rendering_language& L)
  { L.begin_attribute(A);}
+
 /*! \ingroup renderermanip1 */
 inline DevManip1<Attribute> 
 BeginAttribute(const Attribute& A)
@@ -88,6 +90,7 @@ BeginAttribute(const Attribute& A)
 /*! \ingroup renderermanip1 */
 inline void begin_transformation(const Transformation& T, rendering_language& L)
  { L.begin_transformation(T);}
+
 /*! \ingroup renderermanip1 */
 inline DevManip1<Transformation> 
 BeginTransformation(const Transformation& T)
@@ -97,14 +100,17 @@ BeginTransformation(const Transformation& T)
 /*! \ingroup renderermanip1 */
 inline void pause_for(const double& sec, rendering_language& L)
 { L.pause(sec);}
+
 /*! \ingroup renderermanip1 */
 inline DevManip1<double> 
 Pause(const double& sec)
 {  return (DevManip1<double>(sec,&pause_for));}
 
+
 /*! \ingroup renderermanip1 */
 inline void geom_from_file(const string& file, rendering_language& L)
  { L.read_from_file(file);}
+
 /*! \ingroup renderermanip1 */
 inline DevManip1<string> GeomFromFile(const string& file)
 { return (DevManip1<string>(file, &geom_from_file)); }

@@ -5,6 +5,7 @@
 
 
 #include "FunctionAlgebra/function-algebra.h"
+#include "Geometry/matrix.h"
 
 class RenderableGeom;
 
@@ -19,8 +20,8 @@ public:
   coord_type      operator()(const coord_type&) const;
   Transformation  operator()(const Transformation& T) const;
 
-  class mat4;
-  mat4 GetMat4();
+  typedef matrix<4,4> matrix4_type;
+  matrix4_type GetMat4() const;
 };
 
 

@@ -4,9 +4,9 @@
 // $LICENSE
 
 
-#include "map.h"
-#include "forward/iostream.h"
-#include "forward/string.h"
+#include <map>
+#include <iostream>
+#include <string>
 
 template<class KEY>
 class generic_value {
@@ -14,7 +14,7 @@ public:
   virtual generic_value<KEY>* getval()       const         = 0;
   virtual void           setval(const generic_value<KEY>*) = 0;
   virtual KEY key() const = 0;
-  virtual void print(ostream& out) const = 0;
+  virtual void print(std::ostream& out) const = 0;
 };
 
 
@@ -48,7 +48,7 @@ template<class KEY>
 class ValueTable {
 private:
   //typedef leda_d_array<KEY, const generic_value<KEY> *>  table_type;
-  typedef map<KEY, const generic_value<KEY> *,__STD::less<KEY> >  table_type;
+  typedef std::map<KEY, const generic_value<KEY> *,std::less<KEY> >  table_type;
   table_type table;
   int entries;
 public:

@@ -86,6 +86,7 @@ public:
   rendering_language(): state(0) {}
   rendering_language(ostream* out);
   virtual ~rendering_language();
+  virtual rendering_language* clone() const = 0;
 
   virtual void set_stream(ostream* out); 
   virtual void begin_transformation(const Transformation&) = 0;
@@ -120,5 +121,10 @@ public:
 
 };
 
+template<>
+struct copy_traits<rendering_language> {
+  static rendering_language * clone(rendering_language const& r) 
+  { return r.clone();}
+};
 
 #endif

@@ -3,36 +3,41 @@
 
 // $LICENSE
 
-
-/*----------------------------------------------------------------------------
-    cylinder.h		class to create a cylinder
-
-    by Heiko Schwierz, BTU-Cottbus, torus@math.tu-cottbus.de
-    at Lehrstuhl Numerische Mathematik und Wissenschaftliches Rechnen (NMWR)
-
-    last change:        July 4, 1997
------------------------------------------------------------------------------*/
 #include "GraphicsDevice/geom.h"
-
 #include "GraphicsDevice/rendering-language.h"
 #include "GraphicsDevice/renderable-geom.h"
 
+/*!  \brief Geometric cylinder
+     \ingroup geometricshape
+ 
+   Axis is in z direction.
+   \see RCylinder();
+
+ */
 
 class geom_cylinder : public geom {
 private:
-  double r; // radius
-  double h; // height
+  typedef geom_cylinder self;
+
+  double r; //< radius
+  double h; //< height
 protected:
   void init(double rr, double hh) {r=rr;h=hh;}
 public:
   geom_cylinder(double rr, double hh) {init(rr,hh);}
+  virtual self * clone() const { return new self(*this); }
+  virtual void   write_geom_to(rendering_language& L) const 
+  { L.write_cylinder(*this);}
+
   double radius() const {return r;}
   double height() const {return h;}
-  void   write_geom_to(rendering_language& L) const 
-  { L.write_cylinder(*this);}
 };
 
+/*!  \brief Creator function for geometric cylinder 
+    \ingroup geometricshape
 
+    Axis is in z-direction.
+ */
 extern RenderableGeom RCylinder(double r, double h);
 
 
