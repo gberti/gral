@@ -22,6 +22,7 @@ namespace GrAL {  namespace sequence {
    */
   template<class INT> class integer_range {
     typedef interval<INT> interval_type;
+    typedef INT           element_type;
     std::vector<interval_type> intervals;
   public:
     //! Construct empty range
@@ -43,6 +44,12 @@ namespace GrAL {  namespace sequence {
     const_iterator begin() const { return intervals.begin();}
     //! Past-the-end interval
     const_iterator end()   const { return intervals.end();}
+
+    //! smallest element. The range is contained in [low(), high()]
+    element_type low()  const {return intervals.front().low();}
+    //! largest element. The range is contained in [low(), high()]
+    element_type high() const {return intervals.back() .high();}
+
 
     //! True iff \c i is contained in an interval
     bool contains(INT i) const { 
