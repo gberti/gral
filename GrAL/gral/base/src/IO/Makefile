@@ -5,7 +5,7 @@ include  $(CONFIG)
 LOCALSOURCES= $(shell ls *.C) 
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
-ALLDEPMODULES += gral/complex2d geometry
+EXTRA_DEPMODULES += gral/complex2d geometry
 
 OBJDIR=obj.tmp
 
@@ -20,7 +20,7 @@ all: compile lib
 
 compile: makefile
 	(cd $(OBJDIR);\
-         $(MAKE) compile SRC="$(LOCALSOURCES)")
+         $(MAKE) compile SRC="$(LOCALSOURCES)" CCFLAGS="$(CCFLAGS)" EXTRA_DEPMODULES="$(EXTRA_DEPMODULES)")
 
 lib: makefile
 	mkdir -p $(LIBDIR)
