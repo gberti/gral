@@ -259,6 +259,7 @@ class Cell_Complex3D
   }
   vertex_handle v(archgt::vertex_handle lv) const 
     { c_(); return TheGrid().cells[TheGrid().offset[h]+lv];}
+  inline Vertex V(archgt::Vertex v) const;
 };
 
 
@@ -385,6 +386,11 @@ inline
 VertexOnCellIterator_Complex3D
 Cell_Complex3D::FirstVertex() const
 { c_(); return VertexOnCellIterator(*this);}
+
+inline
+Vertex_Complex3D
+Cell_Complex3D::V(Cell_Complex3D::archgt::Vertex vv) const
+{ return Vertex(TheGrid(), v(vv.handle())); }
 
 
 // grid_types
