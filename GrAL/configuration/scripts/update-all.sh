@@ -1,7 +1,7 @@
 #! /bin/bash
 
 cvswork=${CVSWORK-${HOME}/CVS-work}
-MODULES=`$cvswork/configuration/scripts/modules.sh`;
+MODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
 
 
 cd ${HOME}/CVS-work;
