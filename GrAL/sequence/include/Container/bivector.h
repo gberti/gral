@@ -30,7 +30,7 @@ namespace GrAL {
 template<class T>
 class bivector {
 private:
-  typedef ::std::deque<T> table_type;
+  typedef std::deque<T> table_type;
   typedef table_type    tt;
 
   table_type table;
@@ -56,7 +56,11 @@ public:
   //! Insert \c t at the end and return its permanent index
   int push_back (T const& t) { table.push_back(t); return table.size() - offset -1;}
   //! Insert \c t at the beginning and return its permanent index
-  int push_front(T const& t) { offset++; table.push_front(t); return -offset;}
+  int push_front(T const& t) {
+    offset++; 
+    table.push_front(t);
+    return -offset;
+  }
 
   void pop_back()  { table.pop_back (); }
   void pop_front() { table.pop_front(); offset--; }
