@@ -7,7 +7,7 @@
 #include "Gral/Distributed/grid-to-mpi-graph.h"
 
 #include <vector>
-#include "Utility/assigment-operators.h"
+#include "Utility/assignment-operators.h"
 
 // #include "IO/iomgr.h"
 

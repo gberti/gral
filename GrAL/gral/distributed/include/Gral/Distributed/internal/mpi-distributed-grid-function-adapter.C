@@ -195,7 +195,7 @@ void distributed_grid_function_adapter<GF,DistributedG>::do_shared_ranges()
 					TheOverlap().elements(tpE(),*Nb).shared()),
 			    TheOverlap().elements(tpE(),*Nb).shared().size(),
 			    TheDistributedGrid().Proc(*Nb),
-			    assigment_operators::add_assign()));
+			    assignment_operators::add_assign()));
       }
     }
   }
