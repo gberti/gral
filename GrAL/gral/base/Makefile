@@ -25,7 +25,7 @@ install-headers:
         done;
 
 clean: stdclean
-	(cd doc;  $(MAKE) clean DEPS="")
+	(cd doc;  $(MAKE) clean DEPS="" ALLROOT=$(ALLROOT))
 	find . -name "*~" -o -name "*.dvi" -o -name "*.aux" -o -name "*.log" -exec rm {} \;
 	rm -f doxy.tags doxy.log
 

@@ -1,12 +1,7 @@
 
-ALLROOT=$(HOME)/CVS-work/
+ALLROOT=$(shell pwd)
 SUBDIRS= configuration utilities external-control sequence geometry \
          gral
-
-# gral/complex2d gral/distributed gral/partitioning
-
-
-#include $(ALLROOT)/configuration/defs/recursive-targets
 
 clean:
 	@set -e; \
@@ -31,19 +26,17 @@ install:
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
-TARGET=new
-
-# In theory, all targets can be made by executing
-# gmake generic TARGET=<target>
-generic:
+test:
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
-        $(MAKE) $(TARGET) ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        $(MAKE) test ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
+
 
 # predoc  = generate docs
 # postdoc = install docs (replace dummy links)
+
 doc: predoc postdoc
 
 predoc:	
