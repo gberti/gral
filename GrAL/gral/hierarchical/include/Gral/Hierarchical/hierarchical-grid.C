@@ -138,8 +138,8 @@ namespace hierarchical {
     unsigned level_diff = lev - p.level();
     REQUIRE(level_diff >= 0, "leveldiff=" << level_diff,1);
     cell_index_type   sz = power(the_pattern.cell_size(), level_diff);
-    vertex_index_type low    = product(p.Flat().vertex_index_low(), sz);
-    vertex_index_type beyond = product(p.Flat().vertex_index_high(), sz) + vertex_index_type(1);
+    vertex_index_type low    = product(p.Flat().low_vertex_index(), sz);
+    vertex_index_type beyond = product(p.Flat().high_vertex_index(), sz) + vertex_index_type(1);
     // assume vertex based arguments to subrange
     return temporary<cart_subrange_type>(cart_subrange_type(*FlatGrid(lev), low, beyond));
   }
