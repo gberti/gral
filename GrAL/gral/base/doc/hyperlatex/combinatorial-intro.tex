@@ -128,8 +128,8 @@
 \begin{example}
        my_geometry geom(g);
        // ...
-       for(\link{EdgeIterator}{GridEdgeRange.html} e = G.FirstEdge(); ! e.IsDone(); ++e)
-         draw(geom.\link{segment}{GeomSegment.html}(*e));
+       for(\link{EdgeIterator}{EdgeRange.html} e = G.FirstEdge(); ! e.IsDone(); ++e)
+         draw(geom.\xlinkUNDEF{segment}{GeomSegment.html}(*e));
 \end{example}
 
 \begin{Label}{incidence-it-intro}
@@ -182,7 +182,7 @@
  
   \begin{example}
  a_grid_type g;
- typedef \link{grid\_types}{grid_types.html}<a_grid_type> gt;
+ typedef \xlinkUNDEF{grid\_types}{grid_types.html}<a_grid_type> gt;
  // ....
  \sectionlink{grid\_function}{DataAssociationLayer}<\sectionlink{Cell}{GridCell},flux\_type> fluxes(g);
  for(gt::\sectionlink{CellIterator}{GridVertexIterator} c = g.FirstCell(); ! c.IsDone(); ++c) \{

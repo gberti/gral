@@ -54,25 +54,25 @@
 
 
 /*!  Construct combinatorial grid, without mappings
-   \ingroup copyoperations
+     \ingroup copyoperations
  */
-template<class G1, class G2>
+template<class G_DEST, class G_SRC>
 inline void 
-ConstructGrid0(G1      & destG, 
-	       G2 const&  srcG)
+ConstructGrid0(G_DEST     & destG, 
+	       G_SRC const&  srcG)
 {
-  typedef grid_types<G2>                         gt2;
-  typedef typename gt2::cell_handle              cell_handle_2;
-  typedef typename gt2::vertex_handle            vertex_handle_2;
-  typedef typename grid_types<G1>::cell_handle   cell_handle_1;
-  typedef typename grid_types<G1>::vertex_handle vertex_handle_1;
+  typedef grid_types<G_SRC>                          gtsrc;
+  typedef typename gtsrc::cell_handle                cell_handle_src;
+  typedef typename gtsrc::vertex_handle              vertex_handle_src;
+  typedef typename grid_types<G_DEST>::cell_handle   cell_handle_dest;
+  typedef typename grid_types<G_DEST>::vertex_handle vertex_handle_dest;
 
   // here we are not interested in a cell correspondance
-  dummy_mapping<cell_handle_2,cell_handle_1>       c_corr;
+  dummy_mapping<cell_handle_src,cell_handle_dest>       c_corr;
 
   // VertexCorr must be a functional type, because it is used.
-  vertex_morphism<G_SRC, G_DEST> v_corr(G_src, G_dest);
-
+  //  vertex_morphism<G_SRC, G_DEST> v_corr(srcG, destG);
+  partial_mapping<vertex_handle_src, vertex_handle_dest> v_corr;
   ConstructGrid0(destG,srcG,v_corr,c_corr);
 }
 
@@ -80,20 +80,20 @@ ConstructGrid0(G1      & destG,
 /*!  Construct combinatorial grid, return vertex mapping
    \ingroup copyoperations
  */
-template<class G1, class G2, class V_CORR>
+template<class G_DEST, class G_SRC, class V_CORR>
 inline void 
-ConstructGrid0(G1      & destG, 
-	       G2 const& srcG,
-	       V_CORR  & VertexCorr)
+ConstructGrid0(G_DEST     & destG, 
+	       G_SRC const& srcG,
+	       V_CORR     & VertexCorr)
 {
-  typedef grid_types<G2>                         gt2;
-  typedef typename gt2::cell_handle              cell_handle_2;
-  typedef typename grid_types<G1>::cell_handle   cell_handle_1;
+  typedef grid_types<G_SRC>                          gtsrc;
+  typedef typename gtsrc::cell_handle                cell_handle_src;
+  typedef typename grid_types<G_DEST>::cell_handle   cell_handle_dest;
 
   // here we are not interested in a cell correspondance
-  dummy_mapping<cell_handle_2,cell_handle_1>       CellCorr;
+  dummy_mapping<cell_handle_src,cell_handle_dest>       CellCorr;
 
-  // provided by the implementation of  G1
+  // provided by the implementation of  G_DEST
   ConstructGrid0(destG,srcG,VertexCorr,CellCorr);
 }
 

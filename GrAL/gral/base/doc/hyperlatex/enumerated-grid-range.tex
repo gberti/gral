@@ -17,13 +17,13 @@ to the range\noteref{note-vertex-cell-consistency}.
 Iteration over facets is provided.
 
 \datasubsection{Model of}
-\sectionlink{\concept{Vertex Grid Range}}{VertexGridRange}
+\sectionlink{\concept{Vertex Grid Range}}{VertexRange}
 \\
-\sectionlink{\concept{Edge Grid Range}}{EdgeGridRange}\noteref{note-edgerange-in-2d-only}
+\sectionlink{\concept{Edge Grid Range}}{EdgeRange}\noteref{note-edgerange-in-2d-only}
 \\
-\sectionlink{\concept{Facet Grid Range}}{FacetGridRange}
+\sectionlink{\concept{Facet Grid Range}}{FacetRange}
 \\
-\sectionlink{\concept{Cell Grid Range}}{CellGridRange}
+\sectionlink{\concept{Cell Grid Range}}{CellRange}
 
 \datasubsection{Definition}
 Defined in \gralfilelink{enumerated-subrange}{h}{base}
@@ -53,7 +53,7 @@ None.
    \hline
    {\tt vertex\_range\_ref } 
    & reference to vertex range, 
-   \par defined as {\tt \sectionlinkfoot{vertex\_range\_ref}{VertexRangeRef}<G,R>} \\
+   \par defined as {\gralclasslink{vertex\_range\_ref}{base}<G,R>} \\
    {\tt cell\_range\_ref } 
    & reference to cell range, 
    \par defined as {\tt \sectionlinkfoot{cell\_range\_ref}{CellRangeRef}<G,R>} \\
@@ -99,7 +99,7 @@ None.
   \sectionlinkshort{\type{GetCellRangeVertices}}{GetCellRangeVertices} algorithm.
 
 \item \notelabel{note-edgerange-in-2d-only}
-  The  \sectionlinkshort{\concept{Edge Grid Range}}{EdgeGridRange} concept
+  The  \sectionlinkshort{\concept{Edge Grid Range}}{EdgeRange} concept
   is supported in 2D only (when edges and facets coincide).
   The current implementation simply assumes that the template parameter
   {\tt G} is two-dimensional; for future extension, 
@@ -110,8 +110,8 @@ None.
    parameter \type{G}. There is currently no mechanism implemented
    to determine at compile time which types are provided by \type{G},
    therefore, some default assumption has to be made, excluding 
-   some simler grid types from the set of possible parameters.
-   This restiction is artificial and should be removed.
+   some simpler grid types from the set of possible parameters.
+   This restriction is artificial and should be removed.
 \end{enumerate}
 
 \datasubsection{See also}

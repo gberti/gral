@@ -1,16 +1,14 @@
 
 // $LICENSE
 
-#include "Gral/Grids/Complex2D/complex2d.h"
+#include "Gral/Grids/Complex2D/all.h"
 
 #include <map> // STL
 #include <algorithm> // STL
 
 #include "Gral/Base/vtuple2d.h"
 #include "Gral/Grids/Complex2D/stored-geometry.h"
-#include "Gral/Grids/Complex2D/internal/complex2d-construct.C"
 
-#include "Gral/Grids/Complex2D/internal/adjacency.h"
 
 //---------------  construction & destruction  ----------------------
 

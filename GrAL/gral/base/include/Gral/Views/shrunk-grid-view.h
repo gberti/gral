@@ -31,6 +31,8 @@
 
     Require(ShrunkG.NumOfCells() == G.NumOfCells(), "", 1);
     \endcode
+
+    \see test-shrunk-grid.C
  */
 
 /*! \brief An ``exploded'' view of a grid

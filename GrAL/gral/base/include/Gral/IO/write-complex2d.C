@@ -63,7 +63,7 @@ void write_complex2d(GRID const& G,  ostream& out, int offset,
   out << "\n";
 
   int cnum = offset;
-  for(c = G.FirstCell(); !c.IsDone(); ++c){
+  for(CellIterator c = G.FirstCell(); !c.IsDone(); ++c){
     out	<< (*c).NumOfVertices() << "   ";
     G2Out_c[c.handle()] = cnum; ++cnum;
     for(VertexOnCellIterator vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc)

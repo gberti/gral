@@ -8,13 +8,15 @@
 #include <map> // STL
 
 #include "Gral/Grids/Complex2D/internal/copy.h"
+#include "Gral/Grids/Complex2D/all.h"
+#include "Gral/Base/grid-morphism.h"
 
 #include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"
 
 //----------------------------------------------------------------
 //
-//  Copy-construct a Complex2D from a right-hand side (Connect)
+//  Copy-construct a Complex2D from a right-hand side (srcG)
 //  that allows
 //  - iteration over vertices ( VertexIterator | FirstVertex() )
 //  - iteration over cells    ( CellIterator   | FirstCell() )
@@ -91,6 +93,7 @@ void Construct_complex2d(Complex2D& CC,
 
   // this should be replaced by an array if possible.
   // map also lacks an operator() const  |  operator[] const 
+  //vertex_morphism<G2,Complex2D> VertexCorr(srcG,CC);
   partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
   Construct_complex2d(CC,destGeom,srcG,srcGeom,VertexCorr);
 }
