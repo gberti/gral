@@ -43,7 +43,7 @@ public:
 
   //--------------- comparisom ----------------------
 
-  friend bool operator == (const self& lhs, const self& rhs) 
+  friend bool operator==(const self& lhs, const self& rhs) 
    { return ((lhs.ve == rhs.ve) && (lhs.e == rhs.e)); }
   friend bool operator!=(const self& lhs, const self& rhs)
     { return !(lhs == rhs);}

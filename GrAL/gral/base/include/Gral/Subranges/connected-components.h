@@ -252,7 +252,7 @@ namespace connected_components {
 
     bool operator==(self const& rhs) const { 
       cb_();
-      REQUIRE((comps == rhs.comps), "component_iterator<GT>::operator==: Component lists differ",1); 
+      REQUIRE((comps == rhs.comps), "component_iterator<GT>::==: Component lists differ",1); 
       return (c == rhs.c);
     }
     bool operator!=(self const& rhs) const { return !(*this == rhs);} 

@@ -26,7 +26,7 @@ namespace hierarchical {
     hier_partial_grid_function(typename base::hier_grid_type const& gg,
 			       typename base::value_type     const& t ) : base(gg,t) {} 
 
-    void set_default(base::value_type const& t) 
+    void set_default(typename base::value_type const& t) 
     {
       for(typename base::level_handle lev = TheGrid()->coarsest_level(); lev <= TheGrid()->finest_level(); ++lev)
 	(*this)[lev].set_default(t);

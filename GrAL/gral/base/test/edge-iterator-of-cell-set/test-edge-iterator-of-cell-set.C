@@ -1,0 +1,37 @@
+/*! \file
+    Testing edge_iterator_of_cell_set<> 
+*/
+
+#include "Gral/Iterators/edge-iterator-of-cell-set.h"
+
+#include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
+#include "Gral/Grids/Cartesian2D/partial-grid-functions.h"
+
+#include "Gral/Test/test-edge-iterator.h"
+#include "Gral/Base/extend-grid-types.h"
+
+// make sure all members are instantiated
+typedef grid_types<cartesian2d::CartesianGrid2D> gt;
+template class edge_iterator_of_cell_set<gt::CellIterator>;
+
+
+
+int main() {
+
+  gt::grid_type R(2,2);
+  typedef edge_iterator_of_cell_set<gt::CellIterator> markedEdgeIterator;
+
+  markedEdgeIterator v(R.FirstCell());
+  int nv = 0;
+  while(! v.IsDone()) {
+    ++v;
+    ++nv;
+  }
+
+
+  REQUIRE_ALWAYS( nv == R.NumOfEdges(), 
+		  "R.NumOfEdges()=" << R.NumOfEdges() << " nv=" << nv, 1);
+
+  typedef xgt<gt, override_EdgeIterator<markedEdgeIterator> > mygt;
+  test_edge_iterator(R,cout, mygt());
+}
