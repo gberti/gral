@@ -46,7 +46,7 @@ standard-test-check-clean:
 #####################################################################
 
 stdclean: moduleclean
-	@rm -f *~ *.o  *.d *.ti *.ii
+	@rm -f *~ *.o  *.d *.ti *.ii core core.*
 	@find . -name "*~" -exec rm {} \; -print
 	@rm -rf ti_files # KCC template DB
 	@rm -rf *.tmp
