@@ -36,6 +36,7 @@ namespace cartesiannd {
    */
   template<class CARTGRID, class MAP> //  = identity<cartesiannd::default_coord<CARTGRID>::type > >
   class mapped_geometry {
+    typedef mapped_geometry<CARTGRID, MAP> self;
   public:
     typedef CARTGRID grid_type;
     typedef MAP      mapping_type;
@@ -70,7 +71,7 @@ namespace cartesiannd {
     { 
       f.make_own(new mapping_type(ff));
       init();
-      preserve_aspect_ratio();
+      prepend_scaling_mapping();
     }
 
     mapped_geometry(grid_type const& gg, index_type lw, index_type hgh, 
@@ -81,23 +82,32 @@ namespace cartesiannd {
       f.make_own(new mapping_type(ff));
       init();
     }
+    mapped_geometry(grid_type const& gg, self const& master)
+      : g(gg),
+	low_ (gg.low_vertex_index()), 
+	high_(gg.high_vertex_index()) 
+    {
+      f.make_own(new mapping_type(* master.f));
+      if(master.has_inverse())
+	f_inverse.make_own(new mapping_type(* master.f_inverse));
+      init();
+    }
 
-    void set_inverse_mapping(mapping_type inv) 
-    { f_inverse.make_own(new mapping_type(inv));}
 
     void init() {
       delta = coord_type(1.0);
       delta = quotient(delta, coord_type(high_ - low_));
     }
-    void preserve_aspect_ratio() 
-    {
-      scalar_type mx = * std::min_element(delta.begin(), delta.end());
-      delta = coord_type(mx);
-    }
 
     void set_mapping(mapping_type const& ff) {
       f.make_own(new mapping_type(ff));
+      prepend_scaling_mapping();
     }
+    void set_inverse_mapping(mapping_type const& inv) { 
+      f_inverse.make_own(new mapping_type(inv));
+      prepend_scaling_inverse();
+    }
+    bool has_inverse() const { return f_inverse != 0;}
 
     void rebind(grid_type const& gg) {
       g = ref_ptr<grid_type const>(gg);
@@ -106,8 +116,9 @@ namespace cartesiannd {
       init();
     }
     void rebind(grid_type const& gg, mapping_type const& ff) {
-      f = ref_ptr<mapping_type const>(ff);
+      f.make_own(new mapping_type(ff));
       rebind(gg);
+      prepend_scaling_mapping();
     }
 
     ref_ptr<grid_type const> TheGrid() const { return g;}
@@ -124,7 +135,9 @@ namespace cartesiannd {
       return floor_tuple(quotient(local_p, delta)) + coord_type(low_);
 
     }
+
     coord_type coord (Vertex const& v) const { cb(); return (*f)(unit_coord(v.index()));}
+
     /*! \brief length of an edge.
         
        \note The result is only correct in the case of an affine mapping
@@ -157,7 +170,25 @@ namespace cartesiannd {
      */
     template<class COORD>
     location_result_type locate(COORD const& pp) const;
-   
+
+  private:
+    void prepend_scaling_mapping()
+    {
+      if(f != 0) {
+	scalar_type mx = * std::min_element(delta.begin(), delta.end());
+	// map isotropic unit coords \f$ \subset [0,1]^d \f$ to anisotropic unit coords \f$ [0,1]^d \f$ 
+	mapping_type S = mapping_type::inverse_scaling(delta / mx);
+	f.make_own(new mapping_type ((*f)(S)));
+      }
+    }
+    void prepend_scaling_inverse()
+    {
+      if(f_inverse != 0) {
+	scalar_type mx = * std::min_element(delta.begin(), delta.end());
+	mapping_type S_inv = mapping_type::scaling(delta / mx);
+	f_inverse.make_own(new mapping_type(S_inv(*f_inverse)));
+      }
+    }   
   }; // mapped_geometry<CARTGRID,MAP>
 
 
