@@ -5,12 +5,15 @@
 
 #include <iostream>
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Test/test-cell-iterator.C"
+#else
+
 template<class G>
 bool test_cell_iterator(G const& g, std::ostream & out);
 
-
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Test/test-cell-iterator.C"
 #endif
+
+
 
 #endif

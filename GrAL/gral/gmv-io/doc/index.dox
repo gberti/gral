@@ -2,7 +2,7 @@
 
     This module contains components for writing 
     grids and grid functions in the format used  
-    by <A HREF= "http://www-xdiv.lanl.gov/XCM/gmv/"> GMV </A>
+    by <A HREF="http://www-xdiv.lanl.gov/XCM/gmv/" TARGET=_parent> GMV </A>
     (General Mesh Viewer).
 
     The classes a use might want to use are

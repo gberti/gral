@@ -1,0 +1,10 @@
+/*! \mainpage Index of the  GrAL Hierarchical Package, part of the GrAL (Grid Algorithms Library)
+
+     This package contains components for representing hierarchical grids.
+     The major components are:
+     <UL> 
+       <LI> hierarchical::hgrid_cartesian: dimension-independent Hierarchical Cartesian grid </LI> 
+       <LI> octree::Octree: dimension-independent Octree data structure </LI>
+     </UL>
+  
+*/

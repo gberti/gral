@@ -2,9 +2,9 @@
 
     This module contains components for writing 
     grids in the OFF format used  
-    by <A HREF= "http://www.geomview.org"> geomview </A>.
+    by <A HREF="http://www.geomview.org" TARGET=_parent> geomview </A>.
 
     The classe intended for direct use is OstreamOFF2DFmt.
 
-    See  test-geomview-output.C for sample usage.
+    See   test-geomview-output.C for sample usage.
 */
