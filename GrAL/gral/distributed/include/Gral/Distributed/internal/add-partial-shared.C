@@ -25,7 +25,7 @@ void AddPartialSharedRanges(Overlap          &  ovrlp,  // out
   for(RgeFacetIterator f = shared_f.FirstElement(); ! f.IsDone(); ++f) {
     int q = Prtng.other_partition(*f,p);
     //      if(p > q) { // <---- unsymmetric
-    if( (P2C(p) > P2C(q)) || (P2C(p) == P2C(q) && p > q)) { // <---- unsymmetric
+    if( (P2C(q) < P2C(p)) || (P2C(p) == P2C(q) && p > q)) { // <---- unsymmetric
       ovrlp[P2C(p)].facets(P2C(q)).shared().push_back(*f);             // local
       if( q < 0)
 	ovrlp[P2C(q)].facets(P2C(p)).shared().push_back(facet_corr(*f)); // "remote"
@@ -44,7 +44,7 @@ void AddPartialSharedRanges(Overlap          &  ovrlp,  // out
     for(VtxPartIterator qi = PV.begin(*v); qi != PV.end(*v); ++qi) {
       int q = *qi;
       //	if(p > q) { // <---- unsymmetric
-      if( (P2C(p) > P2C(q)) || (P2C(p) == P2C(q) && p > q)) { // <---- unsymmetric
+      if( (P2C(q) < P2C(p)) || (P2C(p) == P2C(q) && p > q)) { // <---- unsymmetric
 	ovrlp[P2C(p)].vertices(P2C(q)).shared().push_back(*v);             // local
 	if( q < 0)
 	  ovrlp[P2C(q)].vertices(P2C(p)).shared().push_back(vtx_corr(*v));   // "remote"
