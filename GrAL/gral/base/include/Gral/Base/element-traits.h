@@ -114,8 +114,9 @@ struct element_traits_edge_base
   typedef typename gt::edge_handle       handle_type;
   typedef edge_type_tag                  element_type_tag;
   typedef typename gt::dimension_tag     grid_dimension_tag;
-  typedef element_codim_tag<grid_dimension_tag::dim-1> element_codimension_tag;
-  typedef element_dim_tag<1>                           element_dimension_tag;
+  typedef element_codim_tag<(int)(grid_dimension_tag::dim)-1> 
+                                         element_codimension_tag;
+  typedef element_dim_tag<1>             element_dimension_tag;
 
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstEdge();}
@@ -156,9 +157,10 @@ struct element_traits_facet_base
   typedef typename gt::FacetIterator      ElementIterator;
   typedef typename gt::facet_handle       handle_type;
   typedef facet_type_tag                  element_type_tag;
-  typedef typename gt::dimension_tag                 grid_dimension_tag;
-  typedef element_dim_tag<grid_dimension_tag::dim-1> element_dimension_tag;
-  typedef element_codim_tag<1>                       element_codimension_tag;
+  typedef typename gt::dimension_tag      grid_dimension_tag;
+  typedef element_dim_tag<(int)(grid_dimension_tag::dim)-1> 
+                                          element_dimension_tag;
+  typedef element_codim_tag<1>            element_codimension_tag;
 
 
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFacet();}
