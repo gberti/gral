@@ -8,6 +8,10 @@
 #include <iostream>
 #include <stdlib.h>
 
+#ifdef GRAL_NO_ABORT
+#include <exception>
+#endif
+
 //@{
   
 //----------------------------------------------------------------
@@ -28,33 +32,57 @@
   ENSURE((p != 0), "Pointer null!", 1);
  }
  \endcode
+
+ To modify the default behavior, you can define the macros
+ GRAL_NO_ABORT (to throw an exception instead of aborting)
+ and GRAL_NO_SHOW_DATE to inhibit printing date/time of compilation
+ (useful for regression tests).
 */ 
 //----------------------------------------------------------------
 
 
-#define _ERRORLOG std::cerr
+#define GRAL_ERRORLOG std::cerr
+#define GRAL_ABORT abort() 
+#define GRAL_DATE_INFO  " (compiled on " << __DATE__ << " at " __TIME__  << " )"
 
-#define _PRECONDITION_ERROR  _ERRORLOG << "\nERROR in FILE "  << __FILE__ << ", LINE " << __LINE__\
-   << "\n(compiled on " << __DATE__ << " at " __TIME__  << " )\n"\
-   << "precondition violated:\n"
 
-#define _POSTCONDITION_ERROR  _ERRORLOG << "\nERROR in FILE "  << __FILE__ << ", LINE " << __LINE__\
-   << "\n(compiled on " << __DATE__ << " at " __TIME__  << " )\n"\
-                                       << ": postcondition violated:\n"
+#ifdef  GRAL_NO_ABORT
+#undef  GRAL_ABORT
+#define GRAL_ABORT throw std::exception()
+#endif
+
+#ifdef  GRAL_NO_SHOW_DATE
+#undef  GRAL_DATE_INFO
+#define GRAL_DATE_INFO  ""
+#endif
+
+#define GRAL_ERROR  GRAL_ERRORLOG \
+   << "\n" \
+   << "GRAL_ERROR in FILE "  << __FILE__ << "\n" \
+   << "      FUNCTION " << __FUNCTION__ \
+   << ", LINE " << __LINE__\
+   << GRAL_DATE_INFO << "\n"
+
+
+#define GRAL_PRECONDITION_ERROR   GRAL_ERROR  << "      precondition violated: "
+#define GRAL_POSTCONDITION_ERROR  GRAL_ERROR  << "      postcondition violated: "
+
+
+
 
 #define REQUIRE_ALWAYS(condition, error_msg, severity)\
- if(! (condition))  { _PRECONDITION_ERROR << #condition << ' ' << error_msg << std::endl; abort();}
+ if(! (condition))  { GRAL_PRECONDITION_ERROR << #condition << ' ' << error_msg << std::endl; GRAL_ABORT;}
 
 #define ENSURE_ALWAYS(condition, error_msg, severity)\
- if(! (condition)) { _POSTCONDITION_ERROR << #condition << ' ' << error_msg << std::endl; abort();}
+ if(! (condition)) { GRAL_POSTCONDITION_ERROR << #condition << ' ' << error_msg << std::endl; GRAL_ABORT;}
 
 #ifdef NMWR_DEBUG
 
-#define REQUIRE(condition, error_msg, severity)\
- if(! (condition))  { _PRECONDITION_ERROR << #condition << ' ' << error_msg << std::endl; abort();}
+#define REQUIRE(condition, error_msg, severity)  REQUIRE_ALWAYS(condition, error_msg, severity) 
+// if(! (condition))  { GRAL_PRECONDITION_ERROR << #condition << ' ' << error_msg << std::endl; GRAL_ABORT;}
 
-#define ENSURE(condition, error_msg, severity)\
- if(! (condition)) { _POSTCONDITION_ERROR << #condition << ' '  << error_msg << std::endl; abort();}
+#define ENSURE(condition, error_msg, severity) ENSURE_ALWAYS(condition, error_msg, severity)
+// if(! (condition)) { GRAL_POSTCONDITION_ERROR << #condition << ' '  << error_msg << std::endl; GRAL_ABORT;}
 
 #else
 #define REQUIRE(condition, error_msg, severity) 
@@ -62,9 +90,5 @@
 #endif
 
 //@}
-/*
-template <class STRING>
-void _handle_my_errors(
-*/
 
 #endif

@@ -96,7 +96,7 @@ struct point_traits<double>
 
 
 template<class ARRAY, class COMPONENT, unsigned DIM>
-struct point_traits_fixed_size_array :
+struct point_traits_fixed_size_array_base :
   public point_traits_base<ARRAY>
 {
   typedef ARRAY          Ptype;
@@ -136,6 +136,24 @@ struct point_traits_fixed_size_array :
 
 };
 
+template<class ARRAY, class COMPONENT, unsigned DIM>
+struct point_traits_fixed_size_array :
+  public point_traits_fixed_size_array_base<ARRAY,COMPONENT,DIM> {};
+
+
+template<class ARRAY, class COMPONENT>
+struct point_traits_fixed_size_array<ARRAY, COMPONENT, 2> 
+  : public point_traits_fixed_size_array_base<ARRAY, COMPONENT, 2>
+{
+  typedef point_traits_fixed_size_array_base<ARRAY, COMPONENT, 2> base;
+  typedef typename base::component_type component_type;  
+
+  static component_type  z(typename base::Ptype const& p) {return zero;}
+  static component_type& z(typename base::Ptype      & p) {return zero;}
+  
+  static const component_type zero = 0;
+
+};
 
 template<class ARRAY, unsigned N>
 struct array_operators 
