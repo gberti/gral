@@ -6,7 +6,7 @@
 #include "Gral/Test/all.h"
 
 #include "Utility/pre-post-conditions.h"
-
+#include "Geometry/coords.h"
 #include <iostream>
 
 template<class GRID1D>
@@ -33,8 +33,15 @@ void test_switch(GRID1D const& G, std::ostream& out)
 int main() {
   using namespace std;
 
-  polygon1d::polygon p(3);
   typedef grid_types<polygon1d::polygon> gt;
+  typedef coordN<2> coord_type;
+  typedef coord_type ct;
+
+  polygon1d::polygon p(3);
+
+  ct coords[3] = { ct(0,0), ct(1,0), ct(0,1) };
+  polygon1d::geometry<coord_type> geom(p, coords, coords+sizeof(coords)/sizeof(coord_type));
+
 
   ostream* out = &cout;
   test_vertex_iterator(p, *out);
@@ -89,5 +96,6 @@ int main() {
     ConstructGrid0(p2,p);
   }
 
+ 
 
 }
