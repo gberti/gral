@@ -41,10 +41,13 @@ template<class FACETRANGE>
 class facet_grid
   : public grid_types_facet_grid<FACETRANGE>  {
 private:
-  typedef enumerated_vertex_range<base_grid_type> vertex_range_type;
+  typedef grid_types_facet_grid<FACETRANGE>       gt;
 public:
+  typedef typename gt::base_grid_type                base_grid_type;
+  typedef enumerated_vertex_range<base_grid_type>    vertex_range_type;
+  typedef FACETRANGE                                 facet_range_type;
   typedef typename vertex_range_type::VertexIterator VertexIterator;
-
+  typedef typename gt               ::CellIterator   CellIterator;
 private:
  FACETRANGE const* facets;
  vertex_range_type vertices;
