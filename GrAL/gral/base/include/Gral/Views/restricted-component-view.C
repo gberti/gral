@@ -10,6 +10,35 @@ namespace GrAL {
 
 namespace restricted_grid_component_view {
 
+  template<class GRID, class INSIDE_PRED, class GT>
+  grid_view<GRID, INSIDE_PRED, GT>::grid_view
+  (typename grid_view<GRID, INSIDE_PRED, GT>::grid_type const& gg,
+   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type        ins,
+   typename grid_view<GRID, INSIDE_PRED, GT>::baseCell  const& grm) 
+      : g(&gg), inside(ins), germs(gg), range(gg),  
+	cells_initialized(false),
+	vertices_initialized(false) 
+    {
+      germs.push_back(grm);
+    }
+
+  template<class GRID, class INSIDE_PRED, class GT>
+  template<class IT>
+  grid_view<GRID, INSIDE_PRED, GT>::grid_view
+  (typename grid_view<GRID, INSIDE_PRED, GT>::grid_type const& gg,
+   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type        ins,
+   IT begin_germ, IT end_germ)
+      : g(&gg), inside(ins), germs(gg), range(gg),  
+	cells_initialized(false),
+	vertices_initialized(false) 
+    {
+      while(begin_germ != end_germ) {
+	germs.push_back(*begin_germ);
+	++begin_germ;
+      }
+    }
+
+
 
   template<class GRID, class INSIDE_PRED, class GT>
   void grid_view<GRID, INSIDE_PRED, GT>::init
@@ -19,16 +48,39 @@ namespace restricted_grid_component_view {
   {
     clear();
     g = ref_ptr<grid_type const>(gg); 
-    range.init(gg);
     inside = ins;
-    germ   = grm;
+    range.init(gg);
+    germs.init(gg);
+    germs.push_back(grm);
   }
+
+
+  template<class GRID, class INSIDE_PRED, class GT>
+  template<class IT>
+  void grid_view<GRID, INSIDE_PRED, GT>::init
+  (typename grid_view<GRID, INSIDE_PRED, GT>::grid_type const& gg,
+   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type        ins,
+   IT begin_germ, IT end_germ)
+  {
+    clear();
+    g = ref_ptr<grid_type const>(gg); 
+    inside = ins;
+    range.init(gg);
+    germs.init(gg);
+    while(begin_germ != end_germ) {
+      germs.push_back(*begin_germ);
+      ++begin_germ;
+    }
+  }
+
+
 
   template<class GRID, class INSIDE_PRED, class GT>
   void grid_view<GRID, INSIDE_PRED, GT>::clear()
   {
     g = ref_ptr<const grid_type>();
     range.clear();
+    germs.clear();
     cells_initialized = false;
     vertices_initialized = false;
   }
@@ -39,8 +91,13 @@ namespace restricted_grid_component_view {
     if(! cells_initialized) {
       std::queue<baseCell>  front;
       partial_grid_function<baseCell, bool> found(*g,false);
-      front.push(germ);
-      found[germ] = true;
+      typedef grid_types<range_type> rgt;
+      for(typename rgt::CellIterator germ(germs); !germ.IsDone(); ++germ) {
+	if(inside(*germ)) {
+	  front.push(*germ);
+	  found[*germ] = true;
+	}
+      }
       while(! front.empty()) {
 	baseCell c = front.front();
 	front.pop();

@@ -90,8 +90,8 @@ namespace restricted_grid_component_view {
   private:
     ref_ptr<grid_type const>  g;
     pred_type                 inside;
-    baseCell                  germ;
-    
+    range_type                germs;
+
     mutable range_type range;
     mutable bool       cells_initialized;
     mutable bool       vertices_initialized;
@@ -99,14 +99,21 @@ namespace restricted_grid_component_view {
     grid_view() {}
     grid_view(grid_type const& gg,
 	      pred_type        ins,
-	      baseCell  const& grm)
-      : g(&gg), inside(ins), germ(grm), range(gg),  
-	cells_initialized(false),
-	vertices_initialized(false) 
-    {}
+	      baseCell  const& grm);
+    template<class IT>
+    grid_view(grid_type const& gg,
+	      pred_type        ins,
+	      IT begin_germ, IT end_germ);
+
     void init(grid_type const& gg,
 	      pred_type        ins,
 	      baseCell  const& grm);
+
+    template<class IT>
+    void init(grid_type const& gg,
+	      pred_type        ins,
+	      IT begin_germ, IT end_germ);
+
     void clear();
 
     friend class restricted_grid_component_view::vertex_iterator<GRID,INSIDE_PRED, GT>;
