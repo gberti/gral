@@ -1,9 +1,12 @@
 #! /bin/bash
 
+source ${HOME}/.bashrc
+
 TAG=${1-HEAD}
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules-v0_2.sh`;
 EXCLUDED=`$cvswork/configuration/scripts/excluded-v0_2.sh`;
+TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel-v0_2.sh`;
 CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
 ALLROOT=GrAL-0.2
@@ -11,7 +14,7 @@ cd ${HOME}/tmp;
 rm -rf ${ALLROOT};
 mkdir ${ALLROOT};
 cd ${ALLROOT};
-for i in ${MODULES}
+for i in ${TOPLEVELMODULES}
 do
  cvs -d ${CVSREPO} export -r ${TAG} $i;
 done;
@@ -24,7 +27,12 @@ mv gral/LICENSE      .
 mv gral/v0_2/MODULES .
 mv gral/v0_2/INSTALL .
 mv gral/NEWS         .
-mv gral/Makefile.global ./Makefile
+mv gral/v0_2/Makefile ./Makefile
+cp gral/v0_2/Makefile.gral gral/Makefile
+mv gral/v0_2/index.dox gral/doc
+
+perl -i -p -e "s/WITHMPI=true/WITHMPI=false/" gral/distributed/mk.config
+mv configuration/defs/mpi/mpi.defs.template configuration/defs/mpi/mpi.defs
 
 rm -rf configuration/scripts
 rm -f  gral/TODO.html

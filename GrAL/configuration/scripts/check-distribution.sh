@@ -1,6 +1,6 @@
 #! /bin/bash
 
-TMP=$1
+TMP=${1-${HOME}/tmp}
 
 cd ${TMP}
 rm -rf GrAL
