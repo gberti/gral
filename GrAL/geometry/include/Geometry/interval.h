@@ -29,10 +29,14 @@ public:
       t1(right)
   {}
   bool empty() const { return t0 > t1;}
+  bool contains(scalar_type x) const { return t0 <= x && x <= t1;}
 
   void sort() { if (t0 > t1) ::std::swap(t0,t1);}
   scalar_type l() const { return t0;}
   scalar_type r() const { return t1;}
+  scalar_type low () const { return t0;}
+  scalar_type high() const { return t1;}
+
 
   //! return \f$\conv(\mbox{\texttt{*this}} \cup \{p\}) \f$
   interval& operator|=(scalar_type p)
