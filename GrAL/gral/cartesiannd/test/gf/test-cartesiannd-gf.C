@@ -1,0 +1,25 @@
+/*! \file
+    Test harness for cartesiannd::grid<DIM> grid functions
+*/
+
+#include "Gral/Grids/CartesianND/cartesiannd.h"
+#include "Gral/Test/test-grid-functions.h"
+#include "Gral/Test/test-partial-grid-functions.h"
+#include <iostream>
+
+int main() {
+  using namespace std;
+
+  typedef grid_types<cartesiannd::grid<2> > gt2;
+  typedef gt2::index_type it2;  
+  cartesiannd::grid<2> R(it2(2,2));
+
+  grid_function<gt2::Vertex, int> gf1(R,0);
+
+  test_grid_functions<gt2::Vertex>(R, cout);
+  test_grid_functions<gt2::Edge>  (R, cout);
+  test_grid_functions<gt2::Cell>  (R, cout);
+  test_partial_grid_functions<gt2::Vertex>(R, cout);
+  test_partial_grid_functions<gt2::Edge>  (R, cout);
+  test_partial_grid_functions<gt2::Cell>  (R, cout);
+}

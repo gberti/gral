@@ -25,7 +25,7 @@
 
 */
 template<class OCTREE, class OCTCELL> // = typename OCTREE::oct_cell_type>
-void refine_towards(OCTREE & Tree, OCTCELL const& Leaf, OCTCELL const& subLeaf, unsigned nl)
+void refine_towards(OCTREE & Tree, OCTCELL const& Leaf, OCTCELL const& subLeaf, int nl)
 {
   REQUIRE(Tree.leaf_ancestor(subLeaf) == Leaf, "subLeaf is not a descendant of Leaf", 1);
   int k = subLeaf.level() - Leaf.level(); 

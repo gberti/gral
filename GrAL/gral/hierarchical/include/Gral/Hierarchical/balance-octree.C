@@ -21,7 +21,7 @@
 */
 
 template<class OCTREE>
-void balance_octree(OCTREE& Tree, unsigned balance)
+void balance_octree(OCTREE& Tree, int balance)
 {
   typedef OCTREE oct;
   typename oct::level_handle k = Tree.finest_level();

@@ -27,6 +27,11 @@
 
 
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Grids/Complex2D/internal/copy.C"
+
+#else
+
 template<class Conn, class VtxCorr, class CellCorr>
 void copy_cells(Complex2D& G, 
 		const Conn& G_src,
@@ -34,8 +39,6 @@ void copy_cells(Complex2D& G,
 		CellCorr&       cell_corr);
 
 
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Grids/Complex2D/internal/copy.C"
 #endif
 
 #endif
