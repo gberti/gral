@@ -3,6 +3,7 @@
 
 #include <iostream>
 
+
 class A {
 public:
   int i;
@@ -16,6 +17,35 @@ public:
   temporary<int> f4() { return temporary<int>(i);}
 };
 
+
+class X {
+  int i;
+public:
+  X(int ii = 1) : i(ii) {}
+};
+
+class Y {
+  int i;
+public:
+  Y(int ii = 2) : i(ii) {}
+};
+
+class G {
+  ref_ptr<X const> x;
+  ref_ptr<Y const> y1;
+  Y       y_owned;
+public:
+  G() {}
+  G(ref_ptr<X const> xx) : x(xx) {}
+  G(ref_ptr<Y const> yy) : y1(yy), y_owned(*yy) {}
+
+  ref_ptr<X const> TheX()  const { return x;}
+  ref_ptr<Y const> TheY1() const { return y1;}
+  ref_ptr<Y const> TheYOwned() const { return ref_ptr<Y const>(y_owned);}
+
+  temporary<X const>   AnX() const { return temporary<X const>(X(66));}
+  temporary<Y>         AnY() const { return temporary<Y>(Y(77));}
+};
 
 int main() {
   using namespace std;
@@ -68,4 +98,21 @@ int main() {
   pci1 = pi1;
 
 
+  G g1;
+  G g2(g1.TheX());
+  G g3(g1.TheY1());
+  G g4(g1.TheYOwned());
+  G g5(g1.AnX());
+#ifdef COMPILE_FAIL
+  G g6(g1.AnY()); // this fails because we cannot construct ref_ptr<T const> from temporary<T>
+                  // without making the templated constructor ref_ptr<T>::ref_ptr(temporary<U>) non-explicit.
+#endif
+  G g7(ref_ptr<Y const>(g1.AnY()));
+#ifdef COMPILE_FAIL
+  G g8(make_ref_ptr(g1.AnY())); // ambiguous
+#endif
+
+  Y y1(* g1.TheY1());
+  Y y2(* g1.TheYOwned());
+  Y y3(g1.AnY());
 }
