@@ -92,6 +92,7 @@ public:
   value_type /*const&*/  operator*() const;
   
   friend bool operator== <> (self const& lhs, self const& rhs);
+  friend bool operator!= <> (self const& lhs, self const& rhs);
   friend bool operator<  <> (self const& lhs, self const& rhs);
 };
 
@@ -193,6 +194,12 @@ bool operator==  (vertex_iterator_Polygon2d<Face,geom> const& lhs,
   REQUIRE((lhs.p == rhs.p), "vertex_iterator: polygon differs!\n",1);
   return (lhs.i == rhs.i);
 }
+
+template<class Face, class geom>
+inline 
+bool operator!=  (vertex_iterator_Polygon2d<Face,geom> const& lhs, 
+		  vertex_iterator_Polygon2d<Face,geom> const& rhs)
+{ return !(lhs == rhs);}
 
 /*! \ingroup geometrictypes
     \relates  vertex_iterator_Polygon2d
