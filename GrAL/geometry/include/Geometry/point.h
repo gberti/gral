@@ -1,17 +1,15 @@
 #ifndef NMWR_GB_POINT_H
 #define NMWR_GB_POINT_H
 
+#include "Config/compiler-config.h"
+
 #include <iostream.h>
 #include <stdlib.h>
 
 // error handling macro
 #include "Utility/pre-post-conditions.h"
-#include "compiler-config.h"
 
-//#include "Work-around/comma-template.h"
 
-const bool zero_init = true;
-const bool no_init = false;
 
 
 /****************************************************************
@@ -27,16 +25,19 @@ protected:
  int n;
  double* x;
 
+  // const bool zero_init = true;
+  // const bool no_init = false;
+
 public:
 
   // Constructors
   enum { no_init = 0, zero_init = 1}; 
   point() : n(0) { x = 0;}
   
-  point(int n1, bool init)  // generate point of dim. n1, if init == zero_init : initialize with zero
-    : n(n1) {x= new double[n]; if(init== zero_init) for(int i=0;i<=n-1;i++) x[i]=0.0;}
-  point(int n1) : n(n1), x(new double[n]) {}
-  point(const double x1);
+  point(int n1, int init)  // generate point of dim. n1, if init == zero_init : initialize with zero
+    : n(n1) {x= new double[n]; if(init == zero_init) for(int i=0;i<=n-1;i++) x[i]=0.0;}
+  explicit point(int n1) : n(n1), x(new double[n]) {}
+  explicit point(const double x1);
   point(const double x, const double y);
   point(const double x, const double y, const double z);
   point(const double a[], int nn);
@@ -112,13 +113,13 @@ inline bool IsNullvector(const point& p)
 
 inline point unitvector(int dim, int i)
 { 
-  point p(dim,zero_init); 
+  point p(dim,point::zero_init); 
   p[i] = 1.0;
   return p;
 }
 
 
-inline point origin(int dim) { return point(dim,zero_init);}
+inline point origin(int dim) { return point(dim,point::zero_init);}
 
 /* or:
 class unitvector: public point {
