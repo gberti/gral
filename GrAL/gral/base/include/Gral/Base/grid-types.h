@@ -108,6 +108,42 @@ namespace grid_types_detail
 {
 
   template<class GT, class ETAG>
+  struct element_type_aux {};
+
+  // specializations 
+  template<class GT>
+  struct element_type_aux<GT, vertex_type_tag> { typedef typename GT::Vertex type;};
+  template<class GT>
+  struct element_type_aux<GT, edge_type_tag>   { typedef typename GT::Edge   type;};
+  template<class GT>
+  struct element_type_aux<GT, face_type_tag>   { typedef typename GT::Face   type;};
+  template<class GT>
+  struct element_type_aux<GT, facet_type_tag>  { typedef typename GT::Facet  type;};
+  template<class GT>
+  struct element_type_aux<GT, cell_type_tag>   { typedef typename GT::Cell   type;};
+
+
+
+
+  template<class GT, class ETAG>
+  struct element_handle_aux {};
+
+  // specializations 
+  template<class GT>
+  struct element_handle_aux<GT, vertex_type_tag> { typedef typename GT::vertex_handle type;};
+  template<class GT>
+  struct element_handle_aux<GT, edge_type_tag>   { typedef typename GT::edge_handle   type;};
+  template<class GT>
+  struct element_handle_aux<GT, face_type_tag>   { typedef typename GT::face_handle   type;};
+  template<class GT>
+  struct element_handle_aux<GT, facet_type_tag>  { typedef typename GT::facet_handle  type;};
+  template<class GT>
+  struct element_handle_aux<GT, cell_type_tag>   { typedef typename GT::cell_handle   type;};
+
+
+
+
+  template<class GT, class ETAG>
   struct sequence_iterator_aux {};
 
   // specializations 
@@ -123,8 +159,10 @@ namespace grid_types_detail
   struct sequence_iterator_aux<GT, cell_type_tag>   { typedef typename GT::CellIterator   type;};
 
 
-template<class GT, class ETAG_VALUE, class ETAG_ANCHOR>
-struct incidence_iterator_aux {};
+
+
+  template<class GT, class ETAG_VALUE, class ETAG_ANCHOR>
+  struct incidence_iterator_aux {};
 
   // specializations
 
@@ -208,6 +246,41 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_TESTFOR);
 
 #undef DEFINE_TESTFOR
 
+
+  /*
+  template<class GTBASE, class FIXITY>
+  struct grid_types_fixed_dim_aux : public GTBASE 
+  {
+    template<int ED>
+    struct element_d 
+      : public grid_types_detail::element_type_aux<GTBASE, typename int2element_tag<d, ED, d-ED>::tag> {};
+    
+    template<int ED>
+    struct element_handle_d 
+      : public grid_types_detail::element_handle_aux<GTBASE, typename int2element_tag<d, ED, d-ED>::tag> {};
+    
+    template<class ED>
+    struct sequence_iterator_d 
+      : public grid_types_detail::sequence_iterator_aux<GTBASE, typename int2element_tag<d, ED, d-ED>::tag> {};
+    
+    // <DV>On<DA>Iterator
+    template<int DV, class DA>
+    struct incidence_iterator_d 
+      : public grid_types_detail::incidence_iterator_aux<GTBASE, 
+							 typename int2element_tag<d, DV, d-DV>::tag,
+							 typename int2element_tag<d, DA, d-DA>::tag> {};
+
+  };
+
+  // no dimension
+  template<class GTBASE>
+  struct grid_types_fixed_dim_aux<GTBASE, type_tags::variable> : public GTBASE {};
+
+
+  template<class GTBASE>
+  struct grid_types_fixed_dim : public  grid_types_fixed_dim_aux<GTBASE, GTBASE::dimension_tag::fixity_tag {};
+*/
+
 } // namespace grid_types_detail 
 
 
@@ -260,7 +333,7 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(PRINT_HAS_MEMBER);
 
 /*! \brief Plugin-in base class for grid_types<> specializations
     
-   \b Usage example:
+   \b Usage example (enabling for a \c grid_types<> specialization):
    \code
    class MyGrid { ... };
    struct grid_types_mygrid { ... };
@@ -269,16 +342,56 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(PRINT_HAS_MEMBER);
    struct grid_types<MyGrid> : public grid_types_base<grid_types_mygrid> {};
    \endcode
 
+
    \todo This is not yet used in all grid_types<> specializations!
+
 */
 template<class GTBASE>
-struct grid_types_base : public GTBASE
+struct grid_types_base : public GTBASE /*, public grid_types_detail::grid_types_fixed_dim<GTBASE>*/
 {
+private:
+  typedef typename GTBASE::dimension_tag dtag;
+  enum { d = dtag::dim};
+public:
+  enum { dim = d};
+
+  template<class ETAG>
+  struct element : public grid_types_detail::element_type_aux<GTBASE, ETAG> {};
+
+
+  template<class ETAG>
+  struct element_handle   
+    : public grid_types_detail::element_handle_aux<GTBASE, ETAG> {};
+
+
   template<class ETAG>
   struct sequence_iterator : public grid_types_detail::sequence_iterator_aux<GTBASE,ETAG> {};
   
   template<class ETAG_VALUE, class ETAG_ANCHOR>
   struct incidence_iterator : public grid_types_detail::incidence_iterator_aux<GTBASE, ETAG_VALUE, ETAG_ANCHOR> {};
+
+
+
+  template<int ED>
+  struct element_d 
+    : public grid_types_detail::element_type_aux<GTBASE, typename int2element_tag<d, ED, d-ED>::tag> {};
+  
+  template<int ED>
+  struct element_handle_d 
+    : public grid_types_detail::element_handle_aux<GTBASE, typename int2element_tag<d, ED, d-ED>::tag> {};
+  
+  template<int ED>
+  struct sequence_iterator_d 
+    : public grid_types_detail::sequence_iterator_aux<GTBASE, typename int2element_tag<d, ED, d-ED>::tag> {};
+  
+  // <DV>On<DA>Iterator
+  template<int DV, int DA>
+  struct incidence_iterator_d 
+    : public grid_types_detail::incidence_iterator_aux<GTBASE, 
+						       typename int2element_tag<d, DV, d-DV>::tag,
+						       typename int2element_tag<d, DA, d-DA>::tag> {};
+  
+
 };
 
 
