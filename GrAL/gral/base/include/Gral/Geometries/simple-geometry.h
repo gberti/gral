@@ -7,6 +7,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/pre-post-conditions.h"
 #include "Geometry/point-traits.h"
+#include "Geometry/algebraic-primitives.h"
 
 /*! \brief Simple geometry, just storing vertex coordinates
 
@@ -20,9 +21,11 @@ class simple_geometry : public grid_types<GRID> {
   typedef grid_types<GRID>    gt;
   typedef GRID                grid_type;
   typedef typename gt::Vertex Vertex;
+  typedef typename gt::Edge   Edge;
   typedef typename gt::Cell   Cell;
 
   typedef point_traits<coord_type> pt;
+  typedef algebraic_primitives<coord_type> ap;
   typedef typename pt::component_type scalar_type;
  private:
   grid_function<Vertex,coord_type> coords;
@@ -48,6 +51,7 @@ public:
   coord_type const& coord(Vertex const& v) const { cb(); return coords(v);}
   coord_type      & coord(Vertex const& v)       { cb(); return coords[v];}
 
+  scalar_type length(Edge const& e) const { return ap::distance(coord(e.V1()), coord(e.V2()));}
   coord_type barycenter(Cell const& c) const { 
     cb();
     coord_type res(0.0);
