@@ -1,0 +1,15 @@
+
+include/Config/compiler-config.h          <- nmwrlib/include/compiler-config.h
+
+include/Utility/as-string.h               <- nmwrlib/include/as-string.h
+include/Utility/reference-count.h         <- nmwrlib/Utility/reference-count.h
+include/Utility/pre-post-conditions.h     <- nmwrlib/Utility/pre-post-conditions.h 
+include/Utility/copy-traits.h             <- nmwrlib/Container/copy-traits.h
+include/Utility/type-name-traits.h        <- nmwrlib/Container/type-name-traits.h
+include/Utility/safe-file.h               <- nmwrlib/IO/safe-file.h
+
+include/Forward/fstream_fwd.h             <- nmwrlib/forward/fstream.h
+include/Forward/iostream_fwd.h            <- nmwrlib/forward/iostream.h 
+include/Forward/string_fwd.h              <- nmwrlib/forward/string.h
+
+src/Utility/safe-file.C                   <- nmwrlib/IO/safe-file.C

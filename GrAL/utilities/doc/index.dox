@@ -1,0 +1,24 @@
+/*! \mainpage Index of the Utilities PackageKMy Personal Index Page
+       
+
+     \section intro Introduction
+
+      This  package contains various little utilities used in other 
+      packages.
+
+      \subsection secsafefile Safe file I/O
+      see \ref file_interactive
+      
+      \subsection secprepost  Macros for Pre- and Postconditions
+      see \ref file pre-post-conditions.h
+
+     \subsection sectraits Some general traits classes
+        see \ref copy_traits
+
+        see \ref type_name_traits
+
+     \subsection secasstring  Conversion of arbitrary types in strings
+        see \ref file as-string.h
+
+    
+*/
