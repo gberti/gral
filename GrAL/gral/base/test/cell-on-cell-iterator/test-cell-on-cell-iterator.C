@@ -19,7 +19,7 @@ public:
   typedef cgt::FacetOnCellIterator key_type;
 
   unsigned operator()(cgt::FacetOnCellIterator const& fc) const 
-  { return 4*fc.TheCell().handle() + fc.LocalNumber();}
+  { return 4*fc.TheCell().handle() + fc.local_handle();}
 };
 
 
