@@ -8,7 +8,7 @@
 #include <iterator>
 
 //----------------------------------------------------------------
-/*! \defgroup streamgrid Adapter for serial grid representation
+/*! \defgroup streamgrid Adapter for serial 2D grid representation
     \ingroup gridio
     \see Module gridio
 
@@ -24,7 +24,7 @@
     - LVnc_1 ... LVnc_NV_nc ( global numbers of the NV_nc vertices of cell nc-1)
   
   This can be used to construct grids from files, message passing
-  buffers and other sequentialized contexts.
+  buffers, literal arrays and other sequentialized contexts.
 */
 //----------------------------------------------------------------
 
