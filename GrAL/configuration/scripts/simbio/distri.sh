@@ -42,6 +42,8 @@ do
  perl -p -i -e "s|$s||g"  gral/Makefile
 done
 
+perl -p -i -e "s|(SUBDIRS[ ]*=[ ]*)|\1 function-algebra graphics-device |" Makefile
+
 #perl -i -p -e "s/WITHMPI=true/WITHMPI=false/" gral/distributed/mk.config
 #mv configuration/defs/mpi/mpi.defs.template configuration/defs/mpi/mpi.defs
 

@@ -2,8 +2,9 @@
 
 TAG=${1-HEAD}
 cvswork=${CVSWORK-${HOME}/CVS-work}
-MODULES=`$cvswork/configuration/scripts/modules.sh`;
-TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
+scripts=${cvswork}/configuration/scripts;
+MODULES=`$scripts/modules.sh`;
+TOPLEVELMODULES=`$scripts/modules-toplevel.sh`;
 CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
 
@@ -20,6 +21,8 @@ do
  cvs -d ${CVSREPO} export -r ${TAG} $i;
 done;
 
+mv configuration/defs/mpi/mpi.defs.template configuration/defs/mpi/mpi.defs
+
 for i in ${MODULES}
 do
  cd ${GRALROOT}/$i;
@@ -32,6 +35,8 @@ do
  gmake postdoc GRALROOT=${GRALROOT} DOCROOT=../ 
 done;
 
+cd ${GRALROOT};
+find ./gral/base/doc -name "*.html" -exec $scripts/reduce-underscores.pl {} \; 
 
 mkdir ${GRALROOT}/${DOC};
 cd ${GRALROOT}/${DOC};
@@ -42,6 +47,7 @@ do
 done;
 cd ${GRALROOT};
 
+cp ${GRALROOT}/gral/index-global.html ${GRALROOT}/${DOC}/index.html
 
 tar cf gral-doc.tar ./${DOC}
 gzip -f gral-doc.tar;
