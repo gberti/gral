@@ -11,63 +11,48 @@
 
 
 //----------------------------------------------------------------
-// 
-//  Routines that help constructing a composite grid
-//  from a partitioned grid.
-// 
-//  CONTENTS:
-//  --------- 
-//
-//  template<class FacetRange, class VertexRange, class CellRange, 
-//           class OvlpPattern, class Pred>
-//  void mark_layers(FacetRange    boundary_f,      // in
-//     	 	     VertexRange&  v_layer,         // out
-//		     CellRange  &  c_layer,         // out
-// 		     OvlpPattern   ovlppattern,     // in
-//		     Pred          inside)          // in
-//
-//----------------------------------------------------------------
+/*! \brief Mark cells on partition boundary according to pattern.
+   \ingroup overlapds
 
+ The facets in \c boundary_f contain the complete boundary of
+ the partition with respect to other partitions (i.e. they
+ are not part of the underlying grids boundary).
 
-//----------------------------------------------------------------
-// 
-// Mark cells on partition boundary according to pattern.
-// The facets in boundary_f contain the complete boundary of
-// the partition with respect to other partitions (i.e. they
-// are not part of the underlying grids boundary).
-// The Predicate inside controls if cells are to be collected
-// inside (exposed) or outside (copied)  the partition.
-//
-// PRECONDITIONS:
-// --------------
-// inside(f.C1()) <=>  ! inside(f.C2()) \forall f \in boundary_f
-//
-// POSTCONDITIONS:
-// ---------------
-// \forall C \in c_layers : inside(C) = true.
-//
-// ALGORITHM:
-// ---------
-// This routine essentially branches to mark_on_vertices or
-// mark_on_cells, according to pattern, after generating the
-// proper starting sets ("seeds").
-//
+ The Predicate \c inside controls if cells are to be collected
+ inside (exposed) or outside (copied)  the partition.
+
+ \preconditions:
+ [inside(f.C1()) \f$ \iff \f$  ! inside(f.C2()))]  \f$ \forall f \in \f$ boundary_f
+
+ \postconditions:
+ \forall C \in c_layers : inside(C) = true.
+
+ \b Algorithm:
+
+ This routine essentially just branches to mark_on_vertices or
+ mark_on_cells, according to pattern, after generating the
+ proper starting sets ("seeds").
+
+ \todo Why boundary_f passed by value?
+*/
 //----------------------------------------------------------------
 
 template<class FacetRange, 
          class CellRange, 
          class OvlpPattern, class Pred>
-void mark_layers(FacetRange    boundary_f,      
-		 CellRange  &  c_layer,
+void mark_layers(FacetRange           boundary_f,      
+		 CellRange         &  c_layer,
 		 OvlpPattern const &  ovlppattern,
-		 Pred          inside);
+		 Pred                 inside);
 
 //----------------------------------------------------------------
-//
-// collect the private elements:
-// G := priv.TheGrid() = exposed.TheGrid() = ... = copied.TheGrid()
-// priv = range(eit) \setminus  ( exposed \cup shared \cup copied )
-//
+/*! \brief collect the private elements
+    \ingroup overlapds
+
+   \b Semantics:
+
+   priv = range(eit) \f$ \setminus \f$ ( exposed \f$\cup\f$ shared \f$\cup\f$ copied )
+*/
 //----------------------------------------------------------------
 
 template<class ERange, class Eiter>

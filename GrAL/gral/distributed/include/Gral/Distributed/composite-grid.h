@@ -5,6 +5,26 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Distributed/overlapping-grid.h"
 
+/*! \defgroup compositegrids Composite Grids
+    \ingroup distributedgrids
+    
+*/
+
+
+/*! \brief A grid composed of separate pieces
+    \ingroup compositegrids
+    
+    An object of type CompositeGrid represents a  (global) grid
+    which is partitioned into several parts.
+    These parts form the cells of a coarse (quotient) grid.
+    To each of this parts is associated an 
+    OverlappingGrid. The union of these overlapping grids
+    (with proper identification of the overlap) is
+    isomorphic to the underlying global grid.
+    
+   \see composite_grid_function,
+   \partof compositegrids
+ */
 template<class CoarseG, class FineG>
 class CompositeGrid {
 public:

@@ -13,13 +13,13 @@
 
 #include <mpi.h>
 
-///////////////////////////////////////////////////
-//
-// traits classes to help calling MPI-routines
-// from template functions.
-//
-///////////////////////////////////////////////////
 
+/*! \brief traits class to help calling MPI-routines
+    from template functions.
+    \ingroup mpidistributedgrids   
+
+   Specializations exist for int, short, double, float, long double.
+*/
 
 template<class T> struct mpi_types {};
 

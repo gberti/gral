@@ -11,25 +11,19 @@
 
 #include "Gral/Distributed/range-layers.h"
 
-template<class EltRange>
-void write_rge(EltRange const& rge, ostream & out)
-{
-  typedef typename EltRange::const_iterator cit;
-  for(cit e = rge.begin();  e != rge.end(); ++e)
-    out << *e << ' ';
-}
+#include "Container/range.h"
 
 template<class OVRange>
 void write_ovrge(OVRange const& rnge, ostream& out)
 {
-  out << "private:\n";
-      write_rge(rnge.privee(),out);
-      out << '\n' << "exposed:\n";
-      write_rge(rnge.exposed(), out);
-      out << '\n'<< "shared:\n";
-      write_rge(rnge.shared(),  out);
-      out << '\n' << "copied\n";
-      write_rge(rnge.copied(), out);
+  out << "private:\n"
+      << range(rnge.privee().begin(),  rnge.privee().end()) << '\n' 
+      << "exposed:\n"
+      << range(rnge.exposed().begin(), rnge.exposed().end()) << '\n' 
+      << "shared:\n";
+      << range(rnge.shared().begin(),  rnge.shared().end()) << '\n' 
+      << "copied\n";
+      << range(rnge.copied().begin(),  rnge.copied().end()) << '\n'; 
 }
 
 #endif

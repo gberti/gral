@@ -3,7 +3,7 @@
 
 #include "Gral/Distributed/connector.h"
 
-#include "algorithm" // STL
+#include <algorithm> // STL
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998

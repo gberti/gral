@@ -20,38 +20,38 @@
 
 //----------------------------------------------------------------
 //  
-//  Connectors -- abstractions for moving data between ranges.
-//
-//  Contents:
-//  ---------
-//  completely abstract:
-//   [1] class connector; 
-//  partially abstract:
-//   [2] template<class SenderIt, class ReceiverIt> 
-//       class range_connector;
-//  concrete:
-//   [3] template<class SenderIt, class ReceiverIt> 
-//       class copy_range_connector;
-//   [4] template<class SenderIt, class ReceiverIt> 
-//       class copy_range_connector;
-//
-//  Purpose:
-//  -------
-//  This allows distributed data structures (such as distributed
-//  grid functions) to ignore the data transport mechanism used
-//  (message passing or just in-memory copy), and the data transport
-//  handler to ignore details of data storage in the dds.
-//
-//  State:
-//  -----
-//  Under Development.
-//
+/*!  \defgroup connectors Connectors 
+     \brief Abstractions for copying data between iterator ranges.
+
+  \contents:
+  - completely abstract: class connector_impl; 
+  - partially abstract:
+    \c template<class SenderIt, class ReceiverIt> <BR> 
+    \c class range_connector;
+  - concrete:
+     - \c template<class SenderIt, class ReceiverIt> <BR>
+       \c class copy_range_connector;
+     - \c template<class SenderIt, class ReceiverIt> <BR>
+       \c class copy_range_connector;
+
+  \description:
+  The classes in this module allow distributed data structures (dds),
+  such as distributed grid functions,
+  to ignore the data transport mechanism used
+  (message passing or just simple in-core copy).
+  On the other hand, the data transport
+  handler can ignore details of data storage in the dds.
+
+
+*/
 //----------------------------------------------------------------
 
 
 
 //----------------------------------------------------------------
-//                 [1] connector_impl / Connector                   
+/*! abstract base for data connectors (letter class)
+   \ingroup connectors
+ */
 //----------------------------------------------------------------
 
 class connector_impl {
@@ -67,15 +67,18 @@ public:
   virtual ~connector_impl();
 };
 
+/*! specialization of copy_traits for connector_impl
+ */
 struct copy_traits<connector_impl> {
   static connector_impl* clone(connector_impl const& c) { return c.clone();}
 };
 
-
+/*! Envelope class for connector_impl
+   \ingroup connectors
+ */
 class Connector {
 private:
-   RCIPtr<connector_impl> impl; // needs non-abstract type
-  // connector_impl* impl;
+   RCIPtr<connector_impl> impl; 
 public: 
    typedef Connector self;
   Connector(connector_impl* im = 0)  :impl(im) {}
@@ -87,38 +90,79 @@ public:
   void RecvDataEnd()   { impl->recv_data_end();}
 };
 
-// function objects for parameterization of
-// foreach(begin,end,function) - type algorithms
+/*! \defgroup connectorfunctions  Connector function objects
+    \brief Function objects for parameterization of
+     foreach(begin,end,function) - type algorithms
+
+   \ingroup connectors
+*/
+
+/*! send data associated to connector
+  \ingroup connectors
+
+  If [b,e) is a range of Connector s, then
+  \code
+  foreach(b,e,ConnectorSendData);
+  \endcode
+  is semantically equivalent to
+  \code
+  foreach(b,e,ConnectorSendBegin);
+  foreach(b,e,ConnectorSendEnd);
+  \endcode
+  The latter may be used to let communication and computation overlap
+  (compute-and-send-ahead).
+
+ */
 class ConnectorSendData {
  public:
   void operator()(Connector& C) const { C.SendData();}
   void operator()(connector_impl* C) const { C->send_data();}
 };
 
+/*! begin to send data associated to connector
+  \ingroup connectors
+  \see ConnectorSendData
+ */
 class ConnectorSendBegin {
  public:
   void operator()(Connector& C) const { C.SendDataBegin();}
   void operator()(connector_impl* C) const { C->send_data_begin();}
 };
 
+/*! finish to send data associated to connector
+  \ingroup connectors
+  \see ConnectorSendData
+ */
 class ConnectorSendEnd {
  public:
   void operator()(Connector& C) const { C.SendDataEnd();}
   void operator()(connector_impl* C) const { C->send_data_end();}
 };
 
+/*! receive data associated to connector
+  \ingroup connectors
+  \see ConnectorSendData
+ */
 class ConnectorRecvData {
  public:
   void operator()(Connector& C)      const { C.RecvData();}
   void operator()(connector_impl* C) const { C->recv_data();}
 };
 
+/*! begin to receive data associated to connector
+  \ingroup connectors
+  \see ConnectorSendData, ConnectorRecvData
+ */
 class ConnectorRecvBegin {
  public:
   void operator()(Connector& C) const { C.RecvDataBegin();}
   void operator()(connector_impl* C) const { C->recv_data_begin();}
 };
 
+/*! finish to receive data associated to connector
+  \ingroup connectors
+  \see ConnectorSendData, ConnectorRecvData
+ */
 class ConnectorRecvEnd {
  public:
   void operator()(Connector& C) const { C.RecvDataEnd();}
@@ -127,7 +171,10 @@ class ConnectorRecvEnd {
 
 
 //----------------------------------------------------------------
-//                   [2] range_connector / RangeConnector         
+/*! \brief  connector that operates on a range
+     \ingroup connectors
+
+ */
 //----------------------------------------------------------------
 
 template<class SenderIt, class ReceiverIt>
@@ -172,14 +219,10 @@ Connector ToConnector(RangeConnector<SenderIt,ReceiverIt>& RC)
 }
 */
 
-//----------------------------------------------------------------
-//        [3], [4] copy_range_connector, add_range_connector
-//----------------------------------------------------------------
 
-
-
-
-
+/*!  \brief connector that copies the associated send range to the destination range
+     \ingroup connectors
+ */
 template<class SenderIt, class ReceiverIt>
 class copy_range_connector : public range_connector<SenderIt,ReceiverIt> 
 {
@@ -194,6 +237,10 @@ public:
   virtual void recv_data()  {}
 };
 
+
+/*!  \brief connector that adds the associated range to the destination range
+     \ingroup connectors
+ */
 template<class SenderIt, class ReceiverIt>
 class add_to_range_connector : public range_connector<SenderIt,ReceiverIt> 
 {
@@ -209,9 +256,13 @@ public:
 };
 
 
-// buffering may be avoided if we know that [dest_b,dest_e) already is
-// a buffer, as may be the case with MPI.
+/*! \brief connector that copies send range to destination range, using
+  and intermediate buffer
+  \ingroup connectors
 
+   Buffering may be avoided if we know that [dest_b,dest_e) already is
+   a buffer, as may be the case with MPI.
+*/
 template<class SenderIt, class ReceiverIt>
 class buffered_copy_range_connector : public range_connector<SenderIt,ReceiverIt> 
 {
@@ -229,11 +280,17 @@ public:
   // buffer(se -sb) possible?
   virtual connector_impl* clone() const { return new buffered_copy_range_connector(*this);}
 
-  virtual void send_data();//       { my_copy(src_b,src_e,back_inserter(buffer));}
-  virtual void recv_data();//       { my_copy(buffer.begin(), buffer.end(), dest_b);}
+  virtual void send_data();
+  virtual void recv_data();
 };
 
 
+
+/*! \brief connector that adds send range to destination range, using
+  and intermediate buffer
+  \ingroup connectors
+
+*/
 template<class SenderIt, class ReceiverIt>
 class buffered_add_to_range_connector : public range_connector<SenderIt,ReceiverIt> 
 {
@@ -250,58 +307,61 @@ public:
     : conn_base(sb,se,rb,re) {}
   virtual connector_impl* clone() const { return new buffered_add_to_range_connector(*this);}
 
-  virtual void send_data(); // { copy(src_b,src_e,buffer.begin());}
-  virtual void recv_data(); // { add_to(buffer.begin(), buffer.end(), dest_b);}
+  virtual void send_data(); 
+  virtual void recv_data(); 
 };
 
 
-
+/*! Creator function for copy_range_connector
+  \ingroup connectors
+  \relates copy_range_connector, Connector
+ */
 template<class SenderIt, class ReceiverIt>
-inline
-//RangeConnector<SenderIt,ReceiverIt> 
-Connector
+inline Connector
 CopyConnector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt rs)
 { 
-  //  return RangeConnector<SenderIt,ReceiverIt>
   return Connector
     (new copy_range_connector<SenderIt,ReceiverIt>(sb,se,rb,re));
 }
 
+/*! Creator function for copy_range_connector
+  \ingroup connectors
+  \relates copy_range_connector, Connector
+ */
 template<class SenderRge, class ReceiverRge>
-inline
-//RangeConnector<SenderIt,ReceiverIt> 
-Connector
+inline Connector
 CopyConnector(SenderRge s, ReceiverRge r)
 { 
   typedef typename SenderRge::iterator   SenderIt;
   typedef typename ReceiverRge::iterator ReceiverIt;
-  //  return RangeConnector<SenderIt,ReceiverIt>
   return Connector
     (new copy_range_connector<SenderIt,ReceiverIt>(s.begin(),s.end(),
 						   r.begin(),r.end()));
 }
 
+/*! Creator function for add_to_range_connector
+  \ingroup connectors
+  \relates add_to_range_connector, Connector
+ */
 template<class SenderIt, class ReceiverIt>
-inline
-//RangeConnector<SenderIt,ReceiverIt> 
-Connector
+inline Connector
 AddingConnector(SenderIt sb, SenderIt se, ReceiverIt rb, ReceiverIt rs)
 { 
-  //  return RangeConnector<SenderIt,ReceiverIt>
   return Connector
     (new add_to_range_connector<SenderIt,ReceiverIt>(sb,se,rb,re));
 }
 
 
+/*! Creator function for add_to_range_connector
+  \ingroup connectors
+  \relates add_to_range_connector, Connector
+ */
 template<class SenderRge, class ReceiverRge>
-inline
-//RangeConnector<SenderIt,ReceiverIt> 
-Connector
+inline Connector
 AddingConnector(SenderRge s, ReceiverRge r)
 { 
   typedef typename SenderRge::iterator   SenderIt;
   typedef typename ReceiverRge::iterator ReceiverIt;
-  //  return RangeConnector<SenderIt,ReceiverIt>
   return Connector
     (new add_to_range_connector<SenderIt,ReceiverIt>(s.begin(),s.end(),
 						     r.begin(),r.end()));

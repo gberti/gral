@@ -1,4 +1,4 @@
-#ifndef NMWR_GB_MPI_DISTRIBUTED_GRID_H
+#ifndef NMWR_GB_MPI_DISTRIBUTED_GRID_H   // -*- c++ -*-
 #define NMWR_GB_MPI_DISTRIBUTED_GRID_H
 
 //----------------------------------------------------------------
@@ -15,7 +15,14 @@
 #include "Gral/Distributed/overlapping-grid.h"
 #include "Gral/Distributed/connector.h"
 
+/*! \defgroup mpidistributedgrids Distributed Grids using MPI 
+    \ingroup  distributedgrids
+  
+*/
 
+/*! \brief Helper class bundling MPI per-process entities.
+    \ingroup mpidistributedgrids
+ */
 struct mpi_proc {
  MPI_Comm the_communicator;
  int      the_rank;
@@ -25,6 +32,10 @@ struct mpi_proc {
 };
 
 
+/*! \brief Distributed grid class using MPI for communication
+    \ingroup mpidistributedgrid
+   
+ */
 template<class CoarseG, class FineG>
 class MPIDistributedGrid {
 public:
@@ -121,33 +132,47 @@ public:
 
 };
 
-/* 
-template<class CG1, class FG1, class CG2, class FG2>
-void ConstructDistributed(MPIDistributedGrid<CG1,FG1>     &  MpiG,         // out
-			  CG2                        const&  src_coarse,   // in
-			  FG2                        const&  src_fine,     // in
-			  CellCorr                        &  src2dest_c);  // out
-*/
-
+/*! \brief Creator function for MPI-based connector for data send.
+    \ingroup mpidistributedgrid connectors
+ */
 template<class SenderIt>
 Connector GetSendConnector(SenderIt sb, SenderIt se, unsigned sz, const mpi_proc& Receiver);
 
+/*! \brief Creator function for MPI-based connector for data send.
+    \ingroup mpidistributedgrid connectors
+ */
 template<class Range>
 inline Connector GetSendConnector(const Range& R, unsigned sz, const mpi_proc& Receiver)
 { return GetSendConnector(R.begin(),R.end(), sz,Receiver); }
 
+/*! \brief Creator function for MPI-based connector for data receive.
+    \ingroup mpidistributedgrid connectors
+ */
 template<class ReceiverIt>
 Connector GetRecvConnector(ReceiverIt rb, ReceiverIt re,  unsigned sz, const mpi_proc& Sender);
 
+/*! \brief Creator function for MPI-based connector for data receive.
+    \ingroup mpidistributedgrid connectors
+ */
 template<class Range>
 inline Connector GetRecvConnector(const Range& R,  unsigned sz, const mpi_proc& Sender)
 { return GetRecvConnector(R.begin(),R.end(),sz,Sender); }
 
 
+/*! \brief Creator function for MPI-based connector for data receive.
+    \ingroup mpidistributedgrid connectors
+    Data is received and combined with the local data, using op.
+    
+    Typically, AssignOp is just assigment, or add-assignment (often on shared ranges).
+ */
 template<class ReceiverIt, class AssignOp>
 Connector GetRecvConnector(ReceiverIt rb, ReceiverIt re, unsigned sz,
 			   const mpi_proc& Sender, const AssignOp& op);
 
+/*! \brief Creator function for MPI-based connector for data send.
+    \ingroup mpidistributedgrid connectors
+    Data is received and combined with the local data, using op.
+ */
 template<class Range, class AssignOp>
 inline Connector GetRecvConnector(const Range& R, unsigned sz,
 				  const mpi_proc& Sender, const AssignOp& op)

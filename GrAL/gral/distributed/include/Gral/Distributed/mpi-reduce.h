@@ -14,25 +14,23 @@
 #include "Gral/Distributed/mpi-types.h"
 
 //----------------------------------------------------------------
-//
-// Some experimental/provisoric implementations
-// of global reduce functions like max,min, ...
-//
+/*! \brief Wrapper for MPI Global reduce function
+    \ingroup mpidistributedgrids
+    \todo  Implement other reduce functions or even a generic version,
+    using arbitrary  (commutative and associative) operators.
+  
+   \templateparams
+    - CTXT: Has member <tt> mpicomm CTXT::TheCommunicator() </tt>
+*/
 //----------------------------------------------------------------
 
 
 template<class T, class CTXT> 
-T mpi_global_max(const T& t, const CTXT& Ctxt)
-{
-  T* sendbuf = new T(t);
-  T* recvbuf = new T;
-  MPI_Allreduce(sendbuf,recvbuf,1,mpi_types<T>::tag(),MPI_MAX,Ctxt.TheCommunicator());
-  
-  T the_max = *recvbuf;
-  delete recvbuf;
-  delete sendbuf;
-  return the_max;
-}
+T mpi_global_max(const T& t, const CTXT& Ctxt);
+
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Distributed/internal/mpi-reduce.C"
+#endif
 
 
 #endif

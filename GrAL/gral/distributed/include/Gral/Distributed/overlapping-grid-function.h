@@ -15,9 +15,17 @@
 #include "Gral/Base/grid-functions.h"
 
 //----------------------------------------------------------------
-//
-// a grid function that knows which parts are owned by other parts.
-//
+/*! \brief A grid function that knows which parts are owned by other parts.
+    \ingroup overlappinggrids
+    \partof  overlappinggrids
+
+    \templateparams
+    - E element type
+    - T value type
+    - DGrid: overlapping grid, for example overlapping_grid
+
+   \see module gridfunctions
+ */
 //----------------------------------------------------------------
 
 

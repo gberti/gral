@@ -11,23 +11,29 @@
 
 #include "Gral/Distributed/overlap.h"
 
+
+/*! \defgroup overlappingrids Overlapping Grids
+    \brief Grids and grid functions augmented with overlap ranges.
+    \ingroup distributedgrids
+*/
+
 //----------------------------------------------------------------
-//
-// template<class CoarseGrid, class FineGrid>
-// class overlapping_grid;
-//
-// A overlapping grid augments a base grid with the notion of
-// overlap ranges that capture its relationship to other parts
-// of a (conceptual) global grid.
-// However, a overlapping grid has no idea of the context it is
-// contained in, i.e. a really distributed environment with message
-// passing or just a part of a composite grid.
-//
-//
+/*! \brief Sequential grid augmented with an overlap.
+    \ingroup overlappinggrids
+
+ An overlapping grid augments a base grid with the notion of
+ overlap ranges that capture its relationship to other parts
+ of a (conceptual) global grid.
+
+ However, a overlapping grid has no idea of the context it is
+ contained in, which may be a really distributed environment with message
+ passing or just a part of a composite grid.
+
+ \partof overlappinggrids
+*/
 //----------------------------------------------------------------
 
 
-//template<class FineGrid, class overlap_type>
 
 template<class CoarseGrid, class FineGrid>
 class OverlappingGrid  {

@@ -12,61 +12,36 @@
 #include "Gral/Distributed/range-layers.h"
 
 //----------------------------------------------------------------
-// class overlap<CoarseG,FineG>;
-//
-// classes allowing economic storage of layered overlap ranges
-// allows efficient combination of adjacent ranges
-// like exported = exposed + shared
-//      imported = shared  + copied
-//
-// CONTENTS:
-// ---------
-//   [1] template<class CoarseGrid, class FineGrid> class overlap;
-//
-//   [2a] template<class SrcRange, class DestRange, class Filter>
-//        void copy_overlap_ranges(const SrcRange& prv,   // in
-//                                 const SrcRange& exp,   // in
-//                                 const SrcRange& shd,   // in
-//                                 const SrcRange& cop,   // in
-//                                 DestRange& dest,       // out
-//                                 const Filter& f);      // in
-//   [2b] template<class SrcRange, class DestRange, class Filter>
-//        void copy_overlap_ranges(const SrcRange& exp,   // in
-//                                 const SrcRange& shd,   // in
-//                                 const SrcRange& cop,   // in
-//                                 DestRange& dest,       // out
-//                                 const Filter& f);      // in
-//   [3] template<CG1, FG1,  Ovlp2, 
-//                CoarseCCorr, FineVCorr, FineCCorr>
-//       void CopyOverlap(overlap<CG1,FG1>       &  dest,            // out
-//              	  Ovlp2             const&  src,             // in
-//		          CG1               const&  cg_dest,         // in
-//		          CoarseCCorr       const&  crs_src2dest_c,  // in 
-//   		          FG1               const&  fg_dest,         // in
-//		          FineVCorr         const&  src2dest_v,      // in 
-//                        FineCCorr         const&  src2dest_c);     // in
-//
-//   [4] template<class Overlap>
-//       void write_ovlp(Overlap const& ovlp, ostream & out);
-//   
-//
-// DESCRIPTION:
-// ------------
-//  [1] bundles range_layers for different types of E and gives
-//      access to complete as well as per-neighbor ranges
-//
-//  [2a-b] a simple helper function to set layered ranges from
-//      different source ranges.
-//
-//  [3] generic copy operations for overlap structures.
-//      dest = src modulo the corr. mappings 
-//  [4] print an overlap structure to a stream
-//
+/*! \defgroup overlapds  Grid overlap ranges
+    \ingroup distributedgrids
+  \brief Overlap ranges for grids and corresponding functions
+  \ingroup distributedgrids
+
+ classes allowing economic storage of layered overlap ranges
+ allows efficient combination of adjacent ranges
+ like exported = exposed + shared
+      imported = shared  + copied
+
+*/
 //----------------------------------------------------------------
 
 
 //----------------------------------------------------------------
-//               [1] overlap<CoarseGrid,FineGrid>
+/*! \brief Overlap ranges with economic storage
+    \ingroup overlapds
+    
+ An object of class overlap is tied to a local grid (\c FineGrid) 
+ and a quotient grid (\c CoarseGrid).
+ It gives access to total as well as bilateral overlap ranges
+ of type overlap_ranges<E>, where \c E is an element type of \c FineGrid.
+
+ Therefore, one can access (adjacent) overlap ranges,
+ like exported = exposed \f$ \cup \f$ shared
+  or  imported = shared  \f$ \cup \f$ copied.
+
+ \see overlap_ranges, dyn_overlap 
+ \todo Add facet ranges.
+*/
 //----------------------------------------------------------------
 
 
@@ -88,9 +63,9 @@ public:
   typedef tp<Facet>                  tpF;
   typedef tp<Cell>                   tpC;
 
-  typedef range_layers<Vertex>                         v_range_type;
-  typedef range_layers<Facet>                          f_range_type;
-  typedef range_layers<Cell>                           c_range_type;
+  typedef overlap_ranges<Vertex>                         v_range_type;
+  typedef overlap_ranges<Facet>                          f_range_type;
+  typedef overlap_ranges<Cell>                           c_range_type;
   typedef enumerated_subrange_ref<grid_type>           range_type_ref;
 
   //  typedef typename v_range_type::range_ref  vertex_range_type_ref;
@@ -130,7 +105,7 @@ private:
   // total ranges
   v_range_type    total_ranges_v;
   c_range_type    total_ranges_c;
- 
+
   // contains all coarse cell with no-empty partial ranges.
   coarse_cell_range   neighbours;
 
@@ -173,23 +148,23 @@ public:
 
   //----------------- range access -------------------------
 
-  v_range_type & vertices() { return total_ranges_v;}
-  c_range_type & cells()    { return total_ranges_c;}
+  v_range_type & vertices()    { return total_ranges_v;}
+  c_range_type & cells   ()    { return total_ranges_c;}
   v_range_type & elements(tpV) { return total_ranges_v;}
   c_range_type & elements(tpC) { return total_ranges_c;}
 
-  v_range_type & vertices(const CoarseCell& Nb) { return neighbour_ranges_v[Nb];}
-  c_range_type & cells   (const CoarseCell& Nb) { return neighbour_ranges_c[Nb];}
+  v_range_type & vertices(     const CoarseCell& Nb) { return neighbour_ranges_v[Nb];}
+  c_range_type & cells   (     const CoarseCell& Nb) { return neighbour_ranges_c[Nb];}
   v_range_type & elements(tpV, const CoarseCell& Nb) { return neighbour_ranges_v[Nb];}
   c_range_type & elements(tpC, const CoarseCell& Nb) { return neighbour_ranges_c[Nb];}
 
-  v_range_type const& vertices() const { return total_ranges_v;}
-  c_range_type const& cells() const    { return total_ranges_c;}
+  v_range_type const& vertices()    const { return total_ranges_v;}
+  c_range_type const& cells()       const { return total_ranges_c;}
   v_range_type const& elements(tpV) const { return total_ranges_v;}
   c_range_type const& elements(tpC) const { return total_ranges_c;}
 
-  v_range_type const& vertices(const CoarseCell& Nb) const { return neighbour_ranges_v(Nb);}
-  c_range_type const& cells   (const CoarseCell& Nb) const { return neighbour_ranges_c(Nb);}
+  v_range_type const& vertices(     const CoarseCell& Nb) const { return neighbour_ranges_v(Nb);}
+  c_range_type const& cells   (     const CoarseCell& Nb) const { return neighbour_ranges_c(Nb);}
   v_range_type const& elements(tpV, const CoarseCell& Nb) const { return neighbour_ranges_v(Nb);}
   c_range_type const& elements(tpC, const CoarseCell& Nb) const { return neighbour_ranges_c(Nb);}
 
@@ -206,7 +181,14 @@ public:
 
 
 //----------------------------------------------------------------
-//          [2]  copy_overlap_ranges(...)
+/*! \brief Create a layered range from separate ranges.
+    \ingroup overlapds
+
+    \templateparams
+    - \c SrcRange: STL ForwardContainer (value type element handle)
+    - \c DestRange: STL BackInsertionContainer
+    - \c Filter: <tt> SrcRange::value_type -> DestRange::value_type </tt>
+ */
 //----------------------------------------------------------------
 
 
@@ -216,13 +198,16 @@ void copy_overlap_ranges(const SrcRange& priv, const SrcRange& exp,
 			 const SrcRange& shd,  const SrcRange& cop,
 			 DestRange& dest,const Filter& f);
 
+/*! \overload 
+ */
 template<class SrcRange, class DestRange, class Filter>
 void copy_overlap_ranges(                      const SrcRange& exp,
 			 const SrcRange& shd,  const SrcRange& cop,
 			 DestRange& dest,const Filter& f);
 
-//template<class Ovlp1, class Ovlp2, class FineVCorr, class FineCCorr>
-//template<class CG1, class CG2, class FG1, class FG2, class CoarseCCorr, class FineVCorr, class FineCCorr>
+/*! Copy an entire overlap range modulo grid morphisms
+    \ingroup overlapds
+ */
 template<class CG1, class FG1, class Ovlp2, class CoarseCCorr, class FineVCorr, class FineCCorr>
 void CopyOverlap(overlap<CG1,FG1>       &  dest,            // out
 		 Ovlp2             const&  src,             // in
@@ -234,7 +219,9 @@ void CopyOverlap(overlap<CG1,FG1>       &  dest,            // out
 
 
 
-
+/*! Pretty-print an overlap
+   \ingroup overlapds
+ */
 template<class Overlap>
 void write_ovlp(Overlap const& ovlp, ostream & out);
 

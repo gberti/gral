@@ -9,11 +9,21 @@
 //   
 //----------------------------------------------------------------
 
-#include "list"  // STL
+#include <list>  // STL
+
+#include "Gral/Base/type-tags.h"
+
 #include "Gral/Distributed/connector.h"
 #include "Gral/Distributed/overlapping-grid-function.h"
 
 
+/*! \brief Grid function for a MPIDistributedGrid
+    \ingroup mpidistributedgrids
+   
+    \partof mpidistributedgrids
+    \see module gridfunctions
+    \see compositegrids
+ */
 template<class E, class T, class DistributedG>
 class distributed_grid_function {
   typedef DistributedG                            distributed_grid_type;

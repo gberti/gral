@@ -23,8 +23,6 @@ void ConstructOverlap(Overlap          & Ovlp,         // out
 		      GridMap     const& grid_map)
 
 {
-  //  typedef typename Partition::coarse_grid_type  CoarseGrid;
-  
   typedef grid_types<CoarseGrid>                cgt;
   typedef typename cgt::Cell                    CoarseCell;
   typedef typename cgt::CellIterator            CoarseCellIterator;
@@ -38,7 +36,9 @@ void ConstructOverlap(Overlap          & Ovlp,         // out
   for(CoarseCellIterator P = CrsG.FirstCell(); ! P.IsDone(); ++P) {
     AddTotalSharedRanges(Ovlp[*P].vertices().shared(),
 			 Ovlp[*P].facets  ().shared(),
-			 Prtng, cell2part(*P), Prtng.TheGrid());
+			 Prtng, 
+			 cell2part(*P), 
+			 Prtng.TheGrid());
   }
 
   for(CoarseCellIterator P0 = CrsG.FirstCell(); ! P0.IsDone(); ++P0) {
@@ -47,10 +47,8 @@ void ConstructOverlap(Overlap          & Ovlp,         // out
 			   part2cell,  
 			   Ovlp[*P0].vertices().shared(), 
 			   Ovlp[*P0].facets  ().shared(), 
-			   grid_map,
-			   grid_map);
-    //			   identity<Vertex>(),
-    //		   identity<Facet>());
+			   grid_map,  // may be identity<Vertex>()
+			   grid_map); // may be identity<Facet>()
   }
  
   for(CoarseCellIterator P1 = CrsG.FirstCell(); ! P1.IsDone(); ++P1) {
@@ -61,20 +59,15 @@ void ConstructOverlap(Overlap          & Ovlp,         // out
 		   Ovlp[*P1].facets  ().shared());
   }
 
-
   for(CoarseCellIterator P2 = CrsG.FirstCell(); ! P2.IsDone(); ++P2) {
     AddPartialRanges(Ovlp,
 		     Prtng, cell2part(*P2),
 		     part2cell,
 		     Ovlp[*P2].vertices().copied(),
 		     Ovlp[*P2].cells   ().copied(),
-		     grid_map,
-		     grid_map);
-    //	     identity<Vertex>(),
-    //	     identity<Cell>());
+		     grid_map,  // may be identity<Vertex>()
+		     grid_map); // may be identity<Cell>()
   }
-  
 }
-
 
 #endif

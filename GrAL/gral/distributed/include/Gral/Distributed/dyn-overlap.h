@@ -13,41 +13,48 @@
 #include "Gral/Subranges/enumerated-subrange.h"
 
 //----------------------------------------------------------------
-// 
-// classes bundling overlap ranges
-// allowing efficient extension of ranges
-// This will typically be used to assemble the overlap ranges
-// before copying them to a form supporting combination of adjacent ranges
-//
-// CONTENTS:
-// ---------
-//   [1] template<class E> class overlap_range;
-//   [2] template<class CoarseGrid, class FineGrid> class dyn_overlap;
-//
-//
-// DESCRIPTION:
-// ------------
-//  [1] gives storage  for ranges of elements of type E 
-//      and gives and read/write access to them:
-//
-//       private   exposed    shared    copied
-//      +--------+----------+---------+---------+
-//
-//  [2] bundles range_layers for different types of E and gives
-//      read/write access to complete as well as per-neighbor ranges
-//
-//
+/*! \defgroup dynoverlap Dynamic (extensible) overlap ranges
+    \ingroup overlapds
+   \brief Classes bundling overlap ranges allowing efficient \e extension of ranges
+ 
+   The classes in this module  are typically  used to assemble the overlap ranges
+   before copying them to a form supporting combination of adjacent ranges
+
+   The class dyn_overlap is the dynamic version of overlap, and
+   dyn_overlap_ranges is the dynamic version of overlap_ranges..
+
+ DESCRIPTION:
+ ------------
+  [1] Provides storage  for ranges of elements of type E 
+      and gives and read/write access to them:
+
+
+  [2] bundles range_layers for different types of E and gives
+      read/write access to complete as well as per-neighbor ranges
+
+*/
 //----------------------------------------------------------------
 
 
 //----------------------------------------------------------------
-//                [1] overlap_ranges<E>
+/*!  \brief Provides storage  for ranges of elements of type E 
+      and gives and read/write access to them.
+     \ingroup dynoverlap
+
+      This class is the dynamic version of overlap_ranges.
+
+      Supported are only atomic (non-composite) ranges:
+      <pre>
+       private   exposed    shared    copied
+      +--------+----------+---------+---------+
+      </pre>
+ */
 //----------------------------------------------------------------
 
 template<class E>
-class overlap_ranges {
+class dyn_overlap_ranges {
 public:
-  typedef overlap_ranges<E> self;
+  typedef dyn_overlap_ranges<E> self;
   typedef element_traits<E>          et;
   typedef typename et::grid_type     grid_type;
   typedef grid_types<grid_type>      gt;
@@ -80,8 +87,8 @@ private:
 public:
   //------------------- construction ------------------------
 
-  overlap_ranges() : the_grid(0) {} // init();}
-  overlap_ranges(const grid_type& g) : the_grid(&g) { init();}
+  dyn_overlap_ranges() : the_grid(0) {} // init();}
+  dyn_overlap_ranges(const grid_type& g) : the_grid(&g) { init();}
 
   void set_grid(const grid_type& g) {  the_grid = &g; init();}
 
@@ -122,7 +129,14 @@ public:
 
 
 //----------------------------------------------------------------
-//               [2] overlap<CoarseGrid,FineGrid>
+/*! \brief Dynamic (extensible) overlap data structure.
+    \ingroup dynoverlap
+   
+    This class is the dynamic version of overlap,
+    better suited for incremental creation of overlap ranges.
+
+    \see module overlapds
+ */
 //----------------------------------------------------------------
 
 
@@ -145,13 +159,13 @@ public:
   typedef tp<Facet>                  tpF;
   typedef tp<Cell>                   tpC;
 
-  typedef overlap_ranges<Vertex>                         v_range_type;
-  typedef overlap_ranges<Facet>                          f_range_type;
-  typedef overlap_ranges<Cell>                           c_range_type;
+  typedef dyn_overlap_ranges<Vertex>                         v_range_type;
+  typedef dyn_overlap_ranges<Facet>                          f_range_type;
+  typedef dyn_overlap_ranges<Cell>                           c_range_type;
 
-  typedef typename overlap_ranges<Vertex>::range_type   vertex_range_type;
-  typedef typename overlap_ranges<Facet>::range_type    facet_range_type;
-  typedef typename overlap_ranges<Cell>::range_type     cell_range_type;
+  typedef typename dyn_overlap_ranges<Vertex>::range_type   vertex_range_type;
+  typedef typename dyn_overlap_ranges<Facet>::range_type    facet_range_type;
+  typedef typename dyn_overlap_ranges<Cell>::range_type     cell_range_type;
 
   typedef  partial_grid_function<CoarseCell, v_range_type>  v_neighbour_range_map;
   typedef  partial_grid_function<CoarseCell, f_range_type>  f_neighbour_range_map;

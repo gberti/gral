@@ -15,6 +15,10 @@
 #include "Gral/Distributed/mpi-distributed-grid-function.h"
 
 
+/*! For partial specialization of distr_grid_traits
+    \ingroup mpidistributedgrids
+   
+ */
 template<class CG, class FG>
 struct distr_grid_traits_mpidg {
 
@@ -29,24 +33,31 @@ struct distr_grid_traits_mpidg {
     { return DG.TheGrid(); }
 
 };
+/*! \brief partial specialization of distr_grid_traits
+  \ingroup mpidistributedgrids
+ */
+template<class CG, class FG>
+struct distr_grid_traits<MPIDistributedGrid<CG,FG> >
+  : public distr_grid_traits_mpidg<MPIDistributedGrid<CG,FG> >
+{};
 
-// __STL_FULL_SPECIALIZATION 
-// partial specialization
-#define SPECIALIZATION_MPI_DISTR_GRIDFUNCTION(E,T,CG,FG)\
-class distr_grid_function<grid_types<FG>::##E, T, MPIDistributedGrid<CG,FG> >\
-  : public distributed_grid_function<grid_types<FG>::##E,T, MPIDistributedGrid<CG,FG> >\
-{\
-private:\
-  typedef grid_types<FG>::##E E_type;\
-  typedef distributed_grid_function<E_type ,T, MPIDistributedGrid<CG,FG> > base;\
-  typedef distr_grid_function<E_type,T, MPIDistributedGrid<CG,FG> > self;\
-public:\
-  MAKE_DEFAULT_OPS_SELF;\
-  distr_grid_function(MPIDistributedGrid<CG,FG> const& DG)\
-     : distributed_grid_function<E_type ,T, MPIDistributedGrid<CG,FG> >(DG) {}\
-  distr_grid_function(MPIDistributedGrid<CG,FG> const& DG, T const& t)\
-     : distributed_grid_function<E_type ,T, MPIDistributedGrid<CG,FG> >(DG,t) {}\
-  distr_grid_function()  {}\
+/*! \brief partial specialization of distr_grid_function<E,T,DG>
+    \ingroup mpidistributedgrids
+       
+*/
+template<class E, class T, class CG, class FG>
+class distr_grid_function<E,T,MPIDistributedGrid<CG,FG> >
+: public distributed_grid_function<E,T, MPIDistributedGrid<CG,FG> >
+{
+ private:
+  typedef distributed_grid_function<E,T, MPIDistributedGrid<CG,FG> > base;
+  typedef distr_grid_function      <E,T, MPIDistributedGrid<CG,FG> > self;
+ public:
+  distr_grid_function()  {}
+  distr_grid_function(MPIDistributedGrid<CG,FG> const& DG)
+    : distributed_grid_function<E, T, MPIDistributedGrid<CG,FG> >(DG) {}
+  distr_grid_function(MPIDistributedGrid<CG,FG> const& DG, T const& t)
+    : distributed_grid_function<E, T, MPIDistributedGrid<CG,FG> >(DG,t) {}
 };
 
 
@@ -54,11 +65,16 @@ template<class E, class T, class CG, class FG>
 inline void synchronize(distr_grid_function<E,T, MPIDistributedGrid<CG,FG> > & gf)
 { gf.synchronize(); }
 
+/*! \brief Global maximum over a mpi distributed grid function.
+    \ingroup mpidistributedgrid
+ */
 template<class R, class E, class T, class CG, class FG, class F>
 typename F::result_type
 global_max(R const&  r, 
 	   distr_grid_function<E,T, MPIDistributedGrid<CG,FG> > const& gf, F const& f);
 
+/*! \overload
+ */
 template<class T, class CG, class FG>
 T global_max(T const& t, MPIDistributedGrid<CG,FG> const& MG);
 

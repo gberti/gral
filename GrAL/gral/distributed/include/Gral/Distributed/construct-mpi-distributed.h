@@ -16,9 +16,13 @@
 #include "Gral/Distributed/mpi-distributed-grid.h"
 
 //----------------------------------------------------------------
-// ConstructMPIDistributedFromMaster -- build a mpi-distributed grid
-//    via an intermediary composite grid.
-//    
+/*! \brief build a mpi-distributed grid via an intermediary 
+    composite grid.
+
+    The grid may be periodic.
+   \ingroup mpidistributedgrids
+   \todo Fix geometry construction!
+*/    
 //----------------------------------------------------------------
 
 template<class CG, class FG, class FGEOM, class MG, class GEOM, class TRAFO>

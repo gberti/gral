@@ -1,4 +1,4 @@
-#ifndef NMWR_GB_CONSTRUCT_COMPOSITE_H
+#ifndef NMWR_GB_CONSTRUCT_COMPOSITE_H  // -*- c++ -*-
 #define NMWR_GB_CONSTRUCT_COMPOSITE_H
 
 //----------------------------------------------------------------
@@ -11,15 +11,17 @@
 
 
 //----------------------------------------------------------------
-//
-// Construct a composite grid from a partition of a master grid.
-// typical parameter types:
-// Composite: CompositeGrid<CoarseG,FineG>
-// Partition: partitioning<FineG>
-// Geometry:  geometry type for FineG
-// OVPattern: queue<grid_element_tag>
-// VCorr:     grid_function<CoarseCell, mapping<fine_vhandle,fine_vhandle>
-// CCorr:     grid_function<CoarseCell, mapping<fine_chandle,fine_chandle>
+/*! \brief Construct a composite grid from a partition of a master grid.
+  \ingroup compositegrids
+
+ \templateparams
+  - \c Composite: e.g. \c CompositeGrid<CoarseG,FineG>
+  - \c Partition: e.g. \c partitioning<FineG>
+  - \c Geometry:  geometry type for \c FineG
+  - \c OVPattern: queue<grid_element_tag>
+  - \c VCorr: e. g. \c grid_function<CoarseCell,mapping<fine_vhandle,fine_vhandle>
+  - \c CCorr: e. g. \c grid_function<CoarseCell, mapping<fine_chandle,fine_chandle>
+*/
 //----------------------------------------------------------------
 
 template<class CompositeG, class Partition, class Geometry, 

@@ -1,11 +1,13 @@
 #ifndef NMWR_GB_MPI_DISTRIBUTED_GRID_FUNCTION_C
 #define NMWR_GB_MPI_DISTRIBUTED_GRID_FUNCTION_C
 
-#include "algorithm"  // STL
+#include "Gral/Distributed/mpi-distributed-grid-function.h"
+
+#include <algorithm>  // STL
 
 #include "Container/operators.h"
-#include "Gral/restricted-grid-function.h"
-#include "Gral/Distributed/mpi-distributed-grid-function.h"
+#include "Gral/Base/restricted-grid-function.h"
+
 
 
 template<class E, class T, class DistributedG>

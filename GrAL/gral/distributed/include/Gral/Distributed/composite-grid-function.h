@@ -9,11 +9,17 @@
 //   
 //----------------------------------------------------------------
 
-#include "list"  // STL
+#include <list>  // STL
+
 #include "Gral/Distributed/connector.h"
 #include "Gral/Distributed/overlapping-grid-function.h"
 
 
+/*! \brief Grid function for a composite grid.
+    \ingroup compositegrids
+   
+    \see CompositeGrid
+ */
 template<class E, class T, class CompositeG>
 class composite_grid_function {
   typedef CompositeG                            composite_grid_type;

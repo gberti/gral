@@ -11,6 +11,7 @@
 
 #include <string>
 #include <queue> // STL
+
 #include "Gral/Base/type-tags.h"
 
 //----------------------------------------------------------------

@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_RANGE_LAYERS_H
-#define NMWR_GB_RANGE_LAYERS_H
+#ifndef NMWR_GB_OVERLAP_RANGES_H
+#define NMWR_GB_OVERLAP_RANGES_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -14,48 +14,43 @@
 
 //----------------------------------------------------------------
 // 
-// class range_layers<E>;
-//
-// class allowing economic storage of layered overlap ranges
-// and efficient combination of adjacent ranges
-// like exported = exposed + shared
-//      imported = shared  + copied
-//
-// CONTENTS:
-// ---------
-//  [1] template<class E> class range_layers;
-//  [2a] template<class EltRange>
-//       void write_rge(EltRange const& rge, ostream & out);
-//  [2b] template<class OVRange>
-//       void write_ovrge(OVRange const& rge, ostream & out);
-// 
-// DESCRIPTION:
-// -----------
-//  [1] gives economic storage for adjacent ranges of elements of type E:
-//       private   exposed    shared    copied
-//      +--------+----------+---------+---------+
-//      |-     owned       -|-    imported     -|
-//               |-      exported    -|
-//
-//  [2a] writes an element range to a stream
-//  [2b] writes an overlap range to a stream (with range layers name as above)
-// 
-// CONSTRAINTS on template parameters:
-// -----------------------------------
-//
-//  [1] E is a grid element type, element_traits<E> must be specialized.
-//
-//----------------------------------------------------------------
+/*! \brief economic storage of layered overlap ranges
+           and efficient combination of adjacent ranges
+  \ingroup overlapds
+    
+ This class allows combination of adjacent overlap ranges like
+ exported = exposed \f$ \cup \f$ shared
+ and
+ imported = shared  \f$ \cup \f$ copied
 
+  Layout of ranges:
+  <pre>
+       private   exposed    shared    copied
+      +--------+----------+---------+---------+
+      |-     owned       -|-    imported     -|
+               |-      exported    -|
+ </pre>
 
+  \templateparams
+  -  \c E is a grid element type, 
+      \c element_traits<E> must be specialized.
 
-//----------------------------------------------------------------
-//   [1]     class range_layers<E>
+  \see overlap, dyn_overlap_ranges
+  \partof overlapds
+
+  Similar (slightly more general) classes are defined 
+  in the \ref layeredsubrange  module,
+  but without explicit naming the layers (exposed, shared etc.). 
+
+  \todo rename file to overlap_ranges.h
+  \todo add support for formally owned elements, i.e.  further
+  refine the shared parts.
+*/
 //----------------------------------------------------------------
 
 template<class E>
-class range_layers {
-  typedef range_layers<E>            self;
+class overlap_ranges {
+  typedef overlap_ranges<E>            self;
 public:
   typedef element_traits<E>          et;
   typedef typename et::grid_type     grid_type;
@@ -90,8 +85,8 @@ private:
 public:
   //------------------- construction ------------------------
 
-  range_layers() : the_grid(0) { init();}
-  range_layers(const grid_type& g) : the_grid(&g) { init();}
+  overlap_ranges() : the_grid(0) { init();}
+  overlap_ranges(const grid_type& g) : the_grid(&g) { init();}
 
   void set_grid(const grid_type& g) {
     REQUIRE(the_range.empty(),"set_grid(): range not empty!",1);
@@ -158,28 +153,31 @@ public:
 
 
   // "composed"
-  
+  //! [private, shared]
   range_ref local() const 
     { return range_ref(privee_begin(),shared_end(), the_range, *the_grid); }
 
   int owned_begin() const { return privee_begin();}
   int owned_end()   const { return exposed_end();}
+  //! [private, exposed]
   range_ref owned() const 
     { return range_ref(owned_begin(), owned_end(), the_range, *the_grid);}
   
 
   int exported_begin() const { return exposed_begin();}
   int exported_end()   const { return shared_end();}
+  //! [exposed, shared]
   range_ref   exported() const 
     { return range_ref(exported_begin(),exported_end(), the_range, *the_grid);}
 
   int imported_begin() const { return shared_begin();}
   int imported_end()   const { return copied_end();}
+  //! [shared, copied]
   range_ref   imported() const 
     { return range_ref(imported_begin(),imported_end(), the_range, *the_grid);}
 
 
-  // all of the overlap
+  //! [exported, copied]
   range_ref whole_overlap() const 
     { return range_ref(exported_begin(),copied_end(), the_range, *the_grid);}
 
@@ -187,14 +185,9 @@ public:
 };
 
 //----------------------------------------------------------------
-//   [2a]   void write_rge<EltRange>
-//----------------------------------------------------------------
-
-template<class EltRange>
-void write_rge(EltRange const& rge, ostream & out);
-
-//----------------------------------------------------------------
-//   [2b]   void write_ovrge<OVRange>
+/*! Pretty print a layered element range like overlap_ranges<E>.
+    \ingroup overlapds
+ */
 //----------------------------------------------------------------
 
 template<class OVRange>
