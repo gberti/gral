@@ -39,3 +39,8 @@ install-doc:
         doxygen/html/*.html)
 
 
+# assumes that RELPATH=../../..
+additional-copydoc:
+	cp $(DOXYPATH)/index.html $(DOCDEST)
+	perl -p -i -e "s|\.\./\.\./\.\.|\.|g" $(DOCDEST)/index.html
+

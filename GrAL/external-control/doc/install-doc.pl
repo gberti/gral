@@ -19,7 +19,7 @@ while(<>) {
 
   # replace dummies set by gen-tex-paths.pl
   s|STLURL|$STL|g;
-  s|ALLROOT|$GRALPATH|g;
+  s|ALLROOT|$ALLROOT|g;
 
   print;
 }

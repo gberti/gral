@@ -49,6 +49,12 @@ additional-postdoc:
 	rm -f $(ROOT)/doxygen/html/external-control.html
 	ln -s $(ROOT)/doc/html_dir/external-control.html $(ROOT)/doxygen/html
 
+CONCEPTSPATH=doc/html_dir
+additional-copydoc:
+
+#	mkdir -p $(DOCDEST)/$(CONCEPTSPATH)
+#	cp -r $(CONCEPTSPATH)/* $(DOCDEST)/$(CONCEPTSPATH)
+
 tex:
 	(cd doc; $(MAKE) html)
 

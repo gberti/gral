@@ -31,16 +31,16 @@ do
 done;
 
 
-mkdir ${ALLROOT}/Docs;
-cd ${ALLROOT}/Docs;
+mkdir ${ALLROOT}/graldoc;
+cd ${ALLROOT}/graldoc;
 for i in ${MODULES}
 do
   mkdir -p $i
-  cp -r ${ALLROOT}/$i/doxygen/ $i
+  (cd ${ALLROOT}/$i; gmake copydoc DOCDEST=${ALLROOT}/graldoc/$i)
 done;
 cd ${ALLROOT};
 
-tar cf gral-doc.tar ${ALLROOT}/Docs
+tar cf gral-doc.tar ./graldoc
 gzip -f gral-doc.tar;
 mv gral-doc.tar.gz ..;
 cd ..;

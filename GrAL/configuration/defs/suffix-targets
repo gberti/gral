@@ -35,10 +35,19 @@ doc: predoc postdoc
 predoc:  doxy additional-predoc
 postdoc: installdox additional-postdoc
 
-# hook for module-specific additional docs
+DOCDEST=/dev/null
+copy-doxy: 
+	mkdir -p $(DOCDEST)/$(DOXYPATH)
+	cp -r $(DOXYPATH)/* $(DOCDEST)/$(DOXYPATH)
+
+copydoc: copy-doxy additional-copydoc
+
+additional-doc: additional-predoc additional-postdoc
+
+# hooks for module-specific additional docs
 additional-predoc:
 additional-postdoc:
-
+additional-copydoc:
 
 
 DOCROOT=$(ALLROOT)

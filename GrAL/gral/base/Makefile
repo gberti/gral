@@ -41,6 +41,7 @@ test:
 # depth + 1
 ADDRELPATH=..#
 
+CONCEPTSPATH=doc/hyperlatex/html
 additional-predoc:
 	(cd doc; gmake concepts)
 
@@ -48,10 +49,12 @@ additional-postdoc:
 	(../bin/install-doc.pl -root $(RELROOT) \
                                -path doxygen/html \
                                -stl $(STLURL) \
-                               -gral $(RELROOT)/gral/base/doc/hyperlatex/html\
+                               -gral $(RELROOT)/gral/base/$(CONCEPTSPATH) \
          doxygen/html/*.html)
 	(cd doc; gmake install-doc)
 
-
+additional-copydoc:
+	mkdir -p $(DOCDEST)/$(CONCEPTSPATH)
+	cp -r $(CONCEPTSPATH)/* $(DOCDEST)/$(CONCEPTSPATH)
 
 

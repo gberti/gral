@@ -3,8 +3,6 @@
   
    This packages is used by all other parts of the GrAL.
 
-   See \ref toplevelmodules for a coarse overview on the contents.  
-
    See $GrAL top for an introduction into the concepts of GrAL.
 
    \todo Namespace \c gral 
