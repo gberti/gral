@@ -60,7 +60,7 @@ public:
 
   overlap_type const& Overlap(const CoarseCell& C) const { return local_gfs(C).TheOverlap();}
   NeighbourIterator   FirstNeighbour(const CoarseCell& C) const 
-    { return TheComposite().FirstNeighbour(C);}
+    { return TheCompositeGrid().FirstNeighbour(C);}
 
   grid_function<E,T>  const& GridFunction(const CoarseCell& C) const 
     { return local_gfs(C).TheBaseGridFunction();}
