@@ -16,6 +16,7 @@ namespace GrAL {
  
     \ingroup gridgeometries
     \see \ref gridgeometries module
+    \todo Include dimension-specific / geometric stuff, from \ref geometrictypes2d
 */
 
 namespace detail {
