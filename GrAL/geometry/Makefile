@@ -16,9 +16,12 @@ compile:
 lib:
 
 test:
+	 (cd test; $(MAKE) $(TARGET) CONFIG=$(CONFIG))
 
 demo:
 
+module-check: 
+	(cd test; $(MAKE) check)
 
 install-headers:
 	mkdir -p $(INSTALLHEADERS)/Geometry
