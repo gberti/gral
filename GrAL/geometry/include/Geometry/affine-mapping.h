@@ -4,7 +4,7 @@
 // $LICENSE_NEC_2003
 
 #include "Geometry/point-traits.h"
-
+#include "Geometry/matrix-traits.h"
 
 /*! \brief Affine coordinate mapping
 
@@ -22,6 +22,7 @@ public:
 
   typedef point_traits<argument_type> apt;
   typedef point_traits<result_type >  rpt;
+  typedef matrix_traits<matrix_type>  mt;
 private:
   matrix_type A;
   coord_type  T; 
@@ -35,14 +36,18 @@ public:
   result_type operator()(argument_type const& x) const 
   { 
     result_type res = T;
-    for(int i = rpt::LowerIndex(res); i <= rpt::UpperIndex(res); ++i)
-      for(int j = apt::LowerIndex(x); j <= apt::UpperIndex(x); ++j)
-	res[i] += x[j]*A(i,j);
+    int lr = rpt::LowerIndex(res);
+    int la = apt::LowerIndex(x);
+    int lm = mt::LowerRowIndex(A);
+
+    for(int i = lr; i <= rpt::UpperIndex(res); ++i)
+      for(int j = la; j <= apt::UpperIndex(x); ++j)
+	res[i] += x[j]*A(i-lr+lm,j-la+lm);
     return res;
   }
   /*! \brief Composition operator
    */
-  self operator()(self const& B) { return self(A*B.A, T + A*B.T);}
+  self operator()(self const& B) const { return self(A*B.A, T + A*B.T);}
 
 
   static self identity() 
