@@ -8,6 +8,7 @@ use Getopt::Long;
 
 
 while(<>) {
+  s|\$Metis|<A HREF="%Metis">Metis</A>|g;
   s|\$gral-([^ ]+)[ ]*([a-z\-_A-Z0-9]+)|<A HREF="%ROOT/$1/%DOXYPATH/index.html"> $2 </A>|g;
   s|\$GrAL[ ]+([a-z\-_A-Z0-9]+)|<A HREF="%GRALCONCEPTS/$1.html">$1</A>|g;
   s|Adaptable Unary Function|<A HREF="%STL/AdaptableUnaryFunction.html"> Adaptable Unary Function</A>|g;
