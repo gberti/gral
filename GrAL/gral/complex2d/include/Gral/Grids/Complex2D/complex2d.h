@@ -306,6 +306,7 @@ private:
 public:
   //-------------- iteration ------------------
 
+  enum { dim = 2};
   unsigned dimension() const { return 2;}
 
   //@{ @name STL half-open ranges

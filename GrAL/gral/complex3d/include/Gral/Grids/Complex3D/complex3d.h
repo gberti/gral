@@ -87,7 +87,8 @@ class Complex3D : public grid_types_Complex3D {
 
   void clear(); // make this an empty grid
 
-  unsigned dimension() const { return 3;}  
+  enum { dim = 3};
+  unsigned dimension() const { return dim;}  
   size_type NumOfVertices() const { return num_of_vertices;}
   size_type NumOfCells()    const { return cell_archetype.size();}
 
