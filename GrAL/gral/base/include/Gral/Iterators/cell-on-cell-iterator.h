@@ -4,6 +4,7 @@
 // $LICENSE_NEC
 
 #include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/facet-on-cell-function.h"
 #include <map>
 
 /*! \brief A generic CellOnCellIterator 
@@ -44,12 +45,16 @@
       \endcode
 */
 
-template<class G, class NBTABLE, class GT = grid_types<G> >
+template<class G, 
+	 class NBTABLE = facet_on_cell_function<G,
+						typename grid_types<G>::cell_handle>, 
+	 class GT      = grid_types<G> >
 class cell_on_cell_iterator {
   typedef cell_on_cell_iterator<G,NBTABLE,GT> self;
 public:
   typedef G                        grid_type;
   typedef typename GT::Cell        Cell;
+  typedef typename GT::Facet       Facet;
   typedef typename GT::cell_handle cell_handle;
   typedef typename GT::FacetOnCellIterator FacetOnCellIterator;
   typedef Cell     value_type;
@@ -63,7 +68,8 @@ private:
   //  XGT::Cell c; XGT::CellOnCellIterator(c);
   //  where XGT is GT + cell_on_cell_iterator.
   //  Otherwise, we would have to wrap G+NBTABLE and each type in GT.
-  static    std::map<grid_type const*, NBTABLE const*> ctxt;
+  typedef std::map<grid_type const*, NBTABLE const*> context_table;
+  static  context_table  ctxt;
 public:
   cell_on_cell_iterator() : nbs(0) {}
   cell_on_cell_iterator(Cell const& c_)
@@ -84,8 +90,11 @@ public:
   grid_type const& TheGrid() const { return c.TheGrid();}
   bool             IsDone()  const { return fc.IsDone();}
   Cell      const& TheCell() const { return c;}
+  Facet            TheFacet() const { return *fc;}
 
   static void map_nb_table(grid_type const& g_, NBTABLE const& nbs_) { ctxt[&g_] = &nbs_;}
+  static void init        (grid_type const& g_);
+  static void remove      (grid_type const& g_);
 private:
   bool valid(cell_handle c) const { return TheGrid().valid(c);}
   void advance_till_valid() 
