@@ -201,6 +201,16 @@ namespace sequence {
 
 
  
+  /*! \brief Make the container unique & sorted
+    \ingroup algorithms
+
+  */
+  template<class Container>
+  void sort_and_make_unique(Container & container)
+  {
+    std::sort(container.begin(), container.end());
+    container.erase(unique(container.begin(), container.end()), container.end());
+  }
 
   /*! \brief Functor to advance input iterator
 
