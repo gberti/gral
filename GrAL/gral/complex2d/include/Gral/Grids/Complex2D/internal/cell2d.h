@@ -50,6 +50,7 @@ public:
   inline Vertex V(int i) const;
   inline Edge   E(int i) const;
   inline Edge   F(int i) const;
+  inline vertex_handle v(int i) const;
 
   int NumOfVertices()   const {
     REQUIRE((is_valid()),"Cell2D: action with invalid cell!",1);

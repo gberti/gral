@@ -49,18 +49,23 @@ inline CellOnCell2D_Iterator Cell2D::EndCell()    const { return EndNeighbour();
 
 inline int Cell2D::NumOfNeighbours() const
 { 
-  return count_if(base()._neighbours.begin(), base()._neighbours.end(), 
-		  bind2nd(::std::not_equal_to<int>(),-1)); 
+  return std::count_if(base()._neighbours.begin(), base()._neighbours.end(), 
+		       std::bind2nd(std::not_equal_to<int>(),-1)); 
 }
 
 inline Vertex2D Cell2D::V(int i) const
+{
+  return( _cc->vertex(v(i)));
+}
+
+inline Cell2D::vertex_handle Cell2D::v(int i) const
 {
   REQUIRE((is_valid()),"Cell2D: action with invalid cell!",1);
   REQUIRE((0 <= i && i < NumOfVertices()),\
 	  "Cell2D::Vertex(int i): i = " << i\
 	  << ", must be in [0," << NumOfVertices()-1 << "] !", 1);
 
-  return( _cc->vertex(base()._vertices[i]));
+  return base()._vertices[i];
 }
 
 inline Edge2D Cell2D::E(int i) const
