@@ -4,6 +4,7 @@
 // $LICENSE
 
 #include "Gral/Distributed/copy-overlap.h"
+#include "Gral/Distributed/copy-overlap-ranges.h"
 
 template
 < class Ovlp1, 
@@ -26,8 +27,8 @@ void CopyOverlap(Ovlp1                  &  dest,            // out
   //  dest.set_coarse_grid(cg_dest);
   // dest.set_fine_grid(fg_dest);
   
-  copy_overlap_ranges(src.vertices(),dest.vertices(),src2dest_v);
-  copy_overlap_ranges(src.cells(),   dest.cells(),   src2dest_c);
+  CopyOverlapRanges(dest.vertices(),src.vertices(),src2dest_v);
+  CopyOverlapRanges(dest.cells(),   src.cells()   ,src2dest_c);
   
   // NOTE: dest.neighbour-iteration does not yet work!
   typedef typename Ovlp1::CoarseCell        destCoarseCell;
@@ -37,13 +38,13 @@ void CopyOverlap(Ovlp1                  &  dest,            // out
   for(srcCellNbIterator sCNb = src.FirstCellNeighbour(); ! sCNb.IsDone(); ++sCNb) {
     destCoarseCell dNb = cg_dest.cell(crs_src2dest_c(sCNb.handle()));
     dest.init_bilateral_cell_range(dNb);
-    copy_overlap_ranges(src.cells   (*sCNb),dest.cells   (dNb),src2dest_c);
+    CopyOverlapRanges(dest.cells   (dNb),src.cells   (*sCNb),src2dest_c);
     
   }
   for(srcVertexNbIterator sVNb = src.FirstVertexNeighbour(); ! sVNb.IsDone(); ++sVNb) {
     destCoarseCell dNb = cg_dest.cell(crs_src2dest_c(sVNb.handle()));
     dest.init_bilateral_vertex_range(dNb);
-    copy_overlap_ranges(src.vertices(*sVNb),dest.vertices(dNb),src2dest_v);
+    CopyOverlapRanges(dest.vertices(dNb),src.vertices(*sVNb),src2dest_v);
   }
 
   dest.calc_dependent_information();
