@@ -21,6 +21,10 @@
 %\W\newcommand{\usc}{_}
 %\setcounter{secnumdepth}{6}
 
+\newcommand{\htmlimgpath}{bilder/}
+\newcommand{\htmlimgsuffix}{.jpeg}
+\newcommand{\makepath}[3]{{#1}#2#3}
+\newcommand{\img}[1]{\makepath{\htmlimgpath}{#1}{\htmlimgsuffix}}
 
 % Pfade
 \newcommand{\NMWRROOT}{../}
