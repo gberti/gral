@@ -109,7 +109,9 @@ inline
 restricted_grid_function<E,T, typename ERange::const_iterator>
 Restriction(grid_function<E,T>& gf, const ERange& R)
 { 
-  typedef typename ERange::const_iterator e_iter;
+  typedef typename ERange::const_iterator e_iter;  
+  //typedef typename ERange::ElementIterator e_iter;
+
   return restricted_grid_function<E,T,e_iter>(gf,R.begin(),R.end(),R.size());
 }
 

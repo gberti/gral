@@ -34,7 +34,7 @@ void mpi_graph_format(const Grid& G,
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "GrAL/Distributed/internal/grid-to-mpi-graph.C"
+#include "Gral/Distributed/internal/grid-to-mpi-graph.C"
 #endif
 
 
