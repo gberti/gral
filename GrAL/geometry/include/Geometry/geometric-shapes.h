@@ -62,15 +62,20 @@ public:
   */
 
 
-  template<class CELL, class GEOM, class GT> //  = grid_types<typename CELL::grid_type> >
-  intersection_result intersection_check(CELL const& c, GEOM const& geom) const {
-    typedef element_traits<CELL> et;
-    typedef typename et::element_tag cell_tag;
-    typedef typename GT::incidence<vertex_type_tag, typename et::element_tag>::type VertexOnCellIterator;
+  template<class GT, class ELEM, class GEOM> 
+  intersection_result intersection_check(ELEM const& e, GEOM const& geom) const {
+    typedef element_traits<ELEM> et;
+    typedef typename GT::incidence_iterator<vertex_type_tag, typename et::element_type_tag>::type VertexOnElemIterator;
     int inside_cnt = 0;
-    for(VertexOnCellIterator vc(c); ! vc.IsDone(); ++vc)
-      inside_cnt += (inside(geom.coord(*vc)) ? 1 : 0);
-    return(inside_cnt == 0 ? : outside (inside_cnt == c.NumOfVertices() ? inside : intersection));    
+    for(VertexOnElemIterator ve(e); ! ve.IsDone(); ++ve)
+      inside_cnt += (is_inside(geom.coord(*ve)) ? 1 : 0);
+    return(inside_cnt == 0 ?  outside : (inside_cnt == e.NumOfVertices() ? inside : intersection));    
+  }
+
+  template<class CELL, class GEOM>
+  intersection_result intersection_check(CELL const& c, GEOM const& geom) const {
+    typedef grid_types<typename CELL::grid_type> gt;
+    return intersection_check<gt>(c,geom);
   }
 
   template<class CELL, class GEOM, class GT> // = grid_types<typename CELL::grid_type> >
