@@ -1,6 +1,6 @@
 #! /bin/bash
 
-CVSPG=${HOME}/bin/cvscb
+CVSPG=cvs #${HOME}/bin/cvscb
 cvswork=${CVSWORK-${HOME}/CVS-work}
 MODULES=`$cvswork/configuration/scripts/modules-toplevel.sh`;
 
