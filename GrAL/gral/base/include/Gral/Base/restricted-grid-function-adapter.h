@@ -14,6 +14,19 @@
 */
 //----------------------------------------------------------------
 
+template<class GF, class E_iter>
+class restr_gf_iterator_adapter;
+
+template<class GF, class E_iter>
+inline bool operator==(restr_gf_iterator_adapter<GF,E_iter> const& ls,
+		       restr_gf_iterator_adapter<GF,E_iter> const& rs);
+template<class GF, class E_iter>
+inline bool operator!=(restr_gf_iterator_adapter<GF,E_iter> const& ls,
+		       restr_gf_iterator_adapter<GF,E_iter> const& rs);
+template<class GF, class E_iter>
+inline bool operator< (restr_gf_iterator_adapter<GF,E_iter> const& ls,
+		       restr_gf_iterator_adapter<GF,E_iter> const& rs);
+
 
 
 //----------------------------------------------------------------
