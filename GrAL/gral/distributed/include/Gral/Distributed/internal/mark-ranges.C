@@ -6,8 +6,7 @@
 
 #include "Gral/Distributed/mark-ranges.h"
 
-
-#include "Gral/Base/multi-grid-functions.h"
+#include "Gral/Base/partial-multi-grid-functions.h"
 #include "Gral/Subranges/layered-subrange.h"
 #include "Gral/Algorithms/incidence-hulls.h"
 #include "Gral/Algorithms/sequence-copy.h"
