@@ -41,12 +41,18 @@ namespace hierarchical {
   public:
     hier_grid_function_base() {}
     hier_grid_function_base(hier_grid_type const& gg) : gfs(gg) {}
-    hier_grid_function_base(hier_grid_type const& gg, value_type t) : gfs(gg) { init(t);}
+    hier_grid_function_base(hier_grid_type const& gg, value_type t) : gfs(gg) { set_value(t);}
 
-    void set_grid(hier_grid_type const& gg);  
+    void init(hier_grid_type const& gg, value_type const& t); 
+    void set_grid(hier_grid_type const& gg);
+    void set_value(value_type t);  
     void clear();
 
-    const_ptr<hier_grid_type> TheGrid() const { return gfs.TheGrid();}
+    //! get in sync with grid: add/remove missing/superflous levels
+    void update();
+
+    const_ptr<hier_grid_type> TheGrid () const { return gfs.TheGrid();}
+    const_ptr<hier_grid_type> TheHGrid() const { return gfs.TheGrid();}
 
     reference       operator[](element_type const& e)       { return gfs[e.level()][e.Flat()];}
     const_reference operator()(element_type const& e) const { return gfs(e.level())(e.Flat());}
@@ -67,7 +73,6 @@ namespace hierarchical {
     bool valid(level_handle lev) const { return (lev >= gfs.coarsest_level()) && (lev <= gfs.finest_level());}
     void cv(level_handle lev) const { REQUIRE(valid(lev), "lev=" << lev, 1); }
   private:
-    void init(value_type const& t); 
   }; // class hier_grid_function_base
 
 } //  namespace hierarchical
