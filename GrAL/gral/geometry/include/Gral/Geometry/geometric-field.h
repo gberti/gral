@@ -18,6 +18,7 @@ public:
   typedef typename geom_type::coord_type coord_type;
   typedef typename GT::grid_type         grid_type;
   typedef typename GT::Cell              Cell;
+  typedef typename GT::Vertex            Vertex;
   typedef typename function_type::value_type result_type;
   typedef point_locator<grid_type, geom_type> point_locator_type;
 private:
@@ -40,6 +41,8 @@ public:
     // std::cout << "X=" << X << " in cell " << c.handle() << std::endl;
     return (*interpolator(c))(X);
   }
+  result_type operator()(Vertex v) const { return (*f)(v);}
+  result_type operator()(coord_type X, Cell c) const { return (*interpolator(c))(X);}
 
   temporary<interpolator_type> interpolator(Cell c) const
   { 
