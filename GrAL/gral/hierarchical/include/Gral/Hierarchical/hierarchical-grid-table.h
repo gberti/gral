@@ -115,6 +115,9 @@ namespace hierarchical {
     level_handle add_coarser_level(T const& initializer);
     template<class T>
     level_handle add_finer_level  (T const& initializer);
+    virtual level_handle add_root_level();
+    template<class T>
+    level_handle add_root_level(T const& initializer);
 
     void         remove_coarsest_level();
     void         remove_finest_level();
