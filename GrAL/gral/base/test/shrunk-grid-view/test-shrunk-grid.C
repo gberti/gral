@@ -16,7 +16,9 @@
 #include "Gral/Test/all.h"
 
 #include "Container/functions.h" // std extensions: identity
+#include "Utility/pre-post-conditions.h"
 
+#include <algorithm>
 
 
 int main() {
@@ -39,6 +41,7 @@ int main() {
   // create disjoint union view of above grids and geometries
   namespace sgv = shrink_grid_view;
   typedef sgv::grid_view<reg_grid_type>       shrunk_grid_type;
+  typedef grid_types<shrunk_grid_type>        sgt;
   sgv::grid_view<reg_grid_type>               ShrunkG(R);
   sgv::geom_view<reg_grid_type,reg_geom_type> ShrunkGeom(ShrunkG, GeomR);
   ShrunkGeom.set_shrink_factor(0.5);
@@ -65,7 +68,9 @@ int main() {
   sgv::grid_function_view<gfR_c_int_type> gf_c_Shrink(ShrunkG,gfRc);
 
   // can use this only for gf's which can be instantiated
-  //test_grid_functions(gfShrink,cout);
+  // test_grid_functions<sgt::Cell>(gf_c_Shrink,cout);
+  int cnt = std::count(gf_c_Shrink.begin(), gf_c_Shrink.end(), 0);
+  REQUIRE_ALWAYS(cnt == gf_c_Shrink.size(), "  cnt= " << cnt << " size()=" << gf_c_Shrink.size(), 1);
 
   
   // output ShrunkG to files
