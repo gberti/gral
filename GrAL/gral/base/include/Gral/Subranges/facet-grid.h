@@ -35,7 +35,7 @@ struct grid_types_facet_grid {
 /*! \brief View a facet subrange as a d-1 dimensional grid
 
     \ingroup subranges   
-    Model of $GrAL CellVertexInputGrid
+    Model of $GrAL Cell-VertexInputGridRange
  */
 template<class FACETRANGE>
 class facet_grid

@@ -216,7 +216,7 @@ public:
 
 /*! \brief Cell type for Complex3D
 
-    Model of $GrAL GridCell, $GrAL GridCellIterator
+    Model of $GrAL Cell, $GrAL CellIterator
  */
 class Cell_Complex3D
   :  public grid_types_Complex3D::cell_base_type

@@ -17,7 +17,8 @@
     General Mesh Viewer </A> (GMV) is a versatile tool
     for viewing 3D meshes and fields defined on them.
 
-    Usage: (\c MyGrid is 2D grid object, model of $GrAL Cell-VertexInputGrid)
+    Usage: (\c MyGrid is 2D grid object, 
+    model of $GrAL Cell-VertexInputGridRange)
     \code
     OstreamGMV2DFmt Out("grid.gmv");
     ConstructGrid(Out,MyGrid, MyGeom); 
