@@ -29,7 +29,7 @@ public:
   checked_istream(std::istream* in_ = 0) : in( in_) {}
   checked_istream(std::istream& in_)     : in(&in_) {}
 
-  operator void*() const   { REQUIRE(in != 0, "", 1); return (in->fail() ? (void *)0 : (void *)(-1));}
+  operator void*() const   { REQUIRE_ALWAYS(in != 0, "", 1); return (in->fail() ? (void *)0 : (void *)(-1));}
 
   /*! \brief Implicit conversion to \c istream
       
@@ -40,20 +40,20 @@ public:
         }
       \endcode
   */
-  operator std::istream&() { REQUIRE(in != 0, "",1); return *in;}
+  operator std::istream&() { REQUIRE_ALWAYS(in != 0, "",1); return *in;}
 
   template<class T>
   friend checked_istream& operator>>(checked_istream& in, T & t)
   { 
-    REQUIRE( (in.in != 0), "no istream!\n",1);
-    REQUIRE( (in.in->good()), "attempt to read from empty istream!",1);
+    REQUIRE_ALWAYS( (in.in != 0), "no istream!\n",1);
+    REQUIRE_ALWAYS( (in.in->good()), "attempt to read from empty istream!",1);
 
     *(in.in) >> t; 
 
     // These macros must be on one line, else different compilers will report different line number
     // for the errors, and regression fails.
-    REQUIRE( (in.in->eof() || !in.in->fail()), "reading value " << t << " of type " << typeid(T).name() << " caused an error!\n",1);
-    REQUIRE( (!in.in->bad()), "bad istream, reading " << t << " of type " << typeid(T).name()  << " caused an error!\n",1);
+    REQUIRE_ALWAYS( (in.in->eof() || !in.in->fail()), "reading value " << t << " of type " << typeid(T).name() << " caused an error!\n",1);
+    REQUIRE_ALWAYS( (!in.in->bad()), "bad istream, reading " << t << " of type " << typeid(T).name()  << " caused an error!\n",1);
     return in;
   }
 };
