@@ -27,6 +27,7 @@ public:
   Edge2D_Iterator(GridCellIterator    const& c, 
 		  FacetOnCellIterator const& nb);
   Edge2D_Iterator(Complex2D const&);
+  Edge2D_Iterator(Complex2D const& g, edge_handle const& h);
 
   Edge2D_Iterator(const self& e) : _c(e._c), _fc(e._fc) {}
   self& operator=(const self& e) 
@@ -44,6 +45,9 @@ public:
   handle_type    handle()  const { return TheGrid().handle(this->operator*());}
   Complex const& TheGrid() const {return (_c.TheGrid());}
 
+  vertex_handle v1() const { return _fc.v1();}
+  vertex_handle v2() const { return _fc.v2();}
+
   friend bool operator==(const self& ls, const self& rs) {
     // relies on shortcircuit to prevent (ls._fc == rs._fc) from
     // being executed if (ls._c != rs._c), thus violating the precondition
@@ -54,6 +58,8 @@ public:
 	     || ((ls._c == rs._c) && (ls._fc == rs._fc)));
   }
 
+  bool bound() const { return _c.bound();}
+  bool valid() const { return _c.valid() && _fc.valid();}
 private:
   //---------- helper functions for iteration -------
   inline void _advance_till_valid();
@@ -69,6 +75,13 @@ inline Edge2D_Iterator::Edge2D_Iterator(Complex2D const& CC)
     _fc = (*_c).FirstFacet();
   _advance_till_valid();
 }
+
+inline Edge2D_Iterator::Edge2D_Iterator(Complex2D const&              CC,
+					Complex2D::edge_handle const& h)
+  : _c(CC,h.c), _fc(EdgeOnCellIterator(*_c,h.le))
+{}
+
+
 
 inline Edge2D_Iterator::Edge2D_Iterator(const Cell2D_Iterator& c,
 					const EdgeOnCell2D_Iterator& nb)
