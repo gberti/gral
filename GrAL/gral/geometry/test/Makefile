@@ -2,7 +2,8 @@
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 
-SUBDIRS = point-locator
+SUBDIRS = geometric-field \
+          point-locator
 
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)

@@ -35,7 +35,7 @@ void test_locator(LOCATOR const& Loc, IT begin, IT end, std::ostream& out)
 {
     out << "Bucket grid: [" 
 	<< Loc.TheBucketGrid()->low_vertex_index() << ","
-	<< Loc.TheBucketGrid()->high_vertex_index() << "]" << endl;
+	<< Loc.TheBucketGrid()->high_vertex_index() << "]" << std::endl;
     histogram_table<int> Hist;
     sequence::compute_histogram(Loc.TheBuckets()->begin(), Loc.TheBuckets()->end(), Hist, size_functor());
     out << "Bucket histogram:" << std::endl;
@@ -43,20 +43,21 @@ void test_locator(LOCATOR const& Loc, IT begin, IT end, std::ostream& out)
       out << h->first << " cells: " << h->second << " buckets." << std::endl;
 
     for(IT i = begin; i != end; ++i) {
-      cout << *i << ": ";
+      out << *i << ": ";
       if(Loc.locate(*i).tagname() == "inside")
-	cout << "in cell " << Loc.locate(*i).TheCell().index();
+	out << "in cell " << Loc.locate(*i).TheCell().index();
       else if(Loc.locate(*i).tagname() == "projection")
-	cout << " projected to " << Loc.locate(*i).TheCoord();
+	out << " projected to " << Loc.locate(*i).TheCoord();
       else
-	cout << " not in grid";
-      cout << endl;
+	out << " not in grid";
+      out << std::endl;
     }
 
 }
 
 int main()
 {
+  using namespace std;
   typedef gt::index_type it;
 
   {
