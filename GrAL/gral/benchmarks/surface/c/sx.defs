@@ -1,0 +1,4 @@
+# Settings for SX C++ cross compilation
+
+CCOMP   = /SX/opt/sxc++/inst/bin/sxc++
+COPTFLAGS = -c -Xa -C hopt -O restrict=keyword

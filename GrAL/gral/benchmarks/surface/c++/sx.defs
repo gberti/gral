@@ -1,0 +1,5 @@
+# Settings for SX C++ cross compilation
+
+CCC      = /SX/opt/sxc++/inst/bin/sxc++
+LDFLAGS += -f90lib
+CCOPTFLAGS += -C vopt -O restrict=keyword -pvctl fullmsg
