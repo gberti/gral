@@ -58,7 +58,26 @@ template<class GT>
 inline bool operator==(vertex_iterator_int<GT> const& lhs, 
 		       vertex_iterator_int<GT> const& rhs) { return (rhs.v == lhs.v);}
 template<class GT>
+inline bool operator< (vertex_iterator_int<GT> const& lhs, 
+		       vertex_iterator_int<GT> const& rhs) { return (rhs.v < lhs.v);}
+
+#ifndef GRAL_INCLUDES_RELOPS
+template<class GT>
 inline bool operator!=(vertex_iterator_int<GT> const& lhs, 
 		       vertex_iterator_int<GT> const& rhs) { return !(lhs == rhs);}
+
+template<class GT>
+inline bool operator> (vertex_iterator_int<GT> const& lhs, 
+		       vertex_iterator_int<GT> const& rhs) { return  (rhs < lhs);}
+
+template<class GT>
+inline bool operator<=(vertex_iterator_int<GT> const& lhs, 
+		       vertex_iterator_int<GT> const& rhs) { return !(lhs > rhs);}
+
+template<class GT>
+inline bool operator>=(vertex_iterator_int<GT> const& lhs, 
+		       vertex_iterator_int<GT> const& rhs) { return !(lhs < rhs);}
+
+#endif
 
 #endif

@@ -14,6 +14,9 @@ class cell_iterator_int;
 template<class GT>
 inline bool operator==(cell_iterator_int<GT> const& lhs, 
 		       cell_iterator_int<GT> const& rhs);
+template<class GT>
+inline bool operator< (cell_iterator_int<GT> const& lhs, 
+		       cell_iterator_int<GT> const& rhs);
 
 
 // mixin for vertex-on-cell-iteration
@@ -118,6 +121,8 @@ public:
 
   friend bool operator==<>(cell_iterator_int<GT> const& lhs, 
 			   cell_iterator_int<GT> const& rhs);
+  friend bool operator< <>(cell_iterator_int<GT> const& lhs, 
+			   cell_iterator_int<GT> const& rhs);
 
   bool bound() const { return g != 0;}
   bool valid() const { return bound() && c < (int)g->NumOfCells();}
@@ -129,8 +134,25 @@ template<class GT>
 inline bool operator==(cell_iterator_int<GT> const& lhs, 
 		       cell_iterator_int<GT> const& rhs) { return (rhs.c == lhs.c);}
 template<class GT>
+inline bool operator< (cell_iterator_int<GT> const& lhs, 
+		       cell_iterator_int<GT> const& rhs) { return (rhs.c <  lhs.c);}
+
+#ifndef GRAL_INCLUDES_RELOPS
+template<class GT>
 inline bool operator!=(cell_iterator_int<GT> const& lhs, 
 		       cell_iterator_int<GT> const& rhs) { return !(lhs == rhs);}
 
+template<class GT>
+inline bool operator> (cell_iterator_int<GT> const& lhs, 
+		       cell_iterator_int<GT> const& rhs) { return  (rhs < lhs);}
+
+template<class GT>
+inline bool operator<=(cell_iterator_int<GT> const& lhs, 
+		       cell_iterator_int<GT> const& rhs) { return !(lhs > rhs);}
+
+template<class GT>
+inline bool operator>=(cell_iterator_int<GT> const& lhs, 
+		       cell_iterator_int<GT> const& rhs) { return !(lhs < rhs);}
+#endif
 
 #endif
