@@ -49,15 +49,13 @@ struct  ref_ptr_base {
    The motivating observation is the following: When referencing  another object (say \c b of class \c B)
    with a member of an object \c a of class \c A, the allocation policy and life time of \c b
    may fall into different cases:
-   -# \c b is statically allocated, but its lifetime is at least as long than that of \c a 
-      Example: 
+   -# \c b is statically allocated, but its lifetime is at least as long than that of \c a:
       \code
       Grid g;
       VertexIterator v(g); // a <-> v, and b <-> g
       \endcode
    -# \c b is statically allocated on the fly, i.e. a temporary, for example a light-weight
-     object returned by a function
-      Example:
+     object returned by a function:
       \code
        Vertex v(* g.FirstVertex());
        boundary_type bd(star(v));  // a <-> bd, and b <-> result of star(v)
@@ -66,15 +64,13 @@ struct  ref_ptr_base {
       (Note: \c star(v) is the set of elements incident to a vertex \c v. This is most likely
        to be calculated on-the-fly.)
    -# \c b is dynamically allocated and manually managed, 
-     but the pointer to it has life time at least as long than that of \c a
-      Example:
+     but the pointer to it has life time at least as long than that of \c a:
       \code
        Grid * g = new Grid(nv,nc);
        // ...
        VertexIterator v(g); // a <-> v, and b <-> g
       \endcode
-   -# \c b is dynamically allocated and managed by a smart pointer with sharing semantics
-      Example:
+   -# \c b is dynamically allocated and managed by a smart pointer with sharing semantics:
       \code
       Grid g;
       subrange cells_to_remove(g); 
@@ -96,9 +92,10 @@ struct  ref_ptr_base {
    and to use the constructor to differentiate between the cases.
 
    In case 1 and 3, we just pass a plain reference or pointer to the object to the
-   constructor of \c ref_ptr<>.
+   constructor of \c ref_ptr<>. <br>
    For filtering out case 2, we rely on the temporary object being wrappend into
-   the \c temporary<> template.
+   the \c temporary<> template. <br>
+   Case 4 is not yet supported.
 
   \todo Extend the class to be able to hold instances of true reference-counted smart pointers.
 */
