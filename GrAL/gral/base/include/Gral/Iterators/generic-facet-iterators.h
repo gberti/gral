@@ -500,18 +500,14 @@ namespace generic_facet {
 
     // cell type in gt must derive from this type
     template<class gt>
-      class cell_mixin 
-      : //public grid_types_facet<gt>
-          public gt::cell_base_type
+      class cell_mixin : public gt::cell_base_type
       {
 	typedef grid_types_facet<gt> gtf;
 	typedef typename gt::cell_base_type base;
 
       public:
-	using base::TheGrid;
-	using base::TheArchetype;
-	using base::handle;
-	using base::c_;
+	void c_() const { base::c_();}
+
 	typedef typename gtf::facet_handle      facet_handle;
 	typedef typename gtf::Facet             Facet;
 	typedef typename gtf::arch_cell_handle  arch_cell_handle;
@@ -520,7 +516,7 @@ namespace generic_facet {
 
 	// map local (archetype) facets to global (grid) facets
 	facet_handle_t<gt> f(arch_cell_handle const& h) const {
-	  c_(); return facet_handle(handle(),h);
+	  c_(); return facet_handle(base::handle(),h);
 	}	
 	facet_handle_t<gt> f(archCell const& af) const { c_(); return f(af.handle());}
 
@@ -528,12 +524,12 @@ namespace generic_facet {
 	  { c_(); return Facet(TheGrid(),f(h));}
 	facet<gt> F(archCell const& af) const { c_(); return F(af.handle());}
         
-        unsigned NumOfFacets() const { c_(); return TheArchetype().NumOfCells();}
+        unsigned NumOfFacets() const { c_(); return base::TheArchetype().NumOfCells();}
         facet_on_cell_iterator<gt> FirstFacet() const 
 	  { c_(); return facet_on_cell_iterator<gt>(static_cast<Cell const&>(*this));}
         facet_on_cell_iterator<gt> EndFacet() const 
 	  { c_(); return facet_on_cell_iterator<gt>(static_cast<Cell const&>(*this),
-						    TheArchetype().EndCell());}
+						    base::TheArchetype().EndCell());}
       };
 
 } // namespace generic_facet

@@ -320,15 +320,12 @@ namespace generic_edge {
 	typedef typename gte::arch_edge_handle arch_edge_handle;
 	typedef typename gte::archEdge         archEdge;
 	typedef typename gte::Cell             Cell;
-	using base::TheGrid;
-	using base::TheArchetype;
-	using base::handle;
-	using base::c_;
 
+	void c_() const { base::c_();}
 	// map local (archetype) edges to global (grid) edges
 	edge_handle_t<gt> e(arch_edge_handle const& h) const {
 	  // cast to subclass gt::Cell
-	  c_(); return edge_handle(handle(),h);
+	  c_(); return edge_handle(base::handle(),h);
 	}	
 	edge_handle_t<gt> e(archEdge const& ae) const { c_(); return e(ae.handle());}
 
@@ -336,12 +333,12 @@ namespace generic_edge {
 	  { c_(); return Edge(TheGrid(),e(h));}
 	 edge<gt> E(archEdge const& ae) const { c_(); return E(ae.handle());}
 
-        unsigned NumOfEdges() const { c_(); return TheArchetype().NumOfEdges();}
+        unsigned NumOfEdges() const { c_(); return base::TheArchetype().NumOfEdges();}
         edge_on_cell_iterator<gt> FirstEdge() const 
 	  { c_(); return edge_on_cell_iterator<gt>(static_cast<Cell const&>(*this));}
         edge_on_cell_iterator<gt> EndEdge() const 
 	  { c_(); return edge_on_cell_iterator<gt>(static_cast<Cell const&>(*this),
-						   TheArchetype().EndEdge());}
+						   base::TheArchetype().EndEdge());}
 
       };
 } // namespace
