@@ -17,8 +17,8 @@ namespace detail {
   public:
     typedef Grid grid_type;
   private:
-    typedef typename grid_types<Grid>::element_d<ED>::type element_type;
-    typedef multi_gf_aux<Grid,T,GD,ED-1>                 base;
+    typedef typename grid_types<Grid>::template element_d<ED>::type element_type;
+    typedef multi_gf_aux<Grid,T,GD,ED-1>                            base;
 
     grid_function<element_type, T> f;
   public:

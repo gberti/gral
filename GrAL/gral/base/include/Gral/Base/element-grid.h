@@ -99,11 +99,11 @@ struct grid_types_element_sides_range<E, 1> {
   typedef typename et::grid_type grid_type;
   typedef grid_types<grid_type>  gt;
 
-  typedef typename gt::incidence_iterator<vertex_type_tag, etag>::type VertexIterator;
-  typedef typename gt::Vertex                                     Vertex;
-  typedef typename gt::vertex_handle                              vertex_handle; 
+  typedef typename gt::template incidence_iterator<vertex_type_tag, etag>::type VertexIterator;
+  typedef typename gt::Vertex                                                   Vertex;
+  typedef typename gt::vertex_handle                                            vertex_handle; 
 
-  typedef typename gt::VertexOnEdgeIterator                              VertexOnEdgeIterator;
+  typedef typename gt::VertexOnEdgeIterator                                     VertexOnEdgeIterator;
 
 };
 
@@ -136,11 +136,11 @@ private:
 public: 
   typedef typename base::gt   gt;
   typedef typename base::etag etag;
-  typedef typename gt::incidence_iterator<edge_type_tag,etag>::type      EdgeIterator;
-  typedef typename gt::Edge                                              Edge;
-  typedef typename gt::edge_handle                                       edge_handle;
+  typedef typename gt::template incidence_iterator<edge_type_tag,etag>::type  EdgeIterator;
+  typedef typename gt::Edge                                                   Edge;
+  typedef typename gt::edge_handle                                            edge_handle;
 
-  typedef typename gt::VertexOnFaceIterator                              VertexOnFaceIterator;
+  typedef typename gt::VertexOnFaceIterator                                   VertexOnFaceIterator;
  
 };
 
@@ -150,6 +150,7 @@ class element_sides_range<E,2> : public element_sides_range<E,1>, public grid_ty
   typedef element_sides_range<E,1>    base;
   typedef grid_types_element_sides_range<E, 2> gts;
 public:
+  using base::TheElement;
   typedef typename base::element_type element_type;
   typedef typename base::etag         etag;
 
@@ -171,9 +172,9 @@ private:
   typedef typename base::gt   gt;
   typedef typename base::etag etag;
 public: 
-  typedef typename gt::incidence_iterator<face_type_tag,etag>::type      FaceIterator;
-  typedef typename gt::Face                                              Face;
-  typedef typename gt::face_handle                                       face_handle;
+  typedef typename gt::template incidence_iterator<face_type_tag,etag>::type FaceIterator;
+  typedef typename gt::Face                                                  Face;
+  typedef typename gt::face_handle                                           face_handle;
 
  
 };
@@ -184,6 +185,7 @@ class element_sides_range<E,3> : public element_sides_range<E,2>, public grid_ty
   typedef element_sides_range<E,2>             base;
   typedef grid_types_element_sides_range<E, 3> gts;
 public:
+  using base::TheElement;
   typedef typename base::element_type element_type;
   typedef typename base::etag         etag;
   element_sides_range() {}
@@ -294,9 +296,11 @@ class element_grid : public detail::element_sides_range<E, element_traits<E>::di
 {
   typedef E element_type;
   typedef detail::element_sides_range<E, element_traits<E>::dim> base; // element_dimension_tag::dim> base;
+public:
   typedef element_traits<E> et;
   typedef grid_types<typename et::grid_type> gt;
-public:
+
+  using base::TheElement;
   typedef detail::single_element_iterator<E> CellIterator;
   typedef E                          Cell;
   typedef typename CellIterator::element_handle  cell_handle;
