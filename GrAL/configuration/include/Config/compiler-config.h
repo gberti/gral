@@ -16,18 +16,18 @@
 //----------------------------------------------------------------
 
 #if defined(__GNUC__) || defined (__KCC)
-#define MAKE_DEFAULT_OPS_SELF    
-#define MAKE_DEFAULT_IO_OPS_SELF 
-#define MAKE_REL_OPS_SELF
-#define MAKE_LESS_OP_SELF
-#define MAKE_EQUAL_OP_SELF
-#define DYNAMIC_CAST(type,parm) dynamic_cast<type>(parm)
-#define STATIC_CAST(type,parm)  static_cast<type>(parm)
-#define TF_INLINE
-#ifndef __KCC
-#define USING_NS_STD  
-#define USING_STD(x)  
-#include "stl_config.h"
+/* #define MAKE_DEFAULT_OPS_SELF     */
+/* #define MAKE_DEFAULT_IO_OPS_SELF  */
+/* #define MAKE_REL_OPS_SELF */
+/* #define MAKE_LESS_OP_SELF */
+/* #define MAKE_EQUAL_OP_SELF */
+/* #define DYNAMIC_CAST(type,parm) dynamic_cast<type>(parm) */
+/* #define STATIC_CAST(type,parm)  static_cast<type>(parm) */
+/* #define TF_INLINE */
+#ifndef __KCC 
+/* #define USING_NS_STD   */
+/* #define USING_STD(x)   */
+/* #include "stl_config.h" */
 
 #else /* KCC */
 //#define __STL_EXPLICIT_FUNCTION_TMPL_ARGS  1
