@@ -5,9 +5,11 @@
 
 #include "Gral/Grids/Triang2D/triang2d.h"
 #include "Geometry/point-traits.h"
+#include "Geometry/algebraic-primitives.h"
 #include "Utility/pre-post-conditions.h"
 
 #include <iostream>
+#include <cmath>
 
 /*! \brief Geometry wrapper class for Triang2D
 
@@ -15,13 +17,21 @@
    \f$ (x_0,y_0, x_1, y_1, \ldots) \f$.
 
    It is a model of $GrAL VertexGridGeometry.
+
+   \see test-triang2d-geometry.C
+   \todo It could be parameterised by scalar type of coordinates, 
+    and by space dimension.
  */
 class stored_geometry_triang2d {
 public:
-  typedef Triang2D              grid_type; 
-  typedef grid_types<grid_type> gt;
-  typedef gt::Vertex            Vertex;
-  typedef gt::Cell              Cell;
+  typedef Triang2D                  grid_type; 
+  typedef grid_types<grid_type>     gt;
+  typedef gt::Vertex                Vertex;
+  typedef gt::Edge                  Edge;
+  typedef gt::Cell                  Cell;
+  typedef gt::VertexOnCellIterator  VertexOnCellIterator;
+  typedef gt::EdgeOnCellIterator    EdgeOnCellIterator;
+
 private:
   grid_type const* g;
   double         * xy;
@@ -37,6 +47,7 @@ public:
   //! initialize with reference semantics (coords are referenced)
   stored_geometry_triang2d(grid_type const& g_, double* xy_)
     : g(&g_), xy(xy_), owned(false) {}
+
 
   ~stored_geometry_triang2d() { clear();}
 
@@ -113,7 +124,20 @@ public:
   coord_type  coord(Vertex const& v) const 
     { return coord_type (xy + 2*v.handle());}
 
+  //! Center of intertia of \c c
   coord_type center(Cell const& c) const { return (coord(c.V(0)) + coord(c.V(1)) + coord(c.V(2)))/3.0;}
+
+  //! Barycenter (average of vertices) of cell \c c
+  coord_type barycenter(Cell const& c) const { return center(c);}
+
+  //! solid angle of the wedge of vertex \c vc, in radians (2D) 
+  inline double solid_angle(VertexOnCellIterator const& vc) const;
+
+  /*! ratio of solid angle of wedge \c vc to complete solid angle
+
+      The ratios of the wedges of an internal regular vertex sum up to 1.
+   */
+  double solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(2*M_PI);}
 };
 
 
@@ -175,5 +199,25 @@ inline void assign_point(stored_geometry_triang2d::coord_proxy p,
    p[ip] = q[iq]; 
 }  
 
+
+
+
+
+inline double 
+stored_geometry_triang2d::solid_angle(stored_geometry_triang2d::VertexOnCellIterator const& vc) const 
+{
+  typedef algebraic_primitives<coord_type> ap;
+  Edge e1;
+  Vertex v = *vc;
+  for(EdgeOnCellIterator ec(vc.TheCell()); !ec.IsDone(); ++ec)
+    if(v == (*ec).V1() || v == (*ec).V2()) {
+      e1 = *ec;
+      break;
+    }
+  Edge e2 = TheGrid().switched_edge(v,e1, vc.TheCell());
+  coord_type dir_e1 = (coord(TheGrid().switched_vertex(v,e1)) - coord(v));
+  coord_type dir_e2 = (coord(TheGrid().switched_vertex(v,e2)) - coord(v));
+  return ap::angle(dir_e1, dir_e2);
+}
 
 #endif
