@@ -93,7 +93,11 @@ struct grid_types {};
   MAKRO(EdgeOnCellIterator); \
   MAKRO(FaceOnCellIterator); \
   MAKRO(FacetOnCellIterator); \
-  MAKRO(CellOnCellIterator); 
+  MAKRO(CellOnCellIterator);  \
+  \
+  MAKRO(archetype_type); \
+  MAKRO(archetype_handle); \
+  MAKRO(archetype_iterator);   
 
 
 
@@ -189,6 +193,9 @@ struct incidence_iterator_aux {};
   template<class GT> struct incidence_iterator_aux<GT, cell_type_tag, cell_type_tag>
   { typedef typename GT::CellOnCellIterator type;};
 
+
+  // the following technique for detecting member types is described
+  // e.g. in Josuttis & Vandevoorde, C++ Templates, Addison-Wesley 2002
 
   struct size1 { char dummy;};
   struct size2 { char dummy[2];};
