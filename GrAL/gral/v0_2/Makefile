@@ -99,3 +99,17 @@ postdoc:
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) postdoc GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
+
+
+NEWROOT=$(shell pwd)
+SETROOT=$(NEWROOT)/configuration/bin/setroot.pl
+
+init:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+         do \
+         cd $(NEWROOT)/$$i; \
+         echo 'ENTERING directory' $$i;\
+         find . -name mk.config -exec $(SETROOT) -newroot $(NEWROOT) {} \; -print; \
+         echo 'LEAVING directory' $$i;\
+         done)
