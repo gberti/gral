@@ -1,7 +1,8 @@
+CONFIG=$(shell pwd)/../../mk.config
 include  $(CONFIG)
 
 
-LOCALSOURCES= complex2d.C
+LOCALSOURCES= complex2d.C test-complex2d.C
 
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
