@@ -113,18 +113,22 @@ public:
    */
   static scalar det(matrix_type const& A) { return det2(A.a[0], A.a[1]);}
 
+  /*! \brief Signed area of triangle formed by \c p1, \c p2, \c p3
+   */
   static double signed_triangle_area(const POINT& p1, const POINT& p2, const POINT& p3)
     { 
-      // IOMgr::Info() << "signed triangle area: " 
-      //		    << p1 << " " << p2 << " " << p3 << endl;
-      return (0.5 * det2(p1-p2,p1-p3)); }
-
+      return (0.5 * det2(p1-p2,p1-p3)); 
+    }
+  /*! \brief absolute value of \c signed_triangle_area(p1,p2,p3)
+   */
   static double triangle_area(const POINT& p1, const POINT& p2, const POINT& p3)
     {
       double a(signed_triangle_area(p1,p2,p3));
       return(a >= 0 ? a : -a);
     }
 
+  /*! Find normal to \c p having same modulus
+   */
   static POINT normal_with_same_length(const POINT& p)
     {
       int l = LowerIndex(p);
@@ -137,31 +141,46 @@ public:
       return (q/norm_2(q));
     }
 
-
+  /*! \brief Transpose matrix \f$ M = (p,q) \f$  with columns \c p, \c q
+   */
   static void transpose(POINT & p, POINT & q) {
-    ::std::swap(y(p),x(q));
+    std::swap(y(p),x(q));
   }
 
   static void transpose(matrix_type & A) {
     transpose(A.a[0], A.a[1]);
   }
 
+  /*! \brief  Returns \p turned left
+   */
   static POINT left_perp(POINT const& p) {
     return POINT(-y(p), x(p));
   }
+
+  //! Turn \c p to the left
   static void left_rotate(POINT & p) {
     scalar xp = x(p);
     x(p) = y(p);
     y(p) = -xp;
   }
+
+  /*! \brief  Returns \p turned right
+   */
   static POINT right_perp(POINT const& p) {
     return POINT(y(p), -x(p));
   }
+
+  //! Turn \c p to the right
   static void right_rotate(POINT & p) {
     scalar xp = x(p);
     x(p) = -y(p);
     y(p) =  xp;
   }
+  /*! \brief return a vector perpendicular to \c p
+
+    \note This is mainly useful in dimension-independent code, where <em> turn left </em>
+    do not make sense.
+  */
   static POINT any_perp(POINT const& p) {
     return POINT(-y(p), x(p));
   }
@@ -193,9 +212,12 @@ public:
     matrix_vector_product(a1,a2, b2, c2);
   }
 
-
+  /*! \brief Return the points missing in \c dirs for making a basis of \f$ \R^2 \f$
+    
+      \pre \c dirs contains linear independent vectors
+   */
   static ::std::vector<POINT> basis_completion(::std::vector<POINT> const& dirs) {
-    ::std::vector<POINT> res;
+    std::vector<POINT> res;
     if(dirs.size() == 1) {
       res.resize(1);
       res[0] = perp(dirs.begin(), dirs.end());
