@@ -26,11 +26,11 @@ check:
 #####################################################################
 
 stdclean: moduleclean
-	rm -f *~ *.o  *.d *.ti *.ii
-	find . -name "*~" -exec rm {} \; -print
-	rm -rf ti_files # KCC template DB
-	rm -rf *.tmp
-	rm -f doxy.log 
+	@rm -f *~ *.o  *.d *.ti *.ii
+	@find . -name "*~" -exec rm {} \; -print
+	@rm -rf ti_files # KCC template DB
+	@rm -rf *.tmp
+	@rm -f doxy.log 
 
 clean: stdclean
 
