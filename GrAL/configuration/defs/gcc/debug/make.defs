@@ -2,4 +2,4 @@ THISDIR = $(COMPILERDIR)
 include $(THISDIR)/../make.defs
 
 
-CCFLAGS  += -g -DDEBUG
+CCFLAGS  += -g -DNMWR_DEBUG
