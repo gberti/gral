@@ -52,7 +52,7 @@ tar:
           gmake doc 'ROOT=$(HOME)/tmp/gral/base';\
           gmake tarclean 'ROOT=$(HOME)/tmp/gral/base';); \
          tar cf gral-base.tar gral/base;\
-         cvs -d /home/nmwr/CVS releas gral/base;
+         cvs -d /home/nmwr/CVS releas gral/base;\
         )
 
 dist: doc  tarclean tar
