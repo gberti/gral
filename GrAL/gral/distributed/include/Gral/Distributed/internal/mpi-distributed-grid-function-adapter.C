@@ -24,6 +24,30 @@ distributed_grid_function_adapter<GF,DistributedG>
 
 template<class GF, class DistributedG>
 distributed_grid_function_adapter<GF,DistributedG>
+::distributed_grid_function_adapter(const DistributedG&  dg)
+				    
+  : the_distributed(&dg),
+    the_local_gf(dg.TheOvrlpGrid()),
+    added_on_shared(false),
+    sync_on_shared(false)
+{
+  init();
+}
+
+template<class GF, class DistributedG>
+distributed_grid_function_adapter<GF,DistributedG>
+::distributed_grid_function_adapter(DistributedG            const& dg,
+				    typename GF::value_type const& t)
+  : the_distributed(&dg),
+    the_local_gf(dg.TheOvrlpGrid(), t),
+    added_on_shared(false),
+    sync_on_shared(false)
+{
+  init();
+}
+
+template<class GF, class DistributedG>
+distributed_grid_function_adapter<GF,DistributedG>
 ::distributed_grid_function_adapter(GF const& ogf,
 				    const DistributedG&  cg)
   : the_distributed(&cg),
@@ -31,10 +55,7 @@ distributed_grid_function_adapter<GF,DistributedG>
     added_on_shared(false),
     sync_on_shared(false)
 {
-  // default: connectors only between copied and exposed.
-  do_exported_ranges();
-  do_shared_ranges();
-  initialized = true;
+  init();
 }
 
 template<class GF, class DistributedG>
@@ -76,12 +97,20 @@ distributed_grid_function_adapter<GF,DistributedG>
     added_on_shared = rhs.added_on_shared;
     sync_on_shared  = rhs.sync_on_shared;
     
+    init();
+  }
+}
+
+template<class GF, class DistributedG>
+void
+distributed_grid_function_adapter<GF,DistributedG>
+::init() 
+{
     // default: connectors only between copied and exposed.
     do_exported_ranges();
     do_shared_ranges();
 
     initialized = true;
-  }
 }
 
 template<class CONT>
@@ -105,8 +134,8 @@ void distributed_grid_function_adapter<GF,DistributedG>::set_grid(const Distribu
 { 
     the_distributed = &cg;
     the_local_gf.set_grid(cg.TheOvrlpGrid());
-    do_exported_ranges();
-    do_shared_ranges();
+
+    init();
 } 
 
 template<class GF, class DistributedG>
