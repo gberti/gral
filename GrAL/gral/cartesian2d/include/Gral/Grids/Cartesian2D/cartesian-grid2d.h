@@ -164,11 +164,11 @@ private:
   static index_type direction_    [4];  
   static index_type side_vertex_1_[4];
   static index_type side_vertex_2_[4];
-  
+
   // names for I/O
   static std::string  side_name_  [4];
   static std::string  corner_name_[4];
- 
+
 public:
   typedef polygon1d::polygon      archetype_type;
   typedef archetype_type const*   archetype_iterator;
@@ -185,14 +185,13 @@ private:
   };
   static SD sd;
 public:
-  
+
   // map strings to side-/corner-enum and vice versa
   // this recognises different spellings, e.g. "S", "s", "South", "south".
-  static int get_side(const std::string& nm);
+  static int get_side  (const std::string& nm);
   static int get_corner(const std::string& nm);
-  static std::string side_name  (int side)   { cv_e(side);   return side_name_[side];} // returns "S", "N" etc.
-  static std::string corner_name(int corner) { cv_v(corner); return corner_name_[corner];} // returns "SW", "NW" etc.
-  
+  static std::string side_name  (int side)   { return side_name_  [side-1];} // returns "S", "N" etc.
+  static std::string corner_name(int corner) { return corner_name_[corner-1];} // returns "SW", "NW" etc.
 
   static int invalid_side();
   static int invalid_corner();
@@ -488,16 +487,16 @@ public:
     Cell(const Grid& g, const vertex_base& b) : elem_base(&g), llv(b)  {}
 
 
-    VertexOnCellIterator FirstVertex()    const;
-    VertexOnCellIterator EndVertex()      const;
-    EdgeOnCellIterator   FirstEdge()      const;
-    EdgeOnCellIterator   EndEdge()        const;
-    EdgeOnCellIterator   FirstFacet()     const;
-    EdgeOnCellIterator   EndFacet()       const;
-    CellOnCellIterator   FirstCell()      const;
-    CellOnCellIterator   EndCell()   const;
-    CellOnCellIterator   FirstNeighbour() const;
-    CellOnCellIterator   EndNeighbour()   const;
+    inline VertexOnCellIterator FirstVertex()    const;
+    inline VertexOnCellIterator EndVertex()      const;
+    inline EdgeOnCellIterator   FirstEdge()      const;
+    inline EdgeOnCellIterator   EndEdge()        const;
+    inline EdgeOnCellIterator   FirstFacet()     const;
+    inline EdgeOnCellIterator   EndFacet()       const;
+    inline CellOnCellIterator   FirstCell()      const;
+    inline CellOnCellIterator   EndCell()   const;
+    inline CellOnCellIterator   FirstNeighbour() const;
+    inline CellOnCellIterator   EndNeighbour()   const;
 
     int NumOfVertices()   const {return 4;}
     int NumOfNeighbours() const {return 4- NumOfBoundaryFacets();}
@@ -569,7 +568,7 @@ public:
     bool IsOnBoundary(side nb) const { return TheGrid().IsOnBoundary(edge(nb));}
     bool IsOnBoundary(int nb) const  { return IsOnBoundary(side(nb));}
 
-    void FlipEdge(const Vertex& v, Edge& e) const;   
+    inline void FlipEdge(const Vertex& v, Edge& e) const;   
   protected:
     //    cell_base _b;
     vertex_base get_nb_base(side nb) const { // no check
@@ -862,16 +861,16 @@ public:
       : base(& cc.TheGrid()), v(Cell::SW), c(cc)  {}
     VertexOnCellIterator( Cell::corner vv, const Cell& cc, const Grid* g) 
       : base(g), v(vv), c(cc)  {}
-    self& operator++() { cv(); ++((int&)v); return (*this);}
+    self& operator++() { cv(); ++v; return (*this);}
     self  operator++(int)    { cv(); self tmp(*this); ++(*this); return tmp;}
-    Vertex  operator*() const { cv(); return (c.vertex(v));}
+    Vertex  operator*() const { cv(); return (c.vertex(Cell::corner(v)));}
     // operator Vertex()   const { return this->operator*();}
     bool    IsDone()    const { cb(); return (v >= c.NumOfVertices());}
     // operator bool() const { return !IsDone();} 
     int LocalNumber()   const { cv(); return v;}
     int local_handle()  const { cv(); return v;}
 
-    vertex_handle   handle() const { cv(); return c.vertex(v).handle();}
+    vertex_handle   handle() const { cv(); return c.vertex(Cell::corner(v)).handle();}
 
     self CyclicSucc() const { cv(); self tmp(*this); tmp.v = Cell::corner(tmp.v == 3 ? 0 : tmp.v+1); return tmp;}
     self CyclicPred() const { cv(); self tmp(*this); tmp.v = Cell::corner(tmp.v == 0 ? 3 : tmp.v-1); return tmp;}
@@ -891,7 +890,7 @@ public:
     bool valid() const { return bound() && ! IsDone();}
     void cv()    const { REQUIRE(valid(), "c=" << c.index() << " v=" << v, 1);}
   private:
-    Cell::corner v; 
+    int v;
     Cell c;
   };
 
@@ -913,24 +912,24 @@ public:
     EdgeOnCellIterator(Cell const& cc) { *this = cc.FirstEdge();}
     EdgeOnCellIterator( Cell::side ee, const Cell& cc, const Grid* g)
       :  base(g), e(ee), c(cc) {}
-    self& operator++() { ++((int&)e); return (*this);}
+    self& operator++() { ++e; return (*this);}
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
-    Edge  operator*() const { return (TheCell().edge(e));}
+    Edge  operator*() const { return (TheCell().edge(Cell::side(e)));}
     // FIXME: could be more efficient.
-    edge_handle handle() const { return TheCell().edge(e).handle();}
+    edge_handle handle() const { return TheCell().edge(Cell::side(e)).handle();}
     bool    IsDone()    const { return (e >= c.NumOfEdges());}
     operator bool() const { return !IsDone();} 
 
     int  LocalNumber()  const { return e;}
 
-    Cell    OtherCell() const { return TheCell().Nb(e);}
+    Cell    OtherCell() const { return TheCell().Nb(Cell::side(e));}
     Vertex V1() const { return c.V(e);}
     Vertex V2() const { return c.V((e+1)%4);}
 
     self CyclicSucc() const 
-    { self tmp(*this); tmp.e = Cell::side(tmp.e == 3 ? 0 : tmp.e+1); return tmp;}
+    { self tmp(*this); tmp.e = (tmp.e == 3 ? 0 : tmp.e+1); return tmp;}
     self CyclicPred() const 
-    { self tmp(*this); tmp.e = Cell::side(tmp.e == 0 ? 3 : tmp.e-1); return tmp;}
+    { self tmp(*this); tmp.e = (tmp.e == 0 ? 3 : tmp.e-1); return tmp;}
 
     Cell const&  TheCell()     const { cb(); return c;}
     Cell const&  TheAnchor()   const { cb(); return c;}
@@ -949,7 +948,7 @@ public:
     void cv()    const { REQUIRE(valid(), "c=" << c.index() << " e=" << e, 1);}
 
   private:
-    Cell::side e;  
+    int e;
     Cell c;
   };
 
@@ -981,19 +980,19 @@ public:
       }
     self& operator++() { 
       do {
-	++((int&)nb);
+	++nb;
       } while( ! IsDone() && c.IsOnBoundary(nb));
       return (*this);
     }
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
-    Cell  operator*() const  { return TheCell().neighbour(nb);}
+    Cell  operator*() const  { return TheCell().neighbour(Cell::side(nb));}
     cell_handle handle() const { return (operator*()).handle();}
 
     // operator Cell()   const { return this->operator*();}
-    Edge facet()      const { return c.edge(LocalNumber());}
+    Edge facet()      const { return c.edge(Cell::side(LocalNumber()));}
     bool  IsDone()    const { return (nb >= 4);}
     // operator bool() const { return !IsDone();} 
-    Cell::side LocalNumber()  const { return nb;}
+    int LocalNumber()  const { return nb;}
 
     Cell const&  TheCell()   const { return c;}
     Cell const&  TheAnchor() const { return c;}
@@ -1008,7 +1007,7 @@ public:
     bool valid() const { return bound() && ! IsDone();}
     void cv()    const { REQUIRE(valid(), "c=" << c.index() << " nb=" << nb, 1);}
   private:
-    Cell::side nb;  // [0 , 4[
+    int nb;
     Cell c;
   };
   typedef CellOnCellIterator CellNeighbourIterator;
@@ -1072,7 +1071,7 @@ public:
   inline bool IsValidCellBase(const vertex_base& v) const { 
     return TheCellMap().IsInRange(v);
   }
-  bool IsValid(const Cell& C)     const;
+  inline bool IsValid(const Cell& C)     const;
   //@}
 
   //@{ 
@@ -1084,7 +1083,8 @@ public:
   inline bool IsOnBoundary(const Edge&   E) const;
   inline bool IsOnBoundary(const EdgeOnCellIterator& Nb) const;
 
-  bool IsInside(const Cell& C)    const;
+  inline bool IsInside(const CellIterator& C) const;
+  inline bool IsInside(const Cell& C)    const;
 
   int NumOfBoundaryVertices() const { return (2*(xpoints   + ypoints) -4);}
   int NumOfBoundaryEdges()    const { return (2*(xpoints-1 + ypoints-1));}
@@ -1539,7 +1539,7 @@ inline  bool RegGrid2D::IsOnBoundary(const RegGrid2D::Edge&   E) const
 
 inline  bool RegGrid2D::IsOnBoundary(const RegGrid2D::EdgeOnCellIterator& F) const
 { 
-  vertex_base bv = F.TheCell().get_nb_base(F.e);
+  vertex_base bv = F.TheCell().get_nb_base(Cell::side(F.e));
   return ( ! TheCellMap().IsInRange(bv.x(),bv.y()));
 }
 
@@ -1549,7 +1549,6 @@ inline bool RegGrid2D::IsInside(const RegGrid2D::Cell& C) const
   vertex_base bv = C.ll();
   return ( TheCellMap().IsInRange(bv.x(),bv.y()));
 }
-
 
 inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 {
