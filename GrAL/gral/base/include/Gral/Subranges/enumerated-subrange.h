@@ -14,6 +14,11 @@
 #include "Gral/Base/map-element-iter-names.h"
 #include "Gral/Base/grid-functors.h"
 #include "Gral/Iterators/facet-iterator-of-cell-set.h"
+#include "Gral/Iterators/edge-iterator-of-cell-set.h"
+#include "Gral/Base/element-handle.h"
+#include "Gral/Base/grid-function-vector.h"
+#include "Gral/Base/element-numbering.h"
+
 
 //----------------------------------------------------------------
 /*! \defgroup enumsubranges Enumerated Grid Subranges
@@ -116,6 +121,7 @@ public:
   typedef handle2element_map<E>        handle_map;
 
   typedef mapped_element_ra_seq_iterator<range_type, handle_map > ElementIterator;
+  typedef range_type sequence_type;
 
   //  typedef HIt const_iterator; // iterator over handles
 private:
@@ -185,7 +191,7 @@ class vertex_range_ref
   typedef element_range_ref<typename grid_types<Grid>::Vertex, R> base;
 public:
   typedef typename base::Element         Vertex;
-  typedef typename base::ElementIterator VertexIterator;
+  typedef typename base::ElementIterator VertexIterator;   
   typedef typename base::grid_type       grid_type;
   typedef typename base::range_type      range_type;
 
@@ -612,6 +618,8 @@ public:
 
   void append_vertex(vertex_handle v) { vertices.push_back(v);}
   void append_cell(cell_handle v)     { cells.push_back(v); initialized = false;}
+  void append_vertex(Vertex const& v) { append_vertex(v.handle());}
+  void append_cell  (Cell  const&  c) { append_cell(c.handle());}
 
   void init() const;		     
 
@@ -688,10 +696,130 @@ public:
 
 };
   
+/*
+template<class E, class RANGE, class HANDLE>
+class wrap_element_t {
+  typedef E       base_element_type;
+  typedef RANGE   range_type;
+  typedef HANDLE  handle_type;  
+
+  handle_type               h;
+  ref_ptr<range_type const> rge;
+public:
+  wrap_element_t() {}
+  wrap_element_t(range_type const& r) : rge(r), h(0) {}
+  wrap_element_t(range_type const& r, handle_type hh) : rge(r), h(hh) {}
+  
+  handle_type handle() const { return h;}
+
+  operator base_element_type() const 
+  { return TheRange()->BaseElement<base_element_type>(TheRange()->BaseGrid(),h);}
+
+};
+*/
+
+/*! \brief Wrap an underlying vertex type to create a new type
+  
+   \ingroup enumsubranges
+   \see enumsubranges
+
+   Model of $GrAL Vertex, $GrAL VertexIterator <BR>
+   This type is convertible to the underlying vertex type.
+   It is <em> not </em> constructible from the underlying type,
+   because that would imply searching (and is not defined for all objects of underlying type)! 
+*/
+template<class RANGE>
+class wrap_vertex_t {
+
+  typedef wrap_vertex_t<RANGE> self;
+
+ public:
+  typedef typename  RANGE::base_vertex_type    base_vertex_type;
+  typedef RANGE                                range_type;
+  typedef RANGE                                grid_type;
+  typedef typename RANGE::vertex_handle        handle_type;  
+ private:
+  ref_ptr<range_type const> rge;
+  handle_type               h;
+public:
+  wrap_vertex_t() {}
+  wrap_vertex_t(range_type const& r) : rge(r), h(0) {}
+  wrap_vertex_t(range_type const& r, handle_type hh) : rge(r), h(hh) {}
+
+  self& operator++() { cv(); ++h; return *this;}
+  self const& operator*() const { cv();  return *this;}
+  bool IsDone() const { cb(); return h >= (int)TheRange()->NumOfVertices();}
+
+  handle_type handle() const { cv(); return h;}
+
+  ref_ptr<range_type const>  TheRange () const { cb(); return rge;}
+  ref_ptr<range_type const>  TheAnchor() const { cb(); return rge;}
+
+  operator base_vertex_type() const   { cv(); return TheRange()->BaseVertex(h);}
+
+  bool bound() const { return rge != 0;}
+  bool valid() const { return bound() && h < (int)TheRange()->NumOfVertices();}
+  void cb() const { REQUIRE(bound(),"",1);}
+  void cv() const { REQUIRE(valid(),"",1);} 
+};
+
+
+/*! \brief Wrap an underlying cell type to create a new type
+  
+   \ingroup enumsubranges
+   \see enumsubranges
+   
+
+   Model of $GrAL Cell, $GrAL CellIterator. <BR>
+   This type is convertible to the underlying cell type.
+*/
+template<class RANGE>
+class wrap_cell_t {
+
+  typedef wrap_cell_t<RANGE> self;
+public:
+  typedef typename  RANGE::base_cell_type    base_cell_type;
+  typedef typename  RANGE::base_vertex_type  base_vertex_type;
+  typedef RANGE                          range_type;
+  typedef RANGE                        grid_type;
+  typedef typename RANGE::base_grid_type base_grid_type;
+  typedef typename RANGE::cell_handle  handle_type;  
+  typedef grid_types<base_grid_type>   bgt;
+  typedef typename bgt::archgt         barchgt;
+  typedef typename barchgt::Vertex     arch_vertex_type;
+
+private:
+  ref_ptr<range_type const> rge;
+  handle_type               h;
+public:
+  wrap_cell_t() {}
+  wrap_cell_t(range_type const& r) : rge(r), h(0) {}
+  wrap_cell_t(range_type const& r, handle_type hh) : rge(r), h(hh) {}
+
+  self& operator++() { cv(); ++h; return *this;}
+  self const& operator*() const { cv();  return *this;}
+  bool IsDone() const { cb(); return h >= (int)TheRange()->NumOfCells();}
+
+  handle_type handle() const { cv(); return h;}
+
+  ref_ptr<range_type const>  TheRange () const { cb(); return rge;}
+  ref_ptr<range_type const>  TheAnchor() const { cb(); return rge;}
+
+  temporary<base_cell_type> BaseCell() const { cv(); return temporary<base_cell_type>(TheRange()->BaseCell(h));}
+  operator base_cell_type() const { cv(); return TheRange()->BaseCell(h);}
+
+  base_vertex_type V(arch_vertex_type const& av) const { return BaseCell()->V(av);}
+
+  bool bound() const { return rge != 0;}
+  bool valid() const { return bound() && h < (int)TheRange()->NumOfCells();}
+  void cb() const { REQUIRE(bound(),"",1);}
+  void cv() const { REQUIRE(valid(),"",1);} 
+};
+
 
 //----------------------------------------------------------------
 //
-/*!  A grid subrange  view that is a simple enumeration of its elements.
+/*! \brief  A grid subrange  view that is a simple enumeration of its elements.
    \ingroup enumsubranges
    \see enumsubranges
 
@@ -704,30 +832,54 @@ public:
   vertices to the sequence of cells. This has to be ensured by
   the underlying grid range.
 
-  \todo Facets work correctly only for 2D.  
-  \todo Cannot be used to copy 3D grids from it (missing archetype stuff)
 */
 template<class Grid>
 class enumerated_subrange_ref : public archetypes_from_base<enumerated_subrange_ref<Grid>, Grid>  {
   typedef enumerated_subrange_ref<Grid> self;
 public:
   using archetypes_from_base<enumerated_subrange_ref<Grid>, Grid>::handle;
-  //------- referenced types ------------------
+
   typedef Grid grid_type;
+  typedef Grid base_grid_type;
   typedef grid_types<Grid> gt;
-  typedef typename gt::vertex_handle vertex_handle;
-  typedef typename gt::cell_handle   cell_handle;
-  typedef typename gt::Cell                 Cell;
-  typedef typename gt::Vertex               Vertex;
+
+  //---------- own types ----------------------
+
+  typedef enumerated_subrange<Grid>              range_type;
+  typedef typename range_type::vertex_range_type vertex_range_ref_t;
+  typedef typename range_type::cell_range_type   cell_range_ref_t;
+
+  typedef enumerated_vertex_range<grid_type> vertex_range_t;
+  typedef enumerated_cell_range<grid_type>   cell_range_t;
+
+  //------- wrapped referenced types ------------------
+
+  typedef typename gt::Vertex           base_vertex_type;
+  typedef typename gt::Cell             base_cell_type;
+  typedef vertex_handle_int<self>       vertex_handle;
+  typedef wrap_vertex_t<self>           Vertex;
+  typedef Vertex                        VertexIterator;
+  typedef cell_handle_int<self>         cell_handle;
+  typedef wrap_cell_t<self>             Cell;
+  typedef Cell                          CellIterator;
+
+
+  base_vertex_type BaseVertex(vertex_handle h) const { return base_vertex_type(BaseGrid(), *(vertices.begin() +h));}
+  base_cell_type   BaseCell  (cell_handle h)   const { return base_cell_type  (BaseGrid(), *(cells   .begin() +h));}
+
+  //typedef typename gt::vertex_handle vertex_handle;
+
+  //  typedef  mapped_element_ra_seq_iterator<typename vertex_range_ref_t::sequence_type, 
+  //handle2element_map<Vertex> >
+  //VertexIterator;
+
+  //  typedef typename gt::cell_handle   cell_handle;
+  //  typedef typename gt::Cell                 Cell;
+
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
   typedef tp<Vertex> tpV;
   typedef tp<Cell>   tpC;
 
-  //---------- own types ----------------------
-
-  typedef enumerated_subrange<Grid> range_type;
-  typedef typename range_type::vertex_range_type vertex_range_ref_t;
-  typedef typename range_type::cell_range_type   cell_range_ref_t;
 
 private:
   //---- DATA ---------
@@ -747,14 +899,18 @@ public:
 			  const cell_range_ref_t  & C)
     : vertices(V), cells(C) {}
 
+  enumerated_subrange_ref(const vertex_range_t& V,
+			  const cell_range_t  & C)
+    : vertices(V.range()),
+      cells   (C.range())
+  {}
+
+
 
   //-------------------- iteration  ----------------------------
 
-  typedef typename vertex_range_ref_t::VertexIterator  VertexIterator;
-  typedef typename cell_range_ref_t  ::CellIterator    CellIterator;
   typedef facet_iterator_of_cell_set<CellIterator>     FacetIterator;
-  // 2D only!
-  typedef FacetIterator                                EdgeIterator;
+  typedef edge_iterator_of_cell_set<CellIterator>      EdgeIterator;
 
   unsigned NumOfCells()    const { return cells.size();}
   unsigned NumOfVertices() const { return vertices.size();}
@@ -762,20 +918,28 @@ public:
   unsigned NumOfEdges()    const 
     { return NumOfCells() + NumOfVertices() - 2 + 1; /* 1 == NumOfBoundaryComponents */}
 
-  CellIterator   FirstCell()   const  { return cells.FirstCell();} 
-  VertexIterator FirstVertex() const  { return vertices.FirstVertex();}
+  // CellIterator   FirstCell()   const  { return cells.FirstCell();} 
+  //  VertexIterator FirstVertex() const  { return vertices.FirstVertex();}
+  VertexIterator FirstVertex() const { return VertexIterator(*this);}
+  CellIterator   FirstCell()   const { return CellIterator(*this);}
+
   FacetIterator  FirstFacet()  const  { return FacetIterator(FirstCell());}  
   FacetIterator  FirstEdge()   const  { return FacetIterator(FirstCell());}  
 
-  CellIterator   EndCell()   const  { return cells.EndCell();} 
-  VertexIterator EndVertex() const  { return vertices.EndVertex();}
+  //  CellIterator   EndCell()   const  { return cells.EndCell();} 
+  //  VertexIterator EndVertex() const  { return vertices.EndVertex();}
+  CellIterator   EndCell()   const { return CellIterator(*this, NumOfCells());}
+  VertexIterator EndVertex() const { return VertexIterator(*this, NumOfVertices());}
+
   FacetIterator  EndFacet()  const  { return FacetIterator(EndCell());}  
   FacetIterator  EndEdge()   const  { return FacetIterator(EndCell());}  
   
   vertex_range_ref_t range(tpV) const { return vertices; }
   cell_range_ref_t   range(tpC) const { return cells; }
 
-  grid_type const& TheGrid() const { return vertices.TheGrid();}
+  grid_type const& TheGrid () const { return vertices.TheGrid();}
+  grid_type const& BaseGrid() const { return vertices.TheGrid();}
+
   cell_handle   handle(const Cell& C)   const { return TheGrid().handle(C);}
   vertex_handle handle(const Vertex& V) const { return TheGrid().handle(V);}
 };
@@ -798,23 +962,78 @@ struct grid_types_esr : public GT {
 
 
 template<class Grid>
-struct grid_types_esr_ref  {
-  typedef grid_types<Grid> bgt;
-  typedef typename bgt::Cell   Cell;
-  typedef typename bgt::Vertex Vertex;
-  typedef typename bgt::vertex_handle         vertex_handle;
-  typedef typename bgt::cell_handle           cell_handle;
+struct element_traits<wrap_vertex_t<enumerated_subrange_ref<Grid> > >
+  : public element_traits_vertex_base<enumerated_subrange_ref<Grid> > 
+{
+private:
+  typedef element_traits_vertex_base<enumerated_subrange_ref<Grid> >  base;
+public:
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef typename base::hasher_type_elem_base       hasher_type;
+};
 
+template<class Grid>
+struct element_traits<wrap_cell_t<enumerated_subrange_ref<Grid> > >
+  : public element_traits_cell_base<enumerated_subrange_ref<Grid> > 
+{
+private:
+  typedef element_traits_cell_base<enumerated_subrange_ref<Grid> >  base;
+public:
+  typedef consecutive_integer_tag<0>                 consecutive_tag;
+  typedef typename base::hasher_type_elem_base       hasher_type;
+};
+
+
+template<class Grid, class T>
+class grid_function<wrap_vertex_t<enumerated_subrange_ref<Grid> >, T>
+  : public grid_function_vector<wrap_vertex_t<enumerated_subrange_ref<Grid> >, T>
+{
+  typedef grid_function_vector<wrap_vertex_t<enumerated_subrange_ref<Grid> >, T> base;
+  typedef enumerated_subrange_ref<Grid>                                          grid_type;
+public:
+  grid_function() {}
+  grid_function(grid_type const& g) : base(g) {}
+  grid_function(grid_type const& g, T const& t) : base(g,t) {}
+  grid_function(ref_ptr<grid_type const> g) : base(g) {}
+  grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
+};
+
+
+template<class Grid, class T>
+class grid_function<wrap_cell_t<enumerated_subrange_ref<Grid> >, T>
+  : public grid_function_vector<wrap_cell_t<enumerated_subrange_ref<Grid> >, T>
+{
+  typedef grid_function_vector<wrap_cell_t<enumerated_subrange_ref<Grid> >, T> base;
+  typedef enumerated_subrange_ref<Grid>                                          grid_type;
+public:
+  grid_function() {}
+  grid_function(grid_type const& g) : base(g) {}
+  grid_function(grid_type const& g, T const& t) : base(g,t) {}
+  grid_function(ref_ptr<grid_type const> g) : base(g) {}
+  grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
+};
+
+
+template<class Grid, class GT  = grid_types<Grid> >
+struct grid_types_esr_ref : public GT  {
+  typedef grid_types<Grid> bgt; 
   typedef enumerated_subrange_ref<Grid>           range_type;
+  typedef range_type grid_type;
+
+  //typedef typename bgt::Cell   Cell;
+  //  typedef typename bgt::Vertex Vertex;
+  typedef typename range_type::Vertex Vertex;
+  typedef typename range_type::vertex_handle         vertex_handle;
+  typedef typename range_type::Cell   Cell;
+  typedef typename range_type::cell_handle           cell_handle;
+ //  typedef typename bgt::vertex_handle         vertex_handle;
+  //  typedef typename bgt::cell_handle           cell_handle;
+
   typedef typename range_type::VertexIterator VertexIterator;
   typedef typename range_type::EdgeIterator   EdgeIterator;
   typedef typename range_type::FacetIterator  FacetIterator;
   typedef typename range_type::CellIterator   CellIterator;
 
-  typedef typename bgt::VertexOnCellIterator  VertexOnCellIterator;
-  typedef typename bgt::EdgeOnCellIterator    EdgeOnCellIterator;
-  typedef typename bgt::FacetOnCellIterator   FacetOnCellIterator;
-  typedef typename bgt::CellOnCellIterator    CellOnCellIterator;
 };
 
 
@@ -836,6 +1055,54 @@ template<class Grid>
 struct grid_types<enumerated_subrange_ref<Grid> >
  :  public grid_types_esr_ref<Grid> {};
 
+
+
+
+/*! \brief  Specialisation of element_numbering<>
+    \ingroup  enumsubranges
+    
+    \todo This function accepts arguments of the base vertex type,
+     by maintaining a partial grid function on the vertices of the base grid.
+     This is done in order to make the following code possible:
+     \code
+     typedef grid_types<enumerated_subrange_ref<Grid> > rgt;
+     enumerated_subrange_ref<Grid> Range(G); 
+     // ...
+     element_numbering<rgt::Vertex, rgt> number(Range);
+     for(rgt::CellIterator c(Range); !c.IsDone(); ++c)
+        for(rgt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc)
+	   int num_vc = number(*vc); // *vc is of base vertex type!!
+     \endcode
+     Note that \c VertexOnCellIterator is just an alias to the base grid's
+     \c VertexOnCellIterator. This implies that \c *vc is of base vertex type,
+     which is <em not  </em> convertible to \c rgt::Vertex.
+     
+*/
+template<class Grid>
+class element_numbering<wrap_vertex_t<enumerated_subrange_ref<Grid> >, 
+			grid_types<enumerated_subrange_ref<Grid> > >
+{
+  typedef enumerated_subrange_ref<Grid>                 range_type;
+  //typedef wrap_vertex_t<enumerated_subrange_ref<Grid> > element_type;
+  typedef typename range_type::base_vertex_type         base_vertex_type;
+  typedef grid_types<range_type>                        rgegt;
+  typedef base_vertex_type                              element_type;
+
+  ref_ptr<range_type const>        rge;
+  partial_grid_function<base_vertex_type, int> num;
+  int                              offset_;
+public:
+  element_numbering(range_type const& r, int offset = 0) 
+    : rge(r), num(r.BaseGrid()), offset_(offset) 
+    {
+      int n = offset_;
+      for(typename rgegt::VertexIterator v(*rge); ! v.IsDone(); ++v)
+	num[*v] = n++;
+    }
+
+  int operator()(element_type const& e) const 
+    { return num(e);}
+};
 
 
 
