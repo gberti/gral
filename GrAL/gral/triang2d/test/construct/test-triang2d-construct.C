@@ -11,6 +11,7 @@
 #include "Gral/Grids/Triang2D/test-triang2d.h"
 
 #include "Gral/IO/complex2d-format-input.h"
+#include "Gral/IO/complex2d-format-output.h"
 #include "Gral/Algorithms/cell-neighbor-search.h"
 
 #include "Container/bijective-mapping.h"
@@ -56,10 +57,14 @@ int main(int argc, char* argv[]) {
 
   IstreamComplex2DFmt Gsrc(gridfile_nm);
   Triang2D T;
+  stored_geometry_triang2d GeomT(T);
 
   bijective_mapping<int,int> vcorr;
   dummy_mapping<int,int>     ccorr;
-  ConstructGrid0(T,Gsrc,vcorr,ccorr);
+  ConstructGridVC(T,GeomT, Gsrc, Gsrc, vcorr,ccorr);
+
+  OstreamComplex2DFmt Gout(gridfile_nm +".out");
+  ConstructGrid(Gout, T, GeomT);
   
   testout << "Testing T\n";
   Test.test_iterators(T,testout);
