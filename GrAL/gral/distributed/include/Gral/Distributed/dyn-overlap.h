@@ -199,6 +199,14 @@ public:
 
   dyn_overlap() : the_grid(0) {}  
 
+  void init(const coarse_grid_type& cg,
+            const grid_type& fg)
+  { 
+    set_coarse_grid(cg);
+    set_fine_grid(fg);
+  }
+
+private:
   void set_coarse_grid(const coarse_grid_type& cg) {
     neighbour_ranges_v.set_grid(cg);
     neighbour_ranges_f.set_grid(cg);
@@ -214,6 +222,8 @@ public:
     neighbour_ranges_f.set_default(f_range_type(fg));
     neighbour_ranges_c.set_default(c_range_type(fg));
   }
+
+public:
 
   //----------------- component access ---------------------
 
