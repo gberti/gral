@@ -417,8 +417,8 @@ namespace cartesiannd {
     grid(vertex_index_type beyond) 
     { init(vertex_index_type(0), beyond);}
     //! Grid with vertex indices \f$ x_i \in [l_, b_i[ \f$ with \f$ l = \f$ \c  low and  \f$ b = \f$  \c beyond    
-    grid(vertex_index_type low, vertex_index_type high)
-    { init(low, high+index_type(1));}
+    grid(vertex_index_type low, vertex_index_type beyond)
+    { init(low, beyond);}
 
     ref_ptr<self const> BaseGrid() const { return ref_ptr<self const>(*this);}
 
