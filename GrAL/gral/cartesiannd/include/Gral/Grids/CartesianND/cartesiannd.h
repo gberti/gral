@@ -322,6 +322,10 @@ namespace cartesiannd {
     template<unsigned K>
     bool valid_index(int dir, index_type idx) const { return maps[K][dir].valid(idx);}
 
+    bool valid_vertex_index(vertex_index_type idx) const { return valid_index<0  >(0,idx);}
+    bool valid_cell_index  (cell_index_type   idx) const { return valid_index<dim>(0,idx);}
+
+
     bool valid_dim(unsigned k) const { return k <= DIM;}
     void cvdim    (unsigned k) const { REQUIRE(valid_dim(k), "k=" << k << " DIM=" << DIM, 1);}
 
