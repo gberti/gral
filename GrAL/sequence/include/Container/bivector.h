@@ -74,11 +74,11 @@ public:
     return -offset;
   }
 
-  void pop_back()  { table.pop_back (); }
-  void pop_front() { table.pop_front(); offset--; }
+  void pop_back()  { ce(); table.pop_back (); }
+  void pop_front() { ce(); table.pop_front(); offset--; }
 
   void clear() { offset = 0; table.clear();}
-  void swap(bivector<T> & rhs) { ::std::swap(offset,rhs.offset); ::std::swap(table,rhs.table); }
+  void swap(bivector<T> & rhs) { std::swap(offset,rhs.offset); std::swap(table,rhs.table); }
 
   //! index of first item
   int begin_index() const { return -offset;}
@@ -98,6 +98,7 @@ public:
 
   size_type size()  const { return table.size();}
   bool      empty() const { return table.empty();}
+  void      ce()    const { REQUIRE(! empty(), "",1);}
 
   size_type max_size() const { return table.max_size();}
 
