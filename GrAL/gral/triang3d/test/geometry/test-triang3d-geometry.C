@@ -1,7 +1,9 @@
 
 // LICENSE_NEC_2003
 
-/*! \file Test harness for stored_geometry_triang3d
+/*! \file 
+
+    Test harness for stored_geometry_triang3d
 
 */
 
@@ -85,12 +87,16 @@ int main() {
     cout << "Triangulation: #cells=" << nc << "; #vertices=" << nv << endl;
     for(gt::EdgeIterator e(T); !e.IsDone(); ++e)
       cout << "E [" << (*e).V1().handle() << "->" << (*e).V2().handle() 
-	   << "] length=" << Geom.length(*e) << endl;
+	   << "] length=" << Geom.length(*e) << " == volume=" << Geom.volume(*e) <<endl;
     for(gt::FacetIterator f(T); ! f.IsDone(); ++f) {
       cout << "F [";
       for(gt::VertexOnFacetIterator vf(*f); ! vf.IsDone(); ++vf)
 	cout << vf.handle() << " ";
-      cout << "] area=" << Geom.area(*f) << endl;
+      cout << "] area=" << Geom.area(*f) << " == volume=" << Geom.volume(*f) << endl;
+    }
+    for(gt::CellIterator c(T); ! c.IsDone(); ++c) {
+      cout << "C " << c.handle() 
+	   << " volume=" << Geom.volume(*c) << endl;
     }
   }
 }
