@@ -1,18 +1,18 @@
 1 2 3 
-GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/utilities/include/Utility/checked-istream.h
+GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/GrAL/utilities/include/Utility/checked-istream.h
       FUNCTION operator>>, 
       precondition violated: (in.in->good()) attempt to read from empty istream!
 <Continuing.>
 
 1 2 3 
-GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/utilities/include/Utility/checked-istream.h
+GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/GrAL/utilities/include/Utility/checked-istream.h
       FUNCTION operator>>, 
       precondition violated: (in.in->eof() || !in.in->fail()) reading value 3 of type i caused an error!
 
 <Continuing.>
 
 
-GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/utilities/include/Utility/checked-istream.h
+GRAL_ERROR in FILE /usr/people/lnx10/berti/CVS-work/GrAL/utilities/include/Utility/checked-istream.h
       FUNCTION operator>>, 
       precondition violated: (in.in->good()) attempt to read from empty istream!
 <Continuing.>
