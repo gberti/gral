@@ -33,6 +33,6 @@ has no type EdgeOnCellIterator
 has no type FaceOnCellIterator
 has    type FacetOnCellIterator
 has no type CellOnCellIterator
-has no type archetype_type
-has no type archetype_handle
-has no type archetype_iterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator

@@ -10,7 +10,7 @@ DEPS = $(LOCALSOURCES:%.C=%.d)
 EXEC =  $(LOCALSOURCES:%.C=%.exe)
 
 TARGETS = $(EXEC)
-EXTRA_DEPMODULES += gral/testing
+EXTRA_DEPMODULES += gral/testing geometry
 
 include $(DEPS)
 
