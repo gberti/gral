@@ -44,29 +44,32 @@
 // from Grid/Algorithms
 //----------------------------------------------------------------
 
-template<class G2, class Geom2>
+template<class Geom1, class G2, class Geom2>
 void 
 ConstructGrid(Complex2D  & destG,
+              Geom1      & destGeom,
 	      G2    const& srcG, 
 	      Geom2 const& srcGeom)
-{ Construct(destG,srcG,srcGeom); }
+{ Construct_complex2d(destG,destGeom, srcG,srcGeom); }
 
-template<class G2, class Geom2, class VertexMap>
+template<class Geom1, class G2, class Geom2, class VertexMap>
 void 
 ConstructGridV(Complex2D     & destG, 
+               Geom1         & destGeom,
 	       G2       const& srcG,
 	       Geom2    const& srcGeom,
 	       VertexMap     & VCorrG2_G1)
-{ Construct(destG,srcG,srcGeom,VCorrG2_G1);}
+{ Construct_complex2d(destG,destGeom, srcG,srcGeom,VCorrG2_G1);}
 
-template<class G2, class Geom2, class VertexMap, class CellMap>
+template<class Geom1, class G2, class Geom2, class VertexMap, class CellMap>
 void 
 ConstructGridVC(Complex2D     & destG, 
+                Geom1         & destGeom,
 		G2       const& srcG,
 		Geom2    const& srcGeom,
 		VertexMap     & VCorrG2_G1,
 		CellMap       & CCorrG2_G1) 
-{ Construct(destG,srcG,srcGeom,VCorrG2_G1, CCorrG2_G1);}
+{ Construct_complex2d(destG,destGeom, srcG,srcGeom,VCorrG2_G1, CCorrG2_G1);}
 
 template<class G2, class VertexMap, class CellMap>
 void 
@@ -74,75 +77,78 @@ ConstructGrid0(Complex2D     & destG,
 	       G2       const& srcG,
 	       VertexMap     & VCorrG2_G1,
 	       CellMap       & CCorrG2_G1)
-{ Construct0(destG,srcG,VCorrG2_G1,CCorrG2_G1);}
+{ Construct_complex2d0(destG,srcG,VCorrG2_G1,CCorrG2_G1);}
 
 
 //----------------------------------------------------------------
 //  Definitions of the Complex2D versions.
 //----------------------------------------------------------------
 
-template<class Connectivity, class Geometry>
-void Construct(Complex2D& CC, 
-	       const Connectivity& Connect,
-               const Geometry& geom )
+template<class Geom1, class G2, class Geom2>
+void Construct_complex2d(Complex2D& CC, 
+                         Geom1         & destGeom,
+                         G2       const& srcG,
+                         Geom2    const& srcGeom)
 { 
-  typedef grid_types<Connectivity>                      source_gt;
-  typedef typename source_gt::vertex_handle             src_vertex_handle;
-  typedef typename grid_types<Complex2D>::vertex_handle vertex_handle;
+  typedef grid_types<G2>                        source_gt;
+  typedef typename source_gt::vertex_handle     src_vertex_handle;
+  typedef grid_types<Complex2D>::vertex_handle  vertex_handle;
 
   // this should be replaced by an array if possible.
   // map also lacks an operator() const  |  operator[] const 
   partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
-  //  map<src_vertex_handle,vertex_handle, less<src_vertex_handle> > VertexCorr;
-  Construct(CC,Connect,geom,VertexCorr);
+  Construct_complex2d(CC,destGeom,srcG,srcGeom,VertexCorr);
 }
 
-template<class Connectivity, class Geometry, class VertexMap>
-void Construct(Complex2D& CC, 
-	       const Connectivity& Connect,
-               const Geometry& geom,
-	       VertexMap&  VertexCorr) // maps src::handles to Complex2D::handles
+template<class Geom1, class G2, class Geom2, class VertexMap>
+void Construct_complex2d(Complex2D     & CC, 
+                         Geom1         & destGeom,
+                         G2       const& srcG,
+                         Geom2    const& srcGeom,
+                         VertexMap     & VertexCorr) // maps src::handles to Complex2D::handles
 {
 
-  typedef grid_types<Connectivity>                    source_gt;
-  typedef typename source_gt::cell_handle             src_cell_handle;
-  typedef typename grid_types<Complex2D>::cell_handle cell_handle;
+  typedef grid_types<G2>                      source_gt;
+  typedef typename source_gt::cell_handle     src_cell_handle;
+  typedef grid_types<Complex2D>::cell_handle  cell_handle;
 
   // here we are not interested in a cell correspondance
   dummy_mapping<src_cell_handle,cell_handle> CellCorr;
 
-  Construct(CC,Connect,geom,VertexCorr,CellCorr);
+  Construct_complex2d(CC,destGeom,srcG,srcGeom,VertexCorr,CellCorr);
 }
 
 
-template<class Connectivity, class Geometry, class VertexMap, class CellMap>
-void Construct(Complex2D& CC, 
-	       const Connectivity& Connect,
-               const Geometry& geom,
-	       VertexMap&  VertexCorr, // maps src::handles to
-               CellMap  &  CellCorr)   // complex2d::handles
+template<class Geom1, class G2, class Geom2, class VertexMap, class CellMap>
+void Construct_complex2d(Complex2D     & CC, 
+                         Geom1         & destGeom,
+                         G2       const& srcG,
+                         Geom2    const& srcGeom,
+                         VertexMap     & VertexCorr, // maps src::handles to
+                         CellMap       & CellCorr)   // complex2d::handles
 {
   // construct combinatorial grid
- Construct0(CC,Connect,VertexCorr,CellCorr);
+ Construct_complex2d0(CC,srcG,VertexCorr,CellCorr);
 
  // copy geometry
- friend_for_input cc(CC);
- typedef typename grid_types<Connectivity>::VertexIterator src_vertex_it;
- for(src_vertex_it src_v = Connect.FirstVertex(); ! src_v.IsDone(); ++src_v) {
-   //   assign_point(cc.coord(CC.vertex(VertexCorr(Connect.handle(*src_v)))) , geom.coord(*src_v));
-   assign_point(cc.coord(CC.vertex(VertexCorr(src_v.handle()))) , geom.coord(*src_v));
+ // friend_for_input cc(CC);
+ typedef typename grid_types<G2>::VertexIterator src_vertex_it;
+ for(src_vertex_it src_v = srcG.FirstVertex(); ! src_v.IsDone(); ++src_v) {
+   //   assign_point(cc.coord(CC.vertex(VertexCorr(src_v.handle()))) , geom.coord(*src_v));
+   assign_point(destGeom.coord(CC.vertex(VertexCorr(src_v.handle()))) , srcGeom.coord(*src_v));
+   
  }
 
 }
 
-template<class Connectivity, class VertexMap, class CellMap>
-void Construct0(Complex2D& CC, 
-		const Connectivity& Connect,
-		VertexMap&  VertexCorr, // maps src::handles to
-		CellMap  &  CellCorr)   // complex2d::handles
+template<class G2, class VertexMap, class CellMap>
+void Construct_complex2d0(Complex2D     & CC, 
+                          G2       const& srcG,
+                          VertexMap     &  VertexCorr, // maps src::handles to
+                          CellMap       &  CellCorr)   // complex2d::handles
 
 {
-  typedef grid_types<Connectivity> source_gt;
+  typedef grid_types<G2> source_gt;
 
   //  typedef typename source_gt::vertex_handle   src_v_index;
   typedef typename source_gt::cell_handle          src_cell_handle;
@@ -162,14 +168,14 @@ void Construct0(Complex2D& CC,
   //---  construct vertices ---------------------------
   
   // cc._vertices().reserve(Connect.NumOfVertices());
-  for(src_vertex_it src_v = Connect.FirstVertex(); ! src_v.IsDone(); ++src_v) {
+  for(src_vertex_it src_v = srcG.FirstVertex(); ! src_v.IsDone(); ++src_v) {
     VertexCorr[src_v.handle()] = cc._new_vertex(); // geom.coord(*src_v));
   }
  
 
   //---- construct cells ------------------------------
 
-  copy_cells(CC,Connect,VertexCorr,CellCorr);
+  copy_cells(CC,srcG,VertexCorr,CellCorr);
 
   //---- construct additional adjaceny information ----------------------
 
