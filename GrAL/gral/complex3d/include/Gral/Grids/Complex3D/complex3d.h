@@ -245,6 +245,9 @@ class Cell_Complex3D
     lhs.cb_(); rhs.cb_(); 
     return (lhs.h == rhs.h);
   }
+  friend bool operator!=(self const& lhs, self const& rhs) { 
+    return !(lhs == rhs);
+  }
   friend bool operator< (self const& lhs, self const& rhs) { 
     lhs.cb_(); rhs.cb_(); 
     return (lhs.h <  rhs.h);
@@ -285,6 +288,8 @@ class Vertex_Complex3D : public elem_base_Complex3D {
 
   friend bool operator==(self const& lhs, self const& rhs)
   { lhs.cb_(); rhs.cb_(); return (lhs.h == rhs.h);}
+  friend bool operator!=(self const& lhs, self const& rhs)
+  { return !(lhs == rhs);}
   friend bool operator< (self const& lhs, self const& rhs)
   { lhs.cb_(); rhs.cb_(); return (lhs.h <  rhs.h);}
 
@@ -325,6 +330,9 @@ class VertexOnCellIterator_Complex3D : public elem_base_Complex3D {
   friend bool operator==(self const& lhs, self const& rhs) { 
     lhs.cb_(); rhs.cb_(); 
     return (lhs.c == rhs.c) && (lhs.lv == rhs.lv);
+  }
+  friend bool operator!=(self const& lhs, self const& rhs) { 
+    return !(lhs == rhs);
   }
   friend bool operator< (self const& lhs, self const& rhs) { 
     lhs.cb_(); rhs.cb_(); 
