@@ -36,7 +36,7 @@ void copy_cells(Complex2D& G,
     typename vertex_list::iterator lv(cc._cell_vertices(pc).begin());
     src_vertex_on_cell_it src_lv((*src_c).FirstVertex());
     for(; ! src_lv.IsDone(); ++src_lv) {
-      (int&)(*lv) = vtx_corr(src_lv.handle());
+      (int&)(*lv) = vtx_corr[src_lv.handle()];
       (int&)(*ln) = boundary; // correct neighbour is calculated later
       ++lv;
       ++ln;
