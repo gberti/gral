@@ -33,7 +33,8 @@ void CalculateNeighborCells(NBF             &  Nb,          // out
 			    CELLSET    const&  cell_set)    // in
 { 
   typedef grid_types<CELLSET> gt;
-  typedef hash_map<vertex_set<CELLSET>, 
+  typedef vertex_set<typename gt::Edge> vertex_set_type;
+  typedef hash_map<vertex_set_type,
                    typename gt::FacetOnCellIterator> FACETMAP;
   FACETMAP facet_map;
   CalculateNeighborCells(Nb,cell_set,facet_map, gt()); 
