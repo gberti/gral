@@ -198,7 +198,7 @@ public:
     return (*(the_map.find(t1))).second;
   }
   //! returns \f$ f(t_1) \f$, else an uninitialized value.
-  T2& operator[](const T1& t1) { return the_map[t1];}
+  T2& operator[](const T1& t1) { inverse_ok = false; return the_map[t1];}
 
   //! returns true iff \f$ t_1 \in \dom(f) \f$ 
   bool defined(const T1& t1) const { return (the_map.find(t1) != the_map.end());}
@@ -225,7 +225,7 @@ private:
   void update_inverse() const {
     if(! inverse_ok) {
       calculate_inverse();
-      (bool&)inverse_ok = true;
+      inverse_ok = true;
     }
 
   }
@@ -256,6 +256,9 @@ private:
   const  mapping_type*    bmap; // reference
 
 public:
+  typedef T1 result_type;
+  typedef T2 argument_type;
+
   inverse_mapping(const mapping_type& tm) : bmap(&tm) {}
 
   const T1& operator()(const T2& t2) const { 
@@ -303,7 +306,7 @@ public:
   typedef typename map_table_type::value_type              base_value_type;
   typedef typename map_table_type::const_iterator          base_iter_type;
   typedef mapped_value_const_iterator<base_iter_type,
-                                      get_first<base_value_type> > const_iterator;
+				      get_first<base_value_type> const> const_iterator;
 
   typedef T1                                                value_type;
 
@@ -319,7 +322,6 @@ public:
 
   const_iterator begin() const { return const_iterator(bmap->the_map.begin());}
   const_iterator end()   const { return const_iterator(bmap->the_map.end());}
-  
   T1 const& front() const { return *begin();}
 };
 
@@ -346,7 +348,7 @@ public:
   typedef typename map_table_type::value_type              base_value_type;
   typedef typename map_table_type::const_iterator          base_iter_type;
   typedef mapped_value_const_iterator<base_iter_type,
-                                      get_second<base_value_type> > const_iterator;
+                                      get_second<base_value_type> const> const_iterator;
 
   typedef T2                                                     value_type;
 
