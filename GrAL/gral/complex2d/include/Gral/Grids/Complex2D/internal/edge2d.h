@@ -29,9 +29,8 @@ public:
   Edge2D(const Cell& C1, const Cell& C2)
     : _e(C1.find_local_facet(C2),C1) {}
 
-
-  Edge2D(const EdgeOnCell2D_Iterator& e) : _e(e) {}
-  Edge2D(const CellOnCell2D_Iterator& e) : _e(e) {}
+  explicit Edge2D(const EdgeOnCell2D_Iterator& e) : _e(e) {}
+  explicit Edge2D(const CellOnCell2D_Iterator& e) : _e(e) {}
 
   ~Edge2D() {}
 
