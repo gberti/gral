@@ -4,7 +4,7 @@
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
-#include "Gral/Grids/Complex2D/complex2d.h"
+#include "Gral/Grids/Complex2D/all.h"
 
 #include "Container/index-map-nd.h"
 
