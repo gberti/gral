@@ -23,7 +23,7 @@ do
  rm -rf $i
 done;
 mv gral/v0_2/README  .
-mv gral/LICENSE      .
+mv gral/v0_2/LICENSE .
 mv gral/v0_2/MODULES .
 mv gral/v0_2/INSTALL .
 mv gral/NEWS         .

@@ -1,7 +1,7 @@
 # gcc/make.defs
 
 CCC      =  g++
-CCFLAGS += -Wall
+CCFLAGS += -Wall 
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += -DNMWR_PARTIAL_SPEC
 CCFLAGS += -ftemplate-depth-35

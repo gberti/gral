@@ -14,7 +14,7 @@
 # */
 
 ifndef ARCH
-export ARCH   =solaris#  
+export ARCH   =linux#  
 endif
 
 #//! compiler name, used in paths, possible values: kai, gcc
@@ -71,11 +71,14 @@ export LIBPATH:=$(DEFPATH)#
 
 
 # The includes and libs of the current module
+ifdef ROOT
 export INCDIR   =$(ROOT)/include#
 export LIBDIR   =$(ROOT)/lib/$(LIBPATH)#
-
+IFLAGS  += -I$(INCDIR)
 LDFLAGS += -L$(LIBDIR)
-#IFLAGS  += -I$(INCDIR)
+endif
+
+
 
 export CC      = $(CCC)
 
@@ -95,7 +98,7 @@ include $(COMPILERDIR)/make.defs
 export DEFDIR     :=$(CONFIGURATION)/defs/$(DEFPATH)#  
 #include $(DEFDIR)/make.defs
 
-IFLAGS  += -I$(INCDIR)
+
 
 # if developing code, use include and libraries
 # of other (`peer') modules directly (because of frequent 
