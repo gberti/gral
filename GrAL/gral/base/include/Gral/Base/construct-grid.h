@@ -137,7 +137,7 @@ void ConstructGridVC_generic (G_DEST        & G_dest,
   Geom_dest.set_grid(G_dest);
   typedef grid_types<G_SRC>  srcgt;
   typedef grid_types<G_DEST> destgt;
-  for(typename srcgt::VertexIterator vs(G_src); ! vs.IsDone(); ++vs) {
+  for(typename srcgt::VertexIterator vs=G_src.FirstVertex(); ! vs.IsDone(); ++vs) {
     assign_point(Geom_dest.coord(typename destgt::Vertex(G_dest, v_corr(vs.handle()))),
 		 Geom_src .coord(*vs));
   }
