@@ -4,6 +4,13 @@
 
 #include <iostream>
 
+inline void check_operator(point const& p1,point const& p2, string const& op)
+{
+  REQUIRE( (p1[1] == p2[1]), "F1" << op << "F2: Unequal results: "
+	   << "F1(p) + F2(p) = " << p1 
+	   << "(F1 +F2)(p) = " << p2 << '\n',1);
+}
+
 int main() {
   RFunction F1(Sin);
   RFunction F2(Cos);
@@ -16,10 +23,11 @@ int main() {
   typedef RFunction::coord_type coord_type;
   coord_type p(1.0);
   
-  REQUIRE_ALWAYS( (F1(p) + F2(p) == F1AddF2(p)), "F1+F2: unequal results!",1);
-  REQUIRE_ALWAYS( (F1(p) - F2(p) == F1SubF2(p)), "F1+F2: unequal results!",1);
-  REQUIRE_ALWAYS( (F1(p) / F2(p)[1] == F1DivF2(p)), "F1+F2: unequal results!",1);
-  REQUIRE_ALWAYS( (F1(p) * F2(p) == F1MulF2(p)), "F1+F2: unequal results!",1);
+  check_operator(F1(p) + F2(p), F1AddF2(p), "+");
+  check_operator(F1(p) - F2(p), F1SubF2(p), "-");
+  check_operator(F1(p) / F2(p)[1], F1DivF2(p), "/");
+  check_operator(F1(p) * F2(p)[1], F1MulF2(p), "*");
+ 
   cout << " F1(1.0) = " << F1(p) << '\n'
        << " F2(1.0) = " << F2(p) << '\n'
        << " F1(1.0) + F2(1.0) = " << F1(p) + F2(p) << '\n'
