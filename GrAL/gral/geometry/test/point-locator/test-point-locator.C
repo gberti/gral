@@ -33,23 +33,38 @@ struct size_functor {
 template<class LOCATOR, class IT>
 void test_locator(LOCATOR const& Loc, IT begin, IT end, std::ostream& out)
 {
+  typedef typename LOCATOR::bucket_vertex bucket_vertex;
     out << "Bucket grid: [" 
-	<< Loc.TheBucketGrid()->low_vertex_index() << ","
-	<< Loc.TheBucketGrid()->high_vertex_index() << "]" << std::endl;
+	<< Loc.TheBucketGrid()->low_vertex_index() << " @ " 
+	<< Loc.TheBucketGeometry()->coord(bucket_vertex(Loc.TheBucketGrid(),Loc.TheBucketGrid()->low_vertex_index())) << ","
+	<< Loc.TheBucketGrid()->high_vertex_index() << " @ " 
+	<< Loc.TheBucketGeometry()->coord(bucket_vertex(Loc.TheBucketGrid(),Loc.TheBucketGrid()->high_vertex_index()))
+	<< "]" << std::endl;
     histogram_table<int> Hist;
     sequence::compute_histogram(Loc.TheBuckets()->begin(), Loc.TheBuckets()->end(), Hist, size_functor());
     out << "Bucket histogram:" << std::endl;
     for(histogram_table<int>::const_iterator h=Hist.begin(); h != Hist.end(); ++h)
       out << h->first << " cells: " << h->second << " buckets." << std::endl;
 
+    out << "Buckets:\n";
+    typedef typename LOCATOR::Cell Cell;
+    for(typename LOCATOR::bucket_cell_iterator b(Loc.TheBucketGrid()); !b.IsDone(); ++b) {
+      if(! (*Loc.TheBuckets())(*b).empty()) {
+	out << "bucket " << (*b).index() << ": ";
+	for(unsigned c = 0; c < (*Loc.TheBuckets())(*b).size(); ++c)
+	  out << Cell(Loc.TheGrid(), (*Loc.TheBuckets())(*b)[c]).index() << ", ";
+      }
+      out << "\n";
+    }
+
     for(IT i = begin; i != end; ++i) {
       out << *i << ": ";
       if(Loc.locate(*i).tagname() == "inside")
 	out << "in cell " << Loc.locate(*i).TheCell().index();
       else if(Loc.locate(*i).tagname() == "projection")
-	out << " projected to " << Loc.locate(*i).TheCoord();
+	out << " projected to " << Loc.locate(*i).TheCoord() << " in  cell " << Loc.locate(*i).TheCell().index();
       else
-	out << " not in grid";
+	out << " not found in grid";
       out << std::endl;
     }
 
@@ -78,16 +93,21 @@ int main()
   {
     matrix_type  A(0.0); A(0,1) = -1.0;  A(1,0) = 1.0;
     mapping_type M(A);
-    grid_type R(it(0,0), it(11,11));
+    grid_type R(it(0,0), it(6,6));
     geom_type GeomR(R, it(0,0), it(1,1), M);
+
+    cout << "V(0,0) @" << GeomR.coord(gt::Vertex(R, it(0, 0)))  << "\n";
+    cout << "V(5,5) @" << GeomR.coord(gt::Vertex(R, it(5, 5))) << "\n";
     
     point_locator<grid_type, geom_type, gt> Locator(R,GeomR);
     Locator.init();
     
+
     typedef coord_type ct;
-    coord_type P[9] = { ct(0.0,0.0),  ct(-1.0,0.0), ct(1.0,1.0), 
-			ct(0.0, 0.5), ct(0,1.0), ct(0.0,5.0), 
-			ct(-0.5,9.5), ct(-9.5,9.5), ct(-9.5,0.5)};
+    coord_type P[] = { ct(0.0,0.0),  ct(-1.0,0.0), ct(1.0,1.0), 
+		       ct(0.0, 0.5), ct(0,1.0), ct(0.0,5.0), 
+		       ct(-0.5,4.5), ct(-4.5,4.5), ct(-4.5,0.5),
+		       ct(-0.5,5.5), ct(-5.5,5.5), ct(-5.5,0.5)};
 
     test_locator(Locator, P, P + sizeof(P)/sizeof(ct), cout);
   }
