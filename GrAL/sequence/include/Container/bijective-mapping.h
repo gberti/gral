@@ -9,7 +9,13 @@
 //   
 //----------------------------------------------------------------
 
-#include "my-hash-map.h" // STL
+// namespace sgistl {
+#include <hash_map.h> // STL
+//}
+//using namespace std;
+// using sgistl::hash;
+// using sgistl::hash_map;
+
 
 #include "Container/mapped-value-iterator.h"
 #include "Utility/pre-post-conditions.h"
@@ -128,7 +134,6 @@ private:
   typedef typename map_table_type::const_iterator map_iterator;
 public:
   typedef bijective_mapping<T1,T2>   self;
-  MAKE_DEFAULT_OPS_SELF
   
   //---------- construction ----------------
   
@@ -256,7 +261,7 @@ public:
 template<class T1, class T2>
 class range_of_bijective_mapping {
 public:
-  typedef bijective_mapping<T1,T2>                               mapping_type;
+  typedef bijective_mapping<T1,T2>                         mapping_type;
   typedef typename mapping_type::map_table_type            map_table_type;
   typedef typename map_table_type::value_type              base_value_type;
   typedef typename map_table_type::const_iterator          base_iter_type;
@@ -315,7 +320,7 @@ inverse_mapping<T1,T2>::domain() const { return bmap->range();}
 
 
 #ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "generic/bijective-mapping.C"
+#include "bijective-mapping.C"
 #endif
 
 #endif
