@@ -79,7 +79,7 @@ public:
     }
   };
 
-  class coord_type : public array_operators<coord_type, 2> {
+  class coord_type : public array_operators<coord_type, double, 2> {
     double xy[2];
   public:
     coord_type() {}

@@ -53,7 +53,7 @@ namespace gf_array_adapter {
   };
 
   template<class T, unsigned N>
-  class value_type : public array_operators<value_type<T,N>, N> {
+  class value_type : public array_operators<value_type<T,N>, T, N> {
     T f[N];
   public:
     value_type() {}
@@ -77,7 +77,7 @@ namespace gf_array_adapter {
 
   // specialization for N=1
   template<class T> 
-  class value_type<T,1> : public array_operators<value_type<T,1>, 1> {
+  class value_type<T,1> : public array_operators<value_type<T,1>, T, 1> {
     T f[1];
   public:
     value_type() {}

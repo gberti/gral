@@ -43,8 +43,18 @@ int main ()
   { 
     typedef grid_type_2d grid_type;
     typedef gt2          gt;
+
     grid_type R(3,3);
-    
+
+    cout << "CartesianGrid2D:\n"
+	 << "grid_types<element_grid<gt::Cell> >:\n";
+    checkgt<grid_types<element_grid<gt::Cell> > >(cout);
+    cout << "grid_types<element_grid<gt::Edge> >:\n";
+    checkgt<grid_types<element_grid<gt::Edge> > >(cout);
+    cout << "grid_types<element_grid<gt::Vertex> >:\n";
+    checkgt<grid_types<element_grid<gt::Vertex> > >(cout);
+
+
     element_grid<gt::Cell> c1(* R.FirstCell());
     cout  << "Dimension: " << c1.dimension()  << "  "
 	  << "c1.NumOfCells()="  << c1.NumOfCells() << "  "

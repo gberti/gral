@@ -56,13 +56,15 @@ clean: stdclean
 
 NP=2
 run:
-	$(MPIRUN) -np $(NP)  $(GDB)  test-distributed
-#	$(MPIRUN) -v -np $(NP) -machinefile ./mpihosts $(GDB)  test-distributed
+	echo `hostname` > mpihosts
+	$(MPIRUN) -v -np $(NP) -machinefile ./mpihosts $(GDB)  test-distributed
+#	$(MPIRUN) -np $(NP)  $(GDB)  test-distributed
 
 check:
-	./runtest    $(MPIRUN)
+	echo `hostname` > mpihosts
+	./runtest    '$(MPIRUN) -machinefile ./mpihosts'
 	sleep 10
-	./runtest-io $(MPIRUN)
+	./runtest-io '$(MPIRUN) -machinefile ./mpihosts'
 
 
 
