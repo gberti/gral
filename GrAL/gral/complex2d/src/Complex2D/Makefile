@@ -7,7 +7,7 @@ LOCALSOURCES= complex2d.C test-complex2d.C
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
 
-OBJDIR=obj.tmp.tmp
+OBJDIR=obj.tmp
 
 new: partial-clean all
 
