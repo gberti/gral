@@ -54,6 +54,7 @@ int main() {
     ConstructGrid(Out,G,GeomG);
   }
 
+
   {
     cout << "Copy cartesiannd::grid<3>:" << endl;
     typedef grid_types<cartesiannd::grid<3> > gt;;
@@ -103,7 +104,7 @@ int main() {
     //std::vector<dgt::vertex_handle> v_corr(R.NumOfVertices());
     //std::vector<dgt::cell_handle>   c_corr(R.NumOfCells());
     
-    complexnd::ConstructGrid0(G, R, Phi);
+    ConstructGrid0(G, R, Phi);
     // ConstructGrid0(G, R, v_corr, c_corr);
 
     cout << "Orig. grid:  ";  print_grid(R, cout);
