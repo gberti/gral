@@ -2,6 +2,8 @@
 
 */
 #include "Gral/Hierarchical/octree.h"
+#include "Gral/Hierarchical/refine-octree-cell-towards.C"
+#include "Gral/Hierarchical/balance-octree.C"
 
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
@@ -29,7 +31,8 @@ void print_state(OCTREE const& oct, std::ostream& out)
 
 namespace octree {
   template class Octree<cartesian2d::CartesianGrid2D>;
-  template class Octree<cartesian3d::CartesianGrid3D>;
+  // disabled: no grid cartesian_subrange_type
+  //  template class Octree<cartesian3d::CartesianGrid3D>;
 }
 
 int main() {
@@ -44,8 +47,9 @@ int main() {
     typedef octree_type::OctCellChildIterator OctCellChildIterator ;
 
     cart_grid_type root(3,3);
-    cart_grid_type ref_pattern(3,3); // 2x1 cells!
-    octree::Octree<cartesian2d::CartesianGrid2D>  oct(root,ref_pattern);
+    cart_grid_type ref_pattern(3,3); // 2x2 cells!
+    octree_type    oct(root,ref_pattern);
+    oct.activate(oct.coarsest_level());
     hierarchical::hier_partial_grid_function<oct_cell_type, int> material(* (oct.TheHierGrid()), 0);
 
     print_state(oct, cout);
@@ -120,7 +124,6 @@ int main() {
     for(; !lc.IsDone(); ++lc)
       cout << lc.Flat().index() << "\n";
 
-    
 
     // problems: 
     // (a) must manually add layers to material,
@@ -130,4 +133,67 @@ int main() {
     // (b) give hier. gf an extra parameter which initializes finer levels from coarser ones
     //     (or vice versa)
   }
+  
+  {
+    typedef cartesian2d::CartesianGrid2D cart_grid_type;
+    typedef grid_types<cart_grid_type>   cgt;
+    typedef octree::Octree<cartesian2d::CartesianGrid2D> octree_type;
+    typedef octree::Octree<cartesian2d::CartesianGrid2D> octgt;
+    typedef octree_type::oct_cell_type                   oct_cell_type;
+    typedef octree_type::hier_grid_type                  hgt;
+
+    cart_grid_type root(2,2);        // 1x1 cells
+    cart_grid_type ref_pattern(3,3); // 2x2 cells!
+    octree_type    oct(root,ref_pattern);
+    oct.activate(oct.coarsest_level());
+
+    cout << "refine towards:\n";
+    oct.add_finer_level();
+    octgt::level_handle coarse = oct.coarsest_level();
+    octgt::level_handle fine   = oct.finest_level();
+    
+    print_state(oct, cout);
+    hgt::hier_cell_type c_finest(oct.TheHierGrid(), * oct.TheHierGrid()->FlatGrid(fine)->FirstCell(), fine);
+    hgt::hier_cell_type c_root   = oct.leaf_ancestor(c_finest);
+    refine_towards(oct, c_root, c_finest, 1);
+
+    print_state(oct, cout);
+    for(octgt::level_handle lev = oct.coarsest_level(); lev <= oct.finest_level(); ++lev) {
+      cout << "Level " << lev << ":\n";
+      for(cgt::CellIterator c(oct.LevelGrid(lev)->FirstCell()); ! c.IsDone(); ++c)
+	cout << "Cell " << (*c).index() << (oct.isLeaf(hgt::hier_cell_type(oct.TheHierGrid(), *c, lev)) ? " (L)" : "" ) << "\n";
+    }
+
+    oct.add_finer_level();
+    oct.add_finer_level();
+    fine = oct.finest_level();
+    c_finest = hgt::hier_cell_type(oct.TheHierGrid(), oct.TheHierGrid()->FlatGrid(fine)->cell(cgt::index_type(4,4)), fine);
+    c_root   = oct.leaf_ancestor(c_finest);
+    refine_towards(oct, c_root, c_finest, 2);								
+
+    print_state(oct, cout);
+    for(octgt::level_handle lev = oct.coarsest_level(); lev <= oct.finest_level(); ++lev) {
+      cout << "Level " << lev << ":\n";
+      for(cgt::CellIterator c(oct.LevelGrid(lev)->FirstCell()); ! c.IsDone(); ++c) {
+	hgt::hier_cell_type hc(oct.TheHierGrid(), *c, lev);
+	if(oct.isActive(hc))
+	  cout << "Cell " << (*c).index() << (oct.isLeaf(hc) ? " (L)" : "" ) << "\n";
+      }
+    }
+
+    cout << "balancing:\n";
+    balance_octree(oct, 1);
+    print_state(oct, cout);
+    for(octgt::level_handle lev = oct.coarsest_level(); lev <= oct.finest_level(); ++lev) {
+      cout << "Level " << lev << ":\n";
+      for(cgt::CellIterator c(oct.LevelGrid(lev)->FirstCell()); ! c.IsDone(); ++c) {
+	hgt::hier_cell_type hc(oct.TheHierGrid(), *c, lev);
+	if(oct.isActive(hc))
+	  cout << "Cell " << (*c).index() << (oct.isLeaf(hc) ? " (L)" : "" ) << "\n";
+      }
+    }
+
+  }
+    
+
 }
