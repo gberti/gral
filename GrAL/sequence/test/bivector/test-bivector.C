@@ -3,7 +3,19 @@
 
 #include <iostream>
 
+class bivector_valuetype_arch {
+  typedef bivector_valuetype_arch self;
+public:
+  bivector_valuetype_arch() {}
+  bivector_valuetype_arch(self const&) {}
+  self& operator=(self const&) { return *this;}
+};
+
+  template class bivector<bivector_valuetype_arch>;
+  template class bivector<int>;
+
 int main() {
+
 
   bivector<int> bv1;
   REQUIRE_ALWAYS( (0  == bv1.push_back (0)),  "", 1);
