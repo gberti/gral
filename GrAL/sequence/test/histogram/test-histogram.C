@@ -35,5 +35,9 @@ int main() {
 
   REQUIRE_ALWAYS((sequence::arg_max_map(H2)->first == 1), "", 1);
 
+  int b[6] = { 3, 2, 2, 1, 1, 1};
+  histogram_table<int> H3(b,b+6);
+  REQUIRE_ALWAYS(H3.max_entry() == 1, "max_entry()=" << H3.max_entry(),1);
+
 
 }
