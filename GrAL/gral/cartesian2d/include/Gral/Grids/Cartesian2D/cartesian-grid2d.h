@@ -64,6 +64,7 @@ private:
   indexmap_type yedge_index_map;
 
 public:
+  enum { dim = 2};
 
   /*! @name Constructors  */
   //@{ 
@@ -240,6 +241,7 @@ public:
   public:
     typedef RegGrid2D grid_type;
     typedef RegGrid2D anchor_type;
+    typedef grid_type::index_type index_type;
 
     elem_base() : _g((const Grid*)0) {}
     elem_base(const Grid* g) :_g(g) {}
@@ -249,6 +251,8 @@ public:
       return (*_g);
     }
     grid_type const& TheAnchor() const { return TheGrid();}
+
+    bool bound() const { return _g != 0;} 
   protected: 
     const Grid* _g;
   };
@@ -317,6 +321,7 @@ public:
 
     const index_type&  index() const { return _v;}
     //    const vertex_base& base() const {return _v;}
+    bool valid() const { return TheGrid().IsValid(_v);}
   protected:
     index_type _v;
   };
@@ -388,8 +393,8 @@ public:
     VertexOnEdgeIterator EndVertex()   const; //{ return VertexOnEdgeIterator(*this,2);}
 
     index_type index() const { return v1_;}
-    index_type vertex_index_low() const { return index();}
-    index_type vertex_index_high() const { return index() + (dir == x_dir ? index_type(1,0) : index_type(0,1));}
+    index_type low_vertex_index() const { return index();}
+    index_type high_vertex_index() const { return index() + (dir == x_dir ? index_type(1,0) : index_type(0,1));}
 
     inline void FlipCell(Cell& C) const;
     inline Cell FlippedCell(Cell& C) const;
@@ -419,6 +424,7 @@ public:
     friend class RegGrid2D;
     typedef Cell self;
     typedef grid_types<Grid::archetype_type> archgt;
+    typedef index_type local_index_type;
 
     enum side   { S  = 1, E  = 2, N  = 3, W  = 4, invalid_side   = 5};
     enum corner { SW = 1, SE = 2, NE = 3, NW = 4, invalid_corner = 5};
