@@ -1,15 +1,15 @@
-/*! \mainpage Index of the GrAL Triang2D Grid Module
+/*! \mainpage Index of the GrAL %Triang2D Grid Module
 
    This module contains the concrete grid component Triang2D.
    An object of type Triang2D represents a two-dimensional triangulation.
-   The only incidence relation stored is cell-vertex incidence,
+   The only %incidence relation stored is cell-vertex %incidence,
    in a simple integer array.
 
    The module also serves as an example how to adapt a given
    ``classical'' grid data structure to the GrAL interface.
    Therefore, most things are kept simple, even if much shorter
    implementations would be possible by reusing generic components
-   for defining iterators.
+   e.g. for defining iterators.
 
    
    The main classes one might use are:

@@ -1,9 +1,15 @@
+/*! \file 
+    
+   Test and demonstrate output to GMV format (3D)
+
+ */
 
 #include "Gral/IO/gmv-format-output3d.h"
 #include "Gral/Grids/Cartesian3D/all.h"
 
 #include "Geometry/coords.h"
 #include <functional>
+
 
 template<class COORD>
 struct Id {

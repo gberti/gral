@@ -1,3 +1,8 @@
+/*! \file 
+
+    Test and demonstrate output to GMV format (2D)
+
+ */
 
 #include "Gral/IO/gmv-format-output2d.h"
 #include "Gral/Grids/Cartesian2D/all.h"

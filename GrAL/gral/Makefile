@@ -3,7 +3,7 @@ export CONFIG:=$(shell pwd)/mk.config
 include $(CONFIG)
 
 SUBDIRS =  base complex2d distributed partitioning cartesian2d testing \
-           gmv-io cartesian3d complex3d
+           gmv-io cartesian3d complex3d triang2d
 
 #include $(ALLROOT)/configuration/defs/recursive-targets
 
