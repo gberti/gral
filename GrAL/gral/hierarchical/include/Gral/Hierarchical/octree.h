@@ -363,11 +363,15 @@ public:
   public:
     octree_element_base_t() {}
     explicit
-    octree_element_base_t(octree_type const* o,         level_handle l = o->coarsest_level()) 
-      : oct(o), lev(l) {}
+    octree_element_base_t(octree_type const* o)
+      : oct(o), lev(o->coarsest_level()) {}
+    octree_element_base_t(octree_type const* o,         level_handle lv)
+      : oct(o), lev(lv) {}
     explicit
-    octree_element_base_t(ref_ptr<const octree_type> o, level_handle l = o->coarsest_level()) 
-      : oct(o), lev(l) {}
+    octree_element_base_t(ref_ptr<const octree_type> o)
+      : oct(o), lev(o->coarsest_level()) {}
+    octree_element_base_t(ref_ptr<const octree_type> o, level_handle lv)
+      : oct(o), lev(lv) {}
 
     bool bound() const { return oct != 0;}
     void cb()    const { REQUIRE(bound(), "", 1); }
@@ -408,7 +412,15 @@ public:
 
   private:
     ActiveLevelCellIterator c;
+    //using base::lev;
   public:
+    //using base::cb;
+    //using base::bound;
+    //using base::TheGrid;
+    //using base::TheHierGrid;
+    //using base::TheOctree;
+    //using base::level;
+
     leaf_cell_iterator_t() {}
     leaf_cell_iterator_t(grid_type const& o)
       : base(&o, o.TheOctree()->coarsest_level()),
@@ -419,32 +431,39 @@ public:
       c(o->TheOctree()->ActiveRange(o->TheOctree()->coarsest_level())->FirstCell())
     { make_valid();}
 
-    bool IsDone()    const { cb(); return level() > TheOctree()->finest_level();}
-    Cell operator*() const { cv(); return Cell(TheGrid(), *c, level());}    
+    bool IsDone()    const { base::cb(); return base::level() > base::TheOctree()->finest_level();}
+    Cell operator*() const { cv();       return Cell(base::TheGrid(), *c, base::level());}    
     self& operator++() {
       cv();  ++c; make_valid(); return *this;
     }
-    cell_handle handle() const { return cell_handle((*c).handle(),level());}
+    cell_handle handle() const { return cell_handle((*c).handle(), base::level());}
 
     flat_cell_type Flat() const { return *c;}
     bool valid() const { return ! IsDone() && on_leaf();}
-    void cv()    const { REQUIRE( (bound() && valid()), "", 1);}
+    void cv()    const { REQUIRE( (base::bound() && valid()), "", 1);}
   private:
     void make_valid() {
       while(! IsDone() && ! on_leaf()) {
 	make_valid_c();
 	if( c.IsDone()) {
-	  ++lev;
-	  if(lev <= TheOctree()->finest_level())
-	    c=TheOctree()->ActiveRange(lev)->FirstCell(); 
+	  ++base::lev;
+	  if(base::lev <= base::TheOctree()->finest_level())
+	    c=base::TheOctree()->ActiveRange(base::lev)->FirstCell(); 
 	}
       }
     }
     void make_valid_c() { while(!c.IsDone() && ! on_leaf()) ++c;}
-    bool on_leaf() const { return ! c.IsDone() && TheOctree()->isLeaf(oct_cell_type(* TheHierGrid(), *c, level()));}
+    bool on_leaf() const { return ! c.IsDone() && base::TheOctree()->isLeaf(oct_cell_type(* base::TheHierGrid(), *c, base::level()));}
   }; // class leaf_cell_iterator_t<BASE>
 
 
+  template<class ELEMBASE>
+  inline bool operator==(leaf_cell_iterator_t<ELEMBASE> const& lhs, leaf_cell_iterator_t<ELEMBASE> const& rhs)
+  { return lhs.level() == rhs.level() && lhs.Flat() == rhs.Flat();}
+  template<class ELEMBASE>
+  inline bool operator< (leaf_cell_iterator_t<ELEMBASE> const& lhs, leaf_cell_iterator_t<ELEMBASE> const& rhs)
+  { return lhs.level() < rhs.level() || (lhs.level() == rhs.level() && lhs.Flat() < rhs.Flat());}
+ 
    
 
 } // namespace octree
