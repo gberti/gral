@@ -9,8 +9,8 @@
     is by (sub-) module hierarchy.
 
     Here are the separate packages of GrAL:
-   <UL>
      <H2> Basic, non-grid related modules </H2>
+   <UL>
      <LI>  $gral-configuration Configuration module:
            collect comman make targets and
            variable, compiler config header etc.
@@ -22,12 +22,14 @@
      <LI>  $gral-external-control External Control module:
       Controling runtime parameters in a uniform and hierarchical way.
      <LI>  $gral-geometry         Geometry module:
-           some geometric primitives
+           some geometric primitives, especially for 2D and 3D
      <LI>  $gral-graphics-device Graphics Device module: Abstract interface
          to graphics output, mainly geomview/OOGL at the moment.
      <LI>  $gral-function-algebra Function Algebra module: 
          An implemention of a function algebra, including function composition.
-     <H2> Proper GrAL Modules </H2> 
+   </UL>
+   <H2> Proper GrAL Modules </H2> 
+   <UL>
       <LI> $GRALCONCEPTSTOP 'Intro and concepts documentation'
       <LI> $gral-gral/base GrAL-Base module:
          Basis generic data structures and algorithms. This module is used by all
@@ -44,11 +46,21 @@
          A grid component for 3D grids with arbitrary cells
       <LI> $gral-gral/cartesian3d GrAL-Cartesian3D module:
          A Cartesian grid component for 3D regular grids. 
+      <LI> $gral-gral/complexnd  GrAL-ComplexND module:
+         Unstructured grids of arbitrary dimension
+      <LI> $gral-gral/cartesiannd  GrAL-CartesianND module:
+         Structured grids of arbitrary dimension
       <LI> $gral-gral/partitioning GrAL-Partitioning module:
           Generic components for grid partitioning.
+      <LI> $gral-gral/measurement  GrAL-Measurement module:
+           Components for quantitative measure of grids, such as mesh quality measures
       <LI> $gral-gral/distributed  GrAL-Distributed module:
           Generic components for distributed grids.
+      <LI> $gral-gral/hierarchical GrAL-Hierarchical module:
+           Components for hierarchical grids
       <LI> $gral-gral/gmv-io GrAL-GMV-IO module:
         Components for output to GMV file format (3D and 2D versions).
-  </UL>
+      <LI> $gral-gral/geomview-io GrAL-Geomview-IO module:
+        Components for output to OFF file format used by Geomview
+   </UL>
 */
