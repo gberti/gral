@@ -23,6 +23,7 @@ class SubrangeReg2D {
 public:
   typedef SubrangeReg2D Range;
   typedef RegGrid2D Grid;
+  typedef Grid      grid_type;
   typedef  Grid::indexmap_type indexmap_type;
   typedef  Grid::index_type index_type;
 
@@ -50,6 +51,19 @@ public:
       yedge_index_map (index_type(llx,lly),index_type(urx,  ury-1))
 
     {}
+  // hack: Allow non-closed subranges
+  SubrangeReg2D(const Grid& gg, 
+		const index_type& llv_v, const index_type& urv_v,
+		const index_type& llv_c, const index_type& urv_c)
+    : g(&gg),
+      vertex_index_map(llv_v, urv_v),
+      cell_index_map(llv_c, urv_c),
+      // this is a hack ... does not lead to good edge partitioning
+      xedge_index_map (llv_v,index_type(urv_v.x()-1,urv_v.y()  )), 
+      yedge_index_map (llv_v,index_type(urv_v.x(),  urv_v.y()-1))
+  {}
+
+  static unsigned dimension() { return 2;}
 
   //  SubrangeReg2D(const Grid& gg, const rect& b) 
   // : g(gg), vertex_index_map(b.ll,b.ur) {}
@@ -71,6 +85,7 @@ public:
     typedef VertexIterator_1 self;
 
     VertexIterator_1() : base(0,0), v(-1) {}
+    VertexIterator_1(const Range& r) : base(r.TheGrid(), r) , v(r.MinVertexNum()) {}
     VertexIterator_1(const Grid* g, const Range* r) : base(g,r), v(r->MinVertexNum()) {}
     VertexIterator_1(const Grid& g, const Range& r) : base(g,r), v(r.MinVertexNum()) {}
     VertexIterator_1(vertex_handle vv, const Grid* g, const Range* r) 
@@ -81,6 +96,7 @@ public:
     self& operator++()     { ++v; return (*this); }
     self  operator++(int)  { self tmp(*this); ++(*this); return tmp;}
     Vertex   operator*() const { return TheRange().vertex(v);} 
+    vertex_handle handle() const { return v;}
     
     bool     IsDone()    const { return  (v > TheRange().MaxVertexNum());}
     friend bool operator==(const self& ls, const self& rs) { return (ls.v == rs.v);}
@@ -100,6 +116,7 @@ public:
     typedef CellIterator_1 self;
 
     CellIterator_1() : base(0,0), c(-1) {}
+    CellIterator_1(const Range& r) : base(r.TheGrid(), r), c(r.MinCellNum()) {}
     CellIterator_1(const Grid* g, const Range* r) : base(g,r), c(r->MinCellNum()) {}
     CellIterator_1(const Grid& g, const Range& r) : base(g,r), c(r.MinCellNum()) {}
     CellIterator_1(cell_handle cc, const Grid* g, const Range* r) 
@@ -117,7 +134,8 @@ public:
       return *this;
     }
     Cell   operator*() const { return TheRange().cell(c);} 
-    
+    cell_handle handle() const { return c;}    
+
     bool     IsDone()    const { return  (c > TheRange().MaxCellNum());}
     friend bool operator==(const self& ls, const self& rs) { return (ls.c == rs.c);}
     friend bool operator!=(const self& ls, const self& rs) { return !(ls == rs);}
@@ -229,6 +247,28 @@ public:
   unsigned NumOfFacets() const { return NumOfEdges();}
   EdgeIterator FirstFacet() const {return FirstEdge();}
   EdgeIterator EndFacet()   const {return EndEdge();} // past-the-end!
+
+  /*! \name Archetype handling
+   */
+  /*@{*/ 
+  typedef grid_type::archetype_iterator archetype_iterator;
+  typedef grid_type::archetype_type     archetype_type;
+  typedef grid_type::archetype_handle   archetype_handle;
+
+  static archetype_iterator BeginArchetype() { return grid_type::BeginArchetype();}
+  static archetype_iterator EndArchetype()   { return grid_type::EndArchetype();}
+  static archetype_type const& Archetype(archetype_handle = 0) { return *BeginArchetype();} 
+  static archetype_type const& ArchetypeOf (Cell const&)  
+    { return *BeginArchetype();}
+  static archetype_type   const& ArchetypeOf (cell_handle) 
+    { return *BeginArchetype();}
+  static archetype_handle        archetype_of(cell_handle) 
+    { return 0;}
+  static archetype_handle        archetype_of(Cell const&) 
+    { return 0;}
+  static unsigned NumOfArchetypes() { return 1;}
+  /*@}*/
+
 private:
   const Grid* g;
   indexmap_type vertex_index_map;
@@ -263,6 +303,13 @@ struct grid_types<cartesian2d::SubrangeReg2D> {
   typedef  gt::VertexOnCellIterator VertexOnCellIterator;
   typedef  gt::EdgeOnCellIterator   EdgeOnCellIterator;
   typedef  gt::CellOnCellIterator   CellOnCellIterator;
+
+  typedef  gt::archetype_type     archetype_type;
+  typedef  gt::archetype_handle   archetype_handle;
+  typedef  gt::archetype_iterator archetype_iterator;
+  typedef  archetype_iterator     ArchetypeIterator; 
+  typedef  grid_types<archetype_type>    archgt;
+
 };
 
 
