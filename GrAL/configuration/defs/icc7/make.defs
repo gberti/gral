@@ -1,0 +1,18 @@
+# icc/make.defs
+# Settings for INTEL CC 7.1
+
+CCC      =  /usr/net/lnx/INTEL/C++/compiler70/ia32/bin/icc
+CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
+CCFLAGS += 
+
+CCFLAGS += -w1 
+CCFLAGS += -wd186  ## Warning #186 is pointless comparison of unsigned integer with zero
+CCFLAGS += -wd1125  ## Virtual override intended?
+#CCFLAGS += -w2 -wd981 
+CCFLAGS += -DINTEL_CC
+CCFLAGS += -DGRAL_HAS_SSTREAM
+
+DEPEND    =$(CCC)
+DEPFLAGS += -M $(CCFLAGS)
+
+

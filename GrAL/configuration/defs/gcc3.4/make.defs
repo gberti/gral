@@ -7,7 +7,7 @@ CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS
 CCFLAGS += 
 CCFLAGS += -ftemplate-depth-35
 CCFLAGS += -DGRAL_HAS_SSTREAM
-LDFLAGS += -Xlinker -rpath -Xlinker $(HOME)/lib
+LDFLAGS += -Xlinker -rpath -Xlinker $(HOME)/lib/gcc3.4/install-3.4-20031015/lib/
 DEPEND    =$(CCC)
 DEPFLAGS += -MM $(CCFLAGS)
 
