@@ -86,7 +86,14 @@ $ gmake test-check-clean [PREFIX=/your/prefix]
 (will clean after check, so it does not need so much
  temporary disk space)
 
+This checks also the correct installation of GrAL under PREFIX.
 
+[ You can also build the tests without prior installation,
+  by saying
+  $ gmake test-check-clean DEVELOP=develop
+  Then include and link paths are into the module directories
+  themselves.
+]
 
 Notes on using GrAL parts depending 3rd party libraries
 -------------------------------------------------------

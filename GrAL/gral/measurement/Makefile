@@ -47,7 +47,8 @@ realclean: tarclean
 	(cd test; $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
 
 #	(cd src;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
-#	(cd doc; $(MAKE) realclean)
+#	(cd doc;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
+
 
 
 doc: 
