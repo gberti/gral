@@ -159,8 +159,14 @@ public:
   /*@}*/
 
 private:
-  void c(index_type const& p) const { REQUIRE(valid(p), "p = " << p, 1);}
-  void c(int               i) const { REQUIRE(valid(i), "i = " << i, 1);}
+  void c(index_type const& p) const { REQUIRE(valid(p), "p = " << p 
+					      << " min=" << min_tuple() 
+					      << " max=" << max_tuple(), 1);
+  }
+  void c(int               i) const { REQUIRE(valid(i), "i = " << i 
+					      << " min=" << min_flat_index() 
+					      << " max=" << max_flat_index(), 1);
+  }
 };
 
 } // namespace GrAL 
