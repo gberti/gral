@@ -6,19 +6,19 @@
 #include "Gral/Base/common-grid-basics.h"
 
 
-template<class E, class consecutive_tag>
+template<class E, class GT, class consecutive_tag>
 class element_numbering_aux {};
 
 
 
-template<class E, int N>
-class element_numbering_aux<E, consecutive_integer_tag<N> > 
+template<class E, class GT, int N>
+class element_numbering_aux<E, GT, consecutive_integer_tag<N> > 
 {
 
 public:
   typedef E element_type;
   typedef element_traits<E> et;
-  typedef typename et::grid_type grid_type;
+  typedef typename GT::grid_type grid_type;
 private:
   grid_type const* g;
   int   offset_;
@@ -34,14 +34,15 @@ public:
 };
 
 
-template<class E>
-class element_numbering_aux<E, non_consecutive_tag > 
+template<claCGT::cell_handle>ss E, class GT>
+class element_numbering_aux<E, GT, non_consecutive_tag > 
 {
 
 public:
   typedef E element_type;
   typedef element_traits<E> et;
-  typedef typename et::grid_type grid_type;
+  typedef typename GT::grid_type grid_type;
+  // how to get ElementIterator out of GT ????
 private:
   grid_function<element_type, int> num;
   int   offset_;
@@ -62,7 +63,9 @@ public:
 };
 
 
-/*! Provide a consecutive numbering of grid elements
+/*! \brief Provide a consecutive numbering of grid elements
+ 
+   \ingroup elements
  
     This class has an important specialization in the 
     case that the corresponding elements are already numbered
@@ -70,13 +73,16 @@ public:
     on the fly, by simply adding the offset. Else, we must use
     a grid function.
 
+    \todo Make it deal correctly with grid subranges, where the
+     \c consecutive_tag of underlying \c element_handle does not
+     induce the Right Thing. 
  */
 
-template<class E>
+template<class E, class GT = grid_types<typename element_traits<E>::grid_type> >
 class element_numbering :
-  public element_numbering_aux<E, typename element_traits<E>::consecutive_tag>
+  public element_numbering_aux<E, GT, typename element_traits<E>::consecutive_tag>
 {
-  typedef element_numbering_aux<E, typename element_traits<E>::consecutive_tag> base;
+  typedef element_numbering_aux<E, GT, typename element_traits<E>::consecutive_tag> base;
 public:
   element_numbering(typename base::grid_type const& g,
 		    int offset = 0) : base(g, offset) {}
