@@ -49,6 +49,13 @@ public:
     return res;
   }
 
+  static self identity() 
+  {
+    matrix_type sc(0.0);
+    for(int i = apt::LowerIndex(); i <= apt::UpperIndex(); ++i)
+      sc(i,i) = 1;
+    return self(sc);
+  }
   static self scaling(coord_type s) 
   {
     matrix_type sc(0.0);
