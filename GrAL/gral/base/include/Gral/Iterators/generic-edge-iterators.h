@@ -9,7 +9,7 @@
 /*! \defgroup generic_edge Generic edge components
 
     The components offer gneric support for edge, edge iteration
-    and edge-on-celliteraration, on top of a $GrAL CellVertexInputGrid. 
+    and edge-on-cell iteration, on top of a $GrAL CellVertexInputGrid. 
  */
 
 namespace generic_edge {
