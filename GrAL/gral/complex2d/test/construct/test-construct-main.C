@@ -81,9 +81,9 @@ int main(int argc, char* argv[]) {
   for(int i =0; i < NCC; ++i) {
     string nm = "CC" + as_string(i) + ".out";
     outfile.open(nm.c_str());
-    OstreamComplex2DFmt OG1(testout);
+    OstreamComplex2DFmt OG1(testout,1);
     ConstructGrid(OG1, OG1, CC[i], geometry_type(CC[i]));
-    OstreamComplex2DFmt OG2(outfile);
+    OstreamComplex2DFmt OG2(outfile,1);
     ConstructGrid(OG2, OG2, CC[i], geometry_type(CC[i]));
     outfile.close();
   }
@@ -100,7 +100,7 @@ int main(int argc, char* argv[]) {
 
      ofstream casei_out;
      casei_out.open(("case" + as_string(ii)  + ".grid.out").c_str());
-     OstreamComplex2DFmt OG(casei_out);
+     OstreamComplex2DFmt OG(casei_out,1);
      ConstructGrid(OG, OG, CC.back(), geometry_type(CC.back()));
      casei_out.close();
    }
