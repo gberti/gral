@@ -15,6 +15,8 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/element-handle.h"
 
+#include "Gral/Base/polygon.h"
+
 // many, many forward declarations ...
 
 
@@ -213,6 +215,12 @@ struct complex2d_types {
   typedef CellOnCell2D_Iterator   CellOnCellIterator;
 
   typedef CellOnVertex2D_Iterator CellOnVertexIterator;
+
+  typedef polygon1d::polygon                 archetype_type;
+  typedef std::vector<archetype_type>        archetype_sequence;
+  typedef archetype_sequence::const_iterator archetype_iterator;
+  typedef unsigned                           archetype_handle;
+
 };
 
 
@@ -268,6 +276,9 @@ public: // for benchmark only
   vertex_list_complex2d          _vertices;
   boundary_facet_list            _boundary;
 
+  mutable int                    num_of_edges_cache;
+  archetype_sequence             archetypes;
+  std::vector<unsigned>          arch_for_n_vertices;
 public:
   //--------- types --------------------
 
@@ -284,7 +295,7 @@ public:
  
   //--------------- constructors --------------
   //@{ @name Constructors 
-  Complex2D() {}
+  Complex2D();
   Complex2D(const Complex2D& rhs);
   Complex2D& operator=(const Complex2D& rhs);
   ~Complex2D();
@@ -338,7 +349,7 @@ public:
   //   { return NumOfBoundaryFacets() - # cells w. multiple bd}
 
   // FIXME: only correct for genus = genus(S^2) / genus [0,1]^2
-  int NumOfBoundaryComponents() const { return (NumOfBoundaryFacets() > 0 ? 1 : 0);} 
+  //  int NumOfBoundaryComponents() const { return (NumOfBoundaryFacets() > 0 ? 1 : 0);} 
   //@}
 
   //---------------- size information ------------
@@ -346,7 +357,12 @@ public:
   //@{ @name Size information
   int NumOfVertices() const  {return (_vertices.size());}
   int NumOfEdges()    const  
-    {return (NumOfCells() == 0 ? 0 : -2 + NumOfVertices() + NumOfCells() + NumOfBoundaryComponents());}
+  { 
+    if(num_of_edges_cache < 0)
+      calculate_num_of_edges();
+    return num_of_edges_cache;
+  }
+  //  {return (NumOfCells() == 0 ? 0 : -2 + NumOfVertices() + NumOfCells() + NumOfBoundaryComponents());}
   int NumOfFacets()   const { return NumOfEdges();}
   int NumOfFaces()    const  {return NumOfCells();}
   int NumOfCells()    const  {return (_cells.size());}
@@ -372,6 +388,23 @@ public:
   inline const CoordType& Coord(const Vertex& v)   const;
   inline       CoordType& Coord(const Vertex& v);
   //@}
+
+  /*! \name Archetype handling
+   */
+  /*@{*/
+  archetype_iterator BeginArchetype() const { return archetypes.begin();}
+  archetype_iterator EndArchetype()   const { return archetypes.end();}
+  archetype_type const& Archetype(archetype_handle a) const { return archetypes[a];}
+  archetype_type const& ArchetypeOf (Cell const& c) const 
+  { return Archetype(archetype_of(c));}
+  archetype_type   const& ArchetypeOf (cell_handle c) const 
+    { return ArchetypeOf(cell(c));}
+  archetype_handle        archetype_of(cell_handle c) const 
+    { return archetype_of(cell(c)); }
+  archetype_handle        archetype_of(Cell const& c) const 
+    { return arch_for_n_vertices[c.NumOfVertices()];}
+  unsigned NumOfArchetypes() const { return archetypes.size(); }
+  /*@}*/
   
 private:
   friend class friend_for_input; // work-around class
@@ -399,6 +432,9 @@ private:
   inline void add_cell_on_vertex(const Vertex& V, const Cell& C);
   inline void add_cell_on_vertex(const Vertex& V, const cell_handle& C);
 
+  void add_archetype_of(Cell const& c);
+  void calculate_num_of_edges() const;
+  void calculate_archetypes();
   // calculate required connectivity information
   void  calculate_neighbour_cells();
   void  calculate_vertex_cells();
@@ -440,7 +476,7 @@ public:
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
 
-  // an ugly hack to workaround the lack of template
+  // an ugly hack used to workaround the former lack of template
   // member functions or template friends.
   // the sole purpose of this class is to make public
   // some private functions/data of Complex2D, that are
@@ -462,6 +498,8 @@ public:
 
   void calculate_neighbour_cells()    {_cc.calculate_neighbour_cells();}
   void calculate_vertex_cells()       {_cc.calculate_vertex_cells();}
+  void calculate_archetypes()         {_cc.calculate_archetypes();}
+  void add_archetype_of(Cell const& c) { _cc.add_archetype_of(c);}
 
   cell_handle   _new_cell(int i)                                { return _cc._new_cell(i);}
   vertex_handle _new_vertex(const CoordType& coo = CoordType()) { return _cc._new_vertex(coo);}
@@ -528,6 +566,14 @@ struct grid_types_Complex2D  : public complex2d_types {
   typedef  Complex2D::BoundaryFacetIterator  BoundaryFacetIterator;
   typedef  Complex2D::BoundaryVertexIterator BoundaryVertexIterator;
 
+  // 2D: Cell <-> Face
+  typedef cell_handle             face_handle;
+  typedef Cell                    Face;
+  typedef CellIterator            FaceIterator;
+  typedef VertexOnCellIterator    VertexOnFaceIterator;
+  typedef CellOnVertexIterator    FaceOnVertexIterator;
+  typedef EdgeOnCellIterator      EdgeOnFaceIterator;
+  typedef CellOnEdgeIterator      FaceOnEdgeIterator;
 
   static int hash(const Vertex& V) { return V.handle();}
   static int hash(const Cell&   C) { return C.handle();}
