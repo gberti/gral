@@ -47,14 +47,19 @@ ap::vectorproduct(e[2],e[1]) = -1 0 0
 1 1 1 
 ap::inverse(e[0],e[1],e[2]) = 1 0 0   0 1 0   0 0 1 
 ap::inverse(e[0],e[2],e[1]) = 1 -0 -0   -0 -0 1   -0 1 -0 
-ap::condition(e[0],e[1],e[2],ap::Norm_2()) = 3
+ap::condition(e[0],e[1],e[2],ap::Norm_frobenius()) = 3
 ap::condition(e[0],e[1],e[2],ap::Norm_1()) = 1
 ap::condition(e[0],e[1],e[2],ap::Norm_infinity()) = 1
 ap::inverse(a[0],a[1],a[2]) = 1 0 0   0 0.5 0   0 0 0.333333 
 ap::inverse(a[0],a[1],a[2]) = 1 -0 -0   -0 -0 0.5   -0 0.333333 -0 
-ap::matrixnorm_2(a[0],a[1],a[2]) = 3.74166
+ap::matrixnorm_frobenius(a[0],a[1],a[2]) = 3.74166
 ap::matrixnorm_1(a[0],a[1],a[2]) = 3
 ap::matrixnorm_infinity(a[0],a[1],a[2]) = 3
-ap::condition(a[0],a[1],a[2],ap::Norm_2()) = 4.36527
+ap::condition(a[0],a[1],a[2],ap::Norm_frobenius()) = 4.36527
 ap::condition(a[0],a[1],a[2],ap::Norm_1()) = 3
 ap::condition(a[0],a[1],a[2],ap::Norm_infinity()) = 3
+S does intersect plane
+S does intersect triangle
+intersection: 0.25 0.25 0 
+S does not intersect plane
+S does not intersect triangle
