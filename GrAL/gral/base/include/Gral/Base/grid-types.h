@@ -59,7 +59,7 @@ namespace grid_types_detail
   template<class GT>
   struct sequence_iterator_aux<GT, edge_type_tag>   { typedef typename GT::EdgeIterator   type;};
   template<class GT>
-  struct sequence_iterator_aux<GT, face_type_tag>   { typedef typename GTCGT::cell_handle>::FaceIterator   type;};
+  struct sequence_iterator_aux<GT, face_type_tag>   { typedef typename GT::FaceIterator   type;};
   template<class GT>
   struct sequence_iterator_aux<GT, facet_type_tag>  { typedef typename GT::FacetIterator  type;};
   template<class GT>

@@ -34,7 +34,7 @@ public:
 };
 
 
-template<claCGT::cell_handle>ss E, class GT>
+template<class E, class GT>
 class element_numbering_aux<E, GT, non_consecutive_tag > 
 {
 
