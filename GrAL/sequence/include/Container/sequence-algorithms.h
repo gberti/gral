@@ -24,18 +24,28 @@ namespace sequence {
     }
   }
 
+  /*! \brief helper predicate for comparing pairs
+  
+       \ingroup algorithms
+  */
   struct less_first  {
     typedef bool result_type;
     template<class Pair>
     bool operator()(Pair const& p1, Pair const& p2) const { return p1.first < p2.first;}
   };
+
+  /*! \brief helper predicate for comparing pairs
+  
+       \ingroup algorithms
+  */
   struct less_second  {
     typedef bool result_type;
     template<class Pair>
     bool operator()(Pair const& p1, Pair const& p2) const { return p1.second < p2.second;}
   };
 
-  /*!
+  /*! \brief find iterator with maximum value in map
+
       \ingroup algorithms
   */
 
@@ -57,6 +67,7 @@ namespace sequence {
 
   /*! \brief Check whether any item \c i in \c [first,end[ exist with <tt> p(i) == true </tt>
       \ingroup algorithms
+      \see test-sequence-algorithms.C
   */
  template <typename InputIterator, typename Predicate>
   inline bool exists(InputIterator first, InputIterator end, Predicate p) {
@@ -67,6 +78,28 @@ namespace sequence {
     }
     return false; 
   }
+  /*! \brief Check whether for each  item \c i in \c [first,end[ the condition <tt> p(i) == true </tt> holds
+      \ingroup algorithms
+      \see test-sequence-algorithms.C
+  */
+ template <typename InputIterator, typename Predicate>
+  inline bool forall(InputIterator first, InputIterator end, Predicate p) {
+   bool res = true;
+    while(first != end) {
+      res = res && p(*first);
+      ++first;
+    }
+    return res;
+  }
+
+  /*! \brief Check whether \c v  is contained in the set  \c [first,end[
+      \ingroup algorithms
+      \see test-sequence-algorithms.C
+  */
+ template <typename InputIterator, typename Value>
+ inline bool contains(InputIterator first, InputIterator end, Value const& v) {
+   return std::find(first,end,v) != end;
+ }
 
 
   /*! \brief The classic bubble sort.
