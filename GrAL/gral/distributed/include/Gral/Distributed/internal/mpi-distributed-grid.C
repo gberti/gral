@@ -25,14 +25,23 @@ MPIDistributedGrid<CoarseG,FineG>::MPIDistributedGrid(CoarseG const& cg)
    init(); 
 }
 
+
+
 template<class CoarseG, class FineG>
 void  MPIDistributedGrid<CoarseG,FineG>::set_coarse_grid(CoarseG const& cg)
 {
   REQUIRE( (! initialized), "topology changes not possible!\n",1);
   the_coarse = cg;
+  coarse_grid_complete();
+}
+
+template<class CoarseG, class FineG>
+void  MPIDistributedGrid<CoarseG,FineG>::coarse_grid_complete()
+{
   cell2rank.set_grid(the_coarse);
   rank2cell = vector<CoarseCell>(the_coarse.NumOfCells());
 
+  the_ovrlp_grid.init(TheCoarseGrid());
   init();
 }
 
@@ -80,8 +89,7 @@ void  MPIDistributedGrid<CoarseG,FineG>::init_unstructured()
   else
    MPI_Comm_dup(MPI_COMM_WORLD, &the_communicator);
 
-  // create mapping cell <-> ranks
-  // stimmt diese Zuordnung?
+  // create mapping cells <-> ranks
   int r = 0;
   for(CoarseCellIterator C = CG.FirstCell(); ! C.IsDone(); ++C, ++r) {
     cell2rank[*C] = r;
@@ -91,24 +99,14 @@ void  MPIDistributedGrid<CoarseG,FineG>::init_unstructured()
   MPI_Comm_rank(the_communicator,&my_rank);
   my_cell = rank2cell[my_rank];
 
+  the_local_range = the_ovrlp_grid.LocalRange();
 
-  MPI_Barrier(MPI_COMM_WORLD);
-
-  //  check
-  /*
-  int r1;
-  MPI_Graph_neighbors_count(the_communicator, my_rank,&r1);
-  REQUIRE((r1 == my_cell.NumOfNeighbours()), 
-	  "neighbour count does match: MPI = " << r1 
-	  << ", Grid = " << my_cell.NumOfNeighbours() << "!\n",1);
-  */
+  MPI_Barrier(the_communicator);
 
   if(isMaster())
     // IOMgr::Info()
       std::cerr << "initialized processor grid ( "
 		<< CG.NumOfCells() << " processes)\n";
-
-  the_local_range = the_ovrlp_grid.LocalRange();
 }
 
 
