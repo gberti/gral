@@ -37,6 +37,10 @@ struct grid_types_Triang2D :
  A copy by assignment or copy-ctor will always entail
  value-semantics on the copied-to side, i.e. make a full copy.
 
+  As this class also serves as a tutorial on how to adapt
+  existing data structures to GrAL, the technical level was kept
+  low, i.e. there are no complicated constructions for building
+  element and iterators types out of generic components.
 */
 
 
