@@ -6,11 +6,19 @@
 #include "Gral/Base/construct-grid.h"
 #include "Gral/Grids/Complex3D/complex3d.h"
 
+#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
+#include "Gral/Grids/Complex3D/construct-grid.C"
+
+#else
+
 template<class G_SRC, class VCORR, class CCORR>
 void ConstructGrid0(Complex3D     & G_dest,
 		    G_SRC    const& G_src,
 		    VCORR         & v_corr,
-		    CCORR    const& c_corr);
+		    CCORR         & c_corr);
+
+
+#endif
 
 template<class G_SRC, class GEOM_SRC,
          class GEOM_DEST,
@@ -21,12 +29,8 @@ void ConstructGridVC (Complex3D     & G_dest,
 		      G_SRC    const& G_src,
 		      GEOM_SRC const& Geom_src,
 		      VCORR         & v_corr,
-		      CCORR    const& c_corr)
+		      CCORR         & c_corr)
 { ConstructGridVC_generic(G_dest,Geom_dest, G_src, Geom_src, v_corr, c_corr); }
 
-
-#ifdef NMWR_INCLUDE_TEMPLATE_DEFS
-#include "Gral/Grids/Complex3D/construct-grid.C"
-#endif
 
 #endif
