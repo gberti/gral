@@ -50,6 +50,8 @@ public:
 
   grid_type const& TheGrid() const { return geom->TheGrid();}
 
+  bool bound() const { return geom->bound();}
+  void rebind(grid_type const& g) { geom->rebind(g);}
 };
 
 /*! \brief Creator function for transformed_geom<Geom,Trafo>

@@ -13,6 +13,10 @@
  */
 template<class GRID> 
 class dummy_geometry : public grid_types<GRID> {
+public:
+  typedef GRID     grid_type;
+  typedef float    coord_type;
+  typedef typename grid_types<GRID>::Vertex Vertex;
 private:
   GRID const* g;
   float       x;
@@ -22,10 +26,12 @@ public:
   GRID const& TheGrid() const { return *g;}
 
   void set_grid(GRID const& gg) {g = &gg;}
-  typedef float coord_type;
-  typedef typename grid_types<GRID>::Vertex Vertex;
+
   coord_type   coord(Vertex const&) const { return x;}
   coord_type & coord(Vertex const&)       { return x;}
+
+  bool bound() const { return g != 0;}
+  void rebind(grid_type const& gg) { g = &gg;}
 };
 
 /*! \brief Creator function for dummy_geometry.
