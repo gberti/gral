@@ -566,7 +566,7 @@ private:
   }
 
   void advance() {
-    visited[fcv] = true;
+    visited[*fcv] = true;
     ++fcv;
     if(fcv.IsDone()) {
       ++cv;

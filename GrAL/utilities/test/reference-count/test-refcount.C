@@ -4,9 +4,11 @@
 
 #include "Utility/reference-count.h"
 
-#include <iostream.h>
+#include <iostream>
 
 #include "Utility/pre-post-conditions.h"
+
+using namespace std;
 
 class testA {
 public:

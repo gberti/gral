@@ -1,7 +1,7 @@
 
 // $LICENSE
 
-#include <iostream.h>
+#include <iostream>
 #include <string>
 
 #include "IO/mutator.h"  // only needed for "special" mutators.
@@ -21,6 +21,7 @@
 //----------------------------------------------------------------
 
 int main(int argc, char* argv[]) {
+  using namespace std;
 
   //  read variables from file only: uncomment the following line
   //  ControlDevice Ctrl = GetFileControlDevice("ctrl.in","main");

@@ -1,5 +1,5 @@
 CONFIG=$(shell pwd)/../mk.config
-SUBDIRS = reference-count ref-ptr notifier
+SUBDIRS = reference-count notifier ref-ptr 
 
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)

@@ -50,9 +50,9 @@ class distr_grid_function<E1,T1,MPIDistributedGrid<CG,FG> >
  public:
   distr_grid_function()  {}
   distr_grid_function(MPIDistributedGrid<CG,FG> const& DG)
-    : distributed_grid_function<E, T, MPIDistributedGrid<CG,FG> >(DG) {}
-  distr_grid_function(MPIDistributedGrid<CG,FG> const& DG, T const& t)
-    : distributed_grid_function<E, T, MPIDistributedGrid<CG,FG> >(DG,t) {}
+    : distributed_grid_function<E1, T1, MPIDistributedGrid<CG,FG> >(DG) {}
+  distr_grid_function(MPIDistributedGrid<CG,FG> const& DG, T1 const& t)
+    : distributed_grid_function<E1, T1, MPIDistributedGrid<CG,FG> >(DG,t) {}
 };
 
 
