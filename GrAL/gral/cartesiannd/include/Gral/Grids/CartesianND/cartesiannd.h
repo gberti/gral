@@ -70,7 +70,7 @@ namespace cartesiannd {
 
   template<class CARTGRID>
   struct archetype_of_grid_aux<CARTGRID,1> {
-    typedef archetype_0D type;
+    typedef archetype_0D::archetype_t type;
   };
 
   template<class CARTGRID>
@@ -450,6 +450,7 @@ namespace cartesiannd {
     typedef typename CARTGRID::facet_grid_type facet_grid_type;
     typedef grid_types<facet_grid_type>        fgt;
     typedef typename gt::vertex_index_type     vertex_index_type;
+    typedef typename gt::index_type            index_type;
     // define archetype_type, _iterator etc.
     // typedef typename archetype_of_grid<CARTGRID, CARTGRID::dimension-1>::archetype archetype_type;
 
@@ -479,6 +480,36 @@ namespace cartesiannd {
 
     VertexIterator FirstVertex() const { cg(); return VertexIterator(* g.FirstCell());}
     CellIterator   FirstCell()   const { cg(); return CellIterator  (* g.FirstCell());}
+
+    // hack: assume 2D grid -> 1D arch
+    static void switch_vertex(Vertex      & v, Cell const& e) 
+    {
+      index_type idx_v = v.index();
+      index_type idx_e = e.index();
+      if(idx_v != idx_e) 
+	v = Vertex(v.TheGrid(), idx_e);
+      else {
+	int d = delta_map<dimension+1>::dirs[1][e.direction()][0];
+	idx_v[d] += 1;
+	v = Vertex(v.TheGrid(), idx_v);
+      }
+    }
+
+    static void switch_cell  (Vertex  const& f, Cell      & c) {
+      index_type idx_f = f.index();
+      index_type idx_c = c.index();
+      int m = c.direction(); // in {0,1}
+      int d_alt = delta_map<dimension+1>::dirs[1][m  ][0];
+      int d_new = delta_map<dimension+1>::dirs[1][1-m][0];
+      m = (1-m); 
+      index_type diff_1 = idx_f - idx_c;
+      index_type diff_2 = idx_c; // - 0 = index of g.TheCell();
+      index_type idx_c_new = idx_c;
+      idx_c_new[d_alt] += diff_1[d_alt];
+      idx_c_new[d_new] -= diff_2[d_new];
+      c = Cell(c.TheGrid(), idx_c_new, m);
+    }
+
 
     typedef typename fgt::archetype_iterator archetype_iterator;
     typedef typename fgt::archetype_handle   archetype_handle;
@@ -531,6 +562,8 @@ namespace cartesiannd {
     sequence_iterator_t(ref_ptr<grid_type const> gg, local_element_handle hh, unsigned mm) : g(gg), h(hh), m(mm) {}
     sequence_iterator_t(grid_type         const& gg, index_type idx) : g(gg)  { init(idx,0); }
     sequence_iterator_t(ref_ptr<grid_type const> gg, index_type idx) : g(gg)  { init(idx,0); } 
+    sequence_iterator_t(grid_type         const& gg, index_type idx, unsigned mm) : g(gg)  { init(idx,mm); }
+    sequence_iterator_t(ref_ptr<grid_type const> gg, index_type idx, unsigned mm) : g(gg)  { init(idx,mm); } 
 
     void init(index_type idx) {
       REQUIRE(g->NumOfDirections(K) == 1, "", 1);
