@@ -9,7 +9,7 @@ MODULES=`$cvswork/configuration/scripts/modules.sh`;
 TMP=${HOME}/tmp;
 ALLROOT=${TMP}/modules;
 DOC=doc
-cd ${HOME}/tmp;
+cd ${HOME}/tmp; 
 rm -rf ${ALLROOT};
 mkdir -p  ${ALLROOT};
 cd  ${ALLROOT};
