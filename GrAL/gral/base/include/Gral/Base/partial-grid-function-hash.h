@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include <my-hash-map.h> // STL
+#include "Container/my-hash-map.h" // STL adapted
 
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Base/common-grid-basics.h"

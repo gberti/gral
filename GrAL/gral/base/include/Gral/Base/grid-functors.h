@@ -9,7 +9,7 @@
 //   
 //----------------------------------------------------------------
 
-#include "compiler-config.h"
+#include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Base/common-grid-basics.h"
 
