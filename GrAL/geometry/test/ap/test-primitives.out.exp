@@ -58,6 +58,17 @@ ap::matrixnorm_infinity(a[0],a[1],a[2]) = 3
 ap::condition(a[0],a[1],a[2],ap::Norm_frobenius()) = 4.36527
 ap::condition(a[0],a[1],a[2],ap::Norm_1()) = 3
 ap::condition(a[0],a[1],a[2],ap::Norm_infinity()) = 3
+A= 0 0 0   0 0 0   0 0 0 
+B= 1 0 0   0 1 0   0 0 1 
+C= 0 0 0   0 0 0   0 0 0 
+A= 1 0 0   0 2 0   0 0 3 
+C= 1 0 0   0 2 0   0 0 3 
+D= 0 1 0   0 0 1   0 0 0 
+D= 0 0 1   0 0 0   0 0 0 
+det(A)= 6
+|A|_1  = 3
+|A|_oo = 3
+|A|_F  = 3.74166
 
 Segment:  [0.25 0.25 -1 ,0.25 0.25 1 ]
 Triangle: [0 0 0 ,1 0 0 ,0 1 0 ]
