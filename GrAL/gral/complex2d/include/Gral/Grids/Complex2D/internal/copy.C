@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_COMPLEX2D_INTERNAL_COPY_CELLS_C
 #define NMWR_GB_COMPLEX2D_INTERNAL_COPY_CELLS_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Grids/Complex2D/internal/copy.h"
 

@@ -1,13 +1,8 @@
 #ifndef GRAL_BASE_GB_FACET_ITERATOR_H
 #define GRAL_BASE_GB_FACET_ITERATOR_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
 

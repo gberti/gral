@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 inline 
 EdgeOnCell2D_Iterator::EdgeOnCell2D_Iterator(CellOnCell2D_Iterator const& nb)
 { *this = nb._f;}

@@ -1,13 +1,8 @@
 #ifndef GRAL_BASE_GB_GRID_FUNCTION_VECTOR_H
 #define GRAL_BASE_GB_GRID_FUNCTION_VECTOR_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include <vector.h> // STL
 

@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_COMPOSITE_GRID_H
 #define NMWR_GB_COMPOSITE_GRID_H
 
+// $LICENSE
+
+
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Distributed/overlapping-grid.h"

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 // inline functions for  class Complex2D,
 // to be included in complex2d.h
 

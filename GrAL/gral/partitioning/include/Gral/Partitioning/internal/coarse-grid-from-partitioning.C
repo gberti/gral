@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_COARSE_FROM_PARTITIONING_C
 #define NMWR_GB_COARSE_FROM_PARTITIONING_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Partitioning/coarse-grid-from-partitioning.h"
 #include "Gral/Partitioning/collect-element-partitions.h"

@@ -1,6 +1,9 @@
 #ifndef NMWR_BG_TEST_EXT_CELL_ON_CELL_IT_C
 #define NMWR_BG_TEST_EXT_CELL_ON_CELL_IT_C
 
+// $LICENSE
+
+
 #include <iostream.h>
 #include "Grids/common-grid-basics.h"
 #include "Grids/Iterators/ex-cell-on-cell-it.h"

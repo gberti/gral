@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_DISTR_GRID_TRAITS_H
 #define NMWR_GB_DISTR_GRID_TRAITS_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1999
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 /*! Traits class for distributed grids.
    \ingroup distributedgrids

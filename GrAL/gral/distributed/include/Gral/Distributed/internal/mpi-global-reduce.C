@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_MPI_GLOBAL_REDUCE_C
 #define NMWR_GB_MPI_GLOBAL_REDUCE_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1999
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Distributed/mpi-distributed-grid-traits.h"
 

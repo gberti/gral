@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_ADD_PARTIAL_SHARED_C
 #define NMWR_GB_ADD_PARTIAL_SHARED_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Distributed/internal/add-partial-shared.h"
 #include "Gral/Partitioning/partitioning.h"

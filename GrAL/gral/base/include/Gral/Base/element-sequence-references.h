@@ -1,13 +1,8 @@
 #ifndef GRAL_BASE_GB_ELEMENT_SEQ_REFERENCES_H
 #define GRAL_BASE_GB_ELEMENT_SEQ_REFERENCES_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 /*! \defgroup elementseqviews Views of Grids as Element Sequences
     \ingroup subranges

@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_DISTR_MPI_REDUCE_C
 #define NMWR_GB_DISTR_MPI_REDUCE_C
 
+// $LICENSE
+
+
 #include <mpi.h>
 #include "Gral/Distributed/mpi-reduce.h"
 

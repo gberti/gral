@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_COMPOSITE_GRID_FUNCTION_C
 #define NMWR_GB_COMPOSITE_GRID_FUNCTION_C
 
+// $LICENSE
+
+
 #include <algorithm>  // STL
 
 #include "Utility/pre-post-conditions.h"

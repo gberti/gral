@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_CONSTRUCT_COMPOSITE_C
 #define NMWR_GB_CONSTRUCT_COMPOSITE_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Distributed/construct-composite.h"
 

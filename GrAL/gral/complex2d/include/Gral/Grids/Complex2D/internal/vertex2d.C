@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #ifndef NMWR_GB_VERTEX2D_C
 #define NMWR_GB_VERTEX2D_C
 

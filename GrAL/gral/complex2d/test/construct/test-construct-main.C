@@ -1,4 +1,7 @@
 
+// $LICENSE
+
+
 
 #include <algorithm>
 #include <fstream.h>

@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #include <fstream.h>
 
 #include "Container/bijective-mapping.h"

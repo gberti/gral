@@ -1,13 +1,8 @@
 #ifndef GRAL_BASE_GB_ELEMENT_TRAITS_H
 #define GRAL_BASE_GB_ELEMENT_TRAITS_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 //----------------------------------------------------------------
 /*!  \brief traits classes for enabling uniform treatment

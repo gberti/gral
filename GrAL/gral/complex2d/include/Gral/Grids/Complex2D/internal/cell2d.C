@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_CELL2D_C
 #define NMWR_GB_CELL2D_C
 
+// $LICENSE
+
+
 #include "algorithm"
 #include "functional"
 

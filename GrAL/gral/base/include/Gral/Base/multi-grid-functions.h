@@ -2,13 +2,8 @@
 #define GRAL_BASE_GB_MULTI_GRIDFUNCTIONS_H
 
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Config/compiler-config.h"
 #include "Gral/Base/common-grid-basics.h"

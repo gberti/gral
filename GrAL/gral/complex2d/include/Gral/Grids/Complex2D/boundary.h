@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_COMPLEX2D_BOUNDARY_H
 #define NMWR_GB_COMPLEX2D_BOUNDARY_H
 
+// $LICENSE
+
+
 // Gral Base
 #include "Gral/Base/boundary.h"
 #include "Gral/Iterators/boundary-iterator.h"

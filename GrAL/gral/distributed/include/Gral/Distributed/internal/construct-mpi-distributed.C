@@ -1,14 +1,8 @@
 #ifndef NMWR_GB_CONSTRUCT_MPI_DISTRIBUTED_C
 #define NMWR_GB_CONSTRUCT_MPI_DISTRIBUTED_C
 
-//----------------------------------------------------------------
-//
-//   (c) Guntram Berti, 1999
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include <fstream.h>
 

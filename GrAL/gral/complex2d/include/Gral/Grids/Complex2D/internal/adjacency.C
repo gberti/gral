@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_COMPLEX2D_ADJACENCY_C
 #define NMWR_GB_COMPLEX2D_ADJACENCY_C
 
+// $LICENSE
+
+
 #include "Gral/Grids/Complex2D/internal/adjacency.h"
 #include "Gral/Base/vtuple2d.h"
 

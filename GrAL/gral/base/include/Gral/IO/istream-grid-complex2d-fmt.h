@@ -1,13 +1,8 @@
 #ifndef GRAL_BASE_GB_ISTREAM_GRID_COMPLEX2D_FMT
 #define GRAL_BASE_GB_ISTREAM_GRID_COMPLEX2D_FMT
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 // STD
 #include <iostream.h>

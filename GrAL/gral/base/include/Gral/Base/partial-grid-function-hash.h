@@ -1,13 +1,8 @@
 #ifndef GRAL_BASE_GB_PARTIAL_GRID_FUNCTION_HASH_H
 #define GRAL_BASE_GB_PARTIAL_GRID_FUNCTION_HASH_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Container/my-hash-map.h" // STL adapted
 

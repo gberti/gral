@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_ENLARGE_GRID_COMPLEX2D_H
 #define NMWR_GB_ENLARGE_GRID_COMPLEX2D_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Base/enlarge-grid.h"
 #include "Gral/Grids/Complex2D/complex2d.h"

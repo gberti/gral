@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_COMPOSITE_GRID_C
 #define NMWR_GB_COMPOSITE_GRID_C
 
+// $LICENSE
+
+
 #include "Gral/Distributed/composite-grid.h"
 //#include "IO/iomgr.h"
 

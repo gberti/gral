@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_CONSTRUCT_OVERLAPPING_GRIDS_H
 #define NMWR_GB_CONSTRUCT_OVERLAPPING_GRIDS_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 //----------------------------------------------------------------
 /*! \brief Enlarge a local grid by overlap

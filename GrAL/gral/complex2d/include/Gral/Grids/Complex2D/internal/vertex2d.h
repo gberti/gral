@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_VERTEX2D_H
 #define NMWR_GB_VERTEX2D_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 
 #include "Gral/Grids/Complex2D/complex2d.h"

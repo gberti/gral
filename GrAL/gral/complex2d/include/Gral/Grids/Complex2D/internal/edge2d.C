@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #ifndef NMWR_GB_EDGE2D_INLINE_H
 #define NMWR_GB_EDGE2D_INLINE_H
 

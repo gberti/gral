@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_MPI_DISTRIBUTED_GRID_FUNCTION_C
 #define NMWR_GB_MPI_DISTRIBUTED_GRID_FUNCTION_C
 
+// $LICENSE
+
+
 #include "Gral/Distributed/mpi-distributed-grid-function.h"
 
 #include <algorithm>  // STL

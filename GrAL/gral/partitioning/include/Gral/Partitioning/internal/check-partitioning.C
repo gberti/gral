@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_CHECK_PARTITIONING_C
 #define NMWR_GB_CHECK_PARTITIONING_C
 
+// $LICENSE
+
+
 #include "Gral/Partitioning/partitioning.h"
 
 

@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_GRID_ALGORITHM_INCIDENCE_HULL_C
 #define NMWR_GB_GRID_ALGORITHM_INCIDENCE_HULL_C
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Algorithms/incidence-hulls.h"
 

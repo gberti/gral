@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #include "Gral/Grids/Complex2D/complex2d.h"
 
 #include <map> // STL

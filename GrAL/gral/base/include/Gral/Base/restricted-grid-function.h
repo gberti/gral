@@ -2,13 +2,8 @@
 #define NMWR_GB_RESTRICTED_GRID_FUNCTION
 
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 
 #include "Gral/Base/grid-functions.h"

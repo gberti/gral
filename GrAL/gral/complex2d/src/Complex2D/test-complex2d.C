@@ -1,3 +1,6 @@
+
+// $LICENSE
+
 #include "Gral/Grids/Complex2D/test-complex2d.h"
 #include "Gral/Grids/Complex2D/partial-grid-functions.h"
 #include "Gral/Grids/Complex2D/boundary.h"

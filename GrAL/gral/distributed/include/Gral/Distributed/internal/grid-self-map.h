@@ -1,13 +1,8 @@
 #ifndef NMWR_GB_GRID_SELF_MAP_H
 #define NMWR_GB_GRID_SELF_MAP_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Container/bijective-mapping.h"

@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_COMPLEX2D_GRIDFUNCTIONS_H
 #define NMWR_GB_COMPLEX2D_GRIDFUNCTIONS_H
 
+// $LICENSE
+
+
 #include "Gral/Grids/Complex2D/complex2d.h"
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"

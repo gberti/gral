@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_CONSTRUCT_OVERLAP_C
 #define NMWR_GB_CONSTRUCT_OVERLAP_C
 
+// $LICENSE
+
+
 
 #include "Gral/Distributed/construct-overlap.h"
 

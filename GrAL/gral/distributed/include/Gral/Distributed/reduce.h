@@ -2,13 +2,8 @@
 #define NMWR_GB_DISTR_MPI_REDUCE_H
 
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1998
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 #include <mpi.h>
 #include "Gral/Distributed/mpi-types.h"

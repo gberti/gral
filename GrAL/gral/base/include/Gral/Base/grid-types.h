@@ -1,13 +1,8 @@
 #ifndef GRAL_BASE_GB_GRID_TYPES_H
 #define GRAL_BASE_GB_GRID_TYPES_H
 
-//----------------------------------------------------------------
-//   (c) Guntram Berti, 1997
-//   Chair for Numerical Mathematics & Scientific Computing (NMWR)
-//   TU Cottbus - Germany
-//   http://math-s.math.tu-cottbus.de/NMWR
-//   
-//----------------------------------------------------------------
+
+// $LICENSE
 
 //----------------------------------------------------------------
 /*! \brief Empty traits class for parameterized namespaces associated 

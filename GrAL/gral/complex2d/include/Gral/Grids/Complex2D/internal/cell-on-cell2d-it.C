@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_CELL_ON_CELL2D_INLINE_H
 #define NMWR_GB_CELL_ON_CELL2D_INLINE_H
 
+// $LICENSE
+
+
 inline 
 CellOnCell2D_Iterator::CellOnCell2D_Iterator(Cell2D const& C)
      : _f(C.FirstFacet())

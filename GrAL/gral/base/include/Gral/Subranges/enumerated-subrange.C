@@ -1,6 +1,9 @@
 #ifndef NMWR_GB_ENUMERATED_SUBRANGE_C
 #define NMWR_GB_ENUMERATED_SUBRANGE_C
 
+// $LICENSE
+
+
 #include "Gral/Subranges/enumerated-subrange.h"
 
 
