@@ -113,7 +113,7 @@ public:
   typedef typename vertex_flat_range_type::VertexIterator ActiveLevelVertexIterator;
   typedef typename cell_flat_range_type  ::CellIterator   ActiveLevelCellIterator;
 private:  
-  hier_grid_type               levels;
+  ref_ptr<hier_grid_type>      levels;
   cell_active_range_type       active_cell_range;
   mutable vertex_active_range_type active_vertex_range;
   mutable bool active_vertex_range_initialized;
@@ -134,8 +134,8 @@ public:
 	 pattern_grid_type   const& refpat);
   Octree(ref_ptr<flat_grid_type const> C0,
 	 pattern_grid_type   const& refpat);
-  Octree(hier_grid_type const& H);
-  Octree(ref_ptr<hier_grid_type const> H);
+  Octree(hier_grid_type & H);
+  Octree(ref_ptr<hier_grid_type> H);
 
   // Octree(int nx_, int ny_, int nz_);
 
@@ -147,10 +147,11 @@ public:
   //@}
 
   ref_ptr<const self>               TheOctree()       const { return ref_ptr<const self>(*this);}
-  ref_ptr<const hier_grid_type>     TheHierGrid()     const { return ref_ptr<const hier_grid_type>(levels);}
+  ref_ptr<const hier_grid_type>     TheHierGrid()     const { return levels;} // ref_ptr<const hier_grid_type>(levels);}
+  ref_ptr<      hier_grid_type>     TheHierGrid()           { return levels;} // ref_ptr<const hier_grid_type>(levels);}
   ref_ptr<const pattern_grid_type>  ThePatternGrid()  const { return TheHierGrid()->ThePatternGrid();}
   ref_ptr<const flat_grid_type>     LevelGrid(level_handle lev) const 
-  { return ref_ptr<const flat_grid_type>(levels(lev));}
+  { return ref_ptr<const flat_grid_type>((*TheHierGrid())(lev));}
 
   ref_ptr<const grid_range_type>    ActiveRange(level_handle lev) const
   { return ref_ptr<const grid_range_type>(active_cell_range(lev));}
@@ -275,7 +276,7 @@ public:
   */
   level_handle  next_coarser_level(level_handle lev) const { return TheHierGrid()->next_coarser_level(lev);}
   //! get the number of levels
-  size_type     num_of_levels() const { return levels.num_of_levels();}
+  size_type     num_of_levels() const { return TheHierGrid()->num_of_levels();}
   //@}
 
   /*! \brief Check whether to octree is empty.
@@ -295,8 +296,7 @@ public:
    */
   bool empty(level_handle lev) const { return active_cell_range(lev).empty();}
 
-
-  bool valid(level_handle lev) const { return (levels.coarsest_level() <= lev && lev <= levels.finest_level());}
+  bool valid(level_handle lev) const { return (TheHierGrid()->coarsest_level() <= lev && lev <= TheHierGrid()->finest_level());}
   void cv(level_handle lev) const 
   { REQUIRE(valid(lev), "lev=" << lev, 1); }
   //private:
