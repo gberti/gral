@@ -12,8 +12,13 @@
 #include "Utility/pre-post-conditions.h"
 
 #include "Gral/Base/common-grid-basics.h" 
+#include "Gral/Iterators/vertex-on-edge-iterator.h"
+
 #include "Gral/Grids/Cartesian2D/index-map.h"
 
+
+class RegGrid2D;
+typedef RegGrid2D CartesianGrid2D;
 
 /*! \brief A two-dimensional cartesian grid type
 
@@ -214,6 +219,8 @@ public:
     typedef  VertexOnVertexIterator NeighbourIterator;
 
     Vertex() {}
+    Vertex(Grid const& g, vertex_handle v) { *this = g.vertex(v);}
+
     Vertex(const vertex_base& v, const Grid* g) :  elem_base(g),  _v(v) {}
     Vertex(const vertex_base& v, const Grid& g) :  elem_base(&g), _v(v) {}
     int x() const { return _v.x;}
@@ -276,10 +283,12 @@ public:
     typedef Edge self;
 
     Edge()  {}
+    Edge(Grid const& g, edge_handle e) { *this = g.edge(e);}
+
     Edge(direction d, const vertex_base& v, const Grid* g)
-      : elem_base(g), dir(d), v1(v)  {}
+      : elem_base(g), dir(d), v1_(v)  {}
     Edge(direction d, const vertex_base& v, const Grid& g)
-      : elem_base(&g), dir(d), v1(v)  {}
+      : elem_base(&g), dir(d), v1_(v)  {}
     Edge(const Vertex& w1, const Vertex& w2) : elem_base(&(w1.TheGrid()))
       { init(w1._v,w2._v);}
     Edge(const vertex_base& w1, const vertex_base& w2, const Grid& g) : elem_base(&g)
@@ -292,11 +301,11 @@ public:
 		"Edge(w1,w2): (w1,w2) = (" << w1 << ','  << w2 << ')' << "is no edge!\n",1);
 	if(w1.y == w2.y) {
 	  dir = x_dir;
-	  v1 = ( w1.x < w2.x ? w1 : w2);
+	  v1_ = ( w1.x < w2.x ? w1 : w2);
 	}
 	else {
 	  dir = y_dir;
-	  v1 = ( w1.y < w2.y ? w1 : w2);
+	  v1_ = ( w1.y < w2.y ? w1 : w2);
 	}
       }
 
@@ -304,12 +313,15 @@ public:
     Edge(const Cell&,         const CellOnCellIterator& nb);
     Edge(const CellOnCellIterator& nb);
 
-    Vertex V1() const { return Vertex(v1,_g);}
+    Vertex V1() const { return Vertex(v1_,_g);}
     Vertex V2() const { 
       return Vertex((dir==x_dir 
-		     ? vertex_base(v1.x+1,v1.y)
-		     : vertex_base(v1.x,  v1.y+1)),TheGrid());
+		     ? vertex_base(v1_.x+1,v1_.y)
+		     : vertex_base(v1_.x,  v1_.y+1)),TheGrid());
     }
+    vertex_handle v1() const { return V1().handle();}
+    vertex_handle v2() const { return V2().handle();}
+
     Vertex V(int i) const {
       REQUIRE( (i == 1 || i == 2), "Edge::V(i): i must be 1 or 2! (i = " << i << ")\n",1); 
       return ( i == 1 ? V1() : V2()); }  
@@ -338,7 +350,7 @@ public:
 
   private:
     direction dir;
-    vertex_base v1;
+    vertex_base v1_;
   };
 
   //----------------- CELL ----------------------
@@ -351,8 +363,12 @@ public:
     enum corner { SW = 1, SE = 2, NE = 3, NW = 4, invalid_corner = 5};
 
     Cell() : elem_base(0) {}
+    Cell(const Grid& g, cell_handle c) { *this = g.cell(c); }
+
     Cell(const vertex_base& b, const Grid* g) : elem_base(g),  llv(b)  {}
     Cell(const vertex_base& b, const Grid& g) : elem_base(&g), llv(b)  {}
+
+
     VertexOnCellIterator FirstVertex()    const;
     VertexOnCellIterator EndVertex()      const;
     EdgeOnCellIterator   FirstEdge()      const;
@@ -736,6 +752,8 @@ public:
     self& operator++() { ++((int&)e); return (*this);}
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
     Edge  operator*() const { return (TheCell().edge(e));}
+    // FIXME: could be more efficient.
+    edge_handle handle() const { return TheCell().edge(e).handle();}
     bool    IsDone()    const { return (e > c.NumOfEdges());}
     operator bool() const { return !IsDone();} 
 
@@ -945,6 +963,28 @@ public:
   cell_handle MinNum(const Cell&) const { return MinCellNum();}
   cell_handle MaxNum(const Cell&) const { return MaxCellNum();}
   //@}
+
+  /*! @name switch operator 
+   */
+  //@{
+  inline void switch_vertex(Vertex& v, Edge const& e) const 
+    { e.FlipVertex(v);}
+  inline void switch_edge(Vertex const& v, Edge & e, Cell const& c) const
+    { c.FlipEdge(v,e);}  
+  inline void switch_facet(Vertex const& v, Edge & e, Cell const& c) const
+    { switch_edge(v,e,c);}
+  inline void switch_cell(Edge const& e, Cell & c) const
+    { e.FlipCell(c);}
+  inline Vertex switched_vertex(Vertex const& v, Edge const& e) const
+    { Vertex sv(v); switch_vertex(sv,e); return sv;}
+  inline Edge switched_edge(Vertex const& v, Edge const& e, Cell const& c) const
+    { Edge se(e); switch_edge(v,se,c); return se;}
+  inline Edge switched_facet(Vertex const& v, Edge const& e, Cell const& c) const
+    { Edge se(e); switch_edge(v,se,c); return se;}
+  inline Cell switched_cell(Edge const& e, Cell const& c) const
+    { Cell sc(c); switch_cell(e,sc); return sc;}
+  //@}
+
 };
 
 
@@ -1028,8 +1068,8 @@ RegGrid2D::Edge::C1()   const  { // lower resp. left cell
 	  "Edge::C1() : Edge on Boundary",1);
 	  */
   return (dir == x_dir 
-	  ? Cell(vertex_base(v1.x,  v1.y-1),TheGrid())
-	  : Cell(vertex_base(v1.x-1,v1.y  ),TheGrid()));
+	  ? Cell(vertex_base(v1_.x,  v1_.y-1),TheGrid())
+	  : Cell(vertex_base(v1_.x-1,v1_.y  ),TheGrid()));
 }    
 
 inline  
@@ -1037,7 +1077,7 @@ inline
 RegGrid2D::Edge::C2()   const  {  // upper resp. right cell
   // REQUIRE(TheGrid().TheCellMap().IsInRange(v1),
   //	  "Edge::C1() : Edge on Boundary",1);
-  return Cell(v1,TheGrid()); 
+  return Cell(v1_,TheGrid()); 
 }
 
 inline  
@@ -1111,7 +1151,7 @@ void RegGrid2D::Cell::FlipEdge(const Vertex& v, Edge& e) const {
   REQUIRE(((v == e.V1()) || (v == e.V2())),
 	  "FlipEdge(v,e): v not in {e.V1,e.V2} !\n",1);
   VertexOnCellIterator w =FirstVertex();
-  while ((*w != v) && ( ! w.IsDone())) 
+  while (( ! (*w == v)) && ( ! w.IsDone())) 
     ++w;
   REQUIRE( (*w == v), "FlipEdge(v,e): v not on cell!\n",1);
   Vertex v2 = e.FlippedVertex(v);
@@ -1145,8 +1185,8 @@ RegGrid2D::edge_handle
 RegGrid2D::edge_num(const RegGrid2D::Edge& E) const
 {
   return ( E.dir == Edge::x_dir
-	   ? TheXEdgeMap().number(E.v1)
-	   : TheYEdgeMap().number(E.v1) + NumOfXEdges());
+	   ? TheXEdgeMap().number(E.v1_)
+	   : TheYEdgeMap().number(E.v1_) + NumOfXEdges());
 }
 
 
@@ -1159,8 +1199,8 @@ inline bool RegGrid2D::IsOnBoundary(const RegGrid2D::vertex_base& V) const
 
 inline  bool RegGrid2D::IsOnBoundary(const RegGrid2D::Edge&   E) const
 {
-  return (  (E.dir == Edge::x_dir && (E.v1.y == lly() || E.v1.y == ury()))
-	  ||(E.dir == Edge::y_dir && (E.v1.x == llx() || E.v1.x == urx())));
+  return (  (E.dir == Edge::x_dir && (E.v1_.y == lly() || E.v1_.y == ury()))
+	  ||(E.dir == Edge::y_dir && (E.v1_.x == llx() || E.v1_.x == urx())));
 }
 
 inline  bool RegGrid2D::IsOnBoundary(const RegGrid2D::EdgeOnCellIterator& F) const
@@ -1199,6 +1239,7 @@ struct grid_types<RegGrid2D> {
 
   typedef  Grid::vertex_handle vertex_handle;
   typedef  Grid::edge_handle   edge_handle;
+  typedef  Grid::edge_handle   facet_handle;
   typedef  Grid::cell_handle   cell_handle;
 
   typedef  Grid::VertexIterator  VertexIterator;
@@ -1209,6 +1250,7 @@ struct grid_types<RegGrid2D> {
   typedef  Grid::VertexOnVertexIterator   VertexOnVertexIterator;
   typedef  Grid::VertexOnVertexIterator   VertexNeighbourIterator;
   typedef  Grid::CellOnVertexIterator     CellOnVertexIterator;
+  typedef  vertex_on_edge_iterator<Grid>  VertexOnEdgeIterator;
 
   typedef  Grid::VertexOnCellIterator   VertexOnCellIterator;
   typedef  Grid::EdgeOnCellIterator     EdgeOnCellIterator;
@@ -1218,6 +1260,7 @@ struct grid_types<RegGrid2D> {
   typedef  Grid::CellOnCellIterator     CellNeighbourIterator;
 
 
+  typedef grid_dim_tag<2>   dimension_tag;
   static int dimension(const Cell& ) { return 2;}
   static int dimension(const Facet&) { return 1;} 
   static int dimension(const Vertex&) { return 0;}
