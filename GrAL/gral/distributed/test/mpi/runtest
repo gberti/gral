@@ -5,7 +5,9 @@ rm -f grid.complex2d grid.part
 cp    grid2x2.complex2d grid.complex2d
 cp    grid2x2.p.2x1     grid.part
 
-if ! ${MPIRUN} -v -np 2 -machinefile ./mpihosts test-distributed > out2x2 2>&1 
+
+
+if ! ${MPIRUN} -np 2  test-distributed > out2x2 2>&1 
 then
 /bin/echo "ERROR running test-distributed!  Output was:
 ";
@@ -20,12 +22,14 @@ mv dgf.0 dgf2x2.0.out
 mv dgf.1 dgf2x2.1.out
 fi
 
+sleep 10
 
 rm -f grid.complex2d grid.part
 cp    grid4x2.complex2d grid.complex2d
 cp    grid4x2.p.2x1     grid.part
 
-if ! ${MPIRUN} -v -np 2 -machinefile ./mpihosts test-distributed > out4x2 2>&1 
+
+if ! ${MPIRUN}  -np 2  test-distributed > out4x2 2>&1 
 then
 /bin/echo "ERROR running test-distributed!  Output was:
 ";
