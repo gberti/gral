@@ -97,7 +97,7 @@ namespace polygon1d  {
     unsigned  h;
   public:
     VertexOnCellIterator1d() {}
-    VertexOnCellIterator1d(Cell const& cc) : c(cc), h(0) {}
+    explicit VertexOnCellIterator1d(Cell const& cc, unsigned hh = 0) : c(cc), h(hh) {}
 
     self& operator++() { cv(); ++h; return *this;}
     Vertex operator*() const { cv(); return Vertex(TheGrid(),handle());} 
@@ -131,7 +131,7 @@ namespace polygon1d  {
     unsigned  h;
   public:
     CellOnVertexIterator1d() {}
-    CellOnVertexIterator1d(Vertex const& vv) : v(vv), h(0) {}
+    explicit CellOnVertexIterator1d(Vertex const& vv, unsigned hh = 0) : v(vv), h(hh) {}
 
     self& operator++() { cv(); ++h; return *this;}
     Cell  operator*() const { cv(); return Cell(TheGrid(),handle());} 
