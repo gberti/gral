@@ -16,7 +16,7 @@ toolspyramid.eps : toolspyramid.fig
 pdf : gral_roadmap.pdf
 
 gral_roadmap.ps : gral_roadmap.dvi
-	dvips $<
+	dvips -o $@  $<
 
 gral_roadmap.dvi :  gral_roadmap.tex $(FIGS)
 	$(LATEX) $<
