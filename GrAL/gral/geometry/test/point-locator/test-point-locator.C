@@ -91,6 +91,8 @@ int main()
   }
 
   {
+    // A = (0 -1)  => rotation by 90 degrees to the left.
+    //     (1  0)
     matrix_type  A(0.0); A(0,1) = -1.0;  A(1,0) = 1.0;
     mapping_type M(A);
     grid_type R(it(0,0), it(6,6));
@@ -122,9 +124,32 @@ int main()
     Locator.init();
     
     typedef coord_type ct;
-    coord_type P[9] = { ct(0.0,0.0),  ct(-1.0,0.0), ct(1.0,1.0), 
-			ct(0.0, 0.5), ct(0,1.0), ct(0.0,5.0), 
-			ct(-0.5,9.5), ct(-9.5,9.5), ct(-9.5,0.5)};
+    coord_type P[] = { ct(0.0,0.0),  ct(-1.0,0.0), ct(1.0,1.0), 
+		       ct(0.0, 0.5), ct(0,1.0), ct(0.0,5.0), 
+		       ct(-0.5,9.5), ct(-9.5,9.5), ct(-9.5,0.5)};
+
+    test_locator(Locator, P, P + sizeof(P)/sizeof(ct), cout);
+  }
+
+  {
+    matrix_type  A(2.0); A(0,1) = A(1,0) = 1.0;  // shearing & scaling, (1,1) -> (3,3), (1,0) -> (2,1)
+    mapping_type M(A);
+    grid_type R(it(0,0), it(6,6));
+    geom_type GeomR(R, it(0,0), it(1,1), M);
+
+    cout << "V(" << R.low_vertex_index()  << ") @ " << GeomR.coord(gt::Vertex(R, R.low_vertex_index ()))  << "\n";
+    cout << "V(" << R.high_vertex_index() << ") @ " << GeomR.coord(gt::Vertex(R, R.high_vertex_index()))  << "\n";
+
+    
+    point_locator<grid_type, geom_type, gt> Locator(R,GeomR);
+    Locator.init();
+ 
+    typedef coord_type ct;
+    coord_type P[] = { ct(0.0,0.0),  ct(15.0,15.0), ct(5.0,10.0), ct(10.0,5.0), 
+		       ct(1.0, 0.0), ct(0.0,1.0), ct(-1.0, -1.0),
+		       ct(20.0, 30.0), ct(2.0, 1.0),
+		       ct(2.0,0.0), ct(3.0, 0.0), ct(4.0,0.0), ct(5.0, 0.0),
+		       ct(2.0,-1.0), ct(3.0, -1.0), ct(4.0,-1.0), ct(5.0, -1.0)};
 
     test_locator(Locator, P, P + sizeof(P)/sizeof(ct), cout);
   }
