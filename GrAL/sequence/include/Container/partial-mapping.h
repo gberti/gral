@@ -72,6 +72,8 @@ public:
 
   const T2& set_default(const T2& t2) { default_val = t2; return t2;}
 
+  void clear() { mapping.clear();}
+
   //---------------------- queries -------------------------------
 
   int  size_of_dom() const { return mapping.size();}
