@@ -7,8 +7,15 @@
 
 namespace cartesian3d {
 
+  /*! A mapped geometry for CartesianGrid3D
+
+     \templateparams
+     - \c CoordMap
+        - type \c result_type (called \c coord_type below)
+        - <tt> coord_type operator()(coord_type) </tt>
+  */
 template<class CoordMap>
-class mapped_geometry_cartesian3d {
+class mapped_geometry {
 
 public:
   typedef CoordMap mapping_type;
@@ -23,9 +30,9 @@ private:
   double dx,dy,dz;
 
 public:
-  mapped_geometry_cartesian3d() : g(0) {}
-  mapped_geometry_cartesian3d(grid_type    const& gg,
-			      mapping_type const& ff)
+  mapped_geometry() : g(0) {}
+  mapped_geometry(grid_type    const& gg,
+		  mapping_type const& ff)
     : g(&gg), f(ff)
     {
       init();

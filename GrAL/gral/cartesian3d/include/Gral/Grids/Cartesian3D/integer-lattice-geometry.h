@@ -12,13 +12,14 @@ namespace cartesian3d {
     Model of $GrAL VertexGridGeometry (immutable).
  */
 
-class lattice_geometry_cartesian3d {
+class lattice_geometry {
 
 public:
   typedef CartesianGrid3D             grid_type;
   typedef grid_types<CartesianGrid3D> gt;
   typedef gt::Vertex                  Vertex; 
 
+  //FIXME: we cannot represent e.g. cell centers with this type!
   typedef grid_type::index_type   coord_type;
   typedef int                     real;
 
@@ -26,15 +27,15 @@ private:
   grid_type const* g;
 
 public:
-  lattice_geometry_cartesian3d(grid_type const& gg)
+  lattice_geometry(grid_type const& gg)
     : g(&gg)
     {}
 
-  coord_type const& coord(gt::Vertex const& v) const { return v.index();}
+  coord_type coord(gt::Vertex const& v) const { return v.index();}
   
   real volume(gt::Cell const&) const { return 1;}
-  //real volume(gt::Edge const&) const { return 1;}
-  //real volume(gt::Face const&) const { return 1;}
+  real volume(gt::Edge const&) const { return 1;}
+  real volume(gt::Face const&) const { return 1;}
 };
 
 }; // namespace cartesian3d
