@@ -161,6 +161,7 @@ public:
   typedef std::vector<archetype_type>::const_iterator archetype_iterator;
   archetype_iterator  BeginArchetype() const { return archetypes.begin();}
   archetype_iterator  EndArchetype()   const { return archetypes.end  ();}
+  archetype_handle    handle(archetype_iterator it) const { return it - BeginArchetype();}
 }; // class Complex3D
 
 
