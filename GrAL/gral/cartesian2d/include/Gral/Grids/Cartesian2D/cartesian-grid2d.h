@@ -199,6 +199,8 @@ public:
   class EdgeOnCellIterator;
   class CellOnCellIterator;
 
+  typedef vertex_on_edge_iterator<RegGrid2D> VertexOnEdgeIterator;
+
   unsigned dimension() const { return 2;}
 
   /*! \name Checking functions */
@@ -358,6 +360,7 @@ public:
     Edge(const Cell&,         const CellOnCellIterator& nb);
     explicit Edge(const CellOnCellIterator& nb);
 
+    unsigned NumOfVertices() const { return 2;}
     Vertex V1() const { return Vertex(v1_,_g);}
     Vertex V2() const { 
       return Vertex((dir==x_dir 
@@ -379,6 +382,9 @@ public:
       REQUIRE( (V == V1() || V == V2()), "FlipVertex(): Vertex not on Edge!\n",1);
       return ( V == V1() ? V2() : V1());
     }
+    VertexOnEdgeIterator FirstVertex() const; //{ return VertexOnEdgeIterator(*this);}
+    VertexOnEdgeIterator EndVertex()   const; //{ return VertexOnEdgeIterator(*this,2);}
+
     inline void FlipCell(Cell& C) const;
     inline Cell FlippedCell(Cell& C) const;
     inline Cell C1()   const;  // lower resp. left cell
@@ -1122,6 +1128,97 @@ public:
 };
 
 
+
+class SubrangeReg2D;
+
+
+struct grid_types_cart2d {
+
+  typedef cartesian2d::RegGrid2D  Grid;
+  typedef cartesian2d::RegGrid2D  grid_type;
+  typedef Grid::index_type        index_type;
+
+  typedef  Grid::Vertex Vertex;
+  typedef  Grid::Edge   Edge;
+  typedef  Grid::Edge   Facet;
+  typedef  Grid::Cell   Cell;
+  typedef  Grid::Cell   Face;
+
+
+  typedef  Grid::vertex_handle vertex_handle;
+  typedef  Grid::edge_handle   edge_handle;
+  typedef  Grid::edge_handle   facet_handle;
+  typedef  Grid::cell_handle   cell_handle;
+
+  typedef  Grid::VertexIterator  VertexIterator;
+  typedef  Grid::EdgeIterator    EdgeIterator;
+  typedef  Grid::EdgeIterator    FacetIterator;
+  typedef  Grid::CellIterator    CellIterator;
+
+  typedef  Grid::VertexOnVertexIterator   VertexOnVertexIterator;
+  typedef  Grid::VertexOnVertexIterator   VertexNeighbourIterator;
+  typedef  Grid::CellOnVertexIterator     CellOnVertexIterator;
+  typedef  vertex_on_edge_iterator<Grid>  VertexOnEdgeIterator;
+  typedef  VertexOnEdgeIterator           VertexOnFacetIterator;
+
+  typedef  Grid::VertexOnCellIterator   VertexOnCellIterator;
+  typedef  Grid::EdgeOnCellIterator     EdgeOnCellIterator;
+  typedef  Grid::EdgeOnCellIterator     FacetOnCellIterator;
+  typedef  Grid::CellOnCellIterator     CellOnCellIterator;
+  typedef  Grid::CellOnCellIterator     NeighbourCellIterator;
+  typedef  Grid::CellOnCellIterator     CellNeighbourIterator;
+
+  // 2D: Cell <-> Face
+  typedef cell_handle             face_handle;
+  typedef Cell                    Face;
+  typedef CellIterator            FaceIterator;
+  typedef VertexOnCellIterator    VertexOnFaceIterator;
+  typedef CellOnVertexIterator    FaceOnVertexIterator;
+  typedef EdgeOnCellIterator      EdgeOnFaceIterator;
+  //  typedef CellOnEdgeIterator      FaceOnEdgeIterator;
+
+
+  typedef grid_dim_tag<2>   dimension_tag;
+  static int dimension(const Cell& ) { return 2;}
+  static int dimension(const Facet&) { return 1;} 
+  static int dimension(const Vertex&) { return 0;}
+
+  struct hash_facet {
+    int operator()(const Facet& F) const { return F.GlobalNumber();}
+  };
+
+  static cell_handle invalid_cell_handle(grid_type const& G) { return G.invalid_cell();}
+  static cell_handle outer_cell_handle  (grid_type const& G) { return G.outer_cell_handle();}
+  static bool is_cell_valid (grid_type const& G, cell_handle c) { return (c !=G.invalid_cell());}
+  static bool is_cell_inside(grid_type const& G, cell_handle c) { return (c !=G.invalid_cell());}
+  static bool is_cell_valid (grid_type const& G, Cell const& c) { return (G.IsValid(c));}
+  static bool is_cell_inside(grid_type const& G, Cell const& c) { return (G.IsInside(c));}
+
+  typedef grid_type::archetype_type     archetype_type;
+  typedef grid_type::archetype_handle   archetype_handle;
+  typedef grid_type::archetype_iterator archetype_iterator;
+  typedef grid_types<archetype_type>    archgt;
+
+  typedef cartesian2d::SubrangeReg2D    cartesian_subrange_type;
+
+};
+
+} // namespace cartesian2d
+
+
+
+
+/*! \brief specialization of grid_types template for RegGrid2D
+ */
+struct grid_types<cartesian2d::RegGrid2D> : public grid_types_base<cartesian2d::grid_types_cart2d> 
+{ };
+
+
+
+#include "Gral/Grids/Cartesian2D/element-traits.h"
+
+namespace cartesian2d {
+
 ////////////////////////
 //
 //  methods of RegGrid2D::Vertex
@@ -1191,6 +1288,13 @@ RegGrid2D::Edge::Edge(const RegGrid2D::CellOnCellIterator& nb)
 inline 
 RegGrid2D::Edge::Edge(const RegGrid2D::Cell&, const RegGrid2D::CellOnCellIterator& nb)
 { *this = nb.facet(); }
+
+
+inline
+RegGrid2D::VertexOnEdgeIterator RegGrid2D::Edge::FirstVertex() const { return VertexOnEdgeIterator(*this);}
+    
+inline
+RegGrid2D::VertexOnEdgeIterator RegGrid2D::Edge::EndVertex()   const { return VertexOnEdgeIterator(*this,2);}
 
 inline 
  RegGrid2D::Cell 
@@ -1361,84 +1465,5 @@ inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 } // namespace cartesian2d 
 
 
-namespace cartesian2d {
-  class SubrangeReg2D;
-}; 
-
-/*! \brief specialization of grid_types template for RegGrid2D
- */
-struct grid_types<cartesian2d::RegGrid2D> {
-
-  typedef cartesian2d::RegGrid2D  Grid;
-  typedef cartesian2d::RegGrid2D  grid_type;
-  typedef Grid::index_type        index_type;
-
-  typedef  Grid::Vertex Vertex;
-  typedef  Grid::Edge   Edge;
-  typedef  Grid::Edge   Facet;
-  typedef  Grid::Cell   Cell;
-  typedef  Grid::Cell   Face;
-
-
-  typedef  Grid::vertex_handle vertex_handle;
-  typedef  Grid::edge_handle   edge_handle;
-  typedef  Grid::edge_handle   facet_handle;
-  typedef  Grid::cell_handle   cell_handle;
-
-  typedef  Grid::VertexIterator  VertexIterator;
-  typedef  Grid::EdgeIterator    EdgeIterator;
-  typedef  Grid::EdgeIterator    FacetIterator;
-  typedef  Grid::CellIterator    CellIterator;
-
-  typedef  Grid::VertexOnVertexIterator   VertexOnVertexIterator;
-  typedef  Grid::VertexOnVertexIterator   VertexNeighbourIterator;
-  typedef  Grid::CellOnVertexIterator     CellOnVertexIterator;
-  typedef  vertex_on_edge_iterator<Grid>  VertexOnEdgeIterator;
-  typedef  VertexOnEdgeIterator           VertexOnFacetIterator;
-
-  typedef  Grid::VertexOnCellIterator   VertexOnCellIterator;
-  typedef  Grid::EdgeOnCellIterator     EdgeOnCellIterator;
-  typedef  Grid::EdgeOnCellIterator     FacetOnCellIterator;
-  typedef  Grid::CellOnCellIterator     CellOnCellIterator;
-  typedef  Grid::CellOnCellIterator     NeighbourCellIterator;
-  typedef  Grid::CellOnCellIterator     CellNeighbourIterator;
-
-  // 2D: Cell <-> Face
-  typedef cell_handle             face_handle;
-  typedef Cell                    Face;
-  typedef CellIterator            FaceIterator;
-  typedef VertexOnCellIterator    VertexOnFaceIterator;
-  typedef CellOnVertexIterator    FaceOnVertexIterator;
-  typedef EdgeOnCellIterator      EdgeOnFaceIterator;
-  //  typedef CellOnEdgeIterator      FaceOnEdgeIterator;
-
-
-  typedef grid_dim_tag<2>   dimension_tag;
-  static int dimension(const Cell& ) { return 2;}
-  static int dimension(const Facet&) { return 1;} 
-  static int dimension(const Vertex&) { return 0;}
-
-  struct hash_facet {
-    int operator()(const Facet& F) const { return F.GlobalNumber();}
-  };
-
-  static cell_handle invalid_cell_handle(grid_type const& G) { return G.invalid_cell();}
-  static cell_handle outer_cell_handle  (grid_type const& G) { return G.outer_cell_handle();}
-  static bool is_cell_valid (grid_type const& G, cell_handle c) { return (c !=G.invalid_cell());}
-  static bool is_cell_inside(grid_type const& G, cell_handle c) { return (c !=G.invalid_cell());}
-  static bool is_cell_valid (grid_type const& G, Cell const& c) { return (G.IsValid(c));}
-  static bool is_cell_inside(grid_type const& G, Cell const& c) { return (G.IsInside(c));}
-
-  typedef grid_type::archetype_type     archetype_type;
-  typedef grid_type::archetype_handle   archetype_handle;
-  typedef grid_type::archetype_iterator archetype_iterator;
-  typedef grid_types<archetype_type>    archgt;
-
-  typedef cartesian2d::SubrangeReg2D    cartesian_subrange_type;
-};
-
-
-
-#include "Gral/Grids/Cartesian2D/element-traits.h"
 
 #endif
