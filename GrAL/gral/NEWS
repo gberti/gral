@@ -1,6 +1,8 @@
 Version 0.2:
 
-- new modules:
+- does now work also with gcc 3
+
+- new GrAL modules:
   gral/testing, 
   gral/triang2d,
   gral/complex3d,
@@ -14,11 +16,13 @@ Version 0.2:
 
 
 - many additions to gral/base:
-  isomorphism calculation on grids, and classes for grid morphisms
-  view of disjoint union of grids
-  generic edge and facet support for 3D grids
-  flags and switch operators added consistently
-  new tags for element_traits and grid_traits
+  - some tests added (still not enough)
+  - isomorphism calculation on grids
+  - classes for grid morphisms
+  - union view of disjoint grids
+  - generic edge and facet support for 3D grids
+  - flags and switch operators added consistently
+  - new tags for element_traits and grid_traits
 
 - gral/distributed: 
   support for persistent storage
@@ -28,8 +32,7 @@ Version 0.2:
 - additions to geometry module:
    intersections of geometric entities, 
    small matrix primitives (norms, condition numbers,
-   small linear systems)
+    small linear systems)
 
-- works now with gcc 3
 
 - archetype feature for 3D grids

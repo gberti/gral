@@ -20,6 +20,12 @@ realclean:
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
+all:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(ALLROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) all ALLROOT=$(ALLROOT) CONFIG=$(ALLROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
 new:
 	@set -e; \
         (for i in $(SUBDIRS); \

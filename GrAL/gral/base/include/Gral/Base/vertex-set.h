@@ -1,7 +1,7 @@
 #ifndef GRAL_GB_BASE_VERTEX_SET_H
 #define GRAL_GB_BASE_VERTEX_SET_H
 
-// $LICENSE-NEC
+// $LICENSE_NEC
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/predicates.h" // incidence

@@ -46,13 +46,18 @@ int main() {
     grid_type R(3,3);
     geometry_type GeomR(R, mapping_type());
     grid_function<gt::Cell,   int> gf1(R,1);
-    grid_function<gt::Vertex, int> gf2(R,2);
+    partial_grid_function<gt::Vertex, int> gf2(R,2);
     OstreamGMV2DFmt Out("3x3.out");
+
+    // Try the  experimental version of passing an abritrary list
+    // of grid functions to GMV
     namespace hl = heterogeneous_list;
     hl::BEGIN B;
     ConstructGrid(Out,R,GeomR,
 		  (B, Out.pair("gf1",gf1), Out.pair("gf2",gf2)));
-    // ConstructGrid(Out,R,GeomR, (heterogeneous_list::BEGIN, gf1, gf2));
+    // the construct (B, Out.pair(name, gf), ...) uses an overloaded
+    // operator, (comma-operator) to create a list of (name,grid-function)
+    // pairs to pass to GMV.
   } 
 
 

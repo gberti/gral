@@ -66,6 +66,18 @@ void ConstructGrid(OstreamGMV2DFmt& Out,
 		   GRID const& G,
 		   GEOM const& GEO);
 
+/*! \brief ConstructGrid overload for OstreamGMV2DFmt
+
+  \relates OstreamGMV2DFmt
+
+  This takes an additional list of arbitrary grid functions 
+  to be written to the GMV file.
+
+  \see Module \ref GMV2Dformat
+  \see Module \ref mutatingoperations
+  \see \ref ConstructGrid
+  \see \ref test-gmv-output2d.C for an example
+ */
 template<class GRID,class GEOM, class GF, class MOREGFS>
 void ConstructGrid(OstreamGMV2DFmt& Out, 
 		   GRID const& G,
