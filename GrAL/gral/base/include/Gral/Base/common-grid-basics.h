@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_COMMON_GRID_BASICS_H
-#define NMWR_GB_COMMON_GRID_BASICS_H
+#ifndef GRAL_BASE_GB_COMMON_GRID_BASICS_H
+#define GRAL_BASE_GB_COMMON_GRID_BASICS_H
 
 
 //----------------------------------------------------------------
@@ -11,33 +11,28 @@
 //----------------------------------------------------------------
 
 
-//----------------------------------------------------------------
-//
-// This bundles the basic template frames to be
-// filled in where concrete grids are defined.
-// This traits-related technique is very handy when used in 
-// template functions or classes where the grid type is a parameter.
-//
-//----------------------------------------------------------------
+/*! \file
+  \brief This file bundles the basic template frames to be
+         filled in where concrete grids are defined.
+
+   This traits- technique is very handy when used in 
+   template functions or classes where the grid type is a parameter.
+*/
 
 // parameterized namespaces: access to grid related types.
-#include "Grids/grid-types.h"
-
-// obsolete: geoemtry is a template param. of its own
-//template<class Grid>
-//struct geometric_primitives {};
+#include "Gral/Base/grid-types.h"
 
 
 // empty frame for grid function template grid_function<E,T>
-#include "Grids/grid-functions.h"
+#include "Gral/Base/grid-functions.h"
 
 // empty frame for type tags tp<E>
-#include "Grids/type-tags.h"
+#include "Gral/Base/type-tags.h"
 
 // empty frame for deducing types from elements
-#include "Grids/element-traits.h"
+#include "Gral/Base/element-traits.h"
 
 // empty frame for boundary iteration
-#include "Grids/boundary.h"
+#include "Gral/Base/boundary.h"
 
 #endif

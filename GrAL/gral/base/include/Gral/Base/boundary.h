@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRID_BOUNDARY_H
-#define NMWR_GB_GRID_BOUNDARY_H
+#ifndef GRAL_BASE_GB_GRID_BOUNDARY_H
+#define GRAL_BASE_GB_GRID_BOUNDARY_H
 
 
 //----------------------------------------------------------------
@@ -12,27 +12,31 @@
 //----------------------------------------------------------------
 
 //----------------------------------------------------------------
-// 
-//  A reference to the combinatorial boundary of a grid.
-//  This must be specialized for concrete grid types.
-//
+/*! \brief  A reference to the combinatorial boundary of a grid.
+
+   This must be specialized for concrete grid types:
+   \code
+   template<class Grid>
+   class BoundaryRange {
+     typedef VertexIterator;
+     typedef EdgeIterator;
+     typedef FacetIterator;
+
+     VertexIterator FirstVertex() const;
+     EdgeIterator   FirstEdge()   const;
+     FacetIerator   FirstFacet()  const;
+
+     BoundaryRange(const Grid&);
+   };
+   \endcode
+*/
 //----------------------------------------------------------------
 
 template<class Grid>
-class BoundaryRange {
-  /*
-  typedef VertexIterator;
-  typedef EdgeIterator;
-  typedef FacetIterator;
+class BoundaryRange {};
 
-  VertexIterator FirstVertex() const;
-  EdgeIterator   FirstEdge()   const;
-  FacetIerator   FirstFacet()  const;
-
-  BoundaryRange(const Grid&);
-   */
-};
-
+/*! \brief creator function for BoundaryRange
+ */
 template<class Grid>
 inline
 BoundaryRange<Grid> GetBoundaryRange(Grid const& G)

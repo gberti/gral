@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRID_FUNCTION_VECTOR_H
-#define NMWR_GB_GRID_FUNCTION_VECTOR_H
+#ifndef GRAL_BASE_GB_GRID_FUNCTION_VECTOR_H
+#define GRAL_BASE_GB_GRID_FUNCTION_VECTOR_H
 
 //----------------------------------------------------------------
 //   (c) Guntram Berti, 1998
@@ -12,7 +12,7 @@
 #include <vector.h> // STL
 
 #include "Utility/pre-post-conditions.h"
-#include "Grids/common-grid-basics.h"
+#include "Gral/Base/common-grid-basics.h"
 
 //----------------------------------------------------------------
 //  
