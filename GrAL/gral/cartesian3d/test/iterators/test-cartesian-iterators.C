@@ -18,6 +18,7 @@ int main() {
 
   ofstream* out = new ofstream("test-cartesian-iterators.out");
 
+  typedef grid_types<CartesianGrid3D> gt;
   // testing default constructor
   CartesianGrid3D R0;
   CartesianGrid3D R1; R1 = R0;
@@ -63,11 +64,41 @@ int main() {
 	test_facet_iterator(R,*out);
 	test_cell_iterator(R,*out);
 	test_vertex_on_cell_iterator(R,*out);
+	test_edge_on_cell_iterator(R,*out);
+	test_facet_on_cell_iterator(R,*out);
+
+	test_vertex_on_facet_iterator(R,*out);
+	test_edge_on_facet_iterator(R,*out);
 
 	*out << endl;
       }
     }
   }
+
+  CartesianGrid3D R(2,2,2); // 1 cell
+  gt::Cell c(R.FirstCell());
+  *out << "Grid 2x2x2\n"
+      << "Vertices:" << endl;
+  for(gt::VertexOnCellIterator v(c); !v.IsDone(); ++v)
+    *out << v.handle() << " @ " << v.index() << endl;
+  *out << "Edges:" << endl;
+  for(gt::EdgeOnCellIterator e(c); ! e.IsDone(); ++e)
+    *out << e.handle() << " dir=" << e.dir() << " index=" << e.index() << endl;
+  *out << "Facets:" << endl;
+  for(gt::FacetOnCellIterator f(c); ! f.IsDone(); ++f) {
+    *out << f.handle() << " dir=" << f.dir() << " index=" << f.index() << endl;
+    *out << " Facet vertices: ";
+    for(gt::VertexOnFacetIterator vf(*f); ! vf.IsDone(); ++vf) {
+      *out << vf.handle() << "@(" << vf.index() << ") "; 
+    }
+    *out << endl;
+    *out << " Facet edges: ";
+    for(gt::EdgeOnFacetIterator ef(*f); ! ef.IsDone(); ++ef) {
+      *out << ef.handle() << ": dir=" << ef.dir() << " index=" << ef.index() << "  " ;
+    }
+    *out << endl;
+  }
+
   delete out;
   return 0;
 }
