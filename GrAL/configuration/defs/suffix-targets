@@ -111,8 +111,11 @@ doxy: additional-doxy
 	rm -f doxy.cfg.tmp 
 
 installdox: additional-installdox
-	$(DOXYCFG)/generate-installdox.pl -root $(RELROOT) -path $(DOXYPATH)\
-         doxy.deps.tmp  > installdox.sh.tmp;
+	cat dependencies*                            > doxy.deps.tmp
+	$(DOXYCFG)/generate-installdox.pl \
+          -root $(RELROOT) \
+          -path $(DOXYPATH)\
+           doxy.deps.tmp  > installdox.sh.tmp;
 	chmod ugo+x ./installdox.sh.tmp;
 	./installdox.sh.tmp
 	rm -f installdox.sh.tmp doxy.deps.tmp
