@@ -28,6 +28,7 @@ public:
   typedef grid_types<grid_type>     gt;
   typedef gt::Vertex                Vertex;
   typedef gt::Edge                  Edge;
+  typedef gt::Facet                 Facet;
   typedef gt::Cell                  Cell;
   typedef gt::VertexOnCellIterator  VertexOnCellIterator;
   typedef gt::EdgeOnCellIterator    EdgeOnCellIterator;
@@ -103,6 +104,8 @@ public:
     coord_type(double d)                 { xy[0] = xy[1] = d;}
     coord_type(double x, double y)       { xy[0] = x; xy[1] = y;}
     coord_type& operator=(coord_proxy p) { init(p.xy_v); return *this;}
+    template<class COORD>
+    void operator=(COORD const& coo);
 
 
     double  operator[](int i) const { cr(i); return xy[i]; }
@@ -115,7 +118,7 @@ public:
     void init(double const* p)
       { xy[0] = p[0]; xy[1] = p[1]; }
   };
-
+  typedef double scalar_type;
 
 
 
@@ -124,6 +127,10 @@ public:
   coord_type  coord(Vertex const& v) const 
     { return coord_type (xy + 2*v.handle());}
 
+  inline scalar_type length(Edge const& e) const;
+
+  scalar_type area(Facet const& f)  const { return length(f);}
+
   //! Center of intertia of \c c
   coord_type center(Cell const& c) const { return (coord(c.V(0)) + coord(c.V(1)) + coord(c.V(2)))/3.0;}
 
@@ -131,13 +138,13 @@ public:
   coord_type barycenter(Cell const& c) const { return center(c);}
 
   //! solid angle of the wedge of vertex \c vc, in radians (2D) 
-  inline double solid_angle(VertexOnCellIterator const& vc) const;
+  inline scalar_type solid_angle(VertexOnCellIterator const& vc) const;
 
   /*! ratio of solid angle of wedge \c vc to complete solid angle
 
       The ratios of the wedges of an internal regular vertex sum up to 1.
    */
-  double solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(2*M_PI);}
+  scalar_type solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(2*M_PI);}
 };
 
 
@@ -164,6 +171,17 @@ stored_geometry_triang2d::coord_proxy::operator=
   xy_v[0] = pt::x(p);
   xy_v[1] = pt::y(p);
   // std::cout << xy_v[0] << " " << xy_v[1] << std::endl;
+}
+
+
+template<class COORD>
+inline void
+stored_geometry_triang2d::coord_type::operator=
+(COORD const& p)
+{ 
+  typedef point_traits<COORD> pt;
+  xy[0] = pt::x(p);
+  xy[1] = pt::y(p);
 }
 
 template<>
@@ -201,9 +219,15 @@ inline void assign_point(stored_geometry_triang2d::coord_proxy p,
 
 
 
+inline stored_geometry_triang2d::scalar_type 
+stored_geometry_triang2d::length(stored_geometry_triang2d::Edge const& e) const 
+{ 
+  typedef algebraic_primitives<coord_type> ap;
+  return ap::distance(coord(e.V1()), coord(e.V2()));
+}
 
 
-inline double 
+inline stored_geometry_triang2d::scalar_type 
 stored_geometry_triang2d::solid_angle(stored_geometry_triang2d::VertexOnCellIterator const& vc) const 
 {
   typedef algebraic_primitives<coord_type> ap;
