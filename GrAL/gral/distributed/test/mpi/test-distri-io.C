@@ -39,6 +39,11 @@
 
 
 int main(int argc, char* argv[]) {
+  using std::string;
+  using std::cerr;
+  using std::ifstream;
+  using std::ofstream;
+
 
   MPI_Init(&argc,&argv);
   MPI_Barrier(MPI_COMM_WORLD);
