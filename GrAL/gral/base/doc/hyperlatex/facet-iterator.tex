@@ -5,14 +5,14 @@
 
 \itersubsection{Declaration}
 \begin{example}
-template<class FacetOnCellIt>
+template<class FacOnCellIt>
 class FacetIterator;
 \end{example}
 \itersubsection{Description}
 
 %\noindent
-The class template \type{FacetIterator<>} implements a 
-\conceptlink{Grid Facet Iterator}{GridVertexIterator}
+The class template \type{FacetIterator} implements a 
+\conceptlink{Grid Facet Iterator}{GridFacetIterator}
 based on cell iteration and local facet iteration.
 The iteration proceeds by iterating over each facet of each cell;
 in order to ensure visiting each facet only once, 
@@ -70,7 +70,7 @@ for(FacetIt f(g); ! f.IsDone(); ++f)
 
 \itersubsection{Notes}
 \begin{enumerate}
-\item \notelabel{note-fi-neighbor}
+\item \notelabel{note-fi-neighbors}
 If information about cell neighbors is not available, 
 one has to mark visited facets explicitely,
 which is done by \sectionlinkUNDEF{\type{facet\_set\_of\_cells\_iterator}}{facet-set-of-cells}.
@@ -80,6 +80,7 @@ selecting the appropriate version of \type{FacetIterator}
 automatically.
 \end{enumerate}
 \itersubsection{See also}
-\sectionlink{\type{facet\_handle}}{facet-handle}
+\gralclasslink{facet\_set\_of\_cells\_iterator}{base}
 ~
-\sectionlinkUNDEF{\type{facet\_set\_of\_cells\_iterator}}{facet-set-of-cells}
+\gralclasslink{facet\_handle}{base}
+

@@ -30,9 +30,10 @@ make-links:
           (cd html; rm -f bilder; ln -s ../bilder ./; \
           ln -s top.html index.html;\
           ln -s GridVertex.html  Vertex.html;\
-          ln -s GridEdge.html   Edge.html;\
-          ln -s GridFacet.html  Facet.html;\
-          ln -s GridCell.html   Cell.html;\
+          ln -s GridEdge.html    Edge.html;\
+          ln -s GridFace.html    Face.html;\
+          ln -s GridFacet.html   Facet.html;\
+          ln -s GridCell.html    Cell.html;\
           ln -s GridVertexIterator.html VertexIterator.html; \
           ln -s GridVertexIterator.html EdgeIterator.html; \
           ln -s GridVertexIterator.html FacetIterator.html; \

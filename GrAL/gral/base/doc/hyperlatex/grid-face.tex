@@ -1,0 +1,175 @@
+\xname{GridFace}
+\begin{Label}{GridFace}
+\conceptsection{Grid Face Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A  {\em Grid Face\/} represents the mathematical concept of a Face 
+--- a 2-dimensional entity 
+in a  \sectionlink{\concept{Grid}}{Grid}.
+If the grid is 2-dimensional, a \concept{Grid Face} my
+coincide with a \concept{Grid Cell},
+in a 3-dimensional grid, it may coincide with a \concept{Grid Facet}.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{Grid Element}}{GridElement}
+ 
+\conceptsubsection{Notation}
+{\tt F} is a type which is a model of \concept{Grid Face}.
+\\
+{\tt f} is an object of type {\tt F}
+\\
+{\tt C} is  a shorthand for the {\tt F::Cell} type
+\\
+{\tt c} is an object of type {\tt C}
+\\
+{\tt g} is an object of type {\tt F::grid\_type}
+\\
+{\tt h} is an object of type {\tt F::Face\_handle}
+\\
+{\tt vf} is an object of type {\tt F::VertexIterator}
+
+\conceptsubsection{Associated types}
+
+{\em NOTE:\/} The types and expression involving 
+\sectionlink{\concept{ Incidence Iterators}}{GridIncidenceIterator} are given below for the
+case of \sectionlink{vertex-on-face iteration}{Vertex-On-CellIterator}.
+Analogous types and expressions can be defined for the other element types.
+
+The tables are to be understood in the following sense:
+\\
+{\em If\/} a Face defines the incidence iterator over vertices,
+{\em then\/} the requirements under {\em Optional part\/} apply.
+Analogous requirements take effect if `vertex' is replaced by another element type.
+
+\noindent
+\begin{tabularx}{12cm}{llX} \hline
+  \bf  Name  &\bf  Expression  &\bf  Description   \\ \hline
+  handle type & 
+  {\tt F::face\_handle} &
+  type of the corresponding \sectionlink{\concept{Face Handle}}{GridVertexHandle} 
+  \\ 
+  cell type &
+  \code{F::Cell} &
+  Cell type of the Face, 
+  short for \code{F::grid\_type::Cell}.
+  \\ 
+  \hline
+  \multicolumn{3}{c}{\bf \em Optional part (as example) }
+  \\
+  \hline
+  vertex-on-face iterator &
+  {\tt F::VertexIterator}&
+  type of the corr. VertexOnFaceIterator
+  \\ 
+  \hline
+\end{tabularx}
+    
+\conceptsubsection{Valid Expressions}
+
+\noindent
+\begin{tabularx}{14cm}{RRRR} \\ 
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type \\ 
+  \hline
+  handle & 
+  {\tt f.handle()} &
+  ~ &
+  {\tt F::face\_handle} 
+  \\
+  first cell &
+  \code{c = f.C1()} &
+  ~ &
+  \type{Cell}
+  \\
+  second cell &
+  \code{c = f.C2()} &
+  ~ &
+  \type{Cell}
+  \\
+  \hline
+  \multicolumn{4}{c}{\bf \em Optional part (as example) }  
+  \\
+  \hline
+  vertex-on-face iteration start & 
+  {\tt f.FirstVertex()} &
+  ~ &
+  {\tt F::VertexIterator} 
+  \\
+  number of incident vertices & 
+  {\tt F.NumOfVertices()} &
+  ~ &
+  {\tt int} 
+  \\
+  \hline
+  \\
+\end{tabularx}
+ 
+\T\begin{small}
+\conceptsubsection{Expression semantics}
+\begin{tabularx}{15cm}{XXXXX} \\
+  \hline
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\ 
+  \hline
+  handle &
+  {\tt h = f.handle();} &
+  f is \footlink{valid}{valid} &
+  shorthand for {\tt h = f.TheGrid(). handle(f)} &
+  {\tt f == f.TheGrid(). Face(h)}  
+  \\ 
+  \hline
+  \multicolumn{5}{c}{\bf \em Optional part (as example) }
+  \\
+  \hline
+  Vertex-on-Face iteration start & 
+  {\tt vf = f.FirstVertex()} &
+  {\tt f} is \link{valid}{valid}  &
+  let {\tt fi} point to  the first vertex incident to {\tt f}  & 
+  {\tt vf.TheEdge() == vf.TheAnchor() == f} 
+   and 
+  {\tt vf.TheGrid() == f.TheGrid()}
+  \\ 
+  number of incident vertices & 
+  {\tt n =  f.NumOfVertices()} &
+  {\tt f} is \link{valid}{valid}  &
+  n is the number of vertices that are incident to {\tt f} &
+  ~ 
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+\T\end{small}
+    
+\conceptsubsection{Complexity guarantees}
+All operations are amortized constant time\noteref{note-face-amort}.
+
+\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+\sectionlink{\type{Complex2D::Face}}{Complex2DCell} 
+defined in
+\gralfilelink{cell2d}{h}{complex2d}
+(identical to \type{Complex2D::Cell})
+\conceptsubsection{Notes}
+\begin{enumerate}
+\item \notelabel{note-Face-amort}
+  Amortization is understood to involve calling the operations for all
+  Faces of a grid.
+\end{enumerate}
+
+\conceptsubsection{See also}
+\sectionlink{\concept{Grid}}{Grid} ~
+\sectionlink{\concept{Grid Element Handle}}{GridElementHandle} ~
+\sectionlink{\concept{Face Handle}}{GridVertexHandle}~
+\sectionlink{\concept{Grid Element }}{GridElement} ~
+\sectionlink{\concept{Grid Cell}}{GridCell} ~
+\sectionlink{\concept{Sequence Iterator}}{GridSequenceIterator} ~
+\sectionlink{\concept{Incidence Iterator}}{GridIncidenceIterator} ~
+
+  
+

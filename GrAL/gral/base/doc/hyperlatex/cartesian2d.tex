@@ -1,24 +1,24 @@
 \xname{RegGrid2D}
 \begin{Label}{RegGrid2D}
-\typesection{{\tt RegGrid2D} Grid Type}
+\typesection{{\tt CartesianGrid2D} Grid Type}
 \end{Label}
 
 \needswork{This documentation is still incomplete!}
 
 \typesubsection{Description}
-The type {\tt RegGrid2D} is a model of \sectionlink{\concept{Grid}}{Grid}.
+The type \type{CartesianGrid2D}  is a model of \sectionlink{\concept{Grid}}{Grid}.
 It allows representation of Cartesian grids, that is, regular $m \times n$
 tensor product grids.
 
 \typesubsection{Example}
 
 \begin{example}
-#include "Grids/Reg2D/cartesian-grid2d.h"
+#include "Gral/Grids/Cartesian2D/cartesian-grid2d.h"
 
-\sectionlinkfoot{RegGrid2D}{RegGrid2D} R(10,10);  // 10x10 Cartesian grid
+\gralclasslink{CartesianGrid2D}{RegGrid2D} R(10,10);  // 10x10 Cartesian grid
 assert(R.NumOfVertices() == 10*10);
 assert(R.NumOfCells()    == 9*9);
-typedef grid\_types<RegGrid2D> gt; // 'namespace' for RegGrid2D-related types 
+typedef grid\_types<CartesianGrid2D> gt; // 'namespace' for CartesianGrid2D-related types 
 for(gt::CellIterator c(R), ! c.IsDone(); ++c)
   cout << "Cell " << c.handle() << "  "
        << "has "  << (*c).NumOfVertices() << " vertices\\n";
@@ -26,8 +26,8 @@ for(gt::CellIterator c(R), ! c.IsDone(); ++c)
 
 \typesubsection{Definition}
 
-Defined in \gralfilelink{cartesian-grid2d}{h}{cartesian2d}
-\texorhtml{}{(see also \xlink{cartesian2d}{\GRALINC{cartesiand2d}{index}})}.
+Defined in \gralfilelink{cartesian-grid2d}{h}{cartesian2d}.
+
   
 \typesubsection{Model of}
 \sectionlink{\concept{Grid-With-Boundary}}{Grid-With-Boundary}
@@ -69,19 +69,19 @@ Defined in \gralfilelink{cartesian-grid2d}{h}{cartesian2d}
   corr.\ to \type{Cell}
   \\ \hline
   \multicolumn{3}{c}{{\em element types\/}} \\ \hline
-  \sectionlinkshort{\type{Vertex}}{RegGrid2DVertex} &
+  \sectionlinkUNDEF{\type{Vertex}}{CartesianGrid2DVertex} &
   \sectionlinkshort{\concept{Vertex Grid Range}}{VertexGridRange}&
   The \sectionlinkshort{\concept{Vertex}}{GridVertex} element type 
   \\
-  \sectionlinkshort{\type{Edge}}{RegGrid2DEdge} &
+  \sectionlinkUNDEF{\type{Edge}}{CartesianGrid2DEdge} &
   \sectionlinkshort{\concept{Edge Grid Range}}{VertexGridRange}&
   The \sectionlinkshort{\concept{Edge}}{GridEdge} element type 
   \\
-  \sectionlinkshort{\type{Facet}}{RegGrid2DFacet} &
+  \sectionlinkUNDEF{\type{Facet}}{CartesianGrid2DFacet} &
   \sectionlinkshort{\concept{Facet Grid Range}}{VertexGridRange}&
   The \sectionlinkshort{\concept{Facet}}{GridFacet} element type 
   \\
-  \sectionlinkshort{\type{Cell}}{RegGrid2DCell} &
+  \sectionlinkUNDEF{\type{Cell}}{CartesianGrid2DCell} &
   \sectionlinkshort{\concept{Cell Grid Range}}{VertexGridRange} &
   The \sectionlinkshort{\concept{Cell}}{GridCell} element type 
   \\ \hline
@@ -111,7 +111,7 @@ Defined in \gralfilelink{cartesian-grid2d}{h}{cartesian2d}
   \hline
   \multicolumn{3}{c}{{\em constructors\/}}  \\ 
   \hline
-  RegGrid2D(int m, int n) &
+  CartesianGrid2D(int m, int n) &
   ~ &
   construct cartesian grid with $n$ vertices in $x$ direction
   and $m$ vertices in $y$ direction. 

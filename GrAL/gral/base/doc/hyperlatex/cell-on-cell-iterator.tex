@@ -1,0 +1,111 @@
+ \xname{Cell-On-CellIterator}
+\begin{Label}{Cell-On-CellIterator}
+\conceptsection{Cell-On-Cell Iterator Concept}
+\end{Label}
+
+\conceptsubsection{Description}
+A {\em Cell-On-Cell Iterator\/} refines the concept of 
+\sectionlink{\concept{Grid Incidence Iterator }}{GridIncidenceIterator}.
+(Strictly speaking, it is not an incidence iterator, but an 
+\glossarylink{adjacency}{adjacent}
+iterator, because two cells cannot be incident).
+It allows to access all cells adjacent to a given cell.
+
+\conceptsubsection{Refinement of}
+\sectionlink{\concept{ Incidence Iterator}}{GridIncidenceIterator}
+\\
+%\sectionlink{\concept{Sequence Iterator}}{GridSequenceIterator}
+
+\conceptsubsection{Notation}
+\type{C} is a model of Cell-On-Cell Iterator
+\\ 
+{\tt c} is an object of type \type{C}
+\\
+{\tt c1}, {\tt c2} are  objects of type  {\tt C::Cell}
+
+\conceptsubsection{Associated types}
+The types {\tt C::element\_type} and {\tt C::anchor\_type}
+can now be named more  specifically. 
+The names from the incidence iterator concept
+remain valid.
+
+\noindent
+\begin{tabular}{llp{7cm}} 
+  \\
+  \hline
+  \bf  Name &\bf  Expression  &\bf  Description 
+  \\ 
+  \hline
+  Cell type  &
+  {\tt C::Cell} &
+  synomym to {\tt C::element\_type} 
+  \\ 
+  Anchor type  & 
+  {\tt C::anchor\_type} &
+  synonym to  {\tt C::Cell},
+  \par model of \sectionlink{\concept{Cell Grid Range}}{CellGridRange}  
+  \\ 
+  \hline
+  \\
+\end{tabular}
+    
+\conceptsubsection{Valid Expressions}
+
+\begin{tabular}{llll} \\
+  \hline
+  \bf  Name  &\bf  Expression  &\bf  Type requirements  & \bf  return type  \\ 
+  \hline
+  anchor cell  &
+  {\tt c.TheCell();} &
+  ~ &
+  {\tt C::Cell const\&} 
+  \\ 
+  \hline
+  \\
+\end{tabular}
+
+
+\conceptsubsection{Expression semantics}
+
+\begin{tabularx}{14cm}{RRRRR} \\
+  \hline     
+  \bf  Name     &
+  \bf  Expression &
+  \bf  Precondition&
+  \bf  Semantics &
+  \bf  Postcondition
+  \\
+  \hline
+  anchor cell  &
+  {\tt Cell c1 = c.TheCell();} &
+  {\tt c is not singular} &
+  get the anchor of {\tt c} & 
+  {\tt c1} is a valid cell; 
+  \par
+  {\tt c1 == c.TheCell()}
+  \\ 
+  \hline
+  \\
+\end{tabularx}
+
+\W\conceptsubsection{Refinements}
+
+\conceptsubsection{Models}
+\sectionlink{{\tt Complex2D::CellOnCellIterator}}{Complex2D}
+defined in  
+\gralfilelink{cell-on-cell2d-it}{h}{complex2d}.
+
+\W\conceptsubsection{Notes}
+
+
+\conceptsubsection{See also}
+\sectionlink{\concept{ Grid }}{Grid} ~
+\sectionlink{\concept{ Grid Range }}{GridRange} ~
+\\
+\sectionlink{\concept{ Grid Element }}{GridElement} ~
+\sectionlink{\concept{ Grid Cell}}{GridCell} ~
+\\
+\sectionlink{\concept{Grid Sequence Iterator }}{GridSequenceIterator} ~
+\sectionlink{\concept{Grid Incidence Iterator }}{GridIncidenceIterator} ~
+  
+

@@ -148,7 +148,7 @@ Expected time $O(F)$.
 \begin{example}
 #include "Grids/Algorithms/cell-neighbor-search.h"
 
-\xlinkUNDEF{Triang2D}{Triang2D} t;
+\gralclasslink{Triang2D}{triang2d} t;
 typedef grid_types<Triang2D> gt;
 ...
 \xlink{hash_map}{\STLPATH{hash_map.html}}<gt::FacetOnCellIterator> , gt::cell_handle> Nbs;
@@ -162,12 +162,12 @@ for(gt::CellIterator c(t); ! c.IsDone(); ++c) {
 \end{example}
 The mapping from \code{gt::FacetOnCellIterator} to \code{gt::cell\_handle}
 can of course be done much more efficiently than with a hash table, see
-the example in  \gralfilelink{construct/test-triang2d-construct}{C}{triang2d}.
+the example in  \gralfilelink{test-triang2d-construct}{C}{triang2d}.
 
 \algosubsection{Known Uses}
 
-Used in \xlink{test}{\GRALROOT/test/Grids/triang2d/main-triang2d.C}
-of \sectionlinkUNDEF{\type{Triang2D}}{Triang2D}.
+Useqd in test file \gralfilelink{test-triang2d-construct}{C}{triang2d}
+for \gralclasslink{Triang2D}{triang2d}.
 
 \algosubsection{Notes}
 

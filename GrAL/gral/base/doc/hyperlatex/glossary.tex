@@ -4,6 +4,12 @@
 %\end{Label}
 
 \begin{Glossar}
+\item[adjacent]
+  Two cells are adjacent if they are \Glossarylink{incident} 
+  to a common facet.
+  Two vertices are adjacent if they are incident to a common edge.
+  For other types of elements, we do not define adjacency.
+
 \item[associative copy]
   An associative copy between two grids is a copy operation
   which preserves (outputs) a mapping between the elements of the first and
@@ -97,6 +103,11 @@ A grid morphism is a mapping between the
 \glossarylink{posets}{poset} of two grids
 which respects the partial order.
 It is an isomorphism if it is bijective.
+
+\item[incident]
+ Two elements are incident if one is contained in the boundary 
+ of the other. Thus, elements of the same dimension cannot be incident,
+ only \Glossarylink{adjacent}.
 
 \item[interior facet] A facet $f$ is called interior with respect to a cell set 
   $C$ (which is assumed to be a sub-range of a manifold-with-boundary grid),
