@@ -124,6 +124,7 @@ public:
   edge_handle handle() const { return base.curr_edge().handle();}
 };
 
+template<>
 class BoundaryRange<Complex2D> {
 private:
   //--------- DATA -------------
@@ -149,6 +150,7 @@ public:
 
 };
 
+template<>
 struct grid_types<BoundaryRange<Complex2D> > 
 {
   typedef grid_types<Complex2D>     gt;

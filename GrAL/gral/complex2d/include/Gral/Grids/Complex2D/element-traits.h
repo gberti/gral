@@ -13,10 +13,13 @@
 
 template<class E> 
 struct hasher_for_complex2d {};
+
+template<>  
 struct hasher_for_complex2d<Edge2D> 
   : public hash_edge2d {};
 
 
+template<>  
 struct element_traits<Vertex2D> 
  : public element_traits_vertex_base<Complex2D> 
 {

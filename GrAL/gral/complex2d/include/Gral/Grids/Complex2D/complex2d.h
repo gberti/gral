@@ -163,6 +163,8 @@ struct edge_handle_complex2d {
 
 namespace STDEXT  {
   template<class T> class hash;
+
+  template<>
   struct hash<edge_handle_complex2d> {
   public:
     typedef edge_handle_complex2d key_type;
@@ -668,11 +670,14 @@ struct hash_cell2d {
 namespace STDEXT {
   template<class T>
     struct hash;
-  
+
+  template<>  
   struct hash<Vertex2D> 
     : public hash_vertex2d {};
+  template<>  
   struct hash<Edge2D> 
     : public hash_edge2d {};
+  template<>  
   struct hash<Cell2D> 
     : public hash_cell2d {};
 }

@@ -1242,6 +1242,7 @@ struct grid_types_cart2d {
 
 /*! \brief specialization of grid_types template for RegGrid2D
  */
+template<>
 struct grid_types<cartesian2d::RegGrid2D> : public grid_types_base<cartesian2d::grid_types_cart2d> 
 { };
 
