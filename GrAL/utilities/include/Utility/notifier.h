@@ -109,7 +109,7 @@ private:
 class notifier {
 private:
   friend class observer;
-  typedef vector<observer *>       observer_table;
+  typedef std::vector<observer *>   observer_table;
 public:
   typedef observer_table::iterator observer_iterator;
 private:
