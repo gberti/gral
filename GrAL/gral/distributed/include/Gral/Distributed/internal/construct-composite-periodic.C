@@ -70,7 +70,7 @@ void ConstructComposite_per(CompositeG     & CG,
   ConstructCoarsePartitionGrid(CG.TheCoarseGrid(),Prtng, 			       
 			       CoarseVertexCorr,
 			       CoarseCellCorr);
-  CG.update();
+  CG.coarse_grid_complete();
 
   v_corr.set_grid(CG.TheCoarseGrid());
   c_corr.set_grid(CG.TheCoarseGrid());
@@ -181,9 +181,7 @@ void ConstructComposite_per(CompositeG     & CG,
   typedef dyn_overlap<coarse_grid_type, fine_grid_type> overlap_type;
   grid_function<CoarseCell, overlap_type>               Ovlp(CrsG);
   for(CoarseCellIterator PP = CrsG.FirstCell(); ! PP.IsDone(); ++PP) {
-    // Ovlp[*P] = overlap_type(CrsG, G);
-    Ovlp[*PP].set_coarse_grid(CrsG);
-    Ovlp[*PP].set_fine_grid  (G);
+    Ovlp[*PP].init(CrsG,Prtng.TheGrid());
   }
 
   ConstructOverlap(Ovlp,CrsG,Prtng,ovlp_pattern, part2cell, cell2part, grid_map);
@@ -200,7 +198,7 @@ void ConstructComposite_per(CompositeG     & CG,
   //--------------------- construct local grids  ---------------------------------
 
   for(CoarseCellIterator P1 = CrsG.FirstCell(); ! P1.IsDone(); ++P1) {
-    CG.OvrlpGrid(*P1).set_coarse_grid(CG.TheCoarseGrid());
+    CG.OvrlpGrid(*P1).init(CG.TheCoarseGrid());
     ConstructLocalOverlappingGrid(CG.OvrlpGrid(*P1),
 				  Prtng.Range(cell2part(*P1)), geom,
 				  Ovlp[*P1], v_corr[*P1], c_corr[*P1]);
