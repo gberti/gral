@@ -9,6 +9,7 @@
 
 #include <iostream>
 
+#include <boost/shared_ptr.hpp>
 //#include <stdlib.h>
 
 #include "Config/compiler-config.h"
@@ -193,7 +194,7 @@ public:
     \ingroup mutatorcreators 
  */
 template<class T>
-inline TypedMutator<T>* GetMutator(T& t) { return new TypedMutator<T>(t);}
+inline boost::shared_ptr<Mutator>  GetMutator(T& t) { return boost::shared_ptr<Mutator>(new TypedMutator<T>(t));}
 
 //!
 /*! \brief Creator function for CommentedMutator
@@ -201,69 +202,77 @@ inline TypedMutator<T>* GetMutator(T& t) { return new TypedMutator<T>(t);}
     \ingroup mutatorcreators 
  */
 template<class T>
-inline CommentedMutator<T>* GetMutator(T& t, ::std::string const& comment) 
-{ return new CommentedMutator<T>(t,comment);}
+inline boost::shared_ptr<Mutator> GetMutator(T& t, ::std::string const& comment) 
+{ return  boost::shared_ptr<Mutator>(new CommentedMutator<T>(t,comment));}
 
 /*! \brief Creator function for CommentedMutator
     
     \ingroup mutatorcreators 
  */
 template<class T>
-inline CommentedMutator<T>* GetMutator(T& t, const char* comment) 
-{ return new CommentedMutator<T>(t,comment);}
+inline boost::shared_ptr<Mutator> 
+GetMutator(T& t, const char* comment) 
+{ return  boost::shared_ptr<Mutator>(new CommentedMutator<T>(t,comment));}
  
 /*! \brief Creator function for NotifyOnChangeMutator
     
     \ingroup mutatorcreators 
  */
 template<class T>
-inline NotifyOnChangeMutator<T>* GetNotifyingMutator(T& t, controlable& observ) 
-{ return new NotifyOnChangeMutator<T>(t,observ);}
+inline boost::shared_ptr<Mutator> 
+GetNotifyingMutator(T& t, controlable& observ) 
+{ return boost::shared_ptr<Mutator>(new NotifyOnChangeMutator<T>(t,observ));}
 
 /*! \brief Creator function for SetTrueOnReadMutator
     
     \ingroup mutatorcreators 
  */
-inline SetTrueOnReadMutator* GetTrueOnReadMutator(bool& t)
-{ return new SetTrueOnReadMutator(t);}
+inline boost::shared_ptr<Mutator> 
+GetTrueOnReadMutator(bool& t)
+{ return boost::shared_ptr<Mutator>(new SetTrueOnReadMutator(t));}
 
 /*! \brief Creator function for SetFalseOnReadMutator
     
     \ingroup mutatorcreators 
  */
-inline SetFalseOnReadMutator* GetFalseOnReadMutator(bool& t)
-{ return new SetFalseOnReadMutator(t);}
+inline boost::shared_ptr<Mutator> 
+GetFalseOnReadMutator(bool& t)
+{ return boost::shared_ptr<Mutator>(new SetFalseOnReadMutator(t));}
 
 /*! \brief Creator function for FlipOnReadMutator
     
     \ingroup mutatorcreators 
  */
-inline FlipOnReadMutator* GetFlipOnReadMutator(bool& t)
-{ return new FlipOnReadMutator(t);}
+inline boost::shared_ptr<Mutator> 
+GetFlipOnReadMutator(bool& t)
+{ return boost::shared_ptr<Mutator>(new FlipOnReadMutator(t));}
 
 /*! \brief Creator function for SetOnReadMutator
     
     \ingroup mutatorcreators 
  */
 template<class T, class TObs>
-inline SetOnReadMutator<T,TObs>* GetSetOnReadMutator(T& t, TObs& obs, TObs deflt)
-{ return new SetOnReadMutator<T,TObs>(t,obs,deflt); }
+inline boost::shared_ptr<Mutator> 
+GetSetOnReadMutator(T& t, TObs& obs, TObs deflt)
+{ return boost::shared_ptr<Mutator>(new SetOnReadMutator<T,TObs>(t,obs,deflt)); }
 
 /*! \brief Creator function for CommentedMutator
     
     \ingroup mutatorcreators 
  */
 template<class T>
-inline CommentedMutator<T>* GetCommentedMutator(T& t, ::std::string const& comment)
-{ return  new  CommentedMutator<T>(t,comment); }
+inline boost::shared_ptr<Mutator> 
+GetCommentedMutator(T& t, std::string const& comment)
+{ return  boost::shared_ptr<Mutator>(new  CommentedMutator<T>(t,comment)); }
 
 /*! \brief Creator function for CommentedMutator
     
     \ingroup mutatorcreators 
  */
 template<class T>
-inline CommentedMutator<T>* GetCommentedMutator(T& t, const char* comment)
-{ return  new  CommentedMutator<T>(t,::std::string(comment)); }
+inline boost::shared_ptr<Mutator> 
+GetCommentedMutator(T& t, const char* comment)
+{ return  boost::shared_ptr<Mutator>(new  CommentedMutator<T>(t,::std::string(comment))); }
 
 
 } // namespace GrAL 

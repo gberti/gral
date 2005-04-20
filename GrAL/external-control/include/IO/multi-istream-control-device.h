@@ -14,9 +14,10 @@ class multi_istream_control_device
   
   typedef istream_control_device_impl base;
 public:
-  multi_istream_control_device(::std::istream* i1, ::std::istream* i2,
-                               const ::std::string& nm,
-                               const ::std::string& ind = "")
+  multi_istream_control_device(boost::shared_ptr<std::istream> i1, 
+			       boost::shared_ptr<std::istream> i2,
+                               const std::string& nm,
+                               const std::string& ind = "")
     : base(i1,nm,ind), in2(i2)  {}
 
   virtual void update() {
@@ -25,7 +26,7 @@ public:
   }
 
 private:
- ::std::istream* in2;
+  boost::shared_ptr<std::istream> in2;
 };
 
 } // namespace GrAL 

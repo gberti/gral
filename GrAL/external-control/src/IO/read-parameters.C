@@ -10,7 +10,7 @@
 namespace GrAL {
 
 
-class string_list : public ::std::list< ::std::string> {
+class string_list : public std::list<std::string> {
 public:
   string_list() {}
 };
@@ -20,23 +20,26 @@ MutableVars::MutableVars()
     unrecognized(new string_list)  {}
 
 unsigned MutableVars::size() const { return table->size();}
-bool     MutableVars::defined(::std::string const& nm) const { 
+bool     MutableVars::defined(std::string const& nm) const { 
   return (table->find(nm) != table->end());
 }
 
-Mutator* MutableVars::getMutator(::std::string const& nm)
+  boost::shared_ptr<Mutator> MutableVars::getMutator(::std::string const& nm)
 {
-  return (table->find(nm) != table->end() ? 
-	  (*(table->find(nm))).second : 0);
+  return (table->find(nm) != table->end() 
+	  ? 
+	  (*(table->find(nm))).second  
+	  :
+	  boost::shared_ptr<Mutator>() );
 }
 
 //MutableVars::~MutableVars() { delete(table); delete(unrecognized);}
 MutableVars::~MutableVars() {}
 
-void MutableVars::AddVariable(::std::string const& name, Mutator* m)
+  void MutableVars::AddVariable(::std::string const& name, boost::shared_ptr<Mutator> m)
   { (*table)[name]=m; }
 
-void MutableVars::AddVariable(char const*  name, Mutator* m)
+void MutableVars::AddVariable(char const*  name, boost::shared_ptr<Mutator> m)
   { (*table)[::std::string(name)]=m; }
 
 
@@ -55,7 +58,7 @@ void MutableVars::ReadVariable(::std::istream& is)
     ::std::string s; 
     is >> s;
 
-     ::std::map< ::std::string, Mutator*, ::std::less< ::std::string> >::iterator it;
+    std::map<std::string, boost::shared_ptr<Mutator>, std::less<std::string> >::iterator it;
     if( (it = table->find(s)) != table->end()) {
       //  cerr << "found: " << s << endl;
       (*it).second->read(is);

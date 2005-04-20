@@ -18,24 +18,24 @@ namespace GrAL {
 class istream_control_device_impl : public control_device_impl {
   typedef istream_control_device_impl self;
 public:
-  istream_control_device_impl(::std::istream* i,
-                              ::std::string const& nm, 
-                              ::std::string const& ind = "");
+  istream_control_device_impl(boost::shared_ptr<std::istream> i,
+                              std::string const& nm, 
+                              std::string const& ind = "");
 
-  control_device_impl* get_sub_device(::std::string const& nm);
+  boost::shared_ptr<control_device_impl> get_sub_device(std::string const& nm);
 
-  virtual ::std::string name() const;
+  virtual std::string name() const;
 
   virtual void update();
   
-  virtual void add(const ::std::string& name,Mutator* value);
+  virtual void add(const std::string& name, boost::shared_ptr<Mutator> value);
 
   virtual void register_at(ControlDevice& Ctrl);
-  virtual void register_at(ControlDevice& Ctrl, const ::std::string& prefix);
+  virtual void register_at(ControlDevice& Ctrl, const std::string& prefix);
 
-  virtual void attach_to(::std::istream& in_new);
-  virtual void print_values(::std::ostream& out) const;
-  virtual void print_values(::std::ostream& out, ::std::string const& ind) const; 
+  virtual void attach_to(std::istream& in_new);
+  virtual void print_values(std::ostream& out) const;
+  virtual void print_values(std::ostream& out, std::string const& ind) const; 
 
   virtual void read(::std::istream& in);
   virtual void print(::std::ostream& out) const;
@@ -48,11 +48,11 @@ public:
     { rhs.print(out); return out;}
 
 protected:
-  ::std::istream* in;
-  ::std::string name_;
-  ::std::string indent_;
+  boost::shared_ptr<std::istream> in;
+  std::string name_;
+  std::string indent_;
   MutableVars MV;
-  ::std::list<self*> sub_devices_;
+  std::list<boost::shared_ptr<self> > sub_devices_;
 };
 
 } // namespace GrAL 

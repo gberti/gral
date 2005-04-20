@@ -28,16 +28,19 @@ Commandline::Commandline(int argc, char* argv[]) : commands("") {
   int n = strlen(cmds.str());
   char* copy = new char[n+1];
   strcpy(copy,cmds.str());
-  commands = ::std::string(copy);
+  commands = std::string(copy);
 #endif
 }
 
 //istringstream Commandline::get() const { return istringstream(commands);}
 //strstream Commandline::get() const { return strstream(commands.c_str());}
 const char* Commandline::c_str() const { 
-  char* copy = new char[strlen(commands.c_str())+1];
-  strcpy(copy,commands.c_str());
-  return copy;
+  // char* copy = new char[strlen(commands.c_str())+1];
+  //strcpy(copy,commands.c_str());
+  //return copy;
+  return commands.c_str();
 }
+
+  std::string const& Commandline::str() const { return commands;}
 
 } // namespace GrAL 

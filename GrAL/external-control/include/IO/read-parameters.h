@@ -58,6 +58,8 @@
 #include <iostream>
 #include <map>  // STL
 
+#include <boost/shared_ptr.hpp>
+
 #include "IO/mutator.h"
 
 namespace GrAL {
@@ -69,22 +71,21 @@ namespace GrAL {
 // from polymorphism (derived classes are automatically
 // generated via templates in class TypedMutator).
 
-class string_table_1: public ::std::map< ::std::string, Mutator*, ::std::less< ::std::string> > {
-public:
-  string_table_1() {}
-};
+  class string_table_1: public std::map<std::string, boost::shared_ptr<Mutator>,  std::less<std::string> > {
+  public:
+    string_table_1() {}
+  };
 
 //class string_table_1;
 class string_list;
-class Mutator;
 
 class MutableVars {
 private:
   typedef string_table_1             table_type;
   typedef table_type::const_iterator const_iterator;
 
-  table_type*  table;
-  string_list* unrecognized;
+  boost::shared_ptr<table_type>  table;
+  boost::shared_ptr<string_list> unrecognized;
 
   // FORBIDDEN
   MutableVars(MutableVars const&);
@@ -93,8 +94,8 @@ public:
   MutableVars();
   ~MutableVars();
 
-  void AddVariable(::std::string const& name, Mutator* m);
-  void AddVariable(char        const* name, Mutator* m);
+  void AddVariable(::std::string const& name, boost::shared_ptr<Mutator> m);
+  void AddVariable(char        const* name,   boost::shared_ptr<Mutator> m);
   void ReadVariable(::std::istream& is);
   void ReadValues  (::std::istream& in);
   void PrintValues (::std::ostream& out,
@@ -105,7 +106,7 @@ public:
  
   unsigned size() const;
   bool     defined   (::std::string const& nm) const;
-  Mutator* getMutator(::std::string const& nm);
+  boost::shared_ptr<Mutator> getMutator(::std::string const& nm);
   
   const_iterator begin() const { return table->begin();}
   const_iterator end()   const { return table->end();}
@@ -118,13 +119,13 @@ public:
 // (as a member function) is not (yet) allowed to be a template function
 
 template<class T> 
-inline void AddVar(MutableVars& MV, const ::std::string& name, T& v)
+inline void AddVar(MutableVars& MV, const std::string& name, T& v)
 { MV.AddVariable(name,GetMutator(v));}
 
 
 template<class T> 
 inline void AddVar(MutableVars& MV, const char* name, T& v)
-{ AddVar(MV,::std::string(name),v);}
+{ AddVar(MV,std::string(name),v);}
 
 } // namespace GrAL 
 

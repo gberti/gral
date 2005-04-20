@@ -17,6 +17,7 @@
 #include "IO/command-line.h"
  
 #include "Utility/pre-post-conditions.h" 
+#include "Utility/ref-ptr.h" // for null_deleter
 
 namespace GrAL {
 
@@ -31,10 +32,10 @@ void ControlDevice::print_unrecognized(::std::ostream& out) const { impl->print_
 
 void ControlDevice::attach_to(::std::istream& in) { impl->attach_to(in);}
 
-void ControlDevice::add(::std::string const& name,Mutator* value_ref) 
+  void ControlDevice::add(std::string const& name, boost::shared_ptr<Mutator> value_ref) 
 { impl->add(name,value_ref);}
 
-void ControlDevice::add(char const*   nm,Mutator* value_ref)
+  void ControlDevice::add(char const*   nm, boost::shared_ptr<Mutator> value_ref)
 { add(::std::string(nm),value_ref);}
 
 void ControlDevice::register_at(ControlDevice& Ctrl, ::std::string const& prefix)
@@ -56,48 +57,56 @@ ControlDevice ControlDevice::getSubDevice(char const*   name)
 
 
 
-ControlDevice GetStreamDevice(::std::istream* in, const ::std::string& name)
-{ return ControlDevice( new istream_control_device_impl(in,name));}
+ControlDevice GetStreamDevice(std::istream & in, const std::string& name)
+{ 
+  boost::shared_ptr<std::istream> inp(&in, null_deleter());
+  return ControlDevice(boost::shared_ptr<control_device_impl>(new istream_control_device_impl(inp,name)));
+}
+	
 
-ControlDevice GetFileControlDevice(const ::std::string& filename, const ::std::string& name) 
+ControlDevice GetFileControlDevice(const ::std::string& filename, const std::string& name) 
 { return GetFileControlDevice(filename.c_str(),name);} 
 
-ControlDevice GetFileControlDevice(const char* filename, const ::std::string& name) {
- ::std::ifstream * infile = new ::std::ifstream;
- file_interactive::open(*infile,filename);
- return ControlDevice(new istream_control_device_impl(infile, name));
+ControlDevice GetFileControlDevice(const char* filename, const std::string& name) {
+  std::ifstream *inf(new std::ifstream(name.c_str()));
+  REQUIRE_ALWAYS(inf->is_open(), "could not open file \"" << name << "\"!",1);
+  boost::shared_ptr<std::istream> infile(inf);
+  return ControlDevice(boost::shared_ptr<control_device_impl>(new istream_control_device_impl(infile, name)));
 }
 
 
 
 
-ControlDevice GetDuplexControlDevice(::std::istream& in2,
+ControlDevice GetDuplexControlDevice(std::istream& in2,
+				     const char* filename, const std::string& name) {
+  boost::shared_ptr<std::istream> in1p(new std::ifstream(filename));
+  boost::shared_ptr<std::istream> in2p(&in2, null_deleter());
+  return ControlDevice(boost::shared_ptr<control_device_impl>(new multi_istream_control_device(in1p,in2p,name)));
+}
+
+  
+  ControlDevice GetDuplexControlDevice(boost::shared_ptr<std::istream> in2,
 				     const char* filename, const ::std::string& name) {
- ::std::ifstream * in1 = new ::std::ifstream(filename);
-  return ControlDevice(new multi_istream_control_device(in1,&in2,name));
-}
+    boost::shared_ptr<std::istream> in1(new std::ifstream(filename));
+    return ControlDevice(boost::shared_ptr<control_device_impl>(new multi_istream_control_device(in1,in2,name)));
+  }
+  
 
-ControlDevice GetDuplexControlDevice(::std::istream* in2,
-				     const char* filename, const ::std::string& name) {
- ::std::ifstream * in1 = new ::std::ifstream(filename);
-  return ControlDevice(new multi_istream_control_device(in1,in2,name));
-}
-
-ControlDevice GetDuplexControlDevice(::std::istream& in2,
-				     const ::std::string& filename, const ::std::string& name) {
+ControlDevice GetDuplexControlDevice(std::istream& in2,
+				     const std::string& filename, const std::string& name) {
   return GetDuplexControlDevice(in2,filename.c_str(),name);
 }
 
 ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
-						 const ::std::string& filename, 
-						 const ::std::string& name) 
+						 const std::string& filename, 
+						 const std::string& name) 
 {
   Commandline cmd(argc,argv);
   //  istringstream* in = new istringstream(cmd.get().str());
 #ifdef GRAL_HAS_SSTREAM
-   ::std::istringstream* in = new ::std::istringstream(cmd.c_str());
+  boost::shared_ptr<std::istream> in(new std::istringstream(cmd.str()));
 #else
-  ::std::istrstream* in = new ::std::istrstream(cmd.c_str());
+  boost::shared_ptr<std::istream> in(new std::istrstream(cmd.c_str()));
 #endif
   return GetDuplexControlDevice(in,
 				filename.c_str(),

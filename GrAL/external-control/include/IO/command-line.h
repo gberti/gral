@@ -14,11 +14,11 @@ namespace GrAL {
 class  Commandline {
 public:
   Commandline(int argc, char* argv[]);
-  //  istringstream get() const;
-  //strstream get() const;
-  const char* c_str() const;
+
+  const char*        c_str() const;
+  std::string const&   str() const;
 private:
-  ::std::string commands;
+  std::string commands;
 };
 
 } // namespace GrAL 

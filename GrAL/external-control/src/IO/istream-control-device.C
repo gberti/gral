@@ -3,11 +3,12 @@
 
 #include "IO/istream-control-device.h"
 #include "IO/skip-comments.h"
+#include "Utility/ref-ptr.h"
 
 namespace GrAL {
 
 
-istream_control_device_impl::istream_control_device_impl(::std::istream* i, 
+  istream_control_device_impl::istream_control_device_impl(boost::shared_ptr<std::istream> i, 
 							 ::std::string const& nm, 
 							 ::std::string const& ind /* = "" */)
   : in(i), name_(nm), indent_(ind) {}
@@ -16,7 +17,7 @@ std::string istream_control_device_impl::name() const { return name_ ;}
 
 void istream_control_device_impl::update()        {  MV.ReadValues(*in);}
 
-void istream_control_device_impl::add(const ::std::string& name,Mutator* value) 
+  void istream_control_device_impl::add(const ::std::string& name, boost::shared_ptr<Mutator> value) 
 { MV.AddVariable(name,value);}
 
 void istream_control_device_impl::register_at(ControlDevice& Ctrl) { register_at(Ctrl,"");}
@@ -27,7 +28,10 @@ void istream_control_device_impl::register_at(ControlDevice& Ctrl,
             GetMutator(*this));
 }
 
-void istream_control_device_impl::attach_to(::std::istream& in_new) { in = &in_new;}
+void istream_control_device_impl::attach_to(std::istream& in_new) { 
+  boost::shared_ptr<std::istream> in_new_p(&in_new, null_deleter());
+  boost::swap(in, in_new_p);
+} 
 
 void istream_control_device_impl::print_values(::std::ostream& out) const { MV.PrintValues(out);}
 
@@ -39,10 +43,10 @@ void istream_control_device_impl::print_values(::std::ostream& out,
 
 
 //istream_control_device_impl* 
-control_device_impl* 
-istream_control_device_impl::get_sub_device(::std::string const& nm) 
+  boost::shared_ptr<control_device_impl>
+istream_control_device_impl::get_sub_device(std::string const& nm) 
 { 
-  self* sub = new istream_control_device_impl(in,nm, indent_+" "); 
+  boost::shared_ptr<self> sub(new istream_control_device_impl(in,nm, indent_+" ")); 
   add(nm,GetMutator(*sub));
   sub_devices_.push_back(sub);
   return sub;
@@ -77,20 +81,20 @@ void istream_control_device_impl::print(::std::ostream& out) const {
   out << indent_ << "}";
 }
 
-void istream_control_device_impl::print_unrecognized(::std::ostream& out) const
+void istream_control_device_impl::print_unrecognized(std::ostream& out) const
 { print_unrecognized(out,"");}
 
-void istream_control_device_impl::print_unrecognized(::std::ostream& out, 
-						     ::std::string const& prefix) const
+void istream_control_device_impl::print_unrecognized(std::ostream& out, 
+						     std::string const& prefix) const
 {
-  ::std::string nm = ( prefix == "" ? name() : prefix + "::" + name());
+  std::string nm = ( prefix == "" ? name() : prefix + "::" + name());
   if(MV.HasUnrecognized()) {
     out << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
 	<< "WARNING: Unrecognized Values in ControlDevice " << nm << ":\n";
     MV.PrintUnrecognized(out);
     out << "END Unrecognized Values in ControlDevice " << nm << '\n';
   }
-  ::std::list<self*>::const_iterator subs;
+  std::list<boost::shared_ptr<self> >::const_iterator subs;
   for(subs = sub_devices_.begin(); subs != sub_devices_.end(); ++subs)
     (*subs)->print_unrecognized(out,nm);
 }
