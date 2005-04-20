@@ -21,29 +21,29 @@
 
 namespace GrAL {
 
-std::string Mutator::description() const { return ::std::string("");}
+std::string Mutator::description() const { return std::string("");}
 
 
-void ControlDevice::update() { impl->update(); print_unrecognized(::std::cerr);}
+void ControlDevice::update() { impl->update(); print_unrecognized(std::cerr);}
 
-void ControlDevice::print_values(::std::ostream& out) const { impl->print_values(out);}
+void ControlDevice::print_values(std::ostream& out) const { impl->print_values(out);}
 
-void ControlDevice::print_unrecognized(::std::ostream& out) const { impl->print_unrecognized(out);}
+void ControlDevice::print_unrecognized(std::ostream& out) const { impl->print_unrecognized(out);}
 
-void ControlDevice::attach_to(::std::istream& in) { impl->attach_to(in);}
+void ControlDevice::attach_to(std::istream& in) { impl->attach_to(in);}
 
   void ControlDevice::add(std::string const& name, boost::shared_ptr<Mutator> value_ref) 
 { impl->add(name,value_ref);}
 
   void ControlDevice::add(char const*   nm, boost::shared_ptr<Mutator> value_ref)
-{ add(::std::string(nm),value_ref);}
+{ add(std::string(nm),value_ref);}
 
-void ControlDevice::register_at(ControlDevice& Ctrl, ::std::string const& prefix)
+void ControlDevice::register_at(ControlDevice& Ctrl, std::string const& prefix)
 { impl->register_at(Ctrl,prefix);}
 
 std::string ControlDevice::name() const { return impl->name();}
 
-ControlDevice ControlDevice::getSubDevice(::std::string const& nm) 
+ControlDevice ControlDevice::getSubDevice(std::string const& nm) 
 { 
   ControlDevice sub(impl->get_sub_device(nm));
   // sub.register_at(*this,"");
@@ -51,7 +51,7 @@ ControlDevice ControlDevice::getSubDevice(::std::string const& nm)
 }
 
 ControlDevice ControlDevice::getSubDevice(char const*   name) 
-{ return getSubDevice(::std::string(name));}
+{ return getSubDevice(std::string(name));}
 
 
 
@@ -64,7 +64,7 @@ ControlDevice GetStreamDevice(std::istream & in, const std::string& name)
 }
 	
 
-ControlDevice GetFileControlDevice(const ::std::string& filename, const std::string& name) 
+ControlDevice GetFileControlDevice(const std::string& filename, const std::string& name) 
 { return GetFileControlDevice(filename.c_str(),name);} 
 
 ControlDevice GetFileControlDevice(const char* filename, const std::string& name) {
@@ -86,7 +86,7 @@ ControlDevice GetDuplexControlDevice(std::istream& in2,
 
   
   ControlDevice GetDuplexControlDevice(boost::shared_ptr<std::istream> in2,
-				     const char* filename, const ::std::string& name) {
+				     const char* filename, const std::string& name) {
     boost::shared_ptr<std::istream> in1(new std::ifstream(filename));
     return ControlDevice(boost::shared_ptr<control_device_impl>(new multi_istream_control_device(in1,in2,name)));
   }

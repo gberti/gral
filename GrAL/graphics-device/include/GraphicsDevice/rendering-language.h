@@ -81,7 +81,7 @@ private:
   copy_on_write_ptr<rlang_internals>  state;
   //  virtual void empty_buffer();
 protected:
-  ::std::ostream& the_stream();
+  std::ostream& the_stream();
 
   //! return accumulated Trafos that couldn't be handled directly
   Transformation ToDoTrafo() const; 
@@ -93,11 +93,11 @@ protected:
   bool IsToDoTrafo() const; 
 public:
   rendering_language(): state(0) {}
-  rendering_language(::std::ostream* out);
+  rendering_language(std::ostream* out);
   virtual ~rendering_language();
   virtual rendering_language* clone() const = 0;
 
-  virtual void set_stream(::std::ostream* out); 
+  virtual void set_stream(std::ostream* out); 
   virtual void begin_transformation(const Transformation&) = 0;
   virtual void end_transformation()  = 0;
   virtual void begin_attribute(const Attribute&)  = 0;
@@ -105,12 +105,12 @@ public:
   virtual void begin_object(const RenderableGeom& obj)  = 0;
   virtual void end_object()  = 0;
   //  virtual void begin_group() = 0;
-  virtual void begin_group(const ::std::string& name) = 0;
+  virtual void begin_group(const std::string& name) = 0;
   virtual void end_group()   = 0;
   virtual void begin_block()  = 0;
   virtual void end_block()    = 0;
   virtual void pause(double seconds) = 0;
-  virtual void read_from_file(const ::std::string& file) = 0;
+  virtual void read_from_file(const std::string& file) = 0;
   virtual void filter(const RenderableGeom& Obj);
 
   virtual void  write_sphere(const geom_sphere& )  = 0;

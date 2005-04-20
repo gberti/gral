@@ -18,10 +18,10 @@ public:
   double g() const {return _g;}
   double b() const {return _b;}
 
-  friend ::std::istream& operator>>(::std::istream& in,  rgb_color& rs) { rs.read(in); return in;}
-  friend ::std::ostream& operator<<(::std::ostream& out, const rgb_color& rs) { rs.print(out); return out;}
-  void print(::std::ostream& out) const;
-  void read(::std::istream& in) ;
+  friend std::istream& operator>>(std::istream& in,  rgb_color& rs) { rs.read(in); return in;}
+  friend std::ostream& operator<<(std::ostream& out, const rgb_color& rs) { rs.print(out); return out;}
+  void print(std::ostream& out) const;
+  void read(std::istream& in) ;
 
   //  operator Point3D() const { return Point3D(_r,_g,_b);}
 
@@ -42,10 +42,10 @@ class wrap_rgb_color : public rgb_color {
 public:
   wrap_rgb_color() {}
   wrap_rgb_color(const rgb_color& c) : rgb_color(c) {}
-  ::std::string key() const;
+  std::string key() const;
 
-  void  print(::std::ostream& out) const { rgb_color::print(out);}
-  friend ::std::ostream& operator<<(::std::ostream& out ,const wrap_rgb_color& c) 
+  void  print(std::ostream& out) const { rgb_color::print(out);}
+  friend std::ostream& operator<<(std::ostream& out ,const wrap_rgb_color& c) 
     { c.print(out); return out;}
 };
 

@@ -18,7 +18,7 @@ public:
   virtual boost::shared_ptr<generic_value<KEY> > getval()       const         = 0;
   virtual void           setval(boost::shared_ptr<generic_value<KEY> const>)  = 0;
   virtual KEY key() const = 0;
-  virtual void print(::std::ostream& out) const = 0;
+  virtual void print(std::ostream& out) const = 0;
 };
 
 

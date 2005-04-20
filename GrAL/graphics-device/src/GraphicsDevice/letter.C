@@ -9,7 +9,7 @@
 
 namespace GrAL { 
 
-typedef ::std::list<geom_segment> segment_list;
+typedef std::list<geom_segment> segment_list;
 
 
 static void make_alist(segment_list& l,RenderableGeom::coord_type const& offset)

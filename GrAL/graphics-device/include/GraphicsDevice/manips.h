@@ -72,13 +72,13 @@ inline void EndTransformation(rendering_language& L) { L.end_transformation();}
  */
 
 /*! \ingroup renderermanip1 */
-inline void begin_group(const ::std::string& name, rendering_language& L)
+inline void begin_group(const std::string& name, rendering_language& L)
  { L.begin_group(name);}
 
 /*! \ingroup renderermanip1 */
-inline DevManip1< ::std::string>
-BeginGroup(const ::std::string& name)
-{ return (DevManip1< ::std::string>(name, &begin_group)); }
+inline DevManip1< std::string>
+BeginGroup(const std::string& name)
+{ return (DevManip1< std::string>(name, &begin_group)); }
 
 /*! \ingroup renderermanip1 */
 inline void begin_attribute(const Attribute& A, rendering_language& L)
@@ -111,12 +111,12 @@ Pause(const double& sec)
 
 
 /*! \ingroup renderermanip1 */
-inline void geom_from_file(const ::std::string& file, rendering_language& L)
+inline void geom_from_file(const std::string& file, rendering_language& L)
  { L.read_from_file(file);}
 
 /*! \ingroup renderermanip1 */
-inline DevManip1< ::std::string> GeomFromFile(const ::std::string& file)
-{ return (DevManip1< ::std::string>(file, &geom_from_file)); }
+inline DevManip1< std::string> GeomFromFile(const std::string& file)
+{ return (DevManip1< std::string>(file, &geom_from_file)); }
 
 
 } // namespace GrAL 

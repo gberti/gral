@@ -65,7 +65,7 @@ public:
   typedef  TypedMutator<T> base;
   NotifyOnChangeMutator(T& t, controlable& c)
     : base(t), controlee(c) {}
-  virtual void read(::std::istream& in) {
+  virtual void read(std::istream& in) {
     T old(base::v);
     base::read(in);
     if( old != base::v) controlee.notify();
@@ -86,9 +86,9 @@ class SetTrueOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   SetTrueOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(::std::istream&) { v = true;}
-  virtual void print(::std::ostream& out) const { out << v;}
-  virtual void print(::std::ostream& out, const ::std::string& name) const 
+  virtual void read(std::istream&) { v = true;}
+  virtual void print(std::ostream& out) const { out << v;}
+  virtual void print(std::ostream& out, const std::string& name) const 
     { if(v) out << name;} 
 };
 
@@ -97,9 +97,9 @@ class SetFalseOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   SetFalseOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(::std::istream&) { v = false;}
-  virtual void print(::std::ostream& out) const { out << !v;}
-  virtual void print(::std::ostream& out, const ::std::string& name) const 
+  virtual void read(std::istream&) { v = false;}
+  virtual void print(std::ostream& out) const { out << !v;}
+  virtual void print(std::ostream& out, const std::string& name) const 
     { if(!v) out << name;} 
 };
 
@@ -116,9 +116,9 @@ class FlipOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   FlipOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(::std::istream&) { v = !v;}
-  virtual void print(::std::ostream& out) const { out << v;}
-  virtual void print(::std::ostream& out, const ::std::string& name) const 
+  virtual void read(std::istream&) { v = !v;}
+  virtual void print(std::ostream& out) const { out << v;}
+  virtual void print(std::ostream& out, const std::string& name) const 
     {  out << name;} 
 };
 
@@ -138,7 +138,7 @@ protected:
   Tsec  deflt;
 public:
   SetOnReadMutator(T& t, Tsec& t2, Tsec def) : tm(t), v2(t2), deflt(def) {}
-  virtual void read(::std::istream& in) { tm::read(in); v2 = deflt;} 
+  virtual void read(std::istream& in) { tm::read(in); v2 = deflt;} 
 };
 
 
@@ -148,13 +148,13 @@ public:
 template<class T>
 class CommentedMutator : public TypedMutator<T> {
   typedef TypedMutator<T> tm;
-  ::std::string comment;
+  std::string comment;
 public:
-  CommentedMutator(T& t, const ::std::string& c) 
+  CommentedMutator(T& t, const std::string& c) 
     //: tm(t), comment(c) {}
     : TypedMutator<T>(t), comment(c) {}
   //  virtual void print(ostream& out) const { tm::print(out); out  << "  " << comment;} 
-  virtual ::std::string description() const { return comment;}
+  virtual std::string description() const { return comment;}
 };
 
 /*! \brief Mutator which prints a message to an ostream if read.
@@ -168,16 +168,16 @@ public:
 
 class MessageOnReadMutator : public Mutator {
 private:
-  ::std::ostream* out;
-  ::std::string   text;
+  std::ostream* out;
+  std::string   text;
 public:
-  MessageOnReadMutator(::std::ostream & ou, ::std::string const& txt) 
+  MessageOnReadMutator(std::ostream & ou, std::string const& txt) 
     : out(&ou), text(txt) {}
-  virtual void read (::std::istream& in) { (*out) << text; exit(0); }
-  virtual void print(::std::ostream&   ) const {}
-  virtual void print(::std::ostream& , ::std::string const& ) const {}
+  virtual void read (std::istream& in) { (*out) << text; exit(0); }
+  virtual void print(std::ostream&   ) const {}
+  virtual void print(std::ostream& , std::string const& ) const {}
 
-  virtual ::std::string vartypename() const { return "";}
+  virtual std::string vartypename() const { return "";}
 
 }; 
 
@@ -202,7 +202,7 @@ inline boost::shared_ptr<Mutator>  GetMutator(T& t) { return boost::shared_ptr<M
     \ingroup mutatorcreators 
  */
 template<class T>
-inline boost::shared_ptr<Mutator> GetMutator(T& t, ::std::string const& comment) 
+inline boost::shared_ptr<Mutator> GetMutator(T& t, std::string const& comment) 
 { return  boost::shared_ptr<Mutator>(new CommentedMutator<T>(t,comment));}
 
 /*! \brief Creator function for CommentedMutator
@@ -272,7 +272,7 @@ GetCommentedMutator(T& t, std::string const& comment)
 template<class T>
 inline boost::shared_ptr<Mutator> 
 GetCommentedMutator(T& t, const char* comment)
-{ return  boost::shared_ptr<Mutator>(new  CommentedMutator<T>(t,::std::string(comment))); }
+{ return  boost::shared_ptr<Mutator>(new  CommentedMutator<T>(t,std::string(comment))); }
 
 
 } // namespace GrAL 

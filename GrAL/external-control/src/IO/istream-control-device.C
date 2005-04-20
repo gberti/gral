@@ -9,21 +9,21 @@ namespace GrAL {
 
 
   istream_control_device_impl::istream_control_device_impl(boost::shared_ptr<std::istream> i, 
-							 ::std::string const& nm, 
-							 ::std::string const& ind /* = "" */)
+							 std::string const& nm, 
+							 std::string const& ind /* = "" */)
   : in(i), name_(nm), indent_(ind) {}
 
 std::string istream_control_device_impl::name() const { return name_ ;}
 
 void istream_control_device_impl::update()        {  MV.ReadValues(*in);}
 
-  void istream_control_device_impl::add(const ::std::string& name, boost::shared_ptr<Mutator> value) 
+  void istream_control_device_impl::add(const std::string& name, boost::shared_ptr<Mutator> value) 
 { MV.AddVariable(name,value);}
 
 void istream_control_device_impl::register_at(ControlDevice& Ctrl) { register_at(Ctrl,"");}
 
 void istream_control_device_impl::register_at(ControlDevice& Ctrl, 
-                                              const ::std::string& prefix) {
+                                              const std::string& prefix) {
   Ctrl.add( ( (prefix == "") || (name() == "") ? prefix : prefix + "-") +name(), 
             GetMutator(*this));
 }
@@ -33,10 +33,10 @@ void istream_control_device_impl::attach_to(std::istream& in_new) {
   boost::swap(in, in_new_p);
 } 
 
-void istream_control_device_impl::print_values(::std::ostream& out) const { MV.PrintValues(out);}
+void istream_control_device_impl::print_values(std::ostream& out) const { MV.PrintValues(out);}
 
-void istream_control_device_impl::print_values(::std::ostream& out, 
-                                               ::std::string const& ind) const 
+void istream_control_device_impl::print_values(std::ostream& out, 
+                                               std::string const& ind) const 
 { MV.PrintValues(out, ind, " ");}
 
 
@@ -52,30 +52,30 @@ istream_control_device_impl::get_sub_device(std::string const& nm)
   return sub;
 }
 
-void istream_control_device_impl::read(::std::istream& in) {
+void istream_control_device_impl::read(std::istream& in) {
   skip_comment(in);
   char c;
   in >> c;
   REQUIRE( (c == '{'),"control-device " << name()  << "no leading {!\n",1);
   //  if( c == '{') {
-    (in >> ::std::ws).get(c);
+    (in >> std::ws).get(c);
     while( c != '}') {
       in.putback(c);
     
       skip_comment(in);
-      (in >> ::std::ws).get(c); 
+      (in >> std::ws).get(c); 
       if( c== '}') return;
       in.putback(c);
 
       MV.ReadVariable(in);
-      (in >> ::std::ws).get(c); 
+      (in >> std::ws).get(c); 
      }
     //  }
-    print_unrecognized(::std::cerr);
+    print_unrecognized(std::cerr);
    
 }
 
-void istream_control_device_impl::print(::std::ostream& out) const {
+void istream_control_device_impl::print(std::ostream& out) const {
   out <<  '\n' << indent_ << "{\n";
   print_values(out, indent_);
   out << indent_ << "}";

@@ -24,7 +24,7 @@ namespace GrAL {
      - set interactively via a GUI or a command interpreter
 
      \todo
-      Fix the memory leak in control_device_impl::add(::std::string const&, Mutator* m).
+      Fix the memory leak in control_device_impl::add(std::string const&, Mutator* m).
       (The space m points to is lost forever.)
 */
 

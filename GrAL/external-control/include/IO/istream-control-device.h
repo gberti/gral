@@ -37,14 +37,14 @@ public:
   virtual void print_values(std::ostream& out) const;
   virtual void print_values(std::ostream& out, std::string const& ind) const; 
 
-  virtual void read(::std::istream& in);
-  virtual void print(::std::ostream& out) const;
-  virtual void print_unrecognized(::std::ostream& out) const;
-  virtual void print_unrecognized(::std::ostream& out, ::std::string const& prefix) const;
+  virtual void read(std::istream& in);
+  virtual void print(std::ostream& out) const;
+  virtual void print_unrecognized(std::ostream& out) const;
+  virtual void print_unrecognized(std::ostream& out, std::string const& prefix) const;
 
-  friend ::std::istream& operator>>(::std::istream& in,  self& rhs) 
+  friend std::istream& operator>>(std::istream& in,  self& rhs) 
     { rhs.read(in);   return in;}
-  friend ::std::ostream& operator<<(::std::ostream& out, const self& rhs) 
+  friend std::ostream& operator<<(std::ostream& out, const self& rhs) 
     { rhs.print(out); return out;}
 
 protected:

@@ -26,7 +26,7 @@ public:
   //  friend geom_group& operator<<(geom_group& grp, const RenderableGeom& g) 
   //   {  return grp.add_geom(g);}
 private:
-  ::std::list<RenderableGeom> geoms;
+  std::list<RenderableGeom> geoms;
 };
 
 } // namespace GrAL 

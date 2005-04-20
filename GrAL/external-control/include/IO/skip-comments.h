@@ -14,20 +14,20 @@ namespace GrAL {
 
 class skip_comments_istream {
 public:
-  skip_comments_istream(::std::istream& in, 
+  skip_comments_istream(std::istream& in, 
 			char comment_begin = '#',
 			char comment_end   = '\n') 
     : in_(&in),
       comment_begin_(comment_begin), 
       comment_end_(comment_end) {}
  
-  ::std::istream& the_istream() { return skip_comments(*in_);} 
+  std::istream& the_istream() { return skip_comments(*in_);} 
   char begin_comment() const {return comment_begin_;}
 
-  ::std::istream& skip_comments(::std::istream& in) 
+  std::istream& skip_comments(std::istream& in) 
   {
     while(true) {
-      in >> ::std::ws;
+      in >> std::ws;
       if (in.peek() != comment_begin_)
 	break;
       in.get();
@@ -37,11 +37,11 @@ public:
   } 
 
 private:
-  ::std::istream* in_;
+  std::istream* in_;
   char comment_begin_, comment_end_;
 };
 
-inline ::std::istream& skip_comment(::std::istream& in) {
+inline std::istream& skip_comment(std::istream& in) {
   if(in) {
     skip_comments_istream sk(in);
     sk.skip_comments(in);
@@ -67,7 +67,7 @@ inline skip_comments_istream& operator>>(skip_comments_istream& in, T& t)
 // it would be read as one string.
 
 template<>
-skip_comments_istream& operator>>(skip_comments_istream& in, ::std::string& s);
+skip_comments_istream& operator>>(skip_comments_istream& in, std::string& s);
 
 } // namespace GrAL 
 

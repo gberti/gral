@@ -94,19 +94,19 @@ public:
   MutableVars();
   ~MutableVars();
 
-  void AddVariable(::std::string const& name, boost::shared_ptr<Mutator> m);
+  void AddVariable(std::string const& name, boost::shared_ptr<Mutator> m);
   void AddVariable(char        const* name,   boost::shared_ptr<Mutator> m);
-  void ReadVariable(::std::istream& is);
-  void ReadValues  (::std::istream& in);
-  void PrintValues (::std::ostream& out,
-                    ::std::string const& prefix = "",
-                    ::std::string const& sep = " ") const;
+  void ReadVariable(std::istream& is);
+  void ReadValues  (std::istream& in);
+  void PrintValues (std::ostream& out,
+                    std::string const& prefix = "",
+                    std::string const& sep = " ") const;
   bool HasUnrecognized() const;
-  void PrintUnrecognized(::std::ostream& out) const;
+  void PrintUnrecognized(std::ostream& out) const;
  
   unsigned size() const;
-  bool     defined   (::std::string const& nm) const;
-  boost::shared_ptr<Mutator> getMutator(::std::string const& nm);
+  bool     defined   (std::string const& nm) const;
+  boost::shared_ptr<Mutator> getMutator(std::string const& nm);
   
   const_iterator begin() const { return table->begin();}
   const_iterator end()   const { return table->end();}

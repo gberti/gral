@@ -11,7 +11,7 @@ class oogl : public rendering_language {
 private:
   oogl(const oogl& ) {}
 public:
-  oogl(::std::ostream* out);
+  oogl(std::ostream* out);
   oogl() : rendering_language() {}
   virtual oogl* clone() const;
 
@@ -21,13 +21,13 @@ public:
   virtual void end_attribute();
   virtual void begin_object(const RenderableGeom& Obj) ;
   virtual void end_object() ;
-  virtual void begin_group(const ::std::string& name);
+  virtual void begin_group(const std::string& name);
   virtual void end_group();
   virtual void begin_block();
   virtual void end_block();
   
   virtual void pause(double seconds);
-  virtual void read_from_file(const ::std::string& file);
+  virtual void read_from_file(const std::string& file);
   void  write_attribute(const Attribute& A) ;
   void  write_transformation(const Transformation& T);
   

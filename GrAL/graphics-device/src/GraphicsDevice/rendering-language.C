@@ -12,9 +12,9 @@ namespace GrAL {
 
 class rlang_internals {
 public:
-  ::std::ostream* out;
-  ::std::stack<Transformation, ::std::vector<Transformation> > todo_trafo;
-  rlang_internals(::std::ostream* o) : out(o), todo_trafo() {}
+  std::ostream* out;
+  std::stack<Transformation, std::vector<Transformation> > todo_trafo;
+  rlang_internals(std::ostream* o) : out(o), todo_trafo() {}
 };
 
 rlang_internals*  copy_traits<rlang_internals>::clone(rlang_internals const& t)
@@ -23,10 +23,10 @@ void  copy_traits<rlang_internals>::destroy(rlang_internals      * t)
 { delete t;}
 
 
-rendering_language::rendering_language(::std::ostream* out) : state(new rlang_internals(out)) {}
+rendering_language::rendering_language(std::ostream* out) : state(new rlang_internals(out)) {}
 rendering_language::~rendering_language() {}
 
-void rendering_language::set_stream(::std::ostream* out) { state->out = out;}
+void rendering_language::set_stream(std::ostream* out) { state->out = out;}
 std::ostream& rendering_language::the_stream()
 {  return (*(state->out)); }
 
@@ -58,7 +58,7 @@ void rendering_language::filter(const RenderableGeom& Obj)
   if( Obj.HasTrafo()) end_transformation();
   if( Obj.HasAttr())  end_attribute();
 
-  the_stream() << ::std::endl;
+  the_stream() << std::endl;
 }
 
 

@@ -15,7 +15,7 @@ namespace GrAL {
 Commandline::Commandline(int argc, char* argv[]) : commands("") {
   //  ostringstream cmds;
 #ifdef GRAL_HAS_SSTREAM
-  ::std::ostringstream cmds;
+  std::ostringstream cmds;
   for(int i = 1; i < argc; ++i)
     cmds << argv[i] << " ";
   cmds << '\n';
@@ -24,7 +24,7 @@ Commandline::Commandline(int argc, char* argv[]) : commands("") {
   ostrstream cmds;
   for(int i = 1; i < argc; ++i)
     cmds << argv[i] << " ";
-  cmds << '\n' << ::std::ends;
+  cmds << '\n' << std::ends;
   int n = strlen(cmds.str());
   char* copy = new char[n+1];
   strcpy(copy,cmds.str());
