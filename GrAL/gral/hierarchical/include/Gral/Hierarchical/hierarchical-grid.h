@@ -258,6 +258,10 @@ namespace hierarchical {
     ref_ptr<flat_grid_type const> FlatGrid(level_handle lev) const   
     { cv(lev); return  ref_ptr<flat_grid_type const>(grids(lev));}
 
+    //! Get flat grid of coarsest level
+    ref_ptr<flat_grid_type const> const CoarsestGrid() const { return FlatGrid(coarsest_level());}
+    //! Get flat grid of finest level
+    ref_ptr<flat_grid_type const> const FinestGrid()   const { return FlatGrid(finest_level  ());}
  
     //! Equivalent to <tt> num_of_levels() == 0 </tt>
     bool  empty() const { return num_of_levels()==0;}
