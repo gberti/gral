@@ -62,6 +62,7 @@ void MutableVars::ReadVariable(std::istream& is)
     if( (it = table->find(s)) != table->end()) {
       //  cerr << "found: " << s << endl;
       (*it).second->read(is);
+      (*it).second->run_checker();
     }
     else if (s != "\n")
       unrecognized->push_back(s);

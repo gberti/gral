@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_CONTROLLER_H
-#define NMWR_GB_CONTROLLER_H
+#ifndef GRAL_GB_EXTERNAL_CONTROL_CONTROLLER_H
+#define GRAL_GB_EXTERNAL_CONTROL_CONTROLLER_H
 
 
 
@@ -10,8 +10,8 @@
 #include <string> 
 
 #include <boost/shared_ptr.hpp>
-
 #include "IO/mutator.h"
+#include "IO/checker.h"
 
 namespace GrAL {
 
@@ -23,9 +23,9 @@ namespace GrAL {
      - read from a file
      - set interactively via a GUI or a command interpreter
 
-     \todo
-      Fix the memory leak in control_device_impl::add(std::string const&, Mutator* m).
-      (The space m points to is lost forever.)
+     \fixed 21-04-2005
+      Fixed the memory leak in control_device_impl::add(std::string const&, Mutator* m)
+      and related classes by using <a target="parent" href="http://www.boost.org/libs/smart_ptr/shared_ptr.htm">boost::shared_ptr</a>.
 */
 
 
@@ -65,13 +65,21 @@ public:
   void add(std::string const& nm, boost::shared_ptr<Mutator> value_ref);
   //! Add \c value_ref under name \c nm to this device
   void add(char        const* nm, boost::shared_ptr<Mutator> value_ref);
+  //! Add \c value_ref under name \c nm with checking \c c to this device
+  void add(std::string const& nm, boost::shared_ptr<Mutator> value_ref, Checker c);
+  //! Add \c value_ref under name \c nm with checking \c c to this device
+  void add(char        const* nm, boost::shared_ptr<Mutator> value_ref, Checker c);
 
+  //! Read & update all registered parameters
   void update();
+
+  //! print current values of parameters (for debugging)
   void print_values      (std::ostream&) const;
+  //! print all keys which could not be found during last update
   void print_unrecognized(std::ostream&) const;
   void attach_to         (std::istream& in);
 
-
+  //! Make this device controled by another device.
   void register_at(ControlDevice&, std::string const& prefix);
 
   std::string name() const;
@@ -83,13 +91,34 @@ private:
 };
 
 
-//! register variable t to ControlDevice
+//! register variable \c t to ControlDevice \c Ctrl
 template<class T>
 inline void RegisterAt(ControlDevice& Ctrl, std::string const& name, T& t)
 { 
   boost::shared_ptr<Mutator> p(new TypedMutator<T>(t));
   Ctrl.add(name, p); 
 }
+
+//! register variable \c t with checks \c c to ControlDevice  \c Ctrl
+template<class T>
+inline void RegisterAt(ControlDevice& Ctrl, std::string const& name, T& t, Checker c)
+{ 
+  boost::shared_ptr<Mutator> p(new TypedMutator<T>(t));
+  p->set_checker(c);
+  Ctrl.add(name, p); 
+}
+
+//! register variable t with limits checks to ControlDevice \c Ctrl
+template<class T>
+inline void RegisterAt(ControlDevice& Ctrl, std::string const& name, T& t, T const& lower_bound, T const& upper_bound)
+{ 
+  boost::shared_ptr<Mutator> p(new TypedMutator<T>(t));
+  p->set_checker(GetLimitsChecker(t, lower_bound, upper_bound, name));
+  Ctrl.add(name, p); 
+}
+
+
+
 
 //! register variable t to ControlDevice
 template<class T>

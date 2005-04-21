@@ -1,6 +1,8 @@
 n 4
+
 sub1 
  {
+
 #  flag-off 0
 # flag-on 0
  sub1.1 
@@ -15,5 +17,10 @@ sub1
   }
  #x 1
  y 2
+ checked-x 1.5
+ checked-y 3.1
+ checked-upper-y 4.1	
+ checked-lower-y -3.0
  }
+
 

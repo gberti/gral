@@ -4,13 +4,14 @@
 
 // $LICENSE
 
+#include "IO/checker-base.h"
+
 #include <iostream>
 #include <string>
 
+
 namespace GrAL {
 
-
-//! Placeholder-class for arbitrary variables
 
 /*! Placeholder-class for arbitrary variables
     that (for example) may be read and written from or to streams, resp.
@@ -25,13 +26,19 @@ public:
   virtual std::string vartypename() const = 0;
   virtual std::string description() const;
   virtual ~Mutator() {}
+
+  void run_checker() { c.check(); }
+  void set_checker(Checker _c) { c = _c;}
+
+private:
+  Checker c;
 };
 
 
 class ControlDevice;
 
 
-/*! abstract base for everything that has some parameters
+  /*! abstract base for everything that has some parameters
     to be controled externally. The implementation of 
     register_at will use a concrete implementation
     of Mutator
