@@ -1,4 +1,5 @@
-include  $(CONFIG)
+CONFIG=$(shell pwd)/../../mk.config
+include $(CONFIG)
 
 
 LOCALSOURCES= control-device.C istream-control-device.C\
