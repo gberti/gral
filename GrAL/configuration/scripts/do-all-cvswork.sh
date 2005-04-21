@@ -17,7 +17,7 @@ do
  echo "$1" >> tmp.sh;
  # cat tmp.sh;
  chmod ugo+x tmp.sh;
- ./tmp.sh;
+ ./tmp.sh $i;
  rm tmp.sh;
  echo "";
  cd ${cvswork}
