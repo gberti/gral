@@ -36,7 +36,7 @@ namespace GrAL {
 class control_device_impl : public controlable {
 public:
   virtual void update() = 0;
-  virtual void add(std::string const&, boost::shared_ptr<Mutator>) = 0;
+  virtual void add(std::string const&, Mutator) = 0;
 
   virtual void print_values(std::ostream&) const = 0;
 
@@ -62,13 +62,13 @@ public:
   ControlDevice(boost::shared_ptr<control_device_impl> imp) : impl(imp) {}
 
   //! Add \c value_ref under name \c nm to this device
-  void add(std::string const& nm, boost::shared_ptr<Mutator> value_ref);
+  void add(std::string const& nm, Mutator value_ref);
   //! Add \c value_ref under name \c nm to this device
-  void add(char        const* nm, boost::shared_ptr<Mutator> value_ref);
+  void add(char        const* nm, Mutator value_ref);
   //! Add \c value_ref under name \c nm with checking \c c to this device
-  void add(std::string const& nm, boost::shared_ptr<Mutator> value_ref, Checker c);
+  void add(std::string const& nm, Mutator value_ref, Checker c);
   //! Add \c value_ref under name \c nm with checking \c c to this device
-  void add(char        const* nm, boost::shared_ptr<Mutator> value_ref, Checker c);
+  void add(char        const* nm, Mutator value_ref, Checker c);
 
   //! Read & update all registered parameters
   void update();
@@ -91,39 +91,55 @@ private:
 };
 
 
-//! register variable \c t to ControlDevice \c Ctrl
+  /*! \defgroup controldeviceregistrators  ControlDevice variable registration functions 
+
+      \brief Convenience functions to wrap the most common cases of registring a variable to a control device.
+
+      For examples of using these  functions, see <tt> \ref ex1.C</tt>.
+  */
+
+  /*! \brief register variable \c t to ControlDevice \c Ctrl
+
+      \ingroup  controldeviceregistrators
+   */
 template<class T>
 inline void RegisterAt(ControlDevice& Ctrl, std::string const& name, T& t)
 { 
-  boost::shared_ptr<Mutator> p(new TypedMutator<T>(t));
-  Ctrl.add(name, p); 
+  Ctrl.add(name, GetMutator(t)); 
 }
 
-//! register variable \c t with checks \c c to ControlDevice  \c Ctrl
+  /*! \brief  register variable \c t with checks \c c to ControlDevice  \c Ctrl
+
+      \ingroup  controldeviceregistrators
+  */
 template<class T>
 inline void RegisterAt(ControlDevice& Ctrl, std::string const& name, T& t, Checker c)
 { 
-  boost::shared_ptr<Mutator> p(new TypedMutator<T>(t));
-  p->set_checker(c);
-  Ctrl.add(name, p); 
+  Mutator m = GetMutator(t);
+  m.set_checker(c);
+  Ctrl.add(name, m); 
 }
 
-//! register variable t with limits checks to ControlDevice \c Ctrl
+  /*! \brief  register variable t with limits checks to ControlDevice \c Ctrl
+ 
+      \ingroup  controldeviceregistrators
+   */
 template<class T>
 inline void RegisterAt(ControlDevice& Ctrl, std::string const& name, T& t, T const& lower_bound, T const& upper_bound)
 { 
-  boost::shared_ptr<Mutator> p(new TypedMutator<T>(t));
-  p->set_checker(GetLimitsChecker(t, lower_bound, upper_bound, name));
-  Ctrl.add(name, p); 
+  Mutator  m = GetMutator(t);
+  m.set_checker(GetLimitsChecker(t, lower_bound, upper_bound, name));
+  Ctrl.add(name, m); 
 }
 
 
+  /*! \brief register variable t to ControlDevice
 
-
-//! register variable t to ControlDevice
+      \ingroup  controldeviceregistrators
+  */
 template<class T>
 inline void RegisterAt(ControlDevice& Ctrl, char const*   name, T& t)
-{  Ctrl.add(name, boost::shared_ptr<Mutator>(new TypedMutator<T>(t))); }
+{  Ctrl.add(name, GetMutator(t)); }
 
 
 /*! \defgroup ControlDeviceCreators Creator functions for ControlDevice
@@ -135,11 +151,13 @@ inline void RegisterAt(ControlDevice& Ctrl, char const*   name, T& t)
     
     \ingroup ControlDeviceCreators 
  */
-extern ControlDevice GetStreamDevice(std::istream* in, 
+extern ControlDevice GetStreamDevice(std::istream& in, 
                                      std::string const& name = "");
 
 
 /*! \brief Create a  ControlDevice that reads name-value-pairs from a file
+
+    \ingroup ControlDeviceCreators 
  */
 extern ControlDevice GetFileControlDevice(char const*   filename, 
                                           std::string const& name);

@@ -28,7 +28,7 @@ public:
 
   virtual void update();
   
-  virtual void add(const std::string& name, boost::shared_ptr<Mutator> value);
+  virtual void add(const std::string& name, Mutator value);
 
   virtual void register_at(ControlDevice& Ctrl);
   virtual void register_at(ControlDevice& Ctrl, const std::string& prefix);

@@ -71,7 +71,7 @@ namespace GrAL {
 // from polymorphism (derived classes are automatically
 // generated via templates in class TypedMutator).
 
-  class string_table_1: public std::map<std::string, boost::shared_ptr<Mutator>,  std::less<std::string> > {
+  class string_table_1: public std::map<std::string, Mutator,  std::less<std::string> > {
   public:
     string_table_1() {}
   };
@@ -94,8 +94,8 @@ public:
   MutableVars();
   ~MutableVars();
 
-  void AddVariable(std::string const& name, boost::shared_ptr<Mutator> m);
-  void AddVariable(char        const* name,   boost::shared_ptr<Mutator> m);
+  void AddVariable(std::string const& name, Mutator m);
+  void AddVariable(char        const* name, Mutator m);
   void ReadVariable(std::istream& is);
   void ReadValues  (std::istream& in);
   void PrintValues (std::ostream& out,
@@ -106,7 +106,7 @@ public:
  
   unsigned size() const;
   bool     defined   (std::string const& nm) const;
-  boost::shared_ptr<Mutator> getMutator(std::string const& nm);
+  Mutator  getMutator(std::string const& nm);
   
   const_iterator begin() const { return table->begin();}
   const_iterator end()   const { return table->end();}

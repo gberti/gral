@@ -10,7 +10,8 @@
 #include <iostream>
 
 #include <boost/shared_ptr.hpp>
-//#include <stdlib.h>
+#include "Utility/ref-ptr.h" // for null_deleter
+ 
 
 #include "Config/compiler-config.h"
 #include "IO/mutator-base.h"
@@ -37,8 +38,7 @@ namespace GrAL {
     \see mutatorcreators
  */
 template<class T>
-class TypedMutator : public Mutator {
-  //protected:
+class TypedMutator : public mutator_impl {
 public:
   T& v;
 public:
@@ -162,24 +162,27 @@ public:
   This is useful for adding help messages to command-line control devices, e.g. :
   \code
   string help = "Usage: foobar -f <file> -n <number> \n";
-  Ctrl.add("-?", new MessageOnReadMutator(cerr,help));
+  Ctrl.add("-?", GetMessageOnReadMutator(cerr,help));
  \endcode
 */
 
-class MessageOnReadMutator : public Mutator {
+class MessageOnReadMutator : public mutator_impl {
 private:
-  std::ostream* out;
-  std::string   text;
+  boost::shared_ptr<std::ostream> out;
+  std::string                     text;
+  bool                            do_ex;
 public:
-  MessageOnReadMutator(std::ostream & ou, std::string const& txt) 
-    : out(&ou), text(txt) {}
-  virtual void read (std::istream& in) { (*out) << text; exit(0); }
+  MessageOnReadMutator(std::ostream & ou, std::string const& txt, bool do_exit = true) 
+    : out(&ou, null_deleter()), text(txt), do_ex(do_exit) {}
+  virtual void read (std::istream& in) { (*out) << text; if(do_ex) exit(0); }
   virtual void print(std::ostream&   ) const {}
   virtual void print(std::ostream& , std::string const& ) const {}
 
   virtual std::string vartypename() const { return "";}
 
 }; 
+
+
 
 ////////////////////////////////
 // Mutator-generating Functions
@@ -189,12 +192,15 @@ public:
 
 */
 
-/*! \brief Creator function for TypedMutator
+/*! \brief Creator function for the basic TypedMutator
     
     \ingroup mutatorcreators 
+
+    This function is rarely used directly, 
+    because it is implicitely called by \ref RegisterAt().
  */
 template<class T>
-inline boost::shared_ptr<Mutator>  GetMutator(T& t) { return boost::shared_ptr<Mutator>(new TypedMutator<T>(t));}
+inline Mutator  GetMutator(T& t) { return Mutator(new TypedMutator<T>(t));}
 
 //!
 /*! \brief Creator function for CommentedMutator
@@ -202,77 +208,118 @@ inline boost::shared_ptr<Mutator>  GetMutator(T& t) { return boost::shared_ptr<M
     \ingroup mutatorcreators 
  */
 template<class T>
-inline boost::shared_ptr<Mutator> GetMutator(T& t, std::string const& comment) 
-{ return  boost::shared_ptr<Mutator>(new CommentedMutator<T>(t,comment));}
+inline Mutator GetMutator(T& t, std::string const& comment) 
+{ return  Mutator(new CommentedMutator<T>(t,comment));}
 
 /*! \brief Creator function for CommentedMutator
     
     \ingroup mutatorcreators 
  */
 template<class T>
-inline boost::shared_ptr<Mutator> 
-GetMutator(T& t, const char* comment) 
-{ return  boost::shared_ptr<Mutator>(new CommentedMutator<T>(t,comment));}
+inline Mutator GetMutator(T& t, const char* comment) 
+{ return  Mutator(new CommentedMutator<T>(t,comment));}
  
+
+/*! \brief Creator function for CommentedMutator
+    
+    \ingroup mutatorcreators 
+ */
+template<class T>
+inline Mutator GetCommentedMutator(T& t, std::string const& comment)
+{ return  Mutator(new  CommentedMutator<T>(t,comment)); }
+
+/*! \brief Creator function for CommentedMutator
+    
+    \ingroup mutatorcreators 
+ */
+template<class T>
+inline Mutator GetCommentedMutator(T& t, const char* comment)
+{ return  Mutator(new  CommentedMutator<T>(t,std::string(comment))); }
+
+
 /*! \brief Creator function for NotifyOnChangeMutator
     
     \ingroup mutatorcreators 
  */
 template<class T>
-inline boost::shared_ptr<Mutator> 
-GetNotifyingMutator(T& t, controlable& observ) 
-{ return boost::shared_ptr<Mutator>(new NotifyOnChangeMutator<T>(t,observ));}
+inline Mutator GetNotifyingMutator(T& t, controlable& observ) 
+{ return Mutator(new NotifyOnChangeMutator<T>(t,observ));}
 
 /*! \brief Creator function for SetTrueOnReadMutator
     
     \ingroup mutatorcreators 
  */
-inline boost::shared_ptr<Mutator> 
-GetTrueOnReadMutator(bool& t)
-{ return boost::shared_ptr<Mutator>(new SetTrueOnReadMutator(t));}
+inline Mutator GetTrueOnReadMutator(bool& t)
+{ return Mutator(new SetTrueOnReadMutator(t));}
 
 /*! \brief Creator function for SetFalseOnReadMutator
     
     \ingroup mutatorcreators 
  */
-inline boost::shared_ptr<Mutator> 
-GetFalseOnReadMutator(bool& t)
-{ return boost::shared_ptr<Mutator>(new SetFalseOnReadMutator(t));}
+inline Mutator GetFalseOnReadMutator(bool& t)
+{ return Mutator(new SetFalseOnReadMutator(t));}
 
 /*! \brief Creator function for FlipOnReadMutator
     
     \ingroup mutatorcreators 
  */
-inline boost::shared_ptr<Mutator> 
-GetFlipOnReadMutator(bool& t)
-{ return boost::shared_ptr<Mutator>(new FlipOnReadMutator(t));}
+inline Mutator GetFlipOnReadMutator(bool& t)
+{ return Mutator(new FlipOnReadMutator(t));}
 
 /*! \brief Creator function for SetOnReadMutator
     
     \ingroup mutatorcreators 
  */
 template<class T, class TObs>
-inline boost::shared_ptr<Mutator> 
-GetSetOnReadMutator(T& t, TObs& obs, TObs deflt)
-{ return boost::shared_ptr<Mutator>(new SetOnReadMutator<T,TObs>(t,obs,deflt)); }
+inline Mutator GetSetOnReadMutator(T& t, TObs& obs, TObs deflt)
+{ return Mutator(new SetOnReadMutator<T,TObs>(t,obs,deflt)); }
 
-/*! \brief Creator function for CommentedMutator
+
+
+/*! \brief Creator function for MessageOnReadMutator
     
     \ingroup mutatorcreators 
+    
+    Returns a Mutator which prints a message when read.
  */
-template<class T>
-inline boost::shared_ptr<Mutator> 
-GetCommentedMutator(T& t, std::string const& comment)
-{ return  boost::shared_ptr<Mutator>(new  CommentedMutator<T>(t,comment)); }
+inline Mutator GetMessageOnReadMutator(std::ostream & out, std::string const& txt)
+{ return Mutator(new MessageOnReadMutator(out, txt, false));}
 
-/*! \brief Creator function for CommentedMutator
+
+/*! \brief Creator function for MessageOnReadMutator
     
     \ingroup mutatorcreators 
+    
+    Returns a Mutator which prints a message when read.
+    This is very handy when implementing usage or help messages.
+
+   \par Example:
+   \code
+   ControlDevice Ctrl = ...
+   
+   string h;
+   h += "myprog:  Do something very useful.\n";
+   h += "Usage: myprog <option>\n";
+  
+   int n;
+   RegisterAt(Ctrl, "-n", n);
+   h += "  -n <int>  (Number of norks)\n";
+
+   int k;
+   RegisterAt(Ctrl, "-k", k);
+   h += "  -n <int>  (Number of knorks)\n";
+
+   Mutator help = GetMessageAndExitOnReadMutator(cout, h);
+   Ctrl.add("-h",     help);
+   Ctrl.add("-?",     help);
+   Ctrl.add("--help", help);
+
+   Ctrl.update();
+   \endcode
+
  */
-template<class T>
-inline boost::shared_ptr<Mutator> 
-GetCommentedMutator(T& t, const char* comment)
-{ return  boost::shared_ptr<Mutator>(new  CommentedMutator<T>(t,std::string(comment))); }
+inline Mutator GetMessageAndExitOnReadMutator(std::ostream & out, std::string const& txt)
+{ return Mutator(new MessageOnReadMutator(out, txt, true));}
 
 
 } // namespace GrAL 

@@ -21,7 +21,7 @@
 
 namespace GrAL {
 
-std::string Mutator::description() const { return std::string("");}
+std::string mutator_impl::description() const { return std::string("");}
 
 
 void ControlDevice::update() { impl->update(); print_unrecognized(std::cerr);}
@@ -32,22 +32,22 @@ void ControlDevice::print_unrecognized(std::ostream& out) const { impl->print_un
 
 void ControlDevice::attach_to(std::istream& in) { impl->attach_to(in);}
 
-  void ControlDevice::add(std::string const& name, boost::shared_ptr<Mutator> value_ref) 
+  void ControlDevice::add(std::string const& name, Mutator value_ref) 
 { impl->add(name,value_ref);}
 
-  void ControlDevice::add(std::string const& name, boost::shared_ptr<Mutator> value_ref, Checker c) 
+  void ControlDevice::add(std::string const& name, Mutator value_ref, Checker c) 
   { 
-    value_ref->set_checker(c); 
+    value_ref.set_checker(c); 
     add(name, value_ref);
   }
-  void ControlDevice::add(char        const* name, boost::shared_ptr<Mutator> value_ref, Checker c) 
+  void ControlDevice::add(char        const* name, Mutator value_ref, Checker c) 
   { 
-    value_ref->set_checker(c); 
+    value_ref.set_checker(c); 
     add(name, value_ref);
   }
 
 
-  void ControlDevice::add(char const*   nm, boost::shared_ptr<Mutator> value_ref)
+  void ControlDevice::add(char const*   nm, Mutator  value_ref)
 { add(std::string(nm),value_ref);}
 
 void ControlDevice::register_at(ControlDevice& Ctrl, std::string const& prefix)
@@ -89,17 +89,17 @@ ControlDevice GetFileControlDevice(const char* filename, const std::string& name
 
 
 
-ControlDevice GetDuplexControlDevice(std::istream& in2,
+ControlDevice GetDuplexControlDevice(std::istream& in1,
 				     const char* filename, const std::string& name) {
-  boost::shared_ptr<std::istream> in1p(new std::ifstream(filename));
-  boost::shared_ptr<std::istream> in2p(&in2, null_deleter());
+  boost::shared_ptr<std::istream> in1p(&in1, null_deleter());
+  boost::shared_ptr<std::istream> in2p(new std::ifstream(filename));
   return ControlDevice(boost::shared_ptr<control_device_impl>(new multi_istream_control_device(in1p,in2p,name)));
 }
 
   
-  ControlDevice GetDuplexControlDevice(boost::shared_ptr<std::istream> in2,
+  ControlDevice GetDuplexControlDevice(boost::shared_ptr<std::istream> in1,
 				     const char* filename, const std::string& name) {
-    boost::shared_ptr<std::istream> in1(new std::ifstream(filename));
+    boost::shared_ptr<std::istream> in2(new std::ifstream(filename));
     return ControlDevice(boost::shared_ptr<control_device_impl>(new multi_istream_control_device(in1,in2,name)));
   }
   
