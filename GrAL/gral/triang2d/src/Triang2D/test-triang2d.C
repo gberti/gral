@@ -9,6 +9,7 @@
 
 #include "Gral/Algorithms/cell-neighbor-search.h"
 
+#include <vector>
 
 namespace GrAL {
 
@@ -94,8 +95,8 @@ void TestTriang2D::test_iterators(const Triang2D& CC,
    }
 
   // calculate cell neighbors
-  int* nbs = new int[3*CC.NumOfCells()];
-  nb_type Nbs(nbs);
+  std::vector<int> nbs(3*CC.NumOfCells());
+  nb_type Nbs(&nbs[0]);
   CalculateNeighborCells(Nbs,CC);
 
   out << CC.NumOfVertices() << " vertices,  " << CC.NumOfCells()  << " cells.\n";
