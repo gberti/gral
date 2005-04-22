@@ -44,11 +44,15 @@ int main(int argc, char* argv[]) {
 
   bool flag = true;
   bool print_variables = true;
- 
+
+  std::string  h = "ex1.exe: Example program for demonstrating features of external control\n";
   Ctrl.add("print",GetCommentedMutator(print_variables,
 				       "<bool> : print values of variables?"));
+  h += " print  (demonstrates mutator with comments)\n";
+
   Ctrl.add("n", GetMutator(n));
   Ctrl.add("n", GetMutator(m)); // m will be altered, not n!
+  h += " n      (demonstrates simple mutator)\n";
 
   // create a nested subdevice of level 1
   ControlDevice Ctrl1 = Ctrl.getSubDevice("sub1");
@@ -82,6 +86,12 @@ int main(int argc, char* argv[]) {
   Ctrl1_2.add("name1", GetMutator(name2_1));
   Ctrl1_2.add("name2", GetMutator(name2_2));
 
+  // Add usage/help message for the standard flags
+  Mutator help = GetMessageAndExitOnReadMutator(std::cout, h);
+  Ctrl.add("-h",     help);
+  Ctrl.add("-help",  help);
+  Ctrl.add("--help", help);
+  Ctrl.add("-?",     help);
 
   //---------------------------------------------------------
 
