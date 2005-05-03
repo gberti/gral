@@ -43,7 +43,7 @@ namespace STDEXT {
     typedef T* key_type;
     typedef T* argument_type;
     typedef size_t result_type;
-    size_t operator()(T* t) const { return reinterpret_cast<unsigned>(t);}
+    size_t operator()(T* t) const { return reinterpret_cast<size_t>(t);}
   };
  
   template<>
