@@ -44,9 +44,11 @@ typedef linear_cube_interpolator<geom3d_type, gf3d_type> interpolator3d_type;
 template class linear_cube_interpolator<geom3d_type, gf3d_type>;
 
 
+
 int main() {
   using namespace GrAL;
   using namespace std;
+
 
     
   interpolator2d_type::init();
@@ -147,6 +149,9 @@ int main() {
 
   {
     cout << "\n\n\n";
+
+    // cartesiannd::delta_map<3> d;
+    //cartesiannd::delta_map<3>::force_init();
  
     grid3d_type G(gt3d::index_type(3,3,3));
     geom3d_type GeomG(G);
