@@ -5,6 +5,9 @@
 # in the module directories
 ##################################
 
+# guarantee that all is the first target, such that a plain make does the Right Thing.
+first: all
+
 # configuration parameters
 # may be overrun in mk.config files
 
@@ -19,7 +22,7 @@ endif
 
 #//! compiler name, used in paths, possible values: kai, gcc
 ifndef CCNAME
-export CCNAME =gcc#      
+export CCNAME =gcc3.3#      
 endif
 
 ifndef DEBUG
