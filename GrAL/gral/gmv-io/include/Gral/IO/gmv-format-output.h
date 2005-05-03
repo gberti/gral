@@ -212,7 +212,7 @@ private:
 
   typedef heterogeneous_list::END END;
   void copy_grid_functions_rec(heterogeneous_list::List<END,END>) {}
- typedef heterogeneous_list::END END;
+
   void copy_materials_rec(heterogeneous_list::List<END,END>) {}
 
 

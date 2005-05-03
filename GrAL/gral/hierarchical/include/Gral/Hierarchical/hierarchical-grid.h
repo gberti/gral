@@ -662,7 +662,6 @@ namespace hierarchical {
     vertex_handle v(index_type const& iv) const { return vertex_handle(Flat().v(iv), base::level());}
     Vertex        V(index_type const& iv) const { return Vertex(base::TheGrid(), v(iv));}
 
-    typedef typename flat_element_type::local_index_type local_index_type;
     vertex_handle vl(local_index_type const& lv) const { return vertex_handle(Flat().vl(lv), base::level());}
     Vertex        Vl(local_index_type const& lv) const { return Vertex(base::TheGrid(), vl(lv));}
 
@@ -781,10 +780,8 @@ namespace hierarchical {
     vertex_handle v(index_type const& iv) const { return vertex_handle(Flat().v(iv), base::level());}
     Vertex        V(index_type const& iv) const { return Vertex(base::TheGrid(), v(iv));}
 
-    typedef typename flat_element_type::local_index_type local_index_type;
     vertex_handle vl(local_index_type const& lv) const { return vertex_handle(Flat().vl(lv), base::level());}
     Vertex        Vl(local_index_type const& lv) const { return Vertex(base::TheGrid(), vl(lv));}
-
 
     VertexOnElementIterator FirstVertex() const { return VertexOnElementIterator(*this);}
     VertexOnElementIterator EndVertex()   const { return VertexOnElementIterator(*this, Flat().EndVertex());}
