@@ -211,7 +211,6 @@ template<class CFG>
 class incidence_hull
 {
 public:
-  typedef typename CFG::grid_type    grid_type;
   typedef typename CFG::stencil_type stencil_type;
   typedef typename CFG::gt           gt;
   typedef typename gt::grid_type grid_type;
