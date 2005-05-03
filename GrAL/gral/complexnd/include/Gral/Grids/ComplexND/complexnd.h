@@ -1222,21 +1222,21 @@ namespace complexnd {
  
   //---- specializations for ANY --------------
   // no initialization possible for run-time determined dimension
-  inline ComplexND<ANY>::ComplexND()  {}
-  inline ComplexND<ANY>::ComplexND(unsigned dim) : mixin(dim),  incidences(dim+1) {}
+  template<> inline ComplexND<ANY>::ComplexND()  {}
+  template<> inline ComplexND<ANY>::ComplexND(unsigned dim) : mixin(dim),  incidences(dim+1) {}
 
-  inline ComplexND<ANY>::archetype_handle 
+  template<> inline ComplexND<ANY>::archetype_handle 
   ComplexND<ANY>::add_archetype(ComplexND<ANY>::archetype_type const& A)
   { archetypes.push_back(A);  return archetypes.size() -1;}
-  inline ComplexND<ANY>::archetype_handle ComplexND<ANY>::add_archetype() { return add_archetype(archetype_type(dimension()-1));}
+  template<> inline ComplexND<ANY>::archetype_handle ComplexND<ANY>::add_archetype() { return add_archetype(archetype_type(dimension()-1));}
 
   //---- specializations for D=0 --------------
-  inline ComplexND<0>::ComplexND(pointcloud p) : incidences(dimension() +1)
+  template<> inline ComplexND<0>::ComplexND(pointcloud p) : incidences(dimension() +1)
   { incidences[0].resize(p.NumOfVertices());}
 
   //---- specializations for D=1 --------------
   // cyclic polygon - could go into source file
-  inline ComplexND<1>::ComplexND(polygon p) : incidences(dimension() +1) 
+  template<> inline ComplexND<1>::ComplexND(polygon p) : incidences(dimension() +1) 
   {
     incidences[0].resize(p.NumOfVertices());
     incidences[1].resize(p.NumOfEdges());
@@ -1270,7 +1270,7 @@ namespace complexnd {
   }
 
 
-  inline ComplexND<1>::ComplexND( int edges[][2], int NE) : incidences(dimension() +1) 
+  template<> inline ComplexND<1>::ComplexND( int edges[][2], int NE) : incidences(dimension() +1) 
   {
     // NE = number of edges/vertices of polygon.
     // calculate Number of vertices from edges[]
