@@ -1260,7 +1260,6 @@ struct grid_types_cart2d {
 
   // 2D: Cell <-> Face
   typedef cell_handle             face_handle;
-  typedef Cell                    Face;
   typedef CellIterator            FaceIterator;
   typedef VertexOnCellIterator    VertexOnFaceIterator;
   typedef CellOnVertexIterator    FaceOnVertexIterator;
