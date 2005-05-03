@@ -259,7 +259,9 @@ namespace restricted_grid_view {
     baseCell            c;
   public:
     cell() : g(0) {}
-    cell(grid_type const& gg, baseCell cc = * gg.BaseGrid().FirstCell() ) 
+    cell(grid_type const& gg)
+      : g(&gg), c(* g->BaseGrid().FirstCell()) {}
+    cell(grid_type const& gg, baseCell cc)
       : g(&gg), c(cc) {}
 
     operator baseCell() const { return c;}
