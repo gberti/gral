@@ -494,7 +494,7 @@ public:
   enumerated_vertex_range(const grid_type& g) : base(g) {}
   enumerated_vertex_range(const base& b) : base(b) {}
   template<class RANGE>
-  enumerated_vertex_range(RANGE const& r) : base(r.TheGrid())  { copy(r); }
+  explicit enumerated_vertex_range(RANGE const& r) : base(r.TheGrid())  { copy(r); }
 
 
   
@@ -533,7 +533,7 @@ public:
   enumerated_edge_range(const grid_type& g) : base(g) {}
   enumerated_edge_range(const base& b) : base(b) {}
   template<class RANGE>
-  enumerated_edge_range(RANGE const& r) : base(r.TheGrid())  { copy(r); }
+  explicit enumerated_edge_range(RANGE const& r) : base(r.TheGrid())  { copy(r); }
   
   unsigned NumOfEdges()     const { return size();}
   EdgeIterator FirstEdge() const { return FirstElement();}
@@ -571,7 +571,7 @@ public:
   enumerated_facet_range(const grid_type& g) : base(g) {}
   enumerated_facet_range(const base& b) : base(b) {}
   template<class RANGE>
-  enumerated_facet_range(RANGE const& r) : base(r.TheGrid())  { copy(r); }
+  explicit enumerated_facet_range(RANGE const& r) : base(r.TheGrid())  { copy(r); }
 
   unsigned NumOfFacets()     const { return size();}
   FacetIterator FirstFacet() const { return FirstElement();}
@@ -609,8 +609,9 @@ public:
   enumerated_cell_range() {}
   enumerated_cell_range(const grid_type& g) : base(g) {}
   enumerated_cell_range(const base& b) : base(b) {}
+  
   template<class RANGE>
-  enumerated_cell_range(RANGE const& r) : base(r.TheGrid())  { copy(r); }
+  explicit enumerated_cell_range(RANGE const& r) : base(r.TheGrid())  { copy(r); }
   
   unsigned NumOfCells()     const { return size();}
   CellIterator FirstCell()  const { return FirstElement();}
