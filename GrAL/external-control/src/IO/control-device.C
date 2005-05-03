@@ -80,8 +80,8 @@ ControlDevice GetFileControlDevice(const std::string& filename, const std::strin
 { return GetFileControlDevice(filename.c_str(),name);} 
 
 ControlDevice GetFileControlDevice(const char* filename, const std::string& name) {
-  std::ifstream *inf(new std::ifstream(name.c_str()));
-  REQUIRE_ALWAYS(inf->is_open(), "could not open file \"" << name << "\"!",1);
+  std::ifstream *inf(new std::ifstream(filename));
+  REQUIRE_ALWAYS(inf->is_open(), "could not open file \"" << filename << "\"!",1);
   boost::shared_ptr<std::istream> infile(inf);
   return ControlDevice(boost::shared_ptr<control_device_impl>(new istream_control_device_impl(infile, name)));
 }
