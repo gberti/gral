@@ -143,7 +143,7 @@ public:
   void set_grid(grid_type const& g)   { set_grid_(g);}
   void set_grid(grid_type const& g, value_type const& t) { set_grid_(g); set_value(t); }
 
-  void clear() { base::clear(); ENSURE_ALWAYS(empty(), "", 1);}
+  void clear() { base::clear(); ENSURE_ALWAYS(base::empty(), "", 1);}
 };
 
 
