@@ -30,7 +30,7 @@
 #define STDEXT  my_hash_sx
 #define STDHASH my_hash_sx
 
-#elif defined __GNUC__ && __GNUC__ >= 3 && __GNUC_MINOR__>= 1
+#elif defined __GNUC__ && ( ( __GNUC__ >= 3 && __GNUC_MINOR__>= 1 ) || __GNUC__ >= 4) 
 // use SGI-like hash_map
 #include <ext/hash_map>
 #define STDEXT  __gnu_cxx
