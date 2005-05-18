@@ -175,6 +175,9 @@ public:
   typedef gf_array_adapter::value_type<T,N>  value_type;
   typedef gf_array_adapter::value_proxy<T,N> value_proxy;
   typedef size_t                             size_type;
+
+  typedef value_type                         result_type;
+  typedef element_type                       argument_type;
 private: 
   grid_type const* g;
 
