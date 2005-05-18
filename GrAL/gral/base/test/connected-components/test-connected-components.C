@@ -13,6 +13,14 @@
    Tests for connected_components
 */
 
+
+struct even_row {
+  typedef bool result_type;
+  
+  template<class C>
+  bool operator()(C const& c) const { return c.ll().x() % 2 == 0; }
+};
+
 int main() {
   using namespace GrAL;
   using namespace std;
@@ -95,4 +103,29 @@ int main() {
       cout << endl;
     }
   }
+
+
+
+  // test grids with several components and predicate
+  {
+    CartesianGrid2D  R(5,5);
+   
+    typedef cc::component_list<grid_types<CartesianGrid2D> > comp_list_t;
+    typedef comp_list_t::const_iterator  comp_iterator;
+    typedef comp_list_t::component_type  component_type;
+    typedef component_type::CellIterator compCellIterator;
+    
+    comp_list_t CR(R, even_row());
+    cout << "Row grid: " << CR.NumOfComponents() << " components" << endl; 
+    int i = 0;
+    cout << "Components of CR:" << endl;
+    for(comp_iterator c=CR.begin(); c != CR.end(); ++c, ++i) {
+      cout << " comp. " << i << ": " << (*c).NumOfCells() << " cells " << endl;
+      for(compCellIterator ci(*c); ! ci.IsDone(); ++ci)
+	cout << (*ci).handle() << "  ";
+      cout << endl;
+    }
+  }
+
+
 }

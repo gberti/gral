@@ -14,3 +14,9 @@ Components of C_SR:
 0  
  comp. 1: 1 cells 
 1  
+Row grid: 2 components
+Components of CR:
+ comp. 0: 4 cells 
+0  1  2  3  
+ comp. 1: 4 cells 
+8  9  10  11  

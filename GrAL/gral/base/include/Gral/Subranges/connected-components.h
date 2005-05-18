@@ -61,7 +61,7 @@ namespace connected_components {
       \todo Forward other element types  defined in GT::grid_type,
        define  iterator types  for them.
    */ 
-  template<class GT /* , class PRED = true_pred */ >
+  template<class GT>
   class component /* : public GT ... must re-define sequence iterator types! */ {
     typedef component<GT>            self;
   public:
@@ -73,19 +73,27 @@ namespace connected_components {
 
     // typedef closure_iterators::vertex_iterator<self, GT> VertexIterator;
   private:
-    Cell c; // germ
-    mutable unsigned num_of_cells;
+    Cell                         c; // germ
+    mutable unsigned             num_of_cells;
+    ref_ptr<component_list<GT> const> all_components;
   public:
     component() : num_of_cells(0) {}
-    component(Cell c_) : c(c_) {}
-    component(Cell c_, int noc) : c(c_), num_of_cells(noc) {}
-
+    component(Cell c_, component_list<GT> const& all_c) 
+      : c(c_), num_of_cells(0),   all_components(all_c) {}
+    component(Cell c_, int noc, component_list<GT> const& all_c) 
+      : c(c_), num_of_cells(noc), all_components(all_c) {}
+    
     void init() const; 
 
     CellIterator FirstCell() const;
     unsigned NumOfCells() const { init(); return num_of_cells;}
+    //! true iff cc is in this component
+    bool operator()(Cell const& cc) const;
+
     base_grid_type const& BaseGrid() const { return c.TheGrid();}
+    // ref_ptr<component_list<GT> const> Components() const { return all_components;}
     Cell const& Germ() const { return c;}
+
   };
 
 
@@ -108,7 +116,7 @@ namespace connected_components {
     typedef partial_grid_function<Cell,bool>        visited_table_type;
   private:
     component_type const* comp;
-     ::std::queue<cell_handle> Q;
+    std::queue<cell_handle> Q;
     visited_table_type      visited;
   public:
     cell_iterator() : comp(0) {}
@@ -126,7 +134,7 @@ namespace connected_components {
       Cell c(this->operator*());
       Q.pop();
       for(CellOnCellIterator cc(c); ! cc.IsDone(); ++cc) 
-	if(! visited(*cc)) {
+	if((*comp)(*cc) && ! visited(*cc)) {
 	  visited[*cc] = true;
 	  Q.push(cc.handle());
 	}
@@ -230,9 +238,9 @@ namespace connected_components {
     //! STL-compliant alias for EndComponent()
     const_iterator end()   const;
     
-    component_handle ComponentOf(Cell const& c) const { c_(); return component_handle(comps(*c));}
+    component_handle ComponentOf(Cell const& c) const { c_(); return component_handle(comps(c));}
     component_type_cref   Component(component_handle c) const 
-    { REQUIRE(valid(c), "",1); return component_type_cref(germs[c],num_of_cells[c]);}
+    { REQUIRE(valid(c), "",1); return component_type_cref(germs[c],num_of_cells[c], *this);}
 
     bool valid(component_handle c) const { return (0 <= c) && (c < static_cast<int>(NumOfComponents()));} 
   private:
@@ -296,6 +304,11 @@ namespace connected_components {
   template<class GT>
   inline
   component_iterator<GT> component_list<GT>::end  ()   const { return const_iterator(*this,num_of_components);}
+
+  template<class GT>
+  inline
+  bool component<GT>::operator()(typename component<GT>::Cell const& cc) const 
+  { return all_components->ComponentOf(c) == all_components->ComponentOf(cc);}
 
 
 } // namespace connected_components
