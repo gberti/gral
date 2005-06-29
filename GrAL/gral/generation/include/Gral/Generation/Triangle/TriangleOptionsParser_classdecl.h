@@ -7,20 +7,20 @@ class TriangleOptionsParser : public yyFlexLexer {
                             report(""), _action(DEFAULT), at_char(0) {init();}  
   ~TriangleOptionsParser() {}
   int yylex();
-  inline void parse();
-  inline void parse(const char*);
+  inline void Parse();
+  inline void Parse(const char*);
 
-  const char* options(); 
-  std::string info(const char *flags);
+  const char* GetOptions(); 
+  std::string Info(const char *flags);
   
-  bool getOption(const std::string name) { return flags[name].second; }
-  void setOption(const std::string name, bool v) { flags[name].second = v;}
+  bool GetOption(const std::string name) { return flags[name].second; }
+  void SetOption(const std::string name, bool v) { flags[name].second = v;}
   
-  double getMinAngle() const { return _minangle;}
-  void setMinAngle(const double angle) { _minangle = angle;}
+  double GetMinAngle() const { return _minangle;}
+  void SetMinAngle(const double angle) { _minangle = angle;}
   
-  double getMaxArea() const {return _maxarea;}
-  void setMaxArea(const double area) { _maxarea = area;}
+  double GetMaxArea() const {return _maxarea;}
+  void SetMaxArea(const double area) { _maxarea = area;}
   
   private:       
   typedef enum { REPORT, DEFAULT } action_type;

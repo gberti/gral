@@ -49,7 +49,7 @@ void test_simple_input() {
   triangle_generator::TriangleInput input;
   triangle_adapter::TriangleAdapter triangulation;
   triangle_generator::ConstEllipseMapper mapper(1, 4, sqrt(3)/2.0, 1.0/2.0);
-  generator.setIncircleMap(mapper);
+  generator.SetIncircleMapper(mapper);
 /*  input.addVertex(-1.0, -1.0);
   input.addVertex(1.0, -1.0);
   input.addVertex(1.0, 1.0);
@@ -89,8 +89,8 @@ input.addVertex( L,  L);
 input.addVertex(-L,  L);
 
   SizeControl s;
-  generator.setTriangleTestFunction(s);
-  generator.triangulate(input, "TpczS0a", triangulation);
+  generator.SetTriangleAccepter(s);
+  generator.Triangulate(input, "TpczS0a", triangulation);
   
   Complex2D T;
   stored_geometry_complex2D GeomT(T);
@@ -122,7 +122,7 @@ void test_two_regions() {
   input.addRegion(0.8,0.2,1.0,0.04);
   input.addRegion(0.2,0.8,2.0,0.02);
 
-  generator.triangulate(input, "qpcza", triangulation);
+  generator.Triangulate(input, "qpcza", triangulation);
   
   Complex2D T;
   stored_geometry_complex2D GeomT(T);

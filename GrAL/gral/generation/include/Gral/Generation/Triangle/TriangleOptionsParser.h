@@ -25,19 +25,19 @@ class TriangleOptionsException : public std::exception {
 #include "TriangleOptionsParser_classdecl.h"
 
 inline void 
-TriangleOptionsParser::parse() {
+TriangleOptionsParser::Parse() {
     while(yylex() != 0){
     }
 }
 
 inline void 
-TriangleOptionsParser::parse(const char* s) {
+TriangleOptionsParser::Parse(const char* s) {
      options_text="\'";
      options_text+=s;
      options_text+="\'";
      std::istringstream is(s);
      switch_streams(&is, 0);
-     parse();
+     Parse();
 }
 
 #endif

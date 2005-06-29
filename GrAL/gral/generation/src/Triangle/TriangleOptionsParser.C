@@ -337,7 +337,7 @@ TriangleOptionsParser::verbose() {
   }
 }
 
-const char* TriangleOptionsParser::options() {
+const char* TriangleOptionsParser::GetOptions() {
   char* o=s;
   char* t;
   char tmp[16];
@@ -390,10 +390,10 @@ const char* TriangleOptionsParser::options() {
   return s;
 }
 
-std::string TriangleOptionsParser::info(const char *flags) {
+std::string TriangleOptionsParser::Info(const char *flags) {
   _action = REPORT;
   report = "";
-  parse(flags);
+  Parse(flags);
   return report;
 }
 

@@ -9,6 +9,9 @@ extern "C" {
 
 int triunsuitable(double *pa, double *pb, double *pc, double area, 
     void *userData) {
+  // reinterpret_cast should be safe here as long as those functions are
+  // used inside Triangle generator called from within TriangleGeneator
+  // and derived classes.
   TriangleGenerator *generator=reinterpret_cast<TriangleGenerator *>(userData);
   return generator->triunsuitable(pa, pb, pc, area); 
 }
@@ -17,6 +20,7 @@ int triunsuitable(double *pa, double *pb, double *pc, double area,
 void incircle_transform(double *apa, double *apb, double *apc, double *apd,
                         double *pa, double *pb, double *pc, double *pd,
                         void *userData, double *inverse) {
+  // see the note in triunsuitable
   TriangleGenerator *generator=reinterpret_cast<TriangleGenerator *>(userData);
   generator->incircle_transform(apa, apb, apc, apd, 
                                  pa,  pb,  pc,  pd, inverse);
@@ -141,13 +145,13 @@ void TriangleGenerator::setup_input(TriangleInput & input,
   setup_regions(input, in);
 }
 
-void TriangleGenerator::triangulate(TriangleInput & input, const char *flags,
+void TriangleGenerator::Triangulate(TriangleInput & input, const char *flags,
                                     TriangleAdapter &output) {
-  _options.parse(flags);
+  _options.Parse(flags);
   triangulate_impl(input, output);
 }
 
-void TriangleGenerator::triangulate(TriangleInput & input, 
+void TriangleGenerator::Triangulate(TriangleInput & input, 
                                     TriangleAdapter &output) {
   triangulate_impl(input, output);
 }
@@ -166,7 +170,7 @@ void TriangleGenerator::triangulate_impl(TriangleInput & input,
   init_triangulateio(vorout);
   
   setup_input(input, in);
-  ::triangulate(const_cast<char*>(options()), in, out, vorout, (void*)this);
+  ::triangulate(const_cast<char*>(GetOptions()), in, out, vorout, (void*)this);
   output.steal(out);
 
   /* FIXME remove regionlist and holeslist if switch p was not used 
@@ -178,9 +182,9 @@ void TriangleGenerator::triangulate_impl(TriangleInput & input,
   delete vorout;
 }
 
-const char* TriangleGenerator::options() {
+const char* TriangleGenerator::GetOptions() {
   char *p = options_string;
-  strncpy(options_string, _options.options(), 99);
+  strncpy(options_string, _options.GetOptions(), 99);
   p += strlen(options_string);
   *p++ = 'z';
   *p = '\0';
@@ -188,7 +192,7 @@ const char* TriangleGenerator::options() {
 }
 
 void 
-ConstEllipseMapper::setTransformation(const double *lambda_, const double *e_) {
+ConstEllipseMapper::SetTransformation(const double *lambda_, const double *e_) {
   lambda[0] = lambda_[0];
   lambda[1] = lambda_[1];
   e[0] = e_[0];
@@ -196,7 +200,7 @@ ConstEllipseMapper::setTransformation(const double *lambda_, const double *e_) {
   set_transformation(); 
 }
 
-void ConstEllipseMapper::setTransformation(double lambda1, double lambda2, double e1, double e2) {
+void ConstEllipseMapper::SetTransformation(double lambda1, double lambda2, double e1, double e2) {
   lambda[0] = lambda1;
   lambda[1] = lambda2;
   e[0] = e1;
@@ -226,9 +230,6 @@ ConstEllipseMapper::set_transformation() {
      m_inv[2] = -m[2]/det;
      m_inv[3] = m[0]/det;
   }
-  printf("In  trans: %f %f %f %f\n", m[0], m[1], m[2], m[3]);
-  printf("In  invtrans: %f %f %f %f\n", m_inv[0], m_inv[1], m_inv[2], m_inv[3]);
-  
 }
 
 } // namespace triangle_generator

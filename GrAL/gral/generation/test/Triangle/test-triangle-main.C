@@ -40,7 +40,7 @@ void test_simple_input() {
   input.addVertex(-2.0, 5.0);
   input.addVertex(-3.0, 4.0);
 
-  generator.triangulate(input, "pczAevna0.4", triangulation);
+  generator.Triangulate(input, "pczAevna0.4", triangulation);
   
   Complex2D T;
   stored_geometry_complex2D GeomT(T);
@@ -72,7 +72,7 @@ void test_two_regions() {
   input.addRegion(0.8,0.2,1.0,0.04);
   input.addRegion(0.2,0.8,2.0,0.02);
 
-  generator.triangulate(input, "qpcza", triangulation);
+  generator.Triangulate(input, "qpcza", triangulation);
   
   Complex2D T;
   stored_geometry_complex2D GeomT(T);
