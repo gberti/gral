@@ -57,7 +57,8 @@ int main() {
     for(gt::CellIterator c(T); ! c.IsDone(); ++c) {
       cout << c.handle() 
 	   << " [" << (*c).v(0) << "," << (*c).v(1) << "," << (*c).v(2) << "," << (*c).v(3) << "] "
-	   <<  " center=" << GeomT1.center(*c) << "  ";
+	   <<  " center=" << GeomT1.center(*c) << "  "
+	   <<  " orientation=" << GeomT1.orientation(*c) << " ";
       for(gt::VertexOnCellIterator vc(*c); ! vc.IsDone(); ++vc) {
 	cout << "; v=" << vc.handle()
 	     << ": a=" << GeomT1.solid_angle(vc)

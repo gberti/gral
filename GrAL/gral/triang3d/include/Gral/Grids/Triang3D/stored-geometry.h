@@ -122,7 +122,7 @@ public:
     void init(double const* p)
       { xyz[0] = p[0]; xyz[1] = p[1]; xyz[2] = p[2]; }
   };
-  //! A type for real numbers
+  //! A type for representing real numbers
   typedef double scalar_type;
 
   //! coordinate of Vertex (read/write access)
@@ -142,8 +142,14 @@ public:
   inline scalar_type volume(Edge const& e) const { return length(e);}
   //! 2D-volume of facet
   inline scalar_type volume(Facet const& f)  const { return area(f);}
-  //! 3D-volume of cell
-  inline scalar_type volume(Cell  const& c) const;
+
+  //! Signed volume of cell
+  inline scalar_type oriented_volume(Cell const& c) const;
+  //! Orientation \f$ \in \pm 1\f$ 
+  inline int         orientation(Cell const& c) const { return (oriented_volume(c) > 0 ? 1 : -1);}
+
+  //! Absolute volume of cell
+  inline scalar_type volume(Cell  const& c) const { return fabs(oriented_volume(c));}
 
 
   //! Center of inertia of \c c
@@ -242,12 +248,13 @@ stored_geometry_triang3d::area(stored_geometry_triang3d::Facet const& f) const
   return ap::triangle_area(p0,p1,p2);
 }
 
+
 inline stored_geometry_triang3d::scalar_type 
-stored_geometry_triang3d::volume(stored_geometry_triang3d::Cell  const& c) const
+stored_geometry_triang3d::oriented_volume(stored_geometry_triang3d::Cell  const& c) const
 { 
   typedef algebraic_primitives<coord_type> ap;
   coord_type v0 = coord(c.V(0));
-  return fabs(1.0/6.0 * ap::det3(coord(c.V(1))-v0, coord(c.V(2))-v0, coord(c.V(3))-v0));
+  return 1.0/6.0 * ap::det3(coord(c.V(1))-v0, coord(c.V(2))-v0, coord(c.V(3))-v0);
 }
 
 inline stored_geometry_triang3d::scalar_type 
