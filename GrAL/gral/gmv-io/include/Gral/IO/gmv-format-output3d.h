@@ -93,6 +93,7 @@ private:
     archetype_table   * archetypes;
     archetype_name_map* names;
 
+    void initialize();
     StaticData();
     ~StaticData();
   };
