@@ -13,6 +13,16 @@
    \todo Make output implementation independent
 */
 
+// explicit instantiations to check if everything compiles
+namespace GrAL {
+  template class bijective_mapping<int, short>;
+  template class inverse_mapping  <int, short>;
+  template class domain_of_bijective_mapping<int, short>;
+  template class range_of_bijective_mapping <int, short>;
+}
+
+
+
 int main(int argc, char* argv[]) {
   using namespace GrAL;
   using namespace std;
@@ -75,6 +85,14 @@ int main(int argc, char* argv[]) {
   for(range_iter ri = i1.range().begin(); !(ri == i1.range().end()); ++ri) {
     REQUIRE_ALWAYS( m1.defined(*ri), "m1 not defined for di in range(i1)!\n",1);
   }
+
+  bijective_mapping<int,int, identity_if_undefined> m_id;
+  m_id[1] =2;
+  m_id[2] =1;
+  REQUIRE_ALWAYS(m_id(1) == 2, "",1);
+  REQUIRE_ALWAYS(m_id(2) == 1, "",1);
+  REQUIRE_ALWAYS(m_id(3) == 3, "",1);
+
 }
 
 
