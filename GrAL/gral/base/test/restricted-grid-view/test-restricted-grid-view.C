@@ -86,4 +86,22 @@ int main() {
 
   element_numbering<gt::Vertex>  VNum(R,1);
 
+  for(truegt::CellIterator tc(all_view); !tc.IsDone(); ++tc) {
+    REQUIRE_ALWAYS((*tc).NumOfCells() == (*tc).Base().NumOfCells(), "tc.NumOfCells() = " << (*tc).NumOfCells(), 1);
+    truegt::CellOnCellIterator tcc1 = (*tc).FirstCell();
+    for(truegt::CellOnCellIterator tcc(*tc); !tcc.IsDone(); ++tcc) {
+      REQUIRE_ALWAYS(all_view.inside(*tcc), "", 1);
+    }
+  }
+
+  for(truegt::VertexIterator tv(all_view); !tv.IsDone(); ++tv) {
+    REQUIRE_ALWAYS((*tv).NumOfCells() == (*tv).Base().NumOfCells(), "tv.NumOfCells() = " << (*tv).NumOfCells(), 1);
+    truegt::CellOnVertexIterator tcv1 = (*tv).FirstCell();
+    for(truegt::CellOnVertexIterator tcv(*tv); !tcv.IsDone(); ++tcv) {
+      REQUIRE_ALWAYS(all_view.inside(*tcv), "", 1);
+    }
+  }
+
+
+
 }
