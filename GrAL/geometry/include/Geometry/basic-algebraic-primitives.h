@@ -21,12 +21,53 @@ template<class POINT>
 struct basic_algebraic_primitives : public point_traits<POINT> {
 
   typedef point_traits<POINT> pt;
+  //! \brief scalar type of point (member of field)
   typedef typename pt::component_type scalar;
-  typedef scalar   real; // should use scalar_traits<scalar>::real
-  // anayway, some of the below are not correct for scalar = complex.
+  /*! \brief real type (ordered field)
 
+      \todo This type is currently not correctly defined e.g. for std::complex<>,
+      we should introduce something like scalar_traits<scalar>::real_type
+      Anyway, some of the functions in this class are not correct if 
+      \c scalar_type is \c std::complex<T>.
+  */
+  typedef scalar   real; // should use scalar_traits<scalar>::real
+
+  //!  \brief Pointwise minimum
+  static POINT min(const POINT& p, const POINT& q)
+  {
+    REQUIRE(Dim(p) == Dim(q), "Dim(p)=" << Dim(p) << " != Dim(q)=" << Dim(q),1);
+    int d = Dim(p);
+    int lp = LowerIndex(p);
+    int lq = LowerIndex(q); 
+    
+    POINT res = p;
+    for(int i = 0; i< d; i++)
+      res[lp+i] = std::min(p[lp+i], q[lq+i]);
+    return res;
+  }
+
+  //!  \brief Pointwise maximum
+  static POINT max(const POINT& p, const POINT& q)
+  {
+    REQUIRE(Dim(p) == Dim(q), "Dim(p)=" << Dim(p) << " != Dim(q)=" << Dim(q),1);
+    int d = Dim(p);
+    int lp = LowerIndex(p);
+    int lq = LowerIndex(q); 
+    
+    POINT res = p;
+    for(int i = 0; i< d; i++)
+      res[lp+i] = std::max(p[lp+i], q[lq+i]);
+    return res;
+  }
+
+  //!  \brief restrict x to the range <code> [low,high] </code>
+  static POINT clamp(const POINT& x, const POINT& low, const POINT& high)
+  { return max(low, min(high,x));}
+
+  //!  \brief square of scalar
   static scalar sqr(scalar x) { return (x*x);}
 
+  //! \brief  inner product
   static scalar dot(const POINT& p, const POINT& q)
     {
       int d = Dim(p);
