@@ -6,7 +6,7 @@
 
 namespace GrAL {
 
-/*! \brief Geometric and algebraic primitives specific to 3D
+/*! \file 
 
 */
 

@@ -192,6 +192,12 @@ void mark_on_vertices(VertexIt    seed,         //!< in : vertex seed set
  mark_on_vertices<gt>(seed, vertex_seq, cell_seq, visited, adj_queue, level, inside, end);
 }
 
+/*! \brief Default config class for incidence_hull
+
+    \ingroup incidence_hull
+    
+    This class can be used as parameter to instantiate incidence_hull.
+*/
 template<class GRID, class GT = grid_types<GRID> >
 struct incidence_hull_cfg {
   typedef GRID              grid_type;
@@ -204,6 +210,13 @@ struct incidence_hull_cfg {
 /*! \brief Calculate incidence hull
 
     \ingroup incidence_hull
+
+    \templateparam 
+    - CFG:
+      - <code> typedef grid_type </code>
+      - <code> typedef gt        </code>
+      - <code> typedef stencil_type </code>
+     
 
     \see \ref test-incidence-hulls.C
 */

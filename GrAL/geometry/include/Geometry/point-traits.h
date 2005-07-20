@@ -8,6 +8,9 @@
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
 
+/*! \file
+ */
+
 namespace GrAL {
 
 /*! To be specialized for concrete P
@@ -258,6 +261,10 @@ struct array_operators
 //
 //----------------------------------------------------------------
 
+/*! \brief conversion between points of arbitrary type
+
+ \ingroup algebraicprimitives 
+*/
 template<class P, class Q>
 inline void assign_point(P      & p,
 			 Q const& q) 
@@ -312,6 +319,10 @@ inline void assign_point(float& p, P const& q)
 inline void assign_point(float& p, float q) { p = q;}
 
 
+/*! \brief conversion between points of arbitrary type
+
+   \ingroup algebraicprimitives 
+*/
 template<class P, class Q>
 inline P convert_point(Q const& q)
 {
@@ -321,7 +332,7 @@ inline P convert_point(Q const& q)
 }
 
 template<class P>
-inline P convert_point(P const& p) { return p;}
+inline P const& convert_point(P const& p) { return p;}
 
 } // namespace GrAL 
 

@@ -15,6 +15,8 @@
 
 #include <vector>
 
+/*! \file 
+*/
 
 namespace GrAL {
 
@@ -74,13 +76,30 @@ struct dimension_dependent_primitives<POINT, variable_dimension_tag>
   {};
 
 /*! \defgroup algebraicprimitives Primitive algebraic and geometric operations
+    
+    The class intended for general use is <code> algebraic_primitives </code>.
+    If the point type \c P is  known at compile-time to be of dimension 2 or 3,
+    extended functionality is automatically defined beyond the basic dimension-independend
+    stuff in \c basic_algebraic_primitives.
+
+    Example:
+    \code
+    typedef algebraic_primitives<coord_type> ap;
+
+    coord_type P, Q;
+    ... 
+    if(ap::distance(P,Q) > eps) {
+      ...
+    }
+    \endcode
  */
 
 /*! \brief Collection of primitive algebraic and geometric operations on point types
 
     \ingroup algebraicprimitives   
 
-    This class contains various primitive operations as static member functions. 
+    This class contains various primitive operations as static member functions,
+    see the base class \c basic_algebraic_primitives.
     For 2D and 3D points, some more primitives are automatically generated,
     see \c dimension_dependent_primitives_2d and \c dimension_dependent_primitives_3d
     for details on these primitives.
@@ -103,14 +122,16 @@ struct algebraic_primitives
 
 
 
-/*! \brief calculate centroid and area of a simple polygon in 2D
+/*! \brief Calculate centroid and area of a simple polygon in 2D
+  
+    \ingroup algebraicprimitives   
  
- The polygon is given by a sequence of vertices \c [begin, end).
-
- The centroid (or center of inertia) c of a domain D is defined by
- \f$ \int_{D} x_i dx dy / \mbox{area}(D) \f$
-
- This is adapted from GraphicsGems IV, centroid.c
+    The polygon is given by a sequence of vertices \c [begin, end).
+    
+    The centroid (or center of inertia) c of a domain D is defined by
+    \f$ \int_{D} x_i dx dy / \mbox{area}(D) \f$
+    
+    This code has been adapted from GraphicsGems IV, file \c centroid.c
 
 */
 

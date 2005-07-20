@@ -68,7 +68,9 @@ public:
 
 /*! \brief Provide a consecutive numbering of grid elements
  
+
    \ingroup elements
+   \ingroup gridfunctions
  
     This class has an important specialization in the 
     case that the corresponding elements are already numbered
