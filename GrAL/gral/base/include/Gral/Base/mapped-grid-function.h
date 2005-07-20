@@ -31,6 +31,9 @@ namespace GrAL {
     typedef value_type                        const_reference; // will return by value
     typedef typename GF::element_type         element_type;
     typedef typename GF::size_type            size_type;
+    typedef typename GF::pointer              pointer;
+    typedef typename GF::difference_type      difference_type;
+
     typedef typename GF::grid_type            grid_type;
     typedef mapped_value_const_iterator<base_const_iterator, mapping_type> 
                                               const_iterator;

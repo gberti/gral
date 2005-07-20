@@ -214,19 +214,21 @@ public:
   template<class TT, class VALUETYPE, class VALUETYPE_RET>
   class iterator_t {
     typedef iterator_t<TT,VALUETYPE,VALUETYPE_RET>  self;
-    // typedef grid_function_array_adapter<ELEMENT,T,N> gfaa_type;
-    typedef VALUETYPE_RET reference_type;
-
     T    * f;
     int    i;
   public:
+    typedef VALUETYPE                                           value_type;
+    typedef VALUETYPE_RET                                       reference;
+    typedef typename std::iterator_traits<T *>::difference_type difference_type;
+    typedef typename std::iterator_traits<T *>::pointer         pointer;
+
     explicit iterator_t(T * ff = 0, int ii = 0) : f(ff), i(ii) {}
     
     self& operator++() { ++i; return *this; }
     self  operator++(int) { self tmp(*this); ++i; return tmp;}
+    self  operator+(difference_type k) const { return self(f,i+k); }
 
-    typedef VALUETYPE     value_type;
-    reference_type  operator*() const { return reference_type(f+N*i);} 
+    reference  operator*() const { return reference(f+N*i);} 
     bool operator==(self const& rhs) const { 
       REQUIRE(f == rhs.f, "", 1);
       return (i == rhs.i);
@@ -240,6 +242,8 @@ public:
 
   typedef iterator_t<T const, value_type, value_type const&>  const_iterator;
   typedef iterator_t<T,       value_type, value_proxy>        iterator;
+  typedef typename iterator::difference_type                  difference_type;
+  typedef typename iterator::pointer                          pointer;
 
   const_iterator begin() const { return const_iterator(f,0);}
   const_iterator end  () const { return const_iterator(f,size());}

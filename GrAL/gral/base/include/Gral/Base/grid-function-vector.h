@@ -47,7 +47,8 @@ public:
   typedef typename table_type::value_type      value_type;
   typedef typename table_type::reference       reference;
   typedef typename table_type::const_reference const_reference;
-
+  typedef typename table_type::pointer         pointer;
+  typedef typename table_type::difference_type difference_type;
 
   // grid types
   typedef element_traits<E>            et;

@@ -60,6 +60,8 @@ public:
   //  typedef typename table_type::const_reference  const_reference;
   typedef T      &  reference;
   typedef T const&  const_reference;
+  typedef typename table_type::pointer         pointer;
+  typedef typename table_type::difference_type difference_type;
 
   typedef E const&        argument_type;
   typedef const_reference result_type;

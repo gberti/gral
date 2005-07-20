@@ -70,8 +70,14 @@ template<class GF, class E_iter>
 class restr_gf_iterator_adapter : public detail::deref<GF> {
   typedef restr_gf_iterator_adapter<GF,E_iter> self;
   typedef detail::deref<GF> base;
-  typedef typename base::reference reference;
 public:
+  typedef typename base::reference     reference;
+  typedef std::forward_iterator_tag    iterator_category;
+  typedef typename GF::value_type      value_type;
+  typedef typename GF::pointer         pointer;
+  typedef typename GF::difference_type difference_type;
+ 
+
   //------------------ construction -------------------
 
   restr_gf_iterator_adapter() {}
@@ -80,7 +86,6 @@ public:
 
   //------------------ iteration --- -------------------
 
-  typedef typename GF::value_type value_type;
 
   self&     operator++() { ++it; return *this;}
   reference operator*()  { return base::operator()(*gf, *it);}
@@ -269,7 +274,8 @@ Restriction(GF& gf, const ERange& R)
     typedef typename GF::reference             reference;       //!< reference to value type, type of operator[]
     typedef typename GF::const_reference       const_reference; //!< const reference to value type, type of operator()
     typedef typename GF::size_type             size_type;       //!< type returned by size()
-
+    typedef typename GF::pointer               pointer;
+    typedef typename GF::difference_type       difference_type;
 
   private:
     ref_ptr<grid_type const> g;
