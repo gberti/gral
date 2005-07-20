@@ -39,7 +39,7 @@ namespace GrAL {
 
 template<class coord>
 class box {
-  typedef box<coord>          self;
+  typedef box<coord>                  self;
 public:
   typedef coord                       coord_type;
   typedef point_traits<coord>         pt;
@@ -49,9 +49,12 @@ private:
 public:
   /*! \brief Create empty box
    */
-  box() : minc( ::std::numeric_limits<scalar_type>::max()),
-	  maxc(-::std::numeric_limits<scalar_type>::max())
+  box() 
   {
+    for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
+      minc[i] =  std::numeric_limits<scalar_type>::max();
+      maxc[i] = -std::numeric_limits<scalar_type>::max();
+    }
     REQUIRE(empty(), "minc=" << minc << " maxc=" << maxc,1);
   }  
   /*! \brief Create bounding box of the single point \c p
@@ -80,13 +83,31 @@ public:
 
   void ce() const { REQUIRE(!empty(), "", 1);}
 
+  //! \brief minimal coordinate contained in the box
   const coord& the_min() const { return minc;}
+  //! \brief maximal coordinate contained in the box
   const coord& the_max() const { return maxc;}
-  const coord& min() const { return minc;}
-  const coord& max() const { return maxc;}
+  //! \brief same as the_min
+  const coord& min()  const { return minc;}
+  //! \brief same as the_max
+  const coord& max()  const { return maxc;}
+  //! \brief same as the_min
+  const coord& low()  const { return minc;}
+  //! \brief same as the_max
+  const coord& high() const { return maxc;}
+
+  //! \brief N-dimensional size of the box (aka extent or dimensions)
+  coord        size()    const { return high() - low();}
+  //! Central point 
   coord        center()  const { return 0.5*(minc+maxc);}
 
+  /*! \brief Dimension of the box
+      \todo This should return  a lower dimension if 
+      <code> min()[i] == max()[i] </code> for some \c i,
+      but it currently does not.
+  */
   unsigned dimension()       const { return pt::Dim(minc);}
+  //! \brief Dimension of the enclosing space
   unsigned space_dimension() const { return pt::Dim(minc);}
 
   // function interface
