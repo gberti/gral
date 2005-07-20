@@ -40,6 +40,26 @@ namespace sequence {
     bool operator()(Pair const& p1, Pair const& p2) const { return p1.second < p2.second;}
   };
 
+  /*! \brief helper predicate for comparing pairs
+  
+       \ingroup helperfunctors
+  */
+  struct greater_first  {
+    typedef bool result_type;
+    template<class Pair>
+    bool operator()(Pair const& p1, Pair const& p2) const { return p1.first > p2.first;}
+  };
+
+  /*! \brief helper predicate for comparing pairs
+  
+       \ingroup helperfunctors
+  */
+  struct greater_second  {
+    typedef bool result_type;
+    template<class Pair>
+    bool operator()(Pair const& p1, Pair const& p2) const { return p1.second > p2.second;}
+  };
+
   /*! \brief helper functor for getting size
       
        \ingroup helperfunctors
