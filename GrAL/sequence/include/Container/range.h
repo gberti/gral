@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_PRINT_RANGE_H
-#define NMWR_GB_PRINT_RANGE_H
+#ifndef NMWR_GB_SEQUENCE_PRINT_RANGE_H
+#define NMWR_GB_SEQUENCE_PRINT_RANGE_H
 
 
 // $LICENSE
@@ -38,13 +38,24 @@ inline
 iter_range<It> range(It bb, It ee) 
 { return iter_range<It>(bb,ee); }
 
+/*! \brief creator function for iter_range<T>
+   
+   Input is a container.
+   \ingroup iteratorrange
+ */
+template<class C>
+inline 
+iter_range<typename C::const_iterator> range_c(C const& c)
+{ return iter_range<typename C::const_iterator>(c.begin(),c.end()); }
+
+
 
 /*! \brief output operator for iter_range<T>
    \ingroup iteratorrange
 */
 template<class It>
 inline
-std::ostream& operator<<(::std::ostream& out, iter_range<It> r)
+std::ostream& operator<<(std::ostream& out, iter_range<It> r)
 {
   while(r.b != r.e) {
     out << *(r.b) << ' ';
@@ -53,12 +64,12 @@ std::ostream& operator<<(::std::ostream& out, iter_range<It> r)
   return out;
 }
 
-/*! \brief inputput operator for iter_range<T>
+/*! \brief input operator for iter_range<T>
    \ingroup iteratorrange
 */
 template<class It>
 inline
-std::istream& operator>>(::std::istream& in, iter_range<It> r)
+std::istream& operator>>(std::istream& in,  iter_range<It> r)
 {
   while(r.b != r.e) {
     in  >> *(r.b);
@@ -68,5 +79,10 @@ std::istream& operator>>(::std::istream& in, iter_range<It> r)
 }
 
 } // namespace GrAL 
+
+
+
+
+
 
 #endif
