@@ -81,7 +81,7 @@ public:
    */
   //! \brief Empty grid
   Triang3D() 
-    : cells(0), owned(false), ncells(0), nvertices(0) {}
+    : cells(0), owned(false), ncells(0), nvertices(0) { sd.initialize(); }
   /*! \brief Initialize with reference semantic with respect to \c c
 
       The number of vertices will be calculated. 
@@ -97,7 +97,7 @@ public:
   */
   Triang3D(int* c, int nc) 
     : cells(c), owned(false), ncells(nc) 
-  { nvertices = calc_num_of_vertices(); }
+  { sd.initialize(); nvertices = calc_num_of_vertices(); }
 
   /*! Initialize with reference semantic with respect to \c c
 
@@ -111,7 +111,7 @@ public:
          - The data in \c is only referenced.
    */
   Triang3D(int* c, int nc, int nv) 
-    : cells(c), owned(false), ncells(nc), nvertices(nv) {} 
+    : cells(c), owned(false), ncells(nc), nvertices(nv) { sd.initialize(); } 
 
   /*! \brief  make physical copy of \c rhs
    */
@@ -195,6 +195,7 @@ public:
     typedef Triang3D::archetype_type archetype_type;
 
     archetype_type the_archetype[1];
+    void initialize();
     SD();
   };
   static SD sd;
@@ -220,6 +221,9 @@ public:
     { return a - BeginArchetype();}
   /*@}*/
 
+
+  // FIXME: ad hoc! ... job of archetype??
+  void swap_orientation(Cell const& c);
 };
 
 
@@ -389,6 +393,10 @@ struct grid_types<Triang3D> : public grid_types_base<grid_types_Triang3D>
 
 
 //------------------- inline functions ---------------
+
+inline
+void Triang3D::swap_orientation(Triang3D::Cell const& c) { std::swap(cells[4*c.handle()], cells[4*c.handle()+1]);}
+
 
 inline
 Triang3D::VertexIterator

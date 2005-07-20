@@ -88,16 +88,22 @@ void Triang3D::Steal(int* c, int nc, int nv)
   owned = true;
 }
 
-Triang3D::SD::SD() 
+Triang3D::SD::SD() { initialize(); }
+
+void Triang3D::SD::initialize()
 {
-   int conn[4*4] = {
-     3,    0, 1, 2,
-     3,    1, 0, 3,
-     3,    0, 2, 3,
-     3,    3, 2, 1
-   };
-   stream_grid_mask<int *> arch(4,4,conn);
-   ConstructGrid0(the_archetype[0], arch);
+  static int cnt = 0;
+  if(cnt == 0) {
+    ++cnt;
+    int conn[4*4] = {
+      3,    0, 1, 2,
+      3,    1, 0, 3,
+      3,    0, 2, 3,
+      3,    3, 2, 1
+    };
+    stream_grid_mask<int *> arch(4,4,conn);
+    ConstructGrid0(the_archetype[0], arch);
+  }
 }
 
 
