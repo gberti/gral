@@ -129,6 +129,16 @@ public:
   template<class T>
   std::ostream& operator<<(std::ostream& out, histogram_printer<T> const& h) { h.p(out); return out;}
 
+  /*! \brief Convenience function for printing a histogram_table
+     
+     \b Example:
+     \code
+     histogram_table<string> words;
+     // ...
+     cout << print_histogram(words, "word") << endl;
+     \endcode
+
+  */
   template<class T>
   histogram_printer<T> print_histogram(histogram_table<T> const& hist, 
 				       std::string const& key_label = " ",
