@@ -6,6 +6,32 @@
 #include "Config/compiler-config.h"
 #include <string>
 
+#if defined GRAL_USE_STLPORT
+
+#include <hash_map>
+#define STDEXT std
+#define STDHASH std
+
+namespace STDEXT {
+
+  template<class T>
+  struct hash<T*> {
+    typedef T* key_type;
+    typedef T* argument_type;
+    typedef size_t result_type;
+    size_t operator()(T* t) const { return reinterpret_cast<unsigned>(t);}
+  };
+
+  template<>
+  struct hash<std::string> {
+    typedef std::string key_type;
+    typedef std::string argument_type;
+    typedef size_t result_type;
+    size_t operator()(key_type const& k) const { hash<char const*> h; return h(k.c_str());}
+  };}
+
+
+#else
 // define STDEXT  as the namespace where hash<> templates live.
 // define STDHASH as the namespace where hash_map<> templates live
 // (These may be different, e.g. intel defines hash<> in ::std::, 
@@ -80,5 +106,7 @@ namespace STDEXT {
 
 #endif
 
+// GRAL_USE_STLPORT
+#endif
 
 #endif

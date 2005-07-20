@@ -1,13 +1,13 @@
 CONFIG=$(shell pwd)/../mk.config
+include $(CONFIG)
 
-ifdef WITHMETIS
+ifeq ($(WITHMETIS),true)
 METISDIR = Metis
-SUBDIRS += $(METISDIR)
 endif
 
+SUBDIRS += $(METISDIR)
 
 
-include  $(CONFIG)
 include  $(RECURSIVETARGETS)
 
 
