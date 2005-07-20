@@ -31,19 +31,26 @@ namespace restricted_grid_view {
 
   template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
   class grid_view;
+
   template<class GRID, class INSIDE_PRED, class GT> 
   class vertex;
   template<class GRID, class INSIDE_PRED, class GT> 
   class cell;
+
   template<class GRID, class INSIDE_PRED, class GT> 
   class vertex_iterator;
   template<class GRID, class INSIDE_PRED, class GT> 
   class cell_iterator;
+
   template<class GRID, class INSIDE_PRED, class GT> 
   class vertex_on_cell_iterator;
+  template<class GRID, class INSIDE_PRED, class GT> 
+  class cell_on_cell_iterator;
+  template<class GRID, class INSIDE_PRED, class GT>
+  class cell_on_vertex_iterator;
 
   template<class GRID, class INSIDE_PRED, class GT>
-  struct grid_types_grid_view : public archetypes_from_base_grid_types<GT> {
+  struct grid_types_grid_view_base : public archetypes_from_base_grid_types<GT> {
 
     typedef grid_view<GRID,INSIDE_PRED, GT> grid_type;
 
@@ -53,15 +60,45 @@ namespace restricted_grid_view {
     typedef cell  <GRID,INSIDE_PRED, GT>                  Cell;
     typedef vertex_iterator<GRID,INSIDE_PRED, GT>         VertexIterator;
     typedef cell_iterator  <GRID,INSIDE_PRED, GT>         CellIterator;
+
     typedef vertex_on_cell_iterator<GRID,INSIDE_PRED, GT> VertexOnCellIterator;
 
     typedef typename GT::dimension_tag dimension_tag;
   };
 
+
+  //----- Mixin classes depending on presence of iterator types in base grid ----
+
+  template<class GRID, class INSIDE_PRED, class GT, class VERTEX, unsigned HASCELLONVERTEX>
+  struct vertex_mixin_cov_iterator { };
+  template<class GRID, class INSIDE_PRED, class GT, class VERTEX>
+  struct vertex_mixin_cov_iterator<GRID, INSIDE_PRED, GT, VERTEX, 1>
+  { 
+    cell_on_vertex_iterator<GRID, INSIDE_PRED, GT> FirstCell()  const;
+    unsigned                                       NumOfCells() const;
+  };
+
+
+  template<class GRID, class INSIDE_PRED, class GT, class CELL, unsigned HASCELLONCELL>
+  struct cell_mixin_coc_iterator { };
+  template<class GRID, class INSIDE_PRED, class GT, class CELL>
+  struct cell_mixin_coc_iterator<GRID, INSIDE_PRED, GT, CELL, 1>
+  { 
+    cell_on_cell_iterator<GRID, INSIDE_PRED, GT> FirstCell()  const;
+    unsigned                                     NumOfCells() const;
+  };
+
+
+
   /*! \brief The restricted grid view class
 
     This class is a model of $GrAL Cell-VertexInputGridRange.
-    Grid functions are defined for the vertex type.
+    Grid functions are defined for the vertex and cell types.
+    The following types are defined in <code> grid_types<grid_view<GRID, ...> > </code>
+    if they are defined in \c GRID or \c GT:
+    - CellOnCellIterator
+    - CellOnVertexIterator
+
 
     \templateparams
     - GRID:
@@ -71,10 +108,16 @@ namespace restricted_grid_view {
     - INSIDE_PRED
       - decide whether a cell is to be considered inside,
         <tt> bool operator()(Cell) </tt>
+    - GT
+      - \c grid_types specialization for GRID
 
-       \ingroup restricted_grid_view_grp
-       \see Module \ref restricted_grid_view_grp
-       \see Tested in \ref test-restricted-grid-view.C 
+    
+      \ingroup restricted_grid_view_grp
+      \see Module \ref restricted_grid_view_grp
+      \see Tested in \ref test-restricted-grid-view.C 
+
+      \todo Implement conditionally other incidence iterators, and sequence iterators
+      for element types other than vertex/cell.
   */
 
   template<class GRID, class INSIDE_PRED, class GT>
@@ -155,7 +198,9 @@ namespace restricted_grid_view {
   //--- Vertex ---
 
   template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
-  class vertex {
+  class vertex : public vertex_mixin_cov_iterator<GRID, INSIDE_PRED, GT, vertex<GRID, INSIDE_PRED, GT>, 
+						  has_CellOnVertexIterator<GT>::result> 
+  {
     typedef vertex<GRID,INSIDE_PRED, GT> self;
   public:
     typedef grid_view<GRID,INSIDE_PRED, GT>       grid_type;
@@ -240,11 +285,14 @@ namespace restricted_grid_view {
   };
 
 
+
   //--- Cell ---
   template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
-  class cell {
+  class cell : public cell_mixin_coc_iterator<GRID, INSIDE_PRED, GT, cell<GRID, INSIDE_PRED, GT>, 
+					      has_CellOnCellIterator<GT>::result>
+  {
     typedef cell<GRID,INSIDE_PRED, GT> self;
-    typedef grid_types_grid_view<GRID,INSIDE_PRED, GT> gt;
+    typedef grid_types_grid_view_base<GRID,INSIDE_PRED, GT> gt;
     typedef grid_types<typename gt::archetype_type> archgt;
   public:
     typedef grid_view<GRID,INSIDE_PRED, GT>              grid_type;
@@ -260,9 +308,10 @@ namespace restricted_grid_view {
   public:
     cell() : g(0) {}
     cell(grid_type const& gg)
-      : g(&gg), c(* g->BaseGrid().FirstCell()) {}
+      : g(&gg) {} //  c(* g->BaseGrid().FirstCell()) {}
     cell(grid_type const& gg, baseCell cc)
-      : g(&gg), c(cc) {}
+      : g(&gg), c(cc) 
+    { REQUIRE(g->inside(cc), "Base cell not in component!", 1); }
 
     operator baseCell() const { return c;}
     baseCell  Base() const { return c;}
@@ -277,6 +326,9 @@ namespace restricted_grid_view {
     
     bool operator==(self const& rhs) const { return c == rhs.c;}
     bool operator!=(self const& rhs) const { return !(*this == rhs);}
+
+    bool bound() const { return g != 0;}
+    bool valid() const { return bound() && c.valid();}
   };
 
 
@@ -363,9 +415,144 @@ namespace restricted_grid_view {
 
 
 
+  //------- CellOnCellIterator ---------
+
+  template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
+  class cell_on_cell_iterator {
+    typedef cell_on_cell_iterator<GRID,INSIDE_PRED, GT>  self;
+  public:
+    typedef grid_view<GRID,INSIDE_PRED, GT>              grid_type;
+    typedef typename GT::CellOnCellIterator              baseCellOnCellIterator;
+    typedef typename grid_type::cell_handle              cell_handle;
+    typedef typename grid_type::Cell                     Cell;
+  private:
+    Cell c;
+    baseCellOnCellIterator cc;
+  public:
+    cell_on_cell_iterator()  {}
+    cell_on_cell_iterator(Cell const& c1) : c(c1), cc(c1.Base()) { advance_till_valid();}
+
+    self& operator++() { ++cc; advance_till_valid(); return *this;}
+    Cell  operator*() const { return Cell(TheGrid(),*cc);}
+    bool  IsDone() const { return cc.IsDone();}
+    grid_type const& TheGrid() const { return c.TheGrid();} 
+    cell_handle handle() const { return cc.handle();}
+
+    bool operator==(self const& rhs) const { return c == rhs.c && cc == rhs.cc;}
+    bool operator!=(self const& rhs) const { return !(*this == rhs);}
+    
+  private:
+    void advance_till_valid() {
+      while(!cc.IsDone() && ! TheGrid().inside(*cc))
+	++cc;
+    }
+  };
+
+  // Add CellOnCellIterator to grid_types if the underlying GRID type has it.
+  template<class GRID, class INSIDE_PRED, class GT, unsigned HASCELLONCELL>
+  struct grid_types_with_cell_on_cell_iterator {};
+
+  template<class GRID, class INSIDE_PRED, class GT>
+  struct grid_types_with_cell_on_cell_iterator<GRID, INSIDE_PRED, GT, 1>
+  {
+    typedef cell_on_cell_iterator<GRID, INSIDE_PRED, GT> CellOnCellIterator;
+  };
+
+  // Mixins for cell corresponding to cell_on_cell_iterator
+
+  template<class GRID, class INSIDE_PRED, class GT, class CELL>
+  cell_on_cell_iterator<GRID, INSIDE_PRED, GT> 
+  cell_mixin_coc_iterator<GRID, INSIDE_PRED, GT, CELL, 1>::FirstCell() const 
+  { return cell_on_cell_iterator<GRID, INSIDE_PRED, GT>(static_cast<CELL const&>(*this)); }
+
+  template<class GRID, class INSIDE_PRED, class GT, class CELL>
+  unsigned
+  cell_mixin_coc_iterator<GRID, INSIDE_PRED, GT, CELL, 1>::NumOfCells() const 
+  { 
+    unsigned n = 0;
+    cell_on_cell_iterator<GRID, INSIDE_PRED, GT> cc = FirstCell();
+    while(! cc.IsDone()) {
+      ++cc;
+      ++n;
+    }
+    return n;
+  }
 
 
+  //--------------- CellOnVertexIterator ----------------
 
+  template<class GRID, class INSIDE_PRED, class GT>
+  class cell_on_vertex_iterator {
+    typedef cell_on_vertex_iterator<GRID,INSIDE_PRED, GT>  self;
+  public:
+    typedef grid_view<GRID,INSIDE_PRED, GT>              grid_type;
+    typedef typename GT::CellOnVertexIterator            baseCellOnVertexIterator;
+    typedef typename grid_type::cell_handle              cell_handle;
+    typedef typename grid_type::Cell                     Cell;
+    typedef typename grid_type::Vertex                   Vertex;
+  private:
+    Vertex                   v;
+    baseCellOnVertexIterator cv;
+  public:
+    cell_on_vertex_iterator()  {}
+    cell_on_vertex_iterator(Vertex const& v1) : v(v1), cv(v1.Base()) {}
+
+    self& operator++() { ++cv; advance_till_valid(); return *this;}
+    Cell  operator*() const { return Cell(TheGrid(),*cv);}
+    bool  IsDone() const { return cv.IsDone();}
+    grid_type const& TheGrid() const { return v.TheGrid();} 
+    cell_handle handle() const { return cv.handle();}
+
+    bool operator==(self const& rhs) const { return v == rhs.v && cv == rhs.cv;}
+    bool operator!=(self const& rhs) const { return !(*this == rhs);}
+    
+  private:
+    void advance_till_valid() {
+      while(!cv.IsDone() && ! TheGrid().inside(*cv))
+	++cv;
+    }
+  };
+
+  // Add CellOnVertexIterator to grid_types if the underlying GRID type has it.
+  template<class GRID, class INSIDE_PRED, class GT, unsigned HASCELLONVERTEX>
+  struct grid_types_with_cell_on_vertex_iterator {};
+
+  template<class GRID, class INSIDE_PRED, class GT>
+  struct grid_types_with_cell_on_vertex_iterator<GRID, INSIDE_PRED, GT, 1>
+  {
+    typedef cell_on_vertex_iterator<GRID, INSIDE_PRED, GT> CellOnVertexIterator;
+  };
+
+
+  // Inline functions of mixin for vertex corresponding to cell_on_vertex_iterator
+  template<class GRID, class INSIDE_PRED, class GT, class VERTEX>
+  cell_on_vertex_iterator<GRID, INSIDE_PRED, GT> 
+  vertex_mixin_cov_iterator<GRID, INSIDE_PRED, GT, VERTEX, 1>::FirstCell() const 
+  { return cell_on_vertex_iterator<GRID, INSIDE_PRED, GT>(static_cast<VERTEX const&>(*this)); }
+
+  template<class GRID, class INSIDE_PRED, class GT, class VERTEX>
+  unsigned
+  vertex_mixin_cov_iterator<GRID, INSIDE_PRED, GT, VERTEX, 1>::NumOfCells() const 
+  { 
+    unsigned n = 0;
+    cell_on_vertex_iterator<GRID, INSIDE_PRED, GT> cv = FirstCell();
+    while(! cv.IsDone()) {
+      ++cv;
+      ++n;
+    }
+    return n;
+  }
+
+
+  //---------- assemble complete grid_types ---------------
+
+
+  template<class GRID, class INSIDE_PRED, class GT>
+  struct grid_types_grid_view_all :
+    public grid_types_grid_view_base<GRID, INSIDE_PRED, GT>,
+    public grid_types_with_cell_on_cell_iterator  <GRID, INSIDE_PRED, GT, has_CellOnCellIterator  <GT>::result>,
+    public grid_types_with_cell_on_vertex_iterator<GRID, INSIDE_PRED, GT, has_CellOnVertexIterator<GT>::result>
+  {};
 
 } // namespace restricted_grid_view
 
@@ -377,7 +564,7 @@ namespace restricted_grid_view {
   */ 
 template<class GRID, class INSIDE_PRED, class GT>
 struct grid_types<restricted_grid_view::grid_view<GRID,INSIDE_PRED,GT> >
-  : public grid_types_base<restricted_grid_view::grid_types_grid_view<GRID,INSIDE_PRED,GT> >
+  : public grid_types_base<restricted_grid_view::grid_types_grid_view_all<GRID,INSIDE_PRED,GT> >
 {};
 
 template<class GRID, class INSIDE_PRED, class GT>
