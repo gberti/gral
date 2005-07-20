@@ -112,7 +112,7 @@ int main()
     matrix_type  A_inv(A);
     mapping_type M(A);
     mapping_type M_inv(A_inv);
-    mapping_type M_dummy;
+    mapping_type M_dummy(A);
     geom_type GeomR(R2, M_dummy);
     GeomR.set_mapping(M);
     GeomR.set_inverse_mapping(M_inv);
@@ -125,7 +125,7 @@ int main()
      matrix_type  A_inv(A);
      mapping_type M(A);
      mapping_type M_inv(A_inv);
-     mapping_type M_dummy;
+     mapping_type M_dummy(A);
      geom_type GeomR(R2, M_dummy);
      GeomR.set_mapping(M);
      GeomR.set_inverse_mapping(M_inv);
