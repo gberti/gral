@@ -19,7 +19,7 @@ namespace GrAL {
   \b Contents
 
   This module contains class templates for representing bijective mappings:
-   - class \ref bijective_mapping<T1,T2> : A one-to-one mapping (short f)
+   - class \ref bijective_mapping<T1,T2,Policy> : A one-to-one mapping (short f)
    - class \ref inverse_mapping<T1,T2> : Inverse of a bijective_mapping (short inv)
    - class \ref domain_of_bijective_mapping<T1,T2>: 
      domain of definition of  a  bijective mapping (short dom)
@@ -28,7 +28,19 @@ namespace GrAL {
    - some helper classes and functions for I/O: 
      \ref read_bm, \ref write_bm, \ref printer_of_bij_mapping, \ref Printer
 
- \b Template \b parameters
+     The extra \c Policy parameter (which has been omitted for clarity except in the first
+     occurence) permits to control the behaviour of bijective_mapping if evaluated for an item
+     which has not been set explictly. If \c Policy is \c fail_if_undefined  (the default),
+     than accessing an undefined item is treated as an error.
+     If  \c  Policy is \c identity_if_undefined  and <code> T1 == T2 </code>,
+     then the item itself is returned. Thus, simular to partial_mapping,
+     evaluation on an unbounded set of items is possible.
+     However, this policy leads to possibly undetected violations of bijectivity,
+     which would otherwise be detected when the inverse is built. 
+     For instance, if we say <code> m[1] = 2 </code>, the mapping \c m is \e not bijective any longer
+     because <code> m(1) == 2 || m(2) == 2 </code>, the latter by the implicit identity extension.
+
+     \b Template \b parameters
 
    (same for bijective_mapping<T1,T2>, inverse_mapping<T1,T2>,
      domain_of_bijective_mapping<T1,T2>, range_of_bijective_mapping<T1,T2>)
@@ -73,17 +85,35 @@ namespace GrAL {
   \brief  Classes for representing bijective mappings of finite sets.
 */
 
-template<class T1, class T2>
-class bijective_mapping;
 
-template<class T1, class T2>
-class inverse_mapping;
+  /*! \brief Policy to fail when undefined item is queried
 
-template<class T1, class T2>
-class domain_of_bijective_mapping;
+     \ingroup bijectivemapping
 
-template<class T1, class T2>
-class range_of_bijective_mapping;
+     This class can serve as third (\c Policy) parameter to bijective_mapping.
+  */
+  struct fail_if_undefined {};
+
+   /*! \brief Policy to return identity when undefined item is queried
+
+     \ingroup bijectivemapping
+
+     This class can serve as third (\c Policy) parameter to bijective_mapping.
+  */
+  struct identity_if_undefined {};
+
+
+  template<class T1, class T2, class Policy = fail_if_undefined>
+  class bijective_mapping;
+
+  template<class T1, class T2, class Policy = fail_if_undefined>
+  class inverse_mapping;
+
+  template<class T1, class T2, class Policy = fail_if_undefined>
+  class domain_of_bijective_mapping;
+
+  template<class T1, class T2, class Policy = fail_if_undefined>
+  class range_of_bijective_mapping;
 
 //----------------------------------------------------------------
 //          [0] output facilities
@@ -92,26 +122,26 @@ class range_of_bijective_mapping;
 /*! \brief write a bijective map to ostream
     \ingroup bijectivemapping 
  */
-template<class T1, class T2>
-void write_bm(bijective_mapping<T1,T2> const& m, ::std::ostream& out);
+  template<class T1, class T2,  class Policy>
+void write_bm(bijective_mapping<T1,T2,Policy> const& m, ::std::ostream& out);
 
 /*! \brief read a bijective map from istream
     \ingroup bijectivemapping 
  */
-template<class T1, class T2>
-void read_bm(bijective_mapping<T1,T2>       & m, ::std::istream& in);
+  template<class T1, class T2, class Policy>
+  void read_bm(bijective_mapping<T1,T2,Policy>       & m, ::std::istream& in);
 
 /*! \brief helper class for custom output of  a bijective map 
     \ingroup bijectivemapping 
  */
-template<class T1, class T2>
+template<class T1, class T2, class Policy>
 class printer_of_bij_mapping {
 private:
-  bijective_mapping<T1,T2> const* mp;
+  bijective_mapping<T1,T2,Policy> const* mp;
 public:
-  printer_of_bij_mapping(bijective_mapping<T1,T2> const& m) : mp(&m) {}
+  printer_of_bij_mapping(bijective_mapping<T1,T2,Policy> const& m) : mp(&m) {}
 
-  friend ::std::ostream& operator<<(::std::ostream& out, printer_of_bij_mapping<T1,T2> const& p)
+  friend ::std::ostream& operator<<(::std::ostream& out, printer_of_bij_mapping<T1,T2,Policy> const& p)
     { write_bm(*(p.mp),out); return out;}
 
 };
@@ -127,10 +157,29 @@ public:
 
     \ingroup bijectivemapping  
 */
-template<class T1, class T2>
-inline printer_of_bij_mapping<T1,T2>
-Printer(bijective_mapping<T1,T2> const& m)
-{ return printer_of_bij_mapping<T1,T2>(m);}
+  template<class T1, class T2, class Policy>
+inline printer_of_bij_mapping<T1,T2,Policy>
+Printer(bijective_mapping<T1,T2,Policy> const& m)
+{ return printer_of_bij_mapping<T1,T2,Policy>(m);}
+
+
+
+  template<class T1, class T2, class MAP, class Policy> 
+  struct map_accessor 
+  {
+    static T2 const& get(MAP const& m, T1 const& t1) { 
+      REQUIRE(m.find(t1) != m.end(), "", 1);
+      return m.find(t1)->second;
+    }
+  };
+
+  template<class T1, class MAP> 
+  struct map_accessor<T1,T1,MAP,identity_if_undefined>  
+  {
+    static T1 const& get(MAP const& m, T1 const& t1) { 
+      return (m.find(t1) == m.end() ? t1 : m.find(t1)->second);
+    }
+  };
 
 //----------------------------------------------------------------
 //          [1] class bijective_mapping<T1,T2>
@@ -140,17 +189,17 @@ Printer(bijective_mapping<T1,T2> const& m)
     \ingroup bijectivemapping
     \see bijectivemapping, bijective-mapping.h
 */
-template<class T1, class T2>
-class bijective_mapping {
+  template<class T1, class T2, class Policy>
+  class bijective_mapping {
 public:
-  typedef inverse_mapping<T1,T2>              inverse_type;
-  typedef domain_of_bijective_mapping<T1,T2>  domain_type;
-  typedef range_of_bijective_mapping <T1,T2>  range_type;
+  typedef inverse_mapping<T1,T2,Policy>              inverse_type;
+  typedef domain_of_bijective_mapping<T1,T2,Policy>  domain_type;
+  typedef range_of_bijective_mapping <T1,T2,Policy>  range_type;
 
-  template<class U, class R> friend class bijective_mapping;
-  template<class U, class R> friend class inverse_mapping;
-  template<class U, class R> friend class domain_of_bijective_mapping;
-  template<class U, class R> friend class range_of_bijective_mapping;
+  template<class U, class R, class P> friend class bijective_mapping;
+  template<class U, class R, class P> friend class inverse_mapping;
+  template<class U, class R, class P> friend class domain_of_bijective_mapping;
+  template<class U, class R, class P> friend class range_of_bijective_mapping;
   
   // STL unary function conformance
   typedef T1                         argument_type;
@@ -160,6 +209,8 @@ private:
   // hash_map not yet in ::std::
   typedef STDHASH::hash_map<T1,T2>  map_table_type;
   typedef STDHASH::hash_map<T2,T1>  inv_table_type; 
+  typedef map_accessor<T1,T2,map_table_type,Policy>  map_accessor_type;
+  typedef map_accessor<T2,T1,inv_table_type,Policy>  inv_accessor_type;
   //--------------- DATA -------------------------
 
   map_table_type         the_map;
@@ -172,7 +223,7 @@ private:
 
   typedef typename map_table_type::const_iterator map_iterator;
 public:
-  typedef bijective_mapping<T1,T2>   self;
+    typedef bijective_mapping<T1,T2,Policy>   self;
   
   //---------- construction ----------------
 
@@ -181,21 +232,27 @@ public:
   //! Empty mapping, \f$ \dom(f) = \emptyset \f$, internal storage allocated  
   bijective_mapping(unsigned sz) : the_map(sz), the_inverse_map(sz), inverse_ok(false) {}
   //! \f$ \dom(f) = \dom(inv), f(x) = inv(x) \, \forall x \in \dom(inv) \f$
-  bijective_mapping(inverse_mapping<T2,T1> const& inv);
+    bijective_mapping(inverse_mapping<T2,T1,Policy> const& inv);
 
   //---------- data access -----------------
 
   //! returns \f$ f(t_1) \f$,  Pre: \f$ t_1 \in \dom(f) \f$
   const T2& operator()(const T1& t1) const {
+    /*
     REQUIRE( (the_map.find(t1) != the_map.end()), 
 	     "map not defined for item " << t1 << '\n',1);
     return (*(the_map.find(t1))).second;
+    */
+    return map_accessor_type::get(the_map,t1);
   }
   //! returns \$f f(t_1) \$f,  Pre: \f$ t_1 \in \dom(f) \f$
   const T2& operator[](const T1& t1) const {
+    /*
     REQUIRE( (the_map.find(t1) != the_map.end()), 
 	     "map not defined for item " << t1 << '\n',1);
     return (*(the_map.find(t1))).second;
+    */
+    return map_accessor_type::get(the_map,t1);
   }
   //! returns \f$ f(t_1) \f$, else an uninitialized value.
   T2& operator[](const T1& t1) { inverse_ok = false; return the_map[t1];}
@@ -246,11 +303,12 @@ private:
 
     \see bijectivemapping, bijective-mapping.h
 */
-template<class T1, class T2>
+  template<class T1, class T2, class Policy>
 class inverse_mapping {
 private:
-  typedef bijective_mapping<T1,T2> mapping_type;
-  template<class U, class R> friend class bijective_mapping;
+  typedef bijective_mapping<T1,T2, Policy>   mapping_type;
+  typedef typename mapping_type::inv_accessor_type accessor_type;
+  template<class U, class R, class P> friend class bijective_mapping;
 
   //-------- DATA ----------
   const  mapping_type*    bmap; // reference
@@ -266,6 +324,7 @@ public:
     REQUIRE( (defined(t2)),
 	    "inverse map not defined for item " << t2 << '\n',1);
     return (*(bmap->the_inverse_map.find(t2))).second;
+    return accessor_type::get(bmap->the_inverse_map, t2);
   }
 
   bool defined(const T2& t2) const {
@@ -298,10 +357,10 @@ public:
 
  \see bijectivemapping, bijective-mapping.h
  */
-template<class T1, class T2>
+  template<class T1, class T2, class Policy>
 class domain_of_bijective_mapping {
 public:
-  typedef bijective_mapping<T1,T2>                         mapping_type;
+  typedef bijective_mapping<T1,T2, Policy>                 mapping_type;
   typedef typename mapping_type::map_table_type            map_table_type;
   typedef typename map_table_type::value_type              base_value_type;
   typedef typename map_table_type::const_iterator          base_iter_type;
@@ -340,10 +399,10 @@ public:
 
     \see bijectivemapping, bijective-mapping.h
  */
-template<class T1, class T2>
+  template<class T1, class T2, class Policy>
 class range_of_bijective_mapping {
 public:
-  typedef bijective_mapping<T1,T2>                         mapping_type;
+  typedef bijective_mapping<T1,T2, Policy>                 mapping_type;
   typedef typename mapping_type::map_table_type            map_table_type;
   typedef typename map_table_type::value_type              base_value_type;
   typedef typename map_table_type::const_iterator          base_iter_type;
@@ -374,31 +433,31 @@ public:
 //-----------------------------------------------------------------
 
 
-template<class T1, class T2>
+  template<class T1, class T2, class Policy>
 inline
-inverse_mapping<T1,T2> bijective_mapping<T1,T2>::inverse() const 
+  inverse_mapping<T1,T2, Policy> bijective_mapping<T1,T2, Policy>::inverse() const 
 { return inverse_type(*this);}
 
-template<class T1, class T2>
+template<class T1, class T2, class Policy>
 inline
-domain_of_bijective_mapping<T1,T2> bijective_mapping<T1,T2>::domain() const 
+domain_of_bijective_mapping<T1,T2,Policy> bijective_mapping<T1,T2,Policy >::domain() const 
 { return domain_type(*this);}
  
-template<class T1, class T2>
+template<class T1, class T2, class Policy>
 inline
-range_of_bijective_mapping<T1,T2> bijective_mapping<T1,T2>::range() const 
+range_of_bijective_mapping<T1,T2,Policy> bijective_mapping<T1,T2,Policy>::range() const 
 { return range_type(*this);}
 
-template<class T1, class T2>
+template<class T1, class T2, class Policy>
 inline
 //domain_of_bijective_mapping<T1,T2>
-typename inverse_mapping<T1,T2>::range_type
-inverse_mapping<T1,T2>::range() const { return bmap->domain();}
+typename inverse_mapping<T1,T2,Policy>::range_type
+inverse_mapping<T1,T2,Policy>::range() const { return bmap->domain();}
 
-template<class T1, class T2>
+template<class T1, class T2, class Policy>
 inline
-typename inverse_mapping<T1,T2>::domain_type //range_of_bijective_mapping<T1,T2>
-inverse_mapping<T1,T2>::domain() const { return bmap->range();}
+typename inverse_mapping<T1,T2,Policy>::domain_type //range_of_bijective_mapping<T1,T2>
+inverse_mapping<T1,T2,Policy>::domain() const { return bmap->range();}
 
 
 } // namespace GrAL 
