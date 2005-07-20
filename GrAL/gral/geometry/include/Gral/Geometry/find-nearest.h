@@ -41,6 +41,9 @@ typename GT::Cell find_nearest_cell_approx(GRID const& g, GEOM const& geom, COOR
       distmin = dist;
     }
   }
+  // either g is empty (distmin remains unchanged) or we must have found something.
+  ENSURE_ALWAYS( (distmin ==  std::numeric_limits<real_type>::max()) || res.valid(), 
+		 "did not find a valid cell!", 1);
   return res;
 }
 
