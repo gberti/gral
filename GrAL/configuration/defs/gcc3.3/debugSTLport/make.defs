@@ -1,0 +1,33 @@
+THISDIR = $(COMPILERDIR)
+include $(THISDIR)/../make.defs
+
+# gcc (in contrast to g++) does not link -lstdc++
+# that's exacty what we want if using STLport ... does not suffice.
+
+CCC      =  /usr/net/fdc/bin/g++
+CCFLAGS  += -g -DNMWR_DEBUG
+
+STLPORT=$(HOME)/lib/STLport
+
+STLPORT_CCFLAGS += -I$(STLPORT)/stlport  -D_STLP_DEBUG -DGRAL_USE_STLPORT 
+STLPORT_CCFLAGS += -nostdlib 
+# Do we need one of these?
+STLPORT_CCFLAGS += -pthread -fexceptions -fident 
+
+CCFLAGS += $(STLPORT_CCFLAGS)
+
+# #  /usr/lib/crtn.o 
+# -lsupc++ must come at the end.
+
+STLPORT_LDFLAGS_BEGIN += -nostdlib /usr/lib/crt1.o /usr/lib/crti.o /usr/net/fdc/GCC-3.3.3/lib/gcc-lib/i686-pc-linux-gnu/3.3.3/crtbegin.o 
+# -L$(STLPORT)/lib -lstlportstlg -lsupc++ -lgcc_s -lpthread -lc  -Xlinker -rpath -Xlinker $(STLPORT)/lib
+#STLPORT_LDFLAGS += -L$(STLPORT)/lib -lstlportstlg  -Xlinker -rpath -Xlinker $(STLPORT)/lib
+
+STLPORT_LDFLAGS_END +=  /usr/net/fdc/GCC-3.3.3/lib/gcc-lib/i686-pc-linux-gnu/3.3.3/crtend.o /usr/lib/crtn.o 
+STLPORT_LDFLAGS_END +=  -L$(STLPORT)/lib -lstlportstlg  -Xlinker -rpath -Xlinker $(STLPORT)/lib
+STLPORT_LDFLAGS_END +=  -lsupc++ -lgcc_s -lpthread -lc
+
+LDFLAGS_BEGIN += $(STLPORT_LDFLAGS_BEGIN)
+LDFLAGS_END   += $(STLPORT_LDFLAGS_END)
+
+# LDFLAGS += $(STLPORT_LDFLAGS)
