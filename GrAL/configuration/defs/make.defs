@@ -16,6 +16,10 @@ first: all
 #  - CCNAME:  compiler name, used in paths, possible values: kai, gcc
 # */
 
+ifndef CONFIGURATION
+export CONFIGURATION=$(GRALROOT)/configuration
+endif
+
 ifndef ARCH
 export ARCH   =linux#  
 endif
@@ -95,7 +99,8 @@ export INSTALLLIBRARIES=$(PREFIX)/lib#
 export DEFPATH:=$(ARCH)/$(CCNAME)/$(DEBUG)#
 export LIBPATH:=$(DEFPATH)#
 
-
+# some args may need to be at the beginning of the LDFLAGS
+LDFLAGS = $(LDFLAGS_BEGIN)
 
 # The includes and libs of the current module
 ifdef ROOT
@@ -130,6 +135,7 @@ export DEFDIR     :=$(CONFIGURATION)/defs/$(DEFPATH)#
 
 CCFLAGS += $(EXTRA_CCFLAGS)
 LDFLAGS += $(EXTRA_LDFLAGS)
+IFLAGS  += $(EXTRA_IFLAGS)
 
 # if developing code, use include and libraries
 # of other (`peer') modules directly (because of frequent 
@@ -142,7 +148,9 @@ IFLAGS  += -I$(PREFIX)/include
 LDFLAGS += -L$(PREFIX)/lib/$(LIBPATH)
 endif
 
-IFLAGS += $(EXTRA_IFLAGS)
+
+# some flags need to be at the end of LDFLAGS
+LDFLAGS +=  $(LDFLAGS_END)
 
 
 ifdef PROFILING

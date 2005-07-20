@@ -10,7 +10,7 @@ exec perl -w -x $0 ${1+"$@"} # -*- mode: perl; perl-indent-level: 2; -*-
 
   while(<>) {
     ## replace -0 by 0
-    s/-0(\s)/ 0$1/g;
+    s/-0(\s)/0$1/g;
     ## replace "almost 0" by 0
     while(m/([+|-]?[0-9]+[.]?[0-9]*[e|E][-]?[0-9]+)/g) {
       $wert = abs $1;

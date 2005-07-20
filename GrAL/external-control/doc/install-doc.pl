@@ -36,7 +36,7 @@ while(<>) {
         $n1 = $n + length($&);
 	#$ss = substr($_,$n, length($&));
 	#print "struct: $n1 $n Prematch: $` Match: $& Substr: $ss\n ";
-	substr($_,$n, length($&)) =~ s/_/__/g;
+	#substr($_,$n, length($&)) =~ s/_/__/g;
         $n = $n1;
     }
     $n = 0; 
@@ -46,7 +46,7 @@ while(<>) {
         $n1 = $n + length($&);
 	#$ss = substr($_,$n, length($&));
 	#print "class: $n1 $n Prematch: $` Match: $& Substr: $ss\n";
-	substr($_,$n, length($&)) =~ s/_/__/g;
+	#substr($_,$n, length($&)) =~ s/_/__/g;
         $n = $n1;
     }
 
@@ -58,6 +58,7 @@ while(<>) {
   # replace dummies set by gen-tex-paths.pl
   s|STLURL|$STL|g;
   s|GRALROOT|$GRALPATH|g;
-
+  s|<HEAD>|<HEAD> <link  type="text/css" rel="stylesheet" href="gralconcepts.css">|;
+  s|<head>|<head> <link  type="text/css" rel="stylesheet" href="gralconcepts.css">|;
   print;
 }

@@ -44,7 +44,8 @@ standard-test-check-clean:
 standard-test-check-clean-force:
 	(cd test; $(MAKE) new-check-clean-force)
 
-CHECKER=$(HOME)/bin/valgrind --tool=memcheck --leak-check=yes
+# users can define VG_SUPPRESSIONS to suppress errors, e.g. in third party libs
+CHECKER=$(HOME)/bin/valgrind -v --tool=memcheck --leak-check=yes $(VG_SUPPRESSIONS)
 FILTER=cat
 
 run-check:

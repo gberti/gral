@@ -1,12 +1,14 @@
 
 // $LICENSE
 
-#include <iostream>
-#include <string>
-
 #include "IO/mutator.h"  // only needed for "special" mutators.
 #include "IO/checker.h"
 #include "IO/control-device.h"
+#include "Container/range.h"
+
+#include <iostream>
+#include <string>
+#include <vector>
 
 /*! \file
 
@@ -14,7 +16,7 @@
    file ("ctrl.in" in this example) and command line.
 
    try something like <br>
-   <tt> $ ./ex1.exe   n 77  sub1 { sub1.1 { name1 blabla } x -0.888 } </tt> <br>
+   <tt> $ ./ex1.exe   n 77 +i 44 +i 88  sub1 { sub1.1 { name1 blabla } x -0.888 } </tt> <br>
    on the commandline to see what is happening.
   <br>
    To see error handling, try: <br>
@@ -41,6 +43,7 @@ int main(int argc, char* argv[]) {
   double checked_z = 0.0;
   std::string name1_1 = "1_1", name1_2 = "1_2";
   std::string name2_1 = "2_1", name2_2 = "2_2";
+  std::vector<int> vec;
 
   bool flag = true;
   bool print_variables = true;
@@ -53,6 +56,9 @@ int main(int argc, char* argv[]) {
   Ctrl.add("n", GetMutator(n));
   Ctrl.add("n", GetMutator(m)); // m will be altered, not n!
   h += " n      (demonstrates simple mutator)\n";
+
+  // controling a vector: "+i n" appends n to vec
+  Ctrl.add("+i", GetPushbackMutator(vec));
 
   // create a nested subdevice of level 1
   ControlDevice Ctrl1 = Ctrl.getSubDevice("sub1");
@@ -118,6 +124,7 @@ int main(int argc, char* argv[]) {
 	 << "Values of the variables:\n"
 	 << "n: " << n << '\n'
 	 << "m: " << m << '\n'
+	 << "vec: " << range(vec.begin(), vec.end())
 	 << "x: " << x << '\n'
 	 << "y: " << y << '\n'
 	 << "flag: " << flag << '\n'

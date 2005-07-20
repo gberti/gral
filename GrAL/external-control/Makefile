@@ -55,8 +55,10 @@ additional-predoc: tex
 additional-postdoc:
 	(cd doc;  $(MAKE) postdoc-local)
 	rm -f $(ROOT)/doxygen/html/external-control.html
-	(ln -s $(ROOT)/doc/html_dir/external-control.html \
-               $(ROOT)/doxygen/html/external-control.html)
+	(ln -sf $(ROOT)/doc/html_dir/external-control.html \
+                $(ROOT)/doxygen/html/external-control.html)
+	(ln -sf $(ROOT)/doc/gralconcepts.css  \
+                $(ROOT)/doxygen/html/ )
 
 CONCEPTSPATH=doc/html_dir
 additional-copydoc:
