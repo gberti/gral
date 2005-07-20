@@ -121,7 +121,7 @@ compose_map( M1 const& m1, M2 const& m2)
 */
 
 template<class ARG, class RES> 
-class constant : public ::std::unary_function<ARG,RES> {
+class constant : public std::unary_function<ARG,RES> {
   RES r;
 public:
   constant() {}
@@ -156,6 +156,104 @@ public:
   //! Returns true iff <tt> ff(a) == r </tt>
   bool operator()(argument_type const& a) const { return (*f)(a) == res;}
 };
+
+
+/*! \brief Conjunction (and) of two predicates (convenience type)
+
+    \ingroup accessors 
+*/
+template<class P1, class P2>
+class and_pred : public std::unary_function<typename P1::argument_type, bool> 
+{
+public:
+  typedef typename std::unary_function<typename P1::argument_type, bool>::result_type   result_type;
+  typedef typename std::unary_function<typename P1::argument_type, bool>::argument_type argument_type;
+private:
+  P1 p1;
+  P2 p2;
+public:
+  and_pred() {}
+  and_pred(P1 pp1, P2 pp2) : p1(pp1), p2(pp2) {}
+
+  bool operator()(argument_type const& a) const { return p1(a) && p2(a);}
+};
+
+/*! \brief Disjunction (or) of two predicates (convenience type)
+
+    \ingroup accessors 
+*/
+template<class P1, class P2>
+class or_pred : public std::unary_function<typename P1::argument_type, bool> 
+{
+public:
+  typedef typename std::unary_function<typename P1::argument_type, bool>::result_type   result_type;
+  typedef typename std::unary_function<typename P1::argument_type, bool>::argument_type argument_type;
+private:
+  P1 p1;
+  P2 p2;
+public:
+  or_pred() {}
+  or_pred(P1 pp1, P2 pp2) : p1(pp1), p2(pp2) {}
+
+  bool operator()(argument_type const& a) const { return p1(a) || p2(a);}
+};
+
+
+/*! \brief Negation of a predicate (convenience type)
+
+    \ingroup accessors 
+*/
+template<class P1>
+class not_pred : public std::unary_function<typename P1::argument_type, bool> 
+{
+public:
+  typedef typename std::unary_function<typename P1::argument_type, bool>::result_type   result_type;
+  typedef typename std::unary_function<typename P1::argument_type, bool>::argument_type argument_type;
+private:
+  P1 p1;
+public:
+  not_pred() {}
+  not_pred(P1 pp1) : p1(pp1) {}
+
+  bool operator()(argument_type const& a) const { return ! p1(a);}
+};
+
+
+/*! \brief Creator operator for and_pred
+    
+   For each family of predicates (such as map_is_equal<>),
+   one should implement operator&&(map_is_equal<> p1, P2 p2).
+   Thus, there is a unique operator&& for each combination of predicates.   
+
+   \ingroup accessors
+*/
+template<class F1, class ARG1, class RES1, class P2>
+inline and_pred<map_is_equal<F1,ARG1,RES1>, P2>
+operator&&(map_is_equal<F1,ARG1,RES1> p1, P2 p2)
+{ return and_pred<map_is_equal<F1,ARG1,RES1>, P2>(p1,p2);}
+
+/*! \brief Creator operator for or_pred
+    
+   For each family of predicates (such as map_is_equal<>),
+   one should implement operator||(map_is_equal<> p1, P2 p2).
+   Thus, there is a unique operator|| for each combination of predicates.   
+
+   \ingroup accessors
+*/
+template<class F1, class ARG1, class RES1, class P2>
+inline or_pred<map_is_equal<F1,ARG1,RES1>, P2>
+operator||(map_is_equal<F1,ARG1,RES1> p1, P2 p2)
+{ return or_pred<map_is_equal<F1,ARG1,RES1>, P2>(p1,p2);}
+
+/*! \brief Creator operator for not_pred
+    
+   \ingroup accessors
+*/
+template<class F1, class ARG1, class RES1>
+inline not_pred<map_is_equal<F1,ARG1,RES1> >
+operator!(map_is_equal<F1,ARG1,RES1> p1)
+{ return not_pred<map_is_equal<F1,ARG1,RES1> >(p1);}
+
 
 
 
