@@ -17,7 +17,7 @@ void metis_partGraphRecursive(int n,
                               int* vwgt,    int* adjwgt, 
 			      int  wgtflag, int numflag,
                               int  nparts,
-			      int* opt,     int edgecut, int* part)  {
+			      int* opt,     int& edgecut, int* part)  {
 
 METIS_PartGraphRecursive(&n,
                          xadj,adjncy,
@@ -33,7 +33,7 @@ void metis_partGraphKway(int n,
                          int* vwgt,   int* adjwgt, 
                          int wgtflag, int numflag, 
                          int nparts, 
-			 int* opt, int edgecut, int* part) {
+			 int* opt, int& edgecut, int* part) {
 
 METIS_PartGraphKway(&n,
                     xadj,adjncy,
