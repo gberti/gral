@@ -48,27 +48,26 @@ namespace GrAL {
 
     void redirect(std::ostream& new_out) { out = &new_out;}
 
-    // manipulator like std::endl are templates, so we need a special
-    // version to guide overloading resolution
-    //! \brief Output for manipulators like \c std::endl
-    selective_ostream operator<<( std::ostream& (*f)(std::ostream&) )
-    {
-      if(is_on())
-	*out << f; 
-      return *this;
-    }
-
-    // if this is on global namespace, problems with gcc 2.96
-    //! \brief Output operator
+    void print(std::ostream& (*f)(std::ostream&)) { if(is_on()) *out << f; }
+    
     template<class T>
-    selective_ostream operator<<(T const& t)
-    {
-      if(is_on())
-	*out << t;
-      return *this;
-    } 
-  };
+    void print(T const& t) { if(is_on()) *out << t; } 
 
+  };
+  
+  //! \brief Output operator
+  template<class T>
+  inline selective_ostream operator<<(selective_ostream s, T const& t) 
+  { s.print(t); return s;}
+     
+  // manipulator like std::endl are templates, so we need a special
+  // version to guide overloading resolution
+  //! \brief Output for manipulators like \c std::endl
+  inline selective_ostream operator<<(selective_ostream s, std::ostream& (*f)(std::ostream&) ) 
+  { s.print(f); return s;}
+
+
+  
 } // namespace GrAL
 
 #endif
