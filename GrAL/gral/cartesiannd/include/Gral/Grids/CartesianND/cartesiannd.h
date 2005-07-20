@@ -1076,10 +1076,27 @@ struct grid_types<cartesiannd::archetype_t<cartesiannd::grid<DIM> > >
 };
 
 template<unsigned DIM>
+struct grid_types<cartesiannd::archetype_t<cartesiannd::subrange<DIM> > >
+  : public grid_types_base<cartesiannd::archetype_base_t<cartesiannd::subrange<DIM> > >
+{
+  typedef cartesiannd::archetype_t<cartesiannd::subrange<DIM> > grid_type;
+  typedef cartesiannd::archetype_t<cartesiannd::subrange<DIM> > at;
+  typedef typename at::archetype_iterator                       archetype_iterator;
+  typedef typename at::archetype_handle                         archetype_handle;
+  typedef typename at::archetype_type                           archetype_type;
+
+  typedef grid_dim_tag<DIM-1> dimension_tag;
+};
+
+
+template<unsigned DIM>
 struct grid_types<cartesiannd::subrange<DIM> > 
   : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::subrange<DIM>, DIM> >
 {
   typedef cartesiannd::subrange<DIM> grid_type;
+
+  // subrange of subrange does currently not work.
+  //  typedef cartesiannd::subrange<DIM> cartesian_subrange_type;
 };
 
 
