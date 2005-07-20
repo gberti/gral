@@ -15,6 +15,7 @@ cell_on_cell_iterator<G,NBTABLE,GT>::ctxt;
 template<class G, class NBTABLE, class GT>
 void cell_on_cell_iterator<G,NBTABLE,GT>::init(G const& g_)
 {
+  remove(g_);
   NBTABLE * nbs = new NBTABLE(g_);
   CalculateNeighborCells(* nbs, g_);
   ctxt[&g_] = nbs;
