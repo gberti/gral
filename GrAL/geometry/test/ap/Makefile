@@ -34,7 +34,8 @@ test-primitives: $(LOCALOBJECTS)
 run:
 	$(EXEC) 
 
-check: run-check
+check: 
+	$(MAKE) run-check FILTER=$(CONFIGURATION)/scripts/floating-point-filter.pl
 
 
 clean: stdclean
