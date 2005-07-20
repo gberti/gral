@@ -54,8 +54,7 @@ struct grid_types_base_Triang2D {
   typedef grid_dim_tag<2>               dimension_tag;
 
   typedef polygon1d::polygon                 archetype_type;
-  typedef std::vector<archetype_type>        archetype_sequence;
-  typedef archetype_sequence::const_iterator archetype_iterator;
+  typedef archetype_type const*              archetype_iterator;
   typedef int                                archetype_handle;
   typedef grid_types<archetype_type>         archgt;
 };
