@@ -19,7 +19,6 @@
 #include "Utility/pre-post-conditions.h"
 #include "Utility/type-name-traits.h"
 
-
 namespace GrAL {
 
 //----------------------------------------------------------------
@@ -51,13 +50,63 @@ public:
   }
   virtual void print(std::ostream& out) const 
     { out << v;}
-  virtual void print(std::ostream& out, const std::string& prefix = "") const 
+  virtual void print(std::ostream& out, const std::string& prefix) const 
     { out << prefix << v;}
 
   virtual std::string vartypename() const { return std::string(type_name_traits<T>::name());}
 };
 
- 
+  /*! \brief Mutator for container types
+     
+  On read, this mutator appends to the controled container.
+
+  \templateparams
+   - T is a partial model of STL Back Insertion Sequence
+     - <code> const_iterator begin() / end() </code>
+     - <code> push_back(value_type) </code>
+
+   \b Example:
+   \code
+   std::vector<int> indices;
+   RegisterAt(Ctrl, "+i", GetPushbackMutator(indices));
+   // on the commandline, use '+i' repeatedly:
+   // pgrm  +i 1 +i 88 +i 7
+   \endcode
+
+  */
+  template<class T>
+  class PushbackMutator : public mutator_impl { 
+    T& v;
+  public:
+    PushbackMutator(T& v_) : v(v_) {}
+    virtual void read(std::istream& in) {
+      REQUIRE_ALWAYS((in.good()), "Stream not good! ",1);
+      typename T::value_type vv;
+      in >> vv;
+      v.push_back(vv);
+      ENSURE_ALWAYS((in.eof() || in.good()), "Input failed in PushBackMutator!", 1);
+    }
+    virtual void print(std::ostream& out) const { 
+      for(typename T::const_iterator i = v.begin(); i != v.end(); ++i)
+	out << *i << ' ';
+    }
+    virtual void print(std::ostream& out, const std::string& prefix) const 
+    { out << prefix; print(out); }
+
+    virtual std::string vartypename() const { return std::string(type_name_traits<T>::name());}
+
+  };
+  /*! \brief Creator function for the PushbackMutator
+    
+      \ingroup mutatorcreators 
+
+  */
+  template<class T>
+  inline Mutator  GetPushbackMutator(T& t) { return Mutator(new PushbackMutator<T>(t));}
+
+  
+
+
 //! Notify controlee, if variable changes.
 template<class T>
 class NotifyOnChangeMutator : public TypedMutator<T> {
