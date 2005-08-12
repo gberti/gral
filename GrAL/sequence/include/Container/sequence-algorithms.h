@@ -164,10 +164,24 @@ namespace sequence {
       \see \ref test-sequence-algorithms.C
    */ 
   template <typename InputIterator>
-  inline typename ::std::iterator_traits<InputIterator>::value_type
+  inline typename std::iterator_traits<InputIterator>::value_type
   sum(InputIterator first, InputIterator end) 
   {
-    return ::std::accumulate(first,end, 0, ::std::plus<typename ::std::iterator_traits<InputIterator>::value_type>());
+    typedef typename std::iterator_traits<InputIterator>::value_type value_type;
+    return std::accumulate(first,end, value_type(0), std::plus<value_type>());
+  }
+
+
+  /*! \brief Calculate average of the sequence
+      \ingroup algorithms
+      \see \ref test-sequence-algorithms.C
+   */ 
+  template <typename InputIterator>
+  inline typename std::iterator_traits<InputIterator>::value_type
+  average(InputIterator first, InputIterator end) 
+  {
+    typename std::iterator_traits<InputIterator>::value_type res = sum(first,end);
+    return res / distance(first,end);
   }
 
   /*! \brief The classic bubble sort.
