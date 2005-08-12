@@ -1,0 +1,13 @@
+/*! \mainpage Index of the GrAL Grid Transformation Package
+
+    This package contains algorithms and components related to transformations of grids,
+    such as smoothing, topological improvements like edge flipping, and refinement or coarsening.
+
+
+    Browse the documentation using the modules hierarchy.
+
+*/
+
+/*! \defgroup cartesianndmodule Components for CartesianND
+
+*/
