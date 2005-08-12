@@ -91,7 +91,7 @@ public:
   static gf_name_pair<GF> pair(std::string const& nm, GF const& gf)
     { return gf_name_pair<GF>(nm,gf);}
 
-
+  heterogeneous_list::BEGIN BeginGFs() const { return heterogeneous_list::BEGIN();}
 private:
   // map material ids to names
   struct material_names_impl {
