@@ -40,7 +40,11 @@ public:
   typedef gt::Cell                  Cell;
   typedef gt::VertexOnCellIterator  VertexOnCellIterator;
   typedef gt::EdgeOnCellIterator    EdgeOnCellIterator;
+  typedef gt::vertex_handle         vertex_handle;
 
+  typedef gt::archetype_geom_type         archetype_geom_type;
+  typedef archetype_geom_type::coord_type local_coord_type;
+  typedef point_traits<local_coord_type>  lpt;
 private:
   grid_type const* g;
   double         * xy;
@@ -146,11 +150,28 @@ public:
 
 
   //! coordinate of Vertex (read/write access)
-  coord_proxy coord(Vertex const& v) 
-    { return coord_proxy(xy + 2*v.handle());}
+  coord_proxy coord(Vertex const& v) { return coord(v.handle()); }
+  coord_proxy coord(vertex_handle v) { return coord_proxy(xy + 2*v);}
   //! coordinate of Vertex (read access)
-  coord_type  coord(Vertex const& v) const 
-    { return coord_type (xy + 2*v.handle());}
+  coord_type  coord(Vertex const& v)  const    { return coord(v.handle()); }
+  coord_type  coord(vertex_handle  v) const   { return coord_type (xy + 2*v);}
+
+
+
+  //! Global coordinate of a point given in local coordinates \c lambda with respect to a cell \c c 
+  template<class LOCALCOORD>
+  coord_type coord(Cell const& c, LOCALCOORD const& lambda) const 
+  {
+    typedef point_traits<LOCALCOORD> locpt;
+    return coord(c.v(0)) 
+      + locpt::x(lambda) * (coord(c.v(1)) - coord(c.v(0))) 
+      + locpt::y(lambda) * (coord(c.v(2)) - coord(c.v(0)));
+  } 
+
+
+  local_coord_type local_coord(VertexOnCellIterator const& vc) const 
+  { return TheGrid().ArchetypeGeom(vc.TheCell()).coord(vc.local_handle());}
+
 
   //! Length of (straight) edge
   inline scalar_type length(Edge const& e) const;
@@ -174,14 +195,17 @@ public:
   scalar_type solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(2*M_PI);}
 };
 
+  /*
 
-inline std::ostream&
-operator<<(std::ostream& out, stored_geometry_triang2d::coord_type const& p)
-{ return (out << p[0] << ' ' << p[1]);}
-
-inline std::istream&
-operator>>(std::istream&  in, stored_geometry_triang2d::coord_type & p)
-{ return (in >> p[0] >> p[1]);}
+  now defined by array_operators
+  inline std::ostream&
+  operator<<(std::ostream& out, stored_geometry_triang2d::coord_type const& p)
+  { return (out << p[0] << ' ' << p[1]);}
+  
+  inline std::istream&
+  operator>>(std::istream&  in, stored_geometry_triang2d::coord_type & p)
+  { return (in >> p[0] >> p[1]);}
+  */
 
 
 inline void

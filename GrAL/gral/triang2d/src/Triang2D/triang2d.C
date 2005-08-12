@@ -87,7 +87,12 @@ void Triang2D::Steal(int* c, int nc, int nv)
 
 Triang2D::SD::SD() 
 {
+  typedef archetype_geom_type::coord_type local_coord_type;
   the_archetype[0] = archetype_type(3);
+  the_archetype_geom[0] = archetype_geom_type(the_archetype[0]);
+  the_archetype_geom[0].coord(0) = local_coord_type(0.0, 0.0);
+  the_archetype_geom[0].coord(1) = local_coord_type(1.0, 0.0);
+  the_archetype_geom[0].coord(2) = local_coord_type(0.0, 1.0);
 }
 
 Triang2D::SD Triang2D::sd;
