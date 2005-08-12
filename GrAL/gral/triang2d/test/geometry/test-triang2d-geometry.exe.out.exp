@@ -19,3 +19,10 @@ E [2->0] length=1
 F [0 1 ] volume=1
 F [1 2 ] volume=1.41421
 F [2 0 ] volume=1
+Cell 0
+local= 0 0 global=2 0
+local= 1 0 global=4 0
+local= 0 1 global=0 4
+local= 0.5 0.5 global=2 2
+local= 0 0.5 global=1 2
+local= 0.5 0 global=3 0

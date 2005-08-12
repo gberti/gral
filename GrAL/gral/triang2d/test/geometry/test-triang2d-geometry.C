@@ -72,4 +72,25 @@ int main() {
     }
   }
 
+
+  {
+    triangle tri[] = { {0, 1, 2}};
+    typedef gt::local_coord_type lct;
+    ct  coords[] = { {2.0, 0.0}, {4.0, 0.0}, {0.0,4.0}};
+    lct locals[] = { 
+      lct(0.0, 0.0), lct(1.0, 0.0), lct(0.0, 1.0),
+      lct(0.5, 0.5), lct(0.0, 0.5), lct(0.5, 0.0)
+    };
+
+    int nc = sizeof(tri)/sizeof(triangle);
+    int nv = sizeof(coords)/sizeof(ct);
+    grid_type T((int *)tri, nc, nv);
+    geom_type Geom(T, (double *)coords);
+    for(gt::CellIterator c(T); !c.IsDone(); ++c) {
+      cout << "Cell " << c.handle() << "\n";
+      for(int lc = 0; lc < sizeof(locals)/sizeof(lct); ++lc)
+	cout << "local= " << locals[lc] << " global=" << Geom.coord(*c,locals[lc]) << "\n";
+    }
+  }
+
 }
