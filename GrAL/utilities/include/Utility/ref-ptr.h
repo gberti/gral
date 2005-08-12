@@ -391,10 +391,6 @@ temporary<T>::operator ref_ptr<T> () const { return ref_ptr<T>(new T(t), ref_ptr
   template<class T>
   inline ref_ptr<T> copy_to_ref_ptr(T const& t) { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
 
-  // superflous
-  template<class T>
-  inline ref_ptr<T> copy_to_ref_ptr(T      & t) { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
-
 
   /*! \brief Convert newly allocated pointer to ref_ptr
 
