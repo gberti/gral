@@ -174,6 +174,9 @@ public:
 
   typedef gf_array_adapter::value_type<T,N>  value_type;
   typedef gf_array_adapter::value_proxy<T,N> value_proxy;
+  typedef value_proxy                        reference;
+  typedef const  value_type                  const_reference;
+
   typedef size_t                             size_type;
 
   typedef value_type                         result_type;
