@@ -7,6 +7,7 @@ SUBDIRS = boundary-grid  \
           cell-as-volume \
           cell-on-cell-iterator \
           cell-on-vertex-iterator \
+          collapsed-grid-view \
           connected-components \
           construct-isomorphism  \
           disjoint-union \
@@ -24,6 +25,7 @@ SUBDIRS = boundary-grid  \
           grid-function-array-adapter \
           incidence-hulls \
           mapped-grid-function \
+          morphisms \
           multi-grid-function \
           partial-grid-morphism \
           polygon1d \
@@ -31,6 +33,7 @@ SUBDIRS = boundary-grid  \
 	  restricted-grid-view \
           shrunk-grid-view \
           simple-geometry \
+          single-element-iterator \
           vertex-iterator-of-cell-set  \
           vertex-on-vertex-iterator \
           vertex-stars 
