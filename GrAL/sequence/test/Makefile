@@ -6,7 +6,9 @@ SUBDIRS = bijective-mapping  \
           index-map-nd \
           integer-range \
           sequence-algorithms \
-          tuple 
+          tuple \
+          union-find \
+
 
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
