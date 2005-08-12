@@ -7,6 +7,7 @@
 
 #include "Config/compiler-config.h"
 #include "Utility/pre-post-conditions.h"
+#include <iostream>
 
 /*! \file
  */
@@ -161,6 +162,14 @@ struct point_traits_fixed_size_array_base :
   }
   static Ptype Origin(unsigned) { return Origin();}
 
+  // should i be in [LowerIndex(), UpperIndex()]  or in [0, DIM-1] ??
+  static Ptype unit_vector(int i) {
+    REQUIRE( LowerIndex() <= i && i <= UpperIndex(), "i=" << i << " ", 1);
+    Ptype res = Origin();
+    res[i] = 1;
+    return res;
+  }
+  static Ptype unit_vector(int i, unsigned) { return unit_vector(i);}
 
   // should branch on DIM here.
   static component_type  x(const Ptype& p) {return p[0];}
@@ -245,6 +254,24 @@ struct array_operators
     ARRAY lhs(to_derived());
     return lhs /= v;
   }
+
+
+  friend ARRAY operator*(value_type v, ARRAY const& rhs) { return rhs * v;}
+
+  friend std::ostream& operator<<(std::ostream& out, ARRAY const& a) { 
+    for(unsigned i  = 0; i < N-1; ++i) 
+      out << a[i] << ' ';
+    out << a[N-1];
+    return out;
+  }
+
+  friend std::istream& operator>>(std::istream& in, ARRAY & a) { 
+    for(unsigned i  = 0; i < N; ++i) 
+      in >> a[i];
+    return in;
+  }
+
+
 };
 
 
