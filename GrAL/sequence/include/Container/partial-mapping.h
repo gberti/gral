@@ -67,6 +67,10 @@ private:
   map_table_type mapping;
   T2             default_val;
 public:
+  typedef typename map_table_type::size_type      size_type;
+  typedef typename map_table_type::iterator       iterator;
+  typedef typename map_table_type::const_iterator const_iterator;
+
   //---------------------- construction --------------------------
 
   partial_mapping(const T2& def = T2()) : default_val(def) {}
@@ -77,21 +81,24 @@ public:
 
   //---------------------- queries -------------------------------
 
-  unsigned size()        const { return mapping.size();}
-  unsigned size_of_dom() const { return mapping.size();}
+  size_type size()        const { return mapping.size();}
+  size_type size_of_dom() const { return mapping.size();}
+  bool            empty() const { return mapping.empty();}
+
   bool defined  (const T1& t1) const { return (mapping.find(t1) != mapping.end());}
   bool undefined(const T1& t1) const { return (mapping.find(t1) == mapping.end());}
+
+  void undefine(const T1& t1) { mapping.erase(t1);}
 
   const T2& default_value() const { return default_val;}
 
   //---------------------- data access ---------------------------
 
-  typedef typename map_table_type::iterator       iterator;
-  typedef typename map_table_type::const_iterator const_iterator;
 
   // should use domain/image types
   const_iterator begin() const { return mapping.begin();}
   const_iterator end()   const { return mapping.end();}
+
   // no non-const versions of begin/end: writing should occur
   // only via mapping interface: op[]/() below.
 
