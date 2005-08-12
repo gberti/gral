@@ -81,7 +81,7 @@ public:
       \post 
          - <tt> NumOfCells() == nc </tt>
          - <tt> NumOfVertices() </tt> is the number \f$n_v\f$ of different vertices in \c c.
-         - The data in \c is only referenced.
+         - The data in \c c is only referenced.
    */
   Triang2D(int* c, int nc) 
     : cells(c), owned(false), ncells(nc) 
@@ -111,7 +111,6 @@ public:
   ~Triang2D();
  
 
-
   /*! \brief  make a physical copy
     \post
       The storage pointing to the cells array is owned 
@@ -135,6 +134,16 @@ public:
   */
   void Steal(int* c, int nc, int nv);
 
+  /*! \brief Initialize by copying \c c
+  
+   */
+  void Copy (int const* c, int nc, int nv, int offset = 0) {
+    int * cc = new int[nc*3];
+    for(int cell = 0; cell < 3*nc; ++cell)  
+      cc[cell] = c[cell] - offset;
+    Steal(cc, nc, nv);
+    owned = true;
+  }
   /*! \brief Initialize using the connectivity given by c, 
        \e without assuming ownership.
 
@@ -147,9 +156,11 @@ private:
   int  calc_num_of_vertices();
 
   struct SD {
-    typedef Triang2D::archetype_type archetype_type;
+    typedef Triang2D::archetype_type      archetype_type;
+    typedef Triang2D::archetype_geom_type archetype_geom_type;
 
-    archetype_type the_archetype[1];
+    archetype_type      the_archetype[1];
+    archetype_geom_type the_archetype_geom[1];
     SD();
   };
   static SD sd;
@@ -161,10 +172,10 @@ public:
   friend class Triang2D_Cell;
   friend class Triang2D_Vertex;
 
-  //@{
   /*! \name Sequence iteration
       \todo STL-style EndXXX() 
   */
+  //@{
   int NumOfCells   () const { return ncells   ;}
   int NumOfVertices() const { return nvertices;}
   int NumOfFaces()    const { return NumOfCells();}
@@ -174,6 +185,9 @@ public:
   inline FaceIterator   FirstFace()   const;
   inline FacetIterator  FirstFacet()  const;
   inline CellIterator   FirstCell()   const;
+
+  inline VertexIterator EndVertex() const;
+  inline CellIterator   EndCell()   const;
   //@}
 
   //@{
@@ -214,6 +228,12 @@ public:
   static unsigned NumOfArchetypes() { return 1;}
   static archetype_handle handle(archetype_iterator a)
     { return a - BeginArchetype();}
+
+  static archetype_geom_type const& ArchetypeGeom(archetype_handle   a) { return sd.the_archetype_geom[a];}
+  // these are quite generic ...
+  static archetype_geom_type const& ArchetypeGeom(archetype_iterator a) { return ArchetypeGeom(archetype_handle(a));}
+  static archetype_geom_type const& ArchetypeGeom(Cell        const& c) { return ArchetypeGeom(archetype_of(c));}
+  static archetype_geom_type const& ArchetypeGeom(cell_handle const& c) { return ArchetypeGeom(archetype_of(c));}
   /*@}*/
 };
 
@@ -265,6 +285,7 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs) { return lhs.c == rhs.c;}
   friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
+  friend bool operator< (self const& lhs, self const& rhs) { return lhs.c <  rhs.c;}
 };
 
 
@@ -301,6 +322,7 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs) { return lhs.v == rhs.v;}
   friend bool operator!=(self const& lhs, self const& rhs) { return lhs.v != rhs.v;}
+  friend bool operator< (self const& lhs, self const& rhs) { return lhs.v <  rhs.v;}
 };
 
 
@@ -338,6 +360,7 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs) { return lhs.vc == rhs.vc;}
   friend bool operator!=(self const& lhs, self const& rhs) { return lhs.vc != rhs.vc;}
+  friend bool operator< (self const& lhs, self const& rhs) { return lhs.vc <  rhs.vc;}
 };
 
 
@@ -484,6 +507,9 @@ class Triang2D_FacetIterator
 inline
 Triang2D::VertexIterator
 Triang2D::FirstVertex() const { return VertexIterator(*this);}
+inline
+Triang2D::VertexIterator
+Triang2D::EndVertex()  const { return VertexIterator(*this, NumOfVertices());}
 
 inline
 Triang2D::EdgeIterator
@@ -527,6 +553,11 @@ Triang2D::FirstFace() const { return FaceIterator(*this);}
 inline
 Triang2D::CellIterator
 Triang2D::FirstCell() const { return CellIterator(*this);}
+
+inline
+Triang2D::CellIterator
+Triang2D::EndCell() const { return CellIterator(*this,NumOfCells());}
+
 
 inline
 Triang2D_VertexOnCellIterator
