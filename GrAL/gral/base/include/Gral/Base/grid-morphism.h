@@ -21,8 +21,6 @@ namespace GrAL {
    \todo Make it independent of element being a vertex type
    (using map_element_iter_name<> like in partial_grid_function)
    \todo Can temporary vertex objects be avoided?
-   \todo make \code morphism[Vertex] = Vertex \endcode possible 
-         (currently assignment possible only for vertex_handle)
  */
 template<class G_DEF, class G_IMG>
 class vertex_morphism
@@ -72,6 +70,12 @@ public:
     if(inv == 0) init_inverse();
     return *inv;
   }
+  
+  void set_grids(G_DEF const& g_def, G_IMG const& gg_img) {
+    f.set_grid(g_def);
+    g_img = &gg_img;
+    inverse_owned = false;
+  }
 
 
   VertexImg operator()(VertexDef const& v) const { 
@@ -87,6 +91,18 @@ public:
   vertex_handle_img & operator[](vertex_handle_def v)  {
     REQUIRE((g_img != 0), "No image grid!\n",1);
     return f[VertexDef(f.TheGrid(),v)];
+  }
+
+  struct vertex_handle_img_proxy {
+    vertex_handle_img & h;
+    vertex_handle_img_proxy(vertex_handle_img& hh) : h(hh) {}
+    void operator=(VertexImg const& v) { h = v.handle();}
+    void operator=(vertex_handle_img const& v) { h = v;}
+  };
+
+  vertex_handle_img_proxy operator[](VertexDef const& v) {
+        REQUIRE((g_img != 0), "No image grid!\n",1);
+        return vertex_handle_img_proxy(f[v]);
   }
 
   grid_type_def const& DefGrid() const { return f.TheGrid();}
@@ -120,7 +136,6 @@ private:
    \see  \ref gridmorphisms module
 
    \todo Specialize if grids have consecutive handles
-   \todo Add support for inverse mapping
    \todo construct from vertex morphism
    \see vertex_morphism
 */
@@ -146,7 +161,7 @@ class cell_morphism
 
   void copy(self const& rhs) {
     f = rhs.f;
-    g_img = rhs.img;
+    g_img = rhs.g_img;
     inv = 0;
     inverse_owned = false;
   }
@@ -177,7 +192,7 @@ public:
 
   CellImg operator()(CellDef const& c) const { 
     REQUIRE((g_img != 0), "No image grid!\n",1);
-    return CellImg(*g_img,c.handle());
+    return CellImg(*g_img,f(c));
   }
 
   cell_handle_img operator()(cell_handle_def c) const {
@@ -190,7 +205,7 @@ public:
     return f[CellDef(f.TheGrid(),c)];
   }
 
-  /* This would allow for operator[](Cell) also.
+
   struct cell_handle_img_proxy {
     cell_handle_img & h;
     cell_handle_img_proxy(cell_handle_img& hh) : h(hh) {}
@@ -202,7 +217,7 @@ public:
         REQUIRE((g_img != 0), "No image grid!\n",1);
         return cell_handle_img_proxy(f[c]);
   }
-  */
+ 
 
   grid_type_def const& DefGrid() const { return f.TheGrid();}
   grid_type_img const& ImgGrid() const {
