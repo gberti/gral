@@ -1,0 +1,52 @@
+/* <style type="text/css" > */
+   <!--
+
+    div.color {
+    /* background: rgb(204,204,255);*/
+     background: rgb(255,255,114);
+     padding: 0.5em;
+     border: none;
+     margin-top: 2em;
+     margin-bottom: 2em;
+     /* text-align: left; */
+    }
+    div.navB {
+     background: rgb(255,255,114);
+     padding: 0.5em;
+     border: none;
+     margin-bottom: 2em;
+    }
+    div.box { border: solid; border-width: thin; width: 100%; margin-bottom: 3em;}
+    body { 
+       background: #FFFFF0;
+       margin-left: 8%; margin-right: 8%; 
+       margin-top: 1em; 
+       /*background: white;*/
+       font-family: sans-serif;
+    }
+    hr { margin-left: -6%; margin-right: -6% }
+    h1 { margin-left: -6%; color: green; text-align: center; margin-bottom: 1em;}
+    h2,h3,h4,h5,h6 { margin-left: -4%; color: green;}
+    table { 
+        font-size: smaller;  
+        /*padding: 3px 3px 20px 3px; *
+        /* border-color: black; */
+        border: 1px;
+        /*padding: 10px; */
+        valign: top;
+        spacing: 10px;
+        }
+    th { background: #FFFF99; }
+    td { padding: 5px; vertical-align: top; spacing: 3px; background: #FFFFCC; }
+   td.image { padding: 5px; spacing: 3px; background: #FFFFCC; } 
+  /*white;*/
+
+
+    :link { color: #0033FF; } 
+    :visited { color: #990099;} /* rgb(153, 0, 153) */
+    :active { color: #FF0066; } /* rgb(255, 0, 102) */
+    :hover { color:  #006633; background: #FFFFFF; } /* rgb(0, 96, 255) */ 
+    a { text-decoration: none }
+   -->
+/* </style> */
+
