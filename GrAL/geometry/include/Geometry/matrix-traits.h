@@ -9,7 +9,13 @@
 
 namespace GrAL {
 
-/*! To be specialized for concrete matrix types
+  /*! \defgroup linear_algebra Tools for linear algebra 
+
+  */
+
+/*! \brief To be specialized for concrete matrix types
+
+    \ingroup linear_algebra
  */
 template<class MATRIX>
 struct matrix_traits 
@@ -17,6 +23,11 @@ struct matrix_traits
 #ifdef DOXYGEN
   //!
   typedef MATRIX matrix_type;
+  //!
+  typedef MATRIX inverse_type;
+  //!
+  typedef MATRIX transpose_type;
+
   //! For matrices with compile-time dimensions
   static unsigned NumOfRows();
   //! For matrices with compile-time dimensions
@@ -25,9 +36,11 @@ struct matrix_traits
   static unsigned NumOfRows(matrix_type const&);
   //!
   static unsigned NumOfCols(matrix_type const&);
-
-  static inverse_type inverse(matrix_type const&);
+  //!
+  static inverse_type   inverse  (matrix_type const&);
+  //! 
   static transpose_type transpose(matrix_type const&);
+
 #endif
 };
 
