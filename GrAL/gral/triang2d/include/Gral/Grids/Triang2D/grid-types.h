@@ -8,6 +8,7 @@
 
 #include "Gral/Base/element-handle.h"
 #include "Gral/Base/polygon.h"
+#include "Gral/Base/archetype-geometry.h"
 
 namespace GrAL {
 
@@ -57,6 +58,8 @@ struct grid_types_base_Triang2D {
   typedef archetype_type const*              archetype_iterator;
   typedef int                                archetype_handle;
   typedef grid_types<archetype_type>         archgt;
+  typedef archetype_geometry<grid_type, archetype_type> archetype_geom_type;
+  typedef archetype_geom_type::coord_type    local_coord_type;
 };
 
 } // namespace GrAL 
