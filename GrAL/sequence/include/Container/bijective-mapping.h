@@ -258,7 +258,9 @@ public:
   T2& operator[](const T1& t1) { inverse_ok = false; return the_map[t1];}
 
   //! returns true iff \f$ t_1 \in \dom(f) \f$ 
-  bool defined(const T1& t1) const { return (the_map.find(t1) != the_map.end());}
+  bool defined  (const T1& t1) const { return (the_map.find(t1) != the_map.end());}
+  //! returns true iff \f$ t_1 \notin \dom(f) \f$ 
+  bool undefined(const T1& t1) const { return !defined(t1); }
 
 
   //-------------- related functions and sets ----------------
