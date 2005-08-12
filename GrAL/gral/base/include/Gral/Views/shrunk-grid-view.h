@@ -562,7 +562,7 @@ namespace shrink_grid_view {
       grid_function_view(grid_type const& g_,
 			 GF        const& gf_) : g(&g_), gf(&gf_) {}
 
-      value_type const& operator()(element_type const& e) const { return (*gf)(e.Base());}
+      const_reference   operator()(element_type const& e) const { return (*gf)(e.Base());}
       grid_type  const& TheGrid() const { return *g;}
 
       element_iterator FirstElement() const { return et::FirstElement(TheGrid());}
