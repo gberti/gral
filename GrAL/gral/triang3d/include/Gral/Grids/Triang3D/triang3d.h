@@ -142,7 +142,19 @@ public:
       } // end of block, destructor of T will delete c
       \endcode 
  
-  */  void Steal(int* c, int nc, int nv);
+  */ 
+  void Steal(int* c, int nc, int nv);
+ 
+  /*! \brief Initialize by copying \c c
+
+  */
+  void Copy (int const* c, int nc, int nv, int offset = 0) {
+    int * cc = new int[nc*4];
+    for(int cell = 0; cell < 4*nc; ++cell)  
+      cc[cell] = c[cell] - offset;
+    Steal(cc, nc, nv);
+    owned = true;
+  }
   //@}
 private:
   void clear(); 
