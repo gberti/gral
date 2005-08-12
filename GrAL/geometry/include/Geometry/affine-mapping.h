@@ -15,6 +15,8 @@ namespace GrAL {
 
 /*! \brief Affine coordinate mapping
 
+    \ingroup linear_algebra
+
     \see test-affine-mapping.C
  */
 template<class MATRIX, class ARGTYPE, class RESTYPE = ARGTYPE>
@@ -136,10 +138,22 @@ public:
 
     return self(R);
   }
+  /*! \brief Inverse mapping of \c A
+
+     This works only if the mapping is invertible.
+  */
   static self inverse(self const& A) {
     typedef matrix_traits<matrix_type> mt;
     matrix_type I = mt::inverse(A.TheMatrix());
     return self(I, - (I*A.TheTranslation()));
+  }
+
+  //! \brief Inverse of this mapping
+  self inverse() const { return inverse(*this);}
+  
+  //! \brief Return \f$ A^{-1} b \f$
+  coord_type solve(coord_type const& b) {
+    return inverse(*this)(b);
   }
 };
 
