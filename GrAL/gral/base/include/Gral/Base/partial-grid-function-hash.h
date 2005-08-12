@@ -149,6 +149,7 @@ public:
 
   typedef ElementIterator_generic_pgf<E,T> ElementIterator;
   ElementIterator FirstElement() const { return ElementIterator(table.begin(),table.end());}
+  ElementIterator EndElement()   const { return ElementIterator(table.end(),  table.end());}
 
 
 };

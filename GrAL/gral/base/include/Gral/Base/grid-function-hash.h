@@ -199,6 +199,7 @@ public:
       set_value(t);
     }
   ElementIterator FirstElement() const { return et1::FirstElement(TheGrid());}
+  ElementIterator EndElement()   const { return et1::EndElement  (TheGrid());}
 
 
   /*! Set all value to \c t.
