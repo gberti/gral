@@ -171,14 +171,6 @@ public:
 };
 
 
-inline std::ostream&
-operator<<(std::ostream& out, stored_geometry_triang3d::coord_type const& p)
-{ return (out << p[0] << ' ' << p[1] << ' ' << p[2]);}
-
-inline std::istream&
-operator>>(std::istream&  in, stored_geometry_triang3d::coord_type & p)
-{ return (in >> p[0] >> p[1] >> p[2]);}
-
 
 inline void
 stored_geometry_triang3d::coord_proxy::operator=
