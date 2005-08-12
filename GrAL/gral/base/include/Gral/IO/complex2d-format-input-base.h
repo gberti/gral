@@ -146,6 +146,9 @@ public:
   bool IsDone() const { return (v >= (int)g->NumOfVertices());}
   int  handle() const { return v;}
 
+  bool operator==(self const& rhs) const { return v == rhs.v;}
+  bool operator< (self const& rhs) const { return v <  rhs.v;}
+
   grid_type const& TheGrid() const { return *g;}
 
   void assure_valid() const {
@@ -247,6 +250,9 @@ public:
   Vertex  operator*()    const { assure_valid(); return Vertex(*g,vc-g->offset);}
   int     handle()       const { assure_valid(); return vc - g->offset;}
   grid_type const& TheGrid() const { return *g;}
+
+  bool operator==(self const& rhs) const { return lv == rhs.lv;}
+  bool operator< (self const& rhs) const { return lv <  rhs.lv;}
 
   void assure_valid() const {
     ENSURE((( g != 0) && ( vc - g->offset >= 0) && (vc - g->offset < g->nv)),
@@ -350,4 +356,21 @@ public:
 
 } // namespace GrAL 
 
+
+namespace STDEXT {
+  template<class T> struct hash;
+
+  template<>
+  struct hash<GrAL::VertexIterator_istream_complex2d>
+  {
+    typedef GrAL::VertexIterator_istream_complex2d key_type;
+    typedef key_type                               argument_type;
+    typedef size_t                                 result_type;
+    typedef GrAL::element_traits<key_type> et;
+    typedef et::hasher_type hasher_type;
+
+    result_type operator()(key_type v) const { hasher_type h; return h(v);}
+  };
+
+} // namespace STDEXT
 #endif
