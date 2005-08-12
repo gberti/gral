@@ -36,6 +36,7 @@ namespace GrAL {
 	typedef  element_codimension_tag;
 
         static ElementIterator FirstElement(const grid_type& g);
+        static ElementIterator EndElement  (const grid_type& g);
         static unsigned        size        (const grid_type& g);
         static handle_type     handle      (element_type const& e);
         static element_type    element     (grid_type const& g, 
