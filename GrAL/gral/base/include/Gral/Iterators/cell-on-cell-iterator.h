@@ -5,6 +5,8 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/facet-on-cell-function.h"
+#include "Utility/ref-ptr.h"
+
 #include <map>
 
 namespace GrAL {
@@ -63,7 +65,7 @@ public:
   typedef typename GT::FacetOnCellIterator FacetOnCellIterator;
   typedef Cell     value_type;
 private:
-  NBTABLE   const* nbs;
+  ref_ptr<NBTABLE   const> nbs;
   Cell                 c;
   FacetOnCellIterator fc;
 
@@ -72,16 +74,16 @@ private:
   //  XGT::Cell c; XGT::CellOnCellIterator(c);
   //  where XGT is GT + cell_on_cell_iterator.
   //  Otherwise, we would have to wrap G+NBTABLE and each type in GT.
-  typedef  ::std::map<grid_type const*, NBTABLE const*> context_table;
-  static  context_table  ctxt;
+  typedef std::map<grid_type const*, ref_ptr<NBTABLE const> > context_table;
+  static  context_table  * ctxt;
 public:
   cell_on_cell_iterator() : nbs(0) {}
   cell_on_cell_iterator(Cell const& c_)
     : c(c_), fc(c)
   {
-    REQUIRE(ctxt.find(& (c.TheGrid())) != ctxt.end(), 
+    REQUIRE(ctxt->find(& (c.TheGrid())) != ctxt->end(), 
 	    "No neighbor table registered for grid " << & (c.TheGrid()),1);
-    nbs = ctxt[& (c.TheGrid())];
+    nbs = (*ctxt)[& (c.TheGrid())];
     advance_till_valid();
   }
   cell_on_cell_iterator(Cell const& c_, NBTABLE const& nbs_) 
@@ -96,9 +98,13 @@ public:
   Cell      const& TheCell() const { return c;}
   Facet            TheFacet() const { return *fc;}
 
-  static void map_nb_table(grid_type const& g_, NBTABLE const& nbs_) { ctxt[&g_] = &nbs_;}
+  static void init();
+
   static void init        (grid_type const& g_);
   static void remove      (grid_type const& g_);
+
+  static void map_nb_table(grid_type const& g_, NBTABLE const& nbs_); 
+
 private:
   bool valid(cell_handle c) const { return TheGrid().valid(c);}
   void advance_till_valid() 

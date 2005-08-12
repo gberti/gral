@@ -37,16 +37,17 @@ private:
   Vertex                   v;
   int                      lc;  
 
-  static  std::map<grid_type const*, ref_ptr<cov_table> > ctxt;
+  typedef std::map<grid_type const*, ref_ptr<cov_table> > context_table;
+  static  context_table  * ctxt;
 
 
 public:
   cell_on_vertex_iterator() {}
   cell_on_vertex_iterator(Vertex const& vv) : v(vv), lc(0) 
   {
-    REQUIRE( (ctxt.find(&v.TheGrid()) != ctxt.end()), 
+    REQUIRE( (ctxt->find(&v.TheGrid()) != ctxt->end()), 
 	    "No CellOnVertex incidence information registered for grid!\n",1);
-    inc = ref_ptr<cov_table const>(ctxt[&v.TheGrid()]);
+    inc = ref_ptr<cov_table const>((*ctxt)[&v.TheGrid()]);
   } 
 
   self& operator++() { cv(); ++lc; return *this;}
@@ -63,23 +64,10 @@ public:
   void cb() const { REQUIRE(bound(), "", 1);}
   void cv() const { REQUIRE(valid(), "", 1);}
 
+  static void init();
 
-  static void init(grid_type const& g) { 
-    ref_ptr<cov_table> t(new cov_table(g), ref_ptr_base::shared);
-    for(typename gt::CellIterator c(g); ! c.IsDone(); ++c)
-      for(typename gt::VertexOnCellIterator vc(*c); ! vc.IsDone(); ++vc)
-	(*t)[*vc].push_back(c.handle());
-    ctxt[&g] = t;
-  }
-
-  static void remove(grid_type const& g) {
-    typename cov_table::iterator it = ctxt.find(&g);
-    if(it != ctxt.end()) {
-      it->second.clear();
-      ctxt.erase(it);
-    }
-
-  }
+  static void init  (grid_type const& g);
+  static void remove(grid_type const& g);
   
 };
 

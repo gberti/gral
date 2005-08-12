@@ -7,9 +7,43 @@
 
 namespace GrAL {
 
-template<class G, class GT>
-std::map<G const*, ref_ptr<typename  cell_on_vertex_iterator<G,GT>::cov_table> >
-cell_on_vertex_iterator<G,GT>::ctxt;
+  template<class G, class GT>
+  typename cell_on_vertex_iterator<G,GT>::context_table
+  * cell_on_vertex_iterator<G,GT>::ctxt;
+
+  template<class G, class GT>
+  void cell_on_vertex_iterator<G,GT>::init()
+  {
+    static int count = 0;
+    if(count == 0) {
+      ++count;
+      ctxt = new context_table();
+    }
+  }
+
+  template<class G, class GT>
+  void cell_on_vertex_iterator<G,GT>::init(grid_type const& g) 
+  { 
+    init();
+    remove(g);
+    ref_ptr<cov_table> t = new_ref_ptr(new cov_table(g)); // , ref_ptr_base::shared);
+    for(typename gt::CellIterator c(g); ! c.IsDone(); ++c)
+      for(typename gt::VertexOnCellIterator vc(*c); ! vc.IsDone(); ++vc)
+	(*t)[*vc].push_back(c.handle());
+    (*ctxt)[&g] = t;
+  }
+
+  template<class G, class GT>
+  void cell_on_vertex_iterator<G,GT>::remove(grid_type const& g) 
+  {
+    if(ctxt != 0) {
+      typename context_table::iterator it = ctxt->find(&g);
+      if(it != ctxt->end()) {
+	it->second.clear();
+	ctxt->erase(it);
+      }
+    }
+  }
 
 } // namespace GrAL 
 
