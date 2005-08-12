@@ -101,9 +101,9 @@ void write_complex2d(GRID const& G, GEOM const& Geo,  ::std::ostream& out, int o
   typedef element_traits<Vertex> et;
   typedef typename et::grid_type base_grid_type; // possibly != GRID
   Vertex dummy(*(G.FirstVertex()));
-  base_grid_type const& baseG(dummy.TheGrid());
+  ref_ptr<base_grid_type const> baseG(dummy.TheGrid());
 
-  grid_function<Vertex,int> VNum(baseG);
+  grid_function<Vertex,int> VNum(* baseG);
   int vnum = offset;
   for(VertexIterator v= G.FirstVertex(); ! v.IsDone(); ++v){
     out << Geo.coord(*v) << "\n"; 
