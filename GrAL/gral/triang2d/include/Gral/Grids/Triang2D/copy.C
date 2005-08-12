@@ -41,7 +41,7 @@ void copy_cells(Triang2D       & G,
     int lv = 0;
     src_vertex_on_cell_it src_lv((*src_c).FirstVertex());
     for(; ! src_lv.IsDone(); ++src_lv, ++lv) {
-       cells[3*hc+lv] = vtx_corr(src_lv.handle());
+      cells[3*hc+lv] = vtx_corr(*src_lv).handle();
     }
    
   }

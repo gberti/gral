@@ -43,11 +43,15 @@ void ConstructGrid(Triang2D        & G,
 { 
   typedef grid_types<G2>                                source_gt;
   typedef typename source_gt::vertex_handle             src_vertex_handle;
-  typedef typename grid_types<Triang2D>::vertex_handle  vertex_handle;
+  typedef typename grid_types<Triang2D>::vertex_handle  vertex_handle;  
+  typedef typename source_gt::Vertex                    srcVertex;
+  typedef typename grid_types<Triang2D>::Vertex         Vertex;
+
 
   // this should be replaced by an array if possible.
   // map also lacks an operator() const  |  operator[] const 
-  partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
+  // partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
+  partial_mapping<srcVertex,Vertex> VertexCorr;
   ConstructGridV(G,destGeom,srcG,srcGeom,VertexCorr);
 }
 
@@ -58,12 +62,14 @@ void ConstructGrid0(Triang2D        & G,
   typedef grid_types<G2>                                source_gt;
   typedef typename source_gt::vertex_handle             src_vertex_handle;
   typedef typename source_gt::cell_handle               src_cell_handle;
+  typedef typename source_gt::Vertex                    srcVertex;
   typedef typename grid_types<Triang2D>::vertex_handle  vertex_handle;
+  typedef typename grid_types<Triang2D>::Vertex         Vertex;
   typedef typename grid_types<Triang2D>::cell_handle    cell_handle;
 
   // this should be replaced by an array if possible.
   // map also lacks an operator() const  |  operator[] const 
-  partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
+  partial_mapping<srcVertex,Vertex> VertexCorr;
   // here we are not interested in a cell correspondance
   dummy_mapping<src_cell_handle,cell_handle> CellCorr;
   ConstructGrid0(G,srcG,VertexCorr,CellCorr);
@@ -107,7 +113,7 @@ void ConstructGridVC(Triang2D       & G,
  typedef typename grid_types<G2>::VertexIterator   src_vertex_it;
  typedef typename grid_types<Triang2D>::Vertex     Vertex;
  for(src_vertex_it src_v = srcG.FirstVertex(); ! src_v.IsDone(); ++src_v) {
-   Vertex V(G,VertexCorr(src_v.handle()));
+   Vertex V = VertexCorr(*src_v);
    assign_point(destGeom.coord(V) , srcGeom.coord(*src_v));
  }
 }
@@ -131,12 +137,15 @@ void ConstructGrid0(Triang2D       &  G,
   typedef typename gt::Cell          Cell;
   typedef typename gt::cell_handle   cell_handle;
   typedef typename gt::vertex_handle vertex_handle;
+  typedef typename gt::Vertex        Vertex;
 
   //---  construct vertices ---------------------------
-  
+ 
+  // initialize with 0 cells 
+  G.init(0, 0, srcG.NumOfVertices());
   int v = 0;
   for(src_vertex_it src_v = srcG.FirstVertex(); ! src_v.IsDone(); ++src_v, ++v) {
-    VertexCorr[src_v.handle()] = v;
+    VertexCorr[*src_v] = Vertex(G,v);
   }
   
 

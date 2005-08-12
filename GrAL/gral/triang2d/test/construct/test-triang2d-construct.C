@@ -71,7 +71,9 @@ int main(int argc, char* argv[]) {
   Triang2D T;
   stored_geometry_triang2d GeomT(T);
 
-  bijective_mapping<int,int> vcorr;
+  typedef grid_types<IstreamComplex2DFmt> srcgt;
+  typedef grid_types<Triang2D>            dstgt;
+  bijective_mapping<srcgt::Vertex, dstgt::Vertex> vcorr;
   dummy_mapping<int,int>     ccorr;
   ConstructGridVC(T,GeomT, Gsrc, Gsrc, vcorr,ccorr);
 
