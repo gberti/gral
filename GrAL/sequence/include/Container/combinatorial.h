@@ -5,6 +5,7 @@
 
 #include "Utility/pre-post-conditions.h"
 
+namespace GrAL {
 
 /*! \defgroup combinatorialalgorithms Combinatorial algorithms
     \brief Algorithms calculating combinatorial functions, such as binomial coefficients
@@ -38,6 +39,18 @@ struct power {
 
 template<unsigned BASE>
 struct power<BASE,0> {
+  enum { value = 1};
+};
+
+  /*! \brief Compile-time factorial 
+   */
+template<unsigned N>
+struct factorial {
+  enum { value = N * factorial<N-1>::value};
+};
+
+template<>
+struct factorial<0> {
   enum { value = 1};
 };
 
@@ -170,6 +183,8 @@ V succ_nary_number(V const& v, unsigned b)
 template<class V>
 inline V succ_binary_number(V const& v)
 { return succ_nary_number(v,2);}
+
+} // namespace GrAL 
 
 
 #endif
