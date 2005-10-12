@@ -95,10 +95,8 @@ void Construct_complex2d(Complex2D& CC,
   typedef typename source_gt::vertex_handle     src_vertex_handle;
   typedef grid_types<Complex2D>::vertex_handle  vertex_handle;
 
-  // this should be replaced by an array if possible.
-  // map also lacks an operator() const  |  operator[] const 
-  //vertex_morphism<G2,Complex2D> VertexCorr(srcG,CC);
-  partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
+  vertex_morphism<G2,Complex2D> VertexCorr(srcG, CC);
+
   Construct_complex2d(CC,destGeom,srcG,srcGeom,VertexCorr);
 }
 
