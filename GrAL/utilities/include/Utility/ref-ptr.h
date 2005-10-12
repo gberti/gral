@@ -365,9 +365,10 @@ public:
   friend bool operator!=(T         * p, self const& c) { return c.get() != p;}
 private:
 public:
-  T * get()        const { return ptr.get();}
-  T * operator->() const { return ptr.get();} 
-  T & operator* () const { return *ptr;}
+  // comparison must be possible also with 0 pointers
+  T * get()        const {                           return ptr.get();}
+  T * operator->() const { REQUIRE(ptr != 0, "", 1); return ptr.get();} 
+  T & operator* () const { REQUIRE(ptr != 0, "", 1); return *ptr;}
   boost::shared_ptr<T> const& get_ptr() const { return ptr;}
 };
 
