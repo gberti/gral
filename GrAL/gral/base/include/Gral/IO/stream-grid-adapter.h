@@ -5,7 +5,13 @@
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/grid-function-vector.h"
+#include "Gral/Base/polygon.h"
+
+#include "Utility/ref-ptr.h"
+
 #include <iterator>
+#include <vector>
 
 namespace GrAL {
 
@@ -16,7 +22,8 @@ namespace GrAL {
    \brief  Grid-like iterator from a flat integer data stream.
 
   The format of the serial representation is as follows:
-  - Cells / vertices are implicitely numerated 0 ... nc-1 / nv-1
+  - Cells / vertices are implicitely numbered 0 ... nc-1 / nv-1
+    (nc = number of cells, nv = number of vertices)
   - The integer sequence contains the values
     - NV_0                  ( # vertices of cell 0)
     - LV1_0  ... LV1_NV_0   ( global numbers of the NV_0 vertices of cell 0) <BR>
@@ -27,19 +34,39 @@ namespace GrAL {
   This can be used to construct grids from files, message passing
   buffers, literal arrays and other sequentialized contexts.
  
-   \todo Test
+  Tested in \ref test-stream-grid-adapter.C 
 */
 
 
-template<class It>
-class stream_grid_mask;
+template<class It> class stream_grid_mask;
 
-template<class It>
-class stream_grid_mask_vertex_on_cell;
+template<class It> class stream_grid_mask_vertex;
+template<class It> class stream_grid_mask_cell;
+template<class It> class stream_grid_mask_vertex_on_cell;
 
-template<class It>
-class stream_geom_mask;
+template<class It> class stream_geom_mask;
 
+
+template<class It> 
+struct grid_types_stream_grid_mask
+{
+  typedef stream_grid_mask<It> grid_type;
+  typedef stream_grid_mask_vertex<It> Vertex;
+  typedef stream_grid_mask_vertex<It> VertexIterator;
+  typedef stream_grid_mask_cell<It>   Cell;
+  typedef stream_grid_mask_cell<It>   CellIterator;
+  typedef stream_grid_mask_vertex_on_cell<It>   VertexOnCellIterator;
+
+  typedef int vertex_handle;
+  typedef int cell_handle;
+
+  typedef grid_dim_tag<2>   dimension_tag;
+
+  typedef polygon1d::polygon                          archetype_type;
+  typedef std::vector<archetype_type>::const_iterator archetype_iterator;
+  typedef int                                         archetype_handle;
+
+};
 //----------------------------------------------------------------
 //                 Vertex / VertexIterator
 //----------------------------------------------------------------
@@ -174,9 +201,14 @@ private:
 
   friend class stream_grid_mask_vertex<It>;
   friend class stream_grid_mask_cell<It>;
+
+  typedef grid_types_stream_grid_mask<It> gt;
+
 public:
-  stream_grid_mask(int nv, int nc, It i) : numv(nv), numc(nc), it(i), off(0) {}
-  stream_grid_mask(int nv, int nc, It i, int of) : numv(nv), numc(nc), it(i), off(of) {}
+  stream_grid_mask(int nv, int nc, It i) : numv(nv), numc(nc), it(i), off(0) { init(); }
+  stream_grid_mask(int nv, int nc, It i, int of) : numv(nv), numc(nc), it(i), off(of) { init(); }
+
+  void init() { init_archetypes();}
   void set_offset(int o) { off = o;}
   int offset() const { return off;}
   typedef stream_grid_mask_cell<It>   Cell;
@@ -197,6 +229,33 @@ public:
 
   CellIterator   FirstCell()   const { return Cell(*this,offset(),it);}
   VertexIterator FirstVertex() const { return Vertex(*this,offset());}
+
+  typedef typename gt::archetype_type     archetype_type;
+  typedef typename gt::archetype_iterator archetype_iterator;
+  typedef typename gt::archetype_handle   archetype_handle;
+private:
+  std::vector<archetype_type> archetypes;
+  std::vector<int>            arch_for_n_vertices;
+  void init_archetypes();
+public:
+  archetype_iterator BeginArchetype()  const { return archetypes.begin();}
+  archetype_iterator EndArchetype()    const { return archetypes.end();}
+  unsigned           NumOfArchetypes() const { return archetypes.size(); }
+  archetype_handle   handle(archetype_iterator it) const { return it - BeginArchetype();}
+
+  archetype_type const& Archetype(archetype_handle a) const { return archetypes[a];}
+  archetype_type      & Archetype(archetype_handle a)       { return archetypes[a];}
+  archetype_type const& ArchetypeOf (Cell const& c) const 
+  { return Archetype(archetype_of(c));}
+  /* these cannot be handled - no way to efficiently construct cell out of handle
+  archetype_type   const& ArchetypeOf (cell_handle c) const 
+  { return ArchetypeOf(Cell(*this, c));}
+  archetype_handle        archetype_of(cell_handle c) const 
+  { return archetype_of(Cell(*this, c)); }
+  */
+  archetype_handle        archetype_of(Cell const& c) const 
+  { return arch_for_n_vertices[c.NumOfVertices()];}
+
 };
 
 
@@ -221,28 +280,6 @@ StreamGridMask(int nv, int nc, It it, int off)
 { return stream_grid_mask<It>(nv,nc,it,off);}
 
 
-//----------------------------------------------------------------
-//                     grid_types<>
-//----------------------------------------------------------------
-
-
-template<class It>
-struct grid_types_help_stream_grid_mask  {
-  typedef stream_grid_mask<It> Grid;
-
-  typedef typename Grid::Vertex               Vertex;
-  typedef typename Grid::VertexIterator       VertexIterator;
-  typedef typename Grid::VertexOnCellIterator VertexOnCellIterator;
-  typedef typename Grid::Cell                 Cell;
-  typedef typename Grid::CellIterator         CellIterator;
-  typedef typename Grid::vertex_handle        vertex_handle;
-  typedef typename Grid::cell_handle          cell_handle;
-
-};
-
-template<class It>
-struct grid_types<stream_grid_mask< It > > 
- : public grid_types_help_stream_grid_mask< It > {};
 
 
 template<class It>
@@ -270,7 +307,7 @@ class stream_geom_mask {
 private:
   It begin;
 public:
-  typedef  ::std::iterator_traits<It>    traits;
+  typedef std::iterator_traits<It>    traits;
   typedef typename traits::value_type coord_type;
 
   stream_geom_mask(It b) : begin(b) {}
@@ -290,6 +327,93 @@ inline
 stream_geom_mask<It>
 StreamGeomMask(It it) { return stream_geom_mask<It>(it);}
 
+
+
+  //----------------------------------------------------------------------
+  //     specializations of traits classes & grid functions 
+  //----------------------------------------------------------------------
+
+template<class It>
+struct grid_types<stream_grid_mask<It> >
+  : public grid_types_base<grid_types_stream_grid_mask<It> >
+{};
+
+template<class It>
+struct element_traits<stream_grid_mask_vertex<It> >
+  : public element_traits_vertex_base<stream_grid_mask<It> >
+{
+  typedef element_traits_vertex_base<stream_grid_mask<It> > base;
+  
+  struct hasher_type : public base::hasher_type_elem_base {
+    
+    typedef typename base::hasher_type_elem_base base_hash;
+    typename base_hash::result_type operator()(typename base::element_type const& e) const { return e.handle();}
+  };
+  typedef consecutive_integer_tag<0> consecutive_tag;
+};
+
+template<class It>
+struct element_traits<stream_grid_mask_cell<It> >
+  : public element_traits_cell_base<stream_grid_mask<It> >
+{
+  typedef element_traits_cell_base<stream_grid_mask<It> > base;
+  
+  struct hasher_type : public base::hasher_type_elem_base {
+    
+    typedef typename base::hasher_type_elem_base base_hash;
+    typename base_hash::result_type operator()(typename base::element_type const& e) const { return e.handle();}
+  };
+  typedef consecutive_integer_tag<0> consecutive_tag;
+};
+
+  template<class It, class T>
+  class grid_function<stream_grid_mask_vertex<It>, T>
+    : public grid_function_vector<stream_grid_mask_vertex<It>, T>
+  {
+    typedef grid_function_vector<stream_grid_mask_vertex<It>, T> base;
+  public:
+    typedef typename base::grid_type grid_type;
+
+    grid_function() {}
+    grid_function(grid_type const& gg) : base(gg) {}
+    grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
+    grid_function(ref_ptr<grid_type const> gg) : base(gg) {}
+    grid_function(ref_ptr<grid_type const> gg, T const& t) : base(gg,t) {}
+  };
+
+  template<class It, class T>
+  class grid_function<stream_grid_mask_cell<It>, T>
+    : public grid_function_vector<stream_grid_mask_cell<It>, T>
+  {
+    typedef grid_function_vector<stream_grid_mask_cell<It>, T> base;
+  public:
+    typedef typename base::grid_type grid_type;
+
+    grid_function() {}
+    grid_function(grid_type const& gg) : base(gg) {}
+    grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
+    grid_function(ref_ptr<grid_type const> gg) : base(gg) {}
+    grid_function(ref_ptr<grid_type const> gg, T const& t) : base(gg,t) {}
+  };
+
+
+  template<class It>
+  void stream_grid_mask<It>::init_archetypes() 
+  {
+    archetypes         .clear();
+    arch_for_n_vertices.clear();
+    for(CellIterator c(*this); ! c.IsDone(); ++c) {
+      int nv     = c.NumOfVertices();
+      // size() may be 0!
+      int      max_nv = arch_for_n_vertices.size() -1;
+      if(max_nv < nv)
+	arch_for_n_vertices.resize(nv+1, -1);
+      if( arch_for_n_vertices[nv] == -1)  {
+	archetypes.push_back(archetype_type(nv));
+	arch_for_n_vertices[nv] = archetypes.size()-1;
+      }
+    }
+  }
 } // namespace GrAL 
 
 #endif
