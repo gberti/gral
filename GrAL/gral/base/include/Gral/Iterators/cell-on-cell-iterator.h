@@ -106,7 +106,7 @@ public:
   static void map_nb_table(grid_type const& g_, NBTABLE const& nbs_); 
 
 private:
-  bool valid(cell_handle c) const { return TheGrid().valid(c);}
+  bool valid(cell_handle c) const { return TheGrid().valid_cell(c);}
   void advance_till_valid() 
   { 
     while(! fc.IsDone() && ! valid(handle()))
