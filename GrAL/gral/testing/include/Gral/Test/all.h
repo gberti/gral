@@ -66,11 +66,15 @@
      \ingroup testfunctions
  */
 
+/*! \defgroup switchtests Test for manifold-type incidence operators (switch operators)
+    \ingroup testfunctions
+*/
 
 
 #include "Gral/Test/test-iterators.h"
 #include "Gral/Test/test-grid-functions.h"
 #include "Gral/Test/test-partial-grid-functions.h"
 #include "Gral/Test/test-archetypes.h"
+#include "Gral/Test/test-switch.h"
 
 #endif
