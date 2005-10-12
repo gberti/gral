@@ -98,7 +98,7 @@ void copy_cells_archetypes(Complex2D      & G_dst,
 
 
   for(typename src_gt::CellIterator c_src = G_src.FirstCell(); ! c_src.IsDone(); ++c_src){
-    src_arch_handle a_src = G_src.archetype_of((*c_src).handle());
+    src_arch_handle a_src = G_src.archetype_of(*c_src);
     //  dst_arch_handle a_dst = arch_corr(a_src);
 
     cell_handle pc = cc._new_cell((*c_src).NumOfVertices()); // correct arch gets selected automatically a_dst);

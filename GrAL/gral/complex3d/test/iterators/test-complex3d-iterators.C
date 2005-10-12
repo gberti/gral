@@ -59,6 +59,10 @@ int main(int argc, char* argv[]) {
   test_facet_on_cell_iterator (G,cout);
 
 
+  test_switch_vertex(G);
+  test_switch_edge  (G);
+  test_switch_facet (G);
+
 }
 
 

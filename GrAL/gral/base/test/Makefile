@@ -34,6 +34,7 @@ SUBDIRS = boundary-grid  \
           shrunk-grid-view \
           simple-geometry \
           single-element-iterator \
+          stream-grid-adapter \
           vertex-iterator-of-cell-set  \
           vertex-on-vertex-iterator \
           vertex-stars 
