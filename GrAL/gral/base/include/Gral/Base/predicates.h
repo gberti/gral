@@ -11,6 +11,8 @@ namespace GrAL {
     template<class tag1, class tag2, class E1, class E2>
     struct incidence_aux {};
 
+    // XXXOnCell
+
     template<class E1, class E2>
     struct incidence_aux<vertex_type_tag, cell_type_tag,E1,E2> 
     { 
@@ -28,6 +30,14 @@ namespace GrAL {
     };
 
     template<class E1, class E2>
+    struct incidence_aux<face_type_tag, cell_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::FaceOnCellIterator iterator;
+    };
+
+    template<class E1, class E2>
     struct incidence_aux<facet_type_tag, cell_type_tag,E1,E2> 
     { 
       typedef element_traits<E2> et2;
@@ -35,6 +45,43 @@ namespace GrAL {
       typedef typename gt::FacetOnCellIterator iterator;
     };
     
+    // XXXOnFace
+
+    template<class E1, class E2>
+    struct incidence_aux<vertex_type_tag, face_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::VertexOnFaceIterator iterator;
+    };
+
+    template<class E1, class E2>
+    struct incidence_aux<edge_type_tag, face_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::EdgeOnFaceIterator   iterator;
+    };
+
+    template<class E1, class E2>
+    struct incidence_aux<facet_type_tag, face_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::FacetOnFaceIterator iterator;
+    };
+
+    template<class E1, class E2>
+    struct incidence_aux<cell_type_tag, face_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::CellOnFaceIterator iterator;
+    };
+
+
+    // XXXOnFacet 
+
     template<class E1, class E2>
     struct incidence_aux<vertex_type_tag, facet_type_tag,E1,E2> 
     { 
@@ -42,6 +89,31 @@ namespace GrAL {
       typedef grid_types<typename et2::grid_type> gt;
       typedef typename gt::VertexOnFacetIterator iterator;
     };
+
+    template<class E1, class E2>
+    struct incidence_aux<edge_type_tag, facet_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::EdgeOnFacetIterator iterator;
+    };
+
+    template<class E1, class E2>
+    struct incidence_aux<face_type_tag, facet_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::FaceOnFacetIterator iterator;
+    };
+    template<class E1, class E2>
+    struct incidence_aux<cell_type_tag, facet_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::CellOnFacetIterator iterator;
+    };
+
+    // XXXOnEdge
 
     template<class E1, class E2>
     struct incidence_aux<vertex_type_tag, edge_type_tag,E1,E2> 
@@ -52,12 +124,29 @@ namespace GrAL {
     };
 
     template<class E1, class E2>
-    struct incidence_aux<edge_type_tag, facet_type_tag,E1,E2> 
+    struct incidence_aux<face_type_tag, edge_type_tag,E1,E2> 
     { 
       typedef element_traits<E2> et2;
       typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::EdgeOnFacetIterator iterator;
+      typedef typename gt::FaceOnEdgeIterator iterator;
     };
+
+    template<class E1, class E2>
+    struct incidence_aux<facet_type_tag, edge_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::FacetOnEdgeIterator iterator;
+    };
+
+    template<class E1, class E2>
+    struct incidence_aux<cell_type_tag, edge_type_tag,E1,E2> 
+    { 
+      typedef element_traits<E2> et2;
+      typedef grid_types<typename et2::grid_type> gt;
+      typedef typename gt::CellOnEdgeIterator iterator;
+    };
+
   } // namespace detail
 
 
