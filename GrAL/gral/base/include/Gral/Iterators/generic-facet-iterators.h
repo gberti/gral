@@ -173,7 +173,8 @@ namespace generic_facet {
 	facet_handle  handle()       const 
 	 { c_();  return facet_handle(c.handle(), local_handle()); }
 	
-
+	// this is not unique for the facet, the other cell may have
+	// a different archetype or cell for this facet!
 	archCell         ArchetypeCell() const { c_(); return *lf;} 	
 	grid_type const& TheGrid()   const { c_(); return c.TheGrid();}
 	Cell      const& TheCell()   const { c_(); return c;}
@@ -202,6 +203,7 @@ namespace generic_facet {
       friend class edge_on_facet_iterator  <gt>;
     public:
       typedef typename base::facet_handle facet_handle;
+      typedef typename base::Vertex                Vertex;
       typedef typename base::VertexOnFacetIterator VertexOnFacetIterator;
       typedef typename base::EdgeOnFacetIterator   EdgeOnFacetIterator;
       typedef typename base::grid_type        grid_type;
@@ -221,6 +223,8 @@ namespace generic_facet {
       EdgeOnFacetIterator EndEdge()   const;
       unsigned NumOfEdges() const { c_(); return (*fc.lf).NumOfEdges();}
 
+      // This depends on which cell c is chosen!
+      Vertex V(int i) const { return fc.c.V(ArchetypeCell().V(i));}
 
       archCell          ArchetypeCell() const { c_(); return fc.ArchetypeCell();} 	
       grid_type  const& TheGrid() const { c_(); return fc.TheGrid();}
