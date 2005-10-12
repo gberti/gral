@@ -4,6 +4,7 @@
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/predicates.h"
 
 namespace GrAL {
 
@@ -24,6 +25,46 @@ namespace GrAL {
 template<class GRID, class DIM = typename grid_types<GRID>::dimension_tag> 
 class flag {};
 
+
+
+// 1D case
+template<class GRID>
+class flag<GRID, grid_dim_tag<1> > { 
+public:
+  typedef GRID             grid_type;
+  typedef grid_types<GRID> gt;
+  typedef typename gt::Vertex Vertex;  
+  typedef typename gt::Edge   Edge;
+  typedef typename gt::Facet  Facet;
+  typedef typename gt::Cell   Cell;
+private:
+  Vertex v_;
+  Edge   e_;
+public:
+  flag() {}
+  flag(Vertex const& v, Edge const& e)
+    : v_(v), e_(e) {}
+ 
+  grid_type const& TheGrid() const { return v_.TheGrid();}
+
+  Vertex const& vertex() const { return v_;}
+  Edge   const& edge()   const { return e_;}
+  Facet  const& facet()  const { return e_;}
+  Cell   const& cell()   const { return f_;}
+
+  void switch_vertex() { TheGrid().switch_vertex(v_,e_);}
+  void switch_edge()   { TheGrid().switch_cell  (v_,e_);}
+  void switch_facet()  { TheGrid().switch_vertex(v_,e_);}
+  void switch_cell()   { TheGrid().switch_cell  (v_,e_);}
+
+  Vertex switched_vertex()   const { return TheGrid().switched_vertex(v_,e_);}
+  Edge   switched_edge()     const { return TheGrid().switched_cell  (v_,e_);}
+  Vertex switched_facet()    const { return TheGrid().switched_vertex(v_,e_);}
+  Edge   switched_cell()     const { return TheGrid().switched_cell  (v_,e_);}
+};
+
+
+
 // 2D case
 template<class GRID>
 class flag<GRID, grid_dim_tag<2> > { 
@@ -43,6 +84,21 @@ public:
   flag() {}
   flag(Vertex const& v, Edge const& e, Face const& f)
     : v_(v), e_(e), f_(f) {}
+ 
+  flag(Vertex const& v, Cell const& c) : v_(v), f_(c) 
+  {
+    REQUIRE(incident(v,c), "", 1);
+    for(typename gt::FacetOnCellIterator  e(c); !e.IsDone(); ++e) {
+      if(incident(v,*e)) {
+	e_ = *e;
+	goto found;
+      }
+    }
+    // we should always leave the loop via the successful case
+    ENSURE( false, "Could not find flag for vertex v=" << v.handle() << " and cell c=" << c.handle(), 1);
+  found:
+    ;
+  }
 
   grid_type const& TheGrid() const { return v_.TheGrid();}
 
@@ -87,6 +143,23 @@ public:
   flag(Vertex const& v, Edge const& e, 
        Facet  const& f, Cell const& c)
     : v_(v), e_(e), f_(f), c_(c) {}
+  flag(Vertex const& v, Cell const& c) : v_(v), c_(c) 
+  {
+    REQUIRE(incident(v,c), "", 1);
+    for(typename gt::FacetOnCellIterator  f(c); !f.IsDone(); ++f) {
+      for(typename gt::EdgeOnFacetIterator ef(*f); !ef.IsDone(); ++ef) {
+	if(incident(v,*ef)) {
+	  e_ = *ef;
+	  f_ = *f;
+	  goto found;
+	}
+      }
+    }
+    // we should always leave the loop via the successful case
+    ENSURE( false, "Could not find flag for vertex v=" << v.handle() << " and cell c=" << c.handle(), 1);
+  found:
+    ;
+  }
 
   Vertex const& vertex() const { return v_;}
   Edge   const& edge()   const { return e_;}
