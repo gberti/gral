@@ -13,6 +13,8 @@
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
 
+#include "Utility/ref-ptr.h"
+
 namespace GrAL {
 
 /*! \defgroup triang2dgf Total grid functions for Triang2D
@@ -36,6 +38,8 @@ public:
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
+  grid_function(ref_ptr<grid_type const> gg) : base(gg) {}
+  grid_function(ref_ptr<grid_type const> gg, T const& t) : base(gg,t) {}
 };
 
 
@@ -53,6 +57,8 @@ public:
   grid_function() {}
   grid_function(grid_type const& gg) : base(gg) {}
   grid_function(grid_type const& gg, T const& t) : base(gg,t) {}
+  grid_function(ref_ptr<grid_type const> gg) : base(gg) {}
+  grid_function(ref_ptr<grid_type const> gg, T const& t) : base(gg,t) {}
 };
 
 
