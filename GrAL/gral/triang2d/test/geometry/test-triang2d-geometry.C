@@ -52,9 +52,9 @@ int main() {
   }
 
   {
-    triangle tri[] = { {0, 1, 2}};
+    triangle tri[] = { {0, 1, 2}, { 3, 1, 2} };
     
-    ct coords[] = { {0.0, 0.0}, {1.0, 0.0}, {0.0,1.0}};
+    ct coords[] = { {0.0, 0.0}, {1.0, 0.0}, {0.0,1.0}, {1.0, 1.0} };
     
     int nc = sizeof(tri)/sizeof(triangle);
     int nv = sizeof(coords)/sizeof(ct);
@@ -70,6 +70,10 @@ int main() {
 	cout << vf.handle() << " ";
       cout << "] volume=" << Geom.volume(*f) << endl;
     }
+    for(gt::CellIterator c(T); !c.IsDone(); ++c)
+      cout << "Cell " << c.handle() 
+	   <<  " volume = "      << Geom.volume(c) 
+	   <<  " orientation = " << Geom.orientation(c) << "\n";
   }
 
 

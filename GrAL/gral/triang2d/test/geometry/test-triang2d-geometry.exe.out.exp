@@ -12,13 +12,19 @@
 2:  sum of ratios=0.25
 3:  sum of ratios=0.25
 4:  sum of ratios=1
-Triangulation: #cells=1; #vertices=3
+Triangulation: #cells=2; #vertices=4
 E [0->1] length=1
 E [1->2] length=1.41421
 E [2->0] length=1
+E [3->1] length=1
+E [2->3] length=1
 F [0 1 ] volume=1
 F [1 2 ] volume=1.41421
 F [2 0 ] volume=1
+F [3 1 ] volume=1
+F [2 3 ] volume=1
+Cell 0 volume = 0.5 orientation = 1
+Cell 1 volume = 0.5 orientation = -1
 Cell 0
 local= 0 0 global=2 0
 local= 1 0 global=4 0
