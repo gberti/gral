@@ -488,6 +488,8 @@ public:
   inline bool is_valid_cell  (cell_handle c)   const { return ((0 <= c) && (c < (int)_cells.size()));}
   bool valid(vertex_handle v) const { return ((0 <= v) && (v < (int)_vertices.size()));}
   bool valid(cell_handle   c) const { return ((0 <= c) && (c < (int)_cells   .size()));}
+  bool valid_vertex(vertex_handle v) const { return valid(v);}
+  bool valid_cell  (cell_handle   c) const { return valid(c);}
 
   inline edge_handle handle(const Edge& E) const;
 
