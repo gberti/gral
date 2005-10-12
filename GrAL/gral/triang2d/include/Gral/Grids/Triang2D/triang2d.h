@@ -235,6 +235,9 @@ public:
   static archetype_geom_type const& ArchetypeGeom(Cell        const& c) { return ArchetypeGeom(archetype_of(c));}
   static archetype_geom_type const& ArchetypeGeom(cell_handle const& c) { return ArchetypeGeom(archetype_of(c));}
   /*@}*/
+
+  // FIXME: ad hoc! ... job of archetype??
+  void swap_orientation(Cell const& c);
 };
 
 
@@ -503,6 +506,9 @@ class Triang2D_FacetIterator
 };
 
 //------------------- inline functions ---------------
+
+inline
+void Triang2D::swap_orientation(Triang2D::Cell const& c) { std::swap(cells[3*c.handle()], cells[3*c.handle()+1]);}
 
 inline
 Triang2D::VertexIterator
