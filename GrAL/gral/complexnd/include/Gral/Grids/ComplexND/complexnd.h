@@ -5,6 +5,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/grid-function-vector.h"
+#include "Gral/Base/predicates.h"  // incident()
 
 #include "Utility/pre-post-conditions.h"
 #include "Utility/ref-ptr.h"
@@ -286,6 +287,9 @@ namespace complexnd {
     
     operator int() const { return h_;} 
     self& operator++() { ++h_; return *this;}
+
+    static int dimension()   { return  D;}
+    static int codimension() { return CD;}
   };
 
   // primary template
@@ -453,10 +457,19 @@ namespace complexnd {
     typedef typename gt::FacetIterator      FacetIterator;
     typedef typename gt::CellIterator       CellIterator;
 
-    typedef typename gt::cell_handle         cell_handle;
-    typedef typename gt::Facet               Facet;
+    typedef typename gt::Vertex             Vertex;
+    typedef typename gt::Edge               Edge;
+    typedef typename gt::Face               Face;
+    typedef typename gt::Facet              Facet;
+    typedef typename gt::Cell               Cell;
+
+    typedef typename gt::vertex_handle      vertex_handle;
+    typedef typename gt::edge_handle        edge_handle;
+    typedef typename gt::face_handle        face_handle;
+    typedef typename gt::facet_handle       facet_handle;
+    typedef typename gt::cell_handle        cell_handle;
+
     typedef typename gt::FacetOnCellIterator FacetOnCellIterator;
-    typedef typename gt::Cell                Cell;
 
     typedef typename gt::archetype_handle   archetype_handle;
     typedef typename gt::archetype_type     archetype_type;
@@ -485,12 +498,11 @@ namespace complexnd {
     friend void ConstructGrid0(ComplexND<D>& g, G_SRC const& g_src, PHI& phi);
     */
   public:
-    //@{ 
     /*! @name Constructors
-     */
-      /*! \brief for <tt> D != ANY</tt>  
+        \brief for <tt> D != ANY</tt>  
         \internal init incidences
     */
+    //@{ 
     ComplexND() : incidences(dimension()+1) {}
   
     /*! \brief Only for <tt> D==ANY </tt>, else compile-time error
@@ -513,29 +525,31 @@ namespace complexnd {
     element_incidences const& Incidences(element_t<self,K,CK>    e) const { return incidences[e.dimension()][e.handle().h()];}
     element_incidences const& Incidences(unsigned d, unsigned h) const { return incidences[d][h];}
 
-    /*@{*/ 
     /*! \name Dimension-independent sequence iteration (compiletime defined dimension) 
      \brief \c K is the dimension, \c CK is the codimension of the element. 
       \pre 
           if <tt>D!=ANY</tt> we must have  <tt> K+CK==D </tt>
     */
+    /*@{*/ 
     template<int K, int CK> // = dim-K>
     element_iterator_t<self,K,CK> FirstElement() const; 
     template<int K, int CK> // = dim-K>
     element_iterator_t<self,K,CK> EndElement() const;
     /*@}*/
 
+    /*! \name Dimension-independent sequence iteration (runtime defined dimension)
+        \brief \c d is the dimension of the element.
+    */
     //@{ 
-    //! \name Dimension-independent sequence iteration (runtime defined dimension)
-    //! \brief \c d is the dimension of the element.
     AnyElementIterator FirstElement(unsigned dd) const;
     AnyElementIterator EndElement  (unsigned dd) const;
     unsigned NumOfElements(unsigned k) const { return incidences[k].size();}
     //@}
 
+    /*! \name Dimension-dependent sequence iteration
+        \brief Classical sequence iterator interface
+    */
     //@{ 
-    //! \name Dimension-dependent sequence iteration
-    //! \brief Classical sequence iterator interface
     VertexIterator FirstVertex() const;
     EdgeIterator   FirstEdge()   const;
     FaceIterator   FirstFace()   const;
@@ -550,13 +564,34 @@ namespace complexnd {
     unsigned NumOfCells()    const { return NumOfElements(dimension());}
     //@}
 
-    
+    Vertex switched_vertex(Vertex const& v, Edge const& e) const {
+      return Vertex(*this, vertex_handle(v.handle() == Incidences(e)[0][0] 
+					 ? Incidences(e)[0][1] 
+					 : Incidences(e)[0][0])); 
+    }
+
+    template<int K>
+    element_t<ComplexND<D>,K,D-K> switched_element(element_t<ComplexND<D>,K-1,D-(K-1)> const& e_k_1,
+						   element_t<ComplexND<D>,K  ,D- K   > const& e_k,
+						   element_t<ComplexND<D>,K+1,D-(K+1)> const& e_k1) const;
+    /*
+    template<int K>
+    element_t<self,K,dim-K> switched_element(element_t<self,K-1,dim-K+1> const& e_k_1,
+					     element_t<self,K  ,dim-K  > const& e_k,
+					     element_t<self,K+1,dim-K-1> const& e_k1) const;
+    */
+    Edge  switched_edge (Vertex                  const& v, Edge  const& e, Face                    const& f) const; 
+    Face  switched_face (Edge                    const& e, Face  const& f, element_t<self,3,dim-3> const& c) const;
+    Facet switched_facet(element_t<self,dim-2,2> const& r, Facet const& f, Cell                    const& c) const;
+
+
     Cell switched_cell(Facet const& f, Cell const& c) const {
       return Cell(*this, 
 		  cell_handle((c.handle() == Incidences(f)[dimension()][0]
 			       ? Incidences(f)[dimension()][1] 
 			       : Incidences(f)[dimension()][0])));
     }
+
 
     // must make them public because friend definition does not work
     // private:
@@ -588,9 +623,10 @@ namespace complexnd {
     { REQUIRE_ALWAYS(NumOfVertices() == 0, "", 1);  incidences[0].resize(nv);}
 
   public:
+    /*! @name Archetype handling
+       \brief Access to archetypes
+    */
     //@{ 
-    //! @name Archetype handling
-    //! \brief Access to archetypes
     archetype_type      & Archetype(archetype_handle a)       { ca(a); return archetypes[a]; }
     archetype_type const& Archetype(archetype_handle a) const { ca(a); return archetypes[a]; }
 
@@ -608,7 +644,8 @@ namespace complexnd {
     void ca(archetype_handle a) const { REQUIRE(valid_archetype(a), "a = " << a,1); }
 
   public:
-    cell_handle outer_cell_handle() const { return cell_handle(-1);}
+    cell_handle outer_cell_handle()   const { return cell_handle(-1);}
+    cell_handle invalid_cell_handle() const { return cell_handle(-1);}
     bool IsOnBoundary(FacetOnCellIterator const& fc) const { return IsOnBoundary(*fc);}
     bool IsOnBoundary(Facet               const& f)  const { 
       return Incidences(f)[dimension()][0] == outer_cell_handle() 
@@ -752,8 +789,9 @@ namespace complexnd {
     typedef typename check_consistence<GRID::dim,D,CD>::ok ok_type;
     typedef element_t     <GRID,D,CD> self;
     typedef element_base_t<GRID,D,CD> base;
-    typedef typename base::grid_type grid_type;
     typedef typename base::element_handle_type element_handle_type;
+  public:
+    typedef typename base::grid_type grid_type;
   public:
     element_t() {}
     element_t(grid_type const&         gg, element_handle_type hh = 0) : base(gg,hh) {}
@@ -1386,9 +1424,11 @@ namespace complexnd {
   typename ComplexND<D>::archetype_type const& ComplexND<D>::ArchetypeOf(typename ComplexND<D>::Cell const& c) const 
   { return archetypes[cell_archetype[c.handle()]]; }
   
+
+
 } // namespace complexnd
 
-
+  
 
 
 
@@ -1600,18 +1640,116 @@ template<int D, int K, class T>
 class grid_function<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T>
   : public grid_function_vector<complexnd::element_t<complexnd::ComplexND<D>, K, D-K>, T> 
 {
+public:
   typedef complexnd::ComplexND<D>                 grid_type;
   typedef complexnd::element_t<grid_type, K, D-K> element_type;
+private:
   typedef grid_function_vector<element_type, T>   base;
 
 public:
   grid_function() {}
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g, T const& t) : base(g,t) {}
+  grid_function(ref_ptr<grid_type const> g) : base(g) {}
+  grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
 };
+
+
 
 
 } // namespace GrAL 
 
+
+
+
+namespace GrAL {  namespace complexnd {
+  /*
+  template<>
+  template<>
+  element_t<ComplexND<1>,0,1> ComplexND<1>::switched_element(element_t<ComplexND<1>,-1,2>  const& e_k_1,
+							     element_t<ComplexND<1>, 0,1>  const& e_k,
+							     element_t<ComplexND<1>, 1,0>  const& e_k1) const
+  { return switched_vertex(e_k, e_k1);}
+
+  template<>
+  template<>
+  element_t<ComplexND<1>,1,0> ComplexND<1>::switched_element(element_t<ComplexND<1>,0, 1>  const& e_k_1,
+							     element_t<ComplexND<1>,1, 0>  const& e_k,
+							     element_t<ComplexND<1>,2,-1>  const& e_k1) const
+  { return switched_cell(e_k_1, e_k);}
+  */
+
+
+  // Dummy specializations for D=0 and D=1: should never be called.
+  template<>
+  template<int K>
+  element_t<ComplexND<0>,K,1-K> ComplexND<0>::switched_element(element_t<ComplexND<0>,K-1,0-(K-1)> const& e_k_1,
+							       element_t<ComplexND<0>,K  ,0- K   > const& e_k,
+							       element_t<ComplexND<0>,K+1,0-(K+1)> const& e_k1) const
+  { return e_k;}
+
+  template<>
+  template<int K>
+  element_t<ComplexND<1>,K,1-K> ComplexND<1>::switched_element(element_t<ComplexND<1>,K-1,1-(K-1)> const& e_k_1,
+							       element_t<ComplexND<1>,K  ,1- K   > const& e_k,
+							       element_t<ComplexND<1>,K+1,1-(K+1)> const& e_k1) const
+  { return e_k;}
+
+
+
+  template<int D>
+  template<int K>
+  element_t<ComplexND<D>,K,D-K> ComplexND<D>::switched_element(element_t<ComplexND<D>,K-1,D-(K-1)> const& e_k_1,
+							       element_t<ComplexND<D>,K  ,D- K   > const& e_k,
+							       element_t<ComplexND<D>,K+1,D-(K+1)> const& e_k1) const
+  {
+    for(unsigned e_ki = 0; e_ki < e_k1.NumOfElements(K); ++e_ki) {
+      element_t<self,K,dim-K> e_ks(*this, element_handle_t<self,K,dim-K>(Incidences(e_k1)[e_k.dimension()][e_ki]));
+      if(e_ks != e_k && incident(e_k_1, e_ks))
+	return e_ks;
+    }
+    ENSURE(false,"no switched element found for (e_k_1, e_k, e_k1) = ("
+	   << e_k_1.handle() << "," << e_k.handle() << "," << e_k1.handle() << ")", 1);
+  }
+
+  // dummy specializations for D=0
+  template<>
+  ComplexND<0>::Edge 
+  ComplexND<0>::switched_edge(ComplexND<0>::Vertex const& v, 
+			      ComplexND<0>::Edge const& e, 
+			      ComplexND<0>::Face const& f) const { return e;}
+  template<>  
+  ComplexND<0>::Face 
+  ComplexND<0>::switched_face(ComplexND<0>::Edge const& e, 
+			      ComplexND<0>::Face const& f, 
+			      element_t<ComplexND<0>,3,0-3> const& c) const { return f;}
+  template<>  
+  ComplexND<0>::Facet 
+  ComplexND<0>::switched_facet(element_t<ComplexND<0>,0-2,2> const& e, 
+			       ComplexND<0>::Facet         const& f, 
+			       ComplexND<0>::Cell          const& c) const { return f;}
+
+
+  template<int D>
+  typename ComplexND<D>::Edge 
+  ComplexND<D>::switched_edge(ComplexND<D>::Vertex const& v, 
+			      ComplexND<D>::Edge const& e, 
+			      ComplexND<D>::Face const& f) const 
+  { return switched_element(v,e,f);}
+
+  template<int D>  
+  typename ComplexND<D>::Face ComplexND<D>::switched_face(typename ComplexND<D>::Edge const& e, 
+							  typename ComplexND<D>::Face const& f, 
+							  element_t<self,3,dim-3> const& c) const
+  { return switched_element(e,f,c); }
+
+  template<int D>
+  typename ComplexND<D>::Facet ComplexND<D>::switched_facet(element_t<self,dim-2,2> const& r, 
+							    typename ComplexND<D>::Facet const& f, 
+							    typename ComplexND<D>::Cell const& c) const
+  { return switched_element(r,f,c);}    
+
+    
+}} // namespace GrAL {  namespace complexnd
 
 #endif
