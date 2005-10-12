@@ -34,7 +34,7 @@ int main() {
     cout << "set " << (*s).second << " has " << uf.size((*s).second) << " members\n";
 
   GrAL::union_find<int> uf2;
-  int N = ( 1 << 20);
+  int N = ( 1 << 10);
   cout << "Testing union-find for " << N << " items ... " << endl;
   for(int k = 2; k < N; k *= 2) {
     for(int i = 0; i < N/k; ++i)

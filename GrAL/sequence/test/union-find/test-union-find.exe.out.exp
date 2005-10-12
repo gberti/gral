@@ -10,23 +10,13 @@ uf(8) = 4 size = 5
 uf(9) = 9 size = 1
 set 4 has 5 members
 set 5 has 5 members
-Testing union-find for 1048576 items ... 
-2: 524288 sets
-4: 262144 sets
-8: 131072 sets
-16: 65536 sets
-32: 32768 sets
-64: 16384 sets
-128: 8192 sets
-256: 4096 sets
-512: 2048 sets
-1024: 1024 sets
-2048: 512 sets
-4096: 256 sets
-8192: 128 sets
-16384: 64 sets
-32768: 32 sets
-65536: 16 sets
-131072: 8 sets
-262144: 4 sets
-524288: 2 sets
+Testing union-find for 1024 items ... 
+2: 512 sets
+4: 256 sets
+8: 128 sets
+16: 64 sets
+32: 32 sets
+64: 16 sets
+128: 8 sets
+256: 4 sets
+512: 2 sets
