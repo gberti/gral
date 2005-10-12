@@ -32,6 +32,7 @@ namespace GrAL {
  */
 class stored_geometry_triang2d {
 public:
+  typedef stored_geometry_triang2d  self;
   typedef Triang2D                  grid_type; 
   typedef grid_types<grid_type>     gt;
   typedef gt::Vertex                Vertex;
@@ -62,6 +63,29 @@ public:
   stored_geometry_triang2d(grid_type const& g_, double* xy_)
     : g(&g_), xy(xy_), owned(false) {}
 
+  //! Copy constructor
+  stored_geometry_triang2d(self const& rhs) {
+    if(rhs.g != 0)
+      copy(rhs);
+    else 
+      default_init();
+  }
+  self& operator=(self const& rhs) {
+    clear();
+    if(rhs.g != 0)    
+      copy(rhs);
+    else
+      default_init();
+    return *this;
+  }
+
+  void default_init() {
+      g     = 0;
+      xy    = 0;
+      owned = false;
+  }
+
+
   //! destructor
   ~stored_geometry_triang2d() { clear();}
 
@@ -87,6 +111,13 @@ public:
   unsigned space_dimension() const { return 2;}
 private:
   void clear() { if (owned) delete [] xy; xy = 0;}
+  void copy(self const& rhs)
+  {
+    g = rhs.g;
+    init_xy();
+    for(int i = 0; i < 2*g->NumOfVertices(); ++i)
+      xy[i] = rhs.xy[i];
+  }
   void init_xy() {
     if(g->NumOfVertices() > 0) {
       xy = new double[2*g->NumOfVertices()];
@@ -179,6 +210,15 @@ public:
   //! \f$ d-1 \f$ dimensional volume of Facet (i.e. edge length)
   scalar_type volume(Facet const& f)  const { return length(f);}
 
+  //! Signed volume of cell
+  scalar_type oriented_volume(Cell const& c) const;
+  
+  //! Absolute volume of cell
+  inline scalar_type volume(Cell  const& c) const { return fabs(oriented_volume(c));}
+  
+  //! Orientation \f$ \in \pm 1\f$ 
+  inline int         orientation(Cell const& c) const { return (oriented_volume(c) > 0 ? 1 : -1);}
+
   //! Center of intertia of \c c
   coord_type center(Cell const& c) const { return (coord(c.V(0)) + coord(c.V(1)) + coord(c.V(2)))/3.0;}
 
@@ -195,17 +235,6 @@ public:
   scalar_type solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(2*M_PI);}
 };
 
-  /*
-
-  now defined by array_operators
-  inline std::ostream&
-  operator<<(std::ostream& out, stored_geometry_triang2d::coord_type const& p)
-  { return (out << p[0] << ' ' << p[1]);}
-  
-  inline std::istream&
-  operator>>(std::istream&  in, stored_geometry_triang2d::coord_type & p)
-  { return (in >> p[0] >> p[1]);}
-  */
 
 
 inline void
@@ -277,6 +306,13 @@ stored_geometry_triang2d::length(stored_geometry_triang2d::Edge const& e) const
   return ap::distance(coord(e.V1()), coord(e.V2()));
 }
 
+inline stored_geometry_triang2d::scalar_type 
+stored_geometry_triang2d::oriented_volume(stored_geometry_triang2d::Cell  const& c) const
+{ 
+  typedef algebraic_primitives<coord_type> ap;
+  coord_type v0 = coord(c.V(0));
+  return 0.5 * ap::det2(coord(c.V(1))-v0, coord(c.V(2))-v0);
+}
 
 inline stored_geometry_triang2d::scalar_type 
 stored_geometry_triang2d::solid_angle(stored_geometry_triang2d::VertexOnCellIterator const& vc) const 
