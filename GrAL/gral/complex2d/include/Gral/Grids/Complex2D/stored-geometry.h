@@ -127,6 +127,16 @@ public:
   //! center of inertia
   coord_type center(const Cell& c) const {return(polygon_type(c,basic_geom()).center());}
 
+  //! \brief Barycenter of the vertices of cell \c c 
+  coord_type barycenter(Cell const& c) const { 
+    coord_type res(0.0);
+    for(VertexOnCellIterator vc(c); !vc.IsDone(); ++vc)
+      res += coord(*vc);
+    res *= 1.0/c.NumOfVertices();
+    return res;
+  }
+
+
   /*! \brief Outward pointing normal of a facet
        The result is normalized and  points outward of <tt>nb.TheCell()</tt>.
    */
@@ -184,6 +194,31 @@ public:
     segment_type S(e,basic_geom());
     return ap::normed_normal(S.End()-S.Start());
   }
+  
+  //! solid angle of the wedge of vertex \c vc, in radians (2D) 
+  double solid_angle(VertexOnCellIterator const& vc) const 
+  {
+    typedef algebraic_primitives<coord_type> ap;
+    Edge e1;
+    Vertex v = *vc;
+    for(EdgeOnCellIterator ec(vc.TheCell()); !ec.IsDone(); ++ec)
+      if(v == (*ec).V1() || v == (*ec).V2()) {
+	e1 = *ec;
+	break;
+      }
+    Edge e2 = TheGrid().switched_edge(v,e1, vc.TheCell());
+    coord_type dir_e1 = (coord(TheGrid().switched_vertex(v,e1)) - coord(v));
+    coord_type dir_e2 = (coord(TheGrid().switched_vertex(v,e2)) - coord(v));
+    return ap::angle(dir_e1, dir_e2);
+  }
+
+   /*! ratio of solid angle of wedge \c vc to complete solid angle
+
+      The ratios of the wedges of an internal regular vertex sum up to 1.
+   */
+  double solid_angle_ratio(VertexOnCellIterator const& vc) const { return solid_angle(vc)/(2*M_PI);}
+
+
 private:
   base const& basic_geom() const { return *this;}
 };
