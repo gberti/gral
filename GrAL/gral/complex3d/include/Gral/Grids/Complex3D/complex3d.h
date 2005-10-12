@@ -6,7 +6,9 @@
 #include <vector>
 
 #include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/predicates.h"
 #include "Gral/Grids/Complex2D/complex2d.h"
+
 
 #include "Gral/Iterators/generic-edge-iterators.h"
 #include "Gral/Iterators/generic-facet-iterators.h"
@@ -49,6 +51,8 @@ struct grid_types_Complex3D_base {
   typedef Cell_Complex3D_base cell_base_type;
 
   typedef grid_dim_tag<3> dimension_tag;
+
+  static cell_handle invalid_cell_handle(grid_type const&) { return cell_handle(-1);}
 };
 
 
@@ -68,7 +72,7 @@ struct grid_types_Complex3D
   typedef VertexOnFacetIterator VertexOnFaceIterator;
   typedef EdgeOnFacetIterator   EdgeOnFaceIterator;
 
-  typedef vertex_on_edge_iterator<Complex3D> VertexOnEdgeIterator;
+  typedef vertex_on_edge_iterator<Complex3D, grid_types_Complex3D> VertexOnEdgeIterator;
 };
 
 /*! \brief Class for representing general 3D unstructured grids
@@ -79,11 +83,12 @@ class Complex3D : public grid_types_Complex3D {
   typedef size_t size_type;
 
  private:
-  ::std::vector<vertex_handle>  cells; // cell-vertex incidences
-  ::std::vector<unsigned>       offset; // pointer into cells, nc+1 entries
+  std::vector<vertex_handle>  cells; // cell-vertex incidences
+  std::vector<unsigned>       offset; // pointer into cells, nc+1 entries
   // (last entry  points to end of cells)
-  ::std::vector<unsigned>       cell_archetype;
-  ::std::vector<archetype_type> archetypes;
+
+  std::vector<unsigned>       cell_archetype;
+  std::vector<archetype_type> archetypes;
   size_type                   num_of_vertices;
 
  public:
@@ -100,15 +105,31 @@ class Complex3D : public grid_types_Complex3D {
 
   //@{ @name Sequence iteration
   inline VertexIterator FirstVertex() const;
+  inline VertexIterator EndVertex()   const;
+
   inline EdgeIterator   FirstEdge()   const;
   inline FacetIterator  FirstFace()   const;
   inline FacetIterator  FirstFacet()  const;
+
   inline CellIterator   FirstCell()   const;
+  inline CellIterator   EndCell()     const;
 
   size_type NumOfVertices() const { return num_of_vertices;}
   size_type NumOfCells()    const { return cell_archetype.size();}
   //@}
 
+  bool valid_vertex(vertex_handle v) const { return 0 <= v && v < (int)NumOfVertices();}
+  bool valid_cell  (cell_handle   c) const { return 0 <= c && c < (int)NumOfCells();}
+
+  inline Vertex switched_vertex(Vertex v, Edge  e) const;
+  inline Edge   switched_edge  (Vertex v, Edge  e, Face f) const;
+  inline Facet  switched_facet (Edge   e, Facet f, Cell c) const;
+
+ 
+  void switch_vertex (Vertex& v, Edge   e) const;
+  void switch_edge   (Vertex v,  Edge&  e, Face f) const;
+  void switch_facet  (Edge   e,  Facet& f, Cell c) const;
+  
 private:
 
   friend class Vertex_Complex3D;
@@ -161,11 +182,6 @@ private:
     REQUIRE(valid_archetype(a), "a = " << a,1); 
     return archetypes[a];
   }
-  archetype_type const& Archetype(archetype_handle a) const { 
-    REQUIRE(valid_archetype(a), "a = " << a,1);
-    return archetypes[a];
-  }
-
 
   bool valid_archetype(archetype_handle a) const
     { return ((0 <= a) && (a < (int)archetypes.size())); }
@@ -185,6 +201,11 @@ public:
   archetype_iterator  BeginArchetype() const { return archetypes.begin();}
   archetype_iterator  EndArchetype()   const { return archetypes.end  ();}
   archetype_handle    handle(archetype_iterator it) const { return it - BeginArchetype();}
+  archetype_type const& Archetype(archetype_handle a) const { 
+    REQUIRE(valid_archetype(a), "a = " << a,1);
+    return archetypes[a];
+  }
+
   //@}
 
 }; // class Complex3D
@@ -363,6 +384,8 @@ class VertexOnCellIterator_Complex3D : public elem_base_Complex3D {
   Cell TheCell()   const { c_(); return Cell_();}
   Cell TheAnchor() const { c_(); return Cell_();}
 
+  archgt::vertex_handle local_handle() const { return archgt::vertex_handle(lv);}
+
   friend bool operator==(self const& lhs, self const& rhs) { 
     lhs.cb_(); rhs.cb_(); 
     return (lhs.c == rhs.c) && (lhs.lv == rhs.lv);
@@ -396,6 +419,10 @@ Vertex_Complex3D Complex3D::FirstVertex() const
 { return Vertex(*this);}
 
 inline
+Vertex_Complex3D Complex3D::EndVertex() const
+{ return Vertex(*this,NumOfVertices());}
+
+inline
 Complex3D::EdgeIterator
 Complex3D::FirstEdge() const
 { return EdgeIterator(*this);}
@@ -415,6 +442,10 @@ Cell_Complex3D Complex3D::FirstCell() const
 { return Cell(*this);}
 
 inline
+Cell_Complex3D Complex3D::EndCell() const
+{ return Cell(*this, NumOfCells());}
+
+inline
 Complex3D::archetype_type const& 
 Complex3D::ArchetypeOf(Complex3D::Cell const&  c) const 
 { return ArchetypeOf(c.handle());}
@@ -423,6 +454,55 @@ inline
 Complex3D::archetype_handle
 Complex3D::archetype_of(Complex3D::Cell const& c) const
 { return archetype_of(c.handle());}
+
+
+
+
+
+inline  Complex3D::Vertex Complex3D::switched_vertex(Complex3D::Vertex v, 
+						     Complex3D::Edge   e) const 
+{ 
+  VertexOnEdgeIterator ve(e);
+  return ( v == *ve ? *(++ve) : *ve);
+}
+  
+inline Complex3D::Edge Complex3D::switched_edge(Complex3D::Vertex v, 
+						Complex3D::Edge   e, 
+						Complex3D::Face   f) const 
+{
+  for(EdgeOnFaceIterator ef(f); !ef.IsDone(); ++ef)
+    if(*ef != e && incident(v,*ef))
+      return *ef;
+  ENSURE(false, "could not find switched edge for (v,e,f) = " 
+	 << v.handle()  << "," << e.handle() << "," << f.handle() << ")",1);
+  return e; // keep compilers happy
+}
+ 
+
+inline  Complex3D::Facet Complex3D::switched_facet(Complex3D::Edge  e, 
+						   Complex3D::Facet f, 
+						   Complex3D::Cell  c) const 
+{
+  for(FacetOnCellIterator fc(c); !fc.IsDone(); ++fc)
+    if(*fc != f && incident(e, *fc))
+      return *fc;
+  ENSURE(false, "could not find switched facet for (e,f,c) = " 
+	 << e.handle()  << "," << f.handle() << "," << c.handle() << ")",1);
+  return f; // keep compilers happy
+}
+
+  
+  inline   void Complex3D::switch_vertex (Complex3D::Vertex& v, Complex3D::Edge   e) const 
+  { v = switched_vertex(v,e);}
+  inline void Complex3D::switch_edge   (Complex3D::Vertex v,  Complex3D::Edge&  e, Complex3D::Face f) const 
+  { e = switched_edge (v,e,f);}
+  inline void Complex3D::switch_facet  (Complex3D::Edge   e,  Complex3D::Facet& f, Complex3D::Cell c) const 
+  { f = switched_facet(e,f,c);}
+
+
+
+
+
 
 inline
 VertexOnCellIterator_Complex3D
