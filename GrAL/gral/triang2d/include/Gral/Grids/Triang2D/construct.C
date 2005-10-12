@@ -7,6 +7,7 @@
  */
 
 #include "Gral/Grids/Triang2D/copy.h"
+#include "Gral/Base/grid-morphism.h"
 
 #include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"
@@ -48,10 +49,7 @@ void ConstructGrid(Triang2D        & G,
   typedef typename grid_types<Triang2D>::Vertex         Vertex;
 
 
-  // this should be replaced by an array if possible.
-  // map also lacks an operator() const  |  operator[] const 
-  // partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
-  partial_mapping<srcVertex,Vertex> VertexCorr;
+  vertex_morphism<G2, Triang2D> VertexCorr(srcG, G);
   ConstructGridV(G,destGeom,srcG,srcGeom,VertexCorr);
 }
 
@@ -67,9 +65,8 @@ void ConstructGrid0(Triang2D        & G,
   typedef typename grid_types<Triang2D>::Vertex         Vertex;
   typedef typename grid_types<Triang2D>::cell_handle    cell_handle;
 
-  // this should be replaced by an array if possible.
-  // map also lacks an operator() const  |  operator[] const 
-  partial_mapping<srcVertex,Vertex> VertexCorr;
+  vertex_morphism<G2, Triang2D> VertexCorr(srcG, G);
+
   // here we are not interested in a cell correspondance
   dummy_mapping<src_cell_handle,cell_handle> CellCorr;
   ConstructGrid0(G,srcG,VertexCorr,CellCorr);
@@ -81,7 +78,6 @@ void ConstructGridV(Triang2D       & G,
 		    Geom           & destGeom,
 		    G2        const& srcG,
 		    Geom2     const& srcGeom,
-		    // maps src::handles to grid2d_fvg::handles
 		    VertexMap      &  VertexCorr) 
 {
 
