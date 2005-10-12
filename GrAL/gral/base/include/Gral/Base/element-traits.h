@@ -3,6 +3,8 @@
 
 #include <cstddef>
 
+#include "Utility/ref-ptr.h"
+
 // $LICENSE
 
 namespace GrAL {
@@ -143,11 +145,14 @@ struct element_traits_vertex_base
   static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstVertex();}
   static ElementIterator EndElement  (grid_type    const& g)    { return g.EndVertex();}
   static unsigned        size        (grid_type    const& g)    { return g.NumOfVertices();}
-  static handle_type     handle      (element_type const& e)    { return e.handle();}
-  static element_type    handle2element(grid_type const& g, handle_type h)
-  { 
-    return element_type(g,h); // could be factored out.
-  }
+  static handle_type     handle        (element_type const& e)    { return e.handle();}
+  static element_type    handle2element(grid_type const& g, handle_type h) { return element_type(g,h); }
+
+  static ElementIterator FirstElement(ref_ptr<grid_type const> g)    { return g->FirstVertex();}
+  static ElementIterator EndElement  (ref_ptr<grid_type const> g)    { return g->EndVertex();}
+  static unsigned        size        (ref_ptr<grid_type const> g)    { return g->NumOfVertices();}
+  static element_type    handle2element(ref_ptr<grid_type const> g, handle_type h) { return element_type(*g,h); }
+
 };
 
 
@@ -185,6 +190,11 @@ struct element_traits_edge_base
   {
     return element_type(g,h); // could be factored out.
   }
+
+  static ElementIterator FirstElement(ref_ptr<grid_type const> g)    { return g->FirstVertex();}
+  static ElementIterator EndElement  (ref_ptr<grid_type const> g)    { return g->EndVertex();}
+  static unsigned        size        (ref_ptr<grid_type const> g)    { return g->NumOfVertices();}
+  static element_type    handle2element(ref_ptr<grid_type const> g, handle_type h) { return element_type(*g,h); }
 };
 
 /*! \brief basic definition to derive from for actual specializations
@@ -221,6 +231,10 @@ struct element_traits_face_base
   {
     return element_type(g,h); // could be factored out.
   }
+  static ElementIterator FirstElement(ref_ptr<grid_type const> g)    { return g->FirstVertex();}
+  static ElementIterator EndElement  (ref_ptr<grid_type const> g)    { return g->EndVertex();}
+  static unsigned        size        (ref_ptr<grid_type const> g)    { return g->NumOfVertices();}
+  static element_type    handle2element(ref_ptr<grid_type const> g, handle_type h) { return element_type(*g,h); }
 };
 
 
@@ -258,6 +272,11 @@ struct element_traits_facet_base
   { 
     return element_type(g,h); // could be factored out.
   }
+
+  static ElementIterator FirstElement(ref_ptr<grid_type const> g)    { return g->FirstVertex();}
+  static ElementIterator EndElement  (ref_ptr<grid_type const> g)    { return g->EndVertex();}
+  static unsigned        size        (ref_ptr<grid_type const> g)    { return g->NumOfVertices();}
+  static element_type    handle2element(ref_ptr<grid_type const> g, handle_type h) { return element_type(*g,h); }
 };
 
 
@@ -295,6 +314,11 @@ struct element_traits_cell_base
   { 
     return element_type(g,h); // could be factored out.
   }
+
+  static ElementIterator FirstElement(ref_ptr<grid_type const> g)    { return g->FirstVertex();}
+  static ElementIterator EndElement  (ref_ptr<grid_type const> g)    { return g->EndVertex();}
+  static unsigned        size        (ref_ptr<grid_type const> g)    { return g->NumOfVertices();}
+  static element_type    handle2element(ref_ptr<grid_type const> g, handle_type h) { return element_type(*g,h); }
 };
 
 } // namespace GrAL 
