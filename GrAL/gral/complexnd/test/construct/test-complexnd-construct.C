@@ -46,7 +46,7 @@ void print_incidences(GrAL::complexnd::ComplexND<D> const& g, std::ostream& out)
 }
 
 namespace GrAL { namespace complexnd {
-  template class ComplexND<complexnd::ANY>;
+  //  template class ComplexND<complexnd::ANY>;
   template class ComplexND<0>;
   template class ComplexND<1>;
   template class ComplexND<2>;
