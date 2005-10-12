@@ -23,7 +23,7 @@ namespace octree {
   /*! \brief A non-conforming grid formed by the leafs of an octree
  
       \autor Guntram Berti
-      \see   conforming_leafgrid
+      \todo  A corresponding conforming_leafgrid class
    */
   template<class OCTREE>
   class non_conforming_leafgrid {
@@ -351,6 +351,8 @@ class grid_function<octree::nc_leafgrid_vertex_t<
   grid_function() {}
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g, T const& t) : base(g,t) {}
+  grid_function(ref_ptr<grid_type const> g) : base(g) {}
+  grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
 };
 
 } // namespace GrAL
