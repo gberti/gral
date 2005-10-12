@@ -78,6 +78,7 @@ public:
   typedef typename hgt::pattern_grid_type          pattern_grid_type;
   typedef typename hgt::level_handle               level_handle;
   typedef typename hgt::hier_cell_type             hier_cell_type;
+  typedef typename hgt::hier_edge_type             hier_edge_type;
   typedef typename hgt::hier_vertex_type           hier_vertex_type;
   typedef typename hgt::CellChildIterator          HierCellChildIterator;
   typedef typename hgt::cart_subrange_type         flat_subrange_type;
@@ -94,6 +95,9 @@ public:
   typedef oct_cell_type               Cell;
   typedef typename hgt::cell_handle   cell_handle;
   typedef OctCellChildIterator  CellChildIterator;
+
+  typedef hier_edge_type              oct_edge_type;
+  typedef oct_edge_type               Edge;
 
   typedef size_t size_type;
 
