@@ -72,7 +72,7 @@ namespace extrusion_view {
     typedef  vertex_on_cell_iterator_t<GRID2D> VertexOnCellIterator;
 
     typedef Complex2D                         archetype_type;
-    typedef  ::std::vector<archetype_type>::const_iterator archetype_iterator;
+    typedef std::vector<archetype_type>::const_iterator archetype_iterator;
     typedef int                               archetype_handle;
     typedef grid_types<archetype_type>        archgt;
   };
@@ -88,7 +88,7 @@ namespace extrusion_view {
     typedef typename gt::archetype_handle   archetype_handle;
 
     ref_ptr<GRID2D const>  bg;
-     ::std::vector<archetype_type> the_archetypes;
+    std::vector<archetype_type> the_archetypes;
   public:
     grid() { init(); }
     grid(GRID2D const&         gg) : bg(gg) { init(); }
