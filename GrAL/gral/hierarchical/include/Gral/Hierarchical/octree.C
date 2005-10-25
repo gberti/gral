@@ -28,8 +28,8 @@ namespace octree {
    active_cell_range.init(*TheHierGrid(),false);
    active_cell_range.set_default(false);
 
-   active_vertex_range.init(*TheHierGrid(),false);
-   active_vertex_range.set_default(false);
+   active_vertex_range.init(*TheHierGrid(),0);
+   active_vertex_range.set_default(0);
    active_vertex_range_initialized = false;
   }
 
@@ -40,8 +40,8 @@ namespace octree {
    active_cell_range.init(*TheHierGrid(),false);
    active_cell_range.set_default(false);
 
-   active_vertex_range.init(*TheHierGrid(),false);
-   active_vertex_range.set_default(false);
+   active_vertex_range.init(*TheHierGrid(),0);
+   active_vertex_range.set_default(0);
    active_vertex_range_initialized = false;
   }
 
@@ -53,8 +53,8 @@ namespace octree {
    active_cell_range.init(*TheHierGrid(),false);
    active_cell_range.set_default(false);
 
-   active_vertex_range.init(*TheHierGrid(),false);
-   active_vertex_range.set_default(false);
+   active_vertex_range.init(*TheHierGrid(),0);
+   active_vertex_range.set_default(0);
    active_vertex_range_initialized = false;
  }
 
@@ -67,7 +67,6 @@ namespace octree {
 
     while(empty(finest_level())) {
       TheHierGrid()->remove_finest_level();
-      // active_cell_range.remove_finest_level();
     }
   }
 
@@ -77,7 +76,7 @@ namespace octree {
     if(! isLeaf(newLeaf)) {
       for(OctCellChildIterator ch(newLeaf.FirstChild()); !ch.IsDone(); ++ch) {
 	join_cells_rec(*ch);
-	deactivate(*ch); // could involve deactivating vertices ...
+	deactivate(*ch); // involves deactivating vertices ...
       }
     }
   }
@@ -90,14 +89,16 @@ namespace octree {
       if(level(oldLeaf) == finest_level()) {
 	TheHierGrid()->add_finer_level();
 	// active_cell_range.add_finer_level(false); // by default, all cells are deactivated
-	active_cell_range[TheHierGrid()->finest_level()].set_default(false);
+	active_cell_range  [TheHierGrid()->finest_level()].set_default(false);
+	active_vertex_range[TheHierGrid()->finest_level()].set_default(0);
       }
       // use the more general H<XXX>ChildIterator, because there are no octree children yet
       for(HierCellChildIterator ch(oldLeaf.FirstChild()); !ch.IsDone(); ++ch) {
-	make_leaf(*ch); // involves activiting ch
+	make_leaf(*ch); // involves activiting ch and its vertices
       }
     }
   }
+
   template<class Grid, class GT>
   void Octree<Grid, GT>::add_coarser_level() 
   {
@@ -105,7 +106,8 @@ namespace octree {
     TheHierGrid()->add_coarser_level();
     // all coarse cells deactivated by default
     // active_cell_range.add_coarser_level(false);
-    active_cell_range[TheHierGrid()->coarsest_level()].set_default(false);
+    active_cell_range  [TheHierGrid()->coarsest_level()].set_default(false);
+    active_vertex_range[TheHierGrid()->coarsest_level()].set_default(0);
     // activate all cells having at least one active child
     for(flat_cell_iterator c(*LevelGrid(coarsest_level())); !c.IsDone(); ++c) {
       hier_cell_type hc(*TheHierGrid(), *c, coarsest_level());
@@ -120,7 +122,8 @@ namespace octree {
   {
     REQUIRE_ALWAYS( ! empty(), "", 1);
     TheHierGrid()->add_finer_level();
-    active_cell_range[TheHierGrid()->finest_level()].set_default(false);
+    active_cell_range  [TheHierGrid()->finest_level()].set_default(false);
+    active_vertex_range[TheHierGrid()->finest_level()].set_default(0);
   }
 
   template<class Grid, class GT>
@@ -165,10 +168,10 @@ namespace octree {
   {
     for(int lev = coarsest_level(); lev <= finest_level(); ++lev) {
       active_vertex_range[lev].clear();
-      active_vertex_range[lev].set_default(false);
+      active_vertex_range[lev].set_default(0);
       for(ActiveLevelCellIterator c(ActiveRange(lev)->FirstCell()); !c.IsDone(); ++c)
 	for(typename flatgt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc)
-	  active_vertex_range[lev][*vc] = true;
+	  active_vertex_range[lev][*vc]++;
     }
 
     active_vertex_range_initialized = true; 
