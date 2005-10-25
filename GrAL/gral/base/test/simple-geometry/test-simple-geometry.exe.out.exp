@@ -11,6 +11,8 @@ e [2,4]  length:  1.11803
 e [4,3]  length:  1.11803
 f0 area: 1
 f1 area: 0.5
+c0  vc0 angle: 0.785398 (0.125)  vc1 angle: 2.35619 (0.375)  vc2 angle: 0.785398 (0.125)  vc3 angle: 2.35619 (0.375)  
+c1  vc3 angle: 1.10715 (0.176208)  vc2 angle: 1.10715 (0.176208)  vc4 angle: 0.927295 (0.147584)  
 v0 @ 0 0 0
 v1 @ 1 0 0
 v2 @ 2 1 0
@@ -24,3 +26,32 @@ e [2,4]  length:  1.73205
 e [4,3]  length:  1.41421
 f0 area: 1
 f1 area: 0.707107
+c0  vc0 angle: 0.785398 (0.125)  vc1 angle: 2.35619 (0.375)  vc2 angle: 0.785398 (0.125)  vc3 angle: 2.35619 (0.375)  
+c1  vc3 angle: 1.5708 (0.25)  vc2 angle: 0.955317 (0.152043)  vc4 angle: 0.61548 (0.0979566)  
+v0 @ 0 0 0
+v1 @ 0 0 1
+v2 @ 0 1 0
+v3 @ 0 1 1
+v4 @ 1 0 0
+v5 @ 1 0 1
+v6 @ 1 1 0
+v7 @ 1 1 1
+e [0 4 ]  length:  1
+e [5 1 ]  length:  1
+e [2 6 ]  length:  1
+e [7 3 ]  length:  1
+e [0 2 ]  length:  1
+e [2 3 ]  length:  1
+e [3 1 ]  length:  1
+e [1 0 ]  length:  1
+e [4 6 ]  length:  1
+e [6 7 ]  length:  1
+e [7 5 ]  length:  1
+e [5 4 ]  length:  1
+f0 0 area: 1
+f0 1 area: 1
+f0 2 area: 1
+f0 3 area: 1
+f0 4 area: 1
+f0 5 area: 1
+c0  vc0 angle: 1.5708 (0.125)  vc1 angle: 1.5708 (0.125)  vc2 angle: 1.5708 (0.125)  vc3 angle: 1.5708 (0.125)  vc4 angle: 1.5708 (0.125)  vc5 angle: 1.5708 (0.125)  vc6 angle: 1.5708 (0.125)  vc7 angle: 1.5708 (0.125)  

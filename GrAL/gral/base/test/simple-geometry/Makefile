@@ -9,13 +9,12 @@ OBJECTS =  $(SOURCES:%.C=%.o)
 DEPS = $(SOURCES:%.C=%.d)
 EXEC =  $(SOURCES:%.C=%.exe)
 
-EXTRA_DEPMODULES += geometry gral/complex2d
+EXTRA_DEPMODULES += geometry gral/complex2d gral/complex3d gral/cartesiannd
 
 include $(DEPS)
 
 
-
-LIBS = -lgral-complex2d -lgral-base  -lgeometry 
+LIBS = -lgral-complex3d -lgral-complex2d -lgral-base  -lgeometry 
 
 
 new-check-clean: new check clean
