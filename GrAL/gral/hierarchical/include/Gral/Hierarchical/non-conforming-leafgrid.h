@@ -331,13 +331,15 @@ class grid_function<hierarchical::h_cell_t<
   grid_function() {}
   grid_function(grid_type const& g) : base(g) {}
   grid_function(grid_type const& g, T const& t) : base(g,t) {}
+  grid_function(ref_ptr<grid_type const> g)             : base(g) {}
+  grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
 };
 
 
 
 template<class OCTREE, class T>
 class grid_function<octree::nc_leafgrid_vertex_t<
-                       octree::nc_leafgrid_element_base_t<octree::non_conforming_leafgrid<OCTREE> > >
+                     octree::nc_leafgrid_element_base_t<octree::non_conforming_leafgrid<OCTREE> > >
 		    ,T>
 : public grid_function_hash<octree::nc_leafgrid_vertex_t<
                                 octree::nc_leafgrid_element_base_t<octree::non_conforming_leafgrid<OCTREE> > >
