@@ -164,11 +164,17 @@ private:
   void copy_material(GF const& gf)
   { 
     typedef typename GF::value_type vt;
-    copy_material(gf, typename decide<boost::is_integral<vt>::value>::type()); 
+    // check if vt is an integral type or convertible to one (think of wrappers to integer ...)
+    // Apparently, boost thinks float is convertible to long.
+    typedef  decide<boost::is_integral<vt>::value 
+      || (boost::is_convertible<vt,long>::value && (! boost::is_float<vt>::value)) > decider;
+    copy_material(gf, typename decider::type());
   }
 
   template<class GF>
-  void copy_material(GF const& gf, false_type) {}
+  void copy_material(GF const& gf, false_type) {
+    std::cerr << "Warning: Materials must have integral type, skipping!" << std::endl;
+  }
  
   template<class GF>
   void copy_material(GF const& gf, true_type) 
