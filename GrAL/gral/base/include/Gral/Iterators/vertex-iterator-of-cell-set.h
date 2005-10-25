@@ -19,6 +19,8 @@ namespace GrAL {
      - \c CellIt::grid_type: Has \c Vertex and \c Cell types.
      - \c CellIt::Cell: Model of $GrAL VertexRange
 
+    \deprecated This class is obsolete, use closure_iterator instead.
+
 
     Example:
     \code

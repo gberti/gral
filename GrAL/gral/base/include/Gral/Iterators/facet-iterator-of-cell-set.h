@@ -23,6 +23,7 @@ namespace GrAL {
     This uses a partial grid function to mark visited facets,
     hence this approach works also with other element types.
 
+    \deprecated This class is obsolete, use closure_iterator instead.
 
     \see Test in \ref  test-facet-iterator-of-cell-set.C  
     \see \ref iterators module  
@@ -34,7 +35,7 @@ namespace GrAL {
 
 template<class CELLIT, class GT = grid_types<typename CELLIT::grid_type> >
 class facet_iterator_of_cell_set {
-  typedef facet_iterator_of_cell_set<CELLIT> self;
+  typedef facet_iterator_of_cell_set<CELLIT, GT> self;
 public:
   typedef GT                                gt;
   typedef typename gt::grid_type            grid_type;
@@ -66,7 +67,7 @@ public:
     { 
       major = c;
       if (! major.IsDone()) 
-	minor = (*major).FirstFacet(); 
+	minor =  FacetOnCellIterator(*major); 
     }
 
   self&   operator++() {
@@ -81,9 +82,9 @@ public:
   facet_handle handle() const { cv(); return minor.handle();}
 
   grid_type const& TheGrid() const { cb(); return major.TheGrid();}
-  friend bool operator==(self const& lhs, self const& rhs) 
-  { lhs.cb(); rhs.cb(); return (lhs.major == rhs.major) && (lhs.minor == rhs.minor);}
-  friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs==rhs);}
+  bool operator==(self const& rhs)
+  { rhs.cb(); cb(); return (rhs.major == major) && (rhs.minor == minor);}
+  bool operator!=(self const& rhs) { return !(*this==rhs);}
 
   bool bound() const { return major.bound();}
   bool valid() const { return bound() && minor.valid();}
@@ -97,7 +98,7 @@ private:
     if(minor.IsDone()) {
       ++major;
       if(! major.IsDone())
-	minor = (*major).FirstFacet();
+	minor =  FacetOnCellIterator(*major); 
     } 
   }
 };
