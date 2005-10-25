@@ -5,11 +5,11 @@ CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 
-LOCALSOURCES =  $(shell ls *.C)
+LOCALSOURCES =  test-histogram.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-histogram
-EXEC =  $(TARGETS)
+EXEC = $(LOCALSOURCES:%.C=%.exe)
+TARGETS = $(EXEC)
 
 include $(DEPS)
 

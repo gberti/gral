@@ -5,11 +5,12 @@ CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += geometry
-LOCALSOURCES =  $(shell ls *.C)
+LOCALSOURCES =  test-tuple.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-TARGETS = test-tuple
-EXEC =  $(TARGETS)
+EXEC = $(LOCALSOURCES:%.C=%.exe)
+TARGETS = $(EXEC)
+
 
 include $(DEPS)
 
