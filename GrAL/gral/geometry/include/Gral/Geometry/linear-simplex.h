@@ -24,7 +24,7 @@ private:
 public:
   midpoint_cubature_simplex() 
   {
-    weight_[0] = 1.0/factorial((int)dim);
+    weight_[0] = 1.0/combinatorial::factorial((int)dim);
     point_ [0] = coord_type(1.0/(dim+1.0));
   }
 

@@ -131,7 +131,7 @@ private:
   std::vector<coord_type>   global_cub;
 public:
   enum { dim = grid_type::dim};
-  enum { two_power_dim = compile_time_functions::power<2,dim>::value};
+  enum { two_power_dim = combinatorial::compile_time_functions::power<2,dim>::value};
 
   typedef index_map_nd<dim>                   index_map_type;
   typedef typename index_map_type::index_type index_type;

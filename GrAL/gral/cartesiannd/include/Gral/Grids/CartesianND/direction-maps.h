@@ -186,7 +186,7 @@ namespace cartesiannd {
     map_table(unsigned k, vertex_index_type low, vertex_index_type high) { init(k,low,high);}
     void init(unsigned k, vertex_index_type low, vertex_index_type high) 
     {
-      maps.resize(binomial_coeff(DIM,k));
+      maps.resize(combinatorial::binomial_coeff(DIM,k));
       for(unsigned m = 0; m < maps.size(); ++m) {
 	// delta gives the sum of unit vectors which span the space 
 	// of elements of dimension k and direction m: 
@@ -228,7 +228,7 @@ namespace cartesiannd {
     //! Initialize for dimension \c k
     offset_table(unsigned k) { init(k);}
     void init(unsigned k) { 
-      offsets.resize(binomial_coeff(DIM,k) +1);
+      offsets.resize(combinatorial::binomial_coeff(DIM,k) +1);
     }
      std::vector<unsigned>  offsets;
     //! Offset of direction \c m
@@ -258,14 +258,14 @@ namespace cartesiannd {
   {
     // std::cout << "direction_table::init(" << k << ") ";
     REQUIRE_ALWAYS( (k <= DIM), "k=" << k << " DIM=" << DIM, 1);
-    num2vec.resize(binomial_coeff(DIM,k));
+    num2vec.resize(combinatorial::binomial_coeff(DIM,k));
     // std::cout << ": " << num2vec.size() << "direction" <<  std::endl;
     vector_system v(k,0);
     for(unsigned j = 0; j < k; ++j)
       v[j] = j;
     num2vec[0] = v;
     for(unsigned m = 1; m < num2vec.size(); ++m)
-      num2vec[m] = succ_ordered(num2vec[m-1], DIM-1);
+      num2vec[m] = combinatorial::succ_ordered(num2vec[m-1], DIM-1);
   }
   
   template<unsigned DIM>
@@ -310,7 +310,7 @@ namespace cartesiannd {
       // will have \choice{K,m} m-subdirections dir_km of dir_k,
       // and for each 2^{K-m} parallel elements of dim m
       unsigned p2 = (unsigned)pow(2.0,(int)(K-m));
-      unsigned num_directions = binomial_coeff(K,m);
+      unsigned num_directions = combinatorial::binomial_coeff(K,m);
       nb[d_k].resize(p2*num_directions);
       int nb_cnt = 0;
 
@@ -343,10 +343,10 @@ namespace cartesiannd {
 	  for(unsigned i = 0; i < dir_km_complement.size(); ++i)
 	    offset[dir_km_complement[i]] = eps[i];
 	  nb[d_k][nb_cnt] = inc_descriptor(offset, vec2num(m,dir_km));
-	  eps = succ_binary_number(eps);
+	  eps = combinatorial::succ_binary_number(eps);
 	}
 	    
-	ddir_km = succ_ordered(ddir_km, K-1);
+	ddir_km = combinatorial::succ_ordered(ddir_km, K-1);
       }
     }
   }
@@ -364,7 +364,7 @@ namespace cartesiannd {
       // We have \choice{DIM-K,m-K} m-superdirections dir_km of dir_k,
       // and for each dir_km there are 2^{m-K} parallel elements of dim m
       unsigned p2 = (unsigned)pow(2.0,(int)(m-K));
-      unsigned num_directions = binomial_coeff(DIM-K,m-K);
+      unsigned num_directions = combinatorial::binomial_coeff(DIM-K,m-K);
       nb[d_k].resize(p2*num_directions);
       int nb_cnt = 0;
  
@@ -402,9 +402,9 @@ namespace cartesiannd {
 	  for(unsigned i = 0; i < dir_km_compl_mapped.size(); ++i)
 	    offset[dir_km_compl_mapped[i]] = -eps[i];
 	  nb[d_k][nb_cnt] = inc_descriptor(offset, vec2num(m,dir_km));
-  	  eps = succ_binary_number(eps);
+  	  eps = combinatorial::succ_binary_number(eps);
 	}
-	dir_km_compl = succ_ordered(dir_km_compl, DIM-K-1);
+	dir_km_compl = combinatorial::succ_ordered(dir_km_compl, DIM-K-1);
       }
     }
   }
@@ -473,7 +473,7 @@ namespace cartesiannd {
       
       unsigned sum = 0;
       for(unsigned j = 0; j < i[0]; ++j)
-	sum += binomial_coeff(d-j-1, k-1);
+	sum += combinatorial::binomial_coeff(d-j-1, k-1);
       return sum  + vec2num_rec(k-1,tail,d-(i[0]+1));
     }
   }
