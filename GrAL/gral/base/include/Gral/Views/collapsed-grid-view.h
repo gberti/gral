@@ -50,22 +50,13 @@ namespace GrAL {
 
 namespace collapsed_grid_view {
 
+  template<class GRID>  class grid_view;
+  template<class GRID>  class cell_iterator;
+  template<class GRID>  class vertex_iterator;
+  template<class GRID>  class vertex;
+  template<class GRID>  class vertex_on_cell_iterator;
 
 
-  template<class GRID>
-  class grid_view;
-
-  template<class GRID>
-  class cell_iterator;
-
-  template<class GRID>
-  class vertex_iterator;
-  
-  template<class GRID>
-  class vertex;
-    
-  template<class GRID>
-  class vertex_on_cell_iterator;
 
   template<class GRID>
   class local_grid_types {
