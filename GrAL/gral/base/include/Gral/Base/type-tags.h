@@ -1,3 +1,4 @@
+
 #ifndef GRAL_BASE_GB_TYPE_TAGS_H
 #define GRAL_BASE_GB_TYPE_TAGS_H
 
@@ -202,6 +203,66 @@ struct grid_dim_tag<-1>
 
 };
 
+
+/*! \defgroup type_categories Type categories 
+
+    \ingroup traits     
+
+    Can be used to branch according to conceptual type of argument.
+
+    \note Experimental. We need perhaps constructs like
+    <code> convertible_to<T::category, grid_element_category> </code>.
+*/
+
+struct grid_entity_category {};
+
+struct grid_atom_category          : public grid_entity_category {};
+struct grid_global_entity_category : public grid_entity_category {};
+
+
+// grid atoms
+/*!  \brief Element category
+  \ingroup type_categories
+ */
+struct grid_element_category : public grid_atom_category {};
+struct grid_iterator_category : public grid_atom_category {};
+
+// are these useful?
+struct grid_vertex_category : public grid_element_category {};
+struct grid_edge_category   : public grid_element_category {};
+struct grid_face_category   : public grid_element_category {};
+struct grid_facet_category  : public grid_element_category {};
+struct grid_cell_category   : public grid_element_category {};
+
+
+struct grid_sequence_iterator_category  : public grid_iterator_category {};
+struct grid_incidence_iterator_category : public grid_iterator_category {};
+
+
+// grid global entities
+
+/*!  \brief Range  category
+  \ingroup type_categories
+ */
+struct grid_range_category  : public grid_global_entity_category  {};
+
+struct grid_category : public grid_range_category {};
+
+struct cartesian_grid_category : public grid_category {};
+
+struct grid_view_category : public grid_range_category {};
+
+
+
+struct grid_function_category : public grid_global_entity_category {};
+
+struct total_grid_function_category : public grid_function_category {};
+
+struct partial_grid_function_category : public grid_function_category {};
+
+
+
+struct grid_geometry_category : public grid_global_entity_category {};
 
 } // namespace GrAL 
 
