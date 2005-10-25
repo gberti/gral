@@ -8,15 +8,30 @@
 
 namespace GrAL {
 
+  /*! \brief Generic VertexOnEdge Iterator
+
+     \ingroup iterators
+     
+     \templateparams
+     - GT
+       - <tt> typedef Edge </tt>
+       - <tt> vertex_handle() Edge::v1(), Edge::v2() </tt>
+
+  */ 
 template<class GRID, class GT = grid_types<GRID> >
 class vertex_on_edge_iterator
 {
   typedef vertex_on_edge_iterator<GRID,GT> self;
-
+public:
   typedef GRID                grid_type;
   typedef typename GT::Vertex Vertex; 
   typedef typename GT::vertex_handle vertex_handle;
   typedef typename GT::Edge   Edge;
+
+  typedef Edge   anchor_type;
+  typedef Vertex value_type;
+  typedef Vertex element_type;
+
 private:
   Edge e;
   int  lv;
