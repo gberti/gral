@@ -30,6 +30,13 @@ void test_hier_grid(GRID const& root,
   typedef typename hgt::index_type                      index_type;
   typedef hierarchical::h_element_t<hierarchical::h_element_base_t<hier_grid_type>, typename cgt::Facet >  hier_facet1_type;
 
+  {
+    typedef typename cgt::Cell flat_cell;
+    //  typedef hgt::template flat2hier<flat_cell> flat2hier_cell; 
+    typedef typename hgt::template flat2hier<flat_cell> flat2hier_cell; 
+    typedef typename flat2hier_cell::type hier_cell_t;
+  }
+
   hier_grid_type H(root,pattern);
   H.add_finer_level();
   H.add_coarser_level();
