@@ -112,6 +112,7 @@ public:
 template<>
 struct grid_types<archetype_0D::archetype_t> : public grid_types_base<archetype_0D::archetype_t> 
 {
+  typedef archetype_0D::archetype_t grid_type;
 };
 
 template<>
