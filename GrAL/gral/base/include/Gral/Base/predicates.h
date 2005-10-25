@@ -8,144 +8,137 @@
 namespace GrAL {
 	
   namespace detail {
-    template<class tag1, class tag2, class E1, class E2>
+
+    template<class tag1, class tag2, class E1, class E2, class GT>
     struct incidence_aux {};
 
     // XXXOnCell
 
-    template<class E1, class E2>
-    struct incidence_aux<vertex_type_tag, cell_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<vertex_type_tag, cell_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::VertexOnCellIterator iterator;
+      typedef typename GT::VertexOnCellIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<edge_type_tag, cell_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<edge_type_tag, cell_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::EdgeOnCellIterator iterator;
+      typedef typename GT::EdgeOnCellIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<face_type_tag, cell_type_tag,E1,E2> 
-    { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::FaceOnCellIterator iterator;
-    };
+    template<class E1, class E2, class GT>
+    struct incidence_aux<face_type_tag, cell_type_tag,E1,E2,GT> 
+    { typedef typename GT::FaceOnCellIterator iterator; };
 
-    template<class E1, class E2>
-    struct incidence_aux<facet_type_tag, cell_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<facet_type_tag, cell_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::FacetOnCellIterator iterator;
+      typedef typename GT::FacetOnCellIterator iterator;
     };
     
     // XXXOnFace
 
-    template<class E1, class E2>
-    struct incidence_aux<vertex_type_tag, face_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<vertex_type_tag, face_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::VertexOnFaceIterator iterator;
+      typedef typename GT::VertexOnFaceIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<edge_type_tag, face_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<edge_type_tag, face_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::EdgeOnFaceIterator   iterator;
+      typedef typename GT::EdgeOnFaceIterator   iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<facet_type_tag, face_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<facet_type_tag, face_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::FacetOnFaceIterator iterator;
+      typedef typename GT::FacetOnFaceIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<cell_type_tag, face_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<cell_type_tag, face_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::CellOnFaceIterator iterator;
+      typedef typename GT::CellOnFaceIterator iterator;
     };
 
 
     // XXXOnFacet 
 
-    template<class E1, class E2>
-    struct incidence_aux<vertex_type_tag, facet_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<vertex_type_tag, facet_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::VertexOnFacetIterator iterator;
+      typedef typename GT::VertexOnFacetIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<edge_type_tag, facet_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<edge_type_tag, facet_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::EdgeOnFacetIterator iterator;
+      typedef typename GT::EdgeOnFacetIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<face_type_tag, facet_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<face_type_tag, facet_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::FaceOnFacetIterator iterator;
+      typedef typename GT::FaceOnFacetIterator iterator;
     };
-    template<class E1, class E2>
-    struct incidence_aux<cell_type_tag, facet_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<cell_type_tag, facet_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::CellOnFacetIterator iterator;
+      typedef typename GT::CellOnFacetIterator iterator;
     };
 
     // XXXOnEdge
 
-    template<class E1, class E2>
-    struct incidence_aux<vertex_type_tag, edge_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<vertex_type_tag, edge_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::VertexOnEdgeIterator iterator;
+      typedef typename GT::VertexOnEdgeIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<face_type_tag, edge_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<face_type_tag, edge_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::FaceOnEdgeIterator iterator;
+      typedef typename GT::FaceOnEdgeIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<facet_type_tag, edge_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<facet_type_tag, edge_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::FacetOnEdgeIterator iterator;
+      typedef typename GT::FacetOnEdgeIterator iterator;
     };
 
-    template<class E1, class E2>
-    struct incidence_aux<cell_type_tag, edge_type_tag,E1,E2> 
+    template<class E1, class E2, class GT>
+    struct incidence_aux<cell_type_tag, edge_type_tag,E1,E2,GT> 
     { 
-      typedef element_traits<E2> et2;
-      typedef grid_types<typename et2::grid_type> gt;
-      typedef typename gt::CellOnEdgeIterator iterator;
+      typedef typename GT::CellOnEdgeIterator iterator;
     };
+
+    // XXXOnVertex
+    template<class E1, class E2, class GT>
+    struct incidence_aux<edge_type_tag, vertex_type_tag,E1,E2,GT> 
+    { 
+      typedef typename GT::EdgeOnVertexIterator iterator;
+    };
+
+    template<class E1, class E2, class GT>
+    struct incidence_aux<face_type_tag, vertex_type_tag,E1,E2,GT> 
+    { 
+      typedef typename GT::FaceOnVertexIterator iterator;
+    };
+
+    template<class E1, class E2, class GT>
+    struct incidence_aux<facet_type_tag, vertex_type_tag,E1,E2,GT> 
+    { 
+      typedef typename GT::FacetOnVertexIterator iterator;
+    };
+
+    template<class E1, class E2, class GT>
+    struct incidence_aux<cell_type_tag, vertex_type_tag,E1,E2,GT> 
+    { 
+      typedef typename GT::CellOnVertexIterator iterator;
+    };
+
 
   } // namespace detail
 
@@ -153,10 +146,10 @@ namespace GrAL {
 
   /*! \brief Map element types pairs to corresponding incidence iterator types
    */
-  template<class E1, class E2>
+  template<class E1, class E2, class GT = grid_types<typename element_traits<E1>::grid_type> >
   struct incidence : public detail::incidence_aux<typename element_traits<E1>::element_type_tag,
 						  typename element_traits<E2>::element_type_tag,
-						  E1, E2>
+						  E1, E2, GT>
   {};
 
 /*! \brief Compile-time switch to get VertexOn<E> incidence iterator
@@ -179,7 +172,8 @@ struct VertexOn {
     \ingroup predicates
     \see \ref predicates    
 
-    \todo Tests
+    
+    \see Tested in \ref test-incident.C
     \todo branch on iterator capabilities:
           Use either E1OnE2Iter or E2OnE1Iter.
 */
@@ -192,6 +186,36 @@ bool incident(E1 const& e1, E2 const& e2)
       return true;
   return false;
 }
+
+/*! \brief Predicate to decide whether two elements are incident.
+    \ingroup predicates
+    \see \ref predicates    
+
+    This take an extra template paramter GT which must be specified explicitely.
+    It can be use to plug in additional incidence iterators definitions:
+
+    \code
+    typedef xgt<gt, override_CellOnVertexIterator<my_cell_on_vertex_iterator> > mygt;
+    // ...
+    if(incident<mygt>(c,v))
+       // do something
+    \endcode
+    
+    \see Tested in \ref test-incident.C
+    \todo branch on iterator capabilities:
+          Use either E1OnE2Iter or E2OnE1Iter.
+*/
+template<class GT, class E1, class E2>
+bool incident(E1 const& e1, E2 const& e2)
+{ 
+  typedef typename incidence<E1,E2, GT>::iterator E1OnE2Iterator;
+  for(E1OnE2Iterator e1e2(e2); ! e1e2.IsDone(); ++e1e2)
+    if(*e1e2 == e1)
+      return true;
+  return false;
+}
+
+
 
 } // namespace GrAL 
 
