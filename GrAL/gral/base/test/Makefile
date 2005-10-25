@@ -7,6 +7,7 @@ SUBDIRS = boundary-grid  \
           cell-as-volume \
           cell-on-cell-iterator \
           cell-on-vertex-iterator \
+          closure-iterator \
           collapsed-grid-view \
           connected-components \
           construct-isomorphism  \
@@ -23,6 +24,7 @@ SUBDIRS = boundary-grid  \
           geometric-types \
           grid-as-volume \
           grid-function-array-adapter \
+          incident \
           incidence-hulls \
           mapped-grid-function \
           morphisms \
