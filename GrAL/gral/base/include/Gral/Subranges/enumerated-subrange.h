@@ -639,6 +639,9 @@ public:
   the set of vertices incident to the sequence of cells.
 
   So either only vertices or only cells should be inserted.
+
+  \todo Introduce own types for Vertex, Cell, handles. This would also allow to 
+   have efficient vector-based total grid functions on the subrange.
     
   \todo Make the closure property a compile time or runtime policy.
   It is not consistent to allow both vertex and cell insertion if mixed insertion
@@ -655,10 +658,13 @@ public:
   using archetypes_from_base<enumerated_subrange<Grid>, Grid>::handle;
 
   //------- referenced types ------------------
-  typedef Grid grid_type;
+  typedef self grid_type;
+  typedef Grid base_grid_type;
   typedef grid_types<Grid> gt;
-  typedef typename gt::vertex_handle vertex_handle;
-  typedef typename gt::cell_handle   cell_handle;
+
+  // these could be different types
+  typedef typename gt::vertex_handle        vertex_handle;
+  typedef typename gt::cell_handle          cell_handle;
   typedef typename gt::Cell                 Cell;
   typedef typename gt::Vertex               Vertex;
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
@@ -672,11 +678,11 @@ public:
   typedef typename vertex_sequence::const_iterator v_iterator;
   typedef typename cell_sequence  ::const_iterator c_iterator;
 
-  typedef vertex_range_ref<grid_type, vertex_sequence>  vertex_range_type;
-  typedef cell_range_ref  <grid_type, cell_sequence  >  cell_range_type;
+  typedef vertex_range_ref<base_grid_type, vertex_sequence>  vertex_range_type;
+  typedef cell_range_ref  <base_grid_type, cell_sequence  >  cell_range_type;
 
 private:
-  ref_ptr<const grid_type> the_grid;
+  ref_ptr<const base_grid_type> the_grid;
 
   vertex_sequence vertices;
   //  edge_sequence   edges;
@@ -692,13 +698,15 @@ public:
   /*! \brief  Default constructor, results in unbound range.
    */
   enumerated_subrange()                           :              initialized(false) { init_counts(); }
-  enumerated_subrange(const grid_type& g)         : the_grid(g), initialized(false) { init_counts(); }
-  enumerated_subrange(ref_ptr<const grid_type> g) : the_grid(g), initialized(false) { init_counts(); }
+  /*! \brief Construct empty subrange
+   */
+  enumerated_subrange(const base_grid_type& g)         : the_grid(g), initialized(false) { init_counts(); }
+  enumerated_subrange(ref_ptr<const base_grid_type> g) : the_grid(g), initialized(false) { init_counts(); }
 
-  //! delayed constructor
-  void init(ref_ptr<const grid_type> g) { clear(); the_grid = g; initialized = false; init_counts(); }
-  //! delayed constructor
-  void init(const grid_type& g) { init(const_ref_to_ref_ptr(g));}
+  //! \brief delayed constructor, constructs empty subrange
+  void init(ref_ptr<const base_grid_type> g) { clear(); the_grid = g; initialized = false; init_counts(); }
+  //! \brief delayed constructor, constructs empty subrange
+  void init(const base_grid_type& g) { init(const_ref_to_ref_ptr(g));}
 
   //! make this an empty range. 
   void clear() { 
@@ -712,7 +720,7 @@ public:
    */
 
   template<class CELLRANGE>
-  enumerated_subrange(ref_ptr<const grid_type> g, 
+  enumerated_subrange(ref_ptr<const base_grid_type> g, 
 		      ref_ptr<CELLRANGE> CR) :  
     the_grid(g), initialized(false) 
   { 
@@ -721,7 +729,7 @@ public:
   }
   
   template<class CELLRANGE>
-  enumerated_subrange(const grid_type& g, CELLRANGE const& CR) :  
+  enumerated_subrange(const base_grid_type& g, CELLRANGE const& CR) :  
     the_grid(g), initialized(false) 
   { 
     construct(CR.FirstCell());
@@ -735,10 +743,12 @@ public:
   void init_counts() const { num_of_edges = -1; num_of_facets = -1;}
 
   void append_vertex(vertex_handle v) { vertices.push_back(v);}
-  void append_cell(cell_handle v)     { cells.push_back(v); initialized = false;}
+  void append_cell  (cell_handle   c) { cells.push_back(c); initialized = false;}
   void append_vertex(Vertex const& v) { append_vertex(v.handle());}
   void append_cell  (Cell  const&  c) { append_cell(c.handle());}
 
+  void push_back(vertex_handle v) { append_vertex(v);}
+  void push_back(cell_handle   c) { append_cell  (c);}
   void push_back(Vertex const& v) { append_vertex(v);}
   void push_back(Cell   const& c) { append_cell  (c);}
 
@@ -831,8 +841,8 @@ public:
   cell_range_type   Cells() const 
     { init(); return cell_range_type  (0,(int) cells.size(),    cells,    *the_grid);}
 
-  const grid_type& TheGrid()  const { return *the_grid;}
-  const grid_type& BaseGrid() const { return *the_grid;}
+  const base_grid_type& TheGrid()  const { return *the_grid;}
+  const base_grid_type& BaseGrid() const { return *the_grid;}
   bool bound() const { return the_grid != 0;}
   bool empty() const { return NumOfCells() == 0 && NumOfVertices() == 0;}
 
@@ -988,7 +998,7 @@ class enumerated_subrange_ref : public archetypes_from_base<enumerated_subrange_
 public:
   using archetypes_from_base<enumerated_subrange_ref<Grid>, Grid>::handle;
 
-  typedef Grid grid_type;
+  typedef self grid_type;
   typedef Grid base_grid_type;
   typedef grid_types<Grid> gt;
 
@@ -998,8 +1008,8 @@ public:
   typedef typename range_type::vertex_range_type vertex_range_ref_t;
   typedef typename range_type::cell_range_type   cell_range_ref_t;
 
-  typedef enumerated_vertex_range<grid_type> vertex_range_t;
-  typedef enumerated_cell_range<grid_type>   cell_range_t;
+  typedef enumerated_vertex_range<base_grid_type> vertex_range_t;
+  typedef enumerated_cell_range<base_grid_type>   cell_range_t;
 
   //------- wrapped referenced types ------------------
 
@@ -1086,8 +1096,8 @@ public:
   vertex_range_ref_t range(tpV) const { return vertices; }
   cell_range_ref_t   range(tpC) const { return cells; }
 
-  grid_type const& TheGrid () const { return vertices.TheGrid();}
-  grid_type const& BaseGrid() const { return vertices.TheGrid();}
+  base_grid_type const& TheGrid () const { return vertices.TheGrid();}
+  base_grid_type const& BaseGrid() const { return vertices.TheGrid();}
 
   cell_handle   handle(const Cell& C)   const { return TheGrid().handle(C);}
   vertex_handle handle(const Vertex& V) const { return TheGrid().handle(V);}
@@ -1153,6 +1163,7 @@ namespace detail {
 
 template<class Grid, class GT  = grid_types<Grid> >
 struct grid_types_esr : public GT {
+  typedef enumerated_subrange<Grid> grid_type;
 
   typedef enumerated_subrange<Grid>           range_type;
   typedef enumerated_subrange<Grid>           vertex_range_type;
@@ -1171,8 +1182,10 @@ struct grid_types_esr : public GT {
 template<class Grid, class GT  = grid_types<Grid> >
 struct grid_types_esr_ref : public GT  {
   typedef grid_types<Grid> bgt; 
+  typedef enumerated_subrange_ref<Grid>       grid_type;
   typedef enumerated_subrange_ref<Grid>       range_type;
-  typedef Grid                                grid_type;
+  //  typedef Grid                                grid_type;
+
 
   typedef typename range_type::Vertex         Vertex;
   typedef typename range_type::vertex_handle  vertex_handle;
