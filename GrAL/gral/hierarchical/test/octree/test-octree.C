@@ -16,6 +16,8 @@
 #include "Container/functions.h" // identity<>
 
 #include "Geometry/point-traits.h"
+#include "Geometry/affine-mapping.h"
+#include "Geometry/matrix.h"
 
 using namespace GrAL;
 
@@ -48,12 +50,13 @@ int main() {
   using namespace std;
 
   {
-    typedef cartesian2d::CartesianGrid2D cart_grid_type;
-    typedef grid_types<cart_grid_type> cgt;
-    typedef octree::Octree<cartesian2d::CartesianGrid2D> octree_type;
-    typedef octree::Octree<cartesian2d::CartesianGrid2D> octgt;
+    typedef cartesiannd::grid<2>                    cart_grid_type;
+    typedef grid_types<cart_grid_type>              cgt;
+    typedef octree::Octree<cart_grid_type>          octree_type;
+    typedef octree::Octree<cart_grid_type>          octgt;
     typedef octree_type::oct_cell_type              oct_cell_type;
-    typedef octree_type::OctCellChildIterator OctCellChildIterator ;
+    typedef octree_type::oct_edge_type              oct_edge_type;
+    typedef octree_type::OctCellChildIterator       OctCellChildIterator ;
 
     cart_grid_type root(3,3);
     cart_grid_type ref_pattern(3,3); // 2x2 cells!
@@ -81,6 +84,8 @@ int main() {
 
     print_state(oct, cout);
 
+
+
     lev = oct.finest_level() -1;
     for(cgt::CellIterator c(* oct.LevelGrid(lev)); ! c.IsDone(); ++c) {
       oct_cell_type oc(* (oct.TheHierGrid()), *c, lev);
@@ -100,8 +105,11 @@ int main() {
     enumerated_subrange<cart_grid_type> FL(*oct.LevelGrid(oct.finest_level()), 
 					   *oct.ActiveCellRange(oct.finest_level()));
     typedef tuple<double,2> coord_type;
-    typedef stdext::identity<coord_type>        mapping_type;
-    cartesian2d::mapped_geometry<mapping_type> GeomFL(*oct.LevelGrid(oct.finest_level()));
+    typedef matrix<2,2,0>                                                  matrix_type;
+    typedef affine_mapping<matrix_type, coord_type>                        mapping_type;
+
+    mapping_type f = mapping_type::identity();
+    cartesiannd::mapped_geometry<cart_grid_type, mapping_type>  GeomFL(* oct.LevelGrid(oct.finest_level()),f);
     OstreamComplex2DFmt GOut("oct.complex2d");
     ConstructGrid(GOut, GOut, FL, GeomFL);
 
