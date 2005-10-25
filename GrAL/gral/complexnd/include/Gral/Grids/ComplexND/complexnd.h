@@ -443,6 +443,7 @@ namespace complexnd {
    
       \ingroup complexndstuff
       \todo Calculate incidence information
+      \todo Specialization of switch operators for ANY
    */
   template<int D>
   class ComplexND : public grid_types_ComplexND<D>, public dimension_mixin_grid<D> {

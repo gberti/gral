@@ -547,8 +547,8 @@ namespace cartesiannd {
     typedef grid<DIM-1>                      facet_grid_type;
     typedef typename base::vertex_index_type vertex_index_type;
     enum { dim = DIM};
-    //@{
     //! \name Constructors
+    //@{
     //! Empty grid
     grid() {}
     //! Grid with vertex indices \f$ x_i \in [0, b_i[ \f$ with \f$ b = \f$  \c beyond
