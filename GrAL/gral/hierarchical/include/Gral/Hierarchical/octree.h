@@ -12,9 +12,11 @@
 
 #include "Container/sequence-algorithms.h"
 
+#include <boost/integer.hpp>
+
 #include <algorithm>  // find
 #include <functional> // mem_fun_ref
-
+#include <stack>
 
 
 namespace GrAL {
@@ -101,6 +103,8 @@ public:
 
   typedef size_t size_type;
 
+  enum { dim = flat_grid_type::dim };
+
   //  typedef marked_subrange<cartesian_grid_type>     grid_range_type;
   //typedef hier_grid_table<active_grid_range_type>  subrange_table_type;
 
@@ -111,11 +115,13 @@ public:
 
   typedef hier::hier_partial_grid_function<hier_cell_type, bool>   cell_active_range_type;
   typedef typename subrange_table_type::flat_gf_type               cell_flat_range_type;
-  typedef hier::hier_partial_grid_function<hier_vertex_type, bool> vertex_active_range_type;
+  // there may be up to 2^dim cells incident to a vertex, so we need dim+1 bits to count them.
+  typedef hier::hier_partial_grid_function<hier_vertex_type, typename boost::uint_t<dim+1>::least> vertex_active_range_type;
   typedef typename vertex_active_range_type::flat_gf_type          vertex_flat_range_type;
 
   typedef typename vertex_flat_range_type::VertexIterator ActiveLevelVertexIterator;
   typedef typename cell_flat_range_type  ::CellIterator   ActiveLevelCellIterator;
+
 private:  
   ref_ptr<hier_grid_type>      levels;
   cell_active_range_type       active_cell_range;
@@ -141,7 +147,6 @@ public:
   Octree(hier_grid_type & H);
   Octree(ref_ptr<hier_grid_type> H);
 
-  // Octree(int nx_, int ny_, int nz_);
 
   /*! \brief Add the initial level.
       All  cells are active by default (ensuring that everything is covered by active cells)
@@ -181,7 +186,7 @@ public:
     Inverse to join_cells().
    
      \pre <tt> is_leaf(c) == true </tt>
-     \invariant <tt> split_cell(c); join_cells(c) </tt> does not change the state of the octree.
+     \invariant The sequence <tt> split_cell(c); join_cells(c) </tt> does not change the state of the octree.
      
    */ 
 
@@ -236,7 +241,7 @@ public:
   bool isActive(hier_vertex_type v) const { 
     if(! active_vertex_range_initialized)
       init_active_vertex_range();
-    return active_vertex_range(v);
+    return active_vertex_range(v) > 0;
   }
 
 
@@ -309,8 +314,12 @@ public:
   /*! \brief mark the level as active
    */
   void activate (level_handle lev) { 
-    for(typename flatgt::CellIterator c = LevelGrid(lev)->FirstCell(); ! c.IsDone(); ++c)
+    for(typename flatgt::CellIterator c = LevelGrid(lev)->FirstCell(); ! c.IsDone(); ++c) {
       active_cell_range[lev][*c] = true;
+      for(typename flatgt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc)
+	active_vertex_range[lev][*vc]++;
+    }
+
   }
   /*! \brief mark the level as non-active
    */
@@ -318,21 +327,36 @@ public:
     active_cell_range.set_default(false);
     for(typename flatgt::CellIterator c = LevelGrid(lev)->FirstCell(); ! c.IsDone(); ++c)
       active_cell_range[lev].undefine(*c);
+
+    active_vertex_range.set_default(0);
+    for(typename flatgt::VertexIterator v = LevelGrid(lev)->FirstVertex(); ! v.IsDone(); ++v)
+      active_vertex_range[lev].undefine(*v);
   }
 
 
   /*! \brief mark the cell as active
    */
-  void activate (oct_cell_type c) { active_cell_range[c.level()][c] = true;}
+  void activate (oct_cell_type c) { 
+    active_cell_range[c.level()][c] = true;
+    for(typename flatgt::VertexOnCellIterator vc(c.Flat()); !vc.IsDone(); ++vc)
+      active_vertex_range[c.level()][*vc]++;
+  }
 
   /*! \brief unmark the cell as active
       \todo This works only if the default value is false!
    */
-  void deactivate (oct_cell_type c) { active_cell_range[c.level()].undefine(c); }
+  void deactivate (oct_cell_type c) { 
+    active_cell_range[c.level()].undefine(c); 
+    for(typename flatgt::VertexOnCellIterator vc(c.Flat()); !vc.IsDone(); ++vc) {
+      active_vertex_range[c.level()][*vc]--;
+      if(active_vertex_range[c.level()][*vc] == 0)
+	active_vertex_range[c.level()].undefine(*vc);
+    }
+  }
   //! mark the cell as active and leaf
-  void make_leaf  (oct_cell_type c) { active_cell_range[c.level()][c] = true;}
+  void make_leaf  (oct_cell_type c) { activate(c); }
   //! mark the cell as an internal octcell (active, but no leaf)
-  void make_branch(oct_cell_type c) { active_cell_range[c.level()][c] = true;}
+  void make_branch(oct_cell_type c) { activate(c); }
 
   void join_cells_rec(oct_cell_type const& newLeaf);
 
@@ -417,6 +441,9 @@ public:
     typedef typename base::hgt       hgt;
     typedef typename hgt::flat_cell_type   flat_cell_type;
 
+    typedef grid_type                anchor_type;
+    typedef Cell                     value_type;
+    typedef Cell                     element_type;
   private:
     ActiveLevelCellIterator c;
     //using base::lev;
@@ -471,6 +498,69 @@ public:
   inline bool operator< (leaf_cell_iterator_t<ELEMBASE> const& lhs, leaf_cell_iterator_t<ELEMBASE> const& rhs)
   { return lhs.level() < rhs.level() || (lhs.level() == rhs.level() && lhs.Flat() < rhs.Flat());}
  
+
+
+  template<class OCT, class ELEM>
+  class leaf_elem_iterator {
+    typedef leaf_elem_iterator<OCT, ELEM>        self;
+    typedef OCT                                  octree_type;
+    typedef ELEM                                 element_type;
+    typedef typename element_type::ChildIterator child_iterator;
+
+    // invariant: s.top() is a leaf or s.empty() (then IsDone() == true)
+    std::stack<child_iterator> s;
+    GrAL::ref_ptr<octree_type const> oct;
+  public:
+    leaf_elem_iterator() {}
+    leaf_elem_iterator(octree_type         const& o, element_type const& root) : oct(o) { init(root);}
+    leaf_elem_iterator(ref_ptr<octree_type const> o, element_type const& root) : oct(o) { init(root);}
+    
+     void init(element_type const& root)
+    {
+      if(is_leaf(root))
+	s.push(get_leaf(root));
+      else {
+	s.push(get_first_child(root));
+	to_next_leaf();
+      }
+    }
+    self& operator++() {
+      s.pop(); // top was current leaf
+      to_next_internal();
+      if(!s.empty()) 
+	to_next_leaf();
+      return *this;
+    }
+
+    element_type  operator*() const { return *s.top();}
+    bool IsDone() { return s.empty();}
+  private:
+    bool           is_leaf        (element_type const& e) const { return oct->isLeaf(e);}
+    child_iterator get_leaf       (element_type const& e) const { return child_iterator(e,e.level());}
+    child_iterator get_first_child(element_type const& e) const { return e.FirstChild();}
+
+    // move s.top() to next leaf element
+    void to_next_leaf() {
+      while(! is_leaf(* s.top()))
+	s.push(get_first_child(* s.top()));
+      s.push(get_leaf(* s.top()));
+    }
+    // move current child to next sibling
+    void to_next() {
+      if(! s.empty())
+	++s.top();
+    }
+    // move current child to next valid position
+    void to_next_internal() {
+      to_next();
+      while(!s.empty() && s.top().IsDone()) {
+	s.pop();
+	to_next();
+      }
+
+    }
+
+  };
    
 
 } // namespace octree
