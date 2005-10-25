@@ -310,6 +310,7 @@ public:
 
     Vertex() {}
     Vertex(Grid const& g, vertex_handle v) { *this = g.vertex(v);}
+    Vertex(ref_ptr<Grid const> g, vertex_handle v) { *this = g->vertex(v);}
 
     Vertex(const vertex_base& v, const Grid* g) :  elem_base(g),  _v(v) {}
     Vertex(const vertex_base& v, const Grid& g) :  elem_base(&g), _v(v) {}
@@ -372,7 +373,7 @@ public:
 
     const index_type&  index() const { return _v;}
     //    const vertex_base& base() const {return _v;}
-    bool valid() const { return TheGrid().IsValid(_v);}
+    bool valid() const { return  bound() && TheGrid().IsValid(_v);}
   protected:
     index_type _v;
   };
@@ -389,6 +390,7 @@ public:
 
     Edge()  {}
     Edge(Grid const& g, edge_handle e) { *this = g.edge(e);}
+    Edge(ref_ptr<Grid const> g, edge_handle e) { *this = g->edge(e);}
 
     Edge(direction d, const vertex_base& v, const Grid* g)
       : elem_base(g), dir(d), v1_(v)  {}
@@ -463,6 +465,7 @@ public:
     edge_handle GlobalNumber() const { return TheGrid().edge_num(*this); }
     edge_handle handle      () const { return TheGrid().edge_num(*this); }
 
+    bool valid() const { return  bound() && TheGrid().IsValid(low_vertex_index()) &&  TheGrid().IsValid(high_vertex_index()) ;}
  private:
     direction dir;
     vertex_base v1_;
@@ -482,6 +485,7 @@ public:
 
     Cell() : elem_base(0) {}
     Cell(const Grid& g, cell_handle c) { *this = g.cell(c); }
+    Cell(ref_ptr<Grid const> g, cell_handle c) { *this = g->cell(c); }
 
     Cell(const Grid* g, const vertex_base& b) : elem_base(g),  llv(b)  {}
     Cell(const Grid& g, const vertex_base& b) : elem_base(&g), llv(b)  {}
@@ -621,6 +625,9 @@ public:
   class VertexIterator : public seq_iterator_base {
     typedef VertexIterator self;
   public:
+    typedef Vertex value_type;
+    typedef Vertex element_type;
+
     VertexIterator() : base(0) {} 
     VertexIterator(const Grid* g) : base(g), v(g->MinVertexNum()) {}
     explicit 
@@ -670,6 +677,9 @@ public:
   class EdgeIterator : public seq_iterator_base {
     typedef EdgeIterator self;
   public:
+    typedef Edge value_type;
+    typedef Edge element_type;
+
     EdgeIterator() {}
     explicit
     EdgeIterator(Grid const& g) : base(g), e(g.MinEdgeNum()) {}
@@ -706,6 +716,9 @@ public:
   class CellIterator : public seq_iterator_base {
     typedef CellIterator self;
   public:  
+    typedef Cell value_type;
+    typedef Cell element_type;
+
     CellIterator() : base(0), c(-1) {}
     explicit
     CellIterator(const Grid& g) : base(&g), c(g.MinCellNum()) {}
@@ -779,6 +792,7 @@ public:
       : base(g), _v(v), _vv(vv)  {}
     self& operator++() { cv(); _v = _vv.next_neighbour(_v); return (*this);}
     self  operator++(int)    { cv(); self tmp(*this); ++(*this); return tmp;}
+
     Vertex  operator*() const { cv(); return (_vv.vertex(_v));}
     // operator Vertex()   const { return this->operator*();}
     bool    IsDone()    const { cb(); return (_v >= 4);}
