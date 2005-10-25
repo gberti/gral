@@ -4,7 +4,9 @@
 // $LICENSE_NEC
 
 #include "Gral/Base/common-grid-basics.h"
+
 #include "Container/bivector.h"
+#include "Container/combinatorial.h"
 
 #include "Utility/pre-post-conditions.h"
 #include "Utility/ref-ptr.h"
@@ -29,9 +31,8 @@ namespace hierarchical {
 
   template<class HGrid> class h_cell_child_iterator_t;
   template<class HGrid, class FLATELEM> class h_element_child_iterator_t;
-  //template<class ELEMBASE, class ANCHORTAG> class  h_vertex_on_element_iterator_t;
   template<class ELEMBASE, class ELEMTAG, class ANCHORTAG> class  h_incidence_iterator_t;
-  // template<class HGrid> class h_facet_child_iterator_t;
+
 
   /*! \brief Handle type for hierarchical elements
 
@@ -47,18 +48,18 @@ namespace hierarchical {
   public:
     h_element_handle_t() {}
     h_element_handle_t(flat_element_handle hh, level_handle llev) : h(hh), lev(llev) {}
-    level_handle     level()       const { return lev;}
+
+    // may be dangerous 
+    template<class HG>
+    h_element_handle_t(h_element_handle_t<HG, flat_element_handle> hh) : h(hh.flat()), lev(hh.level()) {}
+
+    level_handle        level()       const { return lev;}
     flat_element_handle flat_handle() const { return h;}
+    flat_element_handle flat       () const { return h;}
 
     operator flat_element_handle() const { return h;}    
     bool operator==(self const& rhs) const { return h == rhs.h && lev == rhs.lev;}
     bool operator!=(self const& rhs) const { return (!*this == rhs);}
-
-    /*
-    struct hasher_type : public typename base::hasher_type_elem_base {
-      size_t operator()(h_element_handle_t<HGrid, FlatHandle> h) const { return 
-    }
-    */
   };
 
   template<class HGrid, class FlatHandle>
@@ -155,10 +156,25 @@ namespace hierarchical {
     typedef h_element_handle_t<self, flat_cell_handle>    hier_cell_handle;
     typedef h_element_handle_t<self, flat_facet_handle>   hier_facet_handle;
     typedef h_element_handle_t<self, flat_edge_handle>    hier_edge_handle;
+
     typedef h_cell_t   <element_base_type>                         hier_cell_type;
     typedef h_vertex_t <element_base_type>                         hier_vertex_type;
     typedef h_element_t<element_base_type, typename flatgt::Edge>  hier_edge_type;
     typedef h_element_t<element_base_type, typename flatgt::Facet> hier_facet_type;
+
+    // Experimental: map flat to hierarchical element types.
+    // FIXME: needs specialisation for Vertex and Cell.
+    template<class FLATELEM> 
+    struct flat2hier  {
+    private:
+      typedef hgrid_cartesian<Grid,GT>          hier_grid;
+      typedef element_traits<FLATELEM>          et;
+      typedef typename et::handle_type          flat_handle_type;
+    public:
+      typedef h_element_t       <hier_grid, FLATELEM>                type;
+      typedef h_element_handle_t<hier_grid, flat_handle_type> handle_type;
+    };
+
 
     typedef hier_vertex_handle vertex_handle;
     typedef hier_facet_handle  facet_handle;
@@ -382,8 +398,9 @@ namespace hierarchical {
  
     /*! \brief Descendant on level \c h of the cell \p 
       If <tt> h == p.level() +1 </tt>, this are just  the children
+
+      \pre h >= p.level()
     */
-    //temporary<cart_subrange_type>  descendants(hier_cell_type const& p, level_handle h) const;
     ref_ptr<cart_subrange_type>  descendants(hier_cell_type const& p, level_handle h) const;
 
     // hier_cell_handle parent(hier_cell_type const& c) const { return quotient(c.Flat().index(), the_pattern.size());}
@@ -391,10 +408,8 @@ namespace hierarchical {
 
     template<class ELEMENTBASE, class FLATELEM>
     ref_ptr<cart_subrange_type> descendants(h_element_t<ELEMENTBASE,FLATELEM> const& p, level_handle h) const;
-    // temporary<cart_subrange_type> descendants(h_element_t<ELEMENTBASE,FLATELEM> const& p, level_handle h) const;
 
     template<class ELEMENTBASE, class FLATELEM>
-    //  temporary<cart_subrange_type> children   (h_element_t<ELEMENTBASE,FLATELEM> const& p) const 
     ref_ptr<cart_subrange_type> children   (h_element_t<ELEMENTBASE,FLATELEM> const& p) const 
     { return descendants(p, p.level()+1);}
 
@@ -509,7 +524,9 @@ namespace hierarchical {
     typedef typename flatgt::vertex_handle flat_vertex_handle;
     typedef typename flatgt::Vertex        flat_vertex_type;
 
-    typedef flat_vertex_type               flat_element_type;
+    typedef flat_vertex_type                  flat_element_type;
+    typedef element_traits<flat_element_type> fet;
+    typedef typename fet::element_type_tag    element_type_tag;
     typedef typename flat_element_type::index_type  index_type;
   private:
     flat_vertex_handle       h;
@@ -605,8 +622,13 @@ namespace hierarchical {
     typedef typename base::flatgt          flatgt;
     typedef typename flatgt::cell_handle   flat_cell_handle;
     typedef typename flatgt::Cell          flat_cell_type;
-    typedef flat_cell_type                 flat_element_type;
-    typedef element_traits<flat_element_type>   fet;
+
+    typedef flat_cell_type                       flat_element_type;
+    typedef element_traits<flat_element_type>    fet;
+    typedef typename fet::element_type_tag       element_type_tag;
+
+    typedef cell_handle      element_handle;
+    typedef flat_cell_handle flat_element_handle;
 
     enum { dim = fet::dim, griddim = grid_type::dim };
 
@@ -713,11 +735,12 @@ namespace hierarchical {
     typedef element_traits<flat_element_type>   fet;
     typedef typename base::flatgt               flatgt;
     typedef typename fet::handle_type           flat_element_handle;
- 
+    
     typedef typename flat_element_type::index_type       index_type;
     typedef typename flat_element_type::local_index_type local_index_type;
 
-    enum { dim = fet::dim, griddim = grid_type::dim };
+    typedef typename fet::element_type_tag       element_type_tag;
+    enum { dim = fet::dim, griddim = grid_type::dim, codim = grid_type::dim - fet::dim };
 
     typedef typename gt::template element_d       <dim>::type     Element;
     typedef typename gt::template element_handle_d<dim>::type     element_handle;
@@ -820,7 +843,7 @@ namespace hierarchical {
     typedef typename HGrid::hier_cell_handle hier_cell_handle;
 
   private:
-    hier_cell_type             p;  // parent
+    hier_cell_type        p;  // parent
     PatternCellIterator  ch; // current child
   public:
     h_cell_child_iterator_t() {}
@@ -880,20 +903,25 @@ namespace hierarchical {
     element_type                        p;  // parent
     ref_ptr<cart_subrange_type const>   children; // range of children
     RangeElementIterator                ch; // current child
-
+    level_handle                        lev; // level of the children
   public:
     h_element_child_iterator_t() {}
     h_element_child_iterator_t(element_type const& pp) 
-      : p(pp), children(TheHierGrid()->children(p)), ch(*children) {}
+      : p(pp), children(TheHierGrid()->children(p)), ch(*children) { init_level(); }
+    h_element_child_iterator_t(element_type const& pp, level_handle lv) 
+      : p(pp), children(TheHierGrid()->descendants(p,lv)), ch(*children), lev(lv) { }
     // hack: must pass subrange ... 
     h_element_child_iterator_t(element_type         const& pp, 
 			       cart_subrange_type   const& children_,
 			       RangeElementIterator const& child) 
-      : p(pp), children(children_), ch(child) {}
+      : p(pp), children(children_), ch(child) { init_level(); }
     h_element_child_iterator_t(element_type         const& pp, 
 			       ref_ptr<cart_subrange_type const> children_,
 			       RangeElementIterator const& child) 
-      : p(pp), children(children_), ch(child) {}
+      : p(pp), children(children_), ch(child) { init_level(); }
+
+
+    void init_level() { lev = TheHierGrid()->next_finer_level(p.level());}
 
     element_type operator*()         const { cv(); return element_type(TheHierGrid(), *ch, level()); }
     // TheHierGrid()->Child(Parent(),(*ch).index());}
@@ -901,7 +929,7 @@ namespace hierarchical {
 
     bool IsDone() { cb(); return ch.IsDone();}
 
-    level_handle      level() const { return TheHierGrid()->next_finer_level(p.level());}
+    level_handle      level() const { return lev; }
     flat_element_type Flat() const { cv(); return operator*().Flat();} 
 
     element_type const& Parent() const { cb(); return p;}
@@ -1022,87 +1050,57 @@ namespace hierarchical {
 			 base::TheHierGrid()->children(*this), 
 			 base::TheHierGrid()->children(*this)->template EndElement<dim>());}
 
-  /*
-  template<class HGRID, class FLATELEM>
-  h_element_child_iterator_t<HGRID,FLATELEM>::
-  h_element_child_iterator_t(typename h_element_child_iterator_t<HGRID,FLATELEM>::element_type const& pp) 
-    : p(pp), ch(* TheHierGrid()->children(p)) {}
-  */
 
 
-  /*
-  template<class ELEMBASE, class FLATELEM, int DIM, int CODIM>
-  struct h_element_traits_base_aux {};
+  template<class ET> class et_hier_hash_mixin : public ET
+  {
+    typedef  ET bet;
+  public:
+    class hasher_type {
+      typedef typename bet::element_type                              element_type;
+      typedef typename element_type:: flat_element_type               flat_element_type;
+      typedef typename element_traits<flat_element_type>::hasher_type flat_hasher_type;
+    public:
+      typedef element_type                           key_type;
+      typedef element_type                           argument_type;
+      typedef typename flat_hasher_type::result_type result_type;
+      
+      result_type operator()(element_type e) const {
+	// prepend the digits of level to the hash value of the flat element
+	// binary notation: LLL00...00FFFFF, where L - bits from level, F - bits from flat element
+	int lev = e.level();
+	unsigned ulev = (lev >= 0 ? 2*lev : -2*lev-1);
+	ulev = combinatorial::mirror_bits(ulev);
+	flat_hasher_type fh;
+	return ulev + fh(e.Flat());
+      }  
+    };
+  };
 
-  template<class ELEMBASE, class FLATELEM, int CODIM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, 0, CODIM>
-    : public element_traits_vertex_base<typename ELEMBASE::grid_type> 
-  {};
-
-  template<class ELEMBASE, class FLATELEM, int CODIM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, 1, CODIM>
-    : public element_traits_edge_base<typename ELEMBASE::grid_type> 
-  {};
-
-  template<class ELEMBASE, class FLATELEM, int CODIM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, 2, CODIM>
-    : public element_traits_face_base<typename ELEMBASE::grid_type> 
-  {};
-
-  template<class ELEMBASE, class FLATELEM, int DIM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, DIM, 0>
-    : public element_traits_cell_base<typename ELEMBASE::grid_type> 
-  {};
-
-  template<class ELEMBASE, class FLATELEM, int DIM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, DIM, 1>
-    : public element_traits_facet_base<typename ELEMBASE::grid_type> 
-  {};
-  
-
-  template<class ELEMBASE, class FLATELEM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, 2, 0>
-    : public element_traits_cell_base<typename ELEMBASE::grid_type> 
-  {};
-
-  template<class ELEMBASE, class FLATELEM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, 1, 0>
-    : public element_traits_cell_base<typename ELEMBASE::grid_type> 
-  {};
-
-  template<class ELEMBASE, class FLATELEM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, 0, 0>
-    : public element_traits_vertex_base<typename ELEMBASE::grid_type> 
-  {};
-
-  template<class ELEMBASE, class FLATELEM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, 0, 1>
-    : public element_traits_vertex_base<typename ELEMBASE::grid_type> 
-  {};
-
-  template<class ELEMBASE, class FLATELEM>
-  struct h_element_traits_base_aux<ELEMBASE, FLATELEM, 1, 1>
-    : public element_traits_edge_base<typename ELEMBASE::grid_type> 
-  {};
+  template<class E> class et_base 
+    : public et_hier_hash_mixin<element_traits_base<E> > {};
 
 
-
-  template<class ELEMBASE, class FLATELEM>
-  struct h_element_traits_base 
-    : public h_element_traits_base_aux<ELEMBASE, FLATELEM, 
-				       h_element_t<ELEMBASE,FLATELEM>::dim,
-				       h_element_t<ELEMBASE,FLATELEM>::griddim> 
-  {};
-  */
 } // namespace hierarchical
 
 
 template<class ELEMBASE, class FLATELEM>
 struct element_traits<hierarchical::h_element_t<ELEMBASE, FLATELEM> > 
-//  : public hierarchical::h_element_traits_base<ELEMBASE, FLATELEM> {};
-{
-  typedef typename hierarchical::h_element_t<ELEMBASE, FLATELEM>::element_handle handle_type;
+  : public  hierarchical::et_base<hierarchical::h_element_t<ELEMBASE, FLATELEM> > 
+{ };
+
+template<class ELEMBASE>
+struct element_traits<hierarchical::h_vertex_t<ELEMBASE> >
+  : public  hierarchical::et_base<hierarchical::h_vertex_t<ELEMBASE> >
+{ 
 };
+
+template<class ELEMBASE>
+struct element_traits<hierarchical::h_cell_t<ELEMBASE> >
+  : public  hierarchical::et_base<hierarchical::h_cell_t<ELEMBASE> >
+{ };
+
+
 
 } // namespace GrAL 
 
