@@ -1,4 +1,11 @@
-SUBDIRS = construct table gridfunction octree geometry non-conforming-leaf-grid
+SUBDIRS = construct \
+          conforming-leaf-grid \
+          gridfunction \
+          geometry \
+          non-conforming-leaf-grid \
+          octree \
+          octree-leaf-iterator \
+          table \
 
 
 PWD=$(shell pwd)
