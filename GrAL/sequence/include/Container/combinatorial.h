@@ -5,7 +5,7 @@
 
 #include "Utility/pre-post-conditions.h"
 
-namespace GrAL {
+namespace GrAL { namespace combinatorial {
 
 /*! \defgroup combinatorialalgorithms Combinatorial algorithms
     \brief Algorithms calculating combinatorial functions, such as binomial coefficients
@@ -24,6 +24,14 @@ I factorial(I n) {
   return (n == 0 ? 1 :n*factorial(n-1));
 }
 
+template<class I>
+I power(I base, unsigned n) 
+{
+  if(n==0)
+    return 1;
+  I power_n_2 = power(base, n/2);
+  return power_n_2 * power_n_2 * ( (2*(n/2) == n) ? 1 : base);
+}
 
 namespace compile_time_functions {
 
@@ -184,7 +192,55 @@ template<class V>
 inline V succ_binary_number(V const& v)
 { return succ_nary_number(v,2);}
 
-} // namespace GrAL 
+
+
+template<class I>
+struct binary_printer {
+  I k;
+
+  binary_printer(I kk) : k(kk) {}
+
+  void print(std::ostream& out) {
+    I one = 1;
+    for(int i = std::numeric_limits<I>::digits; i >= 1; --i)
+      out << ( k & ( one << (i-1)) ? '1' : '0');
+  }
+  
+};
+
+template<class I>
+inline std::ostream& operator<<(std::ostream& out, binary_printer<I> b) { b.print(out); return out;}
+
+/*! \brief Print an integral type bit for bit
+ */
+template<class I>
+inline binary_printer<I> print_binary(I k) { return binary_printer<I>(k);}
+
+
+/*! \brief Mirror the bits of \c x
+
+    \ingroup combinatorialalgorithms
+
+    \f$ x = \sum_{i=0}^N a_i 2^i \mapsto \sum{i=0}^N a_i 2^{N-i} \f$
+    where \f$N+1\f$ is the number of bits.
+*/
+
+template<class I>
+inline I mirror_bits(I x)  {
+  I res = 0;
+  I N   = std::numeric_limits<I>::digits;
+  I two_pow_N_i = power(I(2), N - 1);
+  for(unsigned i = 0; i < N; ++i) {
+    res += two_pow_N_i * ( x & 1);
+    x /= 2;
+    two_pow_N_i  /= 2;
+  }
+  return res;
+}
+
+
+
+}} // namespace GrAL { namespace combinatorial {
 
 
 #endif
