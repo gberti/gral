@@ -12,9 +12,9 @@ namespace restricted_grid_component_view {
 
   template<class GRID, class INSIDE_PRED, class GT>
   grid_view<GRID, INSIDE_PRED, GT>::grid_view
-  (typename grid_view<GRID, INSIDE_PRED, GT>::grid_type const& gg,
-   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type        ins,
-   typename grid_view<GRID, INSIDE_PRED, GT>::baseCell  const& grm) 
+  (typename grid_view<GRID, INSIDE_PRED, GT>::base_grid_type const& gg,
+   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type             ins,
+   typename grid_view<GRID, INSIDE_PRED, GT>::baseCell       const& grm) 
       : g(&gg), inside(ins), germs(gg), range(gg),  
 	cells_initialized(false),
 	vertices_initialized(false) 
@@ -25,8 +25,8 @@ namespace restricted_grid_component_view {
   template<class GRID, class INSIDE_PRED, class GT>
   template<class IT>
   grid_view<GRID, INSIDE_PRED, GT>::grid_view
-  (typename grid_view<GRID, INSIDE_PRED, GT>::grid_type const& gg,
-   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type        ins,
+  (typename grid_view<GRID, INSIDE_PRED, GT>::base_grid_type const& gg,
+   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type             ins,
    IT begin_germ, IT end_germ)
       : g(&gg), inside(ins), germs(gg), range(gg),  
 	cells_initialized(false),
@@ -42,12 +42,12 @@ namespace restricted_grid_component_view {
 
   template<class GRID, class INSIDE_PRED, class GT>
   void grid_view<GRID, INSIDE_PRED, GT>::init
-  (typename grid_view<GRID, INSIDE_PRED, GT>::grid_type const& gg,
-   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type        ins,
-   typename grid_view<GRID, INSIDE_PRED, GT>::baseCell  const& grm) 
+  (typename grid_view<GRID, INSIDE_PRED, GT>::base_grid_type const& gg,
+   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type             ins,
+   typename grid_view<GRID, INSIDE_PRED, GT>::baseCell       const& grm) 
   {
     clear();
-    g = ref_ptr<grid_type const>(gg); 
+    g = ref_ptr<base_grid_type const>(gg); 
     inside = ins;
     range.init(gg);
     germs.init(gg);
@@ -58,12 +58,12 @@ namespace restricted_grid_component_view {
   template<class GRID, class INSIDE_PRED, class GT>
   template<class IT>
   void grid_view<GRID, INSIDE_PRED, GT>::init
-  (typename grid_view<GRID, INSIDE_PRED, GT>::grid_type const& gg,
-   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type        ins,
+  (typename grid_view<GRID, INSIDE_PRED, GT>::base_grid_type const& gg,
+   typename grid_view<GRID, INSIDE_PRED, GT>::pred_type             ins,
    IT begin_germ, IT end_germ)
   {
     clear();
-    g = ref_ptr<grid_type const>(gg); 
+    g = ref_ptr<base_grid_type const>(gg); 
     inside = ins;
     range.init(gg);
     germs.init(gg);
@@ -78,7 +78,7 @@ namespace restricted_grid_component_view {
   template<class GRID, class INSIDE_PRED, class GT>
   void grid_view<GRID, INSIDE_PRED, GT>::clear()
   {
-    g = ref_ptr<const grid_type>();
+    g = ref_ptr<const base_grid_type>();
     range.clear();
     germs.clear();
     cells_initialized = false;

@@ -26,7 +26,6 @@ namespace GrAL {
  
 
    \todo implement Edge/Facet if supported by \c GRID
-   \todo reuse archetypes from GRID
    \see \ref gridviews module
    \see Test in \ref test-restricted-components-view.C
 
@@ -34,25 +33,24 @@ namespace GrAL {
 
 namespace restricted_grid_component_view { 
 
-  template<class GRID, class INSIDE_PRED, class GT> 
-  class vertex;
-  template<class GRID, class INSIDE_PRED, class GT> 
-  class vertex_iterator;
-  template<class GRID, class INSIDE_PRED, class GT> 
-  class cell_iterator;
-  template<class GRID, class INSIDE_PRED, class GT> 
-  class vertex_on_cell_iterator;
+  template<class GRID, class INSIDE_PRED, class GT>  class vertex;
+  template<class GRID, class INSIDE_PRED, class GT>  class vertex_iterator;
+  template<class GRID, class INSIDE_PRED, class GT>  class cell_iterator;
+  template<class GRID, class INSIDE_PRED, class GT>  class vertex_on_cell_iterator;
+  template<class GRID, class INSIDE_PRED, class GT>  class grid_view;
+
 
   template<class GRID, class INSIDE_PRED, class GT>
   struct grid_types_grid_view : public archetypes_from_base_grid_types<GT> {
-    typedef GRID        grid_type;
+    typedef GRID                             base_grid_type;
+    typedef grid_view<GRID, INSIDE_PRED, GT> grid_type;
 
-    typedef typename  GT::vertex_handle vertex_handle;
-    typedef typename  GT::cell_handle   cell_handle;
-    typedef vertex<GRID,INSIDE_PRED, GT>        Vertex;
-    typedef cell_iterator<GRID,INSIDE_PRED, GT> Cell;
-    typedef vertex_iterator<GRID,INSIDE_PRED, GT>        VertexIterator;
-    typedef cell_iterator<GRID,INSIDE_PRED, GT>          CellIterator;
+    typedef typename  GT::vertex_handle                   vertex_handle;
+    typedef typename  GT::cell_handle                     cell_handle;
+    typedef vertex<GRID,INSIDE_PRED, GT>                  Vertex;
+    typedef cell_iterator<GRID,INSIDE_PRED, GT>           Cell;
+    typedef vertex_iterator<GRID,INSIDE_PRED, GT>         VertexIterator;
+    typedef cell_iterator<GRID,INSIDE_PRED, GT>           CellIterator;
     typedef vertex_on_cell_iterator<GRID,INSIDE_PRED, GT> VertexOnCellIterator;
 
     typedef typename GT::dimension_tag dimension_tag;
@@ -73,22 +71,24 @@ namespace restricted_grid_component_view {
         <tt> bool operator()(Cell) </tt>
 
   */
-  template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
+  template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> > 
   class grid_view : public archetypes_from_base<grid_view<GRID, INSIDE_PRED, GT>, GRID, GT>  {
   public:
-    typedef GRID        grid_type;
-    typedef INSIDE_PRED pred_type;
+    typedef grid_view<GRID, INSIDE_PRED, GT> self;
+    typedef self                             grid_type;
+    typedef GRID                             base_grid_type;
+    typedef INSIDE_PRED                      pred_type;
     
-    typedef typename  GT::Vertex baseVertex;
-    typedef typename  GT::Cell   baseCell;
+    typedef typename  GT::Vertex               baseVertex;
+    typedef typename  GT::Cell                 baseCell;
     typedef typename  GT::CellOnCellIterator   baseCellOnCellIterator;
     typedef typename  GT::VertexOnCellIterator baseVertexOnCellIterator;
-    typedef typename  GT::vertex_handle vertex_handle;
-    typedef typename  GT::cell_handle   cell_handle;
+    typedef typename  GT::vertex_handle        vertex_handle;
+    typedef typename  GT::cell_handle          cell_handle;
     
     typedef enumerated_subrange<GRID> range_type;
   private:
-    ref_ptr<grid_type const>  g;
+    ref_ptr<base_grid_type const>  g;
     pred_type                 inside;
     range_type                germs;
 
@@ -97,20 +97,20 @@ namespace restricted_grid_component_view {
     mutable bool       vertices_initialized;
   public:
     grid_view() {}
-    grid_view(grid_type const& gg,
+    grid_view(base_grid_type const& gg,
 	      pred_type        ins,
 	      baseCell  const& grm);
     template<class IT>
-    grid_view(grid_type const& gg,
+    grid_view(base_grid_type const& gg,
 	      pred_type        ins,
 	      IT begin_germ, IT end_germ);
 
-    void init(grid_type const& gg,
+    void init(base_grid_type const& gg,
 	      pred_type        ins,
 	      baseCell  const& grm);
 
     template<class IT>
-    void init(grid_type const& gg,
+    void init(base_grid_type const& gg,
 	      pred_type        ins,
 	      IT begin_germ, IT end_germ);
 
@@ -131,12 +131,14 @@ namespace restricted_grid_component_view {
     unsigned       NumOfCells()    const { init_cells(); return range.NumOfCells();}
 
 
-    grid_type const& BaseGrid() const { return *g;}
-    grid_type const& TheGrid()  const { return *g;}
+    base_grid_type const& BaseGrid() const { return *g;}
+    base_grid_type const& TheGrid()  const { return *g;}
   private:
     void init_cells()    const;
     void init_vertices() const;
   };
+
+
 
   template<class GRID, class INSIDE_PRED, class GT = grid_types<GRID> >
   class vertex {
