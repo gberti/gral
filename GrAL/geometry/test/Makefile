@@ -7,6 +7,7 @@ SUBDIRS = affine-mapping \
           coordN \
           intersections \
           matrix \
+          piecewise-linear-function \
           simplex \
 
 
