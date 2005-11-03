@@ -34,6 +34,7 @@ function-algebra -a GrAL/function-algebra
 graphics-device  -a GrAL/graphics-device
 
 gral             -a GrAL/gral
+gral/base        -a GrAL/gral/base
 
 gralall -a  configuration utilities external-control sequence geometry function-algebra graphics-device gral
 
