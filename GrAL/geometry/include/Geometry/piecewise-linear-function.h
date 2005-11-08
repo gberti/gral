@@ -54,7 +54,7 @@ namespace GrAL {
 	      VAL_IT val_begin, VAL_IT val_end);
 
     void read (std::istream& in);
-    void write(std::ostream& out);
+    void write(std::ostream& out) const;
     void clear() { t.clear(); v.clear();}
 
     result_type operator()(argument_type x) const {
@@ -117,24 +117,16 @@ namespace GrAL {
     t.resize(n);
     v.resize(n);
     for(int i = 0; i < n; ++i)
-      chin >> t[i];
-    for(int i = 0; i < n; ++i)
-      chin >> v[i];
-    // chin >> v_left;
-    // chin >> v_right;
+      chin >> t[i] >> v[i];
   }
 
   template<class ARG, class VAL>
-  void piecewise_linear_function<ARG, VAL>::write(std::ostream& out) 
+  void piecewise_linear_function<ARG, VAL>::write(std::ostream& out) const
   {
     out << t.size() << " ";
     for(unsigned i = 0; i < t.size(); ++i)
-      out << t[i] << " ";
+      out << t[i] << " " << v[i] << "  ";
     out << "\n";
-    for(unsigned i = 0; i < v.size(); ++i)
-      out << v[i] << " ";
-    //  out << v_left << " ";
-    //  out << v_right;
    }
 
   template<class ARG, class VAL>
