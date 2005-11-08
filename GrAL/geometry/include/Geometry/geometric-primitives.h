@@ -16,38 +16,51 @@ template<class Geom>
 struct geom_traits {};
 
 
+  /*! \defgroup geometric_primitives Geometric primitives
 
-template<class P>
-class space_point {
-  typedef space_point<P> self;
-public:
-  typedef P coord_type;
-  typedef point_traits<P> pt;
-  typedef typename pt::component_type scalar_type;
-
-private:
-  coord_type  p[1];
-public:
-  space_point() {}
-  space_point(coord_type const& P0)
-  { p[0]=P0;}
-  coord_type const& p0() const { return p[0];}
-  coord_type const& operator[](int i) const { return p[i];}
-  coord_type const& operator()(int i) const { return p[i];}
-
-  int space_dimension() const { return pt::Dim(p[0]);}
-
-  typedef integer_iterator<int, self>     VertexIterator;
-  VertexIterator FirstVertex() const { return VertexIterator(0);}
-  VertexIterator EndVertex()   const { return VertexIterator(1);}
-
-  typedef coord_type const*  geom_vertex_iterator;
-  geom_vertex_iterator begin_vertex() const { return p;}
-  geom_vertex_iterator end_vertex()   const { return p+1;}
-};
+  */
 
 
 
+  /*! \brief Point in space
+
+      \ingroup geometric_primitives
+  */
+  template<class P>
+  class space_point {
+    typedef space_point<P> self;
+  public:
+    typedef P coord_type;
+    typedef point_traits<P> pt;
+    typedef typename pt::component_type scalar_type;
+    
+  private:
+    coord_type  p[1];
+  public:
+    space_point() {}
+    space_point(coord_type const& P0)
+    { p[0]=P0;}
+    coord_type const& p0() const { return p[0];}
+    coord_type const& operator[](int i) const { return p[i];}
+    coord_type const& operator()(int i) const { return p[i];}
+    
+    int space_dimension() const { return pt::Dim(p[0]);}
+    
+    typedef integer_iterator<int, self>     VertexIterator;
+    VertexIterator FirstVertex() const { return VertexIterator(0);}
+    VertexIterator EndVertex()   const { return VertexIterator(1);}
+    
+    typedef coord_type const*  geom_vertex_iterator;
+    geom_vertex_iterator begin_vertex() const { return p;}
+    geom_vertex_iterator end_vertex()   const { return p+1;}
+  };
+
+
+
+  /*! \brief Segment in space
+
+      \ingroup geometric_primitives
+  */
 template<class P>
 class segment {
   typedef segment<P> self;
@@ -81,6 +94,10 @@ public:
 
 
 
+  /*! \brief Triangle in space
+
+      \ingroup geometric_primitives
+  */
 
 template<class P>
 class triangle {
@@ -117,6 +134,11 @@ public:
 };
 
 
+  /*! \brief Tetrahedron in space
+
+      \ingroup geometric_primitives
+  */
+
 template<class P>
 class tetrahedron {
   typedef tetrahedron<P> self;
@@ -151,19 +173,32 @@ public:
 
 
 
+  /*! \brief Ray in space
+
+      \ingroup geometric_primitives
+  */
+
 template<class P> class ray {
 public:
   typedef P coord_type;
   P p_0, dir_;
+  typedef point_traits<P> pt;
+  typedef typename pt::component_type scalar_type;
+  typedef scalar_type                 real;
 public:
   ray() {}
   ray(P const& pp0, P const& ddir) : p_0(pp0), dir_(ddir) {}
   coord_type const& p0() const { return p_0;}  
   coord_type        p1() const { return p_0 + dir_;}
   coord_type const& dir() const { return dir_;}
-  coord_type operator()(double t) const { return p_0 + t*dir_;}
+  coord_type operator()(real t) const { return p_0 + t*dir_;}
 };
 
+
+  /*! \brief Line in space
+
+      \ingroup geometric_primitives
+  */
 
 template<class P> class line
 { 
@@ -183,6 +218,7 @@ public:
   
   void normalize() { ap::normalize(dir_);}
 };
+
 
 
 template<class P>
@@ -233,10 +269,22 @@ plane_normal(Triangle const& T)
 {
   typedef geom_traits<Triangle> tt;
   typedef algebraic_primitives<typename tt::coord_type> ap;
-  return (ap::normalization
-	  (ap::vectorproduct(tt::p1(T) - tt::p0(T), 
-			     tt::p2(T) - tt::p0(T))));
+  return  ap::vectorproduct(tt::p1(T) - tt::p0(T), 
+			    tt::p2(T) - tt::p0(T));
 }
+
+/*! Calculate normal from 3-point plane representation 
+   */
+template<class Triangle>
+inline
+typename geom_traits<Triangle>::coord_type
+plane_normed_normal(Triangle const& T)
+{ 
+  typedef geom_traits<Triangle> tt;
+  typedef algebraic_primitives<typename tt::coord_type> ap;
+  return (ap::normalization(plane_normal(T)));
+}
+
 
 
 /*! Class for intersecting a segment and a triangle in 3D
@@ -269,7 +317,7 @@ public:
     coord_type n = plane_normal(T);
     real       d = ap::dot(n, tt::p0(T));
     return ( (ap::dot(st::p0(S), n)-d) 
-	     *(ap::dot(st::p1(S), n)-d)  < 0);
+	    *(ap::dot(st::p1(S), n)-d)  < 0);
   }
 
   bool segment_intersects_triangle() {
@@ -329,21 +377,25 @@ public:
     {}
 
   real eps() const { 
-    return ::std::numeric_limits<real>::epsilon();
+    return std::numeric_limits<real>::epsilon();
   }
 
   bool ray_intersects_plane() {
     coord_type n = plane_normal(T);
 
     // if direction of ray points away from plane, no intersection
-    if(ap::dot(n, rt::dir(R)) * ap::dot(n, rt::p0(R) -tt::p0(T)) > 0)
+    if(ap::dot(n, rt::dir(R)) * ap::dot(n, rt::p0(R) -tt::p0(T)) >= 0)
       return false;
-
+    else
+      return true;
+    /*
     real       d = ap::dot(ap::normalization(n),
 			   ap::normalization(rt::dir(R)));
     // is eps the correct quantity?
     // case fabs(d) < eps is considered parallel to plane
-    return ( fabs(d) >= eps());
+    real abs_d = ( d >= real(0) ? d : -d);
+    return ( abs_d >= eps());
+    */
   }
 
   bool ray_intersects_triangle() {
@@ -364,7 +416,7 @@ public:
       return (t>= 0 && r >= 0 && s >= 0 && s+r <= 1);
   }
   //  bool lines_does_intersect_plane();
-  double ray_intersection() {
+  real ray_intersection() {
     //REQUIRE(ray_intersects_plane(), "no intersection!\n",1);
     if(! t_defined)
       ray_intersects_triangle(); // calculates t      

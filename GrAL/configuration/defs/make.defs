@@ -42,7 +42,7 @@ endif
 export SCRIPTS=$(CONFIGURATION)/scripts
 export STLURL=http://www.sgi.com/tech/stl
 
-export BOOST=$(HOME)/sources/boost/boost/
+export BOOST=$(HOME)/sources/boost/#
 
 
 ifndef LOCALBINPATH
@@ -156,5 +156,10 @@ LDFLAGS +=  $(LDFLAGS_END)
 ifdef PROFILING
 include $(CONFIGURATION)/defs/$(CCNAME)/profiling.defs
 endif
+
+# for use in other make contexts
+GRAL_CCFLAGS=$(CCFLAGS) $(IFLAGS)
+GRAL_LDFLAGS=$(LDFLAGS)
+
 
 .PHONY: test

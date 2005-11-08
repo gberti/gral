@@ -28,7 +28,7 @@ new : clean all
 all : $(TARGETS)
 
 
-test-histogram: $(LOCALOBJECTS)
+$(EXEC): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:	

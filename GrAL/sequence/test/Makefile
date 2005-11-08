@@ -1,3 +1,5 @@
+CONFIG=$(shell pwd)/../mk.config
+
 SUBDIRS = bijective-mapping  \
           bivector \
           bubblesort \

@@ -261,8 +261,8 @@ public:
     {
       // solve by Cramer's rule
       scalar d = det3(A1,A2,A3);
-      REQUIRE_ALWAYS( (d != 0.0), "Matrix singular!\n",1);
-      scalar d_inv = 1.0/d;
+      REQUIRE_ALWAYS( (d != scalar(0)), "Matrix singular!\n",1);
+      scalar d_inv = scalar(1)/d;
       int li = pt::LowerIndex(A1);
       x[li+0] = d_inv * det3(b, A2,A3);
       x[li+1] = d_inv * det3(A1,b ,A3);
@@ -376,7 +376,7 @@ public:
       // FIXME: should be
       // if (det3(inv[0],inv[1],inv[2]) <= numeric_traits<real>::epsilon()*max(|Ai|)
       //   return numeric_traits<real>::infinity();
-      double eps = 1.0/1.e10;
+      real eps = 1.0/1.e10;
       if(fabs(det3(A1,A2,A3)) <= (eps*(norm_2(A1) + norm_2(A2) + norm_2(A3))))
 	return 1.0e100;
      

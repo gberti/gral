@@ -73,7 +73,7 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
       int d = Dim(p);
       int lp = LowerIndex(p);
       int lq = LowerIndex(q); 
-      scalar sum = 0.0;
+      scalar sum = 0;
       for(int i = 0; i< d; i++)
 	sum += p[lp+i]*q[lq+i];
       

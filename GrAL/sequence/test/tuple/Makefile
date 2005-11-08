@@ -29,7 +29,7 @@ new : clean all
 all : $(TARGETS)
 
 
-test-tuple: $(LOCALOBJECTS)
+$(EXEC): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:	

@@ -36,7 +36,7 @@ $license = $license1;
 
 #print "executing replace-license.pl\n";
 while(<>) {
-    s|//[ ]*\$LICENSE_NEC_200?|$license|;
+    s|//[ ]*\$LICENSE_NEC_200[0-9]+|$license|;
     s|//[ ]*\$LICENSE_NEC|$license|;
     s|//[ ]*\$LICENSE|$license|;
     print;

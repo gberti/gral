@@ -21,8 +21,8 @@ namespace GrAL { namespace octree { namespace conforming_leaf_grid {
   typedef element_t<octree2d_type, hier_grid2d_type::hier_cell_type>   cell2d_type;
   typedef element_t<octree2d_type, hier_grid2d_type::hier_facet_type>  facet2d_type;
 
-  template class grid_types<grid<octree2d_type> >;
-  template class element_traits<cell2d_type>;
+  //template class grid_types<grid<octree2d_type> >;
+  //template class element_traits<cell2d_type>;
   //  template class element_traits<facet2d_type>;
   typedef element_traits<facet2d_type>::element_type  facet_type;
 

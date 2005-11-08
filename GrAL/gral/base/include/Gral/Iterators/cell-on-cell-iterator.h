@@ -64,6 +64,7 @@ public:
   typedef typename GT::cell_handle cell_handle;
   typedef typename GT::FacetOnCellIterator FacetOnCellIterator;
   typedef Cell     value_type;
+  typedef Cell     anchor_type;
 private:
   ref_ptr<NBTABLE   const> nbs;
   Cell                 c;
@@ -93,10 +94,13 @@ public:
   self& operator++() { ++fc; advance_till_valid(); return (*this);}
   Cell  operator* () const { return Cell(TheGrid(), handle());}
   cell_handle      handle()  const { return const_cast<NBTABLE &>(*nbs)[fc];}
-  grid_type const& TheGrid() const { return c.TheGrid();}
   bool             IsDone()  const { return fc.IsDone();}
-  Cell      const& TheCell() const { return c;}
-  Facet            TheFacet() const { return *fc;}
+
+  grid_type    const& TheGrid()   const { return c.TheGrid();}
+  Cell         const& TheCell()   const { return c;}
+  Cell         const& TheAnchor() const { return c;}
+  Facet               TheFacet()  const { return *fc;}
+  FacetOnCellIterator TheFacetOnCellIterator() const { return fc;}
 
   static void init();
 
