@@ -3,7 +3,7 @@
 
 // $LICENSE_NEC
 
-#include <hash_map>
+#include <ext/hash_map>
 
 namespace GrAL {
 
