@@ -67,7 +67,7 @@ void ConstructSubrangeFromCells
  //  const Grid&         G,          // in : base  grid
  CellIt              Cit)        // in : range(Cit) is the cell subrange 
 {
-  typedef typename Range::grid_type         grid_type;
+  typedef typename CellIt::grid_type        grid_type;
   typedef grid_types<grid_type>             gt;
   typedef typename gt::Cell                 Cell;
   typedef typename gt::Vertex               Vertex;
