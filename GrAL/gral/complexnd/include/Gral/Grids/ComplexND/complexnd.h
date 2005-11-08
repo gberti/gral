@@ -1684,7 +1684,7 @@ namespace GrAL {  namespace complexnd {
   // Dummy specializations for D=0 and D=1: should never be called.
   template<>
   template<int K>
-  element_t<ComplexND<0>,K,1-K> ComplexND<0>::switched_element(element_t<ComplexND<0>,K-1,0-(K-1)> const& e_k_1,
+  element_t<ComplexND<0>,K,0-K> ComplexND<0>::switched_element(element_t<ComplexND<0>,K-1,0-(K-1)> const& e_k_1,
 							       element_t<ComplexND<0>,K  ,0- K   > const& e_k,
 							       element_t<ComplexND<0>,K+1,0-(K+1)> const& e_k1) const
   { return e_k;}
