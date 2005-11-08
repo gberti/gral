@@ -288,6 +288,22 @@ struct array_operators
 //
 //----------------------------------------------------------------
 
+
+/*! \brief Conversion between scalars
+
+    \ingroup algebraicprimitives 
+ */
+template<class S>
+class convert_scalar {
+public:
+  template<class T>
+  static S from(T t) { return S(t);}
+
+  template<class T>
+  S operator()(T t) const { return from(t);}
+};
+
+
 /*! \brief conversion between points of arbitrary type
 
  \ingroup algebraicprimitives 
@@ -311,7 +327,7 @@ inline void assign_point(P      & p,
  int iq = ptQ::LowerIndex(q); 
  int ip = ptP::LowerIndex(p);  
  for(; iq <= ptQ::UpperIndex(q); ++ip, ++iq)
-   p[ip] = q[iq]; 
+   p[ip] = convert_scalar<typename ptP::component_type>::from(q[iq]); 
 }  
 
 // P = [b,e)
@@ -346,6 +362,8 @@ inline void assign_point(float& p, P const& q)
 inline void assign_point(float& p, float q) { p = q;}
 
 
+
+
 /*! \brief conversion between points of arbitrary type
 
    \ingroup algebraicprimitives 
@@ -360,6 +378,8 @@ inline P convert_point(Q const& q)
 
 template<class P>
 inline P const& convert_point(P const& p) { return p;}
+
+
 
 } // namespace GrAL 
 
