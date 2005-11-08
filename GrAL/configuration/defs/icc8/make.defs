@@ -1,0 +1,27 @@
+# icc/make.defs
+# Settings for INTEL CC 8.0
+
+CCC      =  /usr/net/fdc/INTEL/C++/compiler81/bin/icpc
+CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
+CCFLAGS += 
+
+
+#CCFLAGS += -w2 
+CCFLAGS += -w1 
+CCFLAGS += -wd186   ## Warning #186 is "pointless comparison of unsigned integer with zero"
+CCFLAGS += -wd1125  ## "Virtual override intended?"
+CCFLAGS += -wd444   ## remark "destructor non virtual"
+CCFLAGS += -wd424   ## remark "extra ; ignored"
+CCFLAGS += -wd981   ## remark "operands are evaluated in unspecified order"
+CCFLAGS += -wd279   ## remark "controlling expression is constant"
+CCFLAGS += -wd383   ## remark "value copied to temporary, reference to temporary used"
+CCFLAGS += -wd424   ## remark "extra ; ignored"
+#CCFLAGS += -w2 -wd981 
+CCFLAGS += -DINTEL_CC
+CCFLAGS += -DGRAL_HAS_SSTREAM
+LDFLAGS += -Xlinker -rpath -Xlinker /usr/net/fdc/INTEL/C++/compiler81/lib
+
+DEPEND    =$(CCC)
+DEPFLAGS += -M $(CCFLAGS)
+
+
