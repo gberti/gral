@@ -23,6 +23,7 @@ public:
 };
 
 
+
 int main() {
   using namespace GrAL;
   using namespace std;
@@ -72,6 +73,10 @@ int main() {
       cout << "[" << nb.handle() << "] " << flush;
     }
     cout << endl;
+    cout << "With generic iterator #2 (all facets): " << flush; 
+    for(c_o_c_iter_2 cc((*c).FirstFacet()); ! cc.IsDone(); cc.next_facet())
+      cout  << "[" << cc.handle() << "]" << (cc.valid_neighbor() ? "i" : "b" ) << " " << flush;
+    cout << endl;
 
     cout << "With native  iterator:    " << flush;
     for(cgt::CellOnCellIterator cc(*c); ! cc.IsDone(); ++cc) {
@@ -79,6 +84,7 @@ int main() {
       cout << "[" << nb.handle() << "] " << flush;
     }
     cout << endl;
+
   }
 
 }

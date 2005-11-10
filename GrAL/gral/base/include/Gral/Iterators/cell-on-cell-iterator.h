@@ -82,17 +82,43 @@ public:
   cell_on_cell_iterator(Cell const& c_)
     : c(c_), fc(c)
   {
-    REQUIRE(ctxt->find(& (c.TheGrid())) != ctxt->end(), 
-	    "No neighbor table registered for grid " << & (c.TheGrid()),1);
-    nbs = (*ctxt)[& (c.TheGrid())];
+    init_table();
     advance_till_valid();
   }
   cell_on_cell_iterator(Cell const& c_, NBTABLE const& nbs_) 
     : nbs(&nbs_), c(c_),  fc(c) 
   { advance_till_valid();}
-  
+
+  /*! \brief Position iterator at first facet
+      
+      There is not necessarily a valid neighbor at this position.
+      This constructor is useful when iteration over all facets with
+      access to valid neighbors is required.
+      \example
+      \code
+      for(CellOnCellIterator cc(c.FirstFacet()); !cc.IsDone(); cc.next_facet()) {
+         if(cc.valid_neighbor())
+           // handle inner facet
+           Cell n = *cc;
+         else 
+          // handle boundary facet
+      }
+      \endcode
+   */
+  explicit cell_on_cell_iterator(FacetOnCellIterator const& fc_) : c(fc_.TheCell()), fc(fc_) 
+  {
+    init_table();
+    // not necessary valid_neigbhor().
+  }
+  void init_table() {
+    REQUIRE(ctxt->find(& (c.TheGrid())) != ctxt->end(), 
+	    "No neighbor table registered for grid " << & (c.TheGrid()),1);
+    nbs = (*ctxt)[& (c.TheGrid())];
+  }
+
+  //! move to next valid position
   self& operator++() { ++fc; advance_till_valid(); return (*this);}
-  Cell  operator* () const { return Cell(TheGrid(), handle());}
+  Cell  operator* () const { cv(); return Cell(TheGrid(), handle());}
   cell_handle      handle()  const { return const_cast<NBTABLE &>(*nbs)[fc];}
   bool             IsDone()  const { return fc.IsDone();}
 
@@ -109,7 +135,14 @@ public:
 
   static void map_nb_table(grid_type const& g_, NBTABLE const& nbs_); 
 
+  bool valid_neighbor() const { return  valid(handle());}
+  bool inner_facet()    const { return  valid(handle());}
+  bool boundary_facet() const { return !valid(handle());}
+
+  void next_facet()           { ++fc;}
+  void next_neighbor()        { next_facet(); advance_till_valid();}
 private:
+  void cv() const { REQUIRE(valid_neighbor(), "",1);}
   bool valid(cell_handle c) const { return TheGrid().valid_cell(c);}
   void advance_till_valid() 
   { 
