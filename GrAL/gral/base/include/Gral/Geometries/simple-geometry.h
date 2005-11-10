@@ -5,21 +5,168 @@
 
 
 #include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/flag.h"
+
 #include "Utility/pre-post-conditions.h"
 #include "Geometry/point-traits.h"
 #include "Geometry/algebraic-primitives.h"
 #include "Gral/Geometries/geometric-types-2d.h"
 
+
 namespace GrAL {
+
+  template<class GEOM, class GRID, class COORD,unsigned DIM>
+  class solid_angle_plugin_dim { };
+
+  template<class GEOM, class GRID, class COORD, unsigned DIM> // GRID, class COORD, unsigned DIM>
+  class solid_angle_plugin : public solid_angle_plugin_dim<GEOM, GRID, COORD, DIM> // GEOM::dim> 
+  {
+  public:
+    // GEOM derives from this
+    typedef GEOM geom_type;
+    geom_type const& TheGeom() const { return static_cast<geom_type const&>(*this);}
+  };
+
+
+  /*! \brief Extension of simple_geometry for 3D meshes
+
+      \see simple_geometry
+      \todo Move this into separate header
+  */
+  template<class GEOM, class GRID, class COORD>
+  class solid_angle_plugin_dim<GEOM,GRID, COORD, 2> {
+    typedef GEOM                     geom_type;
+    typedef solid_angle_plugin<GEOM, GRID,  COORD, 2> derived;
+    geom_type const& TheGeom() const { return static_cast<derived const&>(*this).TheGeom();}
+    
+    //    typedef typename geom_type::grid_type   grid_type;
+    typedef GRID grid_type;
+    //    typedef typename geom_type::coord_type  coord_type;
+    typedef COORD coord_type;
+    typedef point_traits<coord_type>        pt;
+    typedef typename pt::component_type scalar_type;
+    typedef grid_types<grid_type>            gt;
+    typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
+
+  public:
+    
+    //! solid angle of the wedge of vertex \c vc, in radians (2D)   
+    scalar_type solid_angle      (VertexOnCellIterator vc) const;
+    /*! \brief ratio of solid angle of wedge \c vc to complete solid angle
+      
+      The ratios of the wedges of an internal regular vertex sum up to 1 (for a flat grid).
+      This is useful for dimension-independent algorithms.
+   */
+    scalar_type solid_angle_ratio(VertexOnCellIterator vc) const { return solid_angle(vc) / (2* M_PI);}
+  };
+
+  template<class GEOM, class GRID, class COORD>
+  inline
+  typename solid_angle_plugin_dim<GEOM, GRID, COORD, 2>::scalar_type
+  solid_angle_plugin_dim<GEOM,GRID, COORD, 2>::solid_angle(typename solid_angle_plugin_dim<GEOM, GRID, COORD, 2>::VertexOnCellIterator vc) const
+  {
+    typedef algebraic_primitives<coord_type> ap;
+    typename gt::Edge e1;
+    typename gt::Vertex v = *vc;
+    for(typename gt::EdgeOnCellIterator ec(vc.TheCell()); !ec.IsDone(); ++ec)
+      if(v == (*ec).V1() || v == (*ec).V2()) {
+	e1 = *ec;
+	break;
+      }
+    typename gt::Edge e2 = vc.TheGrid().switched_edge(v,e1, vc.TheCell());
+    coord_type dir_e1 = (TheGeom().coord(vc.TheGrid().switched_vertex(v,e1)) - TheGeom().coord(v));
+    coord_type dir_e2 = (TheGeom().coord(vc.TheGrid().switched_vertex(v,e2)) - TheGeom().coord(v));
+    return ap::angle(dir_e1, dir_e2);
+  }
+
+
+  /*! \brief Extension of simple_geometry for 3D meshes
+
+      \see simple_geometry
+  */
+  template<class GEOM, class GRID, class COORD>
+  class solid_angle_plugin_dim<GEOM,GRID, COORD, 3> {
+    typedef GEOM                     geom_type;
+    typedef solid_angle_plugin<GEOM, GRID,  COORD, 3> derived;
+    geom_type const& TheGeom() const { return static_cast<derived const&>(*this).TheGeom();}
+
+    typedef GRID                        grid_type;
+    typedef COORD                       coord_type;
+    typedef point_traits<COORD>         pt;
+    typedef typename pt::component_type scalar_type;
+    typedef grid_types<GRID>            gt;
+    typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
+
+  public:
+
+    //! solid angle of the wedge of vertex \c vc, in steradians (3D)   
+    scalar_type solid_angle(typename gt::VertexOnCellIterator vc) const;
+
+    /*! \brief ratio of solid angle of wedge \c vc to complete solid angle
+      
+      The ratios of the wedges of an internal regular vertex sum up to 1.
+      This is useful for dimension-independent algorithms.
+   */
+    scalar_type solid_angle_ratio(VertexOnCellIterator vc) const { return solid_angle(vc) / (4 * M_PI);}
+  };
+
+  template<class GEOM, class GRID, class COORD>
+  inline
+  typename solid_angle_plugin_dim<GEOM, GRID, COORD, 3>::scalar_type
+  solid_angle_plugin_dim<GEOM, GRID, COORD, 3>::solid_angle
+  (typename solid_angle_plugin_dim<GEOM, GRID, COORD, 3>::VertexOnCellIterator vc) const
+  {
+    typedef algebraic_primitives<coord_type> ap;
+    typename gt::Cell c(vc.TheCell());
+    typename gt::Vertex v0(*vc);
+    flag<typename gt::grid_type> F(v0, c);
+    
+    typename gt::Vertex v[4];
+    v[0] = v0;
+    v[1] = F.switched_vertex();
+    F.switch_edge();
+    F.switch_facet();
+    v[2] = F.switched_vertex();
+    F.switch_edge();
+    F.switch_facet();
+    v[3] = F.switched_vertex();
+
+    typename gt::Vertex v1 = v[1];
+
+    scalar_type res(0.0);
+    while(v[3] != v1) {
+      coord_type d[3];
+      for(int i = 0; i < 3; ++i)
+	d[i] = ap::normalization(TheGeom().coord(v[i+1]) - TheGeom().coord(v[0]));
+      // Euler-Eriksson-Formula, see R\o{a}de/Westergren, BETA Mathematics Handbook for Science and 
+      // Engineering, Studentlitteratur
+      // This should work even for non-convex vertex figures (spherical polygons)
+      res += 2*atan( ap::det3(d[0],d[1],d[2]) / ( 1 + ap::dot(d[0],d[1]) + ap::dot(d[1],d[2]) + ap::dot(d[0],d[2])));
+      v[1] = v[2];
+      v[2] = v[3];
+      F.switch_edge();
+      F.switch_facet();
+      v[3] = F.switched_vertex();
+    }
+    return fabs(res);
+  }
+
+
 
 /*! \brief Simple geometry, just storing vertex coordinates
 
     \ingroup  gridgeometries
     \see \ref gridgeometries module
     \see Tested in \ref test-simple-geometry.C
+
+      \todo Move plugin stuff like solid_angle to extra header, and make it optional.
+
  */
 template<class GRID, class COORD> 
-class simple_geometry : public grid_types<GRID> {
+class simple_geometry : 
+    public grid_types<GRID>,
+    public solid_angle_plugin<simple_geometry<GRID, COORD>, GRID, COORD, GRID::dim > 
+{
   typedef simple_geometry<GRID, COORD> self;
  public:
   typedef COORD               coord_type;
@@ -32,6 +179,8 @@ class simple_geometry : public grid_types<GRID> {
   typedef point_traits<coord_type> pt;
   typedef algebraic_primitives<coord_type> ap;
   typedef typename pt::component_type scalar_type;
+
+  enum { dim = grid_type::dim };
  private:
   grid_function<Vertex,coord_type> coords;
 
