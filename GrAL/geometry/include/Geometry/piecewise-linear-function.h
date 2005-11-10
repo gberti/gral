@@ -118,6 +118,8 @@ namespace GrAL {
     v.resize(n);
     for(int i = 0; i < n; ++i)
       chin >> t[i] >> v[i];
+    v_left  = v[0];
+    v_right = v[v.size()-1];
   }
 
   template<class ARG, class VAL>
