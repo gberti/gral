@@ -61,9 +61,10 @@ namespace gf_array_adapter {
   class value_type : public array_operators<value_type<T,N>, T, N> {
     T f[N];
   public:
-    value_type() {}
-    value_type(value_proxy<T,N> p)            { init(p.f);}
-    value_type(T const* f)               { init(f);}
+    value_type() { init(T(0)); }
+    value_type(value_proxy<T,N> p)  { init(p.f);}
+    value_type(T const* f)          { REQUIRE(f!=0, "", 1); init(f);}
+    value_type(T t)                 { init(t);}
     value_type& operator=(value_proxy<T,N> p) { init(p.f); return *this;}
 
 
@@ -78,6 +79,8 @@ namespace gf_array_adapter {
   private:
     void init(T const* p)
       { for(int i = 0; i < (int)N; ++i) f[i] = p[i];}
+    void init(T t) 
+    { for(int i = 0; i < (int)N; ++i)   f[i] = t;}
   };
 
   // specialization for N=1
@@ -210,9 +213,12 @@ public:
 
 
   value_proxy operator[](element_type const& v) 
-    { return value_proxy(f + N*v.handle());}
+  { cv(); return value_proxy(f + N*v.handle());}
   const value_type operator()(element_type const& v) const 
-    { return value_type(f + N*v.handle());}
+  { cv(); return value_type(f + N*v.handle());}
+
+  void cv() const { REQUIRE(valid(), "", 1);}
+  bool valid() const { return g != 0 && f != 0;}
 
   template<class TT, class VALUETYPE, class VALUETYPE_RET>
   class iterator_t {
@@ -248,10 +254,10 @@ public:
   typedef typename iterator::difference_type                  difference_type;
   typedef typename iterator::pointer                          pointer;
 
-  const_iterator begin() const { return const_iterator(f,0);}
-  const_iterator end  () const { return const_iterator(f,size());}
-  iterator       begin()       { return       iterator(f,0);}
-  iterator       end  ()       { return       iterator(f,size());}
+  const_iterator begin() const { cv(); return const_iterator(f,0);}
+  const_iterator end  () const { cv(); return const_iterator(f,size());}
+  iterator       begin()       { cv(); return       iterator(f,0);}
+  iterator       end  ()       { cv(); return       iterator(f,size());}
 
 
 };
