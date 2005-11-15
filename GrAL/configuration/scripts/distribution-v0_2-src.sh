@@ -9,19 +9,27 @@ EXCLUDED=`$cvswork/configuration/scripts/excluded-v0_2.sh`;
 TOPLEVELMODULES=`$cvswork/configuration/scripts/modules-toplevel-v0_2.sh`;
 CVSREPO=`cat $cvswork/configuration/CVS/Root`;
 
-GRALROOT=GrAL-0.2
+#GRALROOT=GrAL-0.2
+GRALROOT=GrAL
 cd ${HOME}/tmp;
-rm -rf ${GRALROOT};
-mkdir ${GRALROOT};
-cd ${GRALROOT};
-for i in ${TOPLEVELMODULES}
+#rm -rf ${GRALROOT};
+#mkdir ${GRALROOT};
+#cd ${GRALROOT};
+#for i in ${TOPLEVELMODULES}
+for i in ${MODULES}
 do
- cvs -d ${CVSREPO} export -r ${TAG} $i;
+ #dirpart=`dirname $i`
+ #filepart=`basename $i`
+ #mkdir -p $dirpart
+ #echo "(cd $dirpart; cvs -d ${CVSREPO} export -r ${TAG} -d $filepart  $i);"
+ cvs -d ${CVSREPO} export -r ${TAG} $i
 done;
+cvs -d ${CVSREPO} export -r ${TAG} -l GrAL/gral
 for i in ${EXCLUDED}
 do
  rm -rf $i
 done;
+cd $GRALROOT
 mv gral/v0_2/README  .
 mv gral/v0_2/LICENSE .
 mv gral/v0_2/MODULES .
@@ -50,6 +58,8 @@ find . -name "*.C" -exec ${cvswork}/configuration/scripts/replace-license.pl {} 
 
 
 cd ..;
+mv ${GRALROOT} GrAL-0.2
+GRALROOT="GrAL-0.2"
 tar cf gral-src.tar ${GRALROOT};
 gzip -f gral-src.tar;
 rm -rf ${GRALROOT};
