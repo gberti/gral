@@ -22,19 +22,22 @@ namespace detail {
     typedef partial_multi_gf_aux<Grid,T,GD,ED-1>                    base;
 
     // partial_grid_function<element_type, T> f;
-    partial_grid_function<typename grid_types<Grid>::template element_d<ED>::type, T> f;
+    typedef partial_grid_function<typename grid_types<Grid>::template element_d<ED>::type, T> elem_gf_type;
+    elem_gf_type f;
 
   public:
     typedef typename base::value_type      value_type;
     typedef typename base::reference       reference;
     typedef typename base::const_reference const_reference;
+    typedef typename base::size_type       size_type;
+
 
     partial_multi_gf_aux() {}
     partial_multi_gf_aux(Grid const& g) : base(g), f(g) {}
     partial_multi_gf_aux(Grid const& g, T const& t) : base(g,t), f(g,t) {}
     void clear() { base::clear(); f.clear();}
     bool empty() const { return base::empty() && f.empty();}
-    unsigned size() const { return base::size() + f.size();}
+    size_type  total_size() const { return base::total_size() + f.size();}
 
     using base::operator();
     using base::operator[];
@@ -46,12 +49,24 @@ namespace detail {
     bool defined (element_type const& e) const { return f.defined(e);}
     void undefine(element_type const& e)       { f.undefine(e);}
 
-    grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
+    using base::ElementFunction_;
+    using base::FirstElement_;
+    using base::EndElement_;
+    using base::begin_;
+    using base::end_;
+    elem_gf_type const&                    ElementFunction_(element_type) const { return f;}
+    typename elem_gf_type::ElementIterator FirstElement_   (element_type) const { return f.FirstElement();}
+    typename elem_gf_type::ElementIterator EndElement_     (element_type) const { return f.EndElement();}
+    typename elem_gf_type::const_iterator  begin_          (element_type) const { return f.begin();}
+    typename elem_gf_type::const_iterator  end_            (element_type) const { return f.end  ();}
+    typename elem_gf_type::iterator        begin_          (element_type)       { return f.begin();}
+    typename elem_gf_type::iterator        end_            (element_type)       { return f.end  ();}
+
     grid_type const& TheGrid() const { return f.TheGrid();} 
 
-    void set_value_ (value_type const& t) { base::set_value_(t);  f.set_value(t);}
-    void set_default(value_type const& t) { base::set_default(t); f.set_default(t);}
-    void set_grid_(grid_type const& g)    { base::set_grid_(g);   f.set_grid(g);}
+    void set_value_ (value_type const& t)       { base::set_value_(t);  f.set_value(t);}
+    void set_default(value_type const& t)       { base::set_default(t); f.set_default(t);}
+    void set_grid_(grid_type const& g)          { base::set_grid_(g);   f.set_grid(g);}
 
  };
 
@@ -64,36 +79,42 @@ namespace detail {
   private:
     typedef typename grid_types<Grid>::Vertex  element_type;
     typedef partial_grid_function<element_type, T> elem_gf_type;
-
+    typedef typename elem_gf_type::const_iterator  const_iterator;
     elem_gf_type f;
   public:
     typedef T                                      value_type;
     typedef typename elem_gf_type::reference       reference;
     typedef typename elem_gf_type::const_reference const_reference;
+    typedef typename elem_gf_type::size_type       size_type;
 
     partial_multi_gf_aux() {}
     partial_multi_gf_aux(Grid const& g) : f(g) {}
     partial_multi_gf_aux(Grid const& g, T const& t) :  f(g,t) {}
     void clear() { f.clear();}
     bool empty()    const { return f.empty();}
-    unsigned size() const { return f.size();}
+
+    size_type total_size() const { return f.size();}
 
     const_reference  operator()(element_type const& e) const { return f(e);}
     reference        operator[](element_type const& e)       { return f[e];}
     bool defined (element_type const& e) const { return f.defined(e);}
     void undefine(element_type const& e)       { f.undefine(e);}
 
-    grid_function<element_type, T> const& ElementFunction_(element_type const&) const { return f;}
+    elem_gf_type  const&                   ElementFunction_(element_type) const { return f;}
+    typename elem_gf_type::ElementIterator FirstElement_   (element_type) const { return f.FirstElement();}
+    typename elem_gf_type::ElementIterator EndElement_     (element_type) const { return f.EndElement();}
+    typename elem_gf_type::const_iterator  begin_          (element_type) const { return f.begin();}
+    typename elem_gf_type::const_iterator  end_            (element_type) const { return f.end  ();}
+    typename elem_gf_type::iterator        begin_          (element_type)       { return f.begin();}
+    typename elem_gf_type::iterator        end_            (element_type)       { return f.end  ();}
+
     grid_type const& TheGrid() const { return f.TheGrid();} 
 
     void set_value_ (value_type const& t) { f.set_value(t);}
-    void set_default(value_type const& t) { f.set_default(t);}
     void set_grid_(grid_type const& g)    { f.set_grid(g);}
-
-    const_reference get_default() { return f.get_default();}
+    void set_default(value_type const& t) { f.set_default(t);}
+    const_reference get_default() const { return f.get_default();}
   };
-  
-
   
 
 } // namespace detail
@@ -112,8 +133,9 @@ namespace detail {
 
    \see \ref \c multi_grid_function\c <Grid,T>
    \see Module \ref gridfunctions
+   \see Tested in \ref test-multi-grid-functions.C
 */
-//----------------------------------------------------------------
+
 
 
 template<class Grid, class T>
@@ -126,24 +148,74 @@ class partial_multi_grid_function : public detail::partial_multi_gf_aux<Grid, T,
 			       grid_types<Grid>::dim> base;
 
 public: 
-  typedef Grid grid_type;
-  typedef T    value_type;
+  typedef Grid                           grid_type;
+  typedef T                              value_type;
+  typedef typename base::reference       reference;
+  typedef typename base::const_reference const_reference;
+  typedef typename base::size_type       size_type;
 
   partial_multi_grid_function() {}
   partial_multi_grid_function(const grid_type& g) :  base(g) {}
   partial_multi_grid_function(const grid_type& g, T const& t) :  base(g,t) {}
 
+  /*! \brief Element-wise size */
   template<class E>
-  grid_function<E,T> const& ElementFunction() const { return ElementFunction_(E());}
+  size_type size() const { return ElementFunction<E>().size();}
+  /*! \brief Sum of sizes of element-wise grid functions */
+  size_type size() const { return total_size();}
 
+
+  /*! \brief Type mapping for element-related types 
+   */
   template<class E>
-  unsigned size() const { return ElementFunction<E>().size();}
+  struct element_wise { 
+    typedef partial_grid_function<E,T>          function;
+    typedef typename function::ElementIterator  element_iterator; 
+    typedef typename function::const_iterator   const_iterator;
+    typedef typename function::iterator         iterator;
+  };
+
+  /*! \brief Element-wise grid function */
+  template<class E>
+  typename element_wise<E>::function const& ElementFunction() const { return ElementFunction_(E());}
+
+  /*! \name Element-wise iteration */
+  //@{
+  template<class E>
+  typename element_wise<E>::element_iterator FirstElement() const { return FirstElement_(E());}
+  template<class E>
+  typename element_wise<E>::element_iterator EndElement()   const { return EndElement_(E());}
+  template<class E>
+  typename element_wise<E>::const_iterator begin() const { return begin_(E());}
+  template<class E>
+  typename element_wise<E>::const_iterator end  () const { return end_  (E());}
+  template<class E>
+  typename element_wise<E>::iterator       begin()       { return begin_(E());}
+  template<class E>
+  typename element_wise<E>::iterator       end  ()       { return end_  (E());}
+  //@}
   
-  void set_value(value_type const& t) { set_value_(t);}
-  void set_grid(grid_type const& g)   { set_grid_(g);}
-  void set_grid(grid_type const& g, value_type const& t) { set_grid_(g); set_value(t); }
+  //! \brief Set value to t for each element
+  void set_value(value_type const& t) { set_value_(t); }
+  //! \brief Set default value
+  void set_default(value_type const& t) { base::set_default(t);}
+  //! \brief Get default value
+  const_reference get_default() const { return base::get_default();}
 
+
+  //! \brief Set the grid
+  void set_grid(grid_type const& g)   { set_grid_(g);}
+  //! \brief Set grid and values for all elements
+  void set_grid(grid_type const& g, value_type const& t) { set_grid_(g); set_value(t); }
+  //! \brief Set grid and values for all elements
+  void init(        grid_type const& g, value_type const& t) { set_grid(g,t);}
+  //! \brief Set grid and values for all elements
+  void init(ref_ptr<grid_type const> g, value_type const& t) { set_grid(*g,t);}
+
+  //! \brief Undefine the value for each element
   void clear() { base::clear(); ENSURE_ALWAYS(base::empty(), "", 1);}
+
+
 };
 
 
