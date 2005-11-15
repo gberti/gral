@@ -40,9 +40,15 @@ public:
 
   virtual void print_values(std::ostream&) const = 0;
 
-
+  virtual bool has_unrecognized() const = 0;
+  virtual int  num_unrecognized() const = 0;
   virtual void print_unrecognized(std::ostream&) const = 0;
   virtual void print_unrecognized(std::ostream&, std::string const&) const = 0;
+
+  virtual bool has_unread_required() const = 0;
+  virtual int  num_unread_required() const = 0;
+  virtual void print_unread_required(std::ostream&) const = 0;
+  virtual void print_unread_required(std::ostream&, std::string const&) const = 0;
 
   virtual void attach_to(std::istream& in) = 0;
   virtual boost::shared_ptr<control_device_impl> get_sub_device(std::string const& nm) = 0;
@@ -58,25 +64,60 @@ public:
 */
 class ControlDevice  {
 public:
-  ControlDevice() {}
-  ControlDevice(boost::shared_ptr<control_device_impl> imp) : impl(imp) {}
+  /*! \name Constructors 
+    
+   A ControlDevice is typically constructed by a factory function 
+   (see module \ref ControlDeviceCreators).
+  */
+  //@{
+  ControlDevice();
+  ControlDevice(boost::shared_ptr<control_device_impl> imp);
+  //@}
 
-  //! Add \c value_ref under name \c nm to this device
+  //! \brief Add \c value_ref under name \c nm to this device
   void add(std::string const& nm, Mutator value_ref);
-  //! Add \c value_ref under name \c nm to this device
+  //! \brief Add \c value_ref under name \c nm to this device
   void add(char        const* nm, Mutator value_ref);
-  //! Add \c value_ref under name \c nm with checking \c c to this device
+  //! \brief Add \c value_ref under name \c nm with checking \c c to this device
   void add(std::string const& nm, Mutator value_ref, Checker c);
-  //! Add \c value_ref under name \c nm with checking \c c to this device
+  //! \brief Add \c value_ref under name \c nm with checking \c c to this device
   void add(char        const* nm, Mutator value_ref, Checker c);
 
-  //! Read & update all registered parameters
-  void update();
+  //! \brief Make all subsequently added parameters required
+  void all_required();
+  //! \brief Make all subsequently added parameters optional
+  void all_optional();
+  //! \brief Use the parameter's own setting for all subsequently added parameters
+  void all_default();
 
-  //! print current values of parameters (for debugging)
+  //! \brief Selection of errors to show 
+  enum update_flag { quiet = 0,
+		     show_unrecognized = 1, 
+		     show_unread = (show_unrecognized << 1) 
+  };
+  //! \brief Read & update all registered parameters
+  void update(int flag      = show_unrecognized | show_unread, 
+	      std::ostream& = std::cerr);
+
+  //! \brief True if there are unrecognized values
+  bool has_unrecognized() const;
+ 
+  //! \brief Number of unrecognized values
+  int  num_unrecognized() const;
+ 
+  //! \brief print current values of parameters (for debugging)
   void print_values      (std::ostream&) const;
-  //! print all keys which could not be found during last update
+  //! \brief print all keys which could not be found during last update
   void print_unrecognized(std::ostream&) const;
+
+  //! \brief  True if there are required parameters not read in update()
+  bool has_unread_required() const;
+  //! \brief Number of  required parameters not read in update()
+  int  num_unread_required() const;
+  //! \brief Print all required parmeters not read in update()
+  void print_unread_required(std::ostream&) const;
+
+
   void attach_to         (std::istream& in);
 
   //! Make this device controled by another device.
@@ -88,6 +129,8 @@ public:
   ControlDevice getSubDevice(char        const* name);
 private:
   boost::shared_ptr<control_device_impl> impl;
+  enum { all_default_flag, all_required_flag, all_optional_flag };
+  int  required_flag;
 };
 
 

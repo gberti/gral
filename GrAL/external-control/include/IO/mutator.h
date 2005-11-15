@@ -27,6 +27,7 @@ namespace GrAL {
 //
 //----------------------------------------------------------------
 
+
 /*! \brief  The simplest concrete Mutator
 
 
@@ -37,17 +38,20 @@ namespace GrAL {
     \see mutatorcreators
  */
 template<class T>
-class TypedMutator : public mutator_impl {
+class TypedMutator : public mutator_impl  {
 public:
   T& v;
 public:
   TypedMutator(T& vv) : v(vv) {}
   //  T value() {return v;}
-  virtual void read(std::istream& in)   { 
+protected:
+  virtual bool read_var(std::istream& in)   { 
     REQUIRE_ALWAYS((in.good()), "Stream not good! v = " << v << '\n',1);
     in >> v;
     ENSURE_ALWAYS((in.eof() || in.good()), "Input failed! v = " << v << '\n',1);
+    return true;
   }
+public:
   virtual void print(std::ostream& out) const 
     { out << v;}
   virtual void print(std::ostream& out, const std::string& prefix) const 
@@ -75,17 +79,10 @@ public:
 
   */
   template<class T>
-  class PushbackMutator : public mutator_impl { 
+  class PushbackMutator : public mutator_impl  { 
     T& v;
   public:
     PushbackMutator(T& v_) : v(v_) {}
-    virtual void read(std::istream& in) {
-      REQUIRE_ALWAYS((in.good()), "Stream not good! ",1);
-      typename T::value_type vv;
-      in >> vv;
-      v.push_back(vv);
-      ENSURE_ALWAYS((in.eof() || in.good()), "Input failed in PushBackMutator!", 1);
-    }
     virtual void print(std::ostream& out) const { 
       for(typename T::const_iterator i = v.begin(); i != v.end(); ++i)
 	out << *i << ' ';
@@ -95,6 +92,15 @@ public:
 
     virtual std::string vartypename() const { return std::string(type_name_traits<T>::name());}
 
+  protected:
+    virtual bool read_var(std::istream& in) {
+      REQUIRE_ALWAYS((in.good()), "Stream not good! ",1);
+      typename T::value_type vv;
+      in >> vv;
+      v.push_back(vv);
+      ENSURE_ALWAYS((in.eof() || in.good()), "Input failed in PushBackMutator!", 1);
+      return true;
+    }
   };
   /*! \brief Creator function for the PushbackMutator
     
@@ -114,10 +120,12 @@ public:
   typedef  TypedMutator<T> base;
   NotifyOnChangeMutator(T& t, controlable& c)
     : base(t), controlee(c) {}
-  virtual void read(std::istream& in) {
+protected:
+  virtual bool read_var(std::istream& in) {
     T old(base::v);
-    base::read(in);
+    bool res = base::read_var(in);
     if( old != base::v) controlee.notify();
+    return res;
   }
 private:
   controlable& controlee;
@@ -135,10 +143,12 @@ class SetTrueOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   SetTrueOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(std::istream&) { v = true;}
   virtual void print(std::ostream& out) const { out << v;}
   virtual void print(std::ostream& out, const std::string& name) const 
     { if(v) out << name;} 
+protected:
+  virtual bool read_var(std::istream&) { v = true; return true;}
+
 };
 
 //! Sets value to false, if name is read
@@ -146,10 +156,11 @@ class SetFalseOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   SetFalseOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(std::istream&) { v = false;}
   virtual void print(std::ostream& out) const { out << !v;}
   virtual void print(std::ostream& out, const std::string& name) const 
     { if(!v) out << name;} 
+protected:
+  virtual bool read_var(std::istream&) { v = false; return true;}
 };
 
 
@@ -165,10 +176,12 @@ class FlipOnReadMutator : public TypedMutator<bool> {
   typedef TypedMutator<bool> tm;
  public:
   FlipOnReadMutator(bool& flag) : tm(flag) {}
-  virtual void read(std::istream&) { v = !v;}
   virtual void print(std::ostream& out) const { out << v;}
   virtual void print(std::ostream& out, const std::string& name) const 
     {  out << name;} 
+protected:
+  virtual bool read_var(std::istream&) { v = !v; return true; } 
+
 };
 
 
@@ -187,7 +200,8 @@ protected:
   Tsec  deflt;
 public:
   SetOnReadMutator(T& t, Tsec& t2, Tsec def) : tm(t), v2(t2), deflt(def) {}
-  virtual void read(std::istream& in) { tm::read(in); v2 = deflt;} 
+protected:
+  virtual bool read_var(std::istream& in) { tm::read(in); v2 = deflt; return true;} 
 };
 
 
@@ -200,9 +214,7 @@ class CommentedMutator : public TypedMutator<T> {
   std::string comment;
 public:
   CommentedMutator(T& t, const std::string& c) 
-    //: tm(t), comment(c) {}
     : TypedMutator<T>(t), comment(c) {}
-  //  virtual void print(ostream& out) const { tm::print(out); out  << "  " << comment;} 
   virtual std::string description() const { return comment;}
 };
 
@@ -223,12 +235,12 @@ private:
 public:
   MessageOnReadMutator(std::ostream & ou, std::string const& txt, bool do_exit = true) 
     : out(&ou, null_deleter()), text(txt), do_ex(do_exit) {}
-  virtual void read (std::istream& in) { (*out) << text; if(do_ex) exit(0); }
   virtual void print(std::ostream&   ) const {}
   virtual void print(std::ostream& , std::string const& ) const {}
 
   virtual std::string vartypename() const { return "";}
-
+protected:
+  virtual bool read_var(std::istream& in) { (*out) << text; if(do_ex) exit(0); return true; }
 }; 
 
 

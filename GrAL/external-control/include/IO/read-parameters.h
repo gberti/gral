@@ -102,8 +102,13 @@ public:
                     std::string const& prefix = "",
                     std::string const& sep = " ") const;
   bool HasUnrecognized() const;
+  int  NumUnrecognized() const;
   void PrintUnrecognized(std::ostream& out) const;
- 
+
+  bool HasUnreadRequired() const;
+  int  NumUnreadRequired() const;
+  void PrintUnreadRequired(std::ostream& out) const;
+
   unsigned size() const;
   bool     defined   (std::string const& nm) const;
   Mutator  getMutator(std::string const& nm);

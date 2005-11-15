@@ -23,17 +23,67 @@ namespace GrAL {
 
 std::string mutator_impl::description() const { return std::string("");}
 
+  ControlDevice::ControlDevice() : required_flag(all_default_flag) {}
+  
+  ControlDevice::ControlDevice(boost::shared_ptr<control_device_impl> imp) 
+    : impl(imp), required_flag(all_default_flag)  {}
 
-void ControlDevice::update() { impl->update(); print_unrecognized(std::cerr);}
+
+  void ControlDevice::update(int flag, std::ostream& out) 
+  { 
+    impl->update(); 
+    if(flag & show_unrecognized)
+      print_unrecognized(out);
+    if(flag & show_unread)
+      print_unread_required(out);
+  }
+
+
 
 void ControlDevice::print_values(std::ostream& out) const { impl->print_values(out);}
 
+
+bool ControlDevice::has_unrecognized() const { return impl->has_unrecognized();}
+  
+int  ControlDevice::num_unrecognized() const { return impl->num_unrecognized();}
+
 void ControlDevice::print_unrecognized(std::ostream& out) const { impl->print_unrecognized(out);}
+
+
+bool ControlDevice::has_unread_required()                    const { return impl->has_unread_required();}
+  
+int  ControlDevice::num_unread_required()                    const { return impl->num_unread_required();}
+
+void ControlDevice::print_unread_required(std::ostream& out) const { impl->print_unread_required(out);}
+
+
+
 
 void ControlDevice::attach_to(std::istream& in) { impl->attach_to(in);}
 
+  void ControlDevice::all_required() 
+  { 
+    required_flag = all_required_flag;
+  }
+
+  void ControlDevice::all_optional() 
+  { 
+    required_flag = all_optional_flag;
+  }
+
+  void ControlDevice::all_default()
+  {
+    required_flag = all_default_flag;
+  }
+
   void ControlDevice::add(std::string const& name, Mutator value_ref) 
-{ impl->add(name,value_ref);}
+  { 
+    if(required_flag == all_required_flag)
+      value_ref.make_required();
+    else if(required_flag == all_optional_flag)
+      value_ref.make_optional();
+    impl->add(name,value_ref);
+  }
 
   void ControlDevice::add(std::string const& name, Mutator value_ref, Checker c) 
   { 
@@ -46,9 +96,8 @@ void ControlDevice::attach_to(std::istream& in) { impl->attach_to(in);}
     add(name, value_ref);
   }
 
-
   void ControlDevice::add(char const*   nm, Mutator  value_ref)
-{ add(std::string(nm),value_ref);}
+  { add(std::string(nm),value_ref);}
 
 void ControlDevice::register_at(ControlDevice& Ctrl, std::string const& prefix)
 { impl->register_at(Ctrl,prefix);}

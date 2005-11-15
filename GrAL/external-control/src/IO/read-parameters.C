@@ -95,11 +95,30 @@ void MutableVars::PrintValues(std::ostream     & out,
 
 bool MutableVars::HasUnrecognized() const { return (unrecognized->size() != 0);} 
 
+int  MutableVars::NumUnrecognized() const { return  unrecognized->size();}
+
 void MutableVars::PrintUnrecognized(std::ostream& out) const
 {
   string_list::const_iterator item(unrecognized->begin());
   for(; item != unrecognized->end(); ++item)
     out << *item << '\n';
+}
+
+int MutableVars::NumUnreadRequired() const {
+  int res = 0;
+  for(table_type::const_iterator m = table->begin(); m != table->end(); ++m) 
+    if(! m->second.was_read() && m->second.is_required())
+      ++res;
+  return res;
+}
+
+bool MutableVars::HasUnreadRequired() const { return NumUnreadRequired() > 0;}
+
+void MutableVars::PrintUnreadRequired(std::ostream& out) const {
+  for(table_type::const_iterator m = table->begin(); m != table->end(); ++m) 
+    if(! m->second.was_read() && m->second.is_required()) {
+      out << m->first << " (value: " << m->second << ")\n";
+    }
 }
 
 } // namespace GrAL 

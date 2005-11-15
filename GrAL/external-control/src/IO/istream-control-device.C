@@ -31,7 +31,7 @@ namespace GrAL {
   void istream_control_device_impl::attach_to(std::istream& in_new) { 
     boost::shared_ptr<std::istream> in_new_p(&in_new, null_deleter());
     boost::swap(in, in_new_p);
-} 
+  } 
 
   void istream_control_device_impl::print_values(std::ostream& out) const { MV.PrintValues(out);}
   
@@ -80,6 +80,23 @@ namespace GrAL {
     print_values(out, indent_);
     out << indent_ << "}";
   }
+
+
+  bool istream_control_device_impl::has_unrecognized() const {
+    bool res = MV.HasUnrecognized();
+    std::list<boost::shared_ptr<self> >::const_iterator subs;
+    for(subs = sub_devices_.begin(); subs != sub_devices_.end(); ++subs)
+      res = res || (*subs)->has_unrecognized();
+    return res;
+  }
+
+  int  istream_control_device_impl::num_unrecognized() const {
+    int res = MV.NumUnrecognized();
+    std::list<boost::shared_ptr<self> >::const_iterator subs;
+    for(subs = sub_devices_.begin(); subs != sub_devices_.end(); ++subs)
+      res +=  (*subs)->num_unrecognized();
+    return res;
+  }
   
   void istream_control_device_impl::print_unrecognized(std::ostream& out) const
   { print_unrecognized(out,"");}
@@ -89,8 +106,7 @@ namespace GrAL {
   {
     std::string nm = ( prefix == "" ? name() : prefix + "::" + name());
     if(MV.HasUnrecognized()) {
-      out << ">>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>>\n"
-	  << "WARNING: Unrecognized Values in ControlDevice " << nm << ":\n";
+      out << "WARNING: Unrecognized Values in ControlDevice " << nm << ":\n";
       MV.PrintUnrecognized(out);
       out << "END Unrecognized Values in ControlDevice " << nm << '\n';
     }
@@ -98,5 +114,38 @@ namespace GrAL {
     for(subs = sub_devices_.begin(); subs != sub_devices_.end(); ++subs)
       (*subs)->print_unrecognized(out,nm);
   }
+
+
+
+  bool istream_control_device_impl::has_unread_required() const { 
+    bool res = MV.HasUnreadRequired();
+        std::list<boost::shared_ptr<self> >::const_iterator subs;
+    for(subs = sub_devices_.begin(); subs != sub_devices_.end(); ++subs)
+      res = res || (*subs)->has_unread_required();
+    return res;
+  }
+  
+  int  istream_control_device_impl::num_unread_required() const {
+    int res = MV.NumUnreadRequired();
+    std::list<boost::shared_ptr<self> >::const_iterator subs;
+    for(subs = sub_devices_.begin(); subs != sub_devices_.end(); ++subs)
+      res += (*subs)->num_unread_required();
+    return res;
+  }
+
+  void istream_control_device_impl::print_unread_required(std::ostream& out) const { print_unread_required(out,"");}
+
+  void istream_control_device_impl::print_unread_required(std::ostream& out, std::string const& prefix) const {
+    std::string nm = ( prefix == "" ? name() : prefix + "::" + name());
+    if(MV.HasUnreadRequired()) {
+      out << "WARNING: The following required values were not found in ControlDevice " << nm << ":\n";
+      MV.PrintUnreadRequired(out);
+      out << "End missing required values in ControlDevice " << nm << std::endl;
+    }
+    std::list<boost::shared_ptr<self> >::const_iterator subs;
+    for(subs = sub_devices_.begin(); subs != sub_devices_.end(); ++subs)
+      (*subs)->print_unread_required(out,nm);
+  }
+
 
 } // namespace GrAL 

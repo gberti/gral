@@ -39,8 +39,16 @@ public:
 
   virtual void read(std::istream& in);
   virtual void print(std::ostream& out) const;
+  virtual bool has_unrecognized() const;
+  virtual int  num_unrecognized() const;
   virtual void print_unrecognized(std::ostream& out) const;
   virtual void print_unrecognized(std::ostream& out, std::string const& prefix) const;
+
+  virtual bool has_unread_required() const;
+  virtual int  num_unread_required() const;
+  virtual void print_unread_required(std::ostream& out) const;
+  virtual void print_unread_required(std::ostream& out, std::string const& prefix) const;
+
 
   friend std::istream& operator>>(std::istream& in,  self& rhs) 
     { rhs.read(in);   return in;}
