@@ -35,11 +35,11 @@ realclean: clean
 
 # no test files yet ...
 
-test: demo
+test: standard-test demo
 
-check:
+check: standard-check
 
-test-check-clean:
+test-check-clean: standard-test-check-clean
 
 demo:
 	(cd demo; $(MAKE) new CONFIG=$(CONFIG))
