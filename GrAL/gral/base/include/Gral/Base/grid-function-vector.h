@@ -97,7 +97,7 @@ public:
   template<class ForwardIterator>
   void set_values(ForwardIterator t_begin, ForwardIterator t_end)
   {
-     ::std::copy(t_begin, t_end, table.begin());
+     std::copy(t_begin, t_end, table.begin());
   }
 
   void init(ref_ptr<grid_type const> gg, const T& t) {
@@ -134,6 +134,7 @@ public:
   }
 
   ElementIterator FirstElement() const { return et::FirstElement(*g);}
+  ElementIterator EndElement()   const { return et::EndElement  (*g);}
 
 
   //--------------  data access operators -----------------------
