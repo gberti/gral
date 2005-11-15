@@ -60,6 +60,13 @@ int main(int argc, char* argv[]) {
   // controling a vector: "+i n" appends n to vec
   Ctrl.add("+i", GetPushbackMutator(vec));
 
+  // trigger a warning on update
+  int must_be_there = -1;
+  Ctrl.add("must_be_there", GetMutator(must_be_there).make_required());
+  // default is optional
+  int maybe_there = -1;
+  Ctrl.add("maybe_there", GetMutator(maybe_there).make_optional());
+
   // create a nested subdevice of level 1
   ControlDevice Ctrl1 = Ctrl.getSubDevice("sub1");
   Ctrl1.add("flag-on",  GetTrueOnReadMutator(flag));
@@ -116,8 +123,10 @@ int main(int argc, char* argv[]) {
 
   // Print warning if any strings did not correspond to valid name-value pairs.
   // This is done also by Ctrl.update(), so its superflous in principle.
-  Ctrl.print_unrecognized(cout); 
-
+  if(Ctrl.has_unrecognized())
+    Ctrl.print_unrecognized(cout); 
+  if(Ctrl.has_unread_required())
+    Ctrl.print_unread_required(cout);
 
   if(print_variables) {
     cerr << "\n"
