@@ -30,14 +30,33 @@ struct mgf_tester {
     typedef typename MGF::grid_type  grid_type;
     typedef grid_types<grid_type>    gt;
     typedef typename gt::template sequence_iterator_d<D>::type ElementIterator;
+    typedef typename gt::template element_d          <D>::type Element;
 
     mgf_tester<MGF,D-1>::act(mgf);
     for(ElementIterator e(mgf.TheGrid()); ! e.IsDone(); ++e) {
       mgf[*e] = typename MGF::value_type(D);
       REQUIRE_ALWAYS(mgf(*e) == typename MGF::value_type(D), "mgf(*e)=" << mgf(*e), 1);
+      REQUIRE_ALWAYS(mgf.template ElementFunction<Element>()(*e) == typename MGF::value_type(D), "mgf(*e)=" << mgf(*e), 1);
     }
+
+    typedef typename MGF::template element_wise<Element>::element_iterator gf_element_iterator;
+    typedef typename MGF::template element_wise<Element>::const_iterator   gf_const_iterator;
+    typedef typename MGF::template element_wise<Element>::iterator         gf_iterator;
+    int ei_cnt =0, ci_cnt = 0, i_cnt = 0;
+    for(gf_element_iterator e = mgf.template FirstElement<Element>(); 
+	e != mgf.template EndElement<Element>(); ++e) {
+      ++ei_cnt;
+      REQUIRE_ALWAYS(mgf(*e) == typename MGF::value_type(D), "", 1);
+    }
+    for(gf_const_iterator e = mgf.template begin<Element>(); e != mgf.template end<Element>(); ++e)
+      ++ci_cnt;
+    for(gf_iterator       e = mgf.template begin<Element>(); e != mgf.template end<Element>(); ++e)
+      ++i_cnt;
+    REQUIRE_ALWAYS(ei_cnt == ci_cnt && ci_cnt == i_cnt && i_cnt == (int) mgf.template size<Element>(), "",1);
   }
+
 };
+
 
 template<class MGF>
 struct mgf_tester<MGF,0> 
@@ -59,11 +78,14 @@ int main() {
     typedef   cartesian2d::CartesianGrid2D grid_type;
     typedef grid_types<grid_type> gt;
     grid_type R(2,2);
+
+    typedef gt::element_d<0>::type Vertex;
     
     multi_grid_function        <grid_type, int> mgf (R,1);
     partial_multi_grid_function<grid_type, int> pmgf(R,1);
 
     pmgf.set_default(-1);
+    REQUIRE_ALWAYS(pmgf.size() == 0, "", 1);
     REQUIRE_ALWAYS(pmgf.get_default() == -1, "pmgf::get_default()=" << pmgf.get_default() ,1);
     for(gt::VertexIterator v(R); !v.IsDone(); ++v ) {
       REQUIRE_ALWAYS(pmgf(*v) == -1, "pmgf(*v)=" << pmgf(*v), 1);      
@@ -81,11 +103,16 @@ int main() {
       mgf [*v] = v.handle();
       pmgf[*v] = v.handle();
     }
+    REQUIRE_ALWAYS(pmgf.size() == R.NumOfVertices(), "", 1);
+
 
     test_mgf(mgf);
     test_mgf(pmgf);
 
     pmgf.clear();
+    REQUIRE_ALWAYS(pmgf.empty(), "", 1);
+    REQUIRE_ALWAYS(pmgf.size() == 0, "", 1);
+
     for(gt::VertexIterator v(R); !v.IsDone(); ++v ) {
       REQUIRE_ALWAYS(pmgf(*v) == -1, " pmgf(v)=" << pmgf(*v),1);
       // ! pmgf.defined(*v);
@@ -95,6 +122,16 @@ int main() {
     for(gt::CellIterator c(R); ! c.IsDone(); ++c)
       REQUIRE_ALWAYS(pmgf(*c) == -1, "pmgf(*c)=" << pmgf(*c), 1);
 
+    for(gt::VertexIterator v(R); !v.IsDone(); ++v ) 
+      pmgf[*v] = v.handle();
+    for(gt::EdgeIterator e(R); ! e.IsDone(); ++e)
+      pmgf[*e] = e.handle();
+    REQUIRE_ALWAYS(pmgf.size() == R.NumOfVertices()+R.NumOfEdges(), "", 1);
+    for(gt::CellIterator c(R); ! c.IsDone(); ++c)
+      pmgf[*c] = c.handle();
+    REQUIRE_ALWAYS(pmgf.size() == R.NumOfVertices()+R.NumOfEdges()+R.NumOfCells(), "", 1);
+    REQUIRE_ALWAYS( mgf.size() == R.NumOfVertices()+R.NumOfEdges()+R.NumOfCells(), "", 1);
+    
   }
 
   {
@@ -106,6 +143,6 @@ int main() {
     for(gt::VertexIterator v(R); !v.IsDone(); ++v)
       mgf[*v] = v.handle();
     
-    test_mgf(mgf);
+    //  test_mgf(mgf);
   }
 }
