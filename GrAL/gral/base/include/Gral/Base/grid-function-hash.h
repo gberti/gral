@@ -98,7 +98,7 @@ public:
   */
 
   void set_grid(ref_ptr<grid_type const> gg) {
-    REQUIRE((g == 0), "set grid: grid must be 0!\n",1);
+    // REQUIRE((g == 0), "set grid: grid must be 0!\n",1);
     g = gg;
   }
   void set_grid(const grid_type& gg) { set_grid(ref_ptr<grid_type const>(gg));}
@@ -140,10 +140,10 @@ public:
     const T& operator*() const { return (base_cit::operator*()).second;}
   };
 
-  iter begin() { return iter(table.begin());}
-  iter end()   { return iter(table.end());}
-  const_iter begin() const {return const_iter(table.begin());}
-  const_iter end()   const {return const_iter(table.end());}
+  iter       begin()       { return iter      (table.begin());}
+  iter       end()         { return iter      (table.end());}
+  const_iter begin() const { return const_iter(table.begin());}
+  const_iter end()   const { return const_iter(table.end());}
  
 
   // typedefs for container categorie
