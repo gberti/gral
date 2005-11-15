@@ -166,9 +166,18 @@ public:
 
 
   /*! \brief Type mapping for element-related types 
+
+      Example usage:
+      \code
+      // E is an element type, mgf_type is a partial_multi_grid_function<G,T>
+      typedef typename mgf_type::template element_wise<E>::element_iterator iter;
+      for(iter e = mgf.template FirstElement<E>(); e != mgf.template EndElement<E>(); ++e)
+           mgf[*e] = 0;
+      \endcode
    */
   template<class E>
-  struct element_wise { 
+  class element_wise { 
+  public:
     typedef partial_grid_function<E,T>          function;
     typedef typename function::ElementIterator  element_iterator; 
     typedef typename function::const_iterator   const_iterator;
