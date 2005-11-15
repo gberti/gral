@@ -67,6 +67,19 @@ int main(int argc, char* argv[]) {
   int maybe_there = -1;
   Ctrl.add("maybe_there", GetMutator(maybe_there).make_optional());
 
+  // make optional a series of parameters
+  int maybe_there2 = 2;
+  int maybe_there3 = 3;
+  int maybe_there4 = 4;
+  Ctrl.all_optional();
+  // the following parameters are all optional
+  RegisterAt(Ctrl, "maybe_there2", maybe_there2);
+  RegisterAt(Ctrl, "maybe_there3", maybe_there3);
+  RegisterAt(Ctrl, "maybe_there4", maybe_there4);
+
+  // use the setting of the mutators for subsequent parameters
+  Ctrl.all_default();
+
   // create a nested subdevice of level 1
   ControlDevice Ctrl1 = Ctrl.getSubDevice("sub1");
   Ctrl1.add("flag-on",  GetTrueOnReadMutator(flag));
