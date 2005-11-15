@@ -1,0 +1,122 @@
+Edge leaf iterator:
+L0 [0 0 -> 1 0]
+Edge leaf iterator:
+L0 [0 1 -> 1 1]
+Edge leaf iterator:
+L0 [0 2 -> 1 2]
+Edge leaf iterator:
+L0 [1 0 -> 2 0]
+Edge leaf iterator:
+L0 [1 1 -> 2 1]
+Edge leaf iterator:
+L0 [1 2 -> 2 2]
+Edge leaf iterator:
+L0 [0 0 -> 0 1]
+Edge leaf iterator:
+L0 [0 1 -> 0 2]
+Edge leaf iterator:
+L0 [1 0 -> 1 1]
+Edge leaf iterator:
+L0 [1 1 -> 1 2]
+Edge leaf iterator:
+L0 [2 0 -> 2 1]
+Edge leaf iterator:
+L0 [2 1 -> 2 2]
+Refining cell 0 0,0
+Octree state: Number of levels: 2 ( 0 .. 1 )
+              Number of cells:  8
+              Number of leafs:  7
+Active vertices:
+Level 0: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Level 1: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Edge leaf iterator on e=0 0, 0:
+L1 [0 0 -> 1 0]
+L1 [1 0 -> 2 0]
+Edge leaf iterator on e=0 1, 0:
+L1 [0 2 -> 1 2]
+L1 [1 2 -> 2 2]
+Edge leaf iterator on e=0 0, 0:
+L1 [0 0 -> 0 1]
+L1 [0 1 -> 0 2]
+Edge leaf iterator on e=1 0, 0:
+L1 [2 0 -> 2 1]
+L1 [2 1 -> 2 2]
+Refining cell 0 0,1
+Octree state: Number of levels: 3 ( 0 .. 2 )
+              Number of cells:  12
+              Number of leafs:  10
+Active vertices:
+Level 0: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Level 1: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Level 2: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Edge leaf iterator on e=0 0, 0:
+L2 [0 0 -> 1 0]
+L2 [1 0 -> 2 0]
+L1 [1 0 -> 2 0]
+Edge leaf iterator on e=0 1, 0:
+L1 [0 2 -> 1 2]
+L1 [1 2 -> 2 2]
+Edge leaf iterator on e=0 0, 0:
+L2 [0 0 -> 0 1]
+L2 [0 1 -> 0 2]
+L1 [0 1 -> 0 2]
+Edge leaf iterator on e=1 0, 0:
+L1 [2 0 -> 2 1]
+L1 [2 1 -> 2 2]
+Refining cell 0 0,2
+Octree state: Number of levels: 4 ( 0 .. 3 )
+              Number of cells:  16
+              Number of leafs:  13
+Active vertices:
+Level 0: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Level 1: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Level 2: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Level 3: 9 vertices:  0 0, 0 1, 0 2, 1 0, 1 1, 1 2, 2 0, 2 1, 2 2, 
+Edge leaf iterator on e=0 0, 0:
+L3 [0 0 -> 1 0]
+L3 [1 0 -> 2 0]
+L2 [1 0 -> 2 0]
+L1 [1 0 -> 2 0]
+Edge leaf iterator on e=0 1, 0:
+L1 [0 2 -> 1 2]
+L1 [1 2 -> 2 2]
+Edge leaf iterator on e=0 0, 0:
+L3 [0 0 -> 0 1]
+L3 [0 1 -> 0 2]
+L2 [0 1 -> 0 2]
+L1 [0 1 -> 0 2]
+Edge leaf iterator on e=1 0, 0:
+L1 [2 0 -> 2 1]
+L1 [2 1 -> 2 2]
+Edge leaf iterator on 0 0, 0:
+L3 [0 0 -> 1 0]
+L3 [1 0 -> 2 0]
+L2 [1 0 -> 2 0]
+L1 [1 0 -> 2 0]
+Edge leaf iterator on 0 1, 0:
+L1 [0 2 -> 1 2]
+L1 [1 2 -> 2 2]
+Edge leaf iterator on 0 2, 0:
+L0 [0 2 -> 1 2]
+Edge leaf iterator on 1 0, 0:
+L0 [1 0 -> 2 0]
+Edge leaf iterator on 1 1, 0:
+L0 [1 1 -> 2 1]
+Edge leaf iterator on 1 2, 0:
+L0 [1 2 -> 2 2]
+Edge leaf iterator on 0 0, 0:
+L3 [0 0 -> 0 1]
+L3 [0 1 -> 0 2]
+L2 [0 1 -> 0 2]
+L1 [0 1 -> 0 2]
+Edge leaf iterator on 0 1, 0:
+L0 [0 1 -> 0 2]
+Edge leaf iterator on 1 0, 0:
+L1 [2 0 -> 2 1]
+L1 [2 1 -> 2 2]
+Edge leaf iterator on 1 1, 0:
+L0 [1 1 -> 1 2]
+Edge leaf iterator on 2 0, 0:
+L0 [2 0 -> 2 1]
+Edge leaf iterator on 2 1, 0:
+L0 [2 1 -> 2 2]
