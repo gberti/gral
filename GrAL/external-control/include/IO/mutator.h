@@ -201,7 +201,7 @@ protected:
 public:
   SetOnReadMutator(T& t, Tsec& t2, Tsec def) : tm(t), v2(t2), deflt(def) {}
 protected:
-  virtual bool read_var(std::istream& in) { tm::read(in); v2 = deflt; return true;} 
+  virtual bool read_var(std::istream& in) { tm::read_var(in); v2 = deflt; return true;} 
 };
 
 

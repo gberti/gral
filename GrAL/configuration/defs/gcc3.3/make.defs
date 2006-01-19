@@ -8,7 +8,7 @@ CCC      =  /usr/net/fdc/bin/g++
 CCFLAGS += -Wall
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += 
-CCFLAGS += -ftemplate-depth-35
+CCFLAGS += -ftemplate-depth-200
 CCFLAGS += -DGRAL_HAS_SSTREAM
 
 DEPEND    =$(CCC)

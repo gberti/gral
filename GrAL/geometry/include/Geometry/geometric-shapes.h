@@ -63,11 +63,11 @@ public:
   bool intersects(POLYTOPE const& p) const;
   */
 
-
+  // TODO: this should go into gral/geometry or so ...
   template<class GT, class ELEM, class GEOM> 
   intersection_result intersection_check(ELEM const& e, GEOM const& geom) const {
     typedef element_traits<ELEM> et;
-    typedef typename GT::template incidence_iterator<vertex_type_tag, typename et::element_type_tag>::type VertexOnElemIterator;
+    typedef typename incidence_iterator<GT,vertex_type_tag, typename et::element_type_tag>::type VertexOnElemIterator;
     int inside_cnt = 0;
     for(VertexOnElemIterator ve(e); ! ve.IsDone(); ++ve)
       inside_cnt += (is_inside(geom.coord(*ve)) ? 1 : 0);

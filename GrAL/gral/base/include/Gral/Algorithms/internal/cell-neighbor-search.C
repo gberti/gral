@@ -86,9 +86,9 @@ void CalculateNeighborCells(NBF           &  NB,
         //  & remove facet from the map.
         FacetOnCellIt NbIt((*nb).second);
         // NB[NbIt] = 0;
-	typename CGT::cell_handle fh = f.TheCell().handle();
+	typename CGT::cell_handle fh = f.TheAnchor().handle();
         NB[NbIt]    = fh;
-        NB[f   ]    = NbIt.TheCell().handle();
+        NB[f   ]    = NbIt.TheAnchor().handle();
 
         facet_map.erase(nb);
       }

@@ -42,7 +42,7 @@ template<class E, class T>
 class grid_function_vector {
 public:
   // container types
-  typedef ::std::vector<T>                     table_type;
+  typedef std::vector<T>                       table_type;
   typedef typename table_type::size_type       size_type;
   typedef typename table_type::value_type      value_type;
   typedef typename table_type::reference       reference;
@@ -117,7 +117,7 @@ public:
   void rebind(ref_ptr<grid_type const> gg) {
     g = gg;
     table.resize(et::size(*g));
-    ENSURE( (table.size() == et::size(*g)), "", 1);
+    ENSURE( (table.size() == (size_type)et::size(*g)), "", 1);
   }
   void rebind(const grid_type& gg) { rebind(ref_ptr<grid_type const>(gg));}
 

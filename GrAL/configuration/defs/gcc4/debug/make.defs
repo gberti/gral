@@ -1,0 +1,5 @@
+THISDIR = $(COMPILERDIR)
+include $(THISDIR)/../make.defs
+
+
+CCFLAGS  += -g -DNMWR_DEBUG

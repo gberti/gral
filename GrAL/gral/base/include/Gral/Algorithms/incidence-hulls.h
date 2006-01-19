@@ -506,7 +506,7 @@ void incidence_hull<CFG>::compute
   else if(s.front() == cell_tag) {
     s.pop();
     c_layers.append_layer();
-    for(typename rgt::CellIterator c=seed.FirstCell(); !c.IsDone(); ++c) {
+    for(typename rgt::CellIterator c(seed.FirstCell()); !c.IsDone(); ++c) {
       c_layers.append(*c);
       visited[*c] = lev;
     }
@@ -588,6 +588,7 @@ void incidence_hull<CFG>::add_seed_range(RANGE const& range)
   if(!range.empty()) {
     if(the_stencil.front() == vertex_tag) {
       enumerated_subrange<grid_type> union_range(range.TheGrid()); 
+      //enumerated_vertex_range<grid_type> union_range(range.TheGrid()); 
       typedef grid_types<enumerated_vertex_range<grid_type> > egt;
       partial_grid_function<typename gt::Vertex, bool> in_old_range(union_range.TheGrid(), false);
       if(NumOfVertexLayers() > 0) {
@@ -605,6 +606,7 @@ void incidence_hull<CFG>::add_seed_range(RANGE const& range)
     }
     else if(the_stencil.front() == cell_tag) {
       enumerated_subrange<grid_type> union_range(range.TheGrid()); 
+      //enumerated_cell_range<grid_type> union_range(range.TheGrid()); 
       typedef grid_types<enumerated_cell_range<grid_type> > egt;
       partial_grid_function<typename gt::Cell, bool> in_old_seed(union_range.TheGrid(), false);
       if(NumOfCellLayers() > 0) {
