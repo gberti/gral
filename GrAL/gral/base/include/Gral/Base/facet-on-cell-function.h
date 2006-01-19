@@ -38,7 +38,7 @@ public:
   facet_on_cell_function(grid_type const& g) :  gf(g) 
     {
       for(typename gt::CellIterator c(gf.TheGrid()); ! c.IsDone(); ++c)
-	gf[*c].set_grid((*c).TheArchetype());
+	gf[*c].set_grid(TheGrid().ArchetypeOf(*c));
     }
   facet_on_cell_function(grid_type const& g, T const& t) :  gf(g) 
     {
@@ -47,10 +47,10 @@ public:
     }
 
   T const& operator()(FacetOnCellIterator const& fc) const
-  { return gf(fc.TheCell())(fc.ArchetypeCell());}
+  { return gf(fc.TheAnchor())(GrAL::archetype_element(fc));}
 
   T      & operator[](FacetOnCellIterator const& fc) 
-  { return gf[fc.TheCell()][fc.ArchetypeCell()];}
+  { return gf[fc.TheAnchor()][GrAL::archetype_element(fc)];}
 
   grid_type const& TheGrid() const { return gf.TheGrid();}
 };
