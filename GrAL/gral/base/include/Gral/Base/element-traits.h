@@ -107,6 +107,7 @@ struct consecutive_integer_tag
     {
       typedef GRID             grid_type;
       typedef grid_types<GRID> gt;
+      typedef typename gt::size_type size_type;
       // default: elements not numbered consecutively
       typedef non_consecutive_tag            consecutive_tag; 
       
@@ -130,14 +131,15 @@ struct consecutive_integer_tag
     {
       typedef typename ET::gt        gt;
       typedef typename gt::grid_type grid_type;
+      typedef typename gt::size_type size_type;
 
       typedef typename gt::VertexIterator      ElementIterator;
       static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstVertex();}
       static ElementIterator EndElement  (grid_type    const& g)    { return g.EndVertex();}
-      static unsigned        size        (grid_type    const& g)    { return g.NumOfVertices();}
+      static size_type       size        (grid_type    const& g)    { return g.NumOfVertices();}
       static ElementIterator FirstElement(ref_ptr<grid_type    const> g)    { return g->FirstVertex();}
       static ElementIterator EndElement  (ref_ptr<grid_type    const> g)    { return g->EndVertex();}
-      static unsigned        size        (ref_ptr<grid_type    const> g)    { return g->NumOfVertices();}
+      static size_type       size        (ref_ptr<grid_type    const> g)    { return g->NumOfVertices();}
     };
 
 
@@ -148,14 +150,15 @@ struct consecutive_integer_tag
     {
       typedef typename ET::gt        gt;
       typedef typename gt::grid_type grid_type;
+      typedef typename gt::size_type size_type;
 
       typedef typename gt::EdgeIterator      ElementIterator;
       static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstEdge();}
       static ElementIterator EndElement  (grid_type    const& g)    { return g.EndEdge();}
-      static unsigned        size        (grid_type    const& g)    { return g.NumOfEdges();}
+      static size_type       size        (grid_type    const& g)    { return g.NumOfEdges();}
       static ElementIterator FirstElement(ref_ptr<grid_type    const> g)    { return g->FirstEdge();}
       static ElementIterator EndElement  (ref_ptr<grid_type    const> g)    { return g->EndEdge();}
-      static unsigned        size        (ref_ptr<grid_type    const> g)    { return g->NumOfEdges();}
+      static size_type       size        (ref_ptr<grid_type    const> g)    { return g->NumOfEdges();}
     };
 
 
@@ -166,14 +169,15 @@ struct consecutive_integer_tag
     {
       typedef typename ET::gt        gt;
       typedef typename gt::grid_type grid_type;
+      typedef typename gt::size_type size_type;
 
       typedef typename gt::FaceIterator      ElementIterator;
       static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFace();}
       static ElementIterator EndElement  (grid_type    const& g)    { return g.EndFace();}
-      static unsigned        size        (grid_type    const& g)    { return g.NumOfFaces();}
+      static size_type       size        (grid_type    const& g)    { return g.NumOfFaces();}
       static ElementIterator FirstElement(ref_ptr<grid_type    const> g)    { return g->FirstFace();}
       static ElementIterator EndElement  (ref_ptr<grid_type    const> g)    { return g->EndFace();}
-      static unsigned        size        (ref_ptr<grid_type    const> g)    { return g->NumOfFaces();}
+      static size_type       size        (ref_ptr<grid_type    const> g)    { return g->NumOfFaces();}
     };
 
 
@@ -185,14 +189,15 @@ struct consecutive_integer_tag
     {
       typedef typename ET::gt        gt;
       typedef typename gt::grid_type grid_type;
+      typedef typename gt::size_type size_type;
 
       typedef typename gt::FacetIterator      ElementIterator;
       static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstFacet();}
       static ElementIterator EndElement  (grid_type    const& g)    { return g.EndFacet();}
-      static unsigned        size        (grid_type    const& g)    { return g.NumOfFacets();}
+      static size_type       size        (grid_type    const& g)    { return g.NumOfFacets();}
       static ElementIterator FirstElement(ref_ptr<grid_type    const> g)    { return g->FirstFacet();}
       static ElementIterator EndElement  (ref_ptr<grid_type    const> g)    { return g->EndFacet();}
-      static unsigned        size        (ref_ptr<grid_type    const> g)    { return g->NumOfFacets();}
+      static size_type       size        (ref_ptr<grid_type    const> g)    { return g->NumOfFacets();}
     };
 
 
@@ -203,14 +208,15 @@ struct consecutive_integer_tag
     {
       typedef typename ET::gt        gt;
       typedef typename gt::grid_type grid_type;
+      typedef typename gt::size_type size_type;
 
       typedef typename gt::CellIterator      ElementIterator;
       static ElementIterator FirstElement(grid_type    const& g)    { return g.FirstCell();}
       static ElementIterator EndElement  (grid_type    const& g)    { return g.EndCell();}
-      static unsigned        size        (grid_type    const& g)    { return g.NumOfCells();}
+      static size_type       size        (grid_type    const& g)    { return g.NumOfCells();}
       static ElementIterator FirstElement(ref_ptr<grid_type    const> g)    { return g->FirstCell();}
       static ElementIterator EndElement  (ref_ptr<grid_type    const> g)    { return g->EndCell();}
-      static unsigned        size        (ref_ptr<grid_type    const> g)    { return g->NumOfCells();}
+      static size_type       size        (ref_ptr<grid_type    const> g)    { return g->NumOfCells();}
     };
 
 
