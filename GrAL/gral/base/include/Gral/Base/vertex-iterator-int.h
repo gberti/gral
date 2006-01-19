@@ -123,20 +123,24 @@ class vertex_iterator_int :
 public:
   typedef typename gt::grid_type     grid_type;
   typedef typename gt::vertex_handle vertex_handle;
+
+   typedef grid_type anchor_type;
+   typedef self      value_type;
 protected:
   ref_ptr<grid_type const> g;
-  int                      v;
+  vertex_handle            v;
 public:
   vertex_iterator_int() : g(0), v(-1) {}
   explicit 
-  vertex_iterator_int(grid_type const&         gg, int vv = 0) : g(gg), v(vv) {}
+  vertex_iterator_int(grid_type const&         gg, vertex_handle vv = vertex_handle(0)) : g(gg), v(vv) {}
   explicit 
-  vertex_iterator_int(ref_ptr<grid_type const> gg, int vv = 0) : g(gg), v(vv) {}
+  vertex_iterator_int(ref_ptr<grid_type const> gg, vertex_handle vv = vertex_handle(0)) : g(gg), v(vv) {}
 
   self      & operator++() { cv(); ++v; return *this;}
   self const& operator*() const { cv(); return *this;}
-  grid_type const& TheGrid() const { cb(); return *g;}
-  bool IsDone() const { cb(); return (v >= (int)g->NumOfVertices());}
+  grid_type   const& TheGrid()   const { cb(); return *g;}
+  anchor_type const& TheAnchor() const { cb(); return *g;}
+  bool IsDone() const { cb(); return (v >= g->NumOfVertices());}
 
   friend bool operator== <> (vertex_iterator_int<GT> const& lhs, 
 			     vertex_iterator_int<GT> const& rhs);

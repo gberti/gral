@@ -102,22 +102,25 @@ public:
   typedef typename gt::grid_type    grid_type;
   typedef typename gt::cell_handle  cell_handle;
   typedef typename gt::Cell         Cell;
+
+  typedef grid_type anchor_type;
+  typedef Cell      value_type;
 protected:
   ref_ptr<grid_type const> g;
-  int c;
+  cell_handle c;
 public:
   cell_iterator_int() : g(0), c(-1) {}
   explicit
-  cell_iterator_int(grid_type const&         gg, int cc = 0) : g(gg), c(cc) {}
+  cell_iterator_int(grid_type const&         gg, cell_handle cc = cell_handle(0)) : g(gg), c(cc) {}
   explicit
-  cell_iterator_int(ref_ptr<grid_type const> gg, int cc = 0) : g(gg), c(cc) {}
+  cell_iterator_int(ref_ptr<grid_type const> gg, cell_handle cc = cell_handle(0)) : g(gg), c(cc) {}
 
   self      & operator++()      { cv();  ++c; return *this;}
-  self        operator*() const { cv(); return Cell(*this);}
-  grid_type const& TheGrid() const { cb(); return *g;}
+  Cell        operator*() const { cv(); return Cell(*this);}
+  grid_type   const& TheGrid  () const { cb(); return *g;}
+  anchor_type const& TheAnchor() const { cb(); return *g;}
 
-
-  bool IsDone()  const { cb(); return (c >= (int)g->NumOfCells());}
+  bool IsDone()  const { cb(); return (c >= g->NumOfCells());}
   int  handle()  const { cv(); return c;}
 
   friend bool operator==<>(cell_iterator_int<GT> const& lhs, 
