@@ -49,8 +49,8 @@ public:
 
   Vertex const& vertex() const { return v_;}
   Edge   const& edge()   const { return e_;}
-  Facet  const& facet()  const { return e_;}
-  Cell   const& cell()   const { return f_;}
+  Facet  const& facet()  const { return v_;}
+  Cell   const& cell()   const { return e_;}
 
   void switch_vertex() { TheGrid().switch_vertex(v_,e_);}
   void switch_edge()   { TheGrid().switch_cell  (v_,e_);}
