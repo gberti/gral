@@ -86,7 +86,9 @@ export DEPMODULES = $(DEPMODULES_1)
 unexport PWD
 
 # rules .C.o, .C.d, some standard targets
+ifndef GRAL_DONT_INCLUDE_TARGETS
 include $(CONFIGURATION)/defs/suffix-targets
+endif
 
 # installation
 export INSTALLHEADERS=$(PREFIX)/include#
