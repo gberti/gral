@@ -6,7 +6,9 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Utility/ref-ptr.h"
 
+
 namespace GrAL {
+
 
 /*! \brief Helper class to reuse the archetype functionality of a base grid
 
@@ -25,6 +27,7 @@ public:
   typedef typename GT::archetype_type     archetype_type;
   typedef typename GT::archetype_handle   archetype_handle;
   typedef typename GT::archetype_iterator archetype_iterator;
+  typedef typename get_archgt<GT, grid_types<typename GT::archetype_type> >::type   archgt;
 
   archetype_iterator BeginArchetype() const { return base_grid()->BeginArchetype();}
   archetype_iterator EndArchetype()   const { return base_grid()->EndArchetype();}
@@ -49,6 +52,7 @@ struct archetypes_from_base_grid_types {
   typedef typename GT::archetype_type     archetype_type;
   typedef typename GT::archetype_handle   archetype_handle;
   typedef typename GT::archetype_iterator archetype_iterator;
+  typedef typename get_archgt<GT, grid_types<typename GT::archetype_type> >::type   archgt;
 };
 
 
