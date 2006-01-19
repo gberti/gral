@@ -106,11 +106,11 @@ struct grid_types_element_sides_range<E, 1> {
   typedef typename et::grid_type grid_type;
   typedef grid_types<grid_type>  gt;
 
-  typedef typename gt::template incidence_iterator<vertex_type_tag, etag>::type VertexIterator;
-  typedef typename gt::Vertex                                                   Vertex;
-  typedef typename gt::vertex_handle                                            vertex_handle; 
+  typedef typename incidence_iterator<gt, vertex_type_tag, etag>::type VertexIterator;
+  typedef typename gt::Vertex                                          Vertex;
+  typedef typename gt::vertex_handle                                   vertex_handle; 
 
-  typedef typename gt::VertexOnEdgeIterator                                     VertexOnEdgeIterator;
+  typedef typename gt::VertexOnEdgeIterator                            VertexOnEdgeIterator;
 
 };
 
@@ -143,11 +143,11 @@ private:
 public: 
   typedef typename base::gt   gt;
   typedef typename base::etag etag;
-  typedef typename gt::template incidence_iterator<edge_type_tag,etag>::type  EdgeIterator;
-  typedef typename gt::Edge                                                   Edge;
-  typedef typename gt::edge_handle                                            edge_handle;
+  typedef typename incidence_iterator<gt,edge_type_tag,etag>::type  EdgeIterator;
+  typedef typename gt::Edge                                         Edge;
+  typedef typename gt::edge_handle                                  edge_handle;
 
-  typedef typename gt::VertexOnFaceIterator                                   VertexOnFaceIterator;
+  typedef typename gt::VertexOnFaceIterator                         VertexOnFaceIterator;
  
 };
 
@@ -179,9 +179,9 @@ private:
   typedef typename base::gt   gt;
   typedef typename base::etag etag;
 public: 
-  typedef typename gt::template incidence_iterator<face_type_tag,etag>::type FaceIterator;
-  typedef typename gt::Face                                                  Face;
-  typedef typename gt::face_handle                                           face_handle;
+  typedef typename incidence_iterator<gt,face_type_tag,etag>::type FaceIterator;
+  typedef typename gt::Face                                        Face;
+  typedef typename gt::face_handle                                 face_handle;
 
  
 };
