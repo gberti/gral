@@ -14,21 +14,27 @@ namespace GrAL {
 
     These archetypes are formally required e.g. to end recursions.
 */
-namespace archetype_0D {
+  namespace archetype_0D { 
 
   /*! \brief A 0-dimensional grid which can be used as archetype for regular 1-dimensional grids
 
   */
-class archetype_t {
+class archetype_t { 
   typedef archetype_t self;
 public:
   enum { dim = 0 };
   typedef grid_dim_tag<0> dimension_tag;  
   unsigned dimension() const { return 0;}
-  
+  typedef self grid_type;
+  typedef int  size_type;
+  typedef grid_category_d<0> category; 
+
   struct VertexIterator {
     typedef archetype_t   grid_type;
     typedef VertexIterator self;
+
+    typedef grid_type anchor_type;
+    typedef self      value_type;
 
     grid_type    const*  g;
     int                  h;
@@ -41,6 +47,9 @@ public:
     bool IsDone() const { return h >= 2;}
     bool handle() const { return h;}
 
+    grid_type const& TheGrid  () const { cb(); return *g;}
+    grid_type const& TheAnchor() const { cb(); return *g;}
+
     bool bound() const { return g != 0;}
     bool valid() const { return (bound() && h < 2);}
     void cb() const { REQUIRE(bound(), "", 1);}
@@ -52,12 +61,29 @@ public:
   typedef vertex_handle_int<self> vertex_handle;
   typedef cell_handle_int<self>   cell_handle;
 
-  unsigned NumOfVertices() const { return 2;}
-  unsigned NumOfCells()    const { return 2;}
+  size_type NumOfVertices() const { return 2;}
+  size_type NumOfCells()    const { return 2;}
   VertexIterator FirstVertex() const { return VertexIterator(*this);}
   CellIterator   FirstCell()   const { return CellIterator(*this);}
+  VertexIterator EndVertex()   const { return VertexIterator(*this,2);}
+  CellIterator   EndCell()     const { return CellIterator(*this,2);}
 };
 
+
+    struct grid_types_archetype_t : public grid_types_detail::grid_types_root  {
+
+      typedef archetype_t                  grid_type;
+      typedef grid_type::dimension_tag     dimension_tag;
+
+      typedef grid_type::size_type          size_type;
+      typedef grid_type::vertex_handle      vertex_handle;
+      typedef grid_type::Vertex             Vertex;
+      typedef grid_type::VertexIterator     VertexIterator;
+      typedef grid_type::cell_handle        cell_handle;
+      typedef grid_type::Cell               Cell;
+      typedef grid_type::CellIterator       CellIterator;
+
+    };
 
 
 inline bool operator==(archetype_t::VertexIterator const& lhs,
@@ -110,10 +136,10 @@ public:
 
 
 template<>
-struct grid_types<archetype_0D::archetype_t> : public grid_types_base<archetype_0D::archetype_t> 
-{
-  typedef archetype_0D::archetype_t grid_type;
-};
+struct grid_types<archetype_0D::archetype_t> 
+  : public grid_types_base<archetype_0D::grid_types_archetype_t> 
+{};
+
 
 template<>
 struct element_traits<archetype_0D::archetype_t::Vertex> 
@@ -123,6 +149,20 @@ struct element_traits<archetype_0D::archetype_t::Vertex>
   typedef consecutive_integer_tag<0>                       consecutive_tag;
   typedef base::hasher_type_elem_base                      hasher_type;
 };
+
+
+namespace archetype_0D {
+
+#define gt grid_types<archetype_0D::archetype_t> 
+
+  inline gt::VertexIterator gral_begin(archetype_0D::archetype_t a, gt::VertexIterator) { return a.FirstVertex();}
+  inline gt::VertexIterator gral_end  (archetype_0D::archetype_t a, gt::VertexIterator) { return a.EndVertex();}
+  inline gt::size_type      gral_size (archetype_0D::archetype_t a, gt::VertexIterator) { return a.NumOfVertices();}
+
+#undef gt
+
+}
+
 
 
 template<class T>
