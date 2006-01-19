@@ -18,8 +18,7 @@ namespace GrAL {
       enum { dim = DIM };
       real_type X[dim];
     public:
-      coord_type() {}
-      coord_type(real_type x) { for(int i = 0; i < dim; ++i) X[i] = x;}
+      coord_type(real_type x = 0.0) { for(int i = 0; i < dim; ++i) X[i] = x;}
       coord_type(real_type x, real_type y) { X[0] = x; X[1] = y;}
       coord_type(real_type x, real_type y, real_type z) { X[0] = x; X[1] = y; X[2] = z;}
     
@@ -64,33 +63,11 @@ namespace GrAL {
 
     typedef coord_type_for_archetype_geometry::coord_type<real_type, spacedim, GRID> coord_type;
 
-    /*    
-    class coord_type : public array_operators<coord_type, real_type, spacedim> 
-    {
-      typedef typename  archetype_geometry<GRID, ARCH>::real_type real_type;
-      enum { dim = archetype_geometry<GRID, ARCH>::spacedim };
-      real_type X[dim];
-    public:
-      coord_type() {}
-      coord_type(real_type x) { for(int i = 0; i < dim; ++i) X[i] = x;}
-      coord_type(real_type x, real_type y) { X[0] = x; X[1] = y;}
-      coord_type(real_type x, real_type y, real_type z) { X[0] = x; X[1] = y; X[2] = z;}
-
-      real_type  operator()(int i) const { ch(i); return X[i];}
-      real_type  operator[](int i) const { ch(i); return X[i];}
-      real_type& operator[](int i)       { ch(i); return X[i];}
-
-    private:
-      void ch(int i) const { REQUIRE(0 <= i && i < dim, "i= " << i << " out of range [0, " << dim-1 << "]\n",1); }
-      
-    };
-    */
-
   private:
     grid_function<Vertex, coord_type> coords;
   public:    
     archetype_geometry() {}
-    archetype_geometry(grid_type const& g) : coords(g) {}
+    archetype_geometry(grid_type const& g) : coords(g, coord_type(0.0)) {}
     
     coord_type const& coord(Vertex        const& v) const { return coords(v);}
     coord_type const& coord(vertex_handle const& v) const { return coords(v);}
