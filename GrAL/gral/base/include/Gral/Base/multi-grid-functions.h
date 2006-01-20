@@ -17,9 +17,9 @@ namespace detail {
   public:
     typedef Grid grid_type;
   private:
-    typedef typename grid_types<Grid>::template element_d<ED>::type element_type;
-    typedef multi_gf_aux<Grid,T,GD,ED-1>                            base;
-    typedef element_traits<element_type>                            et;
+    typedef typename element_d<grid_types<Grid>,ED>::type  element_type;
+    typedef multi_gf_aux<Grid,T,GD,ED-1>                   base;
+    typedef element_traits<element_type>                   et;
 
     typedef grid_function<element_type, T> elem_gf_type;
     elem_gf_type f;
@@ -177,7 +177,7 @@ public:
   template<class E>
   size_type size() const { return ElementFunction<E>().size();}
   /*! \brief Sum of sizes of element-wise grid functions */
-  size_type size() const { return total_size();}
+  size_type size() const { return base::total_size();}
 
   //! \brief Set value to t for each element
   void set_value(value_type const& t) { set_value_(t);}
