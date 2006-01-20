@@ -25,20 +25,9 @@ namespace connected_components {
   {
     if(! initialized) {
       comps.init(*g,-1);
-      int current_component = 0;
+      size_type current_component = 0;
       for(CellIterator c(TheGrid()); !c.IsDone(); ++c) {   
 	if(inside(*c) && comps(*c)  == -1 ) { // new component: BFS-visit all cells reachable from c
-	  /*
-	  //component<GT, comp_table_type> Comp(*c, comps, -1);
-	  germs       .push_back(*c); // <=> germs[current_component] = *c;
-	  num_of_cells.push_back(0); 
-	  component<GT> Comp(*c);
-	  for(typename component<GT>::CellIterator cc(Comp); ! cc.IsDone(); ++cc) {
-	    comps[*cc] = current_component;
-	    num_of_cells[current_component]++;
-	  }
-	  */
-
 	  std::queue<cell_handle> Q;
 	  Q.push(c.handle());
 	  comps[*c] = current_component;

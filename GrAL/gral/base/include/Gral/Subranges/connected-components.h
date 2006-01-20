@@ -70,11 +70,12 @@ namespace connected_components {
     typedef cell_iterator<GT>               CellIterator;
     typedef typename GT::CellOnCellIterator CellOnCellIterator;
     typedef typename GT::grid_type          base_grid_type;
+    typedef typename GT::size_type          size_type;
 
     // typedef closure_iterators::vertex_iterator<self, GT> VertexIterator;
   private:
     Cell                         c; // germ
-    mutable unsigned             num_of_cells;
+    mutable size_type            num_of_cells;
     ref_ptr<component_list<GT> const> all_components;
   public:
     component() : num_of_cells(0) {}
@@ -86,7 +87,7 @@ namespace connected_components {
     void init() const; 
 
     CellIterator FirstCell() const;
-    unsigned NumOfCells() const { init(); return num_of_cells;}
+    size_type NumOfCells() const { init(); return num_of_cells;}
     //! true iff cc is in this component
     bool operator()(Cell const& cc) const;
 
@@ -180,6 +181,7 @@ namespace connected_components {
   class component_list {
   public:
     typedef typename GT::grid_type  grid_type;
+    typedef typename GT::size_type  size_type;
     typedef grid_type               range_type;
     // even better: cell_range_type
     // typedef typename GT::range_type range_type; // may be the same as grid_type, but also a subrange type
@@ -190,11 +192,11 @@ namespace connected_components {
 
   private:
     grid_type    const*              g;
-    mutable grid_function<Cell, int> comps; // map cells to component number
-    mutable std::vector<Cell>        germs; // map component number to a cell
-    mutable std::vector<unsigned>    num_of_cells; // number of cell of comp. #i
-    mutable int num_of_components;
-    mutable bool initialized;
+    mutable grid_function<Cell, size_type> comps; // map cells to component number
+    mutable std::vector<Cell>         germs; // map component number to a cell
+    mutable std::vector<size_type>    num_of_cells; // number of cell of comp. #i
+    mutable size_type                 num_of_components;
+    mutable bool                      initialized;
   public:
     // use lazy initialization
     component_list(grid_type const& g_) 
@@ -215,9 +217,9 @@ namespace connected_components {
     
 
     struct component_handle {
-      int c;
+      size_type c;
       operator int() const { return c;}
-      explicit component_handle(int c_) : c(c_) {}
+      explicit component_handle(size_type c_) : c(c_) {}
     };
     
     typedef component_iterator<GT>  const_iterator;
@@ -227,7 +229,7 @@ namespace connected_components {
     bool bound() const { return (g != 0);}
     
     grid_type const& TheGrid() const { c_(); return *g;} 
-    unsigned NumOfComponents() const { c_(); init(); return num_of_components;}
+    size_type NumOfComponents() const { c_(); init(); return num_of_components;}
 
     const_iterator FirstComponent() const;
     //! past-the-end iterator
@@ -261,8 +263,9 @@ namespace connected_components {
   public:
     typedef typename component_list_type::component_type      value_type;
     typedef typename component_list_type::component_type_cref value_type_cref;
+    typedef typename GT::size_type                            size_type;
   private:
-    int c;
+    size_type c;
     component_list_type const* comps;
   public:
     component_iterator() : c(0), comps(0) {}
