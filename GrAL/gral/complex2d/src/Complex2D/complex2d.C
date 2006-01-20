@@ -112,10 +112,9 @@ void Complex2D::calculate_neighbour_cells()
 
 void Complex2D::calculate_num_of_edges() const 
 {
-  unsigned n = 0;
+  num_of_edges_cache= 0;
   for(EdgeIterator e(FirstEdge()); ! e.IsDone(); ++e)
-    ++n;
-  num_of_edges_cache = n;
+    ++num_of_edges_cache;
 }
 
 void Complex2D::calculate_archetypes() 

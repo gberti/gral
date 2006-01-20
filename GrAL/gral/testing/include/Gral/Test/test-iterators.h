@@ -15,8 +15,11 @@
 #include "Gral/Test/test-face-iterator.h"
 #include "Gral/Test/test-facet-iterator.h"
 #include "Gral/Test/test-cell-iterator.h"
+#include "Gral/Test/test-sequence-iterator.h"
 
 // incidence iterators
+
+#include "Gral/Test/test-incidence-iterator.h"
 
 // on cells
 #include "Gral/Test/test-vertex-on-cell-iterator.h"

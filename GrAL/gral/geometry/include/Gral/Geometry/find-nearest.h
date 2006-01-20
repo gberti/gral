@@ -35,7 +35,7 @@ typename GT::Cell find_nearest_cell_approx(GRID const& g, GEOM const& geom, COOR
   real_type distmin = std::numeric_limits<real_type>::max();
 
   for(typename GT::CellIterator c(g); !c.IsDone(); ++c) {
-    double dist = ap::distance(p, geom.coord(typename GT::Vertex(* (*c).FirstVertex())));
+    double dist = ap::distance(p, geom.coord(* GrAL::begin<typename GT::Vertex>(*c))); 
     if(dist < distmin) {
       res = *c;
       distmin = dist;

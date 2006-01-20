@@ -25,7 +25,7 @@ namespace GrAL { namespace octree { namespace conforming_leaf_grid {
   template<class OCTREE, class HIERELEM> class element_t; 
 
 
-  template<class OCTREE> class grid_types_b0 {
+  template<class OCTREE> class grid_types_b0 : public grid_types_detail::grid_types_root {
   public:
     typedef grid<OCTREE>                            grid_type;
     typedef OCTREE                                  octree_type;
@@ -36,6 +36,7 @@ namespace GrAL { namespace octree { namespace conforming_leaf_grid {
 
     typedef typename flatgt::dimension_tag          dimension_tag;
     enum { dim = dimension_tag::dim };
+    typedef typename octree_type::size_type         size_type;
     
     typedef hierarchical::h_element_handle_t<grid_type, typename flatgt::cell_handle>   cell_handle;
     typedef hierarchical::h_element_handle_t<grid_type, typename flatgt::facet_handle>  facet_handle;

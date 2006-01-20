@@ -5,6 +5,8 @@
 // $LICENSE
 
 #include "Gral/Distributed/overlap-ranges.h"
+#include "Gral/Subranges/enumerated-subrange-ref.h"
+
 #include <iostream>
 
 namespace GrAL {

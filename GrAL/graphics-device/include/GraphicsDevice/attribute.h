@@ -46,6 +46,7 @@ public:
 class attr_base {
 public:
   virtual attr_key key() const = 0;
+  virtual ~attr_base() {}
 };
 
 

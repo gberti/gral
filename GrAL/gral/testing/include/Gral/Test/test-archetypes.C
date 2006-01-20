@@ -21,7 +21,8 @@ bool test_archetypes(G const& g, ::std::ostream & out, GT)
   typedef typename GT::archetype_type     archetype_type;
   typedef typename GT::archetype_handle   archetype_handle;
   typedef typename GT::archetype_iterator archetype_iterator;
-
+  typedef typename get_archgt<GT, grid_types<archetype_type> >::type agt;
+  
   REQUIRE_ALWAYS((g.NumOfCells() == 0 || g.NumOfArchetypes() > 0), "",1);
 
   archetype_type A;
@@ -32,11 +33,15 @@ bool test_archetypes(G const& g, ::std::ostream & out, GT)
 
   for(typename GT::CellIterator c(g.FirstCell()); ! c.IsDone(); ++c) {
     archetype_type   A  = g.ArchetypeOf(*c);
-    REQUIRE_ALWAYS((unsigned)A.NumOfVertices() == (unsigned)(*c).NumOfVertices(), 
-		   "A.NumOfVertices()=" << A.NumOfVertices() << "  (*c).NumOfVertices()="   << (*c).NumOfVertices(), 1);
+    REQUIRE_ALWAYS(GrAL::size<typename agt::Vertex>(A) == GrAL::size<typename GT::Vertex>(*c),
+		   "A.NumOfVertices()="  
+		   << GrAL::size<typename agt::Vertex>(A)
+		   << "  (*c).NumOfVertices()="   
+		   << GrAL::size<typename GT::Vertex>(*c), 1);
+
     archetype_handle a  = g.archetype_of(*c);
     archetype_type   A1 = g.Archetype(a);
-    REQUIRE_ALWAYS(A.NumOfVertices() == A1.NumOfVertices(), "", 1);
+    REQUIRE_ALWAYS(GrAL::size<typename agt::Vertex>(A) == GrAL::size<typename agt::Vertex>(A1), "", 1);
     narch[a]++;
   }
   REQUIRE_ALWAYS(narch.size() == g.NumOfArchetypes(), 

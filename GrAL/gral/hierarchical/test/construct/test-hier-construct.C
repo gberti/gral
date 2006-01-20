@@ -8,6 +8,9 @@
 #include "Gral/Grids/Cartesian3D/all.h"
 #include "Gral/Grids/Cartesian2D/all.h"
 
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
+
 #include <iostream>
 
 using namespace GrAL;
@@ -25,7 +28,7 @@ void test_hier_grid(GRID const& root,
   typedef typename hgt::hier_facet_type                 hier_facet_type;
   typedef typename hgt::hier_vertex_type                hier_vertex_type;
   typedef typename hgt::element_base_type               element_base_type;
-  typedef typename hierarchical::h_incidence_iterator_t<element_base_type, vertex_type_tag, cell_type_tag> 
+  typedef typename hierarchical::h_incidence_iterator_t<element_base_type, 0, cgt::dimension_tag::dim>
                                                         HierVertexOnCellIterator;
   typedef typename hgt::index_type                      index_type;
   typedef hierarchical::h_element_t<hierarchical::h_element_base_t<hier_grid_type>, typename cgt::Facet >  hier_facet1_type;
@@ -129,13 +132,41 @@ namespace hierarchical {
   //  template class hgrid_cartesian<cartesian3d::CartesianGrid3D>; 
   template class hgrid_cartesian<cartesian2d::CartesianGrid2D>; 
 
-  
   //  typedef  hgrid_cartesian<cartesian2d::CartesianGrid2D> hier_grid_2d;
+  typedef cartesiannd::grid<2>          flat_grid2d_type;
+  typedef grid_types<flat_grid2d_type>  flatgt2;
   typedef  hgrid_cartesian<cartesiannd::grid<2> >   hier_grid_2d;
+  typedef grid_types<hier_grid_2d> hgt2;
+  typedef hgt2::Vertex Vertex;
+  typedef element<hgt2,vertex_type_tag>::type _Vertex;
+  typedef element<hgt2,edge_type_tag>  ::type _Edge;
+  typedef element<hgt2,cell_type_tag>  ::type _Cell;
+  typedef incidence_iterator<hgt2,vertex_type_tag, cell_type_tag> _VertexOnCellIterator;
+  typedef incidence_iterator<hgt2,edge_type_tag,   cell_type_tag> _EdgeOnCellIterator;
+
+  typedef element_d<hgt2,0>::type d_Vertex;
+  typedef element_d<hgt2,1>::type d_Edge;
+  typedef element_d<hgt2,2>::type d_Cell;
+  typedef incidence_iterator_d<hgt2,0,2> d_VertexOnCellIterator;
+  typedef incidence_iterator_d<hgt2,1,2> d_EdgeOnCellIterator;
+
+  BOOST_STATIC_ASSERT((1== boost::is_same<_Vertex, d_Vertex>::value));
+
+
+  //typedef hgt2::EdgeOnCellIterator EdgeOnCellIterator;
+
   template class h_element_base_t<hier_grid_2d>;
   typedef  h_element_base_t<hier_grid_2d> element_base_type_2d;
   template class h_vertex_t<element_base_type_2d>;
   template class h_cell_t  <element_base_type_2d>;
+  template class h_element_t<element_base_type_2d, flatgt2::Edge>;
+  //  template class h_element_t<element_base_type_2d, flatgt2::Cell>;
+  typedef h_element_t<element_base_type_2d, flatgt2::Cell>::EdgeOnElementIterator edge_on_cell_iterator;
+
+  template class h_incidence_iterator_t<element_base_type_2d, 0, flatgt2::dimension_tag::dim>;
+  template class h_incidence_iterator_t<element_base_type_2d, 1, flatgt2::dimension_tag::dim>;
+					
+
   
   typedef  hgrid_cartesian<cartesiannd::grid<3> > hier_grid_3d;
   template class h_element_base_t<hier_grid_3d>;

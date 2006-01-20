@@ -3,9 +3,12 @@
 
 // $LICENSE_NEC_2005
 
-#include <vector>
 
 #include "Utility/pre-post-conditions.h"
+#include "Container/sequence-algorithms.h"
+
+#include <vector>
+#include <algorithm>
 
 namespace GrAL {
 
@@ -29,7 +32,7 @@ namespace GrAL {
 
   public:
 
-    quantization() { labels.push_back(0); }
+    quantization() { this->labels.push_back(0); }
     quantization(argument_type x) {
       threshold.push_back(x);
       label.push_back(0);
@@ -62,11 +65,11 @@ namespace GrAL {
 
     template<class It>
     void init(It first, It beyond) {
-      REQUIRE_ALWAYS(std::is_sorted(first, beyond), "", 1);
-
+      REQUIRE_ALWAYS(sequence::is_increasing(first, beyond), "", 1);
+      int i = 0;
       while(first != beyond) {
 	threshold.push_back(*first++);
-	label    .push_back(*i++);
+	label    .push_back( i++);
       }
       label.push_back(i);
     }

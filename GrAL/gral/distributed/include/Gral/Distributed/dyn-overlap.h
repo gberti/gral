@@ -5,7 +5,7 @@
 // $LICENSE
 
 #include <vector>
-#include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-element-range.h"
 
 namespace GrAL {
 
@@ -52,7 +52,7 @@ public:
 
   typedef enumerated_element_range<E>          element_seq;
   typedef enumerated_element_range<E>          range_type;
-  typedef typename element_seq::iterator       e_iterator;
+  // typedef typename element_seq::iterator       e_iterator;
   typedef typename element_seq::const_iterator const_e_iterator;
   typedef element_handle                       value_type;
 

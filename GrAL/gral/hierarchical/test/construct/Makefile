@@ -5,7 +5,7 @@ CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/complex2d  gral/cartesian3d gral/cartesian2d gral/cartesiannd
-EXTRA_CCFLAGS += -DGRAL_NO_ABORT -DGRAL_NO_SHOW_DATE -DGRAL_NO_SHOW_LINE -Dnmwr_DEBUG
+override EXTRA_CCFLAGS += -DGRAL_NO_ABORT -DGRAL_NO_SHOW_DATE -DGRAL_NO_SHOW_LINE -DNMWR_DEBUG
 LOCALSOURCES =  test-hier-construct.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)

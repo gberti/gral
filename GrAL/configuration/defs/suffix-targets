@@ -45,7 +45,7 @@ standard-test-check-clean-force:
 	(cd test; $(MAKE) new-check-clean-force)
 
 # users can define VG_SUPPRESSIONS to suppress errors, e.g. in third party libs
-CHECKER=$(HOME)/bin/valgrind -v --tool=memcheck --leak-check=yes $(VG_SUPPRESSIONS)
+CHECKER=$(HOME)/bin/valgrind -v --tool=memcheck --leak-check=yes --num-callers=10 $(VG_SUPPRESSIONS)
 FILTER=cat
 
 run-check:
@@ -92,6 +92,7 @@ stdclean: moduleclean
 	@rm -f $(EXEC)
 	@rm -f *~ *.flc *.o  *.d *.ti *.ii core core.* out *.out
 	@rm -f *.valgrind
+	@rm -f vgcore.*
 	@find . -name "*~" -exec rm {} \; -print
 	@rm -rf ti_files # KCC template DB
 	@rm -rf *.tmp

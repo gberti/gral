@@ -2,7 +2,7 @@
 #define GRAL_GB_MEASUREMENT_CHECK_EDGE_FACET_INTERSECTIONS_H
 
 #include "Gral/Base/common-grid-basics.h"
-#include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-element-range.h"
 
 namespace GrAL {
 

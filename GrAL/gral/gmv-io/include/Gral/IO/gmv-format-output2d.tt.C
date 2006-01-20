@@ -65,7 +65,7 @@ void ConstructGrid_GF(OstreamGMV2DFmt& Out,
   // map cells = surface polygons for GMV
   out << "surface " << G.NumOfCells() << "\n";
   for(typename gt::CellIterator c = G.FirstCell(); ! c.IsDone(); ++c) {
-    out << (*c).NumOfVertices() << " ";
+    out << GrAL::size<typename gt::Vertex>(*c) << " ";
     for(typename gt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc)
       out << G2GMV(*vc) << " ";
     out << '\n';
