@@ -25,14 +25,16 @@ using namespace GrAL;
 template<int D>
 void print_incidences(GrAL::complexnd::ComplexND<D> const& g, std::ostream& out)
 {
-  for(unsigned d1 = 0; d1 <= g.dimension(); ++d1) {
+  typedef GrAL::grid_types<GrAL::complexnd::ComplexND<D> > gt;
+  typedef typename gt::size_type size_type;
+  for(int d1 = 0; d1 <= g.dimension(); ++d1) {
     out << "Anchor dimension: " << d1 << endl;
-    for(unsigned d2 = 0; d2 <= g.dimension(); ++d2) {
+    for(int d2 = 0; d2 <= g.dimension(); ++d2) {
       out << "  Value dimension: " << d2 << endl;
-      for(unsigned e1 = 0; e1 < g.NumOfElements(d1); ++e1) {
+      for(size_type e1 = 0; e1 < g.NumOfElements(d1); ++e1) {
 	if(g.incidences[d1][e1].size() > 0 && g.incidences[d1][e1][d2].size() > 0 ) {
 	  out << "    " << e1 << ": " << g.incidences[d1][e1][d2].size() << " incidences of dim " << d2 << ": ";
-	  for(unsigned e2 = 0; e2 < g.incidences[d1][e1][d2].size(); ++e2) {
+	  for(size_type e2 = 0; e2 < (size_type)g.incidences[d1][e1][d2].size(); ++e2) {
 	    out << g.incidences[d1][e1][d2][e2] << " ";
 	  }
 	  out << endl;
@@ -220,6 +222,7 @@ int main() {
   
   ComplexND<1> polygon1(complexnd::polygon(5));
   ComplexND<1> polygon2;
+  typedef grid_types<ComplexND<1> > gt1;
 
   vertex_morphism<ComplexND<1>, ComplexND<1> > Phi1(polygon1, polygon2);
   ConstructGrid0(polygon2, polygon1, Phi1);  
@@ -243,6 +246,11 @@ int main() {
   test_vertex_on_cell_iterator(polygon2, std::cout);
   //  This is not yet defined!
   //  test_edge_on_cell_iterator  (polygon2, std::cout);
+
+  test_sequence_iterator<gt1::Vertex>(polygon2,cout);
+  test_sequence_iterator<gt1::Cell>  (polygon2,cout);
+
+  test_incidence_iterator<gt1::Vertex,gt1::Cell>(polygon2,cout);
 
 
 

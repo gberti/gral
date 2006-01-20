@@ -47,6 +47,8 @@
 #include "Gral/IO/complex2d-format.h"
 
 #include "Gral/Test/test-archetypes.h"
+#include "Gral/Test/test-sequence-iterator.h"
+#include "Gral/Test/test-incidence-iterator.h"
 
 // Gral Complex2D
 #include "Gral/Grids/Complex2D/complex2d.h"
@@ -164,17 +166,21 @@ int main(int argc, char* argv[]) {
   typedef partial_grid_function<gt::Cell, int>::CellIterator     pgfCellIterator;
   for(pgfCellIterator c = pgfc.FirstCell(); ! c.IsDone(); ++c)
     pgfc[*c] = - pgfc(*c);
+
   
 
-  typedef gt::sequence_iterator<vertex_type_tag> seqVertexIterator;
-  typedef gt::sequence_iterator<edge_type_tag>   seqEdgeIterator;
-  typedef gt::sequence_iterator<facet_type_tag>  seqFacetIterator;
-  typedef gt::sequence_iterator<cell_type_tag>   seqCellIterator;
+  test_sequence_iterator<gt::Vertex>(CC[1], testout);
+  test_sequence_iterator<gt::Edge>  (CC[1], testout);
+  test_sequence_iterator<gt::Cell>  (CC[1], testout);
 
-  typedef gt::incidence_iterator<vertex_type_tag, cell_type_tag> incVertexOnCellIterator;
+  test_incidence_iterator<gt::Vertex, gt::Cell>(CC[1], testout);
+  test_incidence_iterator<gt::Edge,   gt::Cell>(CC[1], testout);
+  test_incidence_iterator<gt::Cell,   gt::Cell>(CC[1], testout);
 
+  test_incidence_iterator<gt::Vertex, gt::Edge>(CC[1], testout);
 
   test_archetypes(CC[0], testout);
+  
 
   return 0;
 }

@@ -58,6 +58,21 @@ int main(int argc, char* argv[]) {
   test_edge_on_cell_iterator  (G,cout);
   test_facet_on_cell_iterator (G,cout);
 
+  test_sequence_iterator<gt::Vertex>(G, cout);
+  test_sequence_iterator<gt::Edge>  (G, cout);
+  test_sequence_iterator<gt::Facet> (G, cout);
+  test_sequence_iterator<gt::Cell>  (G, cout);
+  
+
+  test_incidence_iterator<gt::Vertex, gt::Edge> (G, cout); 
+
+  test_incidence_iterator<gt::Edge,   gt::Facet>(G, cout);
+  test_incidence_iterator<gt::Vertex, gt::Facet>(G, cout);
+
+  test_incidence_iterator<gt::Vertex, gt::Cell>(G, cout);
+  test_incidence_iterator<gt::Edge,   gt::Cell>(G, cout);
+  test_incidence_iterator<gt::Facet,  gt::Cell>(G, cout);
+
 
   test_switch_vertex(G);
   test_switch_edge  (G);
