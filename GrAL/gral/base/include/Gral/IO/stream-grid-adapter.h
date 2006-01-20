@@ -48,8 +48,9 @@ template<class It> class stream_geom_mask;
 
 
 template<class It> 
-struct grid_types_stream_grid_mask
+struct grid_types_stream_grid_mask : public grid_types_detail::grid_types_root 
 {
+  typedef typename std::iterator_traits<It>::value_type  size_type;
   typedef stream_grid_mask<It> grid_type;
   typedef stream_grid_mask_vertex<It> Vertex;
   typedef stream_grid_mask_vertex<It> VertexIterator;
@@ -78,13 +79,19 @@ struct grid_types_stream_grid_mask
 template<class It>
 class stream_grid_mask_vertex {
   typedef stream_grid_mask_vertex<It> self;
-private:
+public:
   typedef stream_grid_mask<It> grid_type;
+  typedef self                 value_type;
+  typedef grid_type            anchor_type;
+private:
   friend  class stream_grid_mask<It>;
 
-  const stream_grid_mask<It>* the_grid;
+  const grid_type* the_grid;
   int v;
 public:
+
+
+  stream_grid_mask_vertex() : the_grid(0) {}
   stream_grid_mask_vertex(const grid_type& g)
     { *this = g.FirstVertex();}
   stream_grid_mask_vertex(const grid_type& g, int vv)
@@ -95,7 +102,12 @@ public:
   bool IsDone() const;
   self operator*() const { return *this;}  
   int  handle() const { return v;}
-  grid_type const& TheGrid() const { return *the_grid;}
+
+  grid_type const& TheGrid  () const { return *the_grid;}
+  grid_type const& TheAnchor() const { return *the_grid;}
+
+  bool operator==(self const& rhs) const { return v == rhs.v;}
+  bool operator!=(self const& rhs) const { return v != rhs.v;}
 };
 
 
@@ -112,14 +124,21 @@ template<class It>
 class stream_grid_mask_cell {
   typedef stream_grid_mask_vertex_on_cell<It> VertexOnCellIterator;
   typedef stream_grid_mask_cell<It>           self;
-  typedef stream_grid_mask<It>                grid_type;
   friend  class  stream_grid_mask<It>;
+  friend  class  stream_grid_mask_vertex_on_cell<It>;
+
+public:
+  typedef stream_grid_mask<It>                grid_type;
+  typedef typename grid_type::size_type       size_type;
+  typedef self                                value_type;
+  typedef grid_type                           anchor_type;
 private:
-  const stream_grid_mask<It>* the_grid;
-  int c;
+  const grid_type* the_grid;
+  size_type c;
   int numv;
   It  vertices;
 public:
+  stream_grid_mask_cell() : the_grid(0) {}
   stream_grid_mask_cell(const grid_type& g)
     { *this = g.FirstCell();}
   stream_grid_mask_cell(const grid_type& g, int cc, It v) 
@@ -127,7 +146,7 @@ public:
   
   // iterator op.
   self& operator++() {
-     ::std::advance(vertices,numv+1);
+    std::advance(vertices,numv+1);
     ++c;
     if(!IsDone()) 
       numv = *vertices;
@@ -139,8 +158,14 @@ public:
   
   int NumOfVertices() const {  return numv;}
   VertexOnCellIterator FirstVertex() const;
-  int handle() const { return c;}
-  grid_type const& TheGrid() const { return *the_grid;}
+  VertexOnCellIterator EndVertex()   const;
+  size_type  handle() const { return c;}
+
+  grid_type const& TheAnchor() const { return *the_grid;}
+  grid_type const& TheGrid()   const { return *the_grid;}
+
+  bool operator==(self const& rhs) const { return c == rhs.c;}
+  bool operator!=(self const& rhs) const { return c != rhs.c;}
 };
 
 
@@ -155,30 +180,38 @@ public:
  */
 template<class It>
 class stream_grid_mask_vertex_on_cell {
+  typedef stream_grid_mask_vertex_on_cell<It> self;
+public:
   typedef stream_grid_mask<It>         grid_type;
   typedef stream_grid_mask_cell<It>    Cell;
   typedef stream_grid_mask_vertex<It>  Vertex;
+  typedef typename grid_type::size_type size_type;
 
+  typedef Cell   anchor_type;
+  typedef Vertex value_type;
 private:
-  const grid_type* the_grid;
-  int c;
-  int numv;
-  It  vertices;
-  int cnt;
+  Cell c;
+  It   vertices;
+  int  cnt;
 
-  typedef stream_grid_mask_vertex_on_cell<It> self;
 public:
-  stream_grid_mask_vertex_on_cell(Cell const& cc)
-    { *this = cc.FirstVertex();}
-  stream_grid_mask_vertex_on_cell(const grid_type& g, int cc, It v) 
-    : the_grid(&g), c(cc), numv(*v), vertices(++v), cnt(1) {}
+  stream_grid_mask_vertex_on_cell() {}
+  stream_grid_mask_vertex_on_cell(Cell const& cc, int ccnt = 0) 
+    : c(cc), vertices(c.vertices), cnt(ccnt) 
+  { ++vertices;}
   
   self&  operator++()      { ++vertices; ++cnt; return (*this);  }
-  bool   IsDone()    const { return (cnt > numv); }
-  Vertex operator*() const { return Vertex(*the_grid,*vertices); }
+  bool   IsDone()    const { return (cnt >= c.NumOfVertices()); }
+  Vertex operator*() const { return Vertex(TheGrid(),*vertices); }
 
   int handle() const { return *vertices;}
-  //  Cell TheCell()
+
+  bool operator==(self const& rhs) const { return c == rhs.c && cnt == rhs.cnt;}
+  bool operator!=(self const& rhs) const { return !(*this == rhs);}
+
+  grid_type const& TheGrid() const { return c.TheGrid();}
+  Cell const& TheCell  () const { return c;}
+  Cell const& TheAnchor() const { return c;}
 };
 
 
@@ -193,20 +226,23 @@ public:
  */
 template<class It>
 class stream_grid_mask {
-private:
-  int numv;
-  int numc;
-  It  it;
-  int off;
-
   friend class stream_grid_mask_vertex<It>;
   friend class stream_grid_mask_cell<It>;
 
   typedef grid_types_stream_grid_mask<It> gt;
+public:
+  typedef typename gt::size_type   size_type;
+private:
+  size_type numv;
+  size_type numc;
+  It  it;
+  int off;
+
 
 public:
-  stream_grid_mask(int nv, int nc, It i) : numv(nv), numc(nc), it(i), off(0) { init(); }
-  stream_grid_mask(int nv, int nc, It i, int of) : numv(nv), numc(nc), it(i), off(of) { init(); }
+
+  stream_grid_mask(size_type nv, size_type nc, It i) : numv(nv), numc(nc), it(i), off(0) { init(); }
+  stream_grid_mask(size_type nv, size_type nc, It i, int of) : numv(nv), numc(nc), it(i), off(of) { init(); }
 
   void init() { init_archetypes();}
   void set_offset(int o) { off = o;}
@@ -217,18 +253,20 @@ public:
   typedef stream_grid_mask_vertex<It> VertexIterator;
   typedef stream_grid_mask_vertex_on_cell<It> VertexOnCellIterator;
 
-  typedef int vertex_handle;
-  typedef int cell_handle;
+  typedef size_type vertex_handle;
+  typedef size_type cell_handle;
 
   cell_handle   handle(const Cell& C)   const { return C.c;}
   vertex_handle handle(const Vertex& V) const { return V.v;}
   vertex_handle handle(const VertexOnCellIterator& V) const { return handle(*V);}
 
-  int NumOfVertices() const { return numv;}
-  int NumOfCells()    const { return numc;}
+  size_type NumOfVertices() const { return numv;}
+  size_type NumOfCells()    const { return numc;}
 
-  CellIterator   FirstCell()   const { return Cell(*this,offset(),it);}
+  CellIterator   FirstCell()   const { return Cell(*this,offset(),             it);}
+  CellIterator   EndCell()     const { return Cell(*this,offset()+NumOfCells(),it);}
   VertexIterator FirstVertex() const { return Vertex(*this,offset());}
+  VertexIterator EndVertex()   const { return Vertex(*this,offset()+NumOfVertices());}
 
   typedef typename gt::archetype_type     archetype_type;
   typedef typename gt::archetype_iterator archetype_iterator;
@@ -293,7 +331,12 @@ inline bool stream_grid_mask_cell<It>::IsDone() const
 template<class It>
 inline stream_grid_mask_vertex_on_cell<It>
 stream_grid_mask_cell<It>::FirstVertex() const 
-{ return VertexOnCellIterator(*the_grid,c,vertices);}
+  { return VertexOnCellIterator(*this);}
+
+template<class It>
+inline stream_grid_mask_vertex_on_cell<It>
+stream_grid_mask_cell<It>::EndVertex() const 
+  { return VertexOnCellIterator(*this, NumOfVertices());}
 
 
 /*! \brief Geometry for stream_grid_mask 
@@ -365,6 +408,63 @@ struct element_traits<stream_grid_mask_cell<It> >
   };
   typedef consecutive_integer_tag<0> consecutive_tag;
 };
+
+
+#define gt grid_types<stream_grid_mask<It> >
+
+template<class It>
+inline typename gt::VertexIterator 
+gral_begin(stream_grid_mask<It> const& g, typename gt::VertexIterator)
+{ return g.FirstVertex();}
+
+template<class It>
+inline typename gt::VertexIterator 
+gral_end(stream_grid_mask<It> const& g, typename gt::VertexIterator)
+{ return g.EndVertex();}
+
+template<class It>
+inline typename gt::size_type
+gral_size(stream_grid_mask<It> const& g, typename gt::VertexIterator)
+{ return g.NumOfVertices();}
+
+
+template<class It>
+inline typename gt::CellIterator 
+gral_begin(stream_grid_mask<It> const& g, typename gt::CellIterator)
+{ return g.FirstCell();}
+
+template<class It>
+inline typename gt::CellIterator 
+gral_end(stream_grid_mask<It> const& g, typename gt::CellIterator)
+{ return g.EndCell();}
+
+template<class It>
+inline typename gt::size_type
+gral_size(stream_grid_mask<It> const& g, typename gt::CellIterator)
+{ return g.NumOfCells();}
+
+
+
+template<class It>
+inline typename gt::VertexOnCellIterator 
+gral_begin(stream_grid_mask_cell<It> const& g, typename gt::VertexOnCellIterator)
+{ return g.FirstVertex();}
+
+template<class It>
+inline typename gt::VertexOnCellIterator 
+gral_end(stream_grid_mask_cell<It> const& g,  typename gt::VertexOnCellIterator)
+{ return g.EndVertex();}
+
+template<class It>
+inline typename gt::size_type
+gral_size(stream_grid_mask_cell<It> const& g, typename gt::VertexOnCellIterator)
+{ return g.NumOfVertices();}
+
+
+
+#undef gt
+
+
 
   template<class It, class T>
   class grid_function<stream_grid_mask_vertex<It>, T>
