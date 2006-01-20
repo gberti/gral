@@ -21,12 +21,14 @@ namespace polygon1d  {
   class CellOnVertexIterator1d;
   class polygon;
 
-  struct grid_types_p1d {
+  struct grid_types_p1d : public grid_types_detail::grid_types_root {
+    typedef grid_types_p1d             self;
+
     typedef polygon                    grid_type;
     typedef grid_dim_tag<1>            dimension_tag;
 
-    typedef vertex_handle_int<polygon> vertex_handle;
-    typedef cell_handle_int  <polygon> cell_handle;
+    typedef vertex_handle_int<polygon,self> vertex_handle;
+    typedef cell_handle_int  <polygon,self> cell_handle;
  
     typedef vertex_iterator_int<grid_types_p1d>  VertexIterator;
     typedef cell_iterator_int  <grid_types_p1d>  CellIterator;
@@ -65,17 +67,17 @@ namespace polygon1d  {
   */
   class polygon : public grid_types_p1d, public archetype_0D::grid_mixin<polygon, grid_types_p1d> {
   private:
-    unsigned nv;
+    size_type nv;
   public:
-    explicit polygon(int nnv = 0) : nv(nnv) {}
+    explicit polygon(size_type nnv = 0) : nv(nnv) {}
 
-    void set_number_of_vertices(int nnv) { nv = nnv;}
+    void set_number_of_vertices(size_type nnv) { nv = nnv;}
     
-    unsigned NumOfVertices() const { return nv;}
-    unsigned NumOfCells()    const { return nv;}
+    size_type NumOfVertices() const { return nv;}
+    size_type NumOfCells()    const { return nv;}
 
-    unsigned NumOfEdges()  const { return NumOfCells();}
-    unsigned NumOfFacets() const { return NumOfVertices();}
+    size_type NumOfEdges()  const { return NumOfCells();}
+    size_type NumOfFacets() const { return NumOfVertices();}
 
     inline VertexIterator FirstVertex() const;
     inline CellIterator   FirstCell()   const;
@@ -84,17 +86,17 @@ namespace polygon1d  {
     FacetIterator FirstFacet() const { return FirstVertex();}
 
 
-    unsigned NumOfVertices(Vertex const&) const { return 2;}
-    unsigned NumOfEdges   (Vertex const&) const { return 2;}
-    unsigned NumOfFaces   (Vertex const&) const { return 2;}
-    unsigned NumOfFacets  (Vertex const&) const { return 2;}
-    unsigned NumOfCells   (Vertex const&) const { return 2;}
+    size_type NumOfVertices(Vertex const&) const { return 2;}
+    size_type NumOfEdges   (Vertex const&) const { return 2;}
+    size_type NumOfFaces   (Vertex const&) const { return 2;}
+    size_type NumOfFacets  (Vertex const&) const { return 2;}
+    size_type NumOfCells   (Vertex const&) const { return 2;}
 
-    unsigned NumOfVertices(Cell const&) const { return 2;}
-    unsigned NumOfFacets  (Cell const&) const { return 2;}
+    size_type NumOfVertices(Cell const&) const { return 2;}
+    size_type NumOfFacets  (Cell const&) const { return 2;}
 
-    int next_handle(int h) const { return (h == (int) NumOfVertices()-1 ?  0                : h+1);}
-    int prev_handle(int h) const { return (h == 0                 ? NumOfVertices()-1 : h-1);}
+    size_type next_handle(size_type h) const { return (h == NumOfVertices()-1 ?  0                : h+1);}
+    size_type prev_handle(size_type h) const { return (h == 0                 ? NumOfVertices()-1 : h-1);}
 
     inline void switch_vertex(Vertex      & v, Cell const& c) const;
     inline void switch_cell  (Vertex const& v, Cell      & c) const;
@@ -113,20 +115,23 @@ namespace polygon1d  {
     typedef VertexOnVertexIterator1d self;
   private:
     Vertex    v;
-    unsigned  h;
+    int  h;
   public:
+    typedef Vertex value_type;
+    typedef Vertex anchor_type;
+    
     VertexOnVertexIterator1d() {}
-    explicit VertexOnVertexIterator1d(Vertex const& vv, unsigned hh = 0) : v(vv), h(hh) {}
+    explicit VertexOnVertexIterator1d(Vertex const& vv, int hh = 0) : v(vv), h(hh) {}
 
     self& operator++() { cv(); ++h; return *this;}
     Vertex operator*() const { cv(); return Vertex(TheGrid(),handle());} 
     vertex_handle handle() const { 
       cv(); 
-      int vh = v.handle();
+      size_type vh = v.handle();
       return (h == 0 ? vertex_handle(prev(vh)) : vertex_handle(next(vh)));
     }
-    unsigned prev(int vh) const { return (vh == 0 ? TheGrid().NumOfVertices() -1 : vh-1);}
-    unsigned next(int vh) const { return (vh+1)%TheGrid().NumOfVertices();}
+    size_type prev(size_type vh) const { return (vh == 0 ? TheGrid().NumOfVertices() -1 : vh-1);}
+    size_type next(size_type vh) const { return (vh+1)%TheGrid().NumOfVertices();}
 
     bool IsDone() const { cb(); return h >= 2;}
 
@@ -150,17 +155,20 @@ namespace polygon1d  {
   class VertexOnCellIterator1d : public grid_types_p1d {
     typedef VertexOnCellIterator1d self;
   private:
-    Cell      c;
-    unsigned  h;
+    Cell c;
+    int  h;
   public:
+    typedef Vertex value_type;
+    typedef Cell   anchor_type;
+
     VertexOnCellIterator1d() {}
-    explicit VertexOnCellIterator1d(Cell const& cc, unsigned hh = 0) : c(cc), h(hh) {}
+    explicit VertexOnCellIterator1d(Cell const& cc, int hh = 0) : c(cc), h(hh) {}
 
     self& operator++() { cv(); ++h; return *this;}
     Vertex operator*() const { cv(); return Vertex(TheGrid(),handle());} 
     vertex_handle handle() const { 
       cv(); 
-      unsigned v = c.handle();
+      size_type v = c.handle();
       return (h == 0 ? vertex_handle(v) : vertex_handle( (v+1)%TheGrid().NumOfVertices()));
     }
     bool IsDone() const { cb(); return h >= 2;}
@@ -186,16 +194,19 @@ namespace polygon1d  {
     typedef CellOnVertexIterator1d self;
   private:
     Vertex    v;
-    unsigned  h;
+    int       h;
   public:
+    typedef Cell   value_type;
+    typedef Vertex anchor_type;
+    
     CellOnVertexIterator1d() {}
-    explicit CellOnVertexIterator1d(Vertex const& vv, unsigned hh = 0) : v(vv), h(hh) {}
+    explicit CellOnVertexIterator1d(Vertex const& vv, int hh = 0) : v(vv), h(hh) {}
 
     self& operator++() { cv(); ++h; return *this;}
     Cell  operator*() const { cv(); return Cell(TheGrid(),handle());} 
     cell_handle handle() const { 
       cv(); 
-      unsigned c = v.handle();
+      size_type c = v.handle();
       return (h == 0 ? cell_handle(c) : cell_handle(c == 0 ? TheGrid().NumOfVertices()-1 : c-1));
     }
     bool IsDone() const { cb(); return h >= 2;}
@@ -303,21 +314,21 @@ void ConstructGrid0(polygon1d::polygon      & G_dst,
 {
   typedef grid_types<GSRC>               gtsrc;
   typedef grid_types<polygon1d::polygon> gtdst;
-
+  typedef typename gtsrc::size_type      size_type;
   G_dst.set_number_of_vertices(G_src.NumOfVertices());
 
   if(G_src.NumOfVertices() > 0) {
     //  ::std::vector<typename gtsrc::vertex_handle> ordered_src_vertices(G_src.NumOfVertices());
     
-    typename gtsrc::Cell   c_src = * G_src.FirstCell();
-    typename gtsrc::Vertex v_src = * c_src.FirstVertex();
+    typename gtsrc::Cell   c_src = * GrAL::begin<typename gtsrc::Cell>(G_src); // G_src.FirstCell();
+    typename gtsrc::Vertex v_src = * GrAL::begin<typename gtsrc::Vertex>(c_src); // c_src.FirstVertex();
     gtdst         ::Cell   c_dst = * G_dst.FirstCell();
     gtdst         ::Vertex v_dst = * c_dst.FirstVertex();
     typename gtsrc::Vertex v_src_first = v_src;    
 
     v_corr[v_src.handle()] = v_dst.handle();
     c_corr[c_src.handle()] = c_dst.handle();
-    unsigned cnt = 0;
+    typename gtsrc::size_type cnt = 0;
     //    ordered_src_vertices[cnt] = v_src.handle();
     G_src.switch_vertex(v_src,c_src);
     G_src.switch_cell  (v_src,c_src);
@@ -346,6 +357,27 @@ void ConstructGrid0(polygon1d::polygon      & G_dst,
 }
 
 namespace polygon1d {
+
+  typedef grid_types<polygon> gt;
+
+  inline gt::VertexIterator   gral_begin(gt::grid_type const& R, gt::VertexIterator) { return R.FirstVertex();}
+  inline gt::VertexIterator   gral_end  (gt::grid_type const& R, gt::VertexIterator) { return gt::VertexIterator(R, R.NumOfVertices());}
+  inline gt::size_type        gral_size (gt::grid_type const& R, gt::VertexIterator) { return R.NumOfVertices();}
+
+  inline gt::CellIterator     gral_begin(gt::grid_type const& R, gt::CellIterator) { return R.FirstCell();}
+  inline gt::CellIterator     gral_end  (gt::grid_type const& R, gt::CellIterator) { return gt::CellIterator(R, R.NumOfCells());}
+  inline gt::size_type        gral_size (gt::grid_type const& R, gt::CellIterator) { return R.NumOfCells();}
+ 
+  inline gt::VertexOnCellIterator   gral_begin(gt::Cell   a, gt::VertexOnCellIterator)   { return a.FirstVertex();}
+  inline gt::VertexOnCellIterator   gral_end  (gt::Cell   a, gt::VertexOnCellIterator)   { return gt::VertexOnCellIterator(a,a.NumOfVertices());}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::VertexOnCellIterator)   { return a.NumOfVertices();}
+
+  inline gt::CellOnVertexIterator   gral_begin(gt::Vertex a, gt::CellOnVertexIterator) { return a.FirstCell();}
+  inline gt::CellOnVertexIterator   gral_end  (gt::Vertex a, gt::CellOnVertexIterator) { return gt::CellOnVertexIterator(a, a.NumOfCells());}
+  inline gt::size_type              gral_size (gt::Vertex a, gt::CellOnVertexIterator) { return a.NumOfCells();}
+
+
+
   inline polygon::VertexIterator polygon::FirstVertex() const { return VertexIterator(*this);}
   inline polygon::CellIterator   polygon::FirstCell()   const { return CellIterator  (*this);}
 
