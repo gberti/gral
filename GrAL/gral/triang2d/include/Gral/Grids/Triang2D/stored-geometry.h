@@ -156,10 +156,10 @@ public:
   class coord_type : public array_operators<coord_type, double, 2> {
     double xy[2];
   public:
-    coord_type() {}
+    // coord_type() {}
     coord_type(coord_proxy p)            { init(p.xy_v);}
     coord_type(double const* xy_)        { init(xy_);}
-    coord_type(double d)                 { xy[0] = xy[1] = d;}
+    coord_type(double d = 0.0)                 { xy[0] = xy[1] = d;}
     coord_type(double x, double y)       { xy[0] = x; xy[1] = y;}
     coord_type& operator=(coord_proxy p) { init(p.xy_v); return *this;}
     template<class COORD>
