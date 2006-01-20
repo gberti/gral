@@ -11,13 +11,10 @@
 #include "Gral/Base/archetypes-from-base.h"
 #include "Gral/Base/wrap-elements.h"
 
-//#include "Gral/Subranges/sequence-element.h"
-
 #include "Gral/Subranges/enumerated-element-range.h"
 #include "Gral/Subranges/enumerated-subrange.h"
 
 #include "Gral/Base/grid-function-hash.h"
-// #include "Gral/Base/element-numbering.h"
 
 #include "Gral/Iterators/sequence-element-iterator.h"
 #include "Gral/Iterators/closure-iterator.h"

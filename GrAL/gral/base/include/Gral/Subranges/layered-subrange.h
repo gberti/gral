@@ -5,7 +5,7 @@
 // $LICENSE
 
 #include <vector>
-#include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-element-range.h"
 
 namespace GrAL {
 
@@ -47,11 +47,12 @@ private:
   //---   DATA  ----
   std::vector<int> layers;
 
-  using base::TheContainer;
-  using base::TheGrid;
 public:
   layered_vertex_range() {}
   layered_vertex_range(const grid_type& g) : base(g) {}
+
+  using base::TheContainer;
+  using base::TheGrid;
 
   void append_layer() { layers.push_back(TheContainer().size());}
   //FIXME: should either make sure that last layer is empty or remove cells!
@@ -122,11 +123,12 @@ private:
   //---   DATA  ----
   std::vector<int> layers;
 
-  using base::TheContainer;
-  using base::TheGrid;
 public:
   layered_cell_range() {}
   layered_cell_range(const grid_type& g) : base(g) {}
+
+  using base::TheContainer;
+  using base::TheGrid;
 
   void append_layer() { layers.push_back(TheContainer().size());}
   //FIXME: should either make sure that last layer is empty or remove cells!

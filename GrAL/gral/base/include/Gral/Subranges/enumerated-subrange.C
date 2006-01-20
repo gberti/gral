@@ -10,8 +10,8 @@ namespace GrAL {
 
 
 
-template<class GRID>
-void enumerated_subrange<GRID>::init() const
+  template<class GRID, class GT>
+  void enumerated_subrange<GRID, GT>::init() const
 {
   if(! initialized) {
     initialized = true;
@@ -26,9 +26,9 @@ void enumerated_subrange<GRID>::init() const
 }
 
 
-template<class GRID>
+  template<class GRID, class GT>
 template<class CELLIT>
-void enumerated_subrange<GRID>::construct(CELLIT c) 
+  void enumerated_subrange<GRID,GT>::construct(CELLIT c) 
 {
   REQUIRE_ALWAYS(cells.empty(), "enumerated_subrange<GRID>::construct: cells must be empty!",1);
   while(! c.IsDone()) {

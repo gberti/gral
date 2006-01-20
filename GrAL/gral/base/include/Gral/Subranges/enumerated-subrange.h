@@ -19,7 +19,6 @@
 #include "Gral/Base/wrap-elements.h"
 
 #include "Gral/Subranges/enumerated-element-range-ref.h"
-#include "Gral/Subranges/sequence-element.h"
 #include "Gral/Iterators/sequence-element-iterator.h"
 #include "Gral/Iterators/closure-iterator.h"
 

@@ -4,7 +4,7 @@
 // $LICENSE_NEC
 
 #include "Gral/Base/common-grid-basics.h"
-#include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-element-range.h"
 
 // for vertex_set_of_facets_iterator<>
 #include "Gral/Base/element-sequence-references.h"

@@ -3,7 +3,7 @@
 
 // $LICENSE_NEC_2004
 
-#include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-element-range.h"
 #include "Gral/Algorithms/cell-neighbor-search.h"
 #include "Gral/Base/facet-on-cell-function.h"
 #include "Gral/Base/vertex-set.h"
