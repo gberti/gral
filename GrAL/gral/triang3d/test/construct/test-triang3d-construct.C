@@ -63,7 +63,22 @@ int main() {
 
   test_archetypes(TT[0], cout);
 
+  test_sequence_iterator<gt::Vertex>(T, cout);
+  test_sequence_iterator<gt::Edge>  (T, cout);
+  test_sequence_iterator<gt::Facet> (T, cout);
+  test_sequence_iterator<gt::Cell>  (T, cout);
+  
 
+  test_incidence_iterator<gt::Vertex, gt::Edge> (T, cout); 
+
+  test_incidence_iterator<gt::Edge,   gt::Facet>(T, cout);
+  test_incidence_iterator<gt::Vertex, gt::Facet>(T, cout);
+
+  test_incidence_iterator<gt::Vertex, gt::Cell>(T, cout);
+  test_incidence_iterator<gt::Edge,   gt::Cell>(T, cout);
+  test_incidence_iterator<gt::Facet,  gt::Cell>(T, cout);
+
+   
   OstreamGMV3DFmt Out("2cells.gmv");
   ConstructGrid(Out,T,GeomT);
 

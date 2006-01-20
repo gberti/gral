@@ -26,7 +26,8 @@
 #include "Container/bijective-mapping.h"
 #include "Container/dummy-mapping.h"
 
-
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
 
 template<class T>
 class CellFacetMapTriang2D {
@@ -77,6 +78,8 @@ int main(int argc, char* argv[]) {
   dummy_mapping<int,int>     ccorr;
   ConstructGridVC(T,GeomT, Gsrc, Gsrc, vcorr,ccorr);
 
+  
+
   test_vertex_iterator(T, cout);
   test_edge_iterator  (T, cout);
   test_cell_iterator  (T, cout);
@@ -102,5 +105,60 @@ int main(int argc, char* argv[]) {
       testout << nbf[fc] << ' ';
     testout << '\n';
   }
-  return 0;
+
+  {   
+    gt::VertexIterator vb = GrAL::begin(T);
+    gt::VertexIterator ve = GrAL::end  (T);
+    gt::CellIterator   cb = GrAL::begin(T);
+    gt::CellIterator   ce = GrAL::end  (T);
+    gt::VertexOnCellIterator vcb = GrAL::begin(*cb);
+    gt::VertexOnCellIterator vce = GrAL::end  (*cb);
+    gt::EdgeOnCellIterator   ecb = GrAL::begin(*cb);
+    gt::EdgeOnCellIterator   ece = GrAL::end  (*cb);
+    int nv = GrAL::size<0>(T);
+    int ne = GrAL::size<1>(T);
+    int nc = GrAL::size<2>(T);
+    int nvc = GrAL::size<0>(*cb);
+    int nec = GrAL::size<1>(*ce);
+  }
+  {
+    gt::VertexIterator vb = GrAL::begin<0>(T);
+    gt::VertexIterator ve = GrAL::end  <0>(T);
+    gt::EdgeIterator   eb = GrAL::begin<1>(T);
+    gt::EdgeIterator   ee = GrAL::end  <1>(T);
+    gt::CellIterator   cb = GrAL::begin<2>(T);
+    gt::CellIterator   ce = GrAL::end  <2>(T);
+
+    gt::VertexOnCellIterator vcb = GrAL::begin<0>(*cb);
+    gt::VertexOnCellIterator vce = GrAL::end  <0>(*cb);
+    gt::EdgeOnCellIterator   ecb = GrAL::begin<1>(*cb);
+    gt::EdgeOnCellIterator   ece = GrAL::end  <1>(*cb);
+  }
+
+  {
+
+    test_sequence_iterator<gt::Vertex>(T, cout);
+    test_sequence_iterator<gt::Edge>  (T, cout);
+    test_sequence_iterator<gt::Cell>  (T, cout);
+
+    test_incidence_iterator<gt::Vertex, gt::Cell>(T, cout);
+    test_incidence_iterator<gt::Edge,   gt::Cell>(T, cout);
+    test_incidence_iterator<gt::Vertex, gt::Edge>(T, cout);
+
+    typedef GrAL::element_handle_d<gt,0>::type  vertex_handle;
+    typedef GrAL::element_d<gt,0>::type Vertex;
+    typedef GrAL::sequence_iterator_d<gt,0>::type VertexIterator;
+    typedef GrAL::incidence_iterator_d<gt,0,2>::type VertexOnCellIterator;
+
+    BOOST_STATIC_ASSERT( (1 == boost::is_same<gt::vertex_handle,  GrAL::element_handle_d   <gt,0>::type>::value));
+    BOOST_STATIC_ASSERT( (1 == boost::is_same<gt::Vertex,         GrAL::element_d          <gt,0>::type>::value));
+    BOOST_STATIC_ASSERT( (1 == boost::is_same<gt::VertexIterator, GrAL::sequence_iterator_d<gt,0>::type>::value));
+    BOOST_STATIC_ASSERT( (1 == boost::is_same<gt::VertexOnCellIterator, 
+			                      GrAL::incidence_iterator_d<gt,0,2>::type>
+			  ::value));
+
+  }
+
+  return 0;  
+
 }
