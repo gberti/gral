@@ -22,8 +22,10 @@ class tuple_base {
 public:
   typedef       T*       iterator;
   typedef const T* const_iterator;
-  typedef T value_type;
-  typedef T c_array[N];
+  typedef T& reference;
+  typedef T  const_reference; // TODO: make this depend on sizeof(T)
+  typedef T  value_type;
+  typedef T  c_array[N];
 
 
   // range-checking possible
@@ -109,9 +111,10 @@ class tuple<T,2> : public tuple_base<T,2> {
   using base::begin;
   using base::end;
 
-  tuple() {}
+  // uninitialized tuple gives valgrind errors
+  //tuple() {}
   //explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
-  explicit tuple(T t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
+  explicit tuple(T t = 0)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
   explicit tuple(const_iterator b, const_iterator /*e */)
   { 
@@ -154,7 +157,7 @@ class tuple<T,3> : public tuple_base<T,3> {
   using base::begin;
   using base::end;
 
-  tuple() {}
+  tuple() { for(iterator i = begin(); i != end(); ++i)  *i = T(0);}
   explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
   tuple(const_iterator b, const_iterator /*e */)
