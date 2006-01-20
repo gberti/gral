@@ -10,7 +10,6 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Grids/Triang2D/grid-types.h"
 
-#include "Gral/Iterators/facet-iterator-of-cell-set.h"
 #include "Gral/Iterators/vertex-on-edge-iterator.h"
 
 #include <algorithm>
@@ -58,10 +57,13 @@ struct grid_types_Triang2D :
 
 class Triang2D : public grid_types_Triang2D {
 private:
-  int* cells;
+  size_type* cells;
   bool owned;
-  int  ncells;
-  int  nvertices;
+  size_type  ncells;
+  size_type  nvertices;
+
+  mutable size_type  nedges;
+  mutable bool       nedges_valid;
 public:
 
   enum { dim = 2};
@@ -72,7 +74,7 @@ public:
    */
   //! \brief Empty grid
   Triang2D() 
-    : cells(0), owned(false), ncells(0), nvertices(0) {}
+    : cells(0), owned(false), ncells(0), nvertices(0), nedges(0), nedges_valid(false) {}
   /*! \brief Construct using cell-vertex incidence information in \c c
       \pre
          - \c c is of size 3*nc, and <tt> c[3*n], c[3*n+1], c[3*n+2]</tt>
@@ -83,8 +85,8 @@ public:
          - <tt> NumOfVertices() </tt> is the number \f$n_v\f$ of different vertices in \c c.
          - The data in \c c is only referenced.
    */
-  Triang2D(int* c, int nc) 
-    : cells(c), owned(false), ncells(nc) 
+  Triang2D(size_type* c, size_type nc) 
+    : cells(c), owned(false), ncells(nc), nedges(-1), nedges_valid(false) 
   { nvertices = calc_num_of_vertices(); }
   /*!  \brief Construct using cell-vertex incidence information in \c c
 
@@ -98,8 +100,8 @@ public:
          - The data in \c is only referenced.
 
    */
-  Triang2D(int* c, int nc, int nv) 
-    : cells(c), owned(false), ncells(nc), nvertices(nv) {} 
+  Triang2D(size_type* c, size_type nc, size_type nv) 
+    : cells(c), owned(false), ncells(nc), nvertices(nv), nedges(-1), nedges_valid(false) {} 
 
   /*! \brief  make physical copy of \c rhs
    */
@@ -132,28 +134,26 @@ public:
        \endcode 
  
   */
-  void Steal(int* c, int nc, int nv);
+  void Steal(size_type* c, size_type nc, size_type nv);
 
   /*! \brief Initialize by copying \c c
   
+      This could be parameterized over the type of the cell vector \c c.
    */
-  void Copy (int const* c, int nc, int nv, int offset = 0) {
-    int * cc = new int[nc*3];
-    for(int cell = 0; cell < 3*nc; ++cell)  
-      cc[cell] = c[cell] - offset;
-    Steal(cc, nc, nv);
-    owned = true;
-  }
+  void Copy (size_type const* c, size_type nc, size_type nv, int offset = 0);
+
+
   /*! \brief Initialize using the connectivity given by c, 
        \e without assuming ownership.
 
    */
-  void init (int* c, int nc, int nv) { Steal(c,nc,nv); owned = false; }
+  void init (size_type* c, size_type nc, size_type nv) { Steal(c,nc,nv); owned = false; }
   //@}
 private:
   void clear(); 
   void do_copy();
-  int  calc_num_of_vertices();
+  size_type  calc_num_of_vertices();
+  size_type  calc_num_of_edges() const;
 
   struct SD {
     typedef Triang2D::archetype_type      archetype_type;
@@ -176,9 +176,10 @@ public:
       \todo STL-style EndXXX() 
   */
   //@{
-  int NumOfCells   () const { return ncells   ;}
-  int NumOfVertices() const { return nvertices;}
-  int NumOfFaces()    const { return NumOfCells();}
+  size_type NumOfCells   () const { return ncells   ;}
+  size_type NumOfVertices() const { return nvertices;}
+  size_type NumOfFaces()    const { return NumOfCells();}
+  size_type NumOfEdges()    const;
 
   inline VertexIterator FirstVertex() const;
   inline EdgeIterator   FirstEdge()   const;
@@ -249,21 +250,29 @@ class Triang2D_Cell : public grid_types_Triang2D  {
   friend class     Triang2D_VertexOnCellIterator;
   friend class     Triang2D_FacetOnCellIterator;
 private: 
-  grid_type const* g;
+  ref_ptr<grid_type const> g;
   cell_handle      c;
 public:
+  typedef grid_type anchor_type;
+  typedef self      value_type;
+
   Triang2D_Cell() : g(0), c(-1) {}
+
   explicit
-  Triang2D_Cell(grid_type const& gg) : g(&gg), c(0) {}
   Triang2D_Cell(grid_type const& gg,
-		cell_handle      cc) : g(&gg), c(cc) {}
+		cell_handle      cc = 0) : g(gg), c(cc) {}
+  explicit
+  Triang2D_Cell(ref_ptr<grid_type const> gg,
+		cell_handle      cc = 0) : g(gg), c(cc) {}
+
   ~Triang2D_Cell() {}  
   
   bool IsDone()   const { return (c == g->ncells); }
   self const& operator*() const { return *this;}
   self & operator++() { ++c; return *this;}
   
-  grid_type const& TheGrid() const { return *g;}
+  grid_type const& TheGrid  () const { return *g;}
+  grid_type const& TheAnchor() const { return *g;}
   cell_handle   handle() const { return c;}
 
   FacetOnCellIterator  FirstFacet () const;
@@ -299,21 +308,24 @@ class Triang2D_Vertex : public grid_types_Triang2D {
   typedef Triang2D_Vertex    self;
 public:
   typedef self      value_type;
+  typedef grid_type anchor_type;
 private: 
-  grid_type const* g;
-  vertex_handle    v;
+  ref_ptr<grid_type const> g;
+  vertex_handle            v;
 public:
   Triang2D_Vertex() : g(0), v(-1) {}
   explicit
-  Triang2D_Vertex(grid_type const& gg) : g(&gg), v(0) {}
-  Triang2D_Vertex(grid_type const& gg, int vv) : g(&gg), v(vv) {}
+  Triang2D_Vertex(ref_ptr<grid_type const> gg, int vv = 0) : g(gg), v(vv) {}
+  explicit
+  Triang2D_Vertex(grid_type const&         gg, int vv = 0) : g(gg), v(vv) {}
   ~Triang2D_Vertex() {}  
   
   bool IsDone()   const { cb(); return (v == g->nvertices); }
   self const& operator*() const { cv(); return *this;}
   self & operator++() { cv(); ++v; return *this;}
   
-  grid_type const& TheGrid() const { cb(); return *g;}
+  grid_type const& TheGrid  () const { cb(); return *g;}
+  grid_type const& TheAnchor() const { cb(); return *g;}
   vertex_handle    handle()  const { cv(); return v;}
 
   // checking functions
@@ -338,6 +350,9 @@ private:
   Cell c;
   int  vc;
 public:
+  typedef Vertex value_type;
+  typedef Cell   anchor_type;
+
   Triang2D_VertexOnCellIterator() : vc(-1) {}
   explicit
   Triang2D_VertexOnCellIterator(Cell const& cc, int vvc = 0) : c(cc), vc(vvc) {}
@@ -347,8 +362,9 @@ public:
     { cv(); return Triang2D_Vertex(TheGrid(), handle());}
   bool IsDone()   const { cb(); return (vc == 3);}
   
-  grid_type const& TheGrid() const { cb(); return c.TheGrid();}
-  Cell const& TheCell() const { cb(); return c;}
+  grid_type const& TheGrid  () const { cb(); return c.TheGrid();}
+  Cell      const& TheAnchor() const { cb(); return c;}
+  Cell      const& TheCell  () const { cb(); return c;}
 
 
   vertex_handle handle() const 
@@ -388,11 +404,15 @@ private:
   Cell c;
   int  fc;
 public:
+  typedef Facet value_type;
+  typedef Cell  anchor_type;
+
   Triang2D_FacetOnCellIterator() : fc(-1) {}
   explicit
   Triang2D_FacetOnCellIterator(Cell const& cc, int ffc = 0) 
     : c(cc), fc(ffc) 
-    { REQUIRE( valid(), "invalid iterator!",1); }
+  {}
+  //    { REQUIRE( valid(), "invalid iterator!",1); }
 
   self&        operator++() { ++fc; return *this;}
   Facet        operator*()  const;
@@ -403,8 +423,10 @@ public:
   vertex_handle v1() const { cv(); return TheGrid().cells[3*c.c+ fc];}
   vertex_handle v2() const { cv(); return TheGrid().cells[3*c.c+ (fc+1)%3];}
 
-  Cell      const& TheCell() const { cb(); return c;}
-  grid_type const& TheGrid() const { cb(); return c.TheGrid();}
+  Cell      const& TheCell()   const { cb(); return c;}
+  Cell      const& TheAnchor() const { cb(); return c;}
+  grid_type const& TheGrid()   const { cb(); return c.TheGrid();}
+
   edge_handle  handle()     const 
     { cv(); return edge_handle(c.handle(), fc);} 
   int local_handle() const { cv(); return fc;}
@@ -418,6 +440,7 @@ public:
   void cb() const { REQUIRE(bound(), "", 1);}
 
   friend bool operator==(self const& lhs, self const& rhs) { return lhs.c == rhs.c && lhs.fc == rhs.fc;}
+  friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
 };
 
 
@@ -434,7 +457,13 @@ public:
   explicit
   Triang2D_Edge(grid_type const& g) 
     : fc(Cell(g,cell_handle(0)), 0) {}
+  explicit 
+  Triang2D_Edge(ref_ptr<grid_type const> g) 
+    : fc(Cell(g,cell_handle(0)), 0) {}
+
   Triang2D_Edge(grid_type const& g, edge_handle e) 
+    : fc(Cell(g,e.c), e.lf) {}
+  Triang2D_Edge(ref_ptr<grid_type const> g, edge_handle e) 
     : fc(Cell(g,e.c), e.lf) {}
 
   edge_handle handle() const { return fc.handle();}
@@ -446,7 +475,9 @@ public:
   Vertex V1() const { return fc.V1();}
   Vertex V2() const { return fc.V2();}
 
-  Cell   TheCell() const { return fc.TheCell();}
+  grid_type const& TheGrid  () const { return fc.TheGrid();}
+  grid_type const& TheAnchor() const { return fc.TheGrid();}
+  Cell             TheCell  () const { return fc.TheCell();}
 
   friend bool operator==(self const& lhs, self const& rhs)
   { 
@@ -495,20 +526,20 @@ struct grid_types<Triang2D> : public grid_types_base<grid_types_Triang2D>
 
 namespace GrAL {
 
-class Triang2D_FacetIterator 
-  : public facet_iterator_of_cell_set<Triang2D_Cell>
-{
-  typedef facet_iterator_of_cell_set<Triang2D_Cell> base;
- public: 
-  Triang2D_FacetIterator() {} 
-  Triang2D_FacetIterator(CellIterator  const& c) : base(c) {}
-  Triang2D_FacetIterator(grid_type const& g) : base(CellIterator(g)) {}
-};
-
 //------------------- inline functions ---------------
 
 inline
 void Triang2D::swap_orientation(Triang2D::Cell const& c) { std::swap(cells[3*c.handle()], cells[3*c.handle()+1]);}
+
+
+Triang2D::size_type
+inline Triang2D::NumOfEdges()    const { 
+  if(!nedges_valid) {
+    calc_num_of_edges();
+    nedges_valid = true;
+  }
+  return nedges;
+}
 
 inline
 Triang2D::VertexIterator
@@ -596,6 +627,36 @@ Triang2D_Edge
 Triang2D_FacetOnCellIterator::operator*() const
 { return Triang2D_Edge(*this); }
 
+
+#define gt grid_types<Triang2D>
+
+  inline gt::VertexIterator   gral_begin(gt::grid_type const& G, gt::VertexIterator) { return G.FirstVertex();}
+  inline gt::VertexIterator   gral_end  (gt::grid_type const& G, gt::VertexIterator) { return G.EndVertex();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::VertexIterator) { return G.NumOfVertices();}
+
+  inline gt::EdgeIterator     gral_begin(gt::grid_type const& G, gt::EdgeIterator)   { return G.FirstEdge();}
+  inline gt::EdgeIterator     gral_end  (gt::grid_type const& G, gt::EdgeIterator)   { return gt::EdgeIterator(G.EndCell());}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::EdgeIterator)   { return G.NumOfEdges();}
+
+  inline gt::CellIterator     gral_begin(gt::grid_type const& G, gt::CellIterator)   { return G.FirstCell();}
+  inline gt::CellIterator     gral_end  (gt::grid_type const& G, gt::CellIterator)   { return G.EndCell();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::CellIterator)   { return G.NumOfCells();}
+
+
+  inline gt::VertexOnCellIterator   gral_begin(gt::Cell   a, gt::VertexOnCellIterator) { return a.FirstVertex();}
+  inline gt::VertexOnCellIterator   gral_end  (gt::Cell   a, gt::VertexOnCellIterator) { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::VertexOnCellIterator) { return a.NumOfVertices();}
+
+  inline gt::VertexOnEdgeIterator   gral_begin(gt::Edge   a, gt::VertexOnEdgeIterator) { return a.FirstVertex();}
+  inline gt::VertexOnEdgeIterator   gral_end  (gt::Edge   a, gt::VertexOnEdgeIterator) { return gt::VertexOnEdgeIterator(a,2);}
+  inline gt::size_type              gral_size (gt::Edge   a, gt::VertexOnEdgeIterator) { return a.NumOfVertices();}
+
+  inline gt::EdgeOnCellIterator     gral_begin(gt::Cell   a, gt::EdgeOnCellIterator) { return a.FirstEdge();}
+  inline gt::EdgeOnCellIterator     gral_end  (gt::Cell   a, gt::EdgeOnCellIterator) { return gt::EdgeOnCellIterator(a,3);}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::EdgeOnCellIterator) { return a.NumOfEdges();}
+
+
+#undef gt
 
 } // namespace GrAL 
 
