@@ -39,6 +39,7 @@ namespace GrAL { namespace graph {
   public:
     typedef GRID grid_type;
     typedef GT   gt;
+    typedef typename gt::Facet              GridFacet;
     typedef typename gt::CellIterator       GridCellIterator;
     typedef typename gt::CellOnCellIterator GridCellOnCellIterator;
     //    typedef typename gt::Cell               vertex_type;
@@ -58,7 +59,6 @@ namespace GrAL { namespace graph {
     int num_edges()    const { return (m_num_edges_valid ? m_num_edges : compute_num_edges());}
     int num_vertices() const { return TheGrid()->NumOfCells();}
 
-        
     struct vertex_type {
       typedef vertex_type self;
       typedef typename gt::Cell GridCell;
@@ -67,14 +67,65 @@ namespace GrAL { namespace graph {
 
       vertex_type() {}
       vertex_type(GridCell c) : base(c) {}
-      
+
+      // Without this conversion operator, some BGL algorithms don't work (e.g. push_relabel_max_flow).      
       operator int() const { return base.handle();}
       //operator base_type() const { return base;}
-       base_type const& Base() const { return base;}
+      base_type const& Base() const { return base;}
       
       bool operator==(self const& rhs) const { return base == rhs.base;}
       bool operator!=(self const& rhs) const { return base != rhs.base;}
     };
+
+    GridCellOnCellIterator first_neighbor(vertex_type v) const { return GridCellOnCellIterator::begin(v.Base());}
+    GridCellOnCellIterator end_neighbor  (vertex_type v) const { return GridCellOnCellIterator::end  (v.Base());}
+        
+
+
+    struct directed_graph_skip_edge_pred {
+      bool operator()(GridCellOnCellIterator) const { return false;}
+    };
+    struct undirected_graph_skip_edge_pred {
+      bool operator()(GridCellOnCellIterator cc) const { return cc.TheCell().handle() > (*cc).handle();}
+    };
+
+    template<class SkipPred, class EDGE> 
+    struct edge_iterator {
+      typedef edge_iterator<SkipPred, EDGE> self;
+      typedef EDGE edge_type;
+    private:
+      GridCellIterator       c;
+      GridCellOnCellIterator nb;
+      SkipPred               skip_nb;
+    public:
+      edge_iterator() {}
+      edge_iterator(GridCellIterator c_, SkipPred skip = SkipPred()) : c(c_),  skip_nb(skip)
+      { 
+	if(!c.IsDone()) nb = GridCellOnCellIterator(*c);
+	advance_till_valid();
+      }
+      void increment() { advance(); advance_till_valid(); }
+      self& operator++() { increment(); return *this;}
+      edge_type operator*() const { return edge_type(nb);}
+      bool IsDone() const { return c.IsDone();}
+      bool operator==(self rhs) const { return c == rhs.c && (c.IsDone() || nb == rhs.nb);}
+    private:   
+      bool valid() const { return !nb.IsDone() && !skip_nb(nb);}
+      void advance() {
+	++nb;
+	if(nb.IsDone()) {
+	  ++c;
+	  if(!c.IsDone())
+	    nb = GridCellOnCellIterator(*c);
+	}
+      }
+      void advance_till_valid() {
+	while(! IsDone() && ! valid())
+	  advance();
+      }
+
+    };
+   
     
 
     GridCellOnCellIterator reverse(GridCellOnCellIterator c) const {
@@ -116,14 +167,19 @@ namespace GrAL { namespace graph {
     typedef graph_view_cng_base<GRID,GT> base;
   public:
     typedef typename base::grid_type grid_type;
+    typedef typename base::GridFacet GridFacet;
+
     graph_view() {}
     graph_view(grid_type const& gg)         : base(gg) {}
     graph_view(ref_ptr<grid_type const> gg) : base(gg) {}
 
     typedef typename base::GridCellOnCellIterator edge_type;
+    GridFacet facet(edge_type e) const { return e.TheFacet();}
+    typedef typename base::template edge_iterator<typename base::directed_graph_skip_edge_pred, edge_type>
+    edge_iterator_base;
 
   protected:
-    virtual int compute_num_edges() const { return compute_num_cell_on_cell_iterators();}
+    virtual int compute_num_edges() const { return base::compute_num_cell_on_cell_iterators();}
   }; 
 
 
@@ -138,8 +194,9 @@ namespace GrAL { namespace graph {
     typedef graph_view_cng_base<GRID,GT> base;
   public:
     typedef typename base::GridCellOnCellIterator GridCellOnCellIterator;
+    typedef typename base::GridFacet              GridFacet;
     typedef typename base::grid_type              grid_type;
-
+    
     graph_view() {}
     graph_view(grid_type const& gg)         : base(gg) {}
     graph_view(ref_ptr<grid_type const> gg) : base(gg) {}
@@ -158,21 +215,20 @@ namespace GrAL { namespace graph {
 	  || 
 	  (base.TheCell() == *(rhs.base) && *base = rhs.base.TheCell());
       }
+      GridCellOnCellIterator Base() const { return base;}
     };
 
-    /* 
-    struct edge_iterator {
-    private:
-      GridCellIterator;
-      GridCellOnCellIterator;
-    public:
-      self& operator++() { advance_till_valid(); return *this;}
-      
-    };
-    */
+    GridFacet facet(edge_type e) const { return e.Base().TheFacet();}
+    typedef typename base::template edge_iterator<typename base::undirected_graph_skip_edge_pred, edge_type>
+    edge_iterator_base;
+
 
   protected:
-    virtual int compute_num_edges() const {  compute_num_cell_on_cell_iterators(); m_num_edges /= 2; return m_num_edges;}
+    virtual int compute_num_edges() const {  
+      base::compute_num_cell_on_cell_iterators();
+      this->m_num_edges /= 2; 
+      return this->m_num_edges;
+    }
   }; 
 
 
@@ -282,7 +338,7 @@ namespace GrAL { namespace graph {
     typedef E             value_type;
     typedef E             key_type;
     typedef value_type      &   reference;
-    typedef value_type const&   reference;
+    //  typedef value_type const&   reference;
     //    typedef boost::readable_property_map_tag category;
     typedef boost::lvalue_property_map_tag category;
 
@@ -310,13 +366,14 @@ namespace boost {
     typedef typename graph_type::vertex_type        vertex_descriptor;
     typedef typename graph_type::edge_type          edge_descriptor;
     typedef typename graph_type::vertex_iterator    vertex_iterator_base;
+    typedef typename graph_type::edge_iterator_base edge_iterator_base;
 
     // static vertex_descriptor null_vertex(graph_type const& g) { return g.TheGrid()->invalid_vertex();}
     static vertex_descriptor null_vertex(graph_type const& g) { return vertex_descriptor();}
 
     typedef typename gral2bgl<DIRECTED_TAG>::type  directed_category;
     typedef disallow_parallel_edge_tag               edge_parallel_category;
-    struct traversal_category : incidence_graph_tag,  vertex_list_graph_tag {};
+    struct traversal_category : incidence_graph_tag,  vertex_list_graph_tag, edge_list_graph_tag {};
 
     typedef int vertices_size_type;
     typedef int edges_size_type;
@@ -354,7 +411,6 @@ namespace boost {
                vertex_iterator() {}
       explicit vertex_iterator(vertex_iterator_base c) : base(c) {}
     private:
-      //const vertex_descriptor& dereference() const { return *base; }
       vertex_descriptor dereference() const { return *base; }
       bool equal(const vertex_iterator& other) const { return base == other.base; }
       void increment() { ++base;}
@@ -364,6 +420,25 @@ namespace boost {
     };
     typedef std::pair<vertex_iterator, vertex_iterator>  vertex_iterator_range;
 
+
+    class edge_iterator : public iterator_facade<edge_iterator,
+						 edge_descriptor,
+						 forward_traversal_tag,
+						 edge_descriptor,
+						 const edge_descriptor*>
+    {
+    public:
+      edge_iterator() {}
+      edge_iterator(edge_iterator_base b) : base(b) {}
+    private:
+      edge_descriptor dereference() const { return *base;}
+      void increment() { ++base;}
+      bool equal(edge_iterator const& rhs) const { return base == rhs.base;}
+     
+      edge_iterator_base base;
+      friend class iterator_core_access;
+    };
+    typedef std::pair<edge_iterator, edge_iterator> edge_iterator_range;
 
     template<class T> 
     struct vertex_property_map { typedef GrAL::graph::vertex_property_map<vertex_descriptor,T, graph_type, void> type;};
@@ -381,21 +456,24 @@ namespace boost {
   };  // graph_traits<>
 
 
+} // namespace boost
+
+namespace GrAL { namespace graph {
 
 #ifdef GRAPH_TYPE
 #error "Macro GRAPH_TYPE already defined, change macro name below!"
 #else
-#define GRAPH_TYPE GrAL::graph::graph_view<GRID, GrAL::graph::cell_neighbor_graph_tag, DIRECTED_TAG, GT>
+#define GRAPH_TYPE graph_view<GRID, cell_neighbor_graph_tag, DIRECTED_TAG, GT>
 
 
   template<class GRID, class DIRECTED_TAG, class GT>
-  typename graph_traits<GRAPH_TYPE >::vertex_descriptor
-  source(typename graph_traits<GRAPH_TYPE >::edge_descriptor e,
+  typename boost::graph_traits<GRAPH_TYPE >::vertex_descriptor
+  source(typename boost::graph_traits<GRAPH_TYPE >::edge_descriptor e,
 	 GRAPH_TYPE const& g) { return e.TheCell();}
 
   template<class GRID, class DIRECTED_TAG, class GT>
-  typename graph_traits<GRAPH_TYPE >::vertex_descriptor
-  target(typename graph_traits<GRAPH_TYPE >::edge_descriptor e,
+  typename boost::graph_traits<GRAPH_TYPE >::vertex_descriptor
+  target(typename boost::graph_traits<GRAPH_TYPE >::edge_descriptor e,
 	 GRAPH_TYPE const& g) { return *e;}
 
   template<class GRID, class DIRECTED_TAG, class GT>
@@ -405,34 +483,42 @@ namespace boost {
   int num_edges(GRAPH_TYPE const& g) { return g.num_edges();}
   
   template<class GRID, class DIRECTED_TAG, class GT>
-  typename graph_traits<GRAPH_TYPE >::degree_size_type
-  out_degree(typename graph_traits<GRAPH_TYPE >::vertex_descriptor const& v, GRAPH_TYPE const& g)
+  typename boost::graph_traits<GRAPH_TYPE >::degree_size_type
+  out_degree(typename boost::graph_traits<GRAPH_TYPE >::vertex_descriptor const& v, GRAPH_TYPE const& g)
   { return v.Base().NumOfCells();}
-  // { return edge_descriptor::num_of_cells(u, g.TheGrid()); }
 
   template<class GRID, class DIRECTED_TAG, class GT>
-  typename graph_traits<GRAPH_TYPE >::out_edge_iterator_range
-  out_edges(typename graph_traits<GRAPH_TYPE >::vertex_descriptor const&u,
+  typename boost::graph_traits<GRAPH_TYPE >::out_edge_iterator_range
+  out_edges(typename boost::graph_traits<GRAPH_TYPE >::vertex_descriptor const&u,
 	    GRAPH_TYPE const&                       g) 
-  { return typename graph_traits<GRAPH_TYPE >::out_edge_iterator_range
-      (typename graph_traits<GRAPH_TYPE >::out_edge_iterator(u.Base().FirstCell()),
-       typename graph_traits<GRAPH_TYPE >::out_edge_iterator(u.Base().EndCell  ()));
+  {
+    typedef typename boost::graph_traits<GRAPH_TYPE >::edge_descriptor ed;
+    return typename boost::graph_traits<GRAPH_TYPE >::out_edge_iterator_range
+      (typename boost::graph_traits<GRAPH_TYPE >::out_edge_iterator(g.first_neighbor(u)),
+       typename boost::graph_traits<GRAPH_TYPE >::out_edge_iterator(g.end_neighbor  (u)));
   }
 	
 
   template<class GRID, class DIRECTED_TAG, class GT>
-  typename graph_traits<GRAPH_TYPE >::vertex_iterator_range
+  typename boost::graph_traits<GRAPH_TYPE >::vertex_iterator_range
   vertices(GRAPH_TYPE const& g) 
-  { return typename graph_traits<GRAPH_TYPE >::vertex_iterator_range
-      ( typename graph_traits<GRAPH_TYPE >::vertex_iterator(g.TheGrid()->FirstCell()),
-	typename graph_traits<GRAPH_TYPE >::vertex_iterator(g.TheGrid()->EndCell  ()));
+  { return typename boost::graph_traits<GRAPH_TYPE >::vertex_iterator_range
+      ( typename boost::graph_traits<GRAPH_TYPE >::vertex_iterator(g.TheGrid()->FirstCell()),
+	typename boost::graph_traits<GRAPH_TYPE >::vertex_iterator(g.TheGrid()->EndCell  ()));
   }
 
+  template<class GRID, class DIRECTED_TAG, class GT>
+  typename boost::graph_traits<GRAPH_TYPE >::edge_iterator_range
+  edges(GRAPH_TYPE const& g) 
+  { return typename boost::graph_traits<GRAPH_TYPE >::edge_iterator_range
+      ( typename boost::graph_traits<GRAPH_TYPE >::edge_iterator(g.TheGrid()->FirstCell()),
+	typename boost::graph_traits<GRAPH_TYPE >::edge_iterator(g.TheGrid()->EndCell  ()));
+  }
 
 
 #undef GRAPH_TYPE
 #endif  // ifdef GRAPH_TYPE 
 
-} // namespace boost
+}} // namespace GrAL { namespace graph
 
 #endif

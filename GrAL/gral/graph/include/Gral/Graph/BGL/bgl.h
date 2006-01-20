@@ -86,31 +86,38 @@ namespace boost {
     : public property_traits<GrAL::graph::edge_property_map<E,T, GRAPH, TAG> > {};
 
 
+} // namespace boost 
+
+namespace GrAL { namespace graph {
+
   // put/get overloads for vertex/edge property maps
 
   template<class E, class T, class GRAPH, class TAG>
-  T get(GrAL::graph::vertex_property_map<E,T, GRAPH, TAG>             const& pm, 
-	typename GrAL::graph::vertex_property_map<E,T, GRAPH, TAG >::key_type v)
+  T get(vertex_property_map<E,T, GRAPH, TAG>             const& pm, 
+	typename vertex_property_map<E,T, GRAPH, TAG >::key_type v)
   { return pm(v);}
 
   template<class E, class T, class GRAPH, class TAG>
-  void put(GrAL::graph::vertex_property_map<E,T, GRAPH, TAG>                    & pm,
-	   typename GrAL::graph::vertex_property_map<E,T,GRAPH,TAG>::key_type v,
+  void put(vertex_property_map<E,T, GRAPH, TAG>                    & pm,
+	   typename vertex_property_map<E,T,GRAPH,TAG>::key_type v,
 	                                                              T t) 
   { pm[v] = t;}
 
   template<class E, class T, class GRAPH, class TAG>
-  T get(GrAL::graph::edge_property_map<E,T, GRAPH, TAG>             const& pm,
-	typename GrAL::graph::edge_property_map<E,T, GRAPH, TAG >::key_type e) 
+  T get(edge_property_map<E,T, GRAPH, TAG>             const& pm,
+	typename edge_property_map<E,T, GRAPH, TAG >::key_type e) 
   { return pm(e);}
 
   template<class E, class T, class GRAPH, class TAG>
-  void put(GrAL::graph::edge_property_map<E,T, GRAPH, TAG >                  & pm,
-	   typename GrAL::graph::edge_property_map<E,T, GRAPH, TAG >::key_type e,
+  void put(edge_property_map<E,T, GRAPH, TAG >                  & pm,
+	   typename edge_property_map<E,T, GRAPH, TAG >::key_type e,
 	   	                                                             T t) 
   { pm[e] = t;}
 
 
+}} // namespace GrAL { namespace graph 
+
+namespace boost {
 
   // put/get overloads for reference wrapped property maps
 
@@ -126,6 +133,7 @@ namespace boost {
   void 
   put(reference_wrapper<PM      > pm, typename PM::key_type k, typename PM::value_type t) 
   { put(pm.get(),k,t);}
+
 
 
 } // namespace boost 
