@@ -12,7 +12,8 @@ int main() {
   using namespace std;
   using namespace GrAL::cartesian2d;
 
-  checkgt<grid_types<cartesian2d::CartesianGrid2D> >(cout);
+  typedef grid_types<cartesian2d::CartesianGrid2D> gt;
+  checkgt<gt>(cout);
 
   REQUIRE_ALWAYS( RegGrid2D::BeginArchetype()->NumOfVertices() == 4, "", 1);
 
@@ -46,6 +47,21 @@ int main() {
       test_edge_on_cell_iterator  (R,*out);
       test_edge_on_face_iterator  (R,*out);
       test_cell_on_cell_iterator  (R,*out);
+
+
+      test_sequence_iterator<gt::Vertex>(R, cout);
+      test_sequence_iterator<gt::Edge>  (R, cout);
+      test_sequence_iterator<gt::Cell>  (R, cout);
+      
+      test_incidence_iterator<gt::Vertex, gt::Cell>(R, cout);
+      test_incidence_iterator<gt::Edge,   gt::Cell>(R, cout);
+      test_incidence_iterator<gt::Cell,   gt::Cell>(R, cout);
+
+      test_incidence_iterator<gt::Vertex, gt::Edge>(R, cout);
+
+      test_incidence_iterator<gt::Vertex, gt::Vertex>(R, cout);
+      test_incidence_iterator<gt::Cell,   gt::Vertex>(R, cout);
+
 
     }
   }

@@ -80,6 +80,21 @@ int main() {
 
 	test_vertex_on_edge_iterator(R,*out);
 
+	test_sequence_iterator<gt::Vertex>(R, *out);
+	test_sequence_iterator<gt::Edge>  (R, *out);
+	test_sequence_iterator<gt::Facet> (R, *out);
+	test_sequence_iterator<gt::Cell>  (R, *out);
+	
+	
+	test_incidence_iterator<gt::Vertex, gt::Edge> (R, *out); 
+	
+	test_incidence_iterator<gt::Edge,   gt::Facet>(R, *out);
+	test_incidence_iterator<gt::Vertex, gt::Facet>(R, *out);
+	
+	test_incidence_iterator<gt::Vertex, gt::Cell>(R, *out);
+	test_incidence_iterator<gt::Edge,   gt::Cell>(R, *out);
+	test_incidence_iterator<gt::Facet,  gt::Cell>(R, *out);
+
 	*out << endl;
       }
     }
