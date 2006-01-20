@@ -49,22 +49,24 @@ namespace generic_edge {
 
   template<class gt> class hasher_edge;
 
-  //  template<class gt, class CELL> class cell_mixin;
   template<class gt> class cell_mixin;
+
+  template<class gt> class grid_mixin;
 
   template<class gt>
   struct grid_types_edge : public virtual  gt
     {
       // these typedefs should be superflous!
       typedef typename gt::grid_type     grid_type;
+      typedef typename gt::size_type     size_type;
+
       typedef typename gt::Cell          Cell;
       typedef typename gt::Vertex        Vertex;
       typedef typename gt::cell_handle   cell_handle;
       typedef typename gt::vertex_handle vertex_handle;
       typedef typename gt::CellIterator  CellIterator;
       
-
-      typedef grid_types<typename gt::archetype_type> agt;
+      typedef typename get_archgt<gt, grid_types<typename gt::archetype_type> >::type agt;
       typedef typename agt::Edge         archEdge;        
       typedef typename agt::EdgeIterator archEdgeIterator;
       typedef typename agt::edge_handle  arch_edge_handle;
@@ -75,12 +77,8 @@ namespace generic_edge {
       typedef edge_handle_t<gt>          edge_handle; 
       typedef hasher_edge<gt>            edge_hasher_type;
 
-      // template<class CELL>
-      // class edge_mixin_for_cell_type : public cell_mixin<gt,CELL> {};
-      // typedef cell_mixin<gt>             edge_mixin_for_cell_type;
-    
-      //  typedef cell_mixin<gt, typename gt::cell_base_type> cell_base_type;
       typedef cell_mixin<gt>  cell_base_type;
+      typedef grid_mixin<gt>  grid_base_type;
     };
 
 
@@ -132,6 +130,10 @@ namespace generic_edge {
 	typedef typename base::Edge          Edge;
 	typedef typename base::edge_handle   edge_handle;
 	typedef typename base::grid_type     grid_type;
+
+	typedef Cell anchor_type;
+	typedef Edge value_type;
+
       private:
 	Cell              c;
 	archEdgeIterator  e;
@@ -183,13 +185,15 @@ namespace generic_edge {
     class edge : public grid_types_edge<gt> {
       typedef edge<gt> self;
       typedef grid_types_edge<gt>       base;
-      public:
-	typedef typename base::Vertex        Vertex;
-	typedef typename base::vertex_handle vertex_handle;
-	typedef typename base::Cell          Cell;
-	typedef typename base::Edge          Edge;
-	typedef typename base::edge_handle   edge_handle;
-	typedef typename base::grid_type     grid_type;
+    public:
+      typedef typename base::Vertex        Vertex;
+      typedef typename base::vertex_handle vertex_handle;
+      typedef typename base::Cell          Cell;
+      typedef typename base::Edge          Edge;
+      typedef typename base::edge_handle   edge_handle;
+      typedef typename base::grid_type     grid_type;
+      
+      typedef edge_type_tag                element_type_tag;
     private:
       edge_on_cell_iterator<gt> e;
     public:
@@ -261,6 +265,9 @@ namespace generic_edge {
       typedef typename base::Edge          Edge;
       typedef typename base::edge_handle   edge_handle;
       typedef typename base::grid_type     grid_type;
+
+      typedef Edge      value_type;
+      typedef grid_type anchor_type;
    private:
       CellIterator                      c;
       edge_on_cell_iterator<gt>         e;
@@ -268,29 +275,33 @@ namespace generic_edge {
       STDHASH::hash_map<edge<gt>, bool, hasher_edge<gt> > visited;
     public:
       edge_iterator() {}
-      explicit
-      edge_iterator(grid_type const& g) : c(g), e(c)
-	{
-	  if (! IsDone()) visited[*e] = true;
-	}
-      
+      explicit  edge_iterator(grid_type const& g) : c(g)  { init();}
+      explicit  edge_iterator(CellIterator cc)    : c(cc) { init();}
+
       self& operator++() { c_(); advance_till_valid(); return (*this);}
       Edge  operator*() const { c_(); return Edge(e);}
       bool  IsDone()    const { cb_(); return c.IsDone();}
-      grid_type const& TheGrid() const { c_(); return e.TheGrid();}
+      grid_type   const& TheGrid()   const { cb_();  return c.TheGrid();}
+      anchor_type const& TheAnchor() const { cb_();  return c.TheGrid();}
       edge_handle handle() const { c_(); return e.handle();}
 
       bool operator==(self const& rhs) const 
-	{ cb_(); rhs.cb_(); return (c == rhs.c && e == rhs.e);}
+      { cb_(); rhs.cb_(); return (rhs.IsDone() && IsDone()) || (c == rhs.c && e == rhs.e);}
       bool operator!=(self const& rhs) const 
-	{ return !((*this) == rhs);}
+      { return !((*this) == rhs);}
 
       bool valid() const { return c.valid() && e.valid();}
-      bool bound() const { return c.bound() && e.bound();}
+      bool bound() const { return c.bound();}
       void c_()       const { REQUIRE(valid(), "",1); }    
       void cb_() const { REQUIRE(bound(), "",1); }    
 
     private:
+      void init() {
+	 if (! c.IsDone()) {
+	    e = edge_on_cell_iterator<gt>(c);
+	    visited[*e] = true;
+	 }
+      }
       void advance() {
 	++e;
 	if(e.IsDone()) {
@@ -312,8 +323,8 @@ namespace generic_edge {
     };
 
     // cell type in gt must derive from this type
-    template<class gt> //, class CELL>
-      class cell_mixin : public /*typename*/ gt::cell_base_type // , public CELL
+    template<class gt> 
+      class cell_mixin : public gt::cell_base_type 
       {
 	typedef grid_types_edge<gt> gte;
 	typedef typename gt::cell_base_type base;
@@ -345,6 +356,36 @@ namespace generic_edge {
 						   base::TheArchetype().EndEdge());}
 
       };
+
+
+  template<class gt>
+  class grid_mixin : public gt::grid_base_type {
+  private:
+    typedef grid_types_edge<gt> gte;
+  public:
+    typedef typename gte::grid_type   grid_type;
+    typedef typename gte::size_type   size_type;
+  private:
+    mutable size_type   num_of_edges;
+    mutable bool        num_of_edges_valid;
+
+    void calc_num_of_edges() const {
+      typename gte::EdgeIterator f(static_cast<grid_type const&>(*this)); 
+      for(num_of_edges = 0; !f.IsDone(); ++f)
+	++num_of_edges;
+    }
+  public:
+    grid_mixin() : num_of_edges(0), num_of_edges_valid(false) {}
+
+    size_type NumOfEdges() const {
+      if(!num_of_edges_valid) {
+	calc_num_of_edges();
+	num_of_edges_valid = true;
+      }
+      return num_of_edges;
+    }
+  };
+
 } // namespace
 
 } // namespace GrAL 

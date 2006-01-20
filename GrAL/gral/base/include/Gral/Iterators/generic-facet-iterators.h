@@ -60,6 +60,8 @@ namespace generic_facet {
 
   template<class gt> class cell_mixin;
 
+  template<class gt> class grid_mixin;
+
   template<class gt>
   struct grid_types_facet : public gt
     {
@@ -74,7 +76,7 @@ namespace generic_facet {
       typedef typename gt::Edge          Edge;
       typedef typename gt::edge_handle   edge_handle; 
 
-      typedef grid_types<typename gt::archetype_type> agt;
+      typedef typename get_archgt<gt, grid_types<typename gt::archetype_type> >::type agt;
       typedef typename agt::CellIterator archCellIterator;
       typedef typename agt::VertexOnCellIterator archVertexOnCellIterator;
       typedef typename agt::EdgeOnCellIterator   archEdgeOnCellIterator;
@@ -94,7 +96,8 @@ namespace generic_facet {
 
       // typedef cell_mixin<gt>               facet_mixin_for_cell_type;
       typedef cell_mixin<gt>               cell_base_type;
-    };
+      typedef grid_mixin<gt>               grid_base_type;
+  };
 
 
 
@@ -152,6 +155,9 @@ namespace generic_facet {
 	typedef typename base::archCellIterator archCellIterator;
 	typedef typename base::arch_cell_handle arch_cell_handle;
 	typedef typename base::grid_type        grid_type;
+
+	typedef Facet value_type;
+	typedef Cell  anchor_type;
       private:
 	Cell              c;
 	archCellIterator  lf;
@@ -209,6 +215,7 @@ namespace generic_facet {
       typedef typename base::grid_type        grid_type;
       typedef typename base::vtuple_type      vtuple_type;
       typedef typename base::archCell         archCell;
+      typedef facet_type_tag                  element_type_tag;
     private:
       facet_on_cell_iterator<gt> fc;
     public:
@@ -242,6 +249,8 @@ namespace generic_facet {
       bool bound() const { return fc.bound();}
       bool valid() const { return fc.valid();}
       void c_() const { REQUIRE(valid(), "" ,1); }
+
+      facet_on_cell_iterator<gt> const& TheFacetOnCellIterator() const { return fc;}
     };
 
    
@@ -320,6 +329,8 @@ namespace generic_facet {
 	typedef typename base::archVertexOnCellIterator archVertexOnCellIterator;
 	typedef typename base::grid_type        grid_type;
 
+	typedef Facet  anchor_type;
+	typedef Vertex value_type;
       private:
 	 facet_on_cell_iterator<gt> f;
 	 archVertexOnCellIterator  vf;
@@ -336,6 +347,9 @@ namespace generic_facet {
         self& operator++() { c_(); ++vf; return (*this);}
 	Vertex operator*() const { c_(); return Vertex(TheGrid(), handle());}
 	bool IsDone() const { cb_(); return vf.IsDone();}
+	
+	Facet TheFacet()  const { return *f;}
+	Facet TheAnchor() const { return *f;}
 
 	grid_type const& TheGrid() const { c_(); return f.TheGrid();}
         vertex_handle handle() const { c_(); return f.TheCell().v(vf.handle());}
@@ -371,6 +385,8 @@ namespace generic_facet {
 	typedef typename base::archEdgeOnCellIterator archEdgeOnCellIterator;
 	typedef typename base::grid_type        grid_type;
 
+	typedef Facet anchor_type;
+	typedef Edge  value_type;
       private:
 	 facet_on_cell_iterator<gt> f;
 	 archEdgeOnCellIterator  ef;
@@ -387,6 +403,9 @@ namespace generic_facet {
         self& operator++() { c_(); ++ef; return (*this);}
 	Edge operator*() const { c_(); return Edge(TheGrid(), handle());}
 	bool IsDone() const { cb_(); return ef.IsDone();}
+
+	Facet TheFacet()  const { return *f;}
+	Facet TheAnchor() const { return *f;}
 
 	grid_type const& TheGrid() const { c_(); return f.TheGrid();}
         edge_handle handle() const { c_(); return f.TheCell().e(ef.handle());}
@@ -424,6 +443,8 @@ namespace generic_facet {
       typedef typename base::arch_cell_handle arch_cell_handle;
       typedef typename base::grid_type        grid_type;
 
+      typedef Facet     value_type;
+      typedef grid_type anchor_type;
     private:
       CellIterator               c;
       facet_on_cell_iterator<gt> e;
@@ -431,30 +452,35 @@ namespace generic_facet {
       STDHASH::hash_map<facet<gt>, bool, hasher_facet<gt> > visited;
     public:
       facet_iterator() {}
-      explicit 
-      facet_iterator(grid_type const& g) 
-	: c(g), e(c), visited() // TheGrid().NumOfCells()*8)
-	{
-	  if (! IsDone()) visited[*e] = true;
-	}
+      explicit  facet_iterator(grid_type const& g)  : c(g)  { init();}
+      explicit  facet_iterator(CellIterator cc)     : c(cc) { init();}
       
       self& operator++() { c_(); advance_till_valid(); return (*this);}
       Facet operator*() const { c_(); return Facet(e);}
       bool  IsDone()    const { cb_(); return c.IsDone();}
 
-      grid_type const& TheGrid() const { cb_(); return c.TheGrid();}
+      grid_type const& TheGrid  () const { cb_(); return c.TheGrid();}
+      grid_type const& TheAnchor() const { cb_(); return c.TheGrid();}
       facet_handle handle() const { c_(); return e.handle();}
 
       bool operator==(self const& rhs) const 
-	{ cb_(); return ((c == rhs.c) && (e == rhs.e)); }
+      { cb_(); rhs.cb_(); return (rhs.IsDone() && IsDone()) || ((c == rhs.c) && (e == rhs.e)); }
       bool operator!=(self const& rhs) const 
 	{ return !((*this) == rhs);}
 
       bool valid() const { return c.valid() && e.valid();}
-      bool bound() const { return c.bound() && e.bound();}
+      bool bound() const { return c.bound();}
       void c_()       const { REQUIRE(valid(), "",1); }    
       void cb_() const { REQUIRE(bound(), "",1); }    
     private:
+      void init()
+      {
+	if(!c.IsDone()) {
+	  e = facet_on_cell_iterator<gt>(c);
+	  visited[*e] = true;
+	}
+      }
+
       // one step forward
       void advance() {
 	++e;
@@ -508,8 +534,8 @@ namespace generic_facet {
 
     // cell type in gt must derive from this type
     template<class gt>
-      class cell_mixin : public gt::cell_base_type
-      {
+    class cell_mixin : public gt::cell_base_type
+    {
 	typedef grid_types_facet<gt> gtf;
 	typedef typename gt::cell_base_type base;
 
@@ -539,6 +565,35 @@ namespace generic_facet {
 	  { c_(); return facet_on_cell_iterator<gt>(static_cast<Cell const&>(*this),
 						    base::TheArchetype().EndCell());}
       };
+
+
+  template<class gt>
+  class grid_mixin : public gt::grid_base_type {
+  private:
+    typedef grid_types_facet<gt>    gtf;
+  public: 
+    typedef typename gtf::grid_type grid_type;
+    typedef typename gtf::size_type size_type;
+  private:
+    mutable size_type num_of_facets;
+    mutable bool      num_of_facets_valid;
+
+    void calc_num_of_facets() const {
+      typename gtf::FacetIterator f(static_cast<grid_type const&>(*this)); 
+      for(num_of_facets = 0; !f.IsDone(); ++f)
+	++num_of_facets;
+    }
+  public:
+    grid_mixin() : num_of_facets(0), num_of_facets_valid(false) {}
+
+    size_type NumOfFacets() const {
+      if(!num_of_facets_valid) {
+	calc_num_of_facets();
+	num_of_facets_valid = true;
+      }
+      return num_of_facets;
+    }
+  };
 
 } // namespace generic_facet
 
