@@ -77,6 +77,7 @@ public:
   typedef hierarchical::hgrid_cartesian<flat_grid_type>  hier_grid_type;
 
   typedef hier_grid_type                           hgt;
+  typedef typename hgt::size_type                  size_type;
   typedef typename hgt::pattern_grid_type          pattern_grid_type;
   typedef typename hgt::level_handle               level_handle;
   typedef typename hgt::hier_cell_type             hier_cell_type;
@@ -101,7 +102,6 @@ public:
   typedef hier_edge_type              oct_edge_type;
   typedef oct_edge_type               Edge;
 
-  typedef size_t size_type;
 
   enum { dim = flat_grid_type::dim };
 
@@ -431,6 +431,7 @@ public:
     typedef typename base::grid_type grid_type;
     typedef typename base::octree_type octree_type;
     typedef typename base::gt        gt;
+    typedef typename base::level_handle level_handle;
     typedef typename gt  ::Cell      Cell;
     typedef typename gt  ::cell_handle cell_handle;
 
@@ -465,6 +466,11 @@ public:
       c(o->TheOctree()->ActiveRange(o->TheOctree()->coarsest_level())->FirstCell())
     { make_valid();}
 
+    leaf_cell_iterator_t(        grid_type const& o, ActiveLevelCellIterator cc, level_handle lev)
+      : base(o,lev), c(cc) {}
+    leaf_cell_iterator_t(ref_ptr<grid_type const> o, ActiveLevelCellIterator cc, level_handle lev)
+      : base(o,lev), c(cc) {}
+
     bool IsDone()    const { base::cb(); return base::level() > base::TheOctree()->finest_level();}
     Cell operator*() const { cv();       return Cell(base::TheGrid(), *c, base::level());}    
     self& operator++() {
@@ -493,10 +499,12 @@ public:
 
   template<class ELEMBASE>
   inline bool operator==(leaf_cell_iterator_t<ELEMBASE> const& lhs, leaf_cell_iterator_t<ELEMBASE> const& rhs)
-  { return lhs.level() == rhs.level() && lhs.Flat() == rhs.Flat();}
+  { return lhs.level() == rhs.level() && (lhs.IsDone() || lhs.Flat() == rhs.Flat());}
+
   template<class ELEMBASE>
   inline bool operator< (leaf_cell_iterator_t<ELEMBASE> const& lhs, leaf_cell_iterator_t<ELEMBASE> const& rhs)
-  { return lhs.level() < rhs.level() || (lhs.level() == rhs.level() && lhs.Flat() < rhs.Flat());}
+  // lhs.level() == rhs.level() && !lhs.IsDone() => !rhs.IsDone() => rhs.Flat() is defined.
+  { return lhs.level() < rhs.level() || (lhs.level() == rhs.level() && !lhs.IsDone() && lhs.Flat() < rhs.Flat());}
  
 
 
