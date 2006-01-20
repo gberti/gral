@@ -15,7 +15,7 @@
 #include "Gral/Base/archetype-0D.h"
 
 #include "Gral/Grids/CartesianND/direction-maps.h"
-
+#include "Gral/Grids/CartesianND/archetypes.h"
 
 #include <vector>
 #include <iostream>
@@ -41,9 +41,6 @@ namespace cartesiannd {
   class subrange;
   template<unsigned DIM>
   class grid;
-  template<class CARTGRID>
-  class archetype_t;
-
 
 
 
@@ -89,13 +86,19 @@ namespace cartesiannd {
 
   template<class GRID,   unsigned D, unsigned CD>  struct element_type 
   { typedef sequence_iterator_t<GRID, D> type; };
+
+  /*  
   template<unsigned DIM, unsigned D, unsigned CD>  struct element_type<subrange<DIM>, D, CD> 
   { typedef sequence_iterator_t<grid<DIM>, D> type; };
+  */
 
   template<class CARTGRID, unsigned K> struct element_handle_type
   { typedef element_handle_t<CARTGRID, K>  type; };
+  
+  /*
   template<unsigned DIM, unsigned K> struct element_handle_type<subrange<DIM>, K>
   { typedef element_handle_t<grid<DIM>, K> type;};
+  */
 
   template<unsigned K, unsigned M> struct less_then { enum { result = ( K <= M ? 1 : 0) }; };
 
@@ -142,12 +145,12 @@ namespace cartesiannd {
   struct archetype_of_grid : public archetype_of_grid_aux<CARTGRID, CARTGRID::dim> {};
 
 
-
   template<class CARTGRID, unsigned DIM>
-  struct grid_types_base
+  struct grid_types_base : public grid_types_detail::grid_types_root 
   {
     enum { dim = DIM};
     typedef grid_dim_tag<dim> dimension_tag;
+    typedef CARTGRID grid_type;
 
     typedef typename element_handle_type<CARTGRID, 0>       ::type vertex_handle;
     typedef          sequence_iterator_t<CARTGRID, 0>              VertexIterator;
@@ -284,6 +287,7 @@ namespace cartesiannd {
   class grid_base : public grid_types_base<CARTGRID, DIM> {
     typedef grid_types_base<CARTGRID, DIM> base;
   public:
+    typedef typename base::size_type         size_type;
     typedef typename base::vertex_index_type vertex_index_type;
     typedef typename base::cell_index_type   cell_index_type;
     typedef typename base::index_type        index_type;
@@ -292,6 +296,15 @@ namespace cartesiannd {
     typedef typename base::FaceIterator      FaceIterator;
     typedef typename base::FacetIterator     FacetIterator;
     typedef typename base::CellIterator      CellIterator;
+    typedef typename base::Vertex    Vertex;
+    typedef typename base::Edge      Edge;
+    typedef typename base::Face      Face;
+    typedef typename base::Facet     Facet;
+    typedef typename base::Cell      Cell;
+
+    typedef typename base::VertexOnEdgeIterator VertexOnEdgeIterator;
+    typedef typename base::CellOnFacetIterator  CellOnFacetIterator;
+
     enum { dim = DIM };
     // protected:
   public:
@@ -339,16 +352,45 @@ namespace cartesiannd {
       cvdim(k);
       return maps[k].num_of_directions();
     }
+    
+    template<unsigned K>
+    void switch_element(sequence_iterator_t<CARTGRID,K-1> const& e_k_1,
+			sequence_iterator_t<CARTGRID,K  >      & e_k,
+			sequence_iterator_t<CARTGRID,K+1> const& e_k1) const
+    {
+      index_type i_k = e_k.index();
+      unsigned   m_k = e_k.direction();
+      delta_map<DIM>::switch_index(e_k_1.index(), e_k_1.direction(),
+				   i_k, m_k,
+				   e_k1 .index(), e_k1 .direction(),
+				   K);
+      e_k = sequence_iterator_t<CARTGRID,K>(e_k.TheGrid(), i_k, m_k);
+    }
+    void switch_element(sequence_iterator_t<CARTGRID,0>      & e_0,
+			sequence_iterator_t<CARTGRID,1> const& e_1) const
 
+    { VertexOnEdgeIterator v(e_1);  e_0 = (e_0 == *v ? *(++v) : *v);}
+
+    void switch_element(sequence_iterator_t<CARTGRID,dim-1> const& f,
+			sequence_iterator_t<CARTGRID,dim>        & c) const
+
+    { CellOnFacetIterator cf(f); c = ( c == *cf ? *(++cf) : *cf); }
+
+
+    void switch_vertex(Vertex& v, Edge const& e) const { switch_element(v,e);}
+    void switch_edge  (Vertex const& v, Edge& e, Face const& f) const { switch_element(v,e,f);}
+    void switch_cell  (Facet const& f, Cell& c)  const { switch_element(f,c);}
+    typedef sequence_iterator_t<CARTGRID,dim-2> Ridge;
+    void switch_facet (Ridge const& r, Facet& f, Cell const& c) const { switch_element(r,f,c);}
 
     //@{
     /*! \name Sequence iteration (Dimension-independent interface)
      */
     //! \brief Number of elements of dimension \c K (compile-time dimension)
     template<unsigned K>
-    unsigned NumOfElements()           const { cvdim(K); return offsets[K][maps[K].num_of_maps()];}
+    size_type NumOfElements()           const { cvdim(K); return offsets[K][maps[K].num_of_maps()];}
     //! \brief Number of elements of dimension \c k (run-time dimension)
-    unsigned NumOfElements(unsigned k) const { cvdim(k); return offsets[k][maps[k].num_of_maps()];}
+    size_type NumOfElements(unsigned k) const { cvdim(k); return offsets[k][maps[k].num_of_maps()];}
     
     //! \brief First element of dimension \c K
     template<unsigned K>
@@ -362,11 +404,11 @@ namespace cartesiannd {
     /*! \name Sequence iteration
         \brief STL-style (begin/end) and GrAL-style (IsDone) iteration  
     */
-    unsigned NumOfVertices() const { return NumOfElements(0);}
-    unsigned NumOfEdges()    const { return NumOfElements(1);}
-    unsigned NumOfFaces()    const { return NumOfElements(2);}
-    unsigned NumOfFacets()   const { return NumOfElements(DIM-1);}
-    unsigned NumOfCells()    const { return NumOfElements(DIM);}
+    size_type NumOfVertices() const { return NumOfElements(0);}
+    size_type NumOfEdges()    const { return NumOfElements(1);}
+    size_type NumOfFaces()    const { return NumOfElements(2);}
+    size_type NumOfFacets()   const { return NumOfElements(DIM-1);}
+    size_type NumOfCells()    const { return NumOfElements(DIM);}
 
     VertexIterator FirstVertex()  const { return FirstElement<0>();}
     EdgeIterator   FirstEdge()    const { return FirstElement<1>();}
@@ -476,49 +518,53 @@ namespace cartesiannd {
     typedef subrange<DIM>                 self;
 
   public:
-    typedef grid<DIM> grid_type;
+    typedef GrAL::cartesian_grid_view_category_d<DIM> category;
+
+    //    typedef grid<DIM> grid_type;
+    typedef self grid_type;
     typedef grid<DIM> base_grid_type;
     typedef grid<DIM-1> facet_grid_type;
 
     typedef typename base::index_type        index_type;
     typedef typename base::vertex_index_type vertex_index_type;
 
-    typedef grid_types_base<grid_type, DIM> bgt;
+    typedef grid_types_base<base_grid_type, DIM> bgt;
     typedef typename bgt::Vertex  BaseVertex;
     typedef typename bgt::Cell    BaseCell;
 
+
   private:
-    ref_ptr<grid_type const> g;
+    ref_ptr<base_grid_type const> g;
   public:
     //@{
     //! \name Constructors
     //! \brief Empty subrange
     subrange() {}
     //! \brief Subrange with vertex bounds \c [low,beyond[
-    subrange(grid_type const&         gg, vertex_index_type low, vertex_index_type beyond) : g(gg) 
+    subrange(base_grid_type const&         gg, vertex_index_type low, vertex_index_type beyond) : g(gg) 
     { init(low,beyond); }
 
     //! \brief Subrange with vertex bounds \c [low,beyond[
-    subrange(ref_ptr<grid_type const> gg, vertex_index_type low, vertex_index_type beyond) : g(gg) 
+    subrange(ref_ptr<base_grid_type const> gg, vertex_index_type low, vertex_index_type beyond) : g(gg) 
     { init(low,beyond); }
 
     //! \brief Subrange with cell bounds \c [clow,chigh]
-    subrange(grid_type         const& gg, BaseCell const& clow, BaseCell const& chigh)  : g(gg)
+    subrange(base_grid_type         const& gg, BaseCell const& clow, BaseCell const& chigh)  : g(gg)
     { init(clow.index(), chigh.index() + index_type(2));}
     //! \brief Subrange with cell bounds \c [clow,chigh]
-    subrange(ref_ptr<grid_type const> gg, BaseCell const& clow, BaseCell const& chigh)  : g(gg)
+    subrange(ref_ptr<base_grid_type const> gg, BaseCell const& clow, BaseCell const& chigh)  : g(gg)
     { init(clow.index(), chigh.index() + index_type(2));}
 
     //! \brief Subrange with vertex bounds \c [vlow,vhigh]
-    subrange(grid_type         const& gg, BaseVertex const& vlow, BaseVertex const& vhigh)  : g(gg)
+    subrange(base_grid_type         const& gg, BaseVertex const& vlow, BaseVertex const& vhigh)  : g(gg)
     { init(vlow.index(), vhigh.index() + index_type(1));}
     //! \brief Subrange with vertex bounds \c [vlow,vhigh]
-    subrange(ref_ptr<grid_type const> gg, BaseVertex const& vlow, BaseVertex const& vhigh)  : g(gg)
+    subrange(ref_ptr<base_grid_type const> gg, BaseVertex const& vlow, BaseVertex const& vhigh)  : g(gg)
     { init(vlow.index(), vhigh.index() + index_type(1));}
     //@}
 
     //! \brief Underlying grid
-    ref_ptr<grid_type const> BaseGrid() const { return g;}
+    ref_ptr<base_grid_type const> BaseGrid() const { return g;}
 
     //! \brief Conversion of subrange element handle to handle of underlying grid
     template<unsigned K>
@@ -543,6 +589,8 @@ namespace cartesiannd {
     typedef grid<DIM>                 self;
 
   public:
+    typedef GrAL::cartesian_grid_category_d<(int)DIM>     category;
+    typedef self                             grid_type;
     typedef grid<DIM>                        base_grid_type;
     typedef grid<DIM-1>                      facet_grid_type;
     typedef typename base::vertex_index_type vertex_index_type;
@@ -570,139 +618,12 @@ namespace cartesiannd {
     template<unsigned K>
     element_handle_t<self, K> base_handle(element_handle_t<self, K> h, unsigned dir) const { return h;}
 
+    
   }; // class grid<unsigned DIM>
 
 
 
 
-  //-----------------------------  archetype ---------------------------------
-
-  template<class CARTGRID>
-  struct  archetype_base_t {
-    typedef grid_types<CARTGRID> gt;
-
-    enum   { dim = CARTGRID::dim -1};
-    typedef grid_dim_tag<dim> dimension_tag;
-
-    unsigned dimension() const { return dim;}
-    typedef typename gt::Facet  Cell;
-    typedef typename gt::Vertex Vertex;
-    typedef typename gt::facet_handle  cell_handle;
-    typedef typename gt::vertex_handle vertex_handle;
-
-    typedef typename gt::VertexOnCellIterator  VertexIterator; 
-    typedef typename gt::FacetOnCellIterator   CellIterator; 
-    typedef typename gt::VertexOnFacetIterator VertexOnCellIterator;
-
-    typedef typename gt::Edge Edge;
-    typedef typename gt::edge_handle edge_handle;
-  };
-
-  /*! \brief Archetype type for n-dimensional Cartesian grids
-      \ingroup cartesianndmodule
-      
-      \todo The class does not work with copy algorithms using archetype isomorphisms,
-      because only typedefs are used.
-   */
-  template<class CARTGRID>
-  class archetype_t : public archetype_base_t<CARTGRID> {
-    typedef grid_types<CARTGRID> gt;
-    typedef archetype_base_t<CARTGRID> base;
-    CARTGRID g; // single D-dimensional cell
-  public:
-    enum { dim = CARTGRID::dim -1};
-    typedef typename base::Cell  Cell;
-    typedef typename base::Vertex Vertex;
-    typedef typename base::cell_handle   cell_handle;
-    typedef typename base::vertex_handle vertex_handle;
-
-    typedef typename base::VertexIterator       VertexIterator; 
-    typedef typename base::CellIterator         CellIterator; 
-    typedef typename base::VertexOnCellIterator VertexOnCellIterator;
-
-    typedef typename CARTGRID::facet_grid_type facet_grid_type;
-    typedef grid_types<facet_grid_type>        fgt;
-    typedef typename gt::vertex_index_type     vertex_index_type;
-    typedef typename gt::index_type            index_type;
-    // define archetype_type, _iterator etc.
-    // typedef typename archetype_of_grid<CARTGRID, CARTGRID::dim-1>::archetype archetype_type;
-
-    // create grid with 1 cell
-    //    archetype_t() : g(vertex_index_type(0), vertex_index_type(1)) {}
-    archetype_t() 
-    {
-      delta_map<CARTGRID::dim>::init();
-      g.init(vertex_index_type(0), vertex_index_type(2));
-      cg();
-      REQUIRE_ALWAYS(g.NumOfCells() == 1, "g.NumOfCells()=" << g.NumOfCells(), 1);
-      /*
-       ::std::cerr << "Init archetype " << CARTGRID::dim << ": " 
-		<< g.NumOfVertices() << " vertices, " << g.NumOfCells() << " cells" <<  ::std::endl;
-      g.print( ::std::cerr);
-      */
-    }
-    void print( ::std::ostream& out) const { g.print(out);}
-
-    void cg() const {
-      REQUIRE(g.NumOfCells() == 1, "g.NumOfCells()=" << g.NumOfCells(), 1);
-    }
-    // for having grid functions on archetype ...
-    operator CARTGRID const&() const { cg(); return g;}
-
-    CARTGRID const& BaseGrid() const { cg(); return g;}
-    unsigned NumOfVertices() const { cg(); return g.NumOfVertices();}
-    unsigned NumOfCells()    const { cg(); return g.NumOfFacets();}
-
-    VertexIterator FirstVertex() const { cg(); return VertexIterator(* g.FirstCell());}
-    CellIterator   FirstCell()   const { cg(); return CellIterator  (* g.FirstCell());}
-
-    // hack: assume 2D grid -> 1D arch
-    static void switch_vertex(Vertex      & v, Cell const& e) 
-    {
-      index_type idx_v = v.index();
-      index_type idx_e = e.index();
-      if(idx_v != idx_e) 
-	v = Vertex(v.TheGrid(), idx_e);
-      else {
-	int d = delta_map<dim+1>::sd->dirs[1][e.direction()][0];
-	idx_v[d] += 1;
-	v = Vertex(v.TheGrid(), idx_v);
-      }
-    }
-
-    static void switch_cell  (Vertex  const& f, Cell      & c) {
-      index_type idx_f = f.index();
-      index_type idx_c = c.index();
-      int m = c.direction(); // in {0,1}
-      int d_alt = delta_map<dim+1>::sd->dirs[1][m  ][0];
-      int d_new = delta_map<dim+1>::sd->dirs[1][1-m][0];
-      m = (1-m); 
-      index_type diff_1 = idx_f - idx_c;
-      index_type diff_2 = idx_c; // - 0 = index of g.TheCell();
-      index_type idx_c_new = idx_c;
-      idx_c_new[d_alt] += diff_1[d_alt];
-      idx_c_new[d_new] -= diff_2[d_new];
-      c = Cell(c.TheGrid(), idx_c_new, m);
-    }
-
-
-    typedef typename fgt::archetype_iterator archetype_iterator;
-    typedef typename fgt::archetype_handle   archetype_handle;
-    typedef typename fgt::archetype_type     archetype_type;
-
-    static archetype_type const&  ArchetypeOf (Cell const&) { return facet_grid_type::TheArchetype();}
-    static archetype_type const&  ArchetypeOf (cell_handle) { return facet_grid_type::TheArchetype();}
-    static archetype_handle       archetype_of(Cell const&) { return facet_grid_type::the_archetype();}
-    static archetype_handle       archetype_of(cell_handle) { return facet_grid_type::the_archetype();}
- 
-    static archetype_type const&  Archetype(archetype_handle a) { return facet_grid_type::Archetype(a);}
-
-    static archetype_iterator BeginArchetype() { return facet_grid_type::BeginArchetype();}
-    static archetype_iterator EndArchetype()   { return facet_grid_type::EndArchetype();}
-    static archetype_handle   handle(archetype_iterator it) { return facet_grid_type::handle(it);}
-    static unsigned NumOfArchetypes() { return facet_grid_type::NumOfArchetypes();}
-    
-  };
 
 
   //----------------------------- sequence iterators ---------------------------------
@@ -712,20 +633,25 @@ namespace cartesiannd {
     typedef grid_types_base<CARTGRID, CARTGRID::dim> base;
     typedef sequence_iterator_t<CARTGRID, K>         self;
   public:
+    struct category : public grid_element_category_d<K>, public grid_sequence_iterator_category_d<K> {};
+    //    typedef grid_element_category_d<K> category;
+    // typedef element_type_tag;
     typedef CARTGRID                                 grid_type;
     enum { dim = K, codim = CARTGRID::dim -K, griddim = CARTGRID::dim};
     unsigned dimension()   const { return dim;}
     unsigned codimension() const { return codim;}
 
     typedef typename grid_type::base_grid_type  base_grid_type;
-    typedef element_handle_t<base_grid_type,K>  element_handle;
+    //typedef element_handle_t<base_grid_type,K>  element_handle;
+    typedef element_handle_t<grid_type,K>       element_handle;
     typedef element_handle_t<CARTGRID, K>       local_element_handle;
 
+    typedef typename base::size_type         size_type;
     typedef typename base::index_type        index_type;
     typedef tuple<int, K>                    local_index_type;
 
-    //    typedef self                             value_type;
-    typedef typename element_type<grid_type, K, griddim - K>::type value_type;
+    typedef self                             value_type;
+    //    typedef typename element_type<grid_type, K, griddim - K>::type value_type;
   private:
     ref_ptr<grid_type const> g;
     local_element_handle     h;
@@ -759,7 +685,7 @@ namespace cartesiannd {
       : g(rhs.TheGrid().BaseGrid()), 
 	h(g->template index2handle<K>(rhs.index(),rhs.direction())),  m(rhs.direction())
     {}
-
+    /*
     // initialization from subrange 
     // this will work only if element_handle and local_element_handle are the same.
     template<class CARTSUBRANGE>
@@ -767,7 +693,7 @@ namespace cartesiannd {
 
     template<class CARTSUBRANGE>
     sequence_iterator_t(        CARTSUBRANGE const& rge, element_handle hh) : g(rge. BaseGrid()), h(hh) { init_m();}
-
+    */
 
     self&       operator++()       { cv(); ++h; advance_m(); return *this; }
     bool        IsDone()     const { cb(); return m >= g->maps[K].num_of_maps();}
@@ -779,7 +705,7 @@ namespace cartesiannd {
 
     local_element_handle local_handle() const { cb(); return h;}
     //! \c handle() return  unique element handle with respect to base grid
-    element_handle     handle()    const { cb(); return TheGrid().base_handle(h,m);}
+    element_handle     handle()    const { cb(); return h;} // TheGrid().base_handle(h,m);}
     unsigned           direction() const { cb(); return m;}
 
     //! for \f$ K \neq 0, D \f$, \c index() is not unique!
@@ -788,25 +714,24 @@ namespace cartesiannd {
     index_type high_vertex_index() const { 
       index_type res(index()); 
       res += delta_map<griddim>::template num2index<index_type>(K,m);
-      /*
-      for(int d = 0; d < dirs.size(); ++d)
-	res[dirs[d]] += 1;
-      */
       return res;
     }
 
     typedef typename base::archetype_type archetype_type;
     typedef typename base::Vertex         Vertex;
     typedef typename base::vertex_handle  vertex_handle;
-
+     
+    // typedef grid_types<archetype_type>    archgt;
+    typedef typename base::archgt           archgt;
+    // typedef grid_types_arch_base<grid_type, griddim> archgt;
     // this is useful only for cells, i.e. K=DIM
-    Vertex        V(typename archetype_type::Vertex const& av) const { return Vertex(TheGrid(), index() + av.index());}
-    vertex_handle v(typename archetype_type::Vertex const& av) const { return TheGrid().get_vertex_handle(index()+av.index());}
+    Vertex        V(typename archgt::Vertex const& av) const { return Vertex(TheGrid(), index() + av.Base().index());}
+    vertex_handle v(typename archgt::Vertex const& av) const { return TheGrid().get_vertex_handle(index()+av.Base().index());}
 
-    Vertex        V(typename archetype_type::vertex_handle av) const 
-    { return V(typename archetype_type::Vertex(TheArchetype(), av));}
-    vertex_handle v(typename archetype_type::vertex_handle av) const 
-    { return V(av).handle();}
+    Vertex        V(typename archgt::vertex_handle av) const 
+        { return V(typename archetype_type::Vertex(TheArchetype(), av));}
+    vertex_handle v(typename archgt::vertex_handle av) const
+     { return V(av).handle();}
     Vertex        V(int av) const { return V(typename archetype_type::vertex_handle(av));}
     vertex_handle v(int av) const { return v(typename archetype_type::vertex_handle(av));}
 
@@ -818,6 +743,7 @@ namespace cartesiannd {
     // local is offset on local coordinates of the element, i.e. has as many dimensions as  this->dimension()
     Vertex        Vl(local_index_type local) const { return V(full_index(local));}
     vertex_handle vl(local_index_type local) const { return v(full_index(local));}
+
 
     index_type full_index(local_index_type local) const {
       //if(dimension() == griddim)
@@ -863,13 +789,13 @@ namespace cartesiannd {
 
 
     template<unsigned M>
-    unsigned NumOfElements() const;
+    size_type NumOfElements() const;
 
-    unsigned NumOfVertices() const { return NumOfElements<0>();}    
-    unsigned NumOfEdges   () const { return NumOfElements<1>();}    
-    unsigned NumOfFaces   () const { return NumOfElements<2>();}    
-    unsigned NumOfFacets  () const { return NumOfElements<griddim-1>();}    
-    unsigned NumOfCells   () const { return NumOfElements<griddim>  ();}    
+    size_type NumOfVertices() const { return NumOfElements<0>();}    
+    size_type NumOfEdges   () const { return NumOfElements<1>();}    
+    size_type NumOfFaces   () const { return NumOfElements<2>();}    
+    size_type NumOfFacets  () const { return NumOfElements<griddim-1>();}    
+    size_type NumOfCells   () const { return NumOfElements<griddim>  ();}    
 
 
 
@@ -921,10 +847,11 @@ namespace cartesiannd {
   template<class CARTGRID, unsigned K, unsigned M>
   class downward_inc_iterator_t : public grid_types_base<CARTGRID, CARTGRID::dim> {
   private:
-    typedef CARTGRID                                 grid_type;
     typedef grid_types_base<CARTGRID, CARTGRID::dim> base;
     typedef downward_inc_iterator_t<CARTGRID, K, M>  self;
   public:
+    typedef grid_incidence_iterator_category_d<M,K>        category;
+    typedef CARTGRID                                       grid_type;
     enum { dim = base::dim}; 
     typedef typename base::index_type                      index_type;
     typedef typename grid_type::base_grid_type             base_grid_type;
@@ -934,12 +861,11 @@ namespace cartesiannd {
     typedef element_type                                   value_type;
   private:
     anchor_type a;
-
-    unsigned                    loc;
+    int         loc;
 
   public:
     downward_inc_iterator_t() {}
-    explicit downward_inc_iterator_t(anchor_type const& aa, unsigned ll = 0) : a(aa), loc(ll) 
+    explicit downward_inc_iterator_t(anchor_type const& aa, int ll = 0) : a(aa), loc(ll) 
     { } //  ::std::cout << "downward_inc_iterator_t<" << K << "," << M << ">" <<  ::std::endl; }
 
     self& operator++()  { cv(); ++loc; return *this;}
@@ -950,7 +876,7 @@ namespace cartesiannd {
     unsigned   direction()    const { cv(); return table()[loc].dir;}
     unsigned   local_handle() const { cb(); return loc;}
 
-    bool IsDone() const { cb(); return loc >= table().size(); }
+    bool IsDone() const { cb(); return loc >= (int)table().size(); }
     
     ref_ptr<anchor_type const> TheAnchor() const { return ref_ptr<anchor_type const>(a);}
     //  ref_ptr<grid_type   const> TheGrid()   const { return a.TheGrid();}
@@ -990,6 +916,8 @@ namespace cartesiannd {
     typedef grid_types_base<CARTGRID, CARTGRID::dim> base;
     typedef upward_inc_iterator_t<CARTGRID, K, M>    self;
   public:
+    typedef grid_incidence_iterator_category_d<M,K>        category;
+
     enum { dim = base::dim};
     typedef typename base::index_type                      index_type;
     typedef typename grid_type::base_grid_type             base_grid_type;
@@ -999,11 +927,11 @@ namespace cartesiannd {
     typedef element_type                                   value_type;
   private:
     anchor_type a;
-    unsigned    loc;
+    int         loc;
 
   public:
     upward_inc_iterator_t() {}
-    explicit upward_inc_iterator_t(anchor_type const&         aa, unsigned ll = 0) : a(aa), loc(ll) 
+    explicit upward_inc_iterator_t(anchor_type const&         aa, int ll = 0) : a(aa), loc(ll) 
     {
       //  ::std::cout << "upward_inc_iterator_t<" << K << "," << M << ">" <<  ::std::endl; 
       advance_till_valid();
@@ -1017,7 +945,7 @@ namespace cartesiannd {
     unsigned   direction()    const { cv(); return table()[loc].dir;}
     unsigned   local_handle() const { cb(); return loc;}
 
-    bool IsDone() const { cb(); return loc >= table().size(); }
+    bool IsDone() const { cb(); return loc >= (int)table().size(); }
     
     ref_ptr<anchor_type const> TheAnchor() const { return ref_ptr<anchor_type const>(a);}
     //ref_ptr<grid_type   const> TheGrid()   const { return a.TheGrid();}
@@ -1049,6 +977,16 @@ namespace cartesiannd {
  { return !(lhs==rhs);}
   //#endif
 
+
+
+
+
+
+
+  //-----------------------------  archetype ---------------------------------
+
+
+
 } // namespace cartesiannd
 
 
@@ -1056,42 +994,17 @@ namespace cartesiannd {
 
 template<unsigned DIM>
 struct grid_types<cartesiannd::grid<DIM> > 
-  : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::grid<DIM>, DIM> >
+  : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::grid<DIM>, DIM> > 
 {
   typedef cartesiannd::grid<DIM>          grid_type;
   typedef cartesiannd::subrange<DIM>      cartesian_subrange_type;
 };
 
-template<unsigned DIM>
-struct grid_types<cartesiannd::archetype_t<cartesiannd::grid<DIM> > >
-  : public grid_types_base<cartesiannd::archetype_base_t<cartesiannd::grid<DIM> > >
-{
-  typedef cartesiannd::archetype_t<cartesiannd::grid<DIM> > grid_type;
-  typedef cartesiannd::archetype_t<cartesiannd::grid<DIM> > at;
-  typedef typename at::archetype_iterator archetype_iterator;
-  typedef typename at::archetype_handle   archetype_handle;
-  typedef typename at::archetype_type     archetype_type;
-
-  typedef grid_dim_tag<DIM-1> dimension_tag;
-};
-
-template<unsigned DIM>
-struct grid_types<cartesiannd::archetype_t<cartesiannd::subrange<DIM> > >
-  : public grid_types_base<cartesiannd::archetype_base_t<cartesiannd::subrange<DIM> > >
-{
-  typedef cartesiannd::archetype_t<cartesiannd::subrange<DIM> > grid_type;
-  typedef cartesiannd::archetype_t<cartesiannd::subrange<DIM> > at;
-  typedef typename at::archetype_iterator                       archetype_iterator;
-  typedef typename at::archetype_handle                         archetype_handle;
-  typedef typename at::archetype_type                           archetype_type;
-
-  typedef grid_dim_tag<DIM-1> dimension_tag;
-};
 
 
 template<unsigned DIM>
 struct grid_types<cartesiannd::subrange<DIM> > 
-  : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::subrange<DIM>, DIM> >
+  : public grid_types_base<cartesiannd::grid_types_base<cartesiannd::subrange<DIM>, DIM> > 
 {
   typedef cartesiannd::subrange<DIM> grid_type;
 
@@ -1099,6 +1012,23 @@ struct grid_types<cartesiannd::subrange<DIM> >
   //  typedef cartesiannd::subrange<DIM> cartesian_subrange_type;
 };
 
+
+
+template<unsigned DIM, unsigned DE>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, DE> >
+{
+  enum { dim = DE, codim = DIM - DE };
+};
+
+template<unsigned DIM, unsigned DE>
+struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::subrange<DIM>, DE> >
+{
+  enum { dim = DE, codim = DIM - DE };
+};
+
+
+
+  // FIXME: use element_trait_base<> !
 
 // vertex
 template<unsigned DIM>
@@ -1188,6 +1118,45 @@ struct element_traits<cartesiannd::sequence_iterator_t<cartesiannd::grid<2>, 1> 
 
 
 
+// element_d etc for grid<DIM>
+// TODO: also for subrange<>
+
+template<unsigned DIM, int DE>
+struct element_handle_d<grid_types<cartesiannd::grid<DIM> >, DE> 
+{ typedef cartesiannd::element_handle_t<cartesiannd::grid<DIM>, (unsigned)DE> type; };
+
+template<unsigned DIM, int DE>
+struct element_d<grid_types<cartesiannd::grid<DIM> >, DE> 
+{ typedef cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, (unsigned)DE> type; };
+
+template<unsigned DIM, int DE>
+struct sequence_iterator_d<grid_types<cartesiannd::grid<DIM> >, DE> 
+{ typedef cartesiannd::sequence_iterator_t<cartesiannd::grid<DIM>, (unsigned)DE> type; };
+
+template<unsigned DIM, int DE, int DA>
+struct incidence_iterator_d<grid_types<cartesiannd::grid<DIM> >, DE, DA> 
+{ typedef typename cartesiannd::incidence_iterator_type<cartesiannd::grid<DIM>, (unsigned)DA, (unsigned)DE>::type  type; };
+
+
+
+// element_d etc for subrange<DIM>
+template<unsigned DIM, int DE>
+struct element_handle_d<grid_types<cartesiannd::subrange<DIM> >, DE> 
+{ typedef cartesiannd::element_handle_t<cartesiannd::subrange<DIM>, (unsigned)DE> type; };
+
+template<unsigned DIM, int DE>
+struct element_d<grid_types<cartesiannd::subrange<DIM> >, DE> 
+{ typedef cartesiannd::sequence_iterator_t<cartesiannd::subrange<DIM>, (unsigned)DE> type; };
+
+template<unsigned DIM, int DE>
+struct sequence_iterator_d<grid_types<cartesiannd::subrange<DIM> >, DE> 
+{ typedef cartesiannd::sequence_iterator_t<cartesiannd::subrange<DIM>, (unsigned)DE> type; };
+
+template<unsigned DIM, int DE, int DA>
+struct incidence_iterator_d<grid_types<cartesiannd::subrange<DIM> >, DE, DA> 
+{ typedef typename cartesiannd::incidence_iterator_type<cartesiannd::subrange<DIM>, (unsigned)DA, (unsigned)DE>::type  type; };
+
+
 
 //-----------------------  inline functions  ----------------------------
 
@@ -1196,12 +1165,13 @@ namespace cartesiannd {
   template<class CARTGRID, unsigned K>
   template<unsigned M>
   inline
-  unsigned sequence_iterator_t<CARTGRID,K>::NumOfElements() const {
+  typename sequence_iterator_t<CARTGRID,K>::size_type
+  sequence_iterator_t<CARTGRID,K>::NumOfElements() const {
     if(M < K)
       return delta_map<griddim>::sd->incs[K][M][direction()].size();
     else {
       typename incidence_iterator_type<CARTGRID,K,M>::type it(FirstElement<M>());
-      int cnt = 0;
+      size_type cnt = 0;
       while(!it.IsDone()) {
 	++it;
 	++cnt;
@@ -1273,15 +1243,54 @@ namespace cartesiannd {
   inline 
   grid<3>::grid(int b1, int b2, int b3) { init(vertex_index_type(0), vertex_index_type(b1,b2,b3)); }
 
+
+
+  //--------------------- begin/end/size overloads --------------------
+
+  template<class CART, unsigned K>
+  sequence_iterator_t<CART,K> gral_begin(CART const& a, sequence_iterator_t<CART, K>) { return a.template FirstElement <K>();}
+  template<class CART, unsigned K>
+  sequence_iterator_t<CART,K> gral_end  (CART const& a, sequence_iterator_t<CART, K>) { return a.template EndElement   <K>();}
+  template<class CART, unsigned K>
+  int                            gral_size (CART const& a, sequence_iterator_t<CART, K>) { return a.template NumOfElements<K>();}
+
+  template<class CART, unsigned K, unsigned M>
+  downward_inc_iterator_t<CART ,K,M>
+  gral_begin(sequence_iterator_t<CART,K> const& a, downward_inc_iterator_t<CART ,K,M>)
+  { return a.template FirstElement <M>(); }
+
+  template<class CART, unsigned K, unsigned M>
+  downward_inc_iterator_t<CART ,K,M>
+  gral_end  (sequence_iterator_t<CART,K> const& a, downward_inc_iterator_t<CART ,K,M>)
+  { return a.template EndElement   <M>(); }
+
+  template<class CART, unsigned K, unsigned M>
+  int
+  gral_size (sequence_iterator_t<CART,K> const& a, downward_inc_iterator_t<CART ,K,M>) 
+  { return a.template NumOfElements<M>(); }
+ 
+
+
+  template<class CART, unsigned K, unsigned M>
+  upward_inc_iterator_t<CART ,K,M>
+  gral_begin(sequence_iterator_t<CART,K> const& a, upward_inc_iterator_t<CART ,K,M>)
+  { return a.template FirstElement <M>(); }
+
+  template<class CART, unsigned K, unsigned M>
+  upward_inc_iterator_t<CART ,K,M>
+  gral_end  (sequence_iterator_t<CART,K> const& a, upward_inc_iterator_t<CART ,K,M>)
+  { return a.template EndElement   <M>(); }
+
+  template<class CART, unsigned K, unsigned M>
+  int
+  gral_size (sequence_iterator_t<CART,K> const& a, upward_inc_iterator_t<CART ,K,M>) 
+  { return a.template NumOfElements<M>(); }
+
+
 } // namespace cartesiannd
 
 } // namespace GrAL 
 
-/*
-template<class CARTGRID, unsigned K>
-inline bool operator!=(GrAL::cartesiannd::sequence_iterator_t<CARTGRID,K>  lhs, 
-		       GrAL::cartesiannd::sequence_iterator_t<CARTGRID,K>  rhs)
-{ return !(lhs==rhs);}
-*/
+
 
 #endif
