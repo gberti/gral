@@ -105,7 +105,7 @@ public:
       }
       \endcode
    */
-  explicit cell_on_cell_iterator(FacetOnCellIterator const& fc_) : c(fc_.TheCell()), fc(fc_) 
+  explicit cell_on_cell_iterator(FacetOnCellIterator const& fc_) : c(fc_.TheAnchor()), fc(fc_) 
   {
     init_table();
     // not necessary valid_neigbhor().
@@ -141,15 +141,36 @@ public:
 
   void next_facet()           { ++fc;}
   void next_neighbor()        { next_facet(); advance_till_valid();}
+
+  static self begin(Cell c) { return self(c);}
+  static self end  (Cell c) { return self(GrAL::end<FacetOnCellIterator>(c));}
+
+  bool operator==(self rhs) const { return c == rhs.c && fc == rhs.fc;}
+  bool operator!=(self rhs) const { return !(*this == rhs);}
+
 private:
   void cv() const { REQUIRE(valid_neighbor(), "",1);}
-  bool valid(cell_handle c) const { return TheGrid().valid_cell(c);}
+  bool valid(cell_handle ch) const { return TheGrid().valid_cell(ch);}
+
   void advance_till_valid() 
   { 
     while(! fc.IsDone() && ! valid(handle()))
       ++fc;
   } 
 };
+
+
+  template<class G, class NBTABLE, class GT>
+  inline
+  cell_on_cell_iterator<G,NBTABLE, GT> gral_begin(typename GT::Cell const& c, cell_on_cell_iterator<G,NBTABLE, GT>)
+  { return cell_on_cell_iterator<G,NBTABLE, GT>::begin(c);}
+ 
+  template<class G, class NBTABLE, class GT>
+  inline
+  cell_on_cell_iterator<G,NBTABLE, GT> gral_end  (typename GT::Cell const& c, cell_on_cell_iterator<G,NBTABLE, GT>)
+  { return cell_on_cell_iterator<G,NBTABLE, GT>::end(c);}
+
+
 
 } // namespace GrAL 
 

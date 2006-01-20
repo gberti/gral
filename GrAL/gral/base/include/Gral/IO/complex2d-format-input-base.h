@@ -97,7 +97,9 @@ public:
   unsigned NumOfCells()    const { self::init(); return nc;}
 
   VertexIterator FirstVertex() const;
+  VertexIterator EndVertex()   const;
   CellIterator   FirstCell()   const;
+  CellIterator   EndCell()     const;
 
   Vertex vertex(vertex_handle v) const;
   // this would require random access to cells which is not possible!
@@ -114,8 +116,14 @@ public:
  */
 class VertexIterator_istream_complex2d 
 {
+  friend class  IstreamComplex2DFmt_base;
+  friend class  VertexOnCellIterator_istream_complex2d; 
+ typedef  VertexIterator_istream_complex2d   self;
+public:
   typedef  IstreamComplex2DFmt_base grid_type;
-  typedef  VertexIterator_istream_complex2d   self;
+
+  typedef grid_type anchor_type;
+  typedef self      value_type;
 private:
   grid_type const* g;
   int v; 
@@ -126,36 +134,34 @@ public:
     : g(&gg), v(0) 
     { 
       g->init(); 
-      //g->set_vertex_iter_initialized();
     }
-  VertexIterator_istream_complex2d(grid_type const& gg, int vv)
-    : g(&gg), v(vv) 
-    { 
-      g->init(); 
-      //g->set_vertex_iter_initialized();
-    } 
-  
+  // private:
+  // jumping into the middle is in general not possible, only exception: past-the-end iterator
+  // however, vertices are read completely by derived grid class ...
+  VertexIterator_istream_complex2d(grid_type const& gg, int vv) : g(&gg), v(vv) { }
+public:
 
   self& operator++() {
-    assure_valid();
+    cv();
     ++v;
     return *this;
   }
 
-  self const& operator*() const  { assure_valid(); return *this;}
-  bool IsDone() const { return (v >= (int)g->NumOfVertices());}
-  int  handle() const { return v;}
+  self const& operator*() const  { cv(); return *this;}
+  bool IsDone() const { cb(); return (v >= (int)g->NumOfVertices());}
+  int  handle() const { cv(); return v;}
 
   bool operator==(self const& rhs) const { return v == rhs.v;}
+  bool operator!=(self const& rhs) const { return v != rhs.v;}
   bool operator< (self const& rhs) const { return v <  rhs.v;}
 
-  grid_type const& TheGrid() const { return *g;}
+  grid_type   const& TheGrid()   const { return *g;}
+  anchor_type const& TheAnchor() const { return *g;}
 
-  void assure_valid() const {
-    ENSURE((( g != 0) && ( v >= 0) && (v < g->nv)),
-	   "invalid vertex iterator!",1);
-  }
-
+  bool bound() const { return g!=0;}
+  bool valid() const { return bound() && !IsDone();}
+  void cb()    const { REQUIRE(bound(), "", 1);}
+  void cv()    const { REQUIRE(valid(), "", 1);}
 };
 
 
@@ -168,8 +174,13 @@ public:
     \see IstreamComplex2DFmt_base
  */
 class CellIterator_istream_complex2d {
-  typedef  IstreamComplex2DFmt_base              grid_type;
-  typedef  CellIterator_istream_complex2d   self;
+  friend class  IstreamComplex2DFmt_base;
+  typedef       CellIterator_istream_complex2d   self;
+public:
+  typedef  IstreamComplex2DFmt_base  grid_type;
+
+  typedef grid_type anchor_type;
+  typedef self      value_type;
 private:
   grid_type const* g;
   int  c; // current cell number
@@ -184,6 +195,10 @@ public:
       if(!IsDone())
 	g->In() >> nv;
     }
+private:
+  // jumping into the middle is in general not possible, only exception: past-the-end iterator
+  CellIterator_istream_complex2d(grid_type const& gg, int cc) : g(&gg), c(cc), nv(-1) {}
+public:
 
   self& operator++() { 
    ++c;
@@ -193,11 +208,24 @@ public:
   }
   self const& operator*() const { return *this;}
   bool IsDone() const { return (c >= (int)g->NumOfCells());}
-  grid_type const& TheGrid() const { return *g;}
-  int NumOfVertices() const { return nv;}
-  int handle()  const { return c;}
+  int  NumOfVertices() const { return nv;}
+  int  handle()  const { return c;}
+
+  grid_type   const& TheGrid()   const { return *g;}
+  anchor_type const& TheAnchor() const { return *g;}
 
   VertexOnCellIterator_istream_complex2d FirstVertex() const;
+  VertexOnCellIterator_istream_complex2d EndVertex()   const;
+
+  bool operator==(self const& rhs) const { return c == rhs.c;}
+  bool operator!=(self const& rhs) const { return c != rhs.c;}
+  bool operator< (self const& rhs) const { return c <  rhs.c;}
+
+  bool bound() const { return g!=0;}
+  bool valid() const { return bound() && !IsDone();}
+  void cb()    const { REQUIRE(bound(), "", 1);}
+  void cv()    const { REQUIRE(valid(), "", 1);}
+
 };
 
 
@@ -212,54 +240,59 @@ public:
     \see IstreamComplex2DFmt_base
  */
 class VertexOnCellIterator_istream_complex2d {
-  typedef  IstreamComplex2DFmt_base      grid_type;
-  typedef  VertexIterator_istream_complex2d        Vertex;
   typedef  VertexOnCellIterator_istream_complex2d  self;
+  friend   class  CellIterator_istream_complex2d;
+public:
+  typedef  IstreamComplex2DFmt_base           grid_type;
+  typedef  VertexIterator_istream_complex2d   Vertex;
+  typedef  CellIterator_istream_complex2d     Cell;
+
+  typedef Vertex value_type;
+  typedef Cell   anchor_type;
 private:
+  /*
   grid_type const* g;
   int nv;
   int  c;
+  */
+  Cell C;
   int lv; // local vertex  number
   int vc; // global vertex number of lv;
 public:
-  VertexOnCellIterator_istream_complex2d() 
-    : g(0), nv(-1), c(-1) 
-    {}
-  VertexOnCellIterator_istream_complex2d(CellIterator_istream_complex2d const& cc)
-  { *this = cc.FirstVertex();}
+  VertexOnCellIterator_istream_complex2d()  {}
+  VertexOnCellIterator_istream_complex2d(Cell const& cc) : C(cc), lv(0)
+  { read();}
+private:
+  VertexOnCellIterator_istream_complex2d(Cell const& cc, int LV) : C(cc), lv(LV) {}
 
-  VertexOnCellIterator_istream_complex2d(grid_type const& gg,
-					 int NV, int C)
-    : g(&gg),
-      nv(NV),
-      c(C),
-      lv(0)
-    {
-      if(!IsDone())
-	g->In() >> vc;
-    }
-  
+public:
+
   self& operator++() {
     ++lv;
-    if(! IsDone())
-      g->In() >> vc;
+    read();
     return *this;
   }
 
-  bool    IsDone()       const { return (lv >= nv);}
-  Vertex  operator*()    const { assure_valid(); return Vertex(*g,vc-g->offset);}
-  int     handle()       const { assure_valid(); return vc - g->offset;}
-  grid_type const& TheGrid() const { return *g;}
+  bool    IsDone()       const { return (lv >= C.NumOfVertices());}
+  Vertex  operator*()    const { cv(); return Vertex(TheGrid(), handle());}
+  int     handle()       const { cv(); return vc - TheGrid().offset;}
+
+  grid_type   const& TheGrid()   const { cb(); return C.TheGrid();}
+  anchor_type const& TheAnchor() const { cb(); return C;}
 
   bool operator==(self const& rhs) const { return lv == rhs.lv;}
+  bool operator!=(self const& rhs) const { return lv != rhs.lv;}
   bool operator< (self const& rhs) const { return lv <  rhs.lv;}
 
-  void assure_valid() const {
-    ENSURE((( g != 0) && ( vc - g->offset >= 0) && (vc - g->offset < g->nv)),
-	   " invalid vertex-on-cell iterator: vc =" << vc 
-           << ", offset = " << g->offset << ", nv = " << g->nv << '\n',1);
+  bool bound() const { return C.valid();}
+  bool valid() const { return bound() && !IsDone();}
+  void cb()    const { REQUIRE(bound(), "", 1);}
+  void cv()    const { REQUIRE(valid(), "", 1);}
+private:
+  void read() { 
+    if(!IsDone())
+      TheGrid().In() >> vc;
   }
-
 };
 
 
@@ -269,15 +302,28 @@ IstreamComplex2DFmt_base::coord_type const&
 IstreamComplex2DFmt_base::coord(VertexIterator_istream_complex2d const& v) const 
 { return v.coord();}
 */
+
 inline 
 VertexIterator_istream_complex2d
 IstreamComplex2DFmt_base::FirstVertex() const
 { return VertexIterator(*this);}
 
 inline 
+VertexIterator_istream_complex2d
+IstreamComplex2DFmt_base::EndVertex() const
+{ return VertexIterator(*this, NumOfVertices());}
+
+
+inline 
 CellIterator_istream_complex2d
 IstreamComplex2DFmt_base::FirstCell()  const
 { return CellIterator(*this);}
+
+inline 
+CellIterator_istream_complex2d
+IstreamComplex2DFmt_base::EndCell()  const
+{ return CellIterator(*this,NumOfCells());}
+
 
 inline 
 IstreamComplex2DFmt_base::Vertex
@@ -288,7 +334,29 @@ IstreamComplex2DFmt_base::vertex(IstreamComplex2DFmt_base::vertex_handle v) cons
 inline 
 VertexOnCellIterator_istream_complex2d
 CellIterator_istream_complex2d::FirstVertex() const 
-{ return VertexOnCellIterator_istream_complex2d(*g,nv,c); }
+{ return VertexOnCellIterator_istream_complex2d(*this);}
+
+inline 
+VertexOnCellIterator_istream_complex2d
+CellIterator_istream_complex2d::EndVertex() const 
+{ return VertexOnCellIterator_istream_complex2d(*this,nv);}
+
+
+
+struct grid_types_IstreamComplex2DFmt_base : public grid_types_detail::grid_types_root
+{
+  typedef IstreamComplex2DFmt_base       grid_type;
+  typedef GrAL::signed_size_t            size_type;
+  typedef grid_dim_tag<2>                dimension_tag;
+
+  typedef  grid_type::Vertex               Vertex;
+  typedef  grid_type::VertexIterator       VertexIterator;
+  typedef  grid_type::VertexOnCellIterator VertexOnCellIterator;
+  typedef  grid_type::Cell                 Cell;
+  typedef  grid_type::CellIterator         CellIterator;
+  typedef  grid_type::vertex_handle        vertex_handle;
+  typedef  grid_type::cell_handle          cell_handle;
+};
 
 
 /*! \brief Specialization of  \c grid_types  for IstreamComplex2DFmt_base
@@ -300,19 +368,10 @@ CellIterator_istream_complex2d::FirstVertex() const
     \see IstreamComplex2DFmt_base
  */
 template<>
-struct grid_types<IstreamComplex2DFmt_base>
-{
-  typedef IstreamComplex2DFmt_base       grid_type;
-  typedef grid_dim_tag<2>                dimension_tag;
+struct grid_types<IstreamComplex2DFmt_base> 
+  : public grid_types_base<grid_types_IstreamComplex2DFmt_base>
+{};
 
-  typedef  grid_type::Vertex               Vertex;
-  typedef  grid_type::VertexIterator       VertexIterator;
-  typedef  grid_type::VertexOnCellIterator VertexOnCellIterator;
-  typedef  grid_type::Cell                 Cell;
-  typedef  grid_type::CellIterator         CellIterator;
-  typedef  grid_type::vertex_handle        vertex_handle;
-  typedef  grid_type::cell_handle          cell_handle;
-};
 
 template<>
 struct element_traits<VertexIterator_istream_complex2d>

@@ -71,6 +71,59 @@ public:
 };
 
 
+
+struct grid_types_OstreamComplex2DFmt : public grid_types_detail::grid_types_root
+{
+  typedef  OstreamComplex2DFmt             grid_type;
+  typedef  grid_dim_tag<2>                 dimension_tag;
+
+  typedef  grid_type::Vertex               Vertex;
+  typedef  grid_type::Cell                 Cell;
+  typedef  grid_type::VertexIterator       VertexIterator;
+  typedef  grid_type::CellIterator         CellIterator;
+  typedef  grid_type::vertex_handle        vertex_handle;
+  typedef  grid_type::cell_handle          cell_handle;
+};
+
+
+/*!  \brief Specialization of  \c grid_types  for OstreamComplex2DFmt
+    \ingroup complex2dformat
+
+
+    \see Module \ref complex2dformat
+    \see Module \ref traits (\c grid_types)
+    \see OstreamComplex2DFmt
+
+*/
+
+template<>
+struct grid_types<OstreamComplex2DFmt> :
+  public grid_types_base<grid_types_OstreamComplex2DFmt> 
+{};
+
+
+template<>
+struct element_traits<vertex_iterator_int<grid_types<OstreamComplex2DFmt> > >
+  : public element_traits_vertex_base<OstreamComplex2DFmt> 
+{
+  struct hasher_type : public hasher_type_elem_base {
+    unsigned operator()(vertex_iterator_int<grid_types<OstreamComplex2DFmt> > const& v) const
+    { return unsigned(v.handle());}
+  };
+};
+
+template<>
+struct element_traits<cell_iterator_int<grid_types<OstreamComplex2DFmt> > >
+  : public element_traits_cell_base<OstreamComplex2DFmt> 
+{
+  struct hasher_type  : public hasher_type_elem_base {
+    unsigned operator()(cell_iterator_int<grid_types<OstreamComplex2DFmt> > const& c) const
+    { return unsigned(c.handle());}
+  };
+};
+
+
+
 /*! \brief ConstructGrid overload for OstreamComplex2DFmt
   \ingroup complex2dformat
   \relates OstreamComplex2DFmt
@@ -151,51 +204,8 @@ public:
   grid_function(grid_type const& gg, T const& tt) : base(gg,tt) {}
 };
 
-/*!  \brief Specialization of  \c grid_types  for OstreamComplex2DFmt
-    \ingroup complex2dformat
 
 
-    \see Module \ref complex2dformat
-    \see Module \ref traits (\c grid_types)
-    \see OstreamComplex2DFmt
-
-*/
-
-template<>
-struct grid_types<OstreamComplex2DFmt>
-{
-  grid_types() {}
-  typedef  OstreamComplex2DFmt             grid_type;
-  typedef  grid_dim_tag<2>                 dimension_tag;
-
-  typedef  grid_type::Vertex               Vertex;
-  typedef  grid_type::Cell                 Cell;
-  typedef  grid_type::VertexIterator       VertexIterator;
-  typedef  grid_type::CellIterator         CellIterator;
-  typedef  grid_type::vertex_handle        vertex_handle;
-  typedef  grid_type::cell_handle          cell_handle;
-};
-
-
-template<>
-struct element_traits<vertex_iterator_int<grid_types<OstreamComplex2DFmt> > >
-  : public element_traits_vertex_base<OstreamComplex2DFmt> 
-{
-  struct hasher_type : public hasher_type_elem_base {
-    unsigned operator()(vertex_iterator_int<grid_types<OstreamComplex2DFmt> > const& v) const
-    { return unsigned(v.handle());}
-  };
-};
-
-template<>
-struct element_traits<cell_iterator_int<grid_types<OstreamComplex2DFmt> > >
-  : public element_traits_cell_base<OstreamComplex2DFmt> 
-{
-  struct hasher_type  : public hasher_type_elem_base {
-    unsigned operator()(cell_iterator_int<grid_types<OstreamComplex2DFmt> > const& c) const
-    { return unsigned(c.handle());}
-  };
-};
 
 
 inline OstreamComplex2DFmt::Vertex 

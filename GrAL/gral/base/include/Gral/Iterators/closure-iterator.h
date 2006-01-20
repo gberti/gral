@@ -9,6 +9,8 @@
 #include "Utility/pre-post-conditions.h"
 #include "Utility/ref-ptr.h"
 
+#include <map>
+
 namespace GrAL {
 
 
@@ -20,8 +22,8 @@ namespace GrAL {
      - \c MinorIt: Model of $GrAL IncidenceIterator on elements of dimension n
           - constructible from \c *major, where \c major is of type MAJORIT
           - typedef value_type
-     - GT
-       - typedef grid_type
+     - \c GT
+       - nested type \c grid_type 
        - 
     \see Test in \ref  test-closure-iterator.C
     \see \ref iterators module  
@@ -34,13 +36,15 @@ namespace GrAL {
   public:
     typedef GT                                gt;
     typedef typename gt::grid_type            grid_type;
+    typedef typename gt::size_type            size_type;
     typedef MAJORIT                           major_iterator_type;
     typedef MINORIT                           minor_iterator_type;
     typedef typename MAJORIT::anchor_type     anchor_type;
+    typedef typename MAJORIT::value_type      major_element_type;
     typedef typename MINORIT::value_type      value_type;
     typedef typename MINORIT::value_type      element_type;
-    typedef element_traits<value_type>        vet;
-    
+    typedef element_traits<value_type>         min_et;
+    typedef element_traits<major_element_type> maj_et;    
   private:
     major_iterator_type major_it;
     minor_iterator_type minor_it;
@@ -61,19 +65,46 @@ namespace GrAL {
     }
     value_type operator*()             const { cv(); return value();}
     bool  IsDone()                     const { cb(); return major_it.IsDone();}
-    typename vet::handle_type handle() const { cv(); return minor_it.handle();}
+    typename min_et::handle_type handle() const { cv(); return minor_it.handle();}
     
-    ref_ptr<grid_type const> TheGrid() const { cb(); return ref_ptr<grid_type const>(major_it.TheGrid());}
-    
-    bool operator==(self const& rhs)
-    { rhs.cb(); cb(); return (rhs.major_it == major_it) && (rhs.minor_it == minor_it);}
+    ref_ptr<grid_type   const> TheGrid()   const { cb(); return ref_ptr<grid_type   const>(major_it.TheGrid());}
+    ref_ptr<anchor_type const> TheAnchor() const { cb(); return ref_ptr<anchor_type const>(major_it.TheAnchor());}
+
+    bool operator==(self const& rhs) { 
+      rhs.cb(); cb(); 
+      // two past-the-end iterators always compare equal
+      return ((rhs.IsDone() && IsDone()) || ((rhs.major_it == major_it) && (rhs.minor_it == minor_it)));
+    }
     bool operator!=(self const& rhs) { return !(*this==rhs);}
     
     bool bound() const { return major_it.bound();}
     bool valid() const { return bound() && minor_it.valid();}
     void cb()    const { REQUIRE(bound(), "", 1);}
     void cv()    const { REQUIRE(valid(), "", 1);}
+
+    static self      begin(anchor_type const& a) { return self(GrAL::begin<major_iterator_type>(a));}
+    static self      end  (anchor_type const& a) { return self(GrAL::end  <major_iterator_type>(a));}
+    static size_type size (anchor_type const& a) { init_sizes(a); return (*sizes)[&a];}
+
+    typedef std::map<anchor_type const*, size_type> size_table;
+    static  size_table * sizes;
   private:
+    static void init_sizes() {
+      if(sizes == 0)
+	sizes = new size_table;
+    }
+    static void init_sizes(anchor_type const& g) {
+      init_sizes();
+      if(sizes->find(&g) == sizes->end())
+	(*sizes)[&g] = compute_size(g);
+    }
+    static size_type compute_size(anchor_type const& g) {
+      size_type sz = 0;
+      for(self it = begin(g); !it.IsDone(); ++it)
+	++sz;
+      return sz;
+    }
+
     value_type  value() const { cv(); return (*minor_it);}
     
     void init()  {
@@ -90,7 +121,36 @@ namespace GrAL {
 	  minor_it =  minor_iterator_type(*major_it);
       } 
     }
-  };
+  }; // class closure_iterator
+
+  template<class MAJORIT, class MINORIT, class GT>
+  typename closure_iterator<MAJORIT, MINORIT, GT>::size_table 
+  * closure_iterator<MAJORIT, MINORIT, GT>::sizes;
+
+
+
+  template<class MAJORIT, class MINORIT, class GT>
+  closure_iterator<MAJORIT, MINORIT, GT>
+  gral_begin(typename MAJORIT::anchor_type const& a, 
+	     closure_iterator<MAJORIT, MINORIT, GT>) 
+  { return closure_iterator<MAJORIT, MINORIT, GT>(a);}
+
+  template<class MAJORIT, class MINORIT, class GT>
+  closure_iterator<MAJORIT, MINORIT, GT>
+  gral_end (typename MAJORIT::anchor_type const& a, 
+	     closure_iterator<MAJORIT, MINORIT, GT>) 
+  { return closure_iterator<MAJORIT, MINORIT, GT>(GrAL::end<MAJORIT>(a));}
+
+
+  // size is difficult, because O(n) -> better handled in grid
+  template<class MAJORIT, class MINORIT, class GT>
+  typename GT::size_type
+  gral_size(typename MAJORIT::anchor_type const& a, 
+	    closure_iterator<MAJORIT, MINORIT, GT>) 
+  { return closure_iterator<MAJORIT, MINORIT, GT>::size(a);}
+
+
+
 
 } // namespace GrAL 
 
