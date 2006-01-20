@@ -9,6 +9,14 @@
 
 namespace GrAL {
 
+/*! \brief Dummy element
+   \ingroup iterators
+  
+   This can be used with generic components formally requiring certain elements
+   which will not be used in the concrete case.
+
+   \see \ref iterators module
+*/
 template<class GRID, class ETAG>
 class dummy_element {
   typedef dummy_element<GRID, ETAG> self;
