@@ -7,6 +7,7 @@
 #include "Container/index-map-nd.h"
 
 #include <vector>
+#include <algorithm>
 
 namespace GrAL {
 
@@ -14,11 +15,16 @@ namespace cartesiannd {
 
   //------------------------ maps of direction tuples etc. ------------------
 
-  // map index tuples of directions of k-dimensional elements to linear indices and vice versa.
-  // E.g. in 3D, facets have direction tuples (0,1), (0,2), and (1,2), which are mapped to 0, 1, 2. 
+  /*! \brief  Map index tuples of directions of k-dimensional elements to linear indices and vice versa.
+      E.g. in 3D, facets have direction tuples (0,1), (0,2), and (1,2), 
+      which are mapped to 0, 1, 2. 
+
+      \todo Make switch operation more efficient by storing constant parts
+  */
   template<unsigned DIM> 
   struct delta_map {
     typedef tuple<int, DIM>       index_type;
+    // direction tuples
     typedef  std::vector<unsigned> vector_system;
 
    
@@ -148,6 +154,48 @@ namespace cartesiannd {
       return delta2index<INDEXTYPE>(num2vec(k, m));
     }
 
+
+
+    template<class INDEXTYPE>
+    static void switch_index(INDEXTYPE const& i_k_1, unsigned  m_k_1,
+			     INDEXTYPE      & i_k,   unsigned& m_k,
+			     INDEXTYPE const& i_k1,  unsigned  m_k1,
+			     unsigned k)
+    {
+      vector_system v_k_1 = num2vec(k-1,m_k_1);
+      vector_system v_k   = num2vec(k  ,m_k);
+      vector_system v_k1  = num2vec(k+1,m_k1);
+      
+      vector_system v_k_sw = switched_direction(v_k_1,v_k,v_k1);
+      unsigned      m_k_sw = vec2num(k,v_k_sw);
+
+      unsigned d1 = diff1(v_k,  v_k_1);
+      unsigned d2 = diff1(v_k1, v_k);
+ 
+      INDEXTYPE i_k_sw = i_k;
+     // exactly two of those 4 conditions are true
+      if(i_k[d1] < i_k_1[d1]) i_k_sw[d1] = i_k_1[d1]; 
+      if(i_k[d2] < i_k_1[d2]) i_k_sw[d2] = i_k_1[d2]; 
+      if(i_k[d1] > i_k1 [d1]) i_k_sw[d1] = i_k1 [d1]; 
+      if(i_k[d2] > i_k1 [d2]) i_k_sw[d2] = i_k1 [d2]; 
+
+      i_k = i_k_sw;
+      m_k = m_k_sw;
+    }
+
+    static vector_system switched_direction(vector_system const& v_k_1, vector_system const& v_k, vector_system const& v_k1) {
+      unsigned d1 = diff1(v_k,  v_k_1);
+      unsigned d2 = diff1(v_k1, v_k);
+      vector_system res(v_k);
+      res.erase (std::find(res.begin(), res.end(), d1));
+      res.insert(std::lower_bound(res.begin(), res.end(), d2), d2);
+      return res;
+    }
+
+    static unsigned  diff1(vector_system v_k, vector_system v_k_1) {
+      REQUIRE(v_k.size() == v_k_1.size() + 1, "",1);
+      return *(std::mismatch(v_k_1.begin(), v_k_1.end(), v_k.begin()).second);
+    }
 
     static void print     ( std::ostream& out);
     static void print_maps( std::ostream& out);
