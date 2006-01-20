@@ -53,9 +53,10 @@ namespace extrusion_view {
   class geometry;
 
   template<class GRID2D>
-  struct grid_types_base {
+  struct grid_types_base : public grid_types_detail::grid_types_root {
     typedef grid<GRID2D> grid_type;
     typedef grid_types<GRID2D> bgt;
+    typedef typename bgt::size_type size_type;
     typedef grid_dim_tag<3> dimension_tag;
 
     // OK only if base grid has (0-base) consecutive integer vertex handle
@@ -82,11 +83,14 @@ namespace extrusion_view {
   class grid : public grid_types_base<GRID2D> {
     typedef grid_types_base<GRID2D> gt;
     typedef typename gt::bgt        bgt;
+  public:
+    typedef typename gt::grid_type  grid_type;
+    typedef typename gt::size_type  size_type;
 
     typedef typename gt::archetype_type     archetype_type;
     typedef typename gt::archetype_iterator archetype_iterator;
     typedef typename gt::archetype_handle   archetype_handle;
-
+  private:
     ref_ptr<GRID2D const>  bg;
     std::vector<archetype_type> the_archetypes;
   public:
@@ -110,8 +114,8 @@ namespace extrusion_view {
     archetype_handle archetype_of(typename gt::cell_handle c) const { return 0;}
 
 
-    int NumOfVertices() const { return 2*BaseGrid()->NumOfVertices();}
-    int NumOfCells()    const { return 3*BaseGrid()->NumOfCells();}
+    size_type NumOfVertices() const { return 2*BaseGrid()->NumOfVertices();}
+    size_type NumOfCells()    const { return 3*BaseGrid()->NumOfCells();}
 
     ref_ptr<GRID2D const> BaseGrid() const { return bg;}
 
@@ -147,6 +151,7 @@ namespace extrusion_view {
   public:  
     typedef grid_types_base<GRID2D> gt;
     typedef grid<GRID2D> grid_type;
+    typedef grid_type    anchor_type;
   private:
     ref_ptr<grid_type const> g;
   public:
@@ -154,7 +159,8 @@ namespace extrusion_view {
     elem_base(grid_type const&         gg) : g(gg) {}
     elem_base(ref_ptr<grid_type const> gg) : g(gg) {}
 
-    ref_ptr<grid_type const> TheGrid() const { cb(); return g;}
+    ref_ptr<grid_type const> TheGrid()   const { cb(); return g;}
+    ref_ptr<grid_type const> TheAnchor() const { cb(); return g;}
 
     bool bound() const { return g != 0;}
     void cb() const { REQUIRE(bound(), "" ,1);}
@@ -233,8 +239,11 @@ namespace extrusion_view {
     typedef elem_base<GRID2D>         base;
     typedef vertex_iterator_t<GRID2D> self;
     typedef typename base::bgt        bgt;
+  public:
+    typedef vertex_type_tag              element_type_tag;
     typedef typename base::vertex_handle vertex_handle;
     typedef typename base::grid_type     grid_type;
+    typedef self                         value_type;
 
     typename bgt::VertexIterator v;
     int                          lv;
@@ -259,7 +268,8 @@ namespace extrusion_view {
     int level() const { return lv;}
     bool valid() const { return bound() && v.valid() && (0<=lv && lv < 2);}
     void cv()    const { REQUIRE(valid(), "", 1);}
-    bool equal_to(self const& rhs) const { return v == rhs.v && lv == rhs.lv;}
+    bool equal_to(self const& rhs) const { return (v == rhs.v && lv == rhs.lv);}
+    // bool equal_to(self const& rhs) const { return (v.IsDone() && rhs.v.IsDone()) || (v == rhs.v && lv == rhs.lv);}
  };
     
 
@@ -270,10 +280,13 @@ namespace extrusion_view {
     friend class vertex_on_cell_iterator_t<GRID2D>;
     typedef elem_base<GRID2D>       base;
     typedef cell_iterator_t<GRID2D> self;
-    typedef typename base::grid_type grid_type;
+  public:
+    typedef cell_type_tag              element_type_tag;
+    typedef typename base::grid_type   grid_type;
     typedef typename base::cell_handle cell_handle;
     typedef typename base::archgt      archgt;
-
+    typedef self                       value_type;
+  private:
     typedef typename base::bgt bgt;
     typename bgt::CellIterator tri;
     int                        lc;
@@ -285,13 +298,14 @@ namespace extrusion_view {
 
     cell_iterator_t() {}
     cell_iterator_t(grid_type const&         g) 
-      : base(g), tri(* TheGrid()->BaseGrid()), lc(0), sub(TheGrid(), *tri) {}
+      : base(g), tri(* TheGrid()->BaseGrid()), lc(0) { init();}
     cell_iterator_t(ref_ptr<grid_type const> g) 
-      : base(g), tri(* TheGrid()->BaseGrid()), lc(0), sub(TheGrid(), *tri) {}
+      : base(g), tri(* TheGrid()->BaseGrid()), lc(0) { init();}
     cell_iterator_t(grid_type const&         g, cell_handle cc) 
-      : base(g), tri(* TheGrid()->BaseGrid(), cc.first), lc(cc.second), sub(TheGrid(), *tri) {}
+      : base(g), tri(* TheGrid()->BaseGrid(), cc.first), lc(cc.second) { init(); }
     cell_iterator_t(ref_ptr<grid_type const> g, cell_handle cc) 
-      : base(g), tri(* TheGrid()->BaseGrid(), cc.first), lc(cc.second), sub(TheGrid(), *tri) {}
+      : base(g), tri(* TheGrid()->BaseGrid(), cc.first), lc(cc.second) { init();}
+
 
     self const& operator* () const { cv(); return *this;}
     self&       operator++()       { cv();  advance(); return *this; }
@@ -303,12 +317,17 @@ namespace extrusion_view {
 
     unsigned NumOfVertices() const { cv(); return 4;}
     vertex_on_cell_iterator_t<GRID2D>  FirstVertex() const;
+    vertex_on_cell_iterator_t<GRID2D>  EndVertex()   const;
 
     bool valid() const { return bound() && tri.valid() && (0<=lc && lc < (int)sub.NumOfCells());}
     void cv()    const { REQUIRE(valid(), "", 1);}
 
     bool equal_to(self const& rhs) const { return tri == rhs.tri && lc == rhs.lc;}
   private:
+    void init() { 
+      if(!IsDone()) 
+	sub = prism_subdivision<GRID2D>(TheGrid(), *tri);
+    }
     void advance() {
       ++lc; 
       if(lc == 3) { 
@@ -326,8 +345,11 @@ namespace extrusion_view {
   class vertex_on_cell_iterator_t : public grid_types_base<GRID2D> {
     typedef grid_types_base<GRID2D>           gt;
     typedef vertex_on_cell_iterator_t<GRID2D> self;
+  public:
     typedef typename gt::vertex_handle        vertex_handle;
-
+    typedef typename gt::Cell                 anchor_type;
+    typedef typename gt::Vertex               value_type;
+  private:
     typename gt::Cell c;
     int               lv;
   public:
@@ -342,6 +364,7 @@ namespace extrusion_view {
 
     ref_ptr<typename gt::grid_type const> TheGrid() const { cb(); return c.TheGrid();}
     ref_ptr<typename gt::Cell const>      TheCell() const { cb(); return ref_ptr<typename gt::Cell const>(c);}
+    ref_ptr<typename gt::Cell const>      TheAnchor() const { return TheCell();}
 
     bool bound() const { return c.valid();}
     bool valid() const { return bound() && 0 <= lv && lv < 4;}
@@ -377,6 +400,10 @@ namespace extrusion_view {
   inline vertex_on_cell_iterator_t<GRID2D> 
   cell_iterator_t<GRID2D>::FirstVertex() const { return vertex_on_cell_iterator_t<GRID2D>(*this);}
 
+  template<class GRID2D>
+  inline vertex_on_cell_iterator_t<GRID2D> 
+  cell_iterator_t<GRID2D>::EndVertex() const  { return vertex_on_cell_iterator_t<GRID2D>(*this, NumOfVertices());}
+
 
   template<class GRID2D>
     void grid<GRID2D>::init() 
@@ -398,7 +425,7 @@ namespace extrusion_view {
 
   template<class GRID2D>
   inline typename grid_types_base<GRID2D>::VertexIterator // vertex_iterator_t<GRID2D> 
-  grid<GRID2D>::EndVertex() const { return vertex_iterator_t<GRID2D>(*this, handle(BaseGrid()->EndVertex().handle(), 1));}
+  grid<GRID2D>::EndVertex() const { return vertex_iterator_t<GRID2D>(*this, handle(BaseGrid()->EndVertex().handle(), 0));}
  
   template<class GRID2D>
   inline typename grid_types_base<GRID2D>::CellIterator // cell_iterator_t<GRID2D> 
@@ -406,7 +433,7 @@ namespace extrusion_view {
 
   template<class GRID2D>
   inline typename grid_types_base<GRID2D>::CellIterator // cell_iterator_t<GRID2D> 
-  grid<GRID2D>::EndCell() const { return cell_iterator_t<GRID2D>(*this, handle(BaseGrid()->EndCell().handle(), 3));}
+  grid<GRID2D>::EndCell() const { return cell_iterator_t<GRID2D>(*this, handle(BaseGrid()->EndCell().handle(), 0));}
 
 
 } // namespace extrusion_view
@@ -440,6 +467,74 @@ struct element_traits<extrusion_view::vertex_iterator_t<GRID2D> >
   typedef non_consecutive_tag consecutive_tag;
 };
 
+
+template<class GRID2D>
+struct element_traits<extrusion_view::cell_iterator_t<GRID2D> >
+  : public element_traits_cell_base<extrusion_view::grid<GRID2D> > 
+{
+  typedef element_traits_cell_base<extrusion_view::grid<GRID2D> > base;
+
+  struct hasher_type {
+    typedef extrusion_view::cell_iterator_t<GRID2D> key_type;
+    typedef key_type                                  argument_type;
+    typedef size_t                                    result_type;
+    size_t operator()(key_type const& e) const {
+      typedef element_traits<typename grid_types<GRID2D>::Cell> bet;
+      typename bet::hasher_type bh;
+      return bh(e.Base()) * e.handle().second;
+    }
+  };
+
+  typedef non_consecutive_tag consecutive_tag;
+};
+
+
+  namespace extrusion_view {
+
+#define gt grid_types<grid<GRID2D> >
+
+    template<class GRID2D>
+    inline typename gt::VertexIterator
+    gral_begin(grid<GRID2D> const&g, vertex_iterator_t<GRID2D> ) { return g.FirstVertex();}
+    //  gral_begin(grid<GRID2D> const&g,  typename gt::VertexIterator) { return g.FirstVertex();}
+   
+    template<class GRID2D>
+    inline typename gt::VertexIterator
+    gral_end  (grid<GRID2D> const&g,  vertex_iterator_t<GRID2D>) { return g.EndVertex();}
+    // gral_end  (grid<GRID2D> const&g,  typename gt::VertexIterator) { return g.EndVertex();}
+ 
+    template<class GRID2D>
+    inline typename gt::size_type
+    gral_size  (grid<GRID2D> const&g,  vertex_iterator_t<GRID2D>) { return g.NumOfVertices();}
+    //  gral_size  (grid<GRID2D> const&g,  typename gt::VertexIterator) { return g.NumOfVertices();}
+
+    template<class GRID2D>
+    inline typename gt::CellIterator
+    gral_begin(grid<GRID2D> const&g,  cell_iterator_t<GRID2D> ) { return g.FirstCell();}
+   
+    template<class GRID2D>
+    inline typename gt::CellIterator
+    gral_end  (grid<GRID2D> const&g,  cell_iterator_t<GRID2D> ) { return g.EndCell();}
+ 
+    template<class GRID2D>
+    inline typename gt::size_type
+    gral_size  (grid<GRID2D> const&g, cell_iterator_t<GRID2D> ) { return g.NumOfCells();}
+
+    template<class GRID2D>
+    inline typename gt::VertexOnCellIterator
+    gral_begin(cell_iterator_t<GRID2D> const&g,  vertex_on_cell_iterator_t<GRID2D>  ) { return g.FirstVertex();}
+   
+    template<class GRID2D>
+    inline typename gt::VertexOnCellIterator
+    gral_end  (cell_iterator_t<GRID2D> const&g,  vertex_on_cell_iterator_t<GRID2D>  ) { return g.EndVertex();}
+ 
+    template<class GRID2D>
+    inline typename gt::size_type
+    gral_size  (cell_iterator_t<GRID2D> const&g, vertex_on_cell_iterator_t<GRID2D>  ) { return g.NumOfVertices();}
+
+#undef gt
+
+  } // namespace extrusion_view
 
 template<class GRID2D, class T>
 class grid_function<extrusion_view::vertex_iterator_t<GRID2D>, T>

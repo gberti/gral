@@ -66,8 +66,8 @@ namespace shrink_grid_view {
     class vertex_handle_t;
 
   template<class GRID>
-    class local_grid_types {
-    public:
+  class local_grid_types : public grid_types_detail::grid_types_root {
+  public:
       typedef grid_view<GRID>        grid_type;
       typedef cell_iterator<GRID>    Cell;
       typedef cell_iterator<GRID>    CellIterator;
@@ -77,11 +77,12 @@ namespace shrink_grid_view {
 
       typedef grid_types<GRID>  bgt;
       typedef GRID              base_grid_type;
-
+    typedef typename bgt::size_type size_type;
+    typedef typename bgt::dimension_tag dimension_tag;
+    
       typedef typename bgt::cell_handle cell_handle;
       typedef vertex_handle_t<GRID>     vertex_handle;
 
-      typedef typename bgt::dimension_tag      dimension_tag;
       typedef typename bgt::archetype_type     archetype_type;
       typedef typename bgt::archetype_handle   archetype_handle;
       typedef typename bgt::archetype_iterator archetype_iterator;
@@ -203,15 +204,19 @@ namespace shrink_grid_view {
     class cell_iterator : public local_grid_types<GRID> {
     private:
       typedef cell_iterator<GRID>    self; 
-      typedef local_grid_types<GRID> base;
+      typedef local_grid_types<GRID> gt;
       friend class vertex_on_cell_iterator<GRID>;
     public:
-      typedef typename base::bgt           bgt;
-      typedef typename base::archgt        archgt;
-      typedef typename base::grid_type     grid_type;
-      typedef typename base::cell_handle   cell_handle;
-      typedef typename base::vertex_handle vertex_handle;
-      typedef typename base::Vertex        Vertex;
+      typedef typename gt::bgt           bgt;
+      typedef typename gt::archgt        archgt;
+      typedef typename gt::grid_type     grid_type;
+      typedef typename gt::cell_handle   cell_handle;
+      typedef typename gt::vertex_handle vertex_handle;
+      typedef typename gt::Vertex        Vertex;
+
+      typedef cell_type_tag element_type_tag;
+      typedef grid_type anchor_type;
+      typedef self      value_type;
    private:
       grid_type  const*          g;
       typename bgt::CellIterator c;
@@ -228,10 +233,12 @@ namespace shrink_grid_view {
       bool IsDone() const { return c.IsDone();}
       cell_handle handle() const { return c.handle();}
 
-      grid_type const& TheGrid() const { return *g;}
+      grid_type const& TheGrid()   const { return *g;}
+      grid_type const& TheAnchor() const { return *g;}
      
       // Vertex-On-Cell Iteration
       vertex_on_cell_iterator<GRID> FirstVertex() const;
+      vertex_on_cell_iterator<GRID> EndVertex()   const;
       unsigned NumOfVertices() const { return c.NumOfVertices();}
       vertex_iterator<GRID> V(typename archgt::Vertex av) const
 	{ return Vertex(*g, vertex_handle(handle(), BaseCell().v(av.handle()) )); }
@@ -254,14 +261,18 @@ namespace shrink_grid_view {
     class vertex_iterator : public local_grid_types<GRID> {
     private:
       typedef vertex_iterator<GRID>  self;
-      typedef local_grid_types<GRID> base;
+      typedef local_grid_types<GRID> gt;
     public:
-      typedef typename base::bgt           bgt;
-      typedef typename base::archgt        archgt;
-      typedef typename base::grid_type     grid_type;
-      typedef typename base::cell_handle   cell_handle;
-      typedef typename base::vertex_handle vertex_handle;
-      typedef typename base::Cell          Cell;
+      typedef typename gt::bgt           bgt;
+      typedef typename gt::archgt        archgt;
+      typedef typename gt::grid_type     grid_type;
+      typedef typename gt::cell_handle   cell_handle;
+      typedef typename gt::vertex_handle vertex_handle;
+      typedef typename gt::Cell          Cell;
+
+      typedef vertex_type_tag element_type_tag;
+      typedef grid_type anchor_type;
+      typedef self      value_type;
     private:
 
       grid_type const* g;
@@ -306,11 +317,12 @@ namespace shrink_grid_view {
       bool IsDone() const { return c.IsDone();}
       vertex_handle handle() const 
 	{ return vertex_handle(c.handle(),vc.handle());}
-      grid_type const& TheGrid() const { return *g;}
+      grid_type const& TheGrid()   const { return *g;}
+      grid_type const& TheAnchor() const { return *g;}
 
-      bool operator==(self const& rhs) const { return vc == rhs.vc;}
+      bool operator==(self const& rhs) const { return (c == rhs.c && IsDone())  || (c == rhs.c && vc == rhs.vc);}
       bool operator!=(self const& rhs) const { return !(*this == rhs);}
-      bool operator< (self const& rhs) const { return vc < rhs.vc;}
+      bool operator< (self const& rhs) const { return c < rhs.c || (c == rhs.c && !IsDone() && vc < rhs.vc);}
 
       Cell Cell_()  const { return Cell(*g,c.handle());}
       typename bgt::Vertex BaseVertex() const { return *vc;}
@@ -329,6 +341,9 @@ namespace shrink_grid_view {
       typedef typename gt::vertex_handle vertex_handle;
       typedef typename gt::Vertex        Vertex;
       typedef typename gt::Cell          Cell;
+
+      typedef Vertex value_type;
+      typedef Cell   anchor_type;
     private:
       grid_type const* g;
       typename bgt::VertexOnCellIterator vc;
@@ -337,6 +352,8 @@ namespace shrink_grid_view {
       explicit
       vertex_on_cell_iterator(Cell const& c) 
 	: g(&(c.TheGrid())), vc(c.c.FirstVertex()) {} 
+      vertex_on_cell_iterator(Cell const& c, typename bgt::VertexOnCellIterator vvc)
+	: g(&c.TheGrid()), vc(vvc) {}
 
       self& operator++() { ++vc; return *this;}
       Vertex operator*() const { return Vertex(*g,handle());}
@@ -346,6 +363,7 @@ namespace shrink_grid_view {
       bool IsDone() const { return vc.IsDone();}
 
       grid_type const& TheGrid() const { return *g;}
+      Cell             TheAnchor() const { return Cell(TheGrid(), vc.TheCell());}
 
       bool operator==(self const& rhs) const { return vc == rhs.vc;}
       bool operator!=(self const& rhs) const { return !(*this == rhs);}
@@ -357,10 +375,14 @@ namespace shrink_grid_view {
   //------------- inline functions -----------------------
 
   template<class GRID>
-    inline
-    vertex_on_cell_iterator<GRID> 
-    cell_iterator<GRID>::FirstVertex() const 
-    { return typename base::VertexOnCellIterator(*this);}
+  inline vertex_on_cell_iterator<GRID> 
+  cell_iterator<GRID>::FirstVertex() const 
+  { return typename gt::VertexOnCellIterator(*this);}
+
+  template<class GRID>
+  inline vertex_on_cell_iterator<GRID> 
+  cell_iterator<GRID>::EndVertex() const 
+  { return typename gt::VertexOnCellIterator(*this, GrAL::end<typename bgt::Vertex>(Base()));}
 
 
   /*
@@ -448,7 +470,7 @@ namespace shrink_grid_view {
 
 template<class GRID>
 class grid_types<shrink_grid_view::grid_view<GRID> > :
-  public shrink_grid_view::local_grid_types<GRID> {};
+  public grid_types_base<shrink_grid_view::local_grid_types<GRID> > {};
 
 
 template<class GRID>
@@ -490,6 +512,54 @@ struct element_traits<shrink_grid_view::cell_iterator<GRID> >
   };
 };
 
+
+  namespace shrink_grid_view {
+#define gt grid_types<grid_view<GRID> >
+
+    template<class GRID>
+    typename gt::VertexIterator gral_begin(grid_view<GRID> const& g, typename gt::VertexIterator)
+    { return g.FirstVertex();}
+
+    template<class GRID>
+    typename gt::VertexIterator gral_end  (grid_view<GRID> const& g, typename gt::VertexIterator)
+    { return g.EndVertex();}
+
+    template<class GRID>
+    typename gt::size_type      gral_size (grid_view<GRID> const& g, typename gt::VertexIterator)
+    { return g.NumOfVertices();}
+
+    template<class GRID>
+    typename gt::CellIterator gral_begin(grid_view<GRID> const& g, typename gt::CellIterator)
+    { return g.FirstCell();}
+
+    template<class GRID>
+    typename gt::CellIterator gral_end  (grid_view<GRID> const& g, typename gt::CellIterator)
+    { return g.EndCell();}
+
+    template<class GRID>
+    typename gt::size_type      gral_size (grid_view<GRID> const& g, typename gt::CellIterator)
+    { return g.NumOfCells();}
+
+
+    template<class GRID>
+    typename gt::VertexOnCellIterator 
+    gral_begin(cell_iterator<GRID> const& c, typename gt::VertexOnCellIterator)
+    { return c.FirstVertex();}
+
+    template<class GRID>
+    typename gt::VertexOnCellIterator 
+    gral_end  (cell_iterator<GRID> const& c, typename gt::VertexOnCellIterator)
+    { return c.EndVertex();}
+
+    template<class GRID>
+    typename gt::size_type      
+    gral_size (cell_iterator<GRID> const& c, typename gt::VertexOnCellIterator)
+    { return c.NumOfVertices();}
+
+    
+#undef gt
+    
+  } // namespace shrink_grid_view
 
 
 template<class GRID, class T>

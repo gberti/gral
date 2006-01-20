@@ -5,10 +5,12 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/cell-vertex-input-grid.h"
-#include <functional>
 
 #include "Utility/pre-post-conditions.h"
 #include "Container/my-hash-map.h"
+
+#include <boost/numeric/conversion/conversion_traits.hpp>
+#include <functional>
 
 namespace GrAL {
 
@@ -42,7 +44,7 @@ namespace GrAL {
 
 
     template<class GRID1, class GRID2>
-    struct grid_types_base
+    struct grid_types_base : public grid_types_detail::grid_types_root 
     {
 
       // used by element classes below
@@ -52,6 +54,10 @@ namespace GrAL {
 
       typedef grid_types<GRID1> gt1;
       typedef grid_types<GRID2> gt2;
+
+      typedef typename boost::numeric::conversion_traits<typename gt1::size_type,
+							 typename gt2::size_type>
+      ::supertype size_type;
 
       typedef typename gt1::vertex_handle vertex_handle_1;
       typedef typename gt2::vertex_handle vertex_handle_2;
@@ -191,7 +197,8 @@ namespace GrAL {
       element_base(): g(0) {}
       element_base(grid_type const& gg) : g(&gg) {}
       
-      grid_type const& TheGrid() const { return *g;}
+      grid_type const& TheGrid()   const { return *g;}
+      grid_type const& TheAnchor() const { return *g;}
       bool bound() const { return (g != 0);}
     private:
       grid_type const* g;
@@ -218,6 +225,7 @@ namespace GrAL {
     public:
       typedef typename base::grid_type_1 grid_type_1;
       typedef typename base::grid_type_2 grid_type_2;
+      typedef typename base::size_type   size_type;
     private:
       grid_type_1 const& g1;
       grid_type_2 const& g2;
@@ -228,13 +236,15 @@ namespace GrAL {
 	: g1(gg1), g2(gg2) {}
 
 
-      unsigned NumOfVertices() const 
+      size_type NumOfVertices() const 
       { return Grid1().NumOfVertices() + Grid2().NumOfVertices();}
-      unsigned NumOfCells   () const 
+      size_type NumOfCells   () const 
       { return Grid1().NumOfCells   () + Grid2().NumOfCells   ();}
 
       Vertex_view<GRID1,GRID2>  FirstVertex() const;
+      Vertex_view<GRID1,GRID2>  EndVertex() const;
       Cell_view  <GRID1,GRID2>  FirstCell()   const;
+      Cell_view  <GRID1,GRID2>  EndCell()   const;
 
       grid_type_1 const& Grid1() const { return g1;}
       grid_type_2 const& Grid2() const { return g2;}
@@ -265,6 +275,9 @@ namespace GrAL {
       typedef typename base::vertex_handle    vertex_handle;
 
       typedef typename base::grid_type       grid_type;
+
+      typedef grid_type anchor_type;
+      typedef self      value_type;
     private:
       VertexIterator1 v1_;
       VertexIterator2 v2_;
@@ -285,6 +298,9 @@ namespace GrAL {
 	  v2_ = VertexIterator2(g.Grid2(), v.v2());
 	}
       }
+      Vertex_view(grid_type const& g, VertexIterator1 v1, VertexIterator2 v2) 
+	: base(g), v1_(v1), v2_(v2) {}
+
       self& operator++() { 
 	if (! v1_.IsDone()) ++v1_;
 	else                ++v2_;
@@ -330,8 +346,12 @@ namespace GrAL {
       typedef typename base::cell_handle_1  cell_handle_1;
       typedef typename base::cell_handle_2  cell_handle_2;
       typedef typename base::cell_handle    cell_handle;
+      typedef typename base::VertexOnCellIterator1 VertexOnCellIterator1;
+      typedef typename base::VertexOnCellIterator2 VertexOnCellIterator2;
 
       typedef typename base::grid_type      grid_type;
+      typedef grid_type                     anchor_type;
+      typedef self                          value_type;
     private:
       CellIterator1 c1_;
       CellIterator2 c2_;
@@ -340,7 +360,8 @@ namespace GrAL {
       Cell_view(grid_type const& g) 
 	: base(g), c1_(g.Grid1()), c2_(g.Grid2()) 
       {}
-      
+      Cell_view(grid_type const& g, CellIterator1 c1, CellIterator2 c2)
+	: base(g), c1_(c1), c2_(c2) {}
       Cell_view(grid_type const& g, cell_handle c) 
 	: base(g)
       {
@@ -374,6 +395,8 @@ namespace GrAL {
       Cell2 c2() const { return *c2_;}
 
       VertexOnCellIterator_view<GRID1,GRID2> FirstVertex() const;
+      VertexOnCellIterator_view<GRID1,GRID2> EndVertex()   const;
+
       unsigned NumOfVertices() const { 
 	return (which() == 1 ? (*c1_).NumOfVertices()  : (*c2_).NumOfVertices());
       }
@@ -405,10 +428,13 @@ namespace GrAL {
       // using base::vertex_handle_1;
       // using base::vertex_handle_2;
       using base::TheGrid;
+
+      typedef Cell   anchor_type;
+      typedef Vertex value_type;
     private:
+      Cell c;
       VertexOnCellIterator1 vc1;
       VertexOnCellIterator2 vc2;
-      Cell c;
     public:
       VertexOnCellIterator_view() {}
       VertexOnCellIterator_view(Cell const& cc) 
@@ -417,6 +443,9 @@ namespace GrAL {
 	if(c.which() == 1) vc1 = c.c1().FirstVertex();
 	else               vc2 = c.c2().FirstVertex();
       }
+      VertexOnCellIterator_view(Cell const& cc, VertexOnCellIterator1 vvc1, VertexOnCellIterator2 vvc2)
+	: c(cc), vc1(vvc1), vc2(vvc2) {}
+
       vertex_handle handle() const { 
 	if(c.which() == 1)
 	  return  vertex_handle(vc1.handle()     ,typename base::vertex_handle_2(), 1);
@@ -427,7 +456,9 @@ namespace GrAL {
       Vertex operator*() const { return Vertex(TheGrid(), handle());}
       bool IsDone() const { return (which() == 1 ? vc1.IsDone() : vc2.IsDone());}
       int which() const { return c.which();}
-    
+      
+      anchor_type const& TheAnchor() const { return c;}
+
       bool operator==(self const& rhs) const 
       { return (which() == 1 ? vc1 == rhs.vc1 : vc2 == rhs.vc2);}
       bool operator!=(self const& rhs) const 
@@ -442,16 +473,40 @@ namespace GrAL {
     VertexOnCellIterator_view<GRID1, GRID2>
     Cell_view<GRID1,GRID2>::FirstVertex() const
     { return typename base::VertexOnCellIterator(*this);}
+    template<class GRID1, class GRID2>
+
+    inline
+    VertexOnCellIterator_view<GRID1, GRID2>
+    Cell_view<GRID1,GRID2>::EndVertex() const
+    { 
+      return (which() == 1  
+	      ? typename base::VertexOnCellIterator(*this, c1().EndVertex(), VertexOnCellIterator2())
+	      : typename base::VertexOnCellIterator(*this, VertexOnCellIterator1(), c2().EndVertex()));
+    }
 
     template<class GRID1, class GRID2>
     inline
     Vertex_view<GRID1,GRID2> 
     grid_view<GRID1,GRID2>::FirstVertex() const { return typename base::VertexIterator(*this);}
+  
+  template<class GRID1, class GRID2>
+  inline
+  Vertex_view<GRID1,GRID2> 
+  grid_view<GRID1,GRID2>::EndVertex() const { 
+    return typename base::VertexIterator(*this, Grid1().EndVertex(), Grid2().EndVertex());
+  }
  
-    template<class GRID1, class GRID2>
-    inline
-    Cell_view<GRID1,GRID2>
-    grid_view<GRID1,GRID2>::FirstCell()   const { return typename base::CellIterator(*this);}
+  template<class GRID1, class GRID2>
+  inline
+  Cell_view<GRID1,GRID2>
+  grid_view<GRID1,GRID2>::FirstCell()   const { return typename base::CellIterator(*this);}
+
+  template<class GRID1, class GRID2>
+  inline
+  Cell_view<GRID1,GRID2>
+  grid_view<GRID1,GRID2>::EndCell()   const { 
+    return typename base::CellIterator(*this, Grid1().EndCell(), Grid2().EndCell());
+  }
 
 
 
@@ -534,7 +589,7 @@ namespace GrAL {
 
   template<class GRID1, class GRID2>
   struct grid_types<disjoint_union_view::grid_view<GRID1,GRID2> >
-    : public disjoint_union_view::grid_types_base<GRID1,GRID2>
+    : public grid_types_base<disjoint_union_view::grid_types_base<GRID1,GRID2> >
   { };
 
 } // namespace GrAL
@@ -645,6 +700,72 @@ namespace GrAL {
       }
     };
   };
+
+
+  namespace disjoint_union_view {
+#define gt grid_types<grid_view<GRID1,GRID2> >
+
+    template<class GRID1, class GRID2>
+    inline typename gt::VertexIterator
+    gral_begin(grid_view<GRID1,GRID2> const& g,
+	       typename gt::VertexIterator)
+    { return g.FirstVertex();}
+
+    template<class GRID1, class GRID2>
+    inline typename gt::VertexIterator
+    gral_end  (grid_view<GRID1,GRID2> const& g,
+	       typename gt::VertexIterator)
+    { return g.EndVertex();}
+
+    template<class GRID1, class GRID2>
+    inline typename gt::size_type
+    gral_size (grid_view<GRID1,GRID2> const& g,
+	       typename gt::VertexIterator)
+    { return g.NumOfVertices();}
+ 
+
+    template<class GRID1, class GRID2>
+    inline typename gt::CellIterator
+    gral_begin(grid_view<GRID1,GRID2> const& g,
+	       typename gt::CellIterator)
+    { return g.FirstCell();}
+
+    template<class GRID1, class GRID2>
+    inline typename gt::CellIterator
+    gral_end  (grid_view<GRID1,GRID2> const& g,
+	       typename gt::CellIterator)
+    { return g.EndCell();}
+
+    template<class GRID1, class GRID2>
+    inline typename gt::size_type
+    gral_size (grid_view<GRID1,GRID2> const& g,
+	       typename gt::CellIterator)
+    { return g.NumOfCells();}
+
+
+    template<class GRID1, class GRID2>
+    inline typename gt::VertexOnCellIterator
+    gral_begin(Cell_view<GRID1,GRID2> const& c,
+	       typename gt::VertexOnCellIterator)
+    { return c.FirstVertex();}
+
+    template<class GRID1, class GRID2>
+    inline typename gt::VertexOnCellIterator
+    gral_end  (Cell_view<GRID1,GRID2> const& c,
+	       typename gt::VertexOnCellIterator)
+    { return c.EndVertex();}
+
+    template<class GRID1, class GRID2>
+    inline typename gt::size_type
+    gral_size (Cell_view<GRID1,GRID2> const& c,
+	       typename gt::VertexOnCellIterator)
+    { return c.NumOfVertices();}
+
+
+
+
+#undef gt
+  }
 
 
   template<class GRID1, class GRID2, class T>

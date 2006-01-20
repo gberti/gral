@@ -7,7 +7,7 @@
 #include "Gral/Base/grid-function-hash.h"
 #include "Gral/Iterators/cell-on-vertex-iterator.h"
 #include "Gral/Base/extend-grid-types.h"
-#include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-element-range.h"
 
 #include "Geometry/point-traits.h"
 #include "Container/union-find.h"
@@ -59,7 +59,7 @@ namespace collapsed_grid_view {
 
 
   template<class GRID>
-  class local_grid_types {
+  class local_grid_types : public grid_types_detail::grid_types_root {
   public:
     typedef grid_view<GRID>        grid_type;
     typedef cell_iterator<GRID>    Cell;
@@ -76,7 +76,7 @@ namespace collapsed_grid_view {
     static void init_iterators(grid_type const& g);
 
     typedef GRID              base_grid_type;
-    
+    typedef typename bgt::size_type     size_type;
     typedef typename bgt::cell_handle   cell_handle;
     typedef typename bgt::vertex_handle vertex_handle;
     
@@ -129,6 +129,9 @@ namespace collapsed_grid_view {
       typedef grid_view<GRID>        self;
       typedef local_grid_types<GRID> gt;
     public:
+      typedef grid_view_category_d<gt::dimension_tag::dim> category;
+
+      typedef typename gt::size_type          size_type;
       typedef typename gt::archetype_iterator archetype_iterator;
       typedef typename gt::archetype_type     archetype_type;
       typedef typename gt::archetype_handle   archetype_handle;
@@ -145,8 +148,8 @@ namespace collapsed_grid_view {
     private:
       ref_ptr<base_grid_type const> g; 
 
-      mutable int  num_of_vertices;
-      mutable int  num_of_cells;
+      mutable size_type  num_of_vertices;
+      mutable size_type  num_of_cells;
 
       // initially identity on vertex_handle. handle_v[v] points to the representant of the set of v.
       union_find<vertex_handle> handle_v; 
@@ -207,8 +210,8 @@ namespace collapsed_grid_view {
 	collapse_vertex_set(v);
       }
 
-      unsigned NumOfCells()    const { return num_of_cells;}
-      unsigned NumOfVertices() const { return num_of_vertices;}
+      size_type NumOfCells()    const { return num_of_cells;}
+      size_type NumOfVertices() const { return num_of_vertices;}
 
       cell_iterator<GRID>   FirstCell()   const;
       vertex_iterator<GRID> FirstVertex() const;
@@ -255,15 +258,19 @@ namespace collapsed_grid_view {
     class cell_iterator : public local_grid_types<GRID> {
     private:
       typedef cell_iterator<GRID>    self; 
-      typedef local_grid_types<GRID> base;
+      typedef local_grid_types<GRID> gt;
       friend class vertex_on_cell_iterator<GRID>;
     public:
-      typedef typename base::bgt           bgt;
-      typedef typename base::archgt        archgt;
-      typedef typename base::grid_type     grid_type;
-      typedef typename base::cell_handle   cell_handle;
-      typedef typename base::vertex_handle vertex_handle;
-      typedef typename base::Vertex        Vertex;
+      typedef typename gt::bgt           bgt;
+      typedef typename gt::archgt        archgt;
+      typedef typename gt::grid_type     grid_type;
+      typedef typename gt::cell_handle   cell_handle;
+      typedef typename gt::vertex_handle vertex_handle;
+      typedef typename gt::Vertex        Vertex;
+      typedef typename gt::Cell          Cell;
+
+      typedef grid_type anchor_type;
+      typedef Cell      value_type;
    private:
       ref_ptr<grid_type  const>  g;
       typename bgt::CellIterator c;
@@ -284,11 +291,14 @@ namespace collapsed_grid_view {
       bool IsDone() const { return c.IsDone();}
       cell_handle handle() const { return c.handle();}
 
-      grid_type const& TheGrid() const { return *g;}
+      grid_type const& TheGrid  () const { return *g;}
+      grid_type const& TheAnchor() const { return *g;}
      
       // Vertex-On-Cell Iteration
       vertex_on_cell_iterator<GRID> FirstVertex() const;
-      unsigned NumOfVertices() const { return c.NumOfVertices();}
+      vertex_on_cell_iterator<GRID> EndVertex()   const;
+      unsigned NumOfVertices() const { return GrAL::size<typename bgt::Vertex>(c);}
+
       Vertex V(typename archgt::Vertex av) const
       { return Vertex(*g, BaseCell().v(av.handle())); }
 
@@ -360,6 +370,9 @@ namespace collapsed_grid_view {
       typedef typename base::vertex_handle vertex_handle;
       typedef typename base::Cell          Cell;
       typedef typename base::Vertex        Vertex;
+
+      typedef grid_type anchor_type;
+      typedef Vertex    value_type;
     private:
 
       ref_ptr<grid_type const>     g;
@@ -387,7 +400,9 @@ namespace collapsed_grid_view {
       Vertex operator*() const { return Vertex(*g, handle());}
       bool IsDone() const { return v.IsDone();}
       vertex_handle handle() const { return g->handle(v.handle());}
-      grid_type const& TheGrid() const { return *g;}
+
+      grid_type const& TheGrid  () const { return *g;}
+      grid_type const& TheAnchor() const { return *g;}
 
       bool operator==(self const& rhs) const { return v == rhs.v;}
       bool operator!=(self const& rhs) const { return !(*this == rhs);}
@@ -414,6 +429,9 @@ namespace collapsed_grid_view {
       typedef typename gt::vertex_handle vertex_handle;
       typedef typename gt::Vertex        Vertex;
       typedef typename gt::Cell          Cell;
+
+      typedef Cell   anchor_type;
+      typedef Vertex value_type;
     private:
       ref_ptr<grid_type const> g;
       typename  bgt::VertexOnCellIterator vc;
@@ -421,14 +439,17 @@ namespace collapsed_grid_view {
       vertex_on_cell_iterator() : g(0) {}
       explicit
       vertex_on_cell_iterator(Cell const& c) 
-	: g(c.TheGrid()), vc(c.c.FirstVertex()) {} 
+      	: g(c.TheGrid()), vc(GrAL::begin<typename bgt::Vertex>(c.c)) {} 
+      vertex_on_cell_iterator(Cell const& c, typename  bgt::VertexOnCellIterator vvc) 
+	: g(c.TheGrid()), vc(vvc) {} 
 
       self& operator++() { ++vc; return *this;}
       Vertex operator*() const { return Vertex(*g,handle());}
       vertex_handle handle() const { return g->handle(vc.handle());}
       bool IsDone() const { return vc.IsDone();}
 
-      grid_type const& TheGrid() const { return *g;}
+      grid_type const& TheGrid()   const { return *g;}
+      Cell             TheAnchor() const { return Cell(TheGrid(),vc.TheAnchor().handle());}
 
       bool operator==(self const& rhs) const { return vc == rhs.vc;}
       bool operator!=(self const& rhs) const { return !(*this == rhs);}
@@ -442,7 +463,13 @@ namespace collapsed_grid_view {
   inline
   vertex_on_cell_iterator<GRID> 
   cell_iterator<GRID>::FirstVertex() const 
-  { return typename base::VertexOnCellIterator(*this);}
+  { return typename gt::VertexOnCellIterator(*this);}
+
+  template<class GRID>
+  inline
+  vertex_on_cell_iterator<GRID> 
+  cell_iterator<GRID>::EndVertex() const 
+  { return typename gt::VertexOnCellIterator(*this, GrAL::end<typename bgt::Vertex>(c));}
 
 
   template<class GRID>
@@ -479,8 +506,8 @@ namespace collapsed_grid_view {
   {
     typedef typename std::iterator_traits<IT>::value_type vertex_set_type;
     typedef grid_types<vertex_set_type>                   setgt;
-    int vcnt = 0;
-    int ccnt = 0;
+    size_type vcnt = 0;
+    size_type ccnt = 0;
     for(IT s = begin_vertex_set; s != end_vertex_set; ++s) {
       partial_grid_function<typename bgt::Cell, int> num_collapsed_vertices(*BaseGrid(), 0);
       typename setgt::VertexIterator v = (*s).FirstVertex();
@@ -605,7 +632,7 @@ namespace collapsed_grid_view {
 
 template<class GRID>
 class grid_types<collapsed_grid_view::grid_view<GRID> > :
-  public collapsed_grid_view::local_grid_types<GRID> {};
+  public grid_types_base<collapsed_grid_view::local_grid_types<GRID> > {};
 
 
 template<class GRID>
@@ -651,6 +678,56 @@ struct element_traits<collapsed_grid_view::cell_iterator<GRID> >
   };
 };
 
+
+
+  namespace collapsed_grid_view {
+
+#define gt grid_types<grid_view<GRID> >
+
+
+    template<class GRID>
+    typename gt::VertexIterator gral_begin(grid_view<GRID> const& g, typename gt::VertexIterator)
+    { return g.FirstVertex();}
+
+    template<class GRID>
+    typename gt::VertexIterator gral_end  (grid_view<GRID> const& g, typename gt::VertexIterator)
+    { return g.EndVertex();}
+
+    template<class GRID>
+    typename gt::size_type      gral_size (grid_view<GRID> const& g, typename gt::VertexIterator)
+    { return g.NumOfVertices();}
+
+    template<class GRID>
+    typename gt::CellIterator gral_begin(grid_view<GRID> const& g, typename gt::CellIterator)
+    { return g.FirstCell();}
+
+    template<class GRID>
+    typename gt::CellIterator gral_end  (grid_view<GRID> const& g, typename gt::CellIterator)
+    { return g.EndCell();}
+
+    template<class GRID>
+    typename gt::size_type      gral_size (grid_view<GRID> const& g, typename gt::CellIterator)
+    { return g.NumOfCells();}
+
+
+    template<class GRID>
+    typename gt::VertexOnCellIterator 
+    gral_begin(cell_iterator<GRID> const& c, typename gt::VertexOnCellIterator)
+    { return c.FirstVertex();}
+
+    template<class GRID>
+    typename gt::VertexOnCellIterator 
+    gral_end  (cell_iterator<GRID> const& c, typename gt::VertexOnCellIterator)
+    { return c.EndVertex();}
+
+    template<class GRID>
+    typename gt::size_type      
+    gral_size (cell_iterator<GRID> const& c, typename gt::VertexOnCellIterator)
+    { return c.NumOfVertices();}
+
+#undef  gt
+
+  }// namespace collapsed_grid_view
 
 
 template<class GRID, class T>
