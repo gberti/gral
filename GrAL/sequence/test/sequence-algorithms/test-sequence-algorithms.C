@@ -15,7 +15,13 @@ int main() {
 
   namespace seq = sequence;
   int a[3] = { 1, 2, 3};
+  int b[3] = { 2, 1, 3};
 
+  REQUIRE_ALWAYS( seq::is_increasing(a+0, a+sizeof(a)/sizeof(int)), "",1);
+  REQUIRE_ALWAYS(!seq::is_increasing(b+0, b+sizeof(b)/sizeof(int)), "",1);
+  REQUIRE_ALWAYS( seq::is_increasing(a+0, a+sizeof(a)/sizeof(int), less   <int>()), "",1);
+  REQUIRE_ALWAYS(!seq::is_increasing(a+0, a+sizeof(a)/sizeof(int), greater<int>()), "",1);
+  
 
   REQUIRE_ALWAYS( seq::contains(a, a+sizeof(a)/sizeof(int), 1), "",1);
   REQUIRE_ALWAYS( seq::contains(a, a+sizeof(a)/sizeof(int), 2), "",1);
