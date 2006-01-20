@@ -15,6 +15,9 @@ Triang2D::Triang2D(Triang2D const& rhs) {
   cells     = rhs.cells;
   ncells    = rhs.ncells;
   nvertices = rhs.nvertices;
+  nedges    = rhs.nedges;
+  nedges_valid = rhs.nedges_valid;
+
   do_copy(); 
   owned = true; 
 }
@@ -25,6 +28,9 @@ Triang2D& Triang2D::operator=(Triang2D const& rhs) {
     cells     = rhs.cells;
     ncells    = rhs.ncells;
     nvertices = rhs.nvertices;
+    nedges    = rhs.nedges;
+    nedges_valid = rhs.nedges_valid;
+
     do_copy();  
     owned = true; 
   }
@@ -40,35 +46,40 @@ void Triang2D::clear()
   }
   cells = 0;
   owned = false;
-  ncells = nvertices = 0;
+  ncells = nvertices = nedges = 0;
+  nedges_valid = false;
 }
 
-int Triang2D::calc_num_of_vertices() 
+Triang2D::size_type Triang2D::calc_num_of_edges() const {
+  nedges = 0;
+  for(EdgeIterator e = FirstEdge(); !e.IsDone(); ++e)
+    ++nedges;
+  return nedges;
+}
+
+Triang2D::size_type Triang2D::calc_num_of_vertices() 
 {
-  // should test if vertices are numbered consecutively from 0..nv !
-  // VertexIterator relies on this!
   std::vector<bool>  found_vertices(3*ncells, false); // max. number of cells
-  for(int c = 0; c < ncells; ++c)
-    for(int vc = 0; vc < 3; ++vc)
+  for(size_type c = 0; c < ncells; ++c)
+    for(size_type vc = 0; vc < 3; ++vc)
       found_vertices[cells[3*c+vc]] = true;
   bool found = true;
-  int v = -1;
+  size_type v = -1;
   while(found) {
     found &= found_vertices[++v];
   }
   nvertices = v;  
 
-  // verify that vertices are consecutive
+  // verify that vertices are consecutive - VertexIterator relies on this!
   for(; v < 3*ncells; ++v)
     if (found_vertices[v])
-      //      IOMgr::Error()  << "Vertices not consecutive: v = " << v << endl;
       std::cerr << "Vertices not consecutive: v = " << v << std::endl;
   return nvertices;
 }
 
 void Triang2D::do_copy() 
 {
-    int * my_cells = new int[3*ncells];
+    size_type * my_cells = new size_type[3*ncells];
     std::copy(cells, cells+3*ncells, my_cells);
     cells = my_cells;
     owned = true;
@@ -76,7 +87,16 @@ void Triang2D::do_copy()
 
 void Triang2D::DoCopy() { if (!owned) do_copy();}
 
-void Triang2D::Steal(int* c, int nc, int nv)
+void Triang2D::Copy(size_type const* c, size_type nc, size_type nv, int offset)
+{
+  size_type * cc = new size_type[nc*3];
+  for(size_type cell = 0; cell < 3*nc; ++cell)  
+    cc[cell] = c[cell] - offset;
+  Steal(cc, nc, nv);
+  owned = true;
+}
+
+void Triang2D::Steal(size_type* c, size_type nc, size_type nv)
 {
   clear();
   cells = c;
