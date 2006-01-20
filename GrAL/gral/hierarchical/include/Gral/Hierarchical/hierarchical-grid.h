@@ -29,9 +29,9 @@ namespace hierarchical {
   template<class ELEMENTBASE> class h_cell_t;
   template<class ELEMENTBASE, class FLATELEM> class h_element_t;
 
-  template<class HGrid> class h_cell_child_iterator_t;
+  template<class HGrid>                 class h_cell_child_iterator_t;
   template<class HGrid, class FLATELEM> class h_element_child_iterator_t;
-  template<class ELEMBASE, class ELEMTAG, class ANCHORTAG> class  h_incidence_iterator_t;
+  template<class ELEMBASE, int DE, int DA> class  h_incidence_iterator_t;
 
 
   /*! \brief Handle type for hierarchical elements
@@ -70,6 +70,8 @@ namespace hierarchical {
   template<class Grid, class GT>
   struct grid_types_hgrid_base {
     typedef hgrid_cartesian<Grid, GT>  grid_type;
+    typedef typename grid_type::size_type size_type;
+
     typedef typename grid_type::Vertex Vertex;
     typedef typename grid_type::Edge   Edge;
     typedef typename grid_type::Facet  Facet;
@@ -95,7 +97,7 @@ namespace hierarchical {
     typedef typename grid_type::VertexOnCellIterator  VertexOnCellterator;
 
     typedef typename grid_type::EdgeOnFacetIterator EdgeOnFacetIterator;
-    typedef typename grid_type::EdgeOnCellIterator  EdgeOnCellterator;
+    typedef typename grid_type::EdgeOnCellIterator  EdgeOnCellIterator;
 
     typedef typename grid_type::FacetOnCellIterator FacetOnCellIterator;
 
@@ -130,6 +132,7 @@ namespace hierarchical {
 
     typedef typename patterngt::index_type pattern_index_type;
 
+    typedef  typename flatgt::size_type     size_type;
     typedef  typename flatgt::Cell          flat_cell_type;  
     typedef  typename flatgt::Facet         flat_facet_type;  
     typedef  typename flatgt::Edge          flat_edge_type;  
@@ -185,13 +188,14 @@ namespace hierarchical {
     typedef hier_facet_type          Facet;
     typedef hier_cell_type           Cell;
 
-    typedef h_incidence_iterator_t<element_base_type, vertex_type_tag, edge_type_tag > VertexOnEdgeIterator;    
-    typedef h_incidence_iterator_t<element_base_type, vertex_type_tag, facet_type_tag> VertexOnFacetIterator;
-    typedef h_incidence_iterator_t<element_base_type, vertex_type_tag, cell_type_tag > VertexOnCellIterator;
 
-    typedef h_incidence_iterator_t<element_base_type, edge_type_tag, facet_type_tag> EdgeOnFacetIterator;
-    typedef h_incidence_iterator_t<element_base_type, edge_type_tag, cell_type_tag > EdgeOnCellIterator;
-    typedef h_incidence_iterator_t<element_base_type, facet_type_tag,cell_type_tag > FacetOnCellIterator;
+    typedef h_incidence_iterator_t<element_base_type, 0, 1>         VertexOnEdgeIterator;    
+    typedef h_incidence_iterator_t<element_base_type, 0, dim-1>     VertexOnFacetIterator;
+    typedef h_incidence_iterator_t<element_base_type, 0, dim>       VertexOnCellIterator;
+
+    typedef h_incidence_iterator_t<element_base_type, 1,    dim-1>  EdgeOnFacetIterator;
+    typedef h_incidence_iterator_t<element_base_type, 1,    dim>    EdgeOnCellIterator;
+    typedef h_incidence_iterator_t<element_base_type, dim-1,dim>    FacetOnCellIterator;
    
     typedef h_cell_child_iterator_t<self>  CellChildIterator;
 
@@ -211,7 +215,6 @@ namespace hierarchical {
  
    typedef typename table_type_template<flat_grid_type>::type table_type;
     // typedef  bivector<flat_grid_type> table_type;
-    typedef typename table_type::size_type size_type;
 
 
     // type for dependent classes (like grid functions) to inherit from
@@ -423,6 +426,77 @@ struct grid_types<hierarchical::hgrid_cartesian<Grid, GT> >
   : public grid_types_base<hierarchical::grid_types_hgrid_base<Grid,GT> > 
 { };
 
+  namespace hierarchical {
+    
+    template<class Grid, class GT, int GD, int D>
+    struct element_d_aux {
+    private:
+    
+      typedef typename grid_types<hierarchical::hgrid_cartesian<Grid,GT> >::flatgt flatgt;
+      typedef typename element_d<flatgt,D>::type flat_element_type;
+    public: 
+      typedef h_element_t<h_element_base_t<hierarchical::hgrid_cartesian<Grid, GT> >, 
+			  flat_element_type>  type; 
+   };
+   
+  template<class Grid, class GT, int GD>
+  struct element_d_aux<Grid, GT, GD, GD> {
+    typedef h_cell_t<h_element_base_t<hgrid_cartesian<Grid, GT> > > type;
+  };
+
+  template<class Grid, class GT, int GD>
+  struct element_d_aux<Grid, GT, GD, 0> {
+    typedef h_vertex_t<h_element_base_t<hgrid_cartesian<Grid, GT> > > type;
+  };
+  
+
+  template<class Grid, class GT, int GD, int D>
+  struct child_iterator_d_aux {
+  private:
+    typedef typename grid_types<hgrid_cartesian<Grid,GT> >::flatgt flatgt;
+    typedef typename element_d<flatgt,D>::type                     flat_element_type;
+  public:
+    typedef h_element_child_iterator_t<hgrid_cartesian<Grid, GT>, flat_element_type> type;
+  };
+
+  template<class Grid, class GT, int GD>
+  struct child_iterator_d_aux<Grid,GT,GD,GD> {
+    typedef h_cell_child_iterator_t<hgrid_cartesian<Grid, GT> > type;
+  };
+
+  
+
+} // namespace hierarchical
+
+  // specialization of dimension-dependent type maps  element_d etc.
+
+  template<class Grid, class GT, int D>
+  struct element_handle_d<grid_types<hierarchical::hgrid_cartesian<Grid, GT> >, D> 
+  { 
+    typedef typename grid_types<hierarchical::hgrid_cartesian<Grid, GT> >::flatgt flatgt;
+    typedef hierarchical::h_element_handle_t<hierarchical::hgrid_cartesian<Grid, GT>, 
+					     typename element_handle_d<flatgt,D>::type> type;
+  };
+
+  template<class Grid, class GT, int D>
+  struct element_d<grid_types<hierarchical::hgrid_cartesian<Grid, GT> >, D> 
+    : public hierarchical::element_d_aux<Grid,GT, GT::dimension_tag::dim, D> {};
+
+  template<class Grid, class GT, int DE, int DA>
+  struct incidence_iterator_d<grid_types<hierarchical::hgrid_cartesian<Grid, GT> >, DE, DA>
+  {
+    typedef hierarchical::hgrid_cartesian<Grid, GT> grid_type;
+    typedef hierarchical::h_incidence_iterator_t<hierarchical::h_element_base_t<grid_type>, DE, DA> type;
+  }; 
+
+
+  template<class GT, int D> struct child_iterator_d {};
+
+  template<class Grid, class GT, int D>  
+  struct child_iterator_d<grid_types<hierarchical::hgrid_cartesian<Grid, GT> >, D> 
+    : public hierarchical::child_iterator_d_aux<Grid, GT, GT::dimension_tag::dim, D> {};
+
+
 namespace hierarchical {
 
   //-------------------- Grid Elements and Iterators ------------------------
@@ -460,6 +534,7 @@ namespace hierarchical {
     typedef typename gt::cell_handle    cell_handle;
     typedef typename gt::vertex_handle  vertex_handle;
     typedef typename gt::level_handle   level_handle;
+    typedef typename gt::size_type      size_type;
 
     // types related to the underlying flat grid
     typedef typename hgt::flatgt         flatgt;
@@ -517,6 +592,8 @@ namespace hierarchical {
     typedef typename base::gt              gt;
     typedef typename base::grid_type       grid_type;
     typedef typename base::level_handle    level_handle;
+    typedef typename base::size_type       size_type;
+
     typedef typename gt::Vertex            Vertex;
     typedef typename gt::vertex_handle     vertex_handle;
 
@@ -608,8 +685,10 @@ namespace hierarchical {
   public:
     typedef typename base::grid_type       grid_type;
     typedef typename base::gt              bgt;
-    typedef grid_types<grid_type>          gt;
+    typedef typename base::size_type       size_type;
     typedef typename base::level_handle    level_handle;
+
+    typedef grid_types<grid_type>          gt;
     typedef typename gt::Cell              Cell;
     typedef typename gt::cell_handle       cell_handle;
     typedef typename gt::Vertex            Vertex;
@@ -635,9 +714,11 @@ namespace hierarchical {
     typedef typename flat_element_type::index_type       index_type;
     typedef typename flat_element_type::local_index_type local_index_type;
 
-    //    typedef typename gt::incidence_iterator_d<dim-1,dim>::type SideIterator;
-    typedef h_incidence_iterator_t<base, facet_type_tag, cell_type_tag> SideIterator;
-    typedef h_incidence_iterator_t<base, edge_type_tag,  cell_type_tag> EdgeOnElementIterator;
+    // If we use this, a number of types are required in non_conforming_leaf_grid
+    //typedef typename incidence_iterator_d<gt,dim-1,dim>::type SideIterator;
+    //typedef typename incidence_iterator_d<gt,    1,dim>::type EdgeOnElementIterator;
+    typedef h_incidence_iterator_t<base, dim-1, dim> SideIterator;
+    typedef h_incidence_iterator_t<base, 1,     dim> EdgeOnElementIterator;
     
     //  typedef typename gt::CellChildIterator                     ChildIterator;
     typedef h_cell_child_iterator_t<grid_type> ChildIterator;
@@ -690,7 +771,7 @@ namespace hierarchical {
 
 
     // Does not work for conforming leaf grids, but these should pobably not use this class anyhow.
-    size_t NumOfVertices() const { return Flat().NumOfVertices();}
+    size_type NumOfVertices() const { return Flat().NumOfVertices();}
 
     // will this work with ELEMENTBASE other than h_element_base_t<> ?
     Cell Parent    () { cv(); return Cell(base::TheHierGrid()->Parent(*this));}
@@ -729,6 +810,7 @@ namespace hierarchical {
     typedef grid_types<grid_type>              gt;
 
     typedef typename base::level_handle    level_handle;
+    typedef typename base::size_type       size_type;
     // typedef typename gt::index_type        index_type;
 
     typedef FLATELEM                            flat_element_type;
@@ -742,14 +824,12 @@ namespace hierarchical {
     typedef typename fet::element_type_tag       element_type_tag;
     enum { dim = fet::dim, griddim = grid_type::dim, codim = grid_type::dim - fet::dim };
 
-    typedef typename gt::template element_d       <dim>::type     Element;
-    typedef typename gt::template element_handle_d<dim>::type     element_handle;
-    typedef typename gt::template incidence_iterator_d<0,dim>::type VertexOnElementIterator;
-    typedef typename gt::template incidence_iterator_d<1,dim>::type EdgeOnElementIterator;
+    typedef typename element_d       <gt,dim>::type     Element;
+    typedef typename element_handle_d<gt,dim>::type     element_handle;
 
-    // Without this enum, ICE in gcc 2.96 in incidence_iterator_d<dim-1,dim>
-    enum { dim1 = dim -1};
-    typedef typename gt::template incidence_iterator_d<dim1,dim>::type SideIterator;
+    typedef typename incidence_iterator_d<gt,0,    dim>::type VertexOnElementIterator;
+    typedef typename incidence_iterator_d<gt,1,    dim>::type EdgeOnElementIterator;
+    typedef typename incidence_iterator_d<gt,dim-1,dim>::type SideIterator;
 
 
     typedef typename gt::Vertex            Vertex;
@@ -810,7 +890,7 @@ namespace hierarchical {
     VertexOnElementIterator EndVertex()   const { return VertexOnElementIterator(*this, Flat().EndVertex());}
 
     // Does not work for conforming leaf grids, but these should pobably not use this class anyhow.
-    size_t NumOfVertices() const { return Flat().NumOfVertices();}
+    size_type NumOfVertices() const { return Flat().NumOfVertices();}
 
     // will this work with ELEMENTBASE other than h_element_base_t<> ?
     //  Element Parent    () { cv(); return Element(TheHierGrid()->Parent(*this));}
@@ -890,15 +970,15 @@ namespace hierarchical {
     typedef typename fet::handle_type           flat_element_handle;
     typedef typename hgt::flatgt                flatgt;
 
-    typedef typename hgt::template element_d       <dim>::type     element_type;
-    typedef typename hgt::template element_handle_d<dim>::type     element_handle;
+    typedef typename element_d       <hgt,dim>::type     element_type;
+    typedef typename element_handle_d<hgt,dim>::type     element_handle;
 
     typedef typename HGRID::level_handle level_handle;
 
 
     typedef typename HGRID::cart_subrange_type           cart_subrange_type;
     typedef grid_types<cart_subrange_type>               rgt;
-    typedef typename rgt::template sequence_iterator_d<dim>::type RangeElementIterator;
+    typedef typename sequence_iterator_d<rgt,dim>::type  RangeElementIterator;
   private:
     element_type                        p;  // parent
     ref_ptr<cart_subrange_type const>   children; // range of children
@@ -948,41 +1028,27 @@ namespace hierarchical {
   }; // class h_element_child_iterator_t<HGrid>
 
 
-  /*! VertexOnElementIterator for hierarchical grids
+  /*! incidence iterator for hierarchical grids
 
   */
 
-  template<class ELEMBASE, class ELEMTAG,  class ANCHORTAG> 
-  //template<class ELEMBASE, class ANCHORTAG> 
+  template<class ELEMBASE, int DE, int DA> 
   class h_incidence_iterator_t : public ELEMBASE {
-    typedef  h_incidence_iterator_t<ELEMBASE, ELEMTAG, ANCHORTAG> self;
-    typedef  ELEMBASE                                            base;
+    typedef  h_incidence_iterator_t<ELEMBASE, DE, DA> self;
+    typedef  ELEMBASE                                 base;
   public:
     typedef typename base::grid_type     grid_type;
-    //    typedef typename base::gt            gt;
     typedef grid_types<grid_type>        gt;
-    typedef ANCHORTAG                    anchor_type_tag;
-    typedef ELEMTAG                      element_type_tag;
-    typedef typename gt::template element<ANCHORTAG>::type  anchor_type;
-    
-    typedef typename gt::template element<ELEMTAG>::type  element_type;
-    typedef typename gt::template element_handle<element_type_tag>::type element_handle;
-    //typedef typename gt::Vertex          Vertex;
-    //typedef typename gt::vertex_handle   vertex_handle;
+    typedef typename base::flatgt        flatgt;
+    typedef typename element_d       <gt,DA>::type  anchor_type;
+    typedef typename element_d       <gt,DE>::type  element_type;
+    typedef typename element_handle_d<gt,DE>::type  element_handle;
 
-    // typedef Cell                         anchor_type;
-    //  typedef Vertex                       value_type;
-    // typedef Vertex                       element_type;
     typedef element_type value_type;
 
-    typedef typename gt::flatgt          flatgt;
-    typedef typename flatgt::template incidence_iterator<element_type_tag, anchor_type_tag>::type  
-                                         flat_incidence_iterator;
+    typedef typename incidence_iterator_d<flatgt,DE, DA>::type  
+             flat_incidence_iterator;
 
-    //using base::cb;
-    //using base::bound;
-    //using base::level;
-    //using base::TheGrid;
 
     h_incidence_iterator_t() {}
     explicit 
