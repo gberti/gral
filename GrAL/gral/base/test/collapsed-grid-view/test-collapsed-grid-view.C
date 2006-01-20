@@ -10,6 +10,7 @@
 #include "Gral/Geometries/simple-geometry.h"
 
 #include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Test/all.h"
 
 #include "Container/tuple-point-traits.h"
 #include "Utility/as-string.h"
@@ -48,9 +49,16 @@ int main()
   REQUIRE_ALWAYS(C.NumOfCells()    == T.NumOfCells(),    "",1);
 
   cout.precision(16);
-  typedef grid_types<Triang2D> gt;
+  typedef grid_types<Triang2D>                  gt;
+  typedef grid_types<cgv::grid_view<Triang2D> > cgt;
+
   int cnt = 0;
   for(gt::EdgeIterator e(T); !e.IsDone(); ++e) {
+
+    test_sequence_iterator <cgt::Vertex>          (C, cout);
+    test_sequence_iterator <cgt::Cell  >          (C, cout);
+    test_incidence_iterator<cgt::Vertex,cgt::Cell>(C, cout);
+
     if(C.CollapsedVertex((*e).V1()) != C.CollapsedVertex((*e).V2())) {
       cout << "Collapsing edge " << (*e).v1() << "->" << (*e).v2() << "\n";
       ++cnt;

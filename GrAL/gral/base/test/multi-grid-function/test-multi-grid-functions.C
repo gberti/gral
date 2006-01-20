@@ -29,8 +29,8 @@ struct mgf_tester {
   static void act(MGF & mgf) {
     typedef typename MGF::grid_type  grid_type;
     typedef grid_types<grid_type>    gt;
-    typedef typename gt::template sequence_iterator_d<D>::type ElementIterator;
-    typedef typename gt::template element_d          <D>::type Element;
+    typedef typename sequence_iterator_d<gt,D>::type ElementIterator;
+    typedef typename element_d          <gt,D>::type Element;
 
     mgf_tester<MGF,D-1>::act(mgf);
     for(ElementIterator e(mgf.TheGrid()); ! e.IsDone(); ++e) {
@@ -79,7 +79,7 @@ int main() {
     typedef grid_types<grid_type> gt;
     grid_type R(2,2);
 
-    typedef gt::element_d<0>::type Vertex;
+    typedef element_d<gt,0>::type Vertex;
     
     multi_grid_function        <grid_type, int> mgf (R,1);
     partial_multi_grid_function<grid_type, int> pmgf(R,1);

@@ -1,22 +1,21 @@
-# gral/base/test/extrusion-view
+# gral/base/test/archetypes0D
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-LOCALSOURCES =  test-extrusion-view.C
+
+LOCALSOURCES =  test-archetypes0D.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-EXEC =  $(LOCALSOURCES:%.C=%.exe)
-
 TARGETS = $(EXEC)
-EXTRA_DEPMODULES += geometry gral/complex2d  gral/testing gral/gmv-io 
+EXEC =  $(LOCALSOURCES:%.C=%.exe)
 
 include $(DEPS)
 
 
 
-LIBS = -lgral-gmv-io -lgral-complex2d -lgral-base -lgeometry  
+LIBS =  -lgral-base
 
 
 new-check-clean: new check clean

@@ -2,7 +2,8 @@
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 
-SUBDIRS = boundary-grid  \
+SUBDIRS = archetype0d \
+          boundary-grid  \
           boundary-range-nd \
           cell-as-volume \
           cell-on-cell-iterator \

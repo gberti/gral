@@ -9,7 +9,7 @@ OBJECTS =  $(SOURCES:%.C=%.o)
 DEPS = $(SOURCES:%.C=%.d)
 EXEC = $(SOURCES:%.C=%.exe)
 TARGETS = $(EXEC)
-EXTRA_DEPMODULES = geometry external-control gral/triang2d gral/gmv-io
+EXTRA_DEPMODULES = geometry external-control gral/triang2d gral/gmv-io gral/testing
 
 include $(DEPS)
 

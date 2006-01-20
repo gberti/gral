@@ -14,6 +14,12 @@
 
 #include <iostream>
 
+struct test_gt {
+  typedef int grid_type;
+  typedef int Vertex;
+
+  typedef int Cell;
+};
 
 int main() {
   using namespace GrAL;
@@ -70,4 +76,16 @@ int main() {
   cout << "override_facet_handle<my_facet_handle>:\n";
   checkgt<override_facet_handle<my_facet_handle> >(cout);
 
+  cout << "checkgt<test_gt>\n";
+  checkgt<test_gt>(cout);
+  cout << "\n";
+  
+  cout << "checkgt<get_from_base_gt_Edge<test_gt, grid_types<Complex2D> >\n";
+  checkgt<get_from_base_gt_Edge<test_gt, grid_types<Complex2D> > >(cout);
+
+  cout << "checkgt<get_element_types_from_base<test_gt,grid_types<Complex2D> > >\n";
+  checkgt<get_element_types_from_base<test_gt,grid_types<Complex2D> > >(cout);
+
+  cout << "checkgt<get_local_types_from_base<test_gt,grid_types<Complex2D> > >\n";
+  checkgt<get_local_types_from_base<test_gt,grid_types<Complex2D> > >(cout);
 }
