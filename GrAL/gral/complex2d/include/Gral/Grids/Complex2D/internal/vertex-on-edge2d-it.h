@@ -38,8 +38,9 @@ public:
   //--------------- anchor access -------------------
 
   const Complex2D& TheGrid()  const { return e.TheGrid();}
-  const Edge&      TheEdge()  const { return e;}
-  const Edge&      TheFacet() const { return e;}
+  const Edge&      TheEdge  () const { return e;}
+  const Edge&      TheFacet () const { return e;}
+  const Edge&      TheAnchor() const { return e;}
 
   //--------------- comparisom ----------------------
 

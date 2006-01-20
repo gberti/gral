@@ -56,8 +56,9 @@ public:
   operator    bool() const { return !IsDone();}
   int local_handle() const { return _f.local_handle();}
 
-  Cell             TheCell()  const { return(_f.TheCell());}
-  Complex2D const& TheGrid()  const { return(_f.TheGrid());}
+  Cell             TheCell()    const { return(_f.TheCell());}
+  Cell             TheAnchor()  const { return(_f.TheCell());}
+  Complex2D const& TheGrid()    const { return(_f.TheGrid());}
 
   friend bool operator==(const self& ls, const self& rs) 
   { return (ls._f == rs._f); }

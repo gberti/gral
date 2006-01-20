@@ -17,6 +17,7 @@
 namespace GrAL {
 
 class Complex3D;
+class Complex3D_base;
 
 class Vertex_Complex3D;
 class Edge_Complex3D;
@@ -29,7 +30,7 @@ class VertexOnCellIterator_Complex3D;
 
 /*! Base type collecting the types related to Complex3D
  */
-struct grid_types_Complex3D_base {
+struct grid_types_Complex3D_base : public grid_types_detail::grid_types_root {
   public:
   typedef Complex3D grid_type;
 
@@ -49,6 +50,7 @@ struct grid_types_Complex3D_base {
   typedef VertexOnCellIterator_Complex3D VertexOnCellIterator;
 
   typedef Cell_Complex3D_base cell_base_type;
+  typedef Complex3D_base      grid_base_type;
 
   typedef grid_dim_tag<3> dimension_tag;
 
@@ -75,12 +77,14 @@ struct grid_types_Complex3D
   typedef vertex_on_edge_iterator<Complex3D, grid_types_Complex3D> VertexOnEdgeIterator;
 };
 
+  class Complex3D_base :  public grid_types_Complex3D {};
+
 /*! \brief Class for representing general 3D unstructured grids
 
     \ingroup complex3dmodule
 */
-class Complex3D : public grid_types_Complex3D {
-  typedef size_t size_type;
+class Complex3D : public grid_types_Complex3D::grid_base_type {
+  //  typedef GrAL::signed_size_t size_type;
 
  private:
   std::vector<vertex_handle>  cells; // cell-vertex incidences
@@ -163,7 +167,7 @@ private:
 
   struct cell_vertex_incidence_map {
   private:
-    ::std::vector<vertex_handle>::iterator pc;
+    std::vector<vertex_handle>::iterator pc;
   public:
     cell_vertex_incidence_map(Complex3D & G, cell_handle c)
       : pc(G.cells.begin() + G.offset[c]) {}
@@ -197,7 +201,7 @@ public:
     { return cell_archetype[c];}
   archetype_handle      archetype_of(Cell const& c) const;
 
-  typedef ::std::vector<archetype_type>::const_iterator archetype_iterator;
+  typedef std::vector<archetype_type>::const_iterator archetype_iterator;
   archetype_iterator  BeginArchetype() const { return archetypes.begin();}
   archetype_iterator  EndArchetype()   const { return archetypes.end  ();}
   archetype_handle    handle(archetype_iterator it) const { return it - BeginArchetype();}
@@ -205,7 +209,7 @@ public:
     REQUIRE(valid_archetype(a), "a = " << a,1);
     return archetypes[a];
   }
-
+ 
   //@}
 
 }; // class Complex3D
@@ -223,7 +227,9 @@ protected:
   void init(grid_type const& gg)  { g = &gg;}
 
 public: 
-  grid_type const& TheGrid() const { return *g;}
+  typedef grid_type anchor_type;
+  grid_type const& TheGrid()   const { return *g;}
+  grid_type const& TheAnchor() const { return *g;}
 
   bool bound() const { return (g != 0);}
 };
@@ -277,6 +283,8 @@ public:
   typedef gt::cell_handle cell_handle;
   typedef gt::vertex_handle vertex_handle;
   typedef gt::VertexOnCellIterator VertexOnCellIterator;
+
+  typedef Cell value_type;
  public:
   Cell_Complex3D() {}
   explicit
@@ -327,6 +335,8 @@ public:
 class Vertex_Complex3D : public elem_base_Complex3D {
   typedef Vertex_Complex3D      self;
   typedef elem_base_Complex3D base;
+public:
+  typedef Vertex    value_type;
  private:
   vertex_handle h;
  public:
@@ -365,6 +375,9 @@ class Vertex_Complex3D : public elem_base_Complex3D {
 class VertexOnCellIterator_Complex3D : public elem_base_Complex3D {
   typedef VertexOnCellIterator_Complex3D  self;
   typedef elem_base_Complex3D             base;
+public:
+  typedef Vertex value_type;
+  typedef Cell   anchor_type;
  private:
   cell_handle c;
   int         lv;
@@ -589,6 +602,57 @@ struct element_traits<Cell_Complex3D>
   struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0> consecutive_tag;
 };
+
+
+
+#define gt grid_types<Complex3D>
+
+  inline gt::VertexIterator   gral_begin(gt::grid_type const& G, gt::VertexIterator) { return G.FirstVertex();}
+  inline gt::VertexIterator   gral_end  (gt::grid_type const& G, gt::VertexIterator) { return G.EndVertex();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::VertexIterator) { return G.NumOfVertices();}
+
+  inline gt::EdgeIterator     gral_begin(gt::grid_type const& G, gt::EdgeIterator)   { return G.FirstEdge();}
+  inline gt::EdgeIterator     gral_end  (gt::grid_type const& G, gt::EdgeIterator)   { return gt::EdgeIterator(G.EndCell());}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::EdgeIterator)   { return G.NumOfEdges();}
+
+  inline gt::FacetIterator    gral_begin(gt::grid_type const& G, gt::FacetIterator)  { return G.FirstFacet();}
+  inline gt::FacetIterator    gral_end  (gt::grid_type const& G, gt::FacetIterator)  { return gt::FacetIterator(G.EndCell());}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::FacetIterator)  { return G.NumOfFacets();}
+
+  inline gt::CellIterator     gral_begin(gt::grid_type const& G, gt::CellIterator)   { return G.FirstCell();}
+  inline gt::CellIterator     gral_end  (gt::grid_type const& G, gt::CellIterator)   { return G.EndCell();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::CellIterator)   { return G.NumOfCells();}
+
+
+  inline gt::VertexOnCellIterator   gral_begin(gt::Cell   a, gt::VertexOnCellIterator)  { return a.FirstVertex();}
+  inline gt::VertexOnCellIterator   gral_end  (gt::Cell   a, gt::VertexOnCellIterator)  { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::VertexOnCellIterator)  { return a.NumOfVertices();}
+
+  inline gt::VertexOnEdgeIterator   gral_begin(gt::Edge   a, gt::VertexOnEdgeIterator)  { return gt::VertexOnEdgeIterator(a);}
+  inline gt::VertexOnEdgeIterator   gral_end  (gt::Edge   a, gt::VertexOnEdgeIterator)  { return gt::VertexOnEdgeIterator(a,2);}
+  inline gt::size_type              gral_size (gt::Edge   a, gt::VertexOnEdgeIterator)  { return 2;}
+
+  inline gt::VertexOnFacetIterator  gral_begin(gt::Facet  a, gt::VertexOnFacetIterator) { return a.FirstVertex();}
+  inline gt::VertexOnFacetIterator  gral_end  (gt::Facet  a, gt::VertexOnFacetIterator) { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Facet  a, gt::VertexOnFacetIterator) { return a.NumOfVertices();}
+
+  inline gt::EdgeOnFacetIterator    gral_begin(gt::Facet  a, gt::EdgeOnFacetIterator) { return a.FirstEdge();}
+  inline gt::EdgeOnFacetIterator    gral_end  (gt::Facet  a, gt::EdgeOnFacetIterator) { return a.EndEdge();}
+  inline gt::size_type              gral_size (gt::Facet  a, gt::EdgeOnFacetIterator) { return a.NumOfEdges();}
+
+
+  inline gt::EdgeOnCellIterator     gral_begin(gt::Cell   a, gt::EdgeOnCellIterator)  { return a.FirstEdge();}
+  inline gt::EdgeOnCellIterator     gral_end  (gt::Cell   a, gt::EdgeOnCellIterator)  { return a.EndEdge();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::EdgeOnCellIterator)  { return a.NumOfEdges();}
+
+  inline gt::FacetOnCellIterator    gral_begin(gt::Cell   a, gt::FacetOnCellIterator) { return a.FirstFacet();}
+  inline gt::FacetOnCellIterator    gral_end  (gt::Cell   a, gt::FacetOnCellIterator) { return a.EndFacet();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::FacetOnCellIterator) { return a.NumOfFacets();}
+
+
+#undef gt
+
+
 
 } // namespace GrAL 
 

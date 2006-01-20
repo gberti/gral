@@ -43,7 +43,8 @@ public:
   operator bool() const { return !IsDone();}
 
   handle_type    handle()  const { return TheGrid().handle(this->operator*());}
-  Complex const& TheGrid() const {return (_c.TheGrid());}
+  Complex const& TheGrid  () const {return (_c.TheGrid());}
+  Complex const& TheAnchor() const {return (_c.TheGrid());}
 
   vertex_handle v1() const { return _fc.v1();}
   vertex_handle v2() const { return _fc.v2();}

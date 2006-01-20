@@ -101,7 +101,7 @@ void copy_cells_archetypes(Complex2D      & G_dst,
     src_arch_handle a_src = G_src.archetype_of(*c_src);
     //  dst_arch_handle a_dst = arch_corr(a_src);
 
-    cell_handle pc = cc._new_cell((*c_src).NumOfVertices()); // correct arch gets selected automatically a_dst);
+    cell_handle pc = cc._new_cell(GrAL::size<typename src_gt::Vertex>(*c_src)); // correct arch gets selected automatically a_dst);
     cell_corr[c_src.handle()] = pc;
     gt::Cell c_dst(G_dst, pc);
 

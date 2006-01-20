@@ -115,7 +115,8 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   // cc._vertices().reserve(Connect.NumOfVertices());
 
   for(src_vertex_it src_v = G_src.FirstVertex(); ! src_v.IsDone(); ++src_v) {
-    src_vertex_handle src_vh = G_src.handle(*src_v);
+    //    src_vertex_handle src_vh = G_src.handle(*src_v);
+    src_vertex_handle src_vh = (*src_v).handle();
     if (! Iv.defined(src_vh)) // new vertex : create copy in G
       VertexCorr[src_vh] = gg._new_vertex(Geo_src.coord(*src_v));
     else // identified vertex, hence already in G
@@ -245,7 +246,8 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   // loop over all new cells (by mapping C(G_src) --> C(G))
   for(src_cell_it src_c = G_src.FirstCell(); ! src_c.IsDone(); ++src_c) {
     // append cell C to all adjacent vertices
-    Cell C =   G.cell(CellCorr(G_src.handle(*src_c)));
+    //  Cell C =   G.cell(CellCorr(G_src.handle(*src_c)));
+    Cell C =   G.cell(CellCorr((*src_c).handle()));
     for(VertexOnCellIterator vc = C.FirstVertex(); !vc.IsDone(); ++vc)
        gg.add_cell_on_vertex(*vc,C);
   }
@@ -258,7 +260,8 @@ void EnlargeGrid(Complex2D& G,                 // in/out
   // setup archetype info. NOTE: if the src G2 has archetype info, this should be used.
   if(! has_archetype_type<Conn>::result) {
     for(src_cell_it src_c = G_src.FirstCell(); ! src_c.IsDone(); ++src_c) {
-      Cell C =   G.cell(CellCorr(G_src.handle(*src_c)));
+      // Cell C =   G.cell(CellCorr(G_src.handle(*src_c)));
+      Cell C =   G.cell(CellCorr((*src_c).handle()));
       gg.add_archetype_of(C);
     }
   }

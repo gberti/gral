@@ -16,8 +16,8 @@ public:
   //------------------- types ---------------------
 
   typedef Complex2D grid_type;
-  typedef Cell    element_type;
-  typedef Cell    value_type;
+  typedef Cell      element_type;
+  typedef Cell      value_type;
   typedef Edge2D    anchor_type;
 
   //----------------- construction -----------------
@@ -37,8 +37,9 @@ public:
   //--------------- anchor access -------------------
 
   const Complex2D& TheGrid()  const { return e.TheGrid();}
-  const Edge&      TheEdge()  const { return e;}
-  const Edge&      TheFacet() const { return e;}
+  const Edge&      TheEdge()    const { return e;}
+  const Edge&      TheAnchor()  const { return e;}
+  const Edge&      TheFacet()   const { return e;}
 
   //--------------- comparisom ----------------------
 

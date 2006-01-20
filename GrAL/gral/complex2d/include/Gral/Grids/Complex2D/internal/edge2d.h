@@ -14,6 +14,7 @@ public:
   typedef edge_handle_complex2d   handle_type;
   typedef Complex2D               anchor_type;
   typedef VertexOnEdge2D_Iterator VertexIterator;
+  typedef edge_type_tag           element_type_tag;
 
 private:
   //----- DATA --------

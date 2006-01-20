@@ -44,7 +44,55 @@ class CellOnCell2D_Iterator;
 
 
 class CellOnVertex2D_Iterator;
+struct edge_handle_complex2d;
 
+
+  struct complex2d_types : public grid_types_detail::grid_types_root { 
+    typedef complex2d_types self;
+  typedef Complex2D Complex;
+  typedef Complex2D grid_type;
+  typedef const Complex2D* ComplexPtr;
+
+  typedef Vertex2D  Vertex;
+  typedef Edge2D    Edge;
+  typedef Edge2D    Facet;
+  typedef Cell2D    Cell;
+  typedef Cell2D    Face;
+
+
+    typedef vertex_handle_int<Complex2D,self> vertex_handle;
+    typedef cell_handle_int<Complex2D,self>   cell_handle;
+    typedef edge_handle_complex2d             edge_handle;
+    typedef edge_handle_complex2d             facet_handle;
+
+  // sequence iterators
+  typedef Vertex2D_Iterator       GridVertexIterator;
+  typedef Edge2D_Iterator         GridEdgeIterator;
+  typedef Edge2D_Iterator         GridFacetIterator;
+  typedef Cell2D_Iterator         GridCellIterator;
+
+  typedef VertexOnEdge2D_Iterator VertexOnEdgeIterator;
+  typedef VertexOnEdge2D_Iterator VertexOnFacetIterator;
+  typedef CellOnEdge2D_Iterator   CellOnEdgeIterator;
+  typedef CellOnEdge2D_Iterator   CellOnFacetIterator;
+
+
+  // X-on-Cell incidence
+  typedef VertexOnCell2D_Iterator VertexOnCellIterator;
+  typedef EdgeOnCell2D_Iterator   EdgeOnCellIterator;
+  typedef EdgeOnCell2D_Iterator   FacetOnCellIterator;
+  typedef CellOnCell2D_Iterator   CellNeighbourIterator;
+  typedef CellOnCell2D_Iterator   CellOnCellIterator;
+
+  typedef CellOnVertex2D_Iterator CellOnVertexIterator;
+
+  typedef polygon1d::polygon                 archetype_type;
+  typedef std::vector<archetype_type>        archetype_sequence;
+  typedef archetype_sequence::const_iterator archetype_iterator;
+  typedef int                                archetype_handle;
+  typedef grid_types<archetype_type>         archgt;
+
+};
 
 // the next two classes (vertex_base and cell_connectivity) are
 // the *internal* representations of vertices and cells and are
@@ -55,8 +103,9 @@ class CellOnVertex2D_Iterator;
 class vertex_base {
 public:
   typedef point2 CoordType;
+  typedef complex2d_types::size_type size_type;
 
-  typedef ::std::vector<int> cell_list;
+  typedef std::vector<size_type> cell_list;
 private:
 
   //--- DATA ------
@@ -91,9 +140,10 @@ private:
 
 
 class cell2d_connectivity {
+  typedef complex2d_types::size_type size_type;
 public:
-  typedef ::std::vector<int> vertex_list;
-  typedef ::std::vector<int> cell_list;
+  typedef std::vector<size_type> vertex_list;
+  typedef std::vector<size_type> cell_list;
 
   //private:
   //-------------- DATA -----------
@@ -105,7 +155,7 @@ public:
   cell_list      _neighbours;
   vertex_list    _vertices; 
 
-  void resize( unsigned n) {
+  void resize(size_type n) {
     _neighbours = cell_list(n);
     _vertices   = vertex_list(n);
   }
@@ -115,7 +165,7 @@ public:
 public:
   //------------ constructors -----------------------
   cell2d_connectivity()  {}
-  cell2d_connectivity(unsigned n) : _neighbours(n), _vertices(n) {} // NumOfVertices() == n
+  cell2d_connectivity(size_type n) : _neighbours(n), _vertices(n) {} // NumOfVertices() == n
   ~cell2d_connectivity() {}
 
   // copying
@@ -139,14 +189,16 @@ private:
 
 
 
-typedef ::std::vector<cell2d_connectivity>   cell_list_complex2d;
-typedef ::std::vector<vertex_base>           vertex_list_complex2d;
+typedef std::vector<cell2d_connectivity>   cell_list_complex2d;
+typedef std::vector<vertex_base>           vertex_list_complex2d;
 
 struct edge_handle_complex2d {
-  int c;  // cell
+  typedef complex2d_types::cell_handle cell_handle;
+  cell_handle c;
+  // int c;  // cell
   int le; // local position in cell
   edge_handle_complex2d() {}
-  edge_handle_complex2d(int cc, int lle) : c(cc), le(lle) {}
+  edge_handle_complex2d(cell_handle cc, int lle) : c(cc), le(lle) {}
 
   int local_facet() const { return le;}
 
@@ -184,54 +236,6 @@ namespace STDEXT  {
 
 namespace GrAL {
 
-struct complex2d_types { 
-  typedef Complex2D Complex;
-  typedef Complex2D grid_type;
-  typedef const Complex2D* ComplexPtr;
-
-  typedef Vertex2D  Vertex;
-  typedef Edge2D    Edge;
-  typedef Edge2D    Facet;
-  typedef Cell2D    Cell;
-  typedef Cell2D    Face;
-
-
-  typedef vertex_handle_int<Complex2D> vertex_handle;
-  typedef cell_handle_int<Complex2D>   cell_handle;
-  typedef edge_handle_complex2d        edge_handle;
-  typedef edge_handle_complex2d        facet_handle;
-
-  // typedef int vertex_handle;
-  //typedef int cell_handle;
-
-  // sequence iterators
-  typedef Vertex2D_Iterator       GridVertexIterator;
-  typedef Edge2D_Iterator         GridEdgeIterator;
-  typedef Edge2D_Iterator         GridFacetIterator;
-  typedef Cell2D_Iterator         GridCellIterator;
-
-  typedef VertexOnEdge2D_Iterator VertexOnEdgeIterator;
-  typedef VertexOnEdge2D_Iterator VertexOnFacetIterator;
-  typedef CellOnEdge2D_Iterator   CellOnEdgeIterator;
-  typedef CellOnEdge2D_Iterator   CellOnFacetIterator;
-
-
-  // X-on-Cell incidence
-  typedef VertexOnCell2D_Iterator VertexOnCellIterator;
-  typedef EdgeOnCell2D_Iterator   EdgeOnCellIterator;
-  typedef EdgeOnCell2D_Iterator   FacetOnCellIterator;
-  typedef CellOnCell2D_Iterator   CellNeighbourIterator;
-  typedef CellOnCell2D_Iterator   CellOnCellIterator;
-
-  typedef CellOnVertex2D_Iterator CellOnVertexIterator;
-
-  typedef polygon1d::polygon                 archetype_type;
-  typedef ::std::vector<archetype_type>        archetype_sequence;
-  typedef archetype_sequence::const_iterator archetype_iterator;
-  typedef int                                archetype_handle;
-  typedef grid_types<archetype_type>         archgt;
-
-};
 
 
 
@@ -278,7 +282,7 @@ struct complex2d_types {
     Its $GrAL Facet type is a typedef to its $GrAL Edge type.
  */
 class Complex2D : public complex2d_types  {
-  typedef ::std::list<EdgeOnCell2D_Iterator>  boundary_facet_list;
+  typedef std::list<EdgeOnCell2D_Iterator>  boundary_facet_list;
   typedef vertex_list_complex2d        v_list;
   typedef cell_list_complex2d          c_list;
 
@@ -289,9 +293,9 @@ public: // for benchmark only
   vertex_list_complex2d          _vertices;
   boundary_facet_list            _boundary;
 
-  mutable int                    num_of_edges_cache;
+  mutable size_type              num_of_edges_cache;
   archetype_sequence             archetypes;
-  ::std::vector<archetype_handle>  arch_for_n_vertices;
+  std::vector<archetype_handle>  arch_for_n_vertices;
 public:
   //--------- types --------------------
 
@@ -300,6 +304,7 @@ public:
   typedef Edge2D_Iterator         EdgeIterator;
   typedef Edge2D_Iterator         FacetIterator;
   typedef Cell2D_Iterator         CellIterator;
+  typedef Cell2D_Iterator         FaceIterator;
 
   typedef BoundaryFacet2D_Iterator            BoundaryFacetIterator;
   typedef BoundaryComponent_Vertex2D_Iterator BoundaryVertexIterator;
@@ -332,10 +337,13 @@ public:
 
   inline FacetIterator    FirstFacet()   const;
   inline FacetIterator    EndFacet()     const;
-
+ 
   inline CellIterator     FirstCell()    const;
   inline CellIterator     EndCell()      const;
-  //@}
+
+  inline FaceIterator     FirstFace()    const;
+  inline FaceIterator     EndFace()      const;
+ //@}
 
   //@{ @name switch operations
   inline void switch_vertex(Vertex& v, Edge const& e) const;
@@ -359,8 +367,8 @@ public:
   inline BoundaryFacetIterator  FirstBoundaryEdge () const;
   inline BoundaryVertexIterator FirstBoundaryVertex() const; // works only for one bd. component!
 
-  int NumOfBoundaryVertices() const { return NumOfBoundaryFacets();}
-  int NumOfBoundaryFacets() const { return (_boundary.size());}
+  size_type NumOfBoundaryVertices() const { return NumOfBoundaryFacets();}
+  size_type NumOfBoundaryFacets() const { return (_boundary.size());}
 
   // now here some work has still to be done ...
   // int NumOfBoundaryCells() const 
@@ -373,17 +381,17 @@ public:
   //---------------- size information ------------
 
   //@{ @name Size information
-  int NumOfVertices() const  {return (_vertices.size());}
-  int NumOfEdges()    const  
+  size_type NumOfVertices() const  {return (_vertices.size());}
+  size_type NumOfEdges()    const  
   { 
     if(num_of_edges_cache < 0)
       calculate_num_of_edges();
     return num_of_edges_cache;
   }
   //  {return (NumOfCells() == 0 ? 0 : -2 + NumOfVertices() + NumOfCells() + NumOfBoundaryComponents());}
-  int NumOfFacets()   const { return NumOfEdges();}
-  int NumOfFaces()    const  {return NumOfCells();}
-  int NumOfCells()    const  {return (_cells.size());}
+  size_type NumOfFacets()   const { return NumOfEdges();}
+  size_type NumOfFaces()    const  {return NumOfCells();}
+  size_type NumOfCells()    const  {return (_cells.size());}
   //@}
   
   //-----------------------------------------------------
@@ -412,7 +420,7 @@ public:
   /*@{*/
   archetype_iterator BeginArchetype() const { return archetypes.begin();}
   archetype_iterator EndArchetype()   const { return archetypes.end();}
-  archetype_handle    handle(archetype_iterator it) const { return it - BeginArchetype();}
+  archetype_handle   handle(archetype_iterator it) const { return it - BeginArchetype();}
 
   archetype_type const& Archetype(archetype_handle a) const { return archetypes[a];}
   archetype_type      & Archetype(archetype_handle a)       { return archetypes[a];}
@@ -425,6 +433,7 @@ public:
   archetype_handle        archetype_of(Cell const& c) const 
     { return arch_for_n_vertices[c.NumOfVertices()];}
   unsigned NumOfArchetypes() const { return archetypes.size(); }
+
 
   /*! \brief Add an archetype to the archetype list.
  
@@ -484,10 +493,10 @@ public:
   inline vertex_handle handle(VertexIterator       const& v)  const;
   inline vertex_handle handle(VertexOnCellIterator const& v)  const;
 
-  inline bool is_valid_vertex(vertex_handle v) const { return ((0 <= v) && (v < (int)_vertices.size()));}
-  inline bool is_valid_cell  (cell_handle c)   const { return ((0 <= c) && (c < (int)_cells.size()));}
-  bool valid(vertex_handle v) const { return ((0 <= v) && (v < (int)_vertices.size()));}
-  bool valid(cell_handle   c) const { return ((0 <= c) && (c < (int)_cells   .size()));}
+  inline bool is_valid_vertex(vertex_handle v) const { return ((0 <= v) && (v <  NumOfVertices()));}
+  inline bool is_valid_cell  (cell_handle c)   const { return ((0 <= c) && (c <  NumOfCells   ()));}
+  bool valid(vertex_handle v) const { return ((0 <= v) && (v < NumOfVertices()));}
+  bool valid(cell_handle   c) const { return ((0 <= c) && (c < NumOfCells   ()));}
   bool valid_vertex(vertex_handle v) const { return valid(v);}
   bool valid_cell  (cell_handle   c) const { return valid(c);}
 
@@ -607,9 +616,9 @@ struct grid_types_Complex2D  : public complex2d_types {
   typedef EdgeOnCellIterator      EdgeOnFaceIterator;
   typedef CellOnEdgeIterator      FaceOnEdgeIterator;
 
-  static int hash(const Vertex& V) { return V.handle();}
-  static int hash(const Cell&   C) { return C.handle();}
-  static int hash(const Edge&   E) 
+  static size_t hash(const Vertex& V) { return V.handle();}
+  static size_t hash(const Cell&   C) { return C.handle();}
+  static size_t hash(const Edge&   E) 
   {
     // problems if E is on boundary: one Cell does not exist.
     // bug detected by  __STL_DEBUG
@@ -649,9 +658,43 @@ template<>
 struct grid_types<Complex2D> : public grid_types_base<grid_types_Complex2D> {};
 
 
+#define gt grid_types<Complex2D>
+
+  inline gt::VertexIterator   gral_begin(gt::grid_type const& G, gt::VertexIterator) { return G.FirstVertex();}
+  inline gt::VertexIterator   gral_end  (gt::grid_type const& G, gt::VertexIterator) { return G.EndVertex();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::VertexIterator) { return G.NumOfVertices();}
+
+  inline gt::EdgeIterator     gral_begin(gt::grid_type const& G, gt::EdgeIterator)   { return G.FirstEdge();}
+  inline gt::EdgeIterator     gral_end  (gt::grid_type const& G, gt::EdgeIterator)   { return G.EndEdge(); }
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::EdgeIterator)   { return G.NumOfEdges();}
+
+  inline gt::CellIterator     gral_begin(gt::grid_type const& G, gt::CellIterator)   { return G.FirstCell();}
+  inline gt::CellIterator     gral_end  (gt::grid_type const& G, gt::CellIterator)   { return G.EndCell();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::CellIterator)   { return G.NumOfCells();}
+
+
+  inline gt::VertexOnCellIterator   gral_begin(gt::Cell   a, gt::VertexOnCellIterator) { return a.FirstVertex();}
+  inline gt::VertexOnCellIterator   gral_end  (gt::Cell   a, gt::VertexOnCellIterator) { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::VertexOnCellIterator) { return a.NumOfVertices();}
+
+  inline gt::VertexOnEdgeIterator   gral_begin(gt::Edge   a, gt::VertexOnEdgeIterator) { return a.FirstVertex();}
+  inline gt::VertexOnEdgeIterator   gral_end  (gt::Edge   a, gt::VertexOnEdgeIterator) { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Edge   a, gt::VertexOnEdgeIterator) { return a.NumOfVertices();}
+
+  inline gt::EdgeOnCellIterator     gral_begin(gt::Cell   a, gt::EdgeOnCellIterator) { return a.FirstEdge();}
+  inline gt::EdgeOnCellIterator     gral_end  (gt::Cell   a, gt::EdgeOnCellIterator) { return a.EndEdge(); }
+  inline gt::size_type              gral_size (gt::Cell   a, gt::EdgeOnCellIterator) { return a.NumOfEdges();}
+
+  inline gt::CellOnCellIterator     gral_begin(gt::Cell   a, gt::CellOnCellIterator) { return a.FirstCell();}
+  inline gt::CellOnCellIterator     gral_end  (gt::Cell   a, gt::CellOnCellIterator) { return a.EndCell();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::CellOnCellIterator) { return a.NumOfCells();}
+
+
+#undef  gt
+
 struct hash_vertex2d {
   typedef grid_types<Complex2D> gt;
-  typedef  gt::Vertex   Vertex;
+  typedef gt::Vertex   Vertex;
   typedef Vertex key_type;
   typedef Vertex argument_type;
   typedef size_t result_type;

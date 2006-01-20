@@ -19,6 +19,9 @@ private:
   Complex2D const* _cc;
 
 public:
+  typedef Vertex    value_type;
+  typedef grid_type anchor_type;
+public:
 
   //------  constructors ---------------
 
@@ -56,7 +59,8 @@ public:
 
   //-------------  anchor ------------------------
 
-  const Complex2D& TheGrid() const { return (*_cc);}
+  const Complex2D& TheGrid  () const { return (*_cc);}
+  const Complex2D& TheAnchor() const { return (*_cc);}
 };
 
  

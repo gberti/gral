@@ -54,7 +54,7 @@ namespace complexnd {
   // But we need them for defining e.g. FirstEdge() in ComplexND<> -> see solution in element_t<>
 
   template<int D>
-  struct grid_types_ComplexND_base  {
+  struct grid_types_ComplexND_base  : public grid_types_detail::grid_types_root {
     typedef ComplexND<D>                        grid_type;
     typedef grid_dim_tag<D>                     dimension_tag;
 
@@ -203,6 +203,7 @@ namespace complexnd {
   // specialization for ANY: runtime grid dimension
   template<>
   struct grid_types_ComplexND<ANY>  {
+    typedef grid_types_ComplexND_base<ANY>::size_type size_type;
     typedef ComplexND<ANY>                        grid_type;
     typedef grid_dim_tag<ANY>                     dimension_tag; 
     typedef element_handle_t<grid_type, ANY, ANY> any_element_handle;
@@ -275,17 +276,18 @@ namespace complexnd {
 
   template<class GRID, int D, int CD>
   struct element_handle_base {
-    typedef GRID grid_type;
-    typedef element_handle_base<GRID, D, CD> self;
-    int     h_;
+    typedef GRID                                 grid_type;
+    typedef element_handle_base<GRID, D, CD>     self;
+    typedef typename grid_types_ComplexND_base<D>::size_type size_type;
+    size_type     h_;
   public:
     element_handle_base() {}
-    element_handle_base(unsigned hh) : h_(hh) {}
+    element_handle_base(size_type hh) : h_(hh) {}
     
-    int  h() const { return h_;}
-    int& h()       { return h_;}
+    size_type  h() const { return h_;}
+    size_type& h()       { return h_;}
     
-    operator int() const { return h_;} 
+    operator size_type() const { return h_;} 
     self& operator++() { ++h_; return *this;}
 
     static int dimension()   { return  D;}
@@ -367,46 +369,61 @@ namespace complexnd {
   struct dimension_mixin_grid {
     enum { dim = D };
     //! \brief Grid dimension
-    unsigned dimension() const { return D;} 
+    int dimension() const { return D;} 
   };
 
   // ... but for ANY, dimension is determined at runtime (object construction time)
   template<>
   struct dimension_mixin_grid<ANY> {
   private:
-    unsigned d;
+    int d;
   public:
     enum { dim = ANY };
 
     dimension_mixin_grid()            : d(0) {}
-    dimension_mixin_grid(unsigned dd) : d(dd) {}
-    unsigned dimension() const { return d;}
+    dimension_mixin_grid(int dd) : d(dd) {}
+    int dimension() const { return d;}
   };
 
+  // compute (co)dimensions, depending on whether any dim is run time
+
+  // compile-time constant case
   template<int D, int K>
   struct d2c { enum { value = D-K};};
   template<int D, int CK>
   struct c2d { enum { value = D-CK};};
+
+  // if any dimension is run-time, we cannot compute compile-time (co)dimensions
   template<int K>
   struct d2c<ANY,K> { enum { value = ANY};};
   template<int CK>
   struct c2d<ANY,CK> { enum { value = ANY};};
+  template<int D>
+  struct d2c<D,ANY> { enum { value = ANY};};
+  template<int D>
+  struct c2d<D,ANY> { enum { value = ANY};};
+  template<>
+  struct d2c<ANY,ANY> { enum { value = ANY};};
+  template<>
+  struct c2d<ANY,ANY> { enum { value = ANY};};
+
 
   /*! \brief Helper class to initialize ComplexND<0>
     \ingroup complexndstuff
   */  
   class pointcloud {
-    unsigned nnodes;
+    typedef grid_types_ComplexND_base<0>::size_type size_type;
+    size_type nnodes;
   public:
     /*! \brief Construction with \c n  the number of vertices
       \pre 
          \f$ n \ge 0 \f$
      */
-    explicit pointcloud(unsigned n = 0) : nnodes(n) {}
+    explicit pointcloud(size_type  n = 0) : nnodes(n) {}
 
     /*! \invariant <tt> n == pointcloud(n).NumOfVertices() </tt>
      */
-    unsigned NumOfVertices() const { return nnodes;}
+    size_type NumOfVertices() const { return nnodes;}
   };
 
   /*! \brief Helper class to initialize ComplexND<1>
@@ -414,15 +431,16 @@ namespace complexnd {
       \ingroup complexndstuff
   */  
   class polygon {
-    unsigned nnodes;
+    typedef grid_types_ComplexND_base<1>::size_type size_type;
+    size_type nnodes;
   public:
     //! \brief Construction with n vertices
-    explicit polygon(unsigned n = 0) : nnodes(n) {}
+    explicit polygon(size_type n = 0) : nnodes(n) {}
 
     //!
-    unsigned NumOfVertices() const { return nnodes;}
+    size_type NumOfVertices() const { return nnodes;}
     //!
-    unsigned NumOfEdges()    const { return nnodes;}
+    size_type NumOfEdges()    const { return nnodes;}
   };
 
 
@@ -451,6 +469,8 @@ namespace complexnd {
     typedef dimension_mixin_grid<D> mixin;
     typedef grid_types_ComplexND<D> gt;
   public:
+    typedef typename gt::size_type  size_type;
+
     typedef typename gt::AnyElementIterator AnyElementIterator;
     typedef typename gt::VertexIterator     VertexIterator;
     typedef typename gt::EdgeIterator       EdgeIterator;
@@ -479,7 +499,7 @@ namespace complexnd {
     // data structure to hold all possible incidences
     // TODO: reordered indexing incidences[d1][d2][e1][e2] would be more efficient
     // typedef std::vector<unsigned>                 incidence_sequence;       // [0, |I_{k,j}(e)| )
-    typedef std::vector<int>                      incidence_sequence;       // [0, |I_{k,j}(e)| )
+    typedef std::vector<size_type>                incidence_sequence;       // [0, |I_{k,j}(e)| )
     typedef std::vector<incidence_sequence>       element_incidences;       // index j \in [0,d]
     typedef std::vector<element_incidences>       element_incidences_table; // index e \in [0, n(k)-1]
     typedef std::vector<element_incidences_table> incidence_table;          // index k \in [0,d]
@@ -510,7 +530,7 @@ namespace complexnd {
        \internal
         made compilable here to allow for explicit instantiation for testing
     */
-    explicit ComplexND(unsigned dim) : incidences(dim+1) { REQUIRE_ALWAYS(dim==dimension(), "",1);}
+    explicit ComplexND(int dim) : incidences(dim+1) { REQUIRE_ALWAYS(dim==dimension(), "",1);}
       
     //! only for <tt>D==0</tt>
     explicit ComplexND(pointcloud p);
@@ -518,7 +538,7 @@ namespace complexnd {
     //! only for  <tt>D==1</tt>
     explicit ComplexND(polygon pn);
     //! Only for  <tt>D==1</tt>
-    ComplexND(int a[][2], int N);
+    ComplexND(size_type a[][2], size_type N);
     //@}
 
     element_incidences const& Incidences(typename gt::AnyElement e) const { return incidences[e.dimension()][e.handle().h()];}
@@ -544,7 +564,7 @@ namespace complexnd {
     //@{ 
     AnyElementIterator FirstElement(unsigned dd) const;
     AnyElementIterator EndElement  (unsigned dd) const;
-    unsigned NumOfElements(unsigned k) const { return incidences[k].size();}
+    size_type NumOfElements(int k) const { return incidences[k].size();}
     //@}
 
     /*! \name Dimension-dependent sequence iteration
@@ -558,11 +578,11 @@ namespace complexnd {
     CellIterator   FirstCell()   const;
 
 
-    unsigned NumOfVertices() const { return NumOfElements(0);}
-    unsigned NumOfEdges()    const { return NumOfElements(1);}
-    unsigned NumOfFaces()    const { return NumOfElements(2);}
-    unsigned NumOfFacets()   const { return NumOfElements(dimension()-1);}
-    unsigned NumOfCells()    const { return NumOfElements(dimension());}
+    size_type NumOfVertices() const { return NumOfElements(0);}
+    size_type NumOfEdges()    const { return NumOfElements(1);}
+    size_type NumOfFaces()    const { return NumOfElements(2);}
+    size_type NumOfFacets()   const { return NumOfElements(dimension()-1);}
+    size_type NumOfCells()    const { return NumOfElements(dimension());}
     //@}
 
     Vertex switched_vertex(Vertex const& v, Edge const& e) const {
@@ -582,8 +602,8 @@ namespace complexnd {
 					     element_t<self,K+1,dim-K-1> const& e_k1) const;
     */
     Edge  switched_edge (Vertex                  const& v, Edge  const& e, Face                    const& f) const; 
-    Face  switched_face (Edge                    const& e, Face  const& f, element_t<self,3,dim-3> const& c) const;
-    Facet switched_facet(element_t<self,dim-2,2> const& r, Facet const& f, Cell                    const& c) const;
+    Face  switched_face (Edge                    const& e, Face  const& f, element_t<self,3,D-3> const& c) const;
+    Facet switched_facet(element_t<self,D-2,2> const& r, Facet const& f, Cell                    const& c) const;
 
 
     Cell switched_cell(Facet const& f, Cell const& c) const {
@@ -613,14 +633,14 @@ namespace complexnd {
       cell_handle  new_cell(cell_archetype.size());
       cell_archetype.push_back(a);
       incidences[dimension()].push_back(element_incidences(dimension()));
-      unsigned nv = std::distance(begin,end);
+      size_type nv = std::distance(begin,end);
       incidences[dimension()][new_cell][0].resize(nv);
-      for(unsigned v = 0; v < nv; ++v, ++begin)
+      for(size_type v = 0; v < nv; ++v, ++begin)
 	incidences[dimension()][new_cell][0][v] = *begin;
       return new_cell;
     }
      
-    void set_num_of_vertices(unsigned nv) 
+    void set_num_of_vertices(size_type nv) 
     { REQUIRE_ALWAYS(NumOfVertices() == 0, "", 1);  incidences[0].resize(nv);}
 
   public:
@@ -671,8 +691,8 @@ namespace complexnd {
   // primary template: dimension and codimension part of the type
   template<class ELEMENT, class GRID, int D, int CD>
   struct dimension_mixin {
-    unsigned dimension()   const { return D;}
-    unsigned codimension() const { return CD;}
+    int dimension()   const { return D;}
+    int codimension() const { return CD;}
   };
  
   // partial specialization: only dimension given (Vertex, Edge, Face)
@@ -682,8 +702,8 @@ namespace complexnd {
     typedef GRID grid_t;
     grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
   public:
-    unsigned dimension()   const { return D;}
-    unsigned codimension() const { return the_grid().dimension() - dimension();}
+    int dimension()   const { return D;}
+    int codimension() const { return the_grid().dimension() - dimension();}
   };
 
   // partial specialization: only codimension given (Facet, Cell)
@@ -693,8 +713,8 @@ namespace complexnd {
     typedef GRID grid_t;
     grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
   public:
-    unsigned dimension()   const { return the_grid().dimension() - codimension();}
-    unsigned codimension() const { return CD;}
+    int dimension()   const { return the_grid().dimension() - codimension();}
+    int codimension() const { return CD;}
   };
 
   // partial specialization: neither dim nor codim given
@@ -703,13 +723,13 @@ namespace complexnd {
   private:
     typedef GRID grid_t;
     grid_t const& the_grid() const { return static_cast<ELEMENT const*>(this)->TheGrid();}
-    unsigned d;
+    int d;
   public:
-    dimension_mixin()            : d( 0) {}
-    dimension_mixin(unsigned dd) : d(dd) {}
+    dimension_mixin()       : d( 0) {}
+    dimension_mixin(int dd) : d(dd) {}
 
-    unsigned dimension()   const { return d;}
-    unsigned codimension() const { return the_grid().dimension() - dimension();}
+    int dimension()   const { return d;}
+    int codimension() const { return the_grid().dimension() - dimension();}
   };
 
 
@@ -723,10 +743,12 @@ namespace complexnd {
   {
     typedef element_base_t<GRID,D,CD> self;
     typedef dimension_mixin<element_base_t<GRID,D,CD>, GRID, D, CD> mixin;
+    typedef grid_types_ComplexND<D> gt;
   public:
     typedef GRID                        grid_type;
     typedef element_handle_t<GRID,D,CD> element_handle_type;
     using mixin::dimension;
+    typedef typename gt::size_type      size_type;
   private:
     ref_ptr<grid_type const> g;
     element_handle_type      h;
@@ -753,14 +775,14 @@ namespace complexnd {
 
 
     template<int K, int CK> 
-    unsigned NumOfElements()           const { return NumOfElements(K);}
-    unsigned NumOfElements(unsigned K) const { cv(); return g->Incidences(dimension(), handle())[K].size();}
+    size_type NumOfElements()           const { return NumOfElements(K);}
+    size_type NumOfElements(unsigned K) const { cv(); return g->Incidences(dimension(), handle())[K].size();}
 
-    unsigned NumOfVertices() const { return NumOfElements(0);}
-    unsigned NumOfEdges()    const { return NumOfElements(1);}
-    unsigned NumOfFaces()    const { return NumOfElements(2);}
-    unsigned NumOfFacets()   const { return NumOfElements(dimension()-1);}
-    unsigned NumOfCells()    const { return NumOfElements(dimension());}
+    size_type NumOfVertices() const { return NumOfElements(0);}
+    size_type NumOfEdges()    const { return NumOfElements(1);}
+    size_type NumOfFaces()    const { return NumOfElements(2);}
+    size_type NumOfFacets()   const { return NumOfElements(dimension()-1);}
+    size_type NumOfCells()    const { return NumOfElements(dimension());}
 
     bool bound() const { return g != 0;}
     void cb()    const { REQUIRE(bound(), "", 1);}
@@ -783,6 +805,8 @@ namespace complexnd {
   template<            int CD_ELEM> struct check_consistence<ANY, ANY   , CD_ELEM> { typedef int ok;};
   template<                       > struct check_consistence<ANY, ANY   , ANY    > { typedef int ok;};
 
+
+
   // primary template. At least one of D and CD are fixed (!= ANY)
   template<class GRID, int D, int CD> // = GRID::dim - D>
   class element_t : public element_base_t<GRID,D,CD> {
@@ -793,6 +817,7 @@ namespace complexnd {
     typedef typename base::element_handle_type element_handle_type;
   public:
     typedef typename base::grid_type grid_type;
+    typedef typename base::size_type size_type;
   public:
     element_t() {}
     element_t(grid_type const&         gg, element_handle_type hh = 0) : base(gg,hh) {}
@@ -802,7 +827,16 @@ namespace complexnd {
 
     template<int K, int CK>
     incidence_iterator_t<grid_type, D, K,   CD, CK>  FirstElement() const;
+    template<int K, int CK>
+    incidence_iterator_t<grid_type, D, K,   CD, CK>  EndElement() const;
+
     incidence_iterator_t<grid_type, D, ANY, CD, ANY> FirstElement(unsigned k) const;
+    incidence_iterator_t<grid_type, D, ANY, CD, ANY> EndElement  (unsigned k) const;
+
+    template<int K>
+    size_type NumOfElements()           const { return this->TheGrid().Incidences(*this)[K].size();}
+    size_type NumOfElements(unsigned k) const { return this->TheGrid().Incidences(*this)[k].size();}
+
 
     incidence_iterator_t<grid_type, D, 0, CD, d2c<D,0>::value>  FirstVertex() const; 
     incidence_iterator_t<grid_type, D, 1, CD, d2c<D,1>::value>  FirstEdge() const; 
@@ -856,14 +890,14 @@ namespace complexnd {
   inline
   element_t<GRID,D,CD>::element_t(element_t<GRID,ANY,ANY> const& rhs) 
     : base(rhs.TheGrid(), typename base::element_handle_type(rhs.handle().h()))
-  { REQUIRE(rhs.dimension() == (unsigned)D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); }
+  { REQUIRE(rhs.dimension() == D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); }
 
 
   template<class GRID, int D, int CD>
   inline
   element_t<GRID,D,CD>&  element_t<GRID,D,CD>::operator=(element_t<GRID,ANY,ANY> const& rhs) 
   {
-    REQUIRE(rhs.dimension() == (unsigned)D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); 
+    REQUIRE(rhs.dimension() == D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); 
     base::operator=(base(rhs.TheGrid(), typename base::element_handle_type(rhs.handle().h())));
     return *this;
   }
@@ -907,6 +941,8 @@ namespace complexnd {
   public:
     typedef element_t<GRID,D,CD> element_type;
     typedef element_type         value_type;
+    typedef grid_type            anchor_type;
+
     using base::cb;
     using base::cv;
     using base::valid;
@@ -936,6 +972,8 @@ namespace complexnd {
   public:
     typedef element_t<GRID,ANY,ANY> element_type;
     typedef element_type            value_type;
+    typedef grid_type               anchor_type;
+
     using base::dimension;
     using base::cb;
     using base::cv;
@@ -966,14 +1004,14 @@ namespace complexnd {
   inline
   element_iterator_t<GRID,D,CD>::element_iterator_t(element_iterator_t<GRID,ANY,ANY> const& rhs) 
     : base(rhs.TheGrid(), typename base::element_handle_type(rhs.handle().h()))
-  { REQUIRE(rhs.dimension() == (unsigned)D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); }
+  { REQUIRE(rhs.dimension() == D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); }
 
 
   template<class GRID, int D, int CD>
   inline
   element_iterator_t<GRID,D,CD>&  element_iterator_t<GRID,D,CD>::operator=(element_iterator_t<GRID,ANY,ANY> const& rhs) 
   {
-    REQUIRE(rhs.dimension() == (unsigned)D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); 
+    REQUIRE(rhs.dimension() == D, "D= " << D << " rhs.dimension=() " << rhs.dimension(), 1); 
     base::operator=(base(rhs.TheGrid(), typename base::element_handle_type(rhs.handle().h())));
     return *this;
   }
@@ -1040,10 +1078,12 @@ namespace complexnd {
     typedef typename grid_type::incidence_sequence incidence_sequence;
     typedef dimension_mixin<incidence_iterator_base_t<GRID, D, K, CD, CK>, GRID, K, CK>  mixin;
     using mixin::dimension;
+    typedef grid_types_ComplexND_base<D> bgt;
+    typedef typename bgt::size_type size_type;
   private:
     anchor_type  a;
   protected:
-    unsigned     lh;
+    size_type    lh;
     
   public:
     incidence_iterator_base_t()  {}
@@ -1057,19 +1097,14 @@ namespace complexnd {
     }
   
     //self& operator++() { cv();  ++lh; return *this;}
-    bool IsDone() const { cb(); return lh >= incidences().size();}
-    //    value_type        operator*() const { cv(); return value_type(TheGrid(), handle());}
+    bool IsDone() const { cb(); return lh >= (size_type)incidences().size();}
     value_handle_type handle()    const { cv(); return value_handle_type(incidences()[lh]);}
 
-    // unsigned dimension()       const { return D;}
-    // unsigned value_dimension() const { return K;}
-
-    //  anchor_handle_type anchor_handle() const { cb(); return a.handle();}
     anchor_type const&   TheAnchor()     const { cb(); return a;}
     grid_type   const&   TheGrid()       const { cb(); return a.TheGrid();}
  
     bool bound() const { return a.bound();}
-    bool valid() const { return bound() &&  0 <= lh && lh < incidences().size();}
+    bool valid() const { return bound() &&  0 <= lh && lh < (size_type)incidences().size();}
     void cb()    const { REQUIRE(bound(), "", 1);}
     void cv()    const { REQUIRE(valid(), "lh=" << lh, 1);}
 
@@ -1095,9 +1130,12 @@ namespace complexnd {
     using base::handle;
     using base::TheGrid;
     using base::cv;
+    typedef typename base::size_type size_type;
 
     incidence_iterator_t() {}
     incidence_iterator_t(typename base::anchor_type const& a) : base(a) {}
+    incidence_iterator_t(typename base::anchor_type const& a, size_type lhh) : base(a) 
+    { this->lh = lhh; }
     
     self& operator++() { base::incr(); return *this;}
     typename base::value_type  operator*() const { cv(); return typename base::value_type(TheGrid(), handle());}
@@ -1117,18 +1155,19 @@ namespace complexnd {
     using base::handle;
     using base::TheGrid;
     using base::cv;
+    typedef typename base::size_type size_type;
 
     incidence_iterator_t() {}
     incidence_iterator_t(typename base::anchor_type const& a) : base(a) 
     {
-      while(base::lh < base::incidences().size() && handle() == TheGrid().outer_cell_handle()) 
+      while(base::lh < (size_type)base::incidences().size() && handle() == TheGrid().outer_cell_handle()) 
 	base::incr();
     }
     
     self& operator++() { 
       do {
 	base::incr();
-      } while( base::lh < base::incidences().size() && handle() == TheGrid().outer_cell_handle());
+      } while( base::lh < (size_type)base::incidences().size() && handle() == TheGrid().outer_cell_handle());
       return *this;
     }
 
@@ -1152,9 +1191,13 @@ namespace complexnd {
     using base::handle;
     using base::TheGrid;
     using base::cv;
+    typedef typename base::size_type size_type;
 
     incidence_iterator_t() {}
     incidence_iterator_t(typename base::anchor_type const& a, int kk) : base(a,kk) {}
+    incidence_iterator_t(typename base::anchor_type const& a, size_type lhh, int kk) : base(a,kk) 
+    { this->lh = lhh;}
+
     // TODO: Add templated constructor for K, CK
     
     self& operator++() { base::incr(); return *this;}
@@ -1185,8 +1228,19 @@ namespace complexnd {
   { return incidence_iterator_t<GRID, D, K, CD, CK>(*this);}
 
   template<class GRID, int D, int CD>
+  template<int K, int CK>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, K, CD, CK> element_t<GRID,D,CD>::EndElement() const
+  { return incidence_iterator_t<GRID, D, K, CD, CK>(*this, NumOfElements<K>());}
+
+
+
+  template<class GRID, int D, int CD>
   incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, ANY, CD, ANY> element_t<GRID,D,CD>::FirstElement(unsigned k) const
   { return incidence_iterator_t<GRID, D, ANY, CD, ANY>(*this, k);}
+
+  template<class GRID, int D, int CD>
+  incidence_iterator_t<typename element_t<GRID,D,CD>::grid_type, D, ANY, CD, ANY> element_t<GRID,D,CD>::EndElement  (unsigned k) const
+  { return incidence_iterator_t<GRID, D, ANY, CD, ANY>(*this, NumOfElements(k), k);}
 
 
   template<class GRID, int D, int CD>
@@ -1262,7 +1316,7 @@ namespace complexnd {
   //---- specializations for ANY --------------
   // no initialization possible for run-time determined dimension
   template<> inline ComplexND<ANY>::ComplexND()  {}
-  template<> inline ComplexND<ANY>::ComplexND(unsigned dim) : mixin(dim),  incidences(dim+1) {}
+  template<> inline ComplexND<ANY>::ComplexND(int dim) : mixin(dim),  incidences(dim+1) {}
 
   template<> inline ComplexND<ANY>::archetype_handle 
   ComplexND<ANY>::add_archetype(ComplexND<ANY>::archetype_type const& A)
@@ -1279,15 +1333,14 @@ namespace complexnd {
   {
     incidences[0].resize(p.NumOfVertices());
     incidences[1].resize(p.NumOfEdges());
-    //unsigned v = 0, e = 0;
-    unsigned n = p.NumOfVertices() -1 ;
-    for( unsigned v = 0, e = 0; v < p.NumOfVertices(); ++v, ++e) {
+    size_type n = p.NumOfVertices() -1 ;
+    for(size_type v = 0, e = 0; v < p.NumOfVertices(); ++v, ++e) {
       incidences[0][v].resize(dimension()+1);
       incidences[1][e].resize(dimension()+1);
 
-      unsigned succ_v = ( v < n   ? v+1 : 0);
-      unsigned prec_v = ( v > 0   ? v-1 : n);
-      unsigned succ_e = succ_v; unsigned prec_e = prec_v;
+      int succ_v = ( v < n   ? v+1 : 0);
+      int prec_v = ( v > 0   ? v-1 : n);
+      int succ_e = succ_v; int prec_e = prec_v;
       // v_{n-1} e_{e-1}   v0    e0   v1   e1 ...
       //    *--------------*----------*-------  
       incidences[0][v][1].push_back(e);
@@ -1302,28 +1355,28 @@ namespace complexnd {
     
     archetype_handle a = add_archetype(archetype_type(pointcloud(2)));
     cell_archetype.resize(NumOfCells());
-    for(unsigned c = 0; c < NumOfCells(); ++c)
+    for(size_type c = 0; c < NumOfCells(); ++c)
       cell_archetype[c] = a;
 
     calculate_incidences();
   }
 
 
-  template<> inline ComplexND<1>::ComplexND( int edges[][2], int NE) : incidences(dimension() +1) 
+  template<> inline ComplexND<1>::ComplexND(size_type edges[][2], size_type NE) : incidences(dimension() +1) 
   {
     // NE = number of edges/vertices of polygon.
     // calculate Number of vertices from edges[]
-    int max_v = -1;
-    for(int e = 0; e < NE; ++e) {
-      for(int ve = 0; ve < 2; ++ve)
+    size_type max_v = -1;
+    for(size_type e = 0; e < NE; ++e) {
+      for(size_type ve = 0; ve < 2; ++ve)
 	max_v = std::max(max_v, edges[e][ve]);
     }
-    int NV = max_v + 1;
+    size_type NV = max_v + 1;
       
     incidences[0].resize(NV);
     incidences[1].resize(NE);
 
-    for( int e = 0;  e < NE; ++e) {
+    for(size_type e = 0;  e < NE; ++e) {
       incidences[1][e].resize(dimension()+1);
       incidences[1][e][0].resize(2);
       incidences[1][e][0][0] = edges[e][0];
@@ -1331,25 +1384,25 @@ namespace complexnd {
     }    
     archetype_handle a = add_archetype(archetype_type(pointcloud(2)));
     cell_archetype.resize(NumOfCells());
-    for(unsigned c = 0; c < NumOfCells(); ++c)
+    for(size_type c = 0; c < NumOfCells(); ++c)
       cell_archetype[c] = a;
 
     // vertex incidences 
-    for(int v = 0; v < NV; ++v) {
+    for(size_type v = 0; v < NV; ++v) {
       incidences[0][v].resize(dimension() +1);
     }
     // edge-on-vertex
-    for(int e = 0;  e < NE; ++e) {
-      for(int ve = 0; ve < 2; ++ve) {
-	int v = incidences[1][e][0][ve];
+    for(size_type e = 0;  e < NE; ++e) {
+      for(size_type ve = 0; ve < 2; ++ve) {
+	size_type v = incidences[1][e][0][ve];
 	incidences[0][v][1].push_back(e);
       }
     }
 
     //vertex-on-vertex
-    for(int v = 0;  v < NV; ++v) {
-      for(int vv = 0; vv < (int)incidences[0][v][1].size(); ++vv) {
-	int e = incidences[0][v][1][vv];
+    for(size_type v = 0;  v < NV; ++v) {
+      for(size_type vv = 0; vv < (size_type)incidences[0][v][1].size(); ++vv) {
+	size_type e = incidences[0][v][1][vv];
 	incidences[0][v][0].push_back
 	  (v == incidences[1][e][0][0] ? incidences[1][e][0][1] : incidences[1][e][0][0]);
       }
@@ -1357,9 +1410,9 @@ namespace complexnd {
 
     // edge-on-edge 
     bool manifold_grid = true;
-    for(int e = 0; e < NE; ++e) {
-      for(int ve = 0; ve < 2; ++ve) {
-	int v = incidences[1][e][0][ve];
+    for(size_type e = 0; e < NE; ++e) {
+      for(size_type ve = 0; ve < 2; ++ve) {
+	size_type v = incidences[1][e][0][ve];
 	if(incidences[0][v][1].size() > 2 ) { // non-manifold
 	  manifold_grid = false;
 	  break;
@@ -1377,7 +1430,7 @@ namespace complexnd {
     }
     // if this is not a manifold grid, cell-cell-incidences are not well defined.
     if(! manifold_grid)
-      for(int e = 0; e < NE; ++e) 
+      for(size_type e = 0; e < NE; ++e) 
 	incidences[0][e][1].clear();
 
     // calculate_incidences();
@@ -1395,7 +1448,7 @@ namespace complexnd {
   template<int K, int CK>
   inline element_iterator_t<ComplexND<D>,K,CK> 
   ComplexND<D>::EndElement()   const { 
-    element_handle_t<self,K,CK>  h = NumOfElements(K);
+    element_handle_t<self,K,CK>  h(NumOfElements(K));
     return element_iterator_t<self,K,CK>(*this,h);
   }
 
@@ -1623,7 +1676,65 @@ struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>,
 };
 
 
+#define gt grid_types<complexnd::ComplexND<D> >
 
+template<int D, int DE> struct element_d<gt, DE> 
+{ typedef complexnd::element_t<complexnd::ComplexND<D>, D,  complexnd::d2c<D,DE>::value>  type; };
+
+template<int D, int DE> struct element_handle_d<gt, DE> 
+{ typedef complexnd::element_handle_t<complexnd::ComplexND<D>, D, complexnd::d2c<D,DE>::value>  type; };
+
+
+template<int D, int DE> struct sequence_iterator_d<gt, DE> 
+{ typedef complexnd::element_iterator_t<complexnd::ComplexND<D>, DE, complexnd::d2c<D,DE>::value>  type; };
+
+template<int D, int DE, int DA> struct incidence_iterator_d<gt, DE, DA> 
+{ typedef complexnd::incidence_iterator_t<complexnd::ComplexND<D>, DA, DE, complexnd::d2c<D,DA>::value, complexnd::d2c<D,DE>::value> type; };
+
+
+#undef gt
+
+
+namespace complexnd {
+
+#define gt grid_types<ComplexND<D> >
+
+
+template<int D, int DE>
+typename sequence_iterator_d<gt, DE>::type
+gral_begin(ComplexND<D> const& g, element_iterator_t<ComplexND<D>, DE, d2c<D,DE>::value>)
+{ return g.template FirstElement<DE,d2c<D,DE>::value>();}
+
+template<int D, int DE>
+typename sequence_iterator_d<gt, DE>::type
+gral_end  (ComplexND<D> const& g, element_iterator_t<ComplexND<D>, DE, d2c<D,DE>::value>)
+{ return g.template EndElement<DE,d2c<D,DE>::value>();}
+
+template<int D, int DE>
+typename ComplexND<D>::size_type
+gral_size (ComplexND<D> const& g, element_iterator_t<ComplexND<D>, DE, d2c<D,DE>::value>)
+{ return g.NumOfElements(DE);}
+
+
+template<int D, int DE, int DA>
+typename incidence_iterator_d<gt, DE, DA>::type
+gral_begin(typename element_d<gt,DA>::type e, incidence_iterator_t<ComplexND<D>,DA,DE, d2c<D,DA>::value, d2c<D,DE>::value>) 
+{ return e.template FirstElement<DE,d2c<D,DE>::value>();}
+
+template<int D, int DE, int DA>
+typename incidence_iterator_d<gt, DE, DA>::type
+gral_end(typename element_d<gt,DA>::type e, incidence_iterator_t<ComplexND<D>,DA,DE, d2c<D,DA>::value, d2c<D,DE>::value>) 
+{ return e.template EndElement<DE,d2c<D,DE>::value>();}
+
+template<int D, int DE, int DA>
+typename ComplexND<D>::size_type
+gral_size(typename element_d<gt,DA>::type e, incidence_iterator_t<ComplexND<D>,DA,DE, d2c<D,DA>::value, d2c<D,DE>::value>) 
+{ return e.NumOfElements(DE); }
+
+
+#undef gt
+
+  } // namespace complexnd
 
 //------------------------------- total grid functions --------------------------------
 
@@ -1704,8 +1815,8 @@ namespace GrAL {  namespace complexnd {
 							       element_t<ComplexND<D>,K  ,D- K   > const& e_k,
 							       element_t<ComplexND<D>,K+1,D-(K+1)> const& e_k1) const
   {
-    for(unsigned e_ki = 0; e_ki < e_k1.NumOfElements(K); ++e_ki) {
-      element_t<self,K,dim-K> e_ks(*this, element_handle_t<self,K,dim-K>(Incidences(e_k1)[e_k.dimension()][e_ki]));
+    for(int e_ki = 0; e_ki < e_k1.NumOfElements(K); ++e_ki) {
+      element_t<self,K,D-K> e_ks(*this, element_handle_t<self,K,D-K>(Incidences(e_k1)[e_k.dimension()][e_ki]));
       if(e_ks != e_k && incident(e_k_1, e_ks))
 	return e_ks;
     }
@@ -1741,11 +1852,11 @@ namespace GrAL {  namespace complexnd {
   template<int D>  
   typename ComplexND<D>::Face ComplexND<D>::switched_face(typename ComplexND<D>::Edge const& e, 
 							  typename ComplexND<D>::Face const& f, 
-							  element_t<self,3,dim-3> const& c) const
+							  element_t<self,3,D-3> const& c) const
   { return switched_element(e,f,c); }
 
   template<int D>
-  typename ComplexND<D>::Facet ComplexND<D>::switched_facet(element_t<self,dim-2,2> const& r, 
+  typename ComplexND<D>::Facet ComplexND<D>::switched_facet(element_t<self,D-2,2> const& r, 
 							    typename ComplexND<D>::Facet const& f, 
 							    typename ComplexND<D>::Cell const& c) const
   { return switched_element(r,f,c);}    

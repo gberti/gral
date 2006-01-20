@@ -141,6 +141,11 @@ inline Complex2D::CellIterator  Complex2D::FirstCell() const
 inline Complex2D::CellIterator  Complex2D::EndCell() const
 { return CellIterator(NumOfCells(),*this);}
 
+inline Complex2D::FaceIterator  Complex2D::FirstFace() const
+{ return FaceIterator(0,*this);}
+inline Complex2D::FaceIterator  Complex2D::EndFace() const
+{ return FaceIterator(NumOfFaces(),*this);}
+
 
 //---------------------- element creation -------------------------------
 

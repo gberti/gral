@@ -16,6 +16,9 @@ private:
   friend class Complex2D;
 
 public:
+  typedef grid_type anchor_type;
+  typedef Cell      value_type;
+
   //-------- DATA --------------
   // public for access by grid_function<Cell2D,T>
   cell_handle _pos;    // current cell position
@@ -59,7 +62,8 @@ public:
 
   //-------------- anchor ---------------------------
 
-  const Complex2D& TheGrid() const { return (*_cc);}
+  const Complex2D& TheGrid  () const { return (*_cc);}
+  const Complex2D& TheAnchor() const { return (*_cc);}
 
   cell_handle handle() const { return _pos;}
 
