@@ -248,6 +248,47 @@ namespace sequence {
     container.erase(unique(container.begin(), container.end()), container.end());
   }
 
+
+   /*! \brief Check whether the sequence is sorted increasingly
+       \ingroup algorithms
+
+  */
+ template<typename ForwardIterator, typename LessOp>
+  bool is_increasing(ForwardIterator begin, ForwardIterator end, LessOp less) {
+    if(begin == end)
+      return true;
+    ForwardIterator next = begin;
+    ++next;
+    while(next != end) {
+      if(!less(*begin, *next))
+	return false;
+      ++begin;
+      ++next;
+    }
+    return true;
+  }
+
+   /*! \brief Check whether the sequence is sorted increasingly, using <tt>operator< </tt>
+
+       \ingroup algorithms
+
+     
+  */
+  template<typename ForwardIterator>
+  bool is_increasing(ForwardIterator begin, ForwardIterator end)
+  { return is_increasing(begin,end, std::less<typename std::iterator_traits<ForwardIterator>::value_type>());}
+
+
+   /*! \brief Check whether the sequence is sorted increasingly, using <tt>operator< </tt>
+
+       \ingroup algorithms
+
+  */
+  template<class Container>
+  bool is_increasing(Container const& container)
+  { return is_sorted(container.begin(), container.end());}
+
+
   /*! \brief Functor to advance input iterator
 
   */
