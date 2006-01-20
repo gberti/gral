@@ -24,15 +24,18 @@ has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has    type VertexOnFaceIterator
 has    type EdgeOnFaceIterator
-has no type CellOnFaceIterator
+has    type FacetOnFaceIterator
+has    type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
-has no type FaceOnCellIterator
+has    type FaceOnCellIterator
 has    type FacetOnCellIterator
 has    type CellOnCellIterator
 has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
+has    type archgt
