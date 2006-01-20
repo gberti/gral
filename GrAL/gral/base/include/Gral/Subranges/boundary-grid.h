@@ -24,6 +24,7 @@ protected:
   typedef typename et::grid_type  base_grid_t;
   typedef grid_types<base_grid_t> bgt;
 public:
+  typedef typename bgt::size_type     size_type;
   typedef typename bgt::Vertex        Vertex;
   typedef typename bgt::vertex_handle vertex_handle;
 
@@ -64,6 +65,7 @@ public:
   typedef typename base::Cell           Cell;
   typedef typename base::VertexIterator VertexIterator;
   typedef typename base::CellIterator   CellIterator;
+  typedef typename base::size_type      size_type;
 
   typedef E BaseCell;
 private:
@@ -79,8 +81,8 @@ public:
 
   VertexIterator FirstVertex()   const { return VertexIterator(bc);}
   CellIterator   FirstCell()     const { return CellIterator(bc);}
-  unsigned       NumOfVertices() const { return 2; } 
-  unsigned       NumOfCells()    const { return 2; } 
+  size_type      NumOfVertices() const { return 2; } 
+  size_type      NumOfCells()    const { return 2; } 
 };
 
 
@@ -124,6 +126,8 @@ public:
   typedef typename base::CellIterator   CellIterator;
   typedef typename base::Facet  Facet;
   typedef typename base::FacetOnCellIterator FacetOnCellIterator;
+  typedef typename base::size_type      size_type;
+
   typedef E BaseCell;
 private:
 
@@ -135,10 +139,10 @@ public:
   // for usage as in VertexIterator v(g); where g is of typeof(*this) 
   operator BaseCell const&() const { return bc;}
 
-  VertexIterator FirstVertex() const { return VertexIterator(bc);}
-  unsigned       NumOfVertices() const { return bc.NumOfVertices();}
-  CellIterator   FirstCell()   const { return CellIterator(bc);}
-  unsigned       NumOfCells()  const { return bc.NumOfFacets();}
+  VertexIterator FirstVertex()   const { return GrAL::begin<Vertex>(bc);} 
+  size_type      NumOfVertices() const { return GrAL::size<Vertex>(bc);}
+  CellIterator   FirstCell()     const { return GrAL::begin<Cell>(bc); } 
+  size_type      NumOfCells()    const { return GrAL::size<Facet>(bc); } 
 
   void switch_cell(Facet const& f, Cell & c) const
     { bc.TheGrid().switch_edge(f,c,bc); }
@@ -185,12 +189,15 @@ class boundary_grid_aux<E, cell_type_tag, grid_dim_tag<3> >
 {
 public:
   typedef boundary_grid_types_aux<E, cell_type_tag, grid_dim_tag<3> > base;
+  typedef typename base::size_type  size_type;
+
   typedef typename base::Vertex Vertex;
   typedef typename base::Cell   Cell;
   typedef typename base::VertexIterator VertexIterator;
   typedef typename base::CellIterator   CellIterator;
   typedef typename base::Facet  Facet;
   typedef typename base::FacetOnCellIterator FacetOnCellIterator;
+
   typedef E BaseCell;
 private:
   BaseCell  bc;
@@ -203,8 +210,8 @@ public:
 
   VertexIterator FirstVertex() const { return VertexIterator(bc);}
   CellIterator   FirstCell()   const { return CellIterator(bc);}
-  unsigned       NumOfVertices() const { return bc.NumOfVertices();}
-  unsigned       NumOfCells()  const { return bc.NumOfFacets();}
+  size_type      NumOfVertices() const { return bc.NumOfVertices();}
+  size_type      NumOfCells()  const { return bc.NumOfFacets();}
 
   void switch_cell  (Facet const& f, Cell const& c) const
     { bc.TheGrid().switch_facet(f,c,bc);}
@@ -258,6 +265,7 @@ public:
   typedef typename base::CellIterator   CellIterator;
   typedef typename base::Facet  Facet;
   typedef typename base::FacetOnCellIterator FacetOnCellIterator;
+  typedef typename base::size_type      size_type;
 
   typedef E BaseFacet;
 private:
@@ -271,8 +279,8 @@ public:
 
   VertexIterator FirstVertex() const { return VertexIterator(bf);}
   CellIterator   FirstCell()   const { return CellIterator(bf);}
-  unsigned       NumOfVertices() const { return bf.NumOfVertices();}
-  unsigned       NumOfCells()  const { return bf.NumOfEdges();}
+  size_type      NumOfVertices() const { return bf.NumOfVertices();}
+  size_type      NumOfCells()  const { return bf.NumOfEdges();}
 
   void switch_cell(Facet const& f, Cell & c) const 
     { bf.TheGrid().switch_edge(f,c);}
@@ -317,6 +325,7 @@ public:
   typedef typename base::Cell           Cell;
   typedef typename base::VertexIterator VertexIterator;
   typedef typename base::CellIterator   CellIterator;
+  typedef typename base::size_type      size_type;
 
   typedef E BaseEdge;
 private:
@@ -330,8 +339,8 @@ public:
 
   VertexIterator FirstVertex()   const { return VertexIterator(be);}
   CellIterator   FirstCell()     const { return CellIterator(be);}
-  unsigned       NumOfVertices() const { return 2; } // be.NumOfVertices();}
-  unsigned       NumOfCells()    const { return 2; } // be.NumOfVertices();}
+  size_type      NumOfVertices() const { return 2; } 
+  size_type      NumOfCells()    const { return 2; } 
 
 };
 
