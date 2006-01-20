@@ -47,18 +47,20 @@ class EdgeOnFacetIterator_Cartesian3D;
 // collect related types in struct,
 // to avoid retyping them in every one of the above classes.
 
-struct grid_types_Cartesian3D {
+struct grid_types_Cartesian3D : public grid_types_detail::grid_types_root {
+  typedef grid_types_Cartesian3D     self;
+
   typedef index_map_nd<3>            index_map_type;
   typedef index_map_type::index_type index_type;
 
   typedef CartesianGrid3D            grid_type;
 
-  typedef vertex_handle_int<grid_type> vertex_handle;
-  typedef edge_handle_int<grid_type>   edge_handle;
-  typedef facet_handle_int<grid_type>  facet_handle;
-  typedef facet_handle                 face_handle;
-  typedef cell_handle_int<grid_type>   cell_handle;
-  typedef int                          archetype_handle;
+  typedef vertex_handle_int<grid_type,self>  vertex_handle;
+  typedef edge_handle_int  <grid_type,self>  edge_handle;
+  typedef facet_handle_int <grid_type,self>  facet_handle;
+  typedef facet_handle                       face_handle;
+  typedef cell_handle_int  <grid_type,self>  cell_handle;
+  typedef int                                archetype_handle;
 
   typedef Vertex_Cartesian3D  Vertex;
   typedef Edge_Cartesian3D    Edge;
@@ -390,7 +392,9 @@ class elem_base_Cartesian3D : public grid_types_Cartesian3D
   elem_base_Cartesian3D() : g(0) {}
   elem_base_Cartesian3D(grid_type const& gg) : g(&gg) {}
 
-  grid_type const& TheGrid() const { return *g;}
+  typedef grid_type anchor_type;
+  grid_type const& TheGrid  () const { return *g;}
+  grid_type const& TheAnchor() const { return *g;}
  
   bool bound() const { return g != 0;}
   void cb()    const { REQUIRE( bound(), "invalid element!",1);}
@@ -403,6 +407,8 @@ class Vertex_Cartesian3D : public elem_base_Cartesian3D {
   typedef elem_base_Cartesian3D  base;
 
   vertex_handle            h;
+public:
+  typedef self      value_type;
 public:
   Vertex_Cartesian3D() {}  
   explicit
@@ -445,6 +451,8 @@ public:
     typedef grid_type::edge_direction::dir direction_type;
 
     edge_handle h;
+  public: 
+    typedef self value_type;
   public:
     Edge_Cartesian3D() {}
     Edge_Cartesian3D(grid_type const& gg, edge_handle e = 0) 
@@ -495,6 +503,8 @@ class Facet_Cartesian3D : public elem_base_Cartesian3D {
   typedef grid_type::facet_direction::dir direction_type;
 
   facet_handle h;
+public:
+  typedef self value_type;
 public:
   Facet_Cartesian3D() {}
   Facet_Cartesian3D(grid_type const& gg, facet_handle e = 0) 
@@ -550,7 +560,8 @@ class Cell_Cartesian3D : public elem_base_Cartesian3D {
   cell_handle              h;
   grid_type::index_type    I;
 
-  //friend class VertexOnCellIterator_Cartesian3D;
+public:
+  typedef self value_type;
 public:
   Cell_Cartesian3D() {}  
   explicit
@@ -623,6 +634,9 @@ private:
   Cell   c;
   int    lv; // archetype::vertex_handle?
 public:
+  typedef Vertex value_type;
+  typedef Cell   anchor_type;
+public:
   VertexOnCellIterator_Cartesian3D()  {}
   explicit
   VertexOnCellIterator_Cartesian3D(Cell const& cc, int llv = 0) 
@@ -638,7 +652,8 @@ public:
   vertex_handle handle() const { cv(); return TheGrid().VertexMap()(index()); }
   int local_handle() const { cv(); return lv;}
 
-  Cell      const& TheCell() const { cb(); return c;}
+  Cell      const& TheCell  () const { cb(); return c;}
+  Cell      const& TheAnchor() const { cb(); return c;}
   grid_type const& TheGrid() const { cb(); return c.TheGrid();}
 
   friend bool operator==(self const& lhs, self const& rhs)
@@ -666,6 +681,9 @@ private:
   Cell   c;
   int    le; // archetype::edge_handle?
 public:
+  typedef Edge value_type;
+  typedef Cell anchor_type;
+public:
   EdgeOnCellIterator_Cartesian3D()  {}
   explicit
   EdgeOnCellIterator_Cartesian3D(Cell const& cc, int lle = 0) 
@@ -680,7 +698,8 @@ public:
   edge_handle                 handle()    const { cv(); return TheGrid().get_edge_handle(dir(), index());}
   int local_handle() const { cv(); return le;}
 
-  Cell      const& TheCell() const { cb(); return c;}
+  Cell      const& TheCell()   const { cb(); return c;}
+  Cell      const& TheAnchor() const { cb(); return c;}
   grid_type const& TheGrid() const { cb(); return c.TheGrid();}
 
 
@@ -709,6 +728,9 @@ private:
   Cell   c;
   int    lf; // archetype::facet_handle?
 public:
+  typedef Facet value_type;
+  typedef Cell  anchor_type;
+public:
   FacetOnCellIterator_Cartesian3D()  {}
   explicit
   FacetOnCellIterator_Cartesian3D(Cell const& cc, int llf = 0) 
@@ -723,7 +745,8 @@ public:
   facet_handle          handle() const { cv(); return TheGrid().get_facet_handle(dir(), index());} 
   int local_handle() const { cv(); return lf;}
 
-  Cell      const& TheCell() const { cb(); return c;}
+  Cell      const& TheCell()   const { cb(); return c;}
+  Cell      const& TheAnchor() const { cb(); return c;}
   grid_type const& TheGrid() const { cb(); return c.TheGrid();}
 
 
@@ -750,6 +773,9 @@ private:
   Facet f;
   int   lv;
 public:
+  typedef Vertex value_type;
+  typedef Facet  anchor_type;
+public:
   VertexOnFacetIterator_Cartesian3D() {}
   explicit
   VertexOnFacetIterator_Cartesian3D(Facet const& ff, int llv = 0) : f(ff), lv(llv) {} 
@@ -762,8 +788,9 @@ public:
   grid_type::index_type index()  const { cv(); return (f.index() + grid_type::sd.vertex_on_facet_index_offset[f.dir()][lv]);}
   int local_handle() const { cv(); return lv;}
 
-  Facet     const& TheFacet() const { cb(); return f;}
-  Face      const& TheFace () const { cb(); return f;}
+  Facet     const& TheFacet () const { cb(); return f;}
+  Face      const& TheFace  () const { cb(); return f;}
+  Face      const& TheAnchor() const { cb(); return f;}
   grid_type const& TheGrid()  const { cb(); return f.TheGrid();}
 
   friend bool operator==(self const& lhs, self const& rhs)
@@ -790,6 +817,9 @@ private:
   Facet f;
   int   le;
 public:
+  typedef Edge  value_type;
+  typedef Facet anchor_type;
+public:
   EdgeOnFacetIterator_Cartesian3D() {}
   explicit
   EdgeOnFacetIterator_Cartesian3D(Facet const& ff, int lle = 0) : f(ff), le(lle) {} 
@@ -803,8 +833,9 @@ public:
   direction_type         dir   () const { cv(); return grid_type::sd.edge_on_facet_dir[f.dir()][le];}
   int local_handle() const { cv(); return le;}
 
-  Facet     const& TheFacet() const { cb(); return f;}
-  Face      const& TheFace () const { cb(); return f;}
+  Facet     const& TheFacet () const { cb(); return f;}
+  Face      const& TheFace  () const { cb(); return f;}
+  Face      const& TheAnchor() const { cb(); return f;}
   grid_type const& TheGrid()  const { cb(); return f.TheGrid();}
 
   friend bool operator==(self const& lhs, self const& rhs)
@@ -831,6 +862,9 @@ private:
   Edge  e;
   int   lv;
 public:
+  typedef Vertex value_type;
+  typedef Edge   anchor_type;
+public:
   VertexOnEdgeIterator_Cartesian3D() {}
   explicit
   VertexOnEdgeIterator_Cartesian3D(Edge const& ee, int llv = 0) : e(ee), lv(llv) {} 
@@ -843,7 +877,8 @@ public:
   grid_type::index_type index () const { cv(); return (e.index() + lv * e.index_offset());}
   int             local_handle() const { cv(); return lv;}
 
-  Edge      const& TheEdge() const { cb(); return e;}
+  Edge      const& TheEdge()   const { cb(); return e;}
+  Edge      const& TheAnchor() const { cb(); return e;}
   grid_type const& TheGrid() const { cb(); return e.TheGrid();}
 
   friend bool operator==(self const& lhs, self const& rhs)
@@ -985,6 +1020,58 @@ struct element_traits<cartesian3d::Cell_Cartesian3D>
   struct hasher_type : public hasher_type_elem_base {};
   typedef consecutive_integer_tag<0>  consecutive_tag;
 };
+
+
+
+#define gt grid_types<cartesian3d::CartesianGrid3D>
+
+  inline gt::VertexIterator   gral_begin(gt::grid_type const& G, gt::VertexIterator) { return G.FirstVertex();}
+  inline gt::VertexIterator   gral_end  (gt::grid_type const& G, gt::VertexIterator) { return G.EndVertex();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::VertexIterator) { return G.NumOfVertices();}
+
+  inline gt::EdgeIterator     gral_begin(gt::grid_type const& G, gt::EdgeIterator)   { return G.FirstEdge();}
+  inline gt::EdgeIterator     gral_end  (gt::grid_type const& G, gt::EdgeIterator)   { return G.EndEdge();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::EdgeIterator)   { return G.NumOfEdges();}
+
+  inline gt::FacetIterator    gral_begin(gt::grid_type const& G, gt::FacetIterator)  { return G.FirstFacet();}
+  inline gt::FacetIterator    gral_end  (gt::grid_type const& G, gt::FacetIterator)  { return G.EndFacet();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::FacetIterator)  { return G.NumOfFacets();}
+
+  inline gt::CellIterator     gral_begin(gt::grid_type const& G, gt::CellIterator)   { return G.FirstCell();}
+  inline gt::CellIterator     gral_end  (gt::grid_type const& G, gt::CellIterator)   { return G.EndCell();}
+  inline gt::size_type        gral_size (gt::grid_type const& G, gt::CellIterator)   { return G.NumOfCells();}
+
+
+
+// on Edge
+  inline gt::VertexOnEdgeIterator   gral_begin(gt::Edge   a, gt::VertexOnEdgeIterator)  { return gt::VertexOnEdgeIterator(a);}
+  inline gt::VertexOnEdgeIterator   gral_end  (gt::Edge   a, gt::VertexOnEdgeIterator)  { return gt::VertexOnEdgeIterator(a,2);}
+  inline gt::size_type              gral_size (gt::Edge   a, gt::VertexOnEdgeIterator)  { return 2;}
+
+// on Facet
+  inline gt::VertexOnFacetIterator  gral_begin(gt::Facet  a, gt::VertexOnFacetIterator) { return a.FirstVertex();}
+  inline gt::VertexOnFacetIterator  gral_end  (gt::Facet  a, gt::VertexOnFacetIterator) { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Facet  a, gt::VertexOnFacetIterator) { return a.NumOfVertices();}
+
+  inline gt::EdgeOnFacetIterator    gral_begin(gt::Facet  a, gt::EdgeOnFacetIterator) { return a.FirstEdge();}
+  inline gt::EdgeOnFacetIterator    gral_end  (gt::Facet  a, gt::EdgeOnFacetIterator) { return a.EndEdge();}
+  inline gt::size_type              gral_size (gt::Facet  a, gt::EdgeOnFacetIterator) { return a.NumOfEdges();}
+
+// on Cell
+  inline gt::VertexOnCellIterator   gral_begin(gt::Cell   a, gt::VertexOnCellIterator)  { return a.FirstVertex();}
+  inline gt::VertexOnCellIterator   gral_end  (gt::Cell   a, gt::VertexOnCellIterator)  { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::VertexOnCellIterator)  { return a.NumOfVertices();}
+
+  inline gt::EdgeOnCellIterator     gral_begin(gt::Cell   a, gt::EdgeOnCellIterator)    { return a.FirstEdge();}
+  inline gt::EdgeOnCellIterator     gral_end  (gt::Cell   a, gt::EdgeOnCellIterator)    { return a.EndEdge();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::EdgeOnCellIterator)    { return a.NumOfEdges();}
+
+  inline gt::FacetOnCellIterator    gral_begin(gt::Cell   a, gt::FacetOnCellIterator)   { return a.FirstFacet();}
+  inline gt::FacetOnCellIterator    gral_end  (gt::Cell   a, gt::FacetOnCellIterator)   { return a.EndFacet();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::FacetOnCellIterator)   { return a.NumOfFacets();}
+
+#undef gt
+
 
 
 } // namespace GrAL 

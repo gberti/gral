@@ -24,6 +24,9 @@ namespace GrAL {
 namespace cartesian2d {
 
   class RegGrid2D;
+  class grid_types_cart2d;
+
+
 
   //! Alias for consistency with Cartesian3D
   typedef RegGrid2D CartesianGrid2D;
@@ -44,6 +47,9 @@ namespace cartesian2d {
 
 class RegGrid2D {
 public:
+  typedef RegGrid2D                    self;
+  typedef cartesian_grid_category_d<2> category;
+  typedef self                         grid_type;
 
   typedef xmjr_indexmap2D indexmap_type;
   // iteration is done in y-direction.
@@ -217,10 +223,11 @@ public:
 							   lly()+(ypoints-1)*side_vertex_2_[s].y());}
 public:
   typedef RegGrid2D Grid;
-  
-  typedef vertex_handle_int<RegGrid2D> vertex_handle;
-  typedef edge_handle_int<RegGrid2D>   edge_handle;
-  typedef cell_handle_int<RegGrid2D>   cell_handle;
+
+  typedef GrAL::signed_size_t                     size_type;
+  typedef vertex_handle_int<RegGrid2D,RegGrid2D>  vertex_handle;
+  typedef edge_handle_int  <RegGrid2D,RegGrid2D>  edge_handle;
+  typedef cell_handle_int  <RegGrid2D,RegGrid2D>  cell_handle;
 
   cell_handle invalid_cell()      const {return TheCellMap().n0() -1;}
   cell_handle outer_cell_handle() const {return TheCellMap().n0() -1;}
@@ -239,7 +246,9 @@ public:
   class EdgeOnCellIterator;
   class CellOnCellIterator;
 
-  typedef vertex_on_edge_iterator<RegGrid2D> VertexOnEdgeIterator;
+  typedef vertex_on_edge_iterator<RegGrid2D,grid_types_cart2d> VertexOnEdgeIterator;
+  typedef Cell Face;
+  typedef Edge Facet;
 
   //! Combinarorial dimension
   unsigned dimension() const { return 2;}
@@ -305,6 +314,8 @@ public:
     typedef Vertex self;
     friend class Edge;
   public:
+    typedef  vertex_type_tag        element_type_tag;
+    typedef  grid_vertex_category   category;
     typedef  VertexOnVertexIterator VertexIterator;
     typedef  VertexOnVertexIterator NeighbourIterator;
 
@@ -314,6 +325,7 @@ public:
 
     Vertex(const vertex_base& v, const Grid* g) :  elem_base(g),  _v(v) {}
     Vertex(const vertex_base& v, const Grid& g) :  elem_base(&g), _v(v) {}
+    Vertex(Grid const& g, int xx, int yy) : elem_base(&g), _v(xx,yy) {}
     int x() const { return _v.x();}
     int y() const { return _v.y();}
     
@@ -382,6 +394,9 @@ public:
 
   class Edge : public elem_base {
   public:
+    typedef  edge_type_tag        element_type_tag;
+    typedef  grid_edge_category   category;
+
     enum   direction {x_dir,y_dir};
 
     friend class RegGrid2D;
@@ -475,8 +490,12 @@ public:
 
   class Cell : public elem_base {
   public:
+    typedef cell_type_tag    element_type_tag;
+
     friend class RegGrid2D;
     typedef Cell self;
+    typedef Cell Face;
+    typedef Edge Facet;
     typedef grid_types<Grid::archetype_type> archgt;
     typedef index_type local_index_type;
 
@@ -498,7 +517,9 @@ public:
     inline EdgeOnCellIterator   FirstFacet()     const;
     inline EdgeOnCellIterator   EndFacet()       const;
     inline CellOnCellIterator   FirstCell()      const;
-    inline CellOnCellIterator   EndCell()   const;
+    inline CellOnCellIterator   EndCell()        const;
+    inline CellOnCellIterator   FirstFace()      const;
+    inline CellOnCellIterator   EndFace()        const;
     inline CellOnCellIterator   FirstNeighbour() const;
     inline CellOnCellIterator   EndNeighbour()   const;
 
@@ -516,7 +537,30 @@ public:
 	return n;
       }
     int NumOfCells() const { return 4 - NumOfBoundaryFacets();}
- 
+    int NumOfFaces() const { return NumOfCells();}
+
+
+    VertexOnCellIterator  FirstElement(tp<Vertex>) const { return FirstVertex();}
+    VertexOnCellIterator  EndElement  (tp<Vertex>) const { return EndVertex();}
+    EdgeOnCellIterator    FirstElement(tp<Edge  >) const { return FirstEdge();}
+    EdgeOnCellIterator    EndElement  (tp<Edge  >) const { return EndEdge();}
+    CellOnCellIterator    FirstElement(tp<Cell  >) const { return FirstCell();}
+    CellOnCellIterator    EndElement  (tp<Cell  >) const { return EndCell();}
+
+    template<class EE> 
+    typename incidence_iterator<grid_type, typename EE::element_type_tag, cell_type_tag>::type
+    FirstElement() const { return FirstElement(tp<EE>());}
+    template<class EE> 
+    typename incidence_iterator<grid_type, typename EE::element_type_tag, cell_type_tag>::type
+    EndElement() const { return EndElement(tp<EE>());}
+
+
+    int NumOf(tp<Vertex>) const { return NumOfVertices();}
+    int NumOf(tp<Edge  >) const { return NumOfEdges   ();}
+    int NumOf(tp<Cell  >) const { return NumOfCells   ();}
+    template<class EE> int NumOf() const { return NumOf(tp<EE>());}
+   
+
     friend bool operator==(const self& lhs, const self& rhs) 
       {return (lhs.llv == rhs.llv);} // GlobalNumber() == rhs.GlobalNumber());}
     friend bool operator!=(const self& lhs, const self& rhs) 
@@ -531,6 +575,9 @@ public:
 
     cell_handle GlobalNumber()    const { return TheGrid().cell_num(llv);}
     cell_handle handle      ()    const { return TheGrid().cell_num(llv);}
+    // FIXME: temporary for BGL!
+    // operator int() const { return handle();}
+    
     Vertex V(corner i) const { return vertex(i);}
     Vertex V(int i)    const { return vertex(corner(i));}
     Vertex V       (archgt::Vertex const& lV) const { return V(lV.handle());}
@@ -573,6 +620,9 @@ public:
     bool IsOnBoundary(int nb) const  { return IsOnBoundary(side(nb));}
 
     inline void FlipEdge(const Vertex& v, Edge& e) const;   
+    
+    typedef grid_type::archetype_type archetype_type;
+    archetype_type const& TheArchetype() const { return TheGrid().ArchetypeOf(*this);}
   protected:
     //    cell_base _b;
     vertex_base get_nb_base(side nb) const { // no check
@@ -633,11 +683,9 @@ public:
     explicit 
     VertexIterator(const Grid& g) : base(g), v(g .MinVertexNum()) {}
     VertexIterator(const Grid& g, vertex_handle vv) : base(&g), v(vv) {}
-    VertexIterator(vertex_handle vv, const Grid* g) : base(g), v(vv) {}
-    self& operator++() {
-      ++v;
-      return (*this);
-    }
+    //    VertexIterator(vertex_handle vv, const Grid* g) : base(g), v(vv) {}
+
+    self& operator++() { ++v; return (*this); }
     self  operator++(int)    { cv(); self tmp(*this); ++(*this); return tmp;}
     self& operator +=(const index_type& ij) {
       cv(); v+= TheGrid().TheVertexMap().offset(ij);
@@ -667,6 +715,10 @@ public:
 
     bool valid() const { return bound() && TheGrid().valid_handle(v);}
     void cv()    const { REQUIRE(valid(), "handle= " << v, 1);}
+
+    static self begin(anchor_type const& a) { return self(a,0);}
+    static self end  (anchor_type const& a) { return self(a,a.NumOf<value_type>());}
+    static int  size (anchor_type const& a) { return a.NumOf<value_type>();}
   private:
     vertex_handle v;
   };
@@ -683,8 +735,7 @@ public:
     EdgeIterator() {}
     explicit
     EdgeIterator(Grid const& g) : base(g), e(g.MinEdgeNum()) {}
-    EdgeIterator(int ee,const Grid* g) 
-      : base(g), e(ee)  {}
+    EdgeIterator(Grid const& g, int ee) : base(g), e(ee) {}
 
     self& operator++() { cv(); ++e; return(*this);}
     Edge operator*() const { cv(); return TheGrid().get_edge(e);}
@@ -706,6 +757,11 @@ public:
 
     bool valid() const { return bound() && TheGrid().valid_handle(e);}
     void cv()    const { REQUIRE(valid(), "handle= " << e, 1);}
+
+    static self begin(anchor_type const& a) { return self(a,0);}
+    static self end  (anchor_type const& a) { return self(a,a.NumOf<value_type>());}
+    static int  size (anchor_type const& a) { return a.NumOf<value_type>();}
+
   private:
     edge_handle e;
   };
@@ -722,7 +778,7 @@ public:
     CellIterator() : base(0), c(-1) {}
     explicit
     CellIterator(const Grid& g) : base(&g), c(g.MinCellNum()) {}
-    CellIterator(int cc, const Grid* g) : base(g), c(cc) {} 
+    //CellIterator(int cc, const Grid* g) : base(g), c(cc) {} 
     CellIterator(const Grid& g, int cc) : base(&g), c(cc) {} 
  
     self& operator++() { cv(); ++c; return (*this);}
@@ -744,6 +800,10 @@ public:
 
     bool valid() const { return bound() && TheGrid().valid_handle(c);}
     void cv()    const { REQUIRE(valid(), "handle= " << c, 1);}
+
+    static self begin(anchor_type const& a) { return self(a,0);}
+    static self end  (anchor_type const& a) { return self(a,a.NumOf<value_type>());}
+    static int  size (anchor_type const& a) { return a.NumOf<value_type>();}
   private:
     cell_handle c;
   };
@@ -873,8 +933,8 @@ public:
     explicit
     VertexOnCellIterator(const Cell& cc)
       : base(& cc.TheGrid()), v(Cell::SW), c(cc)  {}
-    VertexOnCellIterator( Cell::corner vv, const Cell& cc, const Grid* g) 
-      : base(g), v(vv), c(cc)  {}
+    VertexOnCellIterator(const Cell& cc, int vv) : base(& cc.TheGrid()), v(vv), c(cc) {}
+
     self& operator++() { cv(); ++v; return (*this);}
     self  operator++(int)    { cv(); self tmp(*this); ++(*this); return tmp;}
     Vertex  operator*() const { cv(); return (c.vertex(Cell::corner(v)));}
@@ -903,6 +963,11 @@ public:
 
     bool valid() const { return bound() && ! IsDone();}
     void cv()    const { REQUIRE(valid(), "c=" << c.index() << " v=" << v, 1);}
+
+    static self begin(anchor_type const& a) { return self(a,0);}
+    static self end  (anchor_type const& a) { return self(a,a.NumOf<value_type>());}
+    static int  size (anchor_type const& a) { return a.NumOf<value_type>();}
+
   private:
     int v;
     Cell c;
@@ -924,8 +989,8 @@ public:
     EdgeOnCellIterator() {}
     explicit
     EdgeOnCellIterator(Cell const& cc) { *this = cc.FirstEdge();}
-    EdgeOnCellIterator( Cell::side ee, const Cell& cc, const Grid* g)
-      :  base(g), e(ee), c(cc) {}
+    EdgeOnCellIterator(Cell const& cc, int ee) : base(cc.TheGrid()), e(ee), c(cc) {}
+
     self& operator++() { ++e; return (*this);}
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
     Edge  operator*() const { return (TheCell().edge(Cell::side(e)));}
@@ -934,7 +999,8 @@ public:
     bool    IsDone()    const { return (e >= c.NumOfEdges());}
     operator bool() const { return !IsDone();} 
 
-    int  LocalNumber()  const { return e;}
+    int LocalNumber()   const { return e;}
+    archgt::edge_handle local_handle()  const { cv(); return e;}
 
     Cell    OtherCell() const { return TheCell().Nb(Cell::side(e));}
     Vertex V1() const { return c.V(e);}
@@ -961,6 +1027,9 @@ public:
     bool valid() const { return bound() && ! IsDone();}
     void cv()    const { REQUIRE(valid(), "c=" << c.index() << " e=" << e, 1);}
 
+    static self begin(anchor_type const& a) { return self(a,0);}
+    static self end  (anchor_type const& a) { return self(a,a.NumOf<value_type>());}
+    static int  size (anchor_type const& a) { return a.NumOf<value_type>();}
   private:
     int e;
     Cell c;
@@ -981,21 +1050,13 @@ public:
     CellOnCellIterator() {}
     explicit
     CellOnCellIterator(Cell const& cc) { *this = cc.FirstCell();}
+    CellOnCellIterator(Cell const& cc, int n) : base(cc.TheGrid()), nb(n), c(cc)
+    {  advance_till_valid(); }
     CellOnCellIterator(const EdgeOnCellIterator& F) : base(F), nb(F.e), c(F.c) 
-      {
-	while( ! IsDone() && c.IsOnBoundary(nb))
-	  ++(*this);
-      }
-    CellOnCellIterator( Cell::side nnb, const Cell& cc, const Grid* g) 
-      : base(g), nb(nnb), c(cc) 
-      {
-	while( ! IsDone() && c.IsOnBoundary(nb))
-	  ++(*this);
-      }
+    {  advance_till_valid(); }
     self& operator++() { 
-      do {
-	++nb;
-      } while( ! IsDone() && c.IsOnBoundary(nb));
+      ++nb;
+      advance_till_valid();
       return (*this);
     }
     self  operator++(int)    { self tmp(*this); ++(*this); return tmp;}
@@ -1004,6 +1065,8 @@ public:
 
     // operator Cell()   const { return this->operator*();}
     Edge facet()      const { return c.edge(Cell::side(LocalNumber()));}
+    Edge TheFacet() const { return facet();}
+
     bool  IsDone()    const { return (nb >= 4);}
     // operator bool() const { return !IsDone();} 
     int LocalNumber()  const { return nb;}
@@ -1020,9 +1083,20 @@ public:
     
     bool valid() const { return bound() && ! IsDone();}
     void cv()    const { REQUIRE(valid(), "c=" << c.index() << " nb=" << nb, 1);}
+
+    // static self Begin(Cell c) { return self(c);}
+    // static self End  (Cell c) { return self(c.EndCell());}
+
+    static self begin(anchor_type const& a) { return self(a,0);}
+    static self end  (anchor_type const& a) { return self(a,a.NumOf<value_type>());}
+    static int  size (anchor_type const& a) { return a.NumOf<value_type>();}
   private:
     int nb;
     Cell c;
+    void advance_till_valid() {
+      while( ! IsDone() && c.IsOnBoundary(nb))
+	++(*this);
+    }
   };
   typedef CellOnCellIterator CellNeighbourIterator;
   //@}
@@ -1036,22 +1110,22 @@ public:
      \brief Number of elements in each direction
   */
   //! equal to <tt> urx() - llx() + 1 </tt>
-  int NumOfXVertices() const { return xpoints;}
-  int NumOfYVertices() const { return ypoints;}
-  int NumOfXEdges() const { return xpoints-1;}
-  int NumOfYEdges() const { return ypoints-1;}
-  int NumOfXCells() const { return xpoints-1;}
-  int NumOfYCells() const { return ypoints-1;}
+  size_type NumOfXVertices() const { return xpoints;}
+  size_type NumOfYVertices() const { return ypoints;}
+  size_type NumOfXEdges() const { return xpoints-1;}
+  size_type NumOfYEdges() const { return ypoints-1;}
+  size_type NumOfXCells() const { return xpoints-1;}
+  size_type NumOfYCells() const { return ypoints-1;}
 
   //! Number of \e all edges in x-direction
-  int NumOfHorizontalEdges() const { return TheXEdgeMap().range_size();}
+  size_type NumOfHorizontalEdges() const { return TheXEdgeMap().range_size();}
   //! Number of \e all edges in y-direction
-  int NumOfVerticalEdges()   const { return TheYEdgeMap().range_size();} 
+  size_type NumOfVerticalEdges()   const { return TheYEdgeMap().range_size();} 
   //@}
 
-  int Offset(const Vertex&) const {return TheVertexMap().n0();}
-  int Offset(const Edge&  ) const {return TheXEdgeMap().n0();}
-  int Offset(const Cell&  ) const {return TheCellMap().n0();}
+  size_type Offset(const Vertex&) const {return TheVertexMap().n0();}
+  size_type Offset(const Edge&  ) const {return TheXEdgeMap().n0();}
+  size_type Offset(const Cell&  ) const {return TheCellMap().n0();}
 
 
   
@@ -1059,22 +1133,42 @@ public:
   /*! @name Sequence iteration 
       \brief STL-style iterator ranges.
   */
-  VertexIterator FirstVertex() const { return VertexIterator(MinVertexNum(),this);}
-  EdgeIterator   FirstEdge()   const { return EdgeIterator(MinEdgeNum(),this);}
-  EdgeIterator   FirstFacet()  const { return EdgeIterator(MinEdgeNum(),this);}
+  VertexIterator FirstVertex() const { return VertexIterator(*this,MinVertexNum());}
+  EdgeIterator   FirstEdge()   const { return EdgeIterator  (*this,MinEdgeNum());}
+  EdgeIterator   FirstFacet()  const { return EdgeIterator  (*this,MinEdgeNum());}
   CellIterator   FirstFace()   const { return FirstCell();}
-  CellIterator   FirstCell()   const { return CellIterator(MinCellNum(),this);}
-  VertexIterator EndVertex()   const { return VertexIterator(MaxVertexNum()+1,this);}
-  EdgeIterator   EndEdge()     const { return EdgeIterator(MaxEdgeNum()+1,this);}
-  EdgeIterator   EndFacet()    const { return EdgeIterator(MaxEdgeNum()+1,this);}
+  CellIterator   FirstCell()   const { return CellIterator  (*this,MinCellNum());}
+  VertexIterator EndVertex()   const { return VertexIterator(*this,MaxVertexNum()+1);}
+  EdgeIterator   EndEdge()     const { return EdgeIterator  (*this,MaxEdgeNum()+1);}
+  EdgeIterator   EndFacet()    const { return EdgeIterator  (*this,MaxEdgeNum()+1);}
   CellIterator   EndFace()     const { return EndCell();}
-  CellIterator   EndCell()     const { return CellIterator(MaxCellNum()+1,this);}
+  CellIterator   EndCell()     const { return CellIterator  (*this,MaxCellNum()+1);}
 
-  int NumOfVertices() const { return TheVertexMap().range_size();}
-  int NumOfEdges()    const { return NumOfHorizontalEdges()+NumOfVerticalEdges();}
-  int NumOfFacets()   const { return NumOfEdges();}
-  int NumOfFaces()    const { return NumOfCells();}
-  int NumOfCells()    const { return TheCellMap().range_size();}
+  VertexIterator FirstElement(tp<Vertex>) const { return FirstVertex();}
+  VertexIterator EndElement  (tp<Vertex>) const { return EndVertex();}
+  EdgeIterator   FirstElement(tp<Edge>)   const { return FirstEdge();}
+  EdgeIterator   EndElement  (tp<Edge>)   const { return EndEdge();}
+  CellIterator   FirstElement(tp<Cell>)   const { return FirstCell();}
+  CellIterator   EndElement  (tp<Cell>)   const { return EndCell();}
+  
+  template<class E>
+  typename sequence_iterator<self, typename E::element_type_tag>::type
+  FirstElement() const { return FirstElement(tp<E>());}
+  template<class E>
+  typename sequence_iterator<self, typename E::element_type_tag>::type
+  EndElement()   const { return EndElement(tp<E>());}
+ 
+
+  size_type NumOfVertices() const { return TheVertexMap().range_size();}
+  size_type NumOfEdges()    const { return NumOfHorizontalEdges()+NumOfVerticalEdges();}
+  size_type NumOfFacets()   const { return NumOfEdges();}
+  size_type NumOfFaces()    const { return NumOfCells();}
+  size_type NumOfCells()    const { return TheCellMap().range_size();}
+  
+  size_type NumOf(tp<Vertex>) const { return NumOfVertices();}
+  size_type NumOf(tp<Edge  >) const { return NumOfEdges   ();}
+  size_type NumOf(tp<Cell  >) const { return NumOfCells   ();}
+  template<class E> size_type NumOf() const { return NumOf(tp<E>());}
   //@}
 
   //@{ 
@@ -1100,11 +1194,11 @@ public:
   inline bool IsInside(const CellIterator& C) const;
   inline bool IsInside(const Cell& C)    const;
 
-  int NumOfBoundaryVertices() const { return (2*(xpoints   + ypoints) -4);}
-  int NumOfBoundaryEdges()    const { return (2*(xpoints-1 + ypoints-1));}
-  int NumOfBoundaryFacets()   const { return NumOfBoundaryEdges();}
-  int NumOfBoundaryFaces()    const { return NumOfBoundaryCells();}
-  int NumOfBoundaryCells()    const { return (2*(xpoints-1 + ypoints-1) -4);}
+  size_type NumOfBoundaryVertices() const { return (2*(xpoints   + ypoints) -4);}
+  size_type NumOfBoundaryEdges()    const { return (2*(xpoints-1 + ypoints-1));}
+  size_type NumOfBoundaryFacets()   const { return NumOfBoundaryEdges();}
+  size_type NumOfBoundaryFaces()    const { return NumOfBoundaryCells();}
+  size_type NumOfBoundaryCells()    const { return (2*(xpoints-1 + ypoints-1) -4);}
   //@}
 
 
@@ -1183,6 +1277,14 @@ public:
   cell_handle MaxCellNum() const { return TheCellMap().nmax();}
   cell_handle MinNum(const Cell&) const { return MinCellNum();}
   cell_handle MaxNum(const Cell&) const { return MaxCellNum();}
+
+  bool valid(vertex_handle v) const { return MinVertexNum() <= v && v <= MaxVertexNum();}
+  bool valid(edge_handle   e) const { return MinEdgeNum()   <= e && e <= MaxEdgeNum();}
+  bool valid(cell_handle   c) const { return MinCellNum()   <= c && c <= MaxCellNum();}
+  bool valid_vertex(vertex_handle v) const { return valid(v);}
+  bool valid_edge  (edge_handle   e) const { return valid(e);}
+  bool valid_cell  (cell_handle   c) const { return valid(c);}
+
   //@}
 
   /*! @name switch operator 
@@ -1225,6 +1327,7 @@ public:
   static archetype_handle        archetype_of(Cell const&) 
     { return 0;}
   static unsigned NumOfArchetypes() { return 1;}
+
   /*@}*/
 
 };
@@ -1234,19 +1337,22 @@ public:
 class SubrangeReg2D;
 
 
-struct grid_types_cart2d {
-
-  typedef cartesian2d::RegGrid2D  Grid;
-  typedef cartesian2d::RegGrid2D  grid_type;
-  typedef Grid::index_type        index_type;
-  typedef Grid::vertex_index_type vertex_index_type;
-  typedef Grid::cell_index_type   cell_index_type;
-
-  typedef  Grid::Vertex Vertex;
-  typedef  Grid::Edge   Edge;
-  typedef  Grid::Edge   Facet;
-  typedef  Grid::Cell   Cell;
-  typedef  Grid::Cell   Face;
+  struct grid_types_cart2d : public grid_types_detail::grid_types_root {
+    typedef grid_types_cart2d self;
+    
+    typedef cartesian2d::RegGrid2D  Grid;
+    typedef cartesian2d::RegGrid2D  grid_type;
+    typedef Grid::index_type        index_type;
+    typedef Grid::size_type         size_type;
+    
+    typedef Grid::vertex_index_type vertex_index_type;
+    typedef Grid::cell_index_type   cell_index_type;
+    
+    typedef  Grid::Vertex Vertex;
+    typedef  Grid::Edge   Edge;
+    typedef  Grid::Edge   Facet;
+    typedef  Grid::Cell   Cell;
+    typedef  Grid::Cell   Face;
 
 
   typedef  Grid::vertex_handle vertex_handle;
@@ -1262,7 +1368,7 @@ struct grid_types_cart2d {
   typedef  Grid::VertexOnVertexIterator   VertexOnVertexIterator;
   typedef  Grid::VertexOnVertexIterator   VertexNeighbourIterator;
   typedef  Grid::CellOnVertexIterator     CellOnVertexIterator;
-  typedef  vertex_on_edge_iterator<Grid>  VertexOnEdgeIterator;
+  typedef  vertex_on_edge_iterator<Grid,self>  VertexOnEdgeIterator;
   typedef  VertexOnEdgeIterator           VertexOnFacetIterator;
 
   typedef  Grid::VertexOnCellIterator   VertexOnCellIterator;
@@ -1297,12 +1403,22 @@ struct grid_types_cart2d {
   static bool is_cell_valid (grid_type const& G, Cell const& c) { return (G.IsValid(c));}
   static bool is_cell_inside(grid_type const& G, Cell const& c) { return (G.IsInside(c));}
 
+
   typedef grid_type::archetype_type     archetype_type;
   typedef grid_type::archetype_handle   archetype_handle;
   typedef grid_type::archetype_iterator archetype_iterator;
   typedef grid_types<archetype_type>    archgt;
 
   typedef cartesian2d::SubrangeReg2D    cartesian_subrange_type;
+
+
+  template<class E, class A>
+  static VertexOnEdgeIterator begin_aux(A const& a, grid_vertex_category, grid_edge_category) { return VertexOnEdgeIterator(a);}
+  template<class E, class A>
+  static VertexOnEdgeIterator end_aux  (A const& a, grid_vertex_category, grid_edge_category) { return VertexOnEdgeIterator(a.EndVertex());}
+  template<class E, class A>
+  static int size_aux                  (A const& a, grid_vertex_category, grid_edge_category) { return a.NumOfVertices();}
+
 
 };
 
@@ -1314,7 +1430,8 @@ struct grid_types_cart2d {
 /*! \brief specialization of grid_types primary template for RegGrid2D
  */
 template<>
-struct grid_types<cartesian2d::RegGrid2D> : public grid_types_base<cartesian2d::grid_types_cart2d> 
+struct grid_types<cartesian2d::RegGrid2D> 
+  :  public grid_types_base<cartesian2d::grid_types_cart2d>
 { };
 
 } // namespace GrAL
@@ -1342,12 +1459,12 @@ RegGrid2D::Vertex::FirstVertex() const {
     return VertexOnVertexIterator(2,*this,&TheGrid()); // north nb exists
   else if(x() > TheGrid().llx())
     return VertexOnVertexIterator(3,*this,&TheGrid()); // west nb exists
-  return VertexOnVertexIterator(4,*this,&TheGrid()); // no nb exists
+  return EndVertex();
 }
 
 inline
 RegGrid2D::VertexOnVertexIterator 
-RegGrid2D::Vertex::EndVertex() const { return VertexOnVertexIterator(5,*this, &TheGrid());}
+RegGrid2D::Vertex::EndVertex() const { return VertexOnVertexIterator(4,*this, &TheGrid());}
 
 inline 
 RegGrid2D::VertexOnVertexIterator 
@@ -1408,12 +1525,6 @@ RegGrid2D::VertexOnEdgeIterator RegGrid2D::Edge::EndVertex()   const { return Ve
 inline 
  RegGrid2D::Cell 
 RegGrid2D::Edge::C1()   const  { // lower resp. left cell
-  /*
-  REQUIRE((dir == x_dir 
-	   ?TheGrid().TheCellMap().IsInRange(index_type(v1.x(),  v1.y()-1))
-	   :TheGrid().TheCellMap().IsInRange(index_type(v1.x()-1,v1.y()  ))),
-	  "Edge::C1() : Edge on Boundary",1);
-	  */
   return (dir == x_dir 
 	  ? Cell(TheGrid(),vertex_base(v1_.x(),  v1_.y()-1))
 	  : Cell(TheGrid(),vertex_base(v1_.x()-1,v1_.y()  )));
@@ -1422,8 +1533,6 @@ RegGrid2D::Edge::C1()   const  { // lower resp. left cell
 inline  
  RegGrid2D::Cell 
 RegGrid2D::Edge::C2()   const  {  // upper resp. right cell
-  // REQUIRE(TheGrid().TheCellMap().IsInRange(v1),
-  //	  "Edge::C1() : Edge on Boundary",1);
   return Cell(TheGrid(),v1_); 
 }
 
@@ -1445,42 +1554,42 @@ RegGrid2D::Edge::FlipCell(RegGrid2D::Cell& C)   const
 inline 
 RegGrid2D::VertexOnCellIterator 
 RegGrid2D::Cell::FirstVertex()  const 
-{ return VertexOnCellIterator(SW,*this,_g);}
+{ return VertexOnCellIterator(*this,SW);}
 
 inline 
 RegGrid2D::VertexOnCellIterator 
 RegGrid2D::Cell::EndVertex()  const 
-{ return VertexOnCellIterator(invalid_corner,*this,_g);}
+{ return VertexOnCellIterator(*this,invalid_corner);}
 
 inline 
 RegGrid2D::EdgeOnCellIterator   
 RegGrid2D::Cell::FirstEdge()  const 
-{ return EdgeOnCellIterator(S,*this,_g);}
+{ return EdgeOnCellIterator(*this,S);}
 
 inline 
 RegGrid2D::EdgeOnCellIterator   
 RegGrid2D::Cell::EndEdge()  const 
-{ return EdgeOnCellIterator(invalid_side,*this,_g);}
+{ return EdgeOnCellIterator(*this,invalid_side);}
 
 inline 
 RegGrid2D::EdgeOnCellIterator   
 RegGrid2D::Cell::FirstFacet()  const 
-{ return EdgeOnCellIterator(S,*this,_g);}
+{ return EdgeOnCellIterator(*this,S);}
 
 inline 
 RegGrid2D::EdgeOnCellIterator   
 RegGrid2D::Cell::EndFacet()  const 
-{ return EdgeOnCellIterator(invalid_side,*this,_g);}
+{ return EdgeOnCellIterator(*this,invalid_side);}
 
 inline 
 RegGrid2D::CellOnCellIterator   
 RegGrid2D::Cell::FirstNeighbour() const 
-{ return CellOnCellIterator(S,*this,_g);}
+{ return CellOnCellIterator(*this,S);}
 
 inline 
 RegGrid2D::CellOnCellIterator   
 RegGrid2D::Cell::EndNeighbour() const 
-{ return CellOnCellIterator(invalid_side,*this,_g);}
+{ return CellOnCellIterator(*this,invalid_side);}
 
 
 inline 
@@ -1491,6 +1600,16 @@ RegGrid2D::Cell::FirstCell() const
 inline 
 RegGrid2D::CellOnCellIterator   
 RegGrid2D::Cell::EndCell() const 
+{ return EndNeighbour();}
+
+inline 
+RegGrid2D::CellOnCellIterator   
+RegGrid2D::Cell::FirstFace() const 
+{ return FirstNeighbour();}
+
+inline 
+RegGrid2D::CellOnCellIterator   
+RegGrid2D::Cell::EndFace() const 
 { return EndNeighbour();}
 
 inline
@@ -1569,10 +1688,58 @@ inline bool RegGrid2D::IsValid(const RegGrid2D::Cell& C) const
 }
 
 
+  typedef grid_types<RegGrid2D> gt;
+
+  inline gt::VertexIterator   gral_begin(RegGrid2D const& R, gt::VertexIterator) { return R.FirstVertex();}
+  inline gt::VertexIterator   gral_end  (RegGrid2D const& R, gt::VertexIterator) { return R.EndVertex();}
+  inline gt::size_type        gral_size (RegGrid2D const& R, gt::VertexIterator) { return R.NumOfVertices();}
+
+  inline gt::EdgeIterator     gral_begin(RegGrid2D const& R, gt::EdgeIterator) { return R.FirstEdge();}
+  inline gt::EdgeIterator     gral_end  (RegGrid2D const& R, gt::EdgeIterator) { return R.EndEdge();}
+  inline gt::size_type        gral_size (RegGrid2D const& R, gt::EdgeIterator) { return R.NumOfEdges();}
+
+  inline gt::CellIterator     gral_begin(RegGrid2D const& R, gt::CellIterator) { return R.FirstCell();}
+  inline gt::CellIterator     gral_end  (RegGrid2D const& R, gt::CellIterator) { return R.EndCell();}
+  inline gt::size_type        gral_size (RegGrid2D const& R, gt::CellIterator) { return R.NumOfCells();}
+
+
+  inline gt::VertexOnCellIterator   gral_begin(gt::Cell   a, gt::VertexOnCellIterator)   { return a.FirstVertex();}
+  inline gt::VertexOnCellIterator   gral_end  (gt::Cell   a, gt::VertexOnCellIterator)   { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::VertexOnCellIterator)   { return a.NumOfVertices();}
+  inline gt::VertexOnEdgeIterator   gral_begin(gt::Edge   a, gt::VertexOnEdgeIterator)   { return a.FirstVertex();}
+  inline gt::VertexOnEdgeIterator   gral_end  (gt::Edge   a, gt::VertexOnEdgeIterator)   { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Edge   a, gt::VertexOnEdgeIterator)   { return a.NumOfVertices();}
+  inline gt::VertexOnVertexIterator gral_begin(gt::Vertex a, gt::VertexOnVertexIterator) { return a.FirstVertex();}
+  inline gt::VertexOnVertexIterator gral_end  (gt::Vertex a, gt::VertexOnVertexIterator) { return a.EndVertex();}
+  inline gt::size_type              gral_size (gt::Vertex a, gt::VertexOnVertexIterator) { return a.NumOfVertices();}
+
+  inline gt::EdgeOnCellIterator     gral_begin(gt::Cell   a, gt::EdgeOnCellIterator) { return a.FirstEdge();}
+  inline gt::EdgeOnCellIterator     gral_end  (gt::Cell   a, gt::EdgeOnCellIterator) { return a.EndEdge();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::EdgeOnCellIterator) { return a.NumOfEdges();}
+  /*
+  inline gt::EdgeOnVertexIterator   gral_begin(gt::Vertex a, gt::Edge) { return a.FirstEdge();}
+  inline gt::EdgeOnVertexIterator   gral_end  (gt::Vertex a, gt::Edge) { return a.EndEdge();}
+  inline gt::size_type              gral_size (gt::Vertex a, gt::Edge) { return a.NumOfEdges();}
+  */
+
+  inline gt::CellOnVertexIterator   gral_begin(gt::Vertex a, gt::CellOnVertexIterator) { return a.FirstCell();}
+  inline gt::CellOnVertexIterator   gral_end  (gt::Vertex a, gt::CellOnVertexIterator) { return a.EndCell();}
+  inline gt::size_type              gral_size (gt::Vertex a, gt::CellOnVertexIterator) { return a.NumOfCells();}
+  /*
+  inline gt::CellOnEdgeIterator     gral_begin(gt::Edge   a, gt::Cell) { return a.FirstCell();}
+  inline gt::CellOnEdgeIterator     gral_end  (gt::Edge   a, gt::Cell) { return a.EndCell();}
+  inline gt::size_type              gral_size (gt::Edge   a, gt::Cell) { return a.NumOfCells();}
+  */
+  inline gt::CellOnCellIterator     gral_begin(gt::Cell   a, gt::CellOnCellIterator) { return a.FirstCell();}
+  inline gt::CellOnCellIterator     gral_end  (gt::Cell   a, gt::CellOnCellIterator) { return a.EndCell();}
+  inline gt::size_type              gral_size (gt::Cell   a, gt::CellOnCellIterator) { return a.NumOfCells();}
+
+
 
 
 } // namespace cartesian2d 
 
 } // namespace GrAL 
+
 
 #endif
