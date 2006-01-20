@@ -49,6 +49,10 @@ public:
   Edge      const& TheAnchor() const { return e;}
   grid_type const& TheGrid  () const { return e.TheGrid();}
 
+  static self     begin(Edge const& ee) { return self(ee);}
+  static self     end  (Edge const& ee) { return self(ee,2);}
+  static unsigned size (Edge const&)    { return 2;}
+
   bool operator==(self const& rhs) const { return (lv == rhs.lv);}
   bool operator!=(self const& rhs) const { return (lv != rhs.lv);}
 
