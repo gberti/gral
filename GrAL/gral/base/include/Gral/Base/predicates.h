@@ -152,7 +152,7 @@ namespace GrAL {
 						  E1, E2, GT>
   {};
 
-/*! \brief Compile-time switch to get VertexOn<E> incidence iterator
+/*! \brief Meta-function to get VertexOn<E> incidence iterator
 
    \ingroup  traits
    \see \ref traits
@@ -164,6 +164,8 @@ struct VertexOn {
   typedef typename gt::Vertex Vertex;
   // REQUIRE vt::element_type_tag = vertex_type_tag
   typedef typename incidence<Vertex,E>::iterator Iterator;
+  typedef typename incidence<Vertex,E>::iterator type;
+
 };
 
 
