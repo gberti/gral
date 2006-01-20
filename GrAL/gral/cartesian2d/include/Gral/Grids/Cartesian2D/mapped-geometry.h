@@ -314,9 +314,13 @@ public:
   double volume(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
   //! length of a (straight) edge
   double length(const Edge& e) const  { return (segment_type(e,basic_geom()).length());}
+
   // double volume(const EdgeIterator& e) const {return volume(*e);}
   //! 2-dimensional volume of a cell
+  double area  (const Cell& c) const { return volume(c);}
+  //! 2-dimensional volume of a cell
   double volume(const Cell& c) const { return (polygon_type(c,basic_geom()).area());}
+
   
   //! Midpoint of an edge
   coord_type center(const Edge& e) const {return(segment_type(e,basic_geom()).center());}
