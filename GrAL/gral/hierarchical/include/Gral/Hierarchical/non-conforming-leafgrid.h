@@ -8,7 +8,8 @@
 #include "Gral/Hierarchical/octree.h"            // octree_leaf_cell_iterator_t<> 
 #include "Gral/Hierarchical/hierarchical-grid.h" // h_vertex_t<> etc.
 
-#include "Gral/Iterators/vertex-iterator-of-cell-set.h"
+#include "Gral/Iterators/closure-iterator.h"
+
 #include "Gral/Base/grid-function-hash.h"
 #include "Gral/Base/partial-grid-function-hash.h"
 
@@ -35,6 +36,7 @@ namespace octree {
 
     typedef hier_grid_type                                 hgt;
     typedef typename hgt::level_handle                     level_handle;
+    typedef typename hgt::size_type                        size_type;
 
     typedef typename hgt::flat_grid_type                   flat_grid_type;
     typedef typename hier_grid_type::flatgt                flatgt;
@@ -53,16 +55,13 @@ namespace octree {
     typedef hierarchical::h_element_handle_t<self, flat_cell_handle>   cell_handle;
     typedef hierarchical::h_element_handle_t<self, flat_vertex_handle> vertex_handle;
   
-    //typedef typename hgt::vertex_handle vertex_handle;
-    //typedef typename hgt::cell_handle   cell_handle;
-    
-    typedef hierarchical::h_incidence_iterator_t<element_base_type, vertex_type_tag, cell_type_tag > 
+    typedef hierarchical::h_incidence_iterator_t<element_base_type, 0, dim>
                                                              VertexOnCellIterator;
 
     // from octree
     typedef leaf_cell_iterator_t<element_base_type>          CellIterator;
 
-    typedef vertex_iterator_of_cell_set<CellIterator, self>  VertexIterator;
+    typedef closure_iterator<CellIterator, VertexOnCellIterator> VertexIterator;
     // dummy, the h_cell_t wants it.
     // But a leaf grid conceptually is a flat grid.
     struct CellChildIterator {};
@@ -76,6 +75,7 @@ namespace octree {
 
     
     CellIterator   FirstCell()     const;
+    CellIterator   EndCell()       const;
     size_t         NumOfCells()    const { return TheOctree()->NumOfLeafCells();}
     VertexIterator FirstVertex()   const;  
     size_t         NumOfVertices() const;
@@ -106,8 +106,10 @@ namespace octree {
   };
 
   template<class OCTREE>
-  struct nc_leafgrid_grid_types_base {
+  struct nc_leafgrid_grid_types_base : public grid_types_detail::grid_types_root {
     typedef non_conforming_leafgrid<OCTREE>    grid_type;
+    typedef typename grid_type::size_type      size_type;
+
     typedef typename grid_type::Cell           Cell;
     typedef typename grid_type::Vertex         Vertex;
     typedef typename grid_type::CellIterator   CellIterator;
@@ -136,6 +138,7 @@ namespace octree {
     typedef grid_type                            leaf_grid_type;
     // shouldn't this be grid_types<LEAFGRID> ??
     typedef grid_type                            gt;
+    typedef typename gt::size_type               size_type;
     typedef typename grid_type::octree_type      octree_type;
     typedef typename octree_type::hier_grid_type hier_grid_type;
 
@@ -245,6 +248,16 @@ namespace octree {
   typename non_conforming_leafgrid<OCTREE>::CellIterator
   non_conforming_leafgrid<OCTREE>::FirstCell() const 
   { return CellIterator(*this);}
+ 
+  template<class OCTREE>
+  typename non_conforming_leafgrid<OCTREE>::CellIterator
+  non_conforming_leafgrid<OCTREE>::EndCell() const 
+  { 
+    return CellIterator(*this, 
+			TheOctree()->ActiveRange(TheOctree()->finest_level())->EndCell(),
+			1+TheOctree()->finest_level());
+  }
+
 
   template<class OCTREE>
   typename non_conforming_leafgrid<OCTREE>::VertexIterator
@@ -261,6 +274,13 @@ template<class OCTREE>
 struct element_traits<hierarchical::h_vertex_t<typename octree::non_conforming_leafgrid<OCTREE>::element_base_type> >
  here
 */
+
+
+template<class OCTREE>
+struct grid_types<octree::non_conforming_leafgrid<OCTREE> > 
+  : public  grid_types_base<octree::nc_leafgrid_grid_types_base<OCTREE> >
+{ };
+
 
 template<class OCTREE>
 struct element_traits<octree::nc_leafgrid_vertex_t
@@ -305,12 +325,65 @@ struct element_traits<hierarchical::h_cell_t
 };
 
 
-template<class OCTREE>
-struct grid_types<octree::non_conforming_leafgrid<OCTREE> > 
-  : public  grid_types_base<octree::nc_leafgrid_grid_types_base<OCTREE> >
-{
+  namespace octree {
+#define gt grid_types<non_conforming_leafgrid<OCTREE> >
 
-};
+    /* handled by closure iterator
+    template<class OCTREE>
+    typename gt::VertexIterator 
+    gral_begin(non_conforming_leafgrid<OCTREE> const& g, typename gt::VertexIterator)
+    { return g.FirstVertex(); }
+
+    template<class OCTREE>
+    typename gt::VertexIterator 
+    gral_end  (non_conforming_leafgrid<OCTREE> const& g, typename gt::VertexIterator)
+    { return g.EndVertex(); }
+
+    template<class OCTREE>
+    typename gt::size_type
+    gral_size (non_conforming_leafgrid<OCTREE> const& g, typename gt::VertexIterator)
+    { return g.NumOfVertices(); }
+    */
+
+    template<class OCTREE>
+    typename gt::CellIterator 
+    gral_begin(non_conforming_leafgrid<OCTREE> const& g, typename gt::CellIterator)
+    { return g.FirstCell(); }
+
+    template<class OCTREE>
+    typename gt::CellIterator 
+    gral_end  (non_conforming_leafgrid<OCTREE> const& g, typename gt::CellIterator)
+    { return g.EndCell(); }
+
+    template<class OCTREE>
+    typename gt::size_type
+    gral_size (non_conforming_leafgrid<OCTREE> const& g, typename gt::CellIterator)
+    { return g.NumOfCells(); }
+
+    template<class OCTREE>
+    typename gt::VertexOnCellIterator 
+    gral_begin(hierarchical::h_cell_t<nc_leafgrid_element_base_t<non_conforming_leafgrid<OCTREE> > > const& c, 
+	       typename gt::VertexOnCellIterator)
+    { return typename gt::VertexOnCellIterator(c);}
+
+    template<class OCTREE>
+    typename gt::VertexOnCellIterator 
+    gral_end  (hierarchical::h_cell_t<nc_leafgrid_element_base_t<non_conforming_leafgrid<OCTREE> > > const& c, 
+	       typename gt::VertexOnCellIterator)
+    { return typename gt::VertexOnCellIterator(c, GrAL::end<typename gt::VertexOnCellIterator::flat_incidence_iterator>(c.Flat())); }
+
+    template<class OCTREE>
+    typename gt::size_type
+    gral_size (hierarchical::h_cell_t<nc_leafgrid_element_base_t<non_conforming_leafgrid<OCTREE> > > const& c, 
+	       typename gt::VertexOnCellIterator)
+    { return c.NumOfVertices(); }
+
+
+
+#undef gt
+
+  }
+
 
 
 // partial specializations of grid functions
