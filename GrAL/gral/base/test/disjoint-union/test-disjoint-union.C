@@ -42,6 +42,8 @@ int main() {
 
   // create disjoint union view of above grids and geometries
   typedef   disjoint_union_view::grid_view<Complex2D, c2d::CartesianGrid2D> union_type;
+  typedef grid_types<union_type> ugt;
+
   union_type U(G,R);
   typedef disjoint_union_view::geom_view<us_geom_type, reg_geom_type> union_geom_type;
   union_geom_type GeomU(U,GeomG, GeomR);
@@ -51,7 +53,10 @@ int main() {
   test_cell_iterator          (U,cout);
   test_vertex_on_cell_iterator(U,cout);
 
-  typedef grid_types<union_type> ugt;
+  test_sequence_iterator<ugt::Vertex>(U, cout);
+  test_sequence_iterator<ugt::Cell  >(U, cout);
+  test_incidence_iterator<ugt::Vertex,ugt::Cell>(U, cout);
+
   typedef ugt::vertex_handle u_vertex_handle;
 
 

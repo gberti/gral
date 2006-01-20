@@ -52,6 +52,9 @@ int main() {
   test_cell_iterator          (ShrunkG,cout);
   test_vertex_on_cell_iterator(ShrunkG,cout);
 
+  test_sequence_iterator <sgt::Vertex>          (ShrunkG, cout);
+  test_sequence_iterator <sgt::Cell  >          (ShrunkG, cout);
+  test_incidence_iterator<sgt::Vertex,sgt::Cell>(ShrunkG, cout);
 
   // copy ShrunkG into unstructured grid
   

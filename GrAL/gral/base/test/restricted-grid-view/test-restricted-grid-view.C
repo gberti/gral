@@ -8,6 +8,8 @@
 #include "Gral/Views/restricted-grid-view.h"
 #include "Gral/Base/restricted-grid-function-adapter.h"
 
+#include "Gral/Base/partial-grid-function-hash.h"
+
 #include "Gral/Grids/Cartesian2D/all.h"
 #include "Gral/Test/all.h"
 
@@ -15,7 +17,11 @@
 
 #include "Utility/pre-post-conditions.h"
 
+#include <boost/static_assert.hpp>
+
 #include <algorithm>
+
+
 
 typedef GrAL::cartesian2d::CartesianGrid2D cart_grid_type;
 
@@ -56,13 +62,16 @@ int main() {
   typedef grid_types<rgv::grid_view<grid_type, false_pred > > falsegt;
   typedef grid_types<rgv::grid_view<grid_type, even_pred  > > evengt;
 
+  cout << "checkgt<evengt>\n";
+  checkgt<evengt>(cout);
 
-  /* cannot construct cells/vertices from handles
+  gt::FacetOnCellIterator fc(all_view.FirstCell());
+  gt::Facet f = * fc;
+
   test_cell_iterator  (all_view, cout);
   test_vertex_iterator(all_view, cout);
   test_cell_iterator  (nil_view, cout);
   test_vertex_iterator(nil_view, cout);
-  */
 
   gt::CellIterator c(R);
   truegt::CellIterator tc(all_view);
@@ -83,6 +92,33 @@ int main() {
 
   bool eq = std::equal(even_gf.begin(), even_gf.end(), even_const_gf.begin());
 
+  grid_function        <truegt::Edge, int> tge(all_view,1);
+  partial_grid_function<truegt::Edge, int> pge(all_view,1);
+
+  BOOST_STATIC_ASSERT((1== is_base_or_same<grid_incidence_iterator_category, 
+		                           truegt::categories<truegt::FacetOnCellIterator>::type>::value));
+  BOOST_STATIC_ASSERT((1== is_base_or_same<grid_incidence_iterator_category, 
+		                           truegt::categories<truegt::VertexOnFaceIterator>::type>::value));
+  BOOST_STATIC_ASSERT((1== is_base_or_same<grid_sequence_iterator_category, 
+		                           truegt::categories<truegt::CellIterator>::type>::value));
+  BOOST_STATIC_ASSERT((1== is_base_or_same<grid_types_detail::grid_test_category,
+		                           truegt::categories<truegt::test_type>::type>::value));
+  
+  BOOST_STATIC_ASSERT((1== boost::is_same<truegt::VertexOnCellIterator, truegt::VertexOnFaceIterator>::value));
+
+
+  test_sequence_iterator<truegt::Vertex>(all_view, cout);
+  test_sequence_iterator<truegt::Edge  >(all_view, cout);
+  test_sequence_iterator<truegt::Cell  >(all_view, cout);
+
+  test_incidence_iterator<truegt::Vertex,truegt::Edge>(all_view, cout);
+
+  test_incidence_iterator<truegt::Vertex,truegt::Cell>(all_view, cout);
+  test_incidence_iterator<truegt::Edge,  truegt::Cell>(all_view, cout);
+  test_incidence_iterator<truegt::Cell,  truegt::Cell>(all_view, cout);
+
+  //  truegt::CellIterator c1 =  begin<truegt::Cell>(all_view);
+  //truegt::CellOnCellIterator cc1 = begin<truegt::Cell>(*c1);
 
   element_numbering<gt::Vertex>  VNum(R,1);
 

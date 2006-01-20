@@ -63,6 +63,13 @@ int main() {
 
   test_archetypes(p, *out);
 
+
+  test_sequence_iterator<gt::Vertex>(p, *out);
+  test_sequence_iterator<gt::Cell>  (p, *out);
+
+  test_incidence_iterator<gt::Vertex, gt::Cell  >(p, *out);
+  test_incidence_iterator<gt::Cell,   gt::Vertex>(p, *out);
+
   checkgt<gt>(*out);
 
   test_switch(p, *out);

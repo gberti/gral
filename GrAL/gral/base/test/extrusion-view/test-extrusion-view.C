@@ -9,6 +9,7 @@
 #include "Gral/Views/extrusion-view.h"
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/IO/complex2d-format-input.h"
+#include "Gral/Test/all.h"
 
 #include "Gral/IO/gmv-format-output3d.h"
 
@@ -37,7 +38,12 @@ int main() {
     
     extrusion_view::grid<Complex2D> ExG(G);
     extrusion_view::geometry<stored_geometry_complex2D, mapping_type> ExGeom(ExG, GeomG, f);
+
+    test_sequence_iterator<exgt::Vertex>(ExG, cout);
+    test_sequence_iterator<exgt::Cell>  (ExG, cout);
+    test_incidence_iterator<exgt::Vertex,exgt::Cell>  (ExG, cout);
     
+
     OstreamGMV3DFmt Out("ex.gmv");
     ConstructGrid(Out,ExG,ExGeom);
   }
