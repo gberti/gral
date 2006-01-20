@@ -6,6 +6,7 @@
 #include <boost/shared_ptr.hpp>
 #include "Utility/pre-post-conditions.h"
 
+
 namespace GrAL {
 
 
@@ -183,7 +184,6 @@ class ref_ptr : public ref_ptr_base {
   boost::shared_ptr<T> ptr;
 public:
   ref_ptr()  {} 
-  ~ref_ptr() {}
 
   // Cannot overload for T const& and T. So caller must make sure that temporary<T> is passed instead of T.
   // If we disable this, at least the caller must apply the address-of operator&
@@ -373,6 +373,7 @@ public:
 };
 
 
+
 template<class T>
 temporary<T>::operator ref_ptr<T> () const { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
 
@@ -428,6 +429,13 @@ temporary<T>::operator ref_ptr<T> () const { return ref_ptr<T>(new T(t), ref_ptr
 
   template<class T>
   inline ref_ptr<const T> const_ref_to_ref_ptr(T const& t) { return ref_ptr<const T>(t); }
+
+  template<class T>
+  inline T& ref(T & t) { return t;}
+
+  template<class T>
+  inline T& ref(ref_ptr<T> t) { return *t;}
+
 
 
 } // namespace GrAL 
