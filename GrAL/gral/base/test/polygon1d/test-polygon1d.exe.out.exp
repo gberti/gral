@@ -20,13 +20,15 @@ has    type FacetOnVertexIterator
 has    type CellOnVertexIterator
 has    type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
-has no type FacetOnEdgeIterator
+has    type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has no type VertexOnFaceIterator
 has no type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
 has no type CellOnFaceIterator
-has no type VertexOnFacetIterator
-has no type EdgeOnFacetIterator
+has    type VertexOnFacetIterator
+has    type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has    type CellOnFacetIterator
 has    type VertexOnCellIterator
 has no type EdgeOnCellIterator
@@ -36,4 +38,5 @@ has no type CellOnCellIterator
 has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
+has no type archgt
   ->  (v=0 c=0)   ->  (v=1 c=0)   ->  (v=1 c=1)   ->  (v=2 c=1)   ->  (v=2 c=2)   ->  (v=0 c=2) 

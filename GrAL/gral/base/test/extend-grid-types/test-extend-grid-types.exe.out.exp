@@ -25,18 +25,21 @@ has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has    type VertexOnFaceIterator
 has    type EdgeOnFaceIterator
-has no type CellOnFaceIterator
+has    type FacetOnFaceIterator
+has    type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
-has no type FaceOnCellIterator
+has    type FaceOnCellIterator
 has    type FacetOnCellIterator
 has    type CellOnCellIterator
 has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
+has    type archgt
 
 grid_types<CartesianGrid3D>:
 has    type vertex_handle
@@ -65,9 +68,11 @@ has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has    type VertexOnFaceIterator
 has    type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
 has no type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has    type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
@@ -77,6 +82,7 @@ has no type CellOnCellIterator
 has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
+has    type archgt
 
 grid_types<Complex2D>:
 has    type vertex_handle
@@ -105,18 +111,21 @@ has no type FacetOnEdgeIterator
 has    type CellOnEdgeIterator
 has    type VertexOnFaceIterator
 has    type EdgeOnFaceIterator
-has no type CellOnFaceIterator
+has    type FacetOnFaceIterator
+has    type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
+has    type FaceOnFacetIterator
 has    type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
-has no type FaceOnCellIterator
+has    type FaceOnCellIterator
 has    type FacetOnCellIterator
 has    type CellOnCellIterator
 has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
+has    type archgt
 
 grid_types<Complex3D>:
 has    type vertex_handle
@@ -145,9 +154,11 @@ has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has    type VertexOnFaceIterator
 has    type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
 has no type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has    type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
@@ -157,6 +168,7 @@ has no type CellOnCellIterator
 has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
+has    type archgt
 
 xgt<origgt, override_facet_handle<my_facet_handle> >:
 has    type vertex_handle
@@ -185,18 +197,21 @@ has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has    type VertexOnFaceIterator
 has    type EdgeOnFaceIterator
-has no type CellOnFaceIterator
+has    type FacetOnFaceIterator
+has    type CellOnFaceIterator
 has    type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
-has no type FaceOnCellIterator
+has    type FaceOnCellIterator
 has    type FacetOnCellIterator
 has    type CellOnCellIterator
 has    type archetype_type
 has    type archetype_handle
 has    type archetype_iterator
+has    type archgt
 
 override_facet_handle<my_facet_handle>:
 has no type vertex_handle
@@ -225,9 +240,11 @@ has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has no type VertexOnFaceIterator
 has no type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
 has no type CellOnFaceIterator
 has no type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has no type VertexOnCellIterator
 has no type EdgeOnCellIterator
@@ -237,3 +254,173 @@ has no type CellOnCellIterator
 has no type archetype_type
 has no type archetype_handle
 has no type archetype_iterator
+has no type archgt
+checkgt<test_gt>
+has no type vertex_handle
+has no type edge_handle
+has no type face_handle
+has no type facet_handle
+has no type cell_handle
+has    type Vertex
+has no type Edge
+has no type Face
+has no type Facet
+has    type Cell
+has no type VertexIterator
+has no type EdgeIterator
+has no type FaceIterator
+has no type FacetIterator
+has no type CellIterator
+has no type VertexOnVertexIterator
+has no type EdgeOnVertexIterator
+has no type FaceOnVertexIterator
+has no type FacetOnVertexIterator
+has no type CellOnVertexIterator
+has no type VertexOnEdgeIterator
+has no type FaceOnEdgeIterator
+has no type FacetOnEdgeIterator
+has no type CellOnEdgeIterator
+has no type VertexOnFaceIterator
+has no type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
+has no type CellOnFaceIterator
+has no type VertexOnFacetIterator
+has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
+has no type CellOnFacetIterator
+has no type VertexOnCellIterator
+has no type EdgeOnCellIterator
+has no type FaceOnCellIterator
+has no type FacetOnCellIterator
+has no type CellOnCellIterator
+has no type archetype_type
+has no type archetype_handle
+has no type archetype_iterator
+has no type archgt
+
+checkgt<get_from_base_gt_Edge<test_gt, grid_types<Complex2D> >
+has no type vertex_handle
+has no type edge_handle
+has no type face_handle
+has no type facet_handle
+has no type cell_handle
+has    type Vertex
+has    type Edge
+has no type Face
+has no type Facet
+has    type Cell
+has no type VertexIterator
+has no type EdgeIterator
+has no type FaceIterator
+has no type FacetIterator
+has no type CellIterator
+has no type VertexOnVertexIterator
+has no type EdgeOnVertexIterator
+has no type FaceOnVertexIterator
+has no type FacetOnVertexIterator
+has no type CellOnVertexIterator
+has no type VertexOnEdgeIterator
+has no type FaceOnEdgeIterator
+has no type FacetOnEdgeIterator
+has no type CellOnEdgeIterator
+has no type VertexOnFaceIterator
+has no type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
+has no type CellOnFaceIterator
+has no type VertexOnFacetIterator
+has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
+has no type CellOnFacetIterator
+has no type VertexOnCellIterator
+has no type EdgeOnCellIterator
+has no type FaceOnCellIterator
+has no type FacetOnCellIterator
+has no type CellOnCellIterator
+has no type archetype_type
+has no type archetype_handle
+has no type archetype_iterator
+has no type archgt
+checkgt<get_element_types_from_base<test_gt,grid_types<Complex2D> > >
+has no type vertex_handle
+has no type edge_handle
+has no type face_handle
+has no type facet_handle
+has no type cell_handle
+has    type Vertex
+has    type Edge
+has    type Face
+has    type Facet
+has    type Cell
+has no type VertexIterator
+has no type EdgeIterator
+has no type FaceIterator
+has no type FacetIterator
+has no type CellIterator
+has no type VertexOnVertexIterator
+has no type EdgeOnVertexIterator
+has no type FaceOnVertexIterator
+has no type FacetOnVertexIterator
+has no type CellOnVertexIterator
+has no type VertexOnEdgeIterator
+has no type FaceOnEdgeIterator
+has no type FacetOnEdgeIterator
+has no type CellOnEdgeIterator
+has no type VertexOnFaceIterator
+has no type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
+has no type CellOnFaceIterator
+has no type VertexOnFacetIterator
+has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
+has no type CellOnFacetIterator
+has no type VertexOnCellIterator
+has no type EdgeOnCellIterator
+has no type FaceOnCellIterator
+has no type FacetOnCellIterator
+has no type CellOnCellIterator
+has no type archetype_type
+has no type archetype_handle
+has no type archetype_iterator
+has no type archgt
+checkgt<get_local_types_from_base<test_gt,grid_types<Complex2D> > >
+has    type vertex_handle
+has    type edge_handle
+has    type face_handle
+has    type facet_handle
+has    type cell_handle
+has    type Vertex
+has    type Edge
+has    type Face
+has    type Facet
+has    type Cell
+has no type VertexIterator
+has no type EdgeIterator
+has no type FaceIterator
+has no type FacetIterator
+has no type CellIterator
+has no type VertexOnVertexIterator
+has no type EdgeOnVertexIterator
+has no type FaceOnVertexIterator
+has no type FacetOnVertexIterator
+has no type CellOnVertexIterator
+has    type VertexOnEdgeIterator
+has no type FaceOnEdgeIterator
+has no type FacetOnEdgeIterator
+has no type CellOnEdgeIterator
+has    type VertexOnFaceIterator
+has    type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
+has no type CellOnFaceIterator
+has    type VertexOnFacetIterator
+has no type EdgeOnFacetIterator
+has    type FaceOnFacetIterator
+has no type CellOnFacetIterator
+has    type VertexOnCellIterator
+has    type EdgeOnCellIterator
+has    type FaceOnCellIterator
+has    type FacetOnCellIterator
+has no type CellOnCellIterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator
+has    type archgt

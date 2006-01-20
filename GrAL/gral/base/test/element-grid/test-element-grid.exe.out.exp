@@ -3,17 +3,17 @@ grid_types<element_grid<gt::Cell> >:
 has    type vertex_handle
 has    type edge_handle
 has    type face_handle
-has no type facet_handle
+has    type facet_handle
 has    type cell_handle
 has    type Vertex
 has    type Edge
 has    type Face
-has no type Facet
+has    type Facet
 has    type Cell
 has    type VertexIterator
 has    type EdgeIterator
 has    type FaceIterator
-has no type FacetIterator
+has    type FacetIterator
 has    type CellIterator
 has no type VertexOnVertexIterator
 has no type EdgeOnVertexIterator
@@ -25,34 +25,37 @@ has no type FaceOnEdgeIterator
 has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has    type VertexOnFaceIterator
-has no type EdgeOnFaceIterator
+has    type EdgeOnFaceIterator
+has    type FacetOnFaceIterator
 has no type CellOnFaceIterator
-has no type VertexOnFacetIterator
+has    type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
 has no type FaceOnCellIterator
-has no type FacetOnCellIterator
+has    type FacetOnCellIterator
 has no type CellOnCellIterator
 has no type archetype_type
 has no type archetype_handle
 has no type archetype_iterator
+has no type archgt
 grid_types<element_grid<gt::Edge> >:
 has    type vertex_handle
 has    type edge_handle
 has no type face_handle
-has no type facet_handle
+has    type facet_handle
 has    type cell_handle
 has    type Vertex
 has    type Edge
 has no type Face
-has no type Facet
+has    type Facet
 has    type Cell
 has    type VertexIterator
 has    type EdgeIterator
 has no type FaceIterator
-has no type FacetIterator
+has    type FacetIterator
 has    type CellIterator
 has no type VertexOnVertexIterator
 has no type EdgeOnVertexIterator
@@ -61,22 +64,25 @@ has no type FacetOnVertexIterator
 has no type CellOnVertexIterator
 has    type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
-has no type FacetOnEdgeIterator
-has no type CellOnEdgeIterator
+has    type FacetOnEdgeIterator
+has    type CellOnEdgeIterator
 has no type VertexOnFaceIterator
 has no type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
 has no type CellOnFaceIterator
 has no type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
 has no type FaceOnCellIterator
-has no type FacetOnCellIterator
-has no type CellOnCellIterator
+has    type FacetOnCellIterator
+has    type CellOnCellIterator
 has no type archetype_type
 has no type archetype_handle
 has no type archetype_iterator
+has no type archgt
 grid_types<element_grid<gt::Vertex> >:
 has    type vertex_handle
 has no type edge_handle
@@ -93,29 +99,32 @@ has no type EdgeIterator
 has no type FaceIterator
 has no type FacetIterator
 has    type CellIterator
-has no type VertexOnVertexIterator
-has no type EdgeOnVertexIterator
+has    type VertexOnVertexIterator
+has    type EdgeOnVertexIterator
 has no type FaceOnVertexIterator
 has no type FacetOnVertexIterator
-has no type CellOnVertexIterator
+has    type CellOnVertexIterator
 has no type VertexOnEdgeIterator
 has no type FaceOnEdgeIterator
 has no type FacetOnEdgeIterator
 has no type CellOnEdgeIterator
 has no type VertexOnFaceIterator
 has no type EdgeOnFaceIterator
+has no type FacetOnFaceIterator
 has no type CellOnFaceIterator
 has no type VertexOnFacetIterator
 has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
 has no type CellOnFacetIterator
 has    type VertexOnCellIterator
 has    type EdgeOnCellIterator
 has no type FaceOnCellIterator
 has no type FacetOnCellIterator
-has no type CellOnCellIterator
+has    type CellOnCellIterator
 has no type archetype_type
 has no type archetype_handle
 has no type archetype_iterator
+has no type archgt
 Dimension: 2  c1.NumOfCells()=1  c1.NumOfFaces()=1 c1.NumOfEdges()=4 c1.NumOfVertices()=4
 Dimension: 1  e1.NumOfCells()=1  e1.NumOfEdges()=1 e1.NumOfVertices()=2
 Dimension: 0  v1.NumOfCells()=1  v1.NumOfVertices()=1
