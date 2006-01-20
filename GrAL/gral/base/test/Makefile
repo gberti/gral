@@ -39,7 +39,8 @@ SUBDIRS = boundary-grid  \
           stream-grid-adapter \
           vertex-iterator-of-cell-set  \
           vertex-on-vertex-iterator \
-          vertex-stars 
+          vertex-stars \
+          wrap-elements
 
 
 
