@@ -19,7 +19,7 @@ namespace GrAL {
 /*! \brief sorted vertex set of a grid element
     \ingroup elements  
     \see \ref elements module 
-    vertex_set can be used as keys in hash tables of elements.
+    vertex_set can be used as key  in hash tables of elements.
 
     \todo specialize to vertex set of edges
     \todo Rename to element_vertex_set ?
@@ -31,16 +31,17 @@ private:
   typedef element_traits<E>  et;
   typedef grid_types<typename et::grid_type> gt;
   typedef typename gt::vertex_handle         vertex_handle;
-
-   ::std::vector<vertex_handle> v;
+  typedef typename gt::Vertex                Vertex;
+  std::vector<vertex_handle> v;
 public:
   vertex_set(E const& e) 
     { 
-      v.reserve(e.NumOfVertices());
-      for(typename VertexOn<E>::Iterator ve(e.FirstVertex()); ! ve.IsDone(); ++ve) {
+      typedef typename GrAL::iterator<Vertex,E>::type VertexOnEIterator;
+      v.reserve(GrAL::size<Vertex>(e)); 
+      for(VertexOnEIterator ve = GrAL::begin(e); ! ve.IsDone(); ++ve) {
 	v.push_back(ve.handle());
       }
-       ::std::sort(v.begin(), v.end());
+      std::sort(v.begin(), v.end());
     }
 
   vertex_handle operator[](int n) const { check_range(n); return v[n];}
@@ -70,7 +71,7 @@ private:
 /*! \brief sorted general vertex subset of a grid
     \ingroup elements  
     \see \ref elements module 
-    general_vertex_set can be used as keys in hash tables of elements,
+    general_vertex_set can be used as key in hash tables of elements,
     or for otherwise arbitrary sets of vertices
 
  */
@@ -103,8 +104,8 @@ public:
   template<class E>
   explicit general_vertex_set(E const& e) 
     { 
-      v.reserve(e.NumOfVertices());
-      for(typename VertexOn<E>::Iterator ve(e.FirstVertex()); ! ve.IsDone(); ++ve) {
+      v.reserve(GrAL::size<Vertex>(e)); 
+      for(typename VertexOn<E>::type ve = GrAL::begin(e); ! ve.IsDone(); ++ve) {
 	v.push_back(ve.handle());
       }
       init();

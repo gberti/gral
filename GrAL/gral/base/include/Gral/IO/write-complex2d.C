@@ -114,8 +114,8 @@ void write_complex2d(GRID const& G, GEOM const& Geo,  ::std::ostream& out, int o
 
 
   for(CellIterator c = G.FirstCell(); !c.IsDone(); ++c){
-    out	<< (*c).NumOfVertices() << "   ";
-    for(VertexOnCellIterator vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc)
+    out	<< GrAL::size<Vertex>(*c) << "  ";
+    for(VertexOnCellIterator vc = GrAL::begin<Vertex>(*c); ! vc.IsDone(); ++vc)
       out << VNum[*vc] << " ";
     out << "\n";
   }
