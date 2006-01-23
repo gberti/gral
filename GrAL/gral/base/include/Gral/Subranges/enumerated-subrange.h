@@ -42,16 +42,33 @@ namespace GrAL {
   This class has value-semantics, i.e. really stores
   the enumerated sequence.
 
-  If vertices and/or cells are added in a piecemeal fashion by
-  using \c push_back or  \c append, it is not guaranteed that
-  the subrange is <em>closed</em>, i.e. that the sequence of vertices is exactly 
+  The main purpose of enumerated_subrange is to implement a
+  cell-based subrange of a grid by explicitely enumerating its cells,
+  and giving access to elements of lower dimension by computing the closure
+  of the cell range.
+  Cells can be added at once or in a piecemeal fashion.
+
+  For historical reasons, enumerated_subranges also permits
+  addition of vertices. If vertex addition is used, 
+  there is not guarantee that the subrange is  <em>closed</em>,
+  i.e. that the sequence of vertices is exactly 
   the set of vertices incident to the sequence of cells.
+  In the long run, vertex insertion will be removed,
+  and a special class (multi_enumerated_element_range or so, which collects
+  unrelated sequences of elements of different dimension) 
+  will be implemented for algorithms needing this.
 
-  So either only vertices or only cells should be inserted.
+  There is a trade-off between storage space efficiency and grid function efficiency.
+  For instance, when storing vertices explicitely, it is possible to define consecutive
+  vertex handles, allowing the use of vector-based grid functions. However, in order
+  to permit the reuse of incidence information of the base grid, there must be a way to convert
+  a GT::VertexOnCellIterator to a vertex of the subrange, which involves an additional mapping 
+  of base grid vertices to its subrange copies.
+  If many grid functions on the subrange vertices are needed, the consecutive option would be
+  better, else the non-consecutive version (reusing the handles from the base grid).
+  Currently, the latter, non-consecutive version is choosen.
+  This could be made into a compile-time configuration option.    
 
-  \todo Introduce own types for Vertex, Cell, handles. This would also allow to 
-   have efficient vector-based total grid functions on the subrange.
-    
   \todo Make the closure property a compile time or runtime policy.
   It is not consistent to allow both vertex and cell insertion if mixed insertion
   will fail. It is better to use a vertex range if only vertices are wanted
@@ -290,29 +307,15 @@ struct grid_types_esr :
     :  public grid_types_base<detail::grid_types_esr2<Grid,GT> > {};
 
 
-template<class Grid>
-struct element_traits<wrap_vertex_t<enumerated_subrange<Grid> > >
-  : public element_traits_vertex_base<enumerated_subrange<Grid> > 
+template<class Grid, class GT, class E, class EH>
+struct element_traits<wrapped_element<enumerated_subrange<Grid,GT>, E, EH> >
+  : public element_traits_base<wrapped_element<enumerated_subrange<Grid,GT>, E, EH> >
 {
 private:
-  typedef element_traits_vertex_base<enumerated_subrange<Grid> >  base;
+  typedef element_traits_base<wrapped_element<enumerated_subrange<Grid,GT>, E, EH> > base;
 public:
-  // typedef consecutive_integer_tag<0>                 consecutive_tag;
   typedef typename base::hasher_type_elem_base       hasher_type;
 };
-
-template<class Grid>
-struct element_traits<wrap_cell_t<enumerated_subrange<Grid> > >
-  : public element_traits_cell_base<enumerated_subrange<Grid> > 
-{
-private:
-  typedef element_traits_cell_base<enumerated_subrange<Grid> >  base;
-public:
-  // typedef consecutive_integer_tag<0>                 consecutive_tag;
-  typedef typename base::hasher_type_elem_base       hasher_type;
-};
-
-
 
 
 #define gt grid_types<enumerated_subrange<Grid> >
@@ -354,74 +357,20 @@ gral_size (enumerated_subrange<Grid,GT> const& g, typename gt::CellIterator)
 #undef gt
 
 
-template<class Grid, class T>
-class grid_function<wrap_vertex_t<enumerated_subrange<Grid> >, T>
-  : public grid_function_hash<wrap_vertex_t<enumerated_subrange<Grid> >, T>
-{
-  typedef grid_function_hash<wrap_vertex_t<enumerated_subrange<Grid> >, T> base;
-  typedef enumerated_subrange<Grid>                                          grid_type;
-public:
-  grid_function() {}
-  grid_function(grid_type const& g) : base(g) {}
-  grid_function(grid_type const& g, T const& t) : base(g,t) {}
-  grid_function(ref_ptr<grid_type const> g) : base(g) {}
-  grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
-};
+  template<class Grid, class GT, class E, class EH, class T>
+  class grid_function<wrapped_element<enumerated_subrange<Grid,GT>, E, EH>, T>
+    : public grid_function_hash<wrapped_element<enumerated_subrange<Grid,GT>, E, EH>, T>
+  {
+    typedef grid_function_hash<wrapped_element<enumerated_subrange<Grid,GT>, E, EH>, T> base;
+    typedef enumerated_subrange<Grid,GT>                                                grid_type;
+  public:
+    grid_function() {}
+    grid_function(grid_type const& g) : base(g) {}
+    grid_function(grid_type const& g, T const& t) : base(g,t) {}
+    grid_function(ref_ptr<grid_type const> g) : base(g) {}
+    grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
+  };
 
-
-template<class Grid, class T>
-class grid_function<wrap_cell_t<enumerated_subrange<Grid> >, T>
-  : public grid_function_hash<wrap_cell_t<enumerated_subrange<Grid> >, T>
-{
-  typedef grid_function_hash<wrap_cell_t<enumerated_subrange<Grid> >, T> base;
-  typedef enumerated_subrange<Grid>                                        grid_type;
-public:
-  grid_function() {}
-  grid_function(grid_type const& g) : base(g) {}
-  grid_function(grid_type const& g, T const& t) : base(g,t) {}
-  grid_function(ref_ptr<grid_type const> g) : base(g) {}
-  grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
-};
-
-
-
-//----------------------------------------------------------------
-/*! \brief Construct an enumerated subrange from  a set of cells
-   \ingroup enumsubranges   
-
-   THIS FUNCTION IS OBSOLETE!
-
-   \templateparams
-    - Range: (a possible type is  enumerated_subrange)
-       - Model of $GrAL CellRange
-       - \c Range::append_cell(cell_handle) 
-       - \c Range::append_vertex(vertex_handle)
-    - CellIt: $GrAL CellIterator
-
-    \param R [OUT] 
-        is the subrange to be constructed 
-    \param Cit [IN] 
-        range of \c Cit is the cell subrange
-        to be copied
-
-   \pre
-     - R is empty before
-     - return type of \c CellIt::operator*
-       is convertible to  \c Range::Cell
-   
-   \post
-     - \c R contains all cells in the range of \c Cit
-     - \c R contains all vertices incident to cell in \c R
- */
-//----------------------------------------------------------------
-
-/*
-  
-template<class Range, class CellIt>
-void ConstructSubrangeFromCells
- (Range  & R,     // OUT: the subrange to be constructed
-  CellIt   Cit);  // IN : range(Cit) is the cell subrange 
-*/
 
 } // namespace GrAL 
 

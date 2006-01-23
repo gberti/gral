@@ -173,50 +173,39 @@ public:
       typedef grid_types_esr_ref2<Grid,GT> self;
       typedef closure_iterator<typename self::CellIterator,
 			       typename self::EdgeOnCellIterator,
-			       self>    EdgeIterator;
+			       self>
+                 			EdgeIterator;
       typedef closure_iterator<typename self::CellIterator,
 			       typename self::FacetOnCellIterator,
 			       self>    FacetIterator;
-
+  
     };
 
 
   } // namespace detail 
 
 
-  /*! Partial specializaton of grid_types traits for enumerated_subrange_ref<Grid>
+/*! Partial specializaton of grid_types traits for enumerated_subrange_ref<Grid>
     \ingroup traits enumsubranges
     
     \see Module traits
   */
-  template<class Grid, class GT>
-  struct grid_types<enumerated_subrange_ref<Grid,GT> >
-    :  public grid_types_base<detail::grid_types_esr_ref2<Grid,GT> > {};
+template<class Grid, class GT>
+struct grid_types<enumerated_subrange_ref<Grid,GT> >
+  :  public grid_types_base<detail::grid_types_esr_ref2<Grid,GT> > {};
 
 
+template<class Grid, class GT, class E, class EH>
+struct element_traits<wrapped_element<enumerated_subrange_ref<Grid,GT>, E, EH> >
+  : public element_traits_base<wrapped_element<enumerated_subrange_ref<Grid,GT>, E, EH> >
+{
+private:
+  typedef element_traits_base<wrapped_element<enumerated_subrange_ref<Grid,GT>, E, EH> > base;
+public:
+  typedef typename base::hasher_type_elem_base       hasher_type;
+};
 
 
-  template<class Grid, class GT>
-  struct element_traits<wrap_vertex_t<enumerated_subrange_ref<Grid,GT> > >
-    : public element_traits_vertex_base<enumerated_subrange_ref<Grid,GT> > 
-  {
-  private:
-    typedef element_traits_vertex_base<enumerated_subrange_ref<Grid,GT> >  base;
-  public:
-    // typedef consecutive_integer_tag<0>                 consecutive_tag;
-    typedef typename base::hasher_type_elem_base       hasher_type;
-  };
-  
-  template<class Grid, class GT>
-  struct element_traits<wrap_cell_t<enumerated_subrange_ref<Grid,GT> > >
-    : public element_traits_cell_base<enumerated_subrange_ref<Grid,GT> > 
-  {
-  private:
-    typedef element_traits_cell_base<enumerated_subrange_ref<Grid,GT> >  base;
-  public:
-    //typedef consecutive_integer_tag<0>                 consecutive_tag;
-    typedef typename base::hasher_type_elem_base       hasher_type;
-  };
 
 
 
@@ -259,14 +248,12 @@ gral_size (enumerated_subrange_ref<Grid,GT> const& g, typename gt::CellIterator)
 #undef gt
 
 
-
-
-  template<class Grid, class GT, class T>
-  class grid_function<wrap_vertex_t<enumerated_subrange_ref<Grid,GT> >, T>
-    : public grid_function_hash<wrap_vertex_t<enumerated_subrange_ref<Grid,GT> >, T>
+template<class Grid, class GT, class E, class EH, class T>
+class grid_function<wrapped_element<enumerated_subrange_ref<Grid,GT>, E, EH>, T>
+  : public grid_function_hash<wrapped_element<enumerated_subrange_ref<Grid,GT>, E, EH>, T>
 {
-  typedef grid_function_hash<wrap_vertex_t<enumerated_subrange_ref<Grid,GT> >, T> base;
-  typedef enumerated_subrange_ref<Grid,GT>                                          grid_type;
+  typedef grid_function_hash<wrapped_element<enumerated_subrange_ref<Grid,GT>, E, EH>, T> base;
+  typedef enumerated_subrange_ref<Grid,GT>                                                grid_type;
 public:
   grid_function() {}
   grid_function(grid_type const& g) : base(g) {}
@@ -276,105 +263,6 @@ public:
 };
 
 
-  template<class Grid, class GT, class T>
-  class grid_function<wrap_cell_t<enumerated_subrange_ref<Grid, GT> >, T>
-    : public grid_function_hash<wrap_cell_t<enumerated_subrange_ref<Grid, GT> >, T>
-{
-  typedef grid_function_hash<wrap_cell_t<enumerated_subrange_ref<Grid,GT> >, T> base;
-  typedef enumerated_subrange_ref<Grid,GT>                                          grid_type;
-public:
-  grid_function() {}
-  grid_function(grid_type const& g) : base(g) {}
-  grid_function(grid_type const& g, T const& t) : base(g,t) {}
-  grid_function(ref_ptr<grid_type const> g) : base(g) {}
-  grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
-};
-
-
-// OBSOLETE!
-
-/* \brief  Specialisation of element_numbering<>
-    \ingroup  enumsubranges
-    
-    \todo This function accepts arguments of the base vertex type,
-     by maintaining a partial grid function on the vertices of the base grid.
-     This is done in order to make the following code possible:
-     \code
-     typedef grid_types<enumerated_subrange_ref<Grid> > rgt;
-     enumerated_subrange_ref<Grid> Range(G); 
-     // ...
-     element_numbering<rgt::Vertex, rgt> number(Range);
-     for(rgt::CellIterator c(Range); !c.IsDone(); ++c)
-        for(rgt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc)
-	   int num_vc = number(*vc); // *vc is of base vertex type!!
-     \endcode
-     Note that \c VertexOnCellIterator is just an alias to the base grid's
-     \c VertexOnCellIterator. This implies that \c *vc is of base vertex type,
-     which is <em not  </em> convertible to \c rgt::Vertex.
-     
-*/
-/*
-  template<class Grid, class GT>
-  class element_numbering<wrap_vertex_t<enumerated_subrange_ref<Grid,GT> >, 
-			  grid_types<enumerated_subrange_ref<Grid,GT> > >
-{
-  typedef enumerated_subrange_ref<Grid,GT>                 grid_type;
-  //typedef wrap_vertex_t<enumerated_subrange_ref<Grid> > element_type;
-  typedef typename grid_type::base_vertex_type         base_vertex_type;
-  typedef grid_types<grid_type>                         gt;
-  typedef base_vertex_type                              element_type;
-
-  ref_ptr<grid_type const>        rge;
-  partial_grid_function<base_vertex_type, int> num;
-  int                              offset_;
-public:
-  element_numbering(grid_type const& r, int offset = 0) 
-    : rge(r), num(r.BaseGrid()), offset_(offset) 
-    {
-      int n = offset_;
-      for(typename gt::VertexIterator v(*rge); ! v.IsDone(); ++v)
-	num[*v] = n++;
-    }
-
-  int operator()(element_type const& e) const 
-    { return num(e);}
-};
-*/
-
-/* \brief  Specialisation of element_numbering<>
-    \ingroup  enumsubranges
-    
-    \todo This function accepts arguments of the \e base cell type,
-     by maintaining a partial grid function on the cells of the base grid.
-
-*/
-/*
-template<class Grid, class GT>
-class element_numbering<wrap_cell_t<enumerated_subrange_ref<Grid,GT> >, 
-			grid_types <enumerated_subrange_ref<Grid,GT> > >
-{
-  typedef enumerated_subrange_ref<Grid,GT>                 grid_type;
-  //typedef wrap_cell_t<enumerated_subrange_ref<Grid> > element_type;
-  typedef typename grid_type::base_cell_type         base_cell_type;
-  typedef grid_types<grid_type>                      gt;
-  typedef base_cell_type                              element_type;
-
-  ref_ptr<grid_type const>        rge;
-  partial_grid_function<base_cell_type, int> num;
-  int                              offset_;
-public:
-  element_numbering(grid_type const& r, int offset = 0) 
-    : rge(r), num(r.BaseGrid()), offset_(offset) 
-    {
-      int n = offset_;
-      for(typename gt::CellIterator c(*rge); ! c.IsDone(); ++c)
-	num[*c] = n++;
-    }
-
-  int operator()(element_type const& e) const 
-    { return num(e);}
-};
-*/
 
 
 } // namespace GrAL
