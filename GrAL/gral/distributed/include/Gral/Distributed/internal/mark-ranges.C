@@ -90,7 +90,7 @@ void mark_layers(FacetRange    boundary_f,
   
    // there could be "make_layered(range)" to add layer functionality
    // making this tmp & copy approach superflous
-   copy(tmp_c_layer.begin(), tmp_c_layer.end(), back_inserter(c_layer.TheContainer()));
+   copy(tmp_c_layer.TheContainer().begin(), tmp_c_layer.TheContainer().end(), back_inserter(c_layer.TheContainer()));
 
 }
 

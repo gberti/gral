@@ -1,23 +1,21 @@
-# gral/cartesiannd/test/geometry/
+# gral/base/test/wrap-elements
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-
-LOCALSOURCES =  $(shell ls *.C)
+EXTRA_DEPMODULES += gral/cartesian2d 
+LOCALSOURCES =  test-wrap-elements.C
 LOCALOBJECTS =  $(LOCALSOURCES:%.C=%.o)
 DEPS = $(LOCALSOURCES:%.C=%.d)
-EXEC =  $(LOCALSOURCES:%.C=%.exe)
 TARGETS = $(EXEC)
-
+EXEC =  $(LOCALSOURCES:%.C=%.exe)
 
 include $(DEPS)
 
-EXTRA_DEPMODULES+= geometry gral/gmv-io
 
-LIBS = -lgeometry -lgral-gmv-io -lgral-complex2d -lgral-base
 
+LIBS = -lgral-cartesian2d  -lgral-base
 
 
 new-check-clean: new check clean
@@ -28,7 +26,7 @@ new : clean all
 all : $(TARGETS)
 
 
-$(EXEC): $(LOCALOBJECTS)
+$(TARGETS): $(LOCALOBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LOCALOBJECTS) $(LDFLAGS) $(LIBS)
 
 run:
@@ -41,5 +39,5 @@ clean: stdclean
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
 	rm -f .depend *.oogl *.out 
-
+	rm -f oct.complex2d
 

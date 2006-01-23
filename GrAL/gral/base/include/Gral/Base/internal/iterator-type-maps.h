@@ -6,6 +6,7 @@
 #include "Gral/Base/type-tags.h"
 #include "Gral/Base/internal/compile-time-reflection.h"
 #include "Gral/Base/internal/grid-categories.h"
+#include "Gral/Iterators/dummy-iterator.h"
 
 namespace GrAL {
 
@@ -82,9 +83,6 @@ namespace GrAL { namespace grid_types_detail {
   template<class GT>
   struct sequence_iterator_aux1<GT, cell_type_tag,1>   { typedef typename GT::CellIterator   type;};
 
-
-  template<class ELEM, class ANCHOR>
-  class dummy_incidence_iterator;
 
   template<class GT, class ETAG_VALUE, class ETAG_ANCHOR, int HAS>
   struct incidence_iterator_aux1 { typedef void type; };

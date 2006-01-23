@@ -1,0 +1,42 @@
+checkgt<wgt>
+has    type vertex_handle
+has    type edge_handle
+has    type face_handle
+has    type facet_handle
+has    type cell_handle
+has    type Vertex
+has    type Edge
+has    type Face
+has    type Facet
+has    type Cell
+has    type VertexIterator
+has    type EdgeIterator
+has    type FaceIterator
+has    type FacetIterator
+has    type CellIterator
+has no type VertexOnVertexIterator
+has no type EdgeOnVertexIterator
+has no type FaceOnVertexIterator
+has no type FacetOnVertexIterator
+has no type CellOnVertexIterator
+has    type VertexOnEdgeIterator
+has no type FaceOnEdgeIterator
+has no type FacetOnEdgeIterator
+has no type CellOnEdgeIterator
+has    type VertexOnFaceIterator
+has    type EdgeOnFaceIterator
+has    type FacetOnFaceIterator
+has no type CellOnFaceIterator
+has    type VertexOnFacetIterator
+has no type EdgeOnFacetIterator
+has no type FaceOnFacetIterator
+has no type CellOnFacetIterator
+has    type VertexOnCellIterator
+has    type EdgeOnCellIterator
+has no type FaceOnCellIterator
+has    type FacetOnCellIterator
+has no type CellOnCellIterator
+has    type archetype_type
+has    type archetype_handle
+has    type archetype_iterator
+has    type archgt

@@ -5,8 +5,14 @@
  
 */
 
-#include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-element-range.h"
+#include "Gral/Subranges/enumerated-element-range-ref.h"
 #include "Gral/Grids/Cartesian2D/all.h"
+
+#include "Gral/Test/all.h"
+
+#include <boost/static_assert.hpp>
+#include <boost/type_traits.hpp>
 
 #include <iostream>
 
@@ -103,7 +109,17 @@ int main() {
     }
     ec_range_type_ref Secr(0, cells.end() - cells.begin(), cells, R); 
     c_range_type_ref  Scr (0, cells.end() - cells.begin(), cells, R); 
+
+    typedef grid_types<c_range_type> cellgt;
+
+    BOOST_STATIC_ASSERT( ( 1 == boost::is_same<cellgt::CellIterator, GrAL::sequence_iterator<cellgt, cell_type_tag>::type>::value));
+
+    cellgt::CellIterator ci  = GrAL::begin<cellgt::Cell>(Sc);
+    ci     =  GrAL::end<cellgt::Cell>(Sc);
+    int nc =  GrAL::size<cellgt::Cell>(Sc);
   
+    cellgt::CellIterator ci1 = GrAL::begin(Sc);
+
     {
       cout << "Cell range Sc: " 
 	   << Sc.NumOfCells() << " cells" << endl;

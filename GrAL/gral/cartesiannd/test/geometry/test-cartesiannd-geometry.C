@@ -4,8 +4,12 @@
 
 
 #include "Gral/Grids/CartesianND/mapped-geometry.h"
+#include "Gral/Grids/CartesianND/all.h"
 #include "Geometry/affine-mapping.h"
 #include "Geometry/matrix.h"
+
+#include "Gral/IO/gmv-format-output2d.h"
+#include "Gral/IO/gmv-format-output3d.h"
 
 #include <iostream>
 
@@ -56,96 +60,124 @@ int main()
   using namespace GrAL;
   using namespace std;
 
-
-  typedef grid_types<cartesiannd::grid<2> > gt;
-  typedef cartesiannd::grid<2>              grid_type;
-  grid_type R(gt::index_type(0,0), gt::index_type(3,3));
-
-  typedef cartesiannd::default_coord<grid_type>::type   coord_type;
-  typedef matrix<2,2,0>  matrix_type;
-  typedef affine_mapping<matrix_type, coord_type> mapping_type;
-  typedef cartesiannd::mapped_geometry<grid_type, mapping_type> geom_type;
   {
-    matrix_type A(0.0);
-    A(0,0) = 1.0; A(1,1) = 1.0;
-    matrix_type A_inv(A);
-    mapping_type M(A);
-    mapping_type M_inv(A_inv);
-    geom_type GeomR(R, M);
-    GeomR.set_inverse_mapping(M_inv);
+    typedef grid_types<cartesiannd::grid<2> > gt;
+    typedef cartesiannd::grid<2>              grid_type;
+    grid_type R(gt::index_type(0,0), gt::index_type(3,3));
+
+    typedef cartesiannd::default_coord<grid_type>::type   coord_type;
+    typedef matrix<2,2,0>  matrix_type;
+    typedef affine_mapping<matrix_type, coord_type> mapping_type;
+    typedef cartesiannd::mapped_geometry<grid_type, mapping_type> geom_type;
+    {
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 1.0;
+      matrix_type A_inv(A);
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      geom_type GeomR(R, M);
+      GeomR.set_inverse_mapping(M_inv);
     
-    test_geometry(GeomR,cout);
-  }
+      test_geometry(GeomR,cout);
+    
+      OstreamGMV2DFmt Out("2x2.gmv");
+      ConstructGrid(Out,R,GeomR);
+
+    }
    
-  {
-    matrix_type A(0.0);
-    A(0,0) = 1.0; A(1,1) = 2.0;
-    matrix_type A_inv(0.0);
-    A_inv(0,0) =1.0; A_inv(1,1) = 0.5;
-    mapping_type M(A);
-    mapping_type M_inv(A_inv);
-    geom_type GeomR(R, M);
-    GeomR.set_inverse_mapping(M_inv);
+    {
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 2.0;
+      matrix_type A_inv(0.0);
+      A_inv(0,0) =1.0; A_inv(1,1) = 0.5;
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      geom_type GeomR(R, M);
+      GeomR.set_inverse_mapping(M_inv);
 
-    test_geometry(GeomR,cout);
-  }
+      test_geometry(GeomR,cout);
+    }
  
-   {
-    matrix_type A(0.0);
-    A(0,0) = 1.0; A(1,1) = 2.0;
-    matrix_type A_inv(0.0);
-    A_inv(0,0) =1.0; A_inv(1,1) = 0.5;
-    mapping_type M(A);
-    mapping_type M_inv(A_inv);
-    vector<geom_type> GeomR;
-    GeomR.push_back(geom_type(R, gt::index_type(0,0), gt::index_type(1,1), M));
-    GeomR.back().set_inverse_mapping(M_inv);
+    {
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 2.0;
+      matrix_type A_inv(0.0);
+      A_inv(0,0) =1.0; A_inv(1,1) = 0.5;
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      vector<geom_type> GeomR;
+      GeomR.push_back(geom_type(R, gt::index_type(0,0), gt::index_type(1,1), M));
+      GeomR.back().set_inverse_mapping(M_inv);
 
-    test_geometry(GeomR.back(),cout);
-  }
+      test_geometry(GeomR.back(),cout);
+    }
  
 
-  {
-    grid_type R2(gt::index_type(0,0), gt::index_type(3,2));
-    matrix_type A(0.0);
-    A(0,0) = 1.0; A(1,1) = 1.0;
-    matrix_type  A_inv(A);
-    mapping_type M(A);
-    mapping_type M_inv(A_inv);
-    mapping_type M_dummy(A);
-    geom_type GeomR(R2, M_dummy);
-    GeomR.set_mapping(M);
-    GeomR.set_inverse_mapping(M_inv);
-    test_geometry(GeomR,cout);
-  }
-   {
-     grid_type R2(gt::index_type(0,0), gt::index_type(2,3));
-     matrix_type A(0.0);
-     A(0,0) = 1.0; A(1,1) = 1.0;
-     matrix_type  A_inv(A);
-     mapping_type M(A);
-     mapping_type M_inv(A_inv);
-     mapping_type M_dummy(A);
-     geom_type GeomR(R2, M_dummy);
-     GeomR.set_mapping(M);
-     GeomR.set_inverse_mapping(M_inv);
-     test_geometry(GeomR,cout);
-   }
+    {
+      grid_type R2(gt::index_type(0,0), gt::index_type(3,2));
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 1.0;
+      matrix_type  A_inv(A);
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      mapping_type M_dummy(A);
+      geom_type GeomR(R2, M_dummy);
+      GeomR.set_mapping(M);
+      GeomR.set_inverse_mapping(M_inv);
+      test_geometry(GeomR,cout);
+    }
+    {
+      grid_type R2(gt::index_type(0,0), gt::index_type(2,3));
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 1.0;
+      matrix_type  A_inv(A);
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      mapping_type M_dummy(A);
+      geom_type GeomR(R2, M_dummy);
+      GeomR.set_mapping(M);
+      GeomR.set_inverse_mapping(M_inv);
+      test_geometry(GeomR,cout);
+    }
 
-   {
-     grid_type R2(gt::index_type(0,0), gt::index_type(2,3));
-     matrix_type A(0.0);
-     A(0,0) = 1.0; A(1,1) = 1.0;
-     matrix_type  A_inv(A);
-     mapping_type M(A);
-     mapping_type M_inv(A_inv);
-     mapping_type M_dummy;
-     geom_type GeomR(R2, M_dummy);
-     GeomR.set_mapping(M);
-     GeomR.set_inverse_mapping(M_inv);
-     grid_type R_refined(gt::index_type(0,0), gt::index_type(2,5));
-     geom_type Geom_refined(R_refined, GeomR);
-     test_geometry(Geom_refined,cout);
-   }
-   
+    {
+      grid_type R2(gt::index_type(0,0), gt::index_type(2,3));
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 1.0;
+      matrix_type  A_inv(A);
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      mapping_type M_dummy;
+      geom_type GeomR(R2, M_dummy);
+      GeomR.set_mapping(M);
+      GeomR.set_inverse_mapping(M_inv);
+      grid_type R_refined(gt::index_type(0,0), gt::index_type(2,5));
+      geom_type Geom_refined(R_refined, GeomR);
+      test_geometry(Geom_refined,cout);
+    }
+  }   
+
+
+  {
+    typedef grid_types<cartesiannd::grid<3> > gt;
+    typedef cartesiannd::grid<3>              grid_type;
+    grid_type R(gt::index_type(0,0,0), gt::index_type(3,3,3));
+
+    typedef cartesiannd::default_coord<grid_type>::type   coord_type;
+    typedef matrix<3,3,0>  matrix_type;
+    typedef affine_mapping<matrix_type, coord_type> mapping_type;
+    typedef cartesiannd::mapped_geometry<grid_type, mapping_type> geom_type;
+    {
+      mapping_type M = mapping_type::identity(); 
+      mapping_type M_inv = M; 
+      geom_type GeomR(R, M);
+      GeomR.set_inverse_mapping(M_inv);
+    
+      test_geometry(GeomR,cout);
+    
+      OstreamGMV3DFmt Out("2x2x3.gmv");
+      ConstructGrid(Out,R,GeomR);
+
+    }
+  }
 }

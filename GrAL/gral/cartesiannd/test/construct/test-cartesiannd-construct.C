@@ -2,11 +2,12 @@
     Test harness for cartesiannd::grid<DIM>
 */
 
-#include "Gral/Grids/CartesianND/cartesiannd.h"
+#include "Gral/Grids/CartesianND/all.h"
+
 #include "Gral/Test/all.h"
 #include <iostream>
 
-
+#include <boost/static_assert.hpp>
 
 namespace GrAL { namespace cartesiannd {
   template class grid<1>;
@@ -14,6 +15,19 @@ namespace GrAL { namespace cartesiannd {
   template class grid<3>;
 }}
 
+
+namespace GrAL { namespace grid_types_detail {
+  template class get_grid_categories<GrAL::cartesiannd::grid_types_base<GrAL::cartesiannd::grid<2>, 2> >;
+
+}
+  template<class G> class grid_types_test {};
+  
+  template<>
+  class grid_types_test<GrAL::cartesiannd::grid<2> >
+    : public grid_types_detail::get_grid_categories<GrAL::cartesiannd::grid_types_base<GrAL::cartesiannd::grid<2>, 2> > {};
+
+  typedef grid_types_test<GrAL::cartesiannd::grid<2> >::Vertex testVertex;
+}
 
 using namespace GrAL;
 
@@ -37,7 +51,7 @@ struct local_vertex_access_tester<G,1>  {
   static void act(G const& g, std::ostream& out) 
   {
     typedef grid_types<G> gt;
-    typedef typename gt::template sequence_iterator_d<1>::type ElementIterator;
+    typedef typename sequence_iterator_d<gt,1>::type ElementIterator;
     out << "Dim=1:" << std::endl;
     for(ElementIterator e(g); ! e.IsDone(); ++e) {
       typedef typename ElementIterator::local_index_type lit;
@@ -56,8 +70,7 @@ struct local_vertex_access_tester<G,2>  {
   {
     local_vertex_access_tester<G,1>::act(g,out);
     typedef grid_types<G> gt;
-    typedef typename gt::template sequence_iterator_d<2> s2;
-    typedef typename gt::template sequence_iterator_d<2>::type ElementIterator;
+    typedef typename sequence_iterator_d<gt,2>::type ElementIterator;
     out << "Dim=2:" << std::endl;
     for(ElementIterator e(g); ! e.IsDone(); ++e) {
       typedef typename ElementIterator::local_index_type lit;
@@ -76,7 +89,7 @@ struct local_vertex_access_tester<G,3>  {
   {
     local_vertex_access_tester<G,2>::act(g,out);
     typedef grid_types<G> gt;
-    typedef typename gt::template sequence_iterator_d<3>::type ElementIterator;
+    typedef typename sequence_iterator_d<gt,3>::type ElementIterator;
     out << "Dim=3:" << std::endl;
     for(ElementIterator e(g); ! e.IsDone(); ++e) {
       typedef typename ElementIterator::local_index_type lit;
@@ -125,6 +138,9 @@ int main() {
   cout << "delta_map<6>::dirs: \n";
   cartesiannd::delta_map<6>::print_maps(cout);
   cartesiannd::delta_map<6>::selfcheck();
+
+
+  
   
 
   typedef grid_types<cartesiannd::grid<1> > gt1;
@@ -132,6 +148,79 @@ int main() {
 
   typedef grid_types<cartesiannd::grid<2> > gt2;
   typedef gt2::index_type it2;
+
+  typedef cartesiannd::delta_map<2> dm2;
+  typedef gt2::index_type           idx2;
+
+  idx2 i0(0,0);
+  idx2 i1(0,0);
+  idx2 i2(0,0);
+  unsigned m0 = 0, m1 = 0, m2 = 0;
+  unsigned dim = 1;
+
+  cout << "i0=" << i0 << " i1=" << i1 << " i2=" << i2 << endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  cout << endl;
+
+  i0 = idx2(1,1);
+  i1 = idx2(1,0);
+  m1 = 1;
+  cout << "i0=" << i0 << " i1=" << i1 << " i2=" << i2 << endl;
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  cout << endl;
+  
+  i0 = idx2(1,0);
+  i1 = idx2(1,0);
+  m1 = 1;
+  cout << "i0=" << i0 << " i1=" << i1 << " i2=" << i2 << endl;
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  cout << endl;
+    
+  i0 = idx2(0,1);
+  i1 = idx2(0,1);
+  m1 = 0;
+
+  cout << "i0=" << i0 << " i1=" << i1 << " i2=" << i2 << endl;
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  cout << endl;
+
+  i2 = idx2(0,1);
+  m1 = 1;
+  cout << "i0=" << i0 << " i1=" << i1 << " i2=" << i2 << endl;
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  dm2::switch_index(i0,m0, i1,m1, i2, m2, dim);
+  cout << "i1: " << i1 << " m1: " << m1 <<  endl;
+  cout << endl;
+
+
+  BOOST_STATIC_ASSERT((1 == GrAL::is_base_or_same<GrAL::grid_range_category,
+		                                  gt2::categories<gt2::grid_type>::type>
+		       ::value));
+
+  typedef grid_types<cartesiannd::subrange<2> > rgt2;
+  BOOST_STATIC_ASSERT((1 == GrAL::is_base_or_same<GrAL::grid_range_category,
+		                                  rgt2::categories<rgt2::grid_type>::type>
+		       ::value));
+  BOOST_STATIC_ASSERT((1 == GrAL::is_base_or_same<GrAL::grid_range_category,
+		                                  rgt2::categories<cartesiannd::subrange<2> >::type>
+		       ::value));
 
   typedef grid_types<cartesiannd::grid<3> > gt3;
   typedef gt3::index_type it3;
@@ -145,12 +234,15 @@ int main() {
   typedef grid_types<cartesiannd::grid<6> > gt6;
   typedef gt6::index_type it6;
 
+  
+ 
   {
     cartesiannd::grid<2> R(it2(0,0));
     cout << "Grid 0x0 vertices:\n";
     R.print(cout);
     print_grid(R, cout);
     cout << endl;
+
   }
   {
     cartesiannd::grid<2> R(it2(1,1));
@@ -166,6 +258,7 @@ int main() {
     R.print(cout);
     print_grid(R, cout);
     cout << endl;
+
   }
 
   {
@@ -194,6 +287,32 @@ int main() {
     test_vertex_on_edge_iterator(R, cout);
 
     test_archetypes(R,cout);
+    {
+      gt::Cell c = *R.FirstCell();
+      gt::Edge e = *c.FirstEdge();
+      gt::Vertex v = *e.FirstVertex();
+      cout << "v=" << v.index() << " e=" << e.low_vertex_index() << " -> " << e.high_vertex_index() 
+	   << " c= " << c.index() << "\n";
+      R.switch_element(v,e,c);
+      cout << "v=" << v.index() << " e=" << e.low_vertex_index() << " -> " << e.high_vertex_index() 
+	   << " c= " << c.index() << "\n";
+      R.switch_element(v,e);
+      cout << "v=" << v.index() << " e=" << e.low_vertex_index() << " -> " << e.high_vertex_index() 
+	   << " c= " << c.index() << "\n";
+      R.switch_element(v,e,c);
+      cout << "v=" << v.index() << " e=" << e.low_vertex_index() << " -> " << e.high_vertex_index() 
+	   << " c= " << c.index() << "\n";
+      R.switch_element(v,e);
+      cout << "v=" << v.index() << " e=" << e.low_vertex_index() << " -> " << e.high_vertex_index() 
+	   << " c= " << c.index() << "\n";
+      R.switch_element(v,e,c);
+      cout << "v=" << v.index() << " e=" << e.low_vertex_index() << " -> " << e.high_vertex_index() 
+	   << " c= " << c.index() << "\n";
+      R.switch_element(v,e);
+      cout << "v=" << v.index() << " e=" << e.low_vertex_index() << " -> " << e.high_vertex_index() 
+	   << " c= " << c.index() << "\n";
+
+    }
 
     cartesiannd::grid<2>::archetype_type A = R.TheArchetype();
     typedef grid_types<cartesiannd::grid<2>::archetype_type> agt;
@@ -201,20 +320,25 @@ int main() {
     agt::Vertex v(*A.FirstVertex());
     agt::Vertex v_first = v;
 
+    test_sequence_iterator<agt::Vertex>(A, cout);
+    test_sequence_iterator<agt::Cell  >(A, cout);
+    test_incidence_iterator<agt::Vertex,agt::Cell  >(A, cout);
+
     cout << "Testing switch:\n";
 
-    cout << "c=[" << c.direction() << "," << c.index() << "] ";
-    cout << "v=[" << v.index() << "] ";
+    cout << "c=[" << c.Base().direction() << "," << c.Base().index() << "] ";
+    cout << "v=[" << v.Base().index() << "] ";
 
     do {
       A.switch_vertex(v,c);
       cout  << " -> ";
-      cout << "c=[" << c.direction() << "," << c.index() << "] ";
-      cout << "v=[" << v.index() << "] ";
+      cout << "c=[" << c.Base().direction() << "," << c.Base().index() << "] ";
+      cout << "v=[" << v.Base().index() << "] ";
       A.switch_cell(v,c);
+      // A.switch_edge(v,c);
       cout  << " -> ";
-      cout << "c=[" << c.direction() << "," << c.index() << "] ";
-      cout << "v=[" << v.index() << "] ";
+      cout << "c=[" << c.Base().direction() << "," << c.Base().index() << "] ";
+      cout << "v=[" << v.Base().index() << "] ";
     } while ( v != v_first);
     cout << endl;
 
@@ -228,6 +352,43 @@ int main() {
     cout << "Vertices: " << endl;
     for(gt::VertexIterator c(R); ! c.IsDone(); ++c)
       cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
+
+
+    {
+      typedef grid_types< cartesiannd::grid<2> > gt;
+      //  typedef grid_types_detail::get_grid_categories<gt> catgt;
+      typedef gt catgt;
+      typedef catgt::categories<gt::VertexIterator>::type cat_VertexIterator;
+      //int i = cat_VertexIterator();
+      BOOST_STATIC_ASSERT((1 == GrAL::is_base_or_same<GrAL::grid_sequence_iterator_category,
+			   catgt::categories<gt::VertexIterator>::type>
+			   ::value));
+      BOOST_STATIC_ASSERT((1 == GrAL::is_base_or_same<GrAL::grid_incidence_iterator_category,
+			   catgt::categories<gt::VertexOnCellIterator>::type>
+			   ::value));
+      BOOST_STATIC_ASSERT((1 == GrAL::is_base_or_same<GrAL::grid_range_category,
+			   catgt::categories<gt::grid_type>::type>
+			   ::value));
+      
+      
+      //    int i =  catgt::categories<gt::VertexIterator>::type();
+      //  int j =  catgt::categories<gt::VertexOnCellIterator>::type();
+      
+      gt::VertexIterator v = begin<gt::Vertex>(R);
+      gt::CellIterator   c = begin<gt::Cell  >(R);
+      gt::VertexOnCellIterator vc = begin<gt::Vertex>(*c);
+
+
+      typedef element<gt,vertex_type_tag>::type Vertex;
+      typedef element<gt,edge_type_tag>  ::type Edge;
+      typedef element<gt,cell_type_tag>  ::type Cell;
+      typedef sequence_iterator<gt,vertex_type_tag> VertexIterator;
+      typedef sequence_iterator<gt,edge_type_tag>   EdgeIterator;
+      typedef sequence_iterator<gt,cell_type_tag>   CellIterator;
+      typedef incidence_iterator<gt,vertex_type_tag, edge_type_tag>::type VertexOnEdgeIterator;
+      typedef incidence_iterator<gt,vertex_type_tag, cell_type_tag>::type VertexOnCellIterator;
+      typedef incidence_iterator<gt,edge_type_tag,   cell_type_tag>::type EdgeOnCellIterator;
+    }
 
   }
 
@@ -275,6 +436,33 @@ int main() {
     for(gt::VertexIterator c(R); ! c.IsDone(); ++c)
       cout << (*c).low_vertex_index() << "; " << (*c).high_vertex_index() << endl; 
 
+
+    {
+	
+      gt::VertexIterator v     = GrAL::begin<gt::Vertex>(R);
+      gt::VertexIterator v_end = GrAL::end  <gt::Vertex>(R);
+      int                sz_v  = GrAL::size <gt::Vertex>(R);
+	
+      gt::EdgeIterator   e     = GrAL::begin<gt::Edge  >(R);
+      gt::EdgeIterator   e_end = GrAL::end  <gt::Edge  >(R);
+      int                sz_e  = GrAL::size <gt::Edge  >(R);
+      
+      gt::CellIterator   c     = GrAL::begin<gt::Cell  >(R);
+      gt::CellIterator   c_end = GrAL::end  <gt::Cell  >(R);
+      int                sz_c  = GrAL::size <gt::Cell  >(R);
+      
+      gt::VertexOnCellIterator vc     = GrAL::begin<gt::Vertex>(*c);
+      gt::VertexOnCellIterator vc_end = GrAL::end  <gt::Vertex>(*c);
+      int                      sz_vc  = GrAL::size <gt::Vertex>(*c);
+      
+      gt::VertexOnEdgeIterator ve     = GrAL::begin<gt::Vertex>(*e);
+      gt::VertexOnEdgeIterator ve_end = GrAL::end  <gt::Vertex>(*e);
+      int                      sz_ve  = GrAL::size <gt::Vertex>(*e);
+	
+	
+      gt::VertexIterator v3 = GrAL::begin<gt::VertexIterator>(R);
+      }
+
   }
 
   
@@ -290,8 +478,10 @@ int main() {
     test_facet_iterator (R, cout);
     test_cell_iterator  (R, cout);
   }
+
   {
     cartesiannd::grid<5> R(it5(2));
+    typedef GrAL::grid_types<cartesiannd::grid<5> > gt;
     cout << "Grid 2x2x2x2x2 vertices:\n";
     R.print(cout);
     print_grid(R, cout);
@@ -301,7 +491,17 @@ int main() {
     // test_face_iterator  (R, cout);
     test_facet_iterator (R, cout);
     test_cell_iterator  (R, cout);
+
+    typedef GrAL::element_d          <gt,2>::type elem2;
+    typedef GrAL::sequence_iterator_d<gt,2>::type elem2_iterator;
+    elem2_iterator e2 = GrAL::begin<elem2>(R);
+
+    typedef GrAL::element_d          <gt,3>::type elem3;
+    typedef GrAL::sequence_iterator_d<gt,3>::type elem3_iterator;
+    elem3_iterator e3 = GrAL::begin<elem3>(R);
+
   }
+
   {
     cartesiannd::grid<6> R(it6(2));
     cout << "Grid 2^6 vertices:\n";
@@ -314,7 +514,6 @@ int main() {
     test_facet_iterator (R, cout);
     test_cell_iterator  (R, cout);
   }
-  
 
  {
     cartesiannd::grid<2> R(it2(2,2));
@@ -331,10 +530,35 @@ int main() {
     test_cell_iterator  (RR, cout);
 
 
+    test_local_vertex_access(R , cout);
     test_local_vertex_access(RR, cout);
+    
+    typedef grid_types<cartesiannd::subrange<2> > rgt;
+    rgt::VertexIterator v = begin<rgt::VertexIterator>(RR);
+    // all these calls are equivalent
+    rgt::CellIterator   c0  = GrAL::begin(RR);
+    rgt::CellIterator   c1  = GrAL::begin<rgt::Cell>(RR);
+    rgt::CellIterator   c2  = GrAL::begin<rgt::CellIterator>(RR);
+    rgt::VertexOnCellIterator vc = GrAL::begin(*c0);
+ }
 
+ {
+   cartesiannd::grid<2> R(it2(4,4)); // 3x3 cells
+   cartesiannd::subrange<2> RR(R, it2(1,1), it2(3,3));
+   typedef grid_types<cartesiannd::grid    <2> > gt;
+   typedef grid_types<cartesiannd::subrange<2> > rgt;
 
-  }
+   // test construction of grid<> elements with subrange<> elements 
+   // rgt::Cell c_sg = * GrAL::begin<rgt::Cell>(RR);
+   rgt::Cell c_sg = * (GrAL::begin(RR));
+   gt ::Cell c_g  = c_sg;
+   cout << "c_g .index()= " << c_g .index() << " c_g .handle()= " << c_g .handle() << "\n"
+	<< "c_sg.index()= " << c_sg.index() << " c_sg.handle()= " << c_sg.handle() << "\n";
+ 
+   // test indexing of grid_function over grid<> with subrange<> elements
+   grid_function<gt::Cell,int> gf(R,0);
+   gf[c_sg] = 1;
+ }
 
  {
     cartesiannd::grid<2> R(it2(2,2));

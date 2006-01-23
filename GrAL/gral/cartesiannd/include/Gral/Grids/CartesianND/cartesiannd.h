@@ -225,7 +225,7 @@ namespace cartesiannd {
     element_handle_t() {}
     explicit element_handle_t(int hh) : h_(hh) {}
     int h() const { return h_;}
-    operator int()       { return h_;}
+    operator int() const { return h_;}
     self& operator++() {++h_; return *this;}
     //operator int () const { return h;}
   };
