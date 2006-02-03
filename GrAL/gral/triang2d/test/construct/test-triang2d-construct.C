@@ -107,32 +107,32 @@ int main(int argc, char* argv[]) {
   }
 
   {   
-    gt::VertexIterator vb = GrAL::begin(T);
-    gt::VertexIterator ve = GrAL::end  (T);
-    gt::CellIterator   cb = GrAL::begin(T);
-    gt::CellIterator   ce = GrAL::end  (T);
-    gt::VertexOnCellIterator vcb = GrAL::begin(*cb);
-    gt::VertexOnCellIterator vce = GrAL::end  (*cb);
-    gt::EdgeOnCellIterator   ecb = GrAL::begin(*cb);
-    gt::EdgeOnCellIterator   ece = GrAL::end  (*cb);
-    int nv = GrAL::size<0>(T);
-    int ne = GrAL::size<1>(T);
-    int nc = GrAL::size<2>(T);
-    int nvc = GrAL::size<0>(*cb);
-    int nec = GrAL::size<1>(*ce);
+    gt::VertexIterator vb = GrAL::begin_x(T);
+    gt::VertexIterator ve = GrAL::end_x  (T);
+    gt::CellIterator   cb = GrAL::begin_x(T);
+    gt::CellIterator   ce = GrAL::end_x  (T);
+    gt::VertexOnCellIterator vcb = GrAL::begin_x(*cb);
+    gt::VertexOnCellIterator vce = GrAL::end_x  (*cb);
+    gt::EdgeOnCellIterator   ecb = GrAL::begin_x(*cb);
+    gt::EdgeOnCellIterator   ece = GrAL::end_x  (*cb);
+    int nv = GrAL::size_d<0>(T);
+    int ne = GrAL::size_d<1>(T);
+    int nc = GrAL::size_d<2>(T);
+    int nvc = GrAL::size_d<0>(*cb);
+    int nec = GrAL::size_d<1>(*ce);
   }
   {
-    gt::VertexIterator vb = GrAL::begin<0>(T);
-    gt::VertexIterator ve = GrAL::end  <0>(T);
-    gt::EdgeIterator   eb = GrAL::begin<1>(T);
-    gt::EdgeIterator   ee = GrAL::end  <1>(T);
-    gt::CellIterator   cb = GrAL::begin<2>(T);
-    gt::CellIterator   ce = GrAL::end  <2>(T);
+    gt::VertexIterator vb = GrAL::begin_d<0>(T);
+    gt::VertexIterator ve = GrAL::end_d  <0>(T);
+    gt::EdgeIterator   eb = GrAL::begin_d<1>(T);
+    gt::EdgeIterator   ee = GrAL::end_d  <1>(T);
+    gt::CellIterator   cb = GrAL::begin_d<2>(T);
+    gt::CellIterator   ce = GrAL::end_d  <2>(T);
 
-    gt::VertexOnCellIterator vcb = GrAL::begin<0>(*cb);
-    gt::VertexOnCellIterator vce = GrAL::end  <0>(*cb);
-    gt::EdgeOnCellIterator   ecb = GrAL::begin<1>(*cb);
-    gt::EdgeOnCellIterator   ece = GrAL::end  <1>(*cb);
+    gt::VertexOnCellIterator vcb = GrAL::begin_d<0>(*cb);
+    gt::VertexOnCellIterator vce = GrAL::end_d  <0>(*cb);
+    gt::EdgeOnCellIterator   ecb = GrAL::begin_d<1>(*cb);
+    gt::EdgeOnCellIterator   ece = GrAL::end_d  <1>(*cb);
   }
 
   {

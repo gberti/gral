@@ -17,7 +17,6 @@
 
 #include <iostream>
 
-// #include "Gral/Grids/Cartesian2D/all.h"
 
 using namespace std;
 using namespace GrAL;

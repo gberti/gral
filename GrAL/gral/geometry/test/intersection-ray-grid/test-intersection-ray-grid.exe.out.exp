@@ -1,0 +1,56 @@
+Ray 0.2 0.2 0.2 -> 1 1 1:
+ Intersection 0: t=0.133333 @ 0.333333 0.333333 0.333333 in cell 3
+Ray 0 0 0 -> 1 1 1:
+ Intersection 0: t=0.333333 @ 0.333333 0.333333 0.333333 in cell 3
+Ray 0.5 -1 -1 -> 0 1 1:
+ Intersection 0: t=1 @ 0.5 0 0 in cell 0
+ Intersection 1: t=1 @ 0.5 0 0 in cell 1
+ Intersection 2: t=1.25 @ 0.5 0.25 0.25 in cell 3
+Ray 1 1 0 -> -1 -1 0:
+ Intersection 0: t=1 @ 0 0 0 in cell 1
+ Intersection 1: t=1 @ 0 0 0 in cell 2
+ Intersection 2: t=0.5 @ 0.5 0.5 0 in cell 3
+Ray 1 1 1 -> -1 -1 -1:
+ Intersection 0: t=1 @ 0 0 0 in cell 0
+ Intersection 1: t=1 @ 0 0 0 in cell 1
+ Intersection 2: t=1 @ 0 0 0 in cell 2
+ Intersection 3: t=0.666667 @ 0.333333 0.333333 0.333333 in cell 3
+Testing translated geometry:
+Ray 0.2 0.2 0.2 -> 1 1 1:
+ Intersection 0: t=0.133333 @ 0.433333 0.433333 0.433333 in cell 3
+Ray 0 0 0 -> 1 1 1:
+ Intersection 0: t=0.333333 @ 0.433333 0.433333 0.433333 in cell 3
+Ray 0.5 -1 -1 -> 0 1 1:
+ Intersection 0: t=1 @ 0.6 0.1 0.1 in cell 0
+ Intersection 1: t=1 @ 0.6 0.1 0.1 in cell 1
+ Intersection 2: t=1.25 @ 0.6 0.35 0.35 in cell 3
+Ray 1 1 0 -> -1 -1 0:
+ Intersection 0: t=1 @ 0.1 0.1 0.1 in cell 1
+ Intersection 1: t=1 @ 0.1 0.1 0.1 in cell 2
+ Intersection 2: t=0.5 @ 0.6 0.6 0.1 in cell 3
+Ray 1 1 1 -> -1 -1 -1:
+ Intersection 0: t=1 @ 0.1 0.1 0.1 in cell 0
+ Intersection 1: t=1 @ 0.1 0.1 0.1 in cell 1
+ Intersection 2: t=1 @ 0.1 0.1 0.1 in cell 2
+ Intersection 3: t=0.666667 @ 0.433333 0.433333 0.433333 in cell 3
+Testing rays through corners:
+Ray 0 0 0 -> 0.35 0.36 0.34:
+ Intersection 0: t=0.294118 @ 0.102941 0.105882 0.1 in cell 0
+ Intersection 1: t=1.2381 @ 0.433333 0.445714 0.420952 in cell 3
+Ray 1 0 0 -> -0.65 0.36 0.34:
+ Intersection 0: t=0.294118 @ 0.808824 0.105882 0.1 in cell 0
+ Intersection 1: t=1.38462 @ 0.1 0.498462 0.470769 in cell 2
+Ray 0 1 0 -> 0.35 -0.64 0.34:
+ Intersection 0: t=0.294118 @ 0.102941 0.811765 0.1 in cell 0
+ Intersection 1: t=1.40625 @ 0.492187 0.1 0.478125 in cell 1
+Ray 0 0 1 -> 0.35 0.36 -0.66:
+ Intersection 0: t=1.36364 @ 0.477273 0.490909 0.1 in cell 0
+ Intersection 1: t=0.285714 @ 0.1 0.102857 0.811429 in cell 2
+Ray 0/1 0/1 0/1 -> 1/4 1/4 1/4:
+ Intersection 0: t=4/3 @ 1/3 1/3 1/3 in cell 3
+Ray 1/1 0/1 0/1 -> -3/4 1/4 1/4:
+ Intersection 0: t=4/3 @ 0/1 1/3 1/3 in cell 2
+Ray 0/1 1/1 0/1 -> 1/4 -3/4 1/4:
+ Intersection 0: t=4/3 @ 1/3 0/1 1/3 in cell 1
+Ray 0/1 0/1 1/1 -> 1/4 1/4 -3/4:
+ Intersection 0: t=4/3 @ 1/3 1/3 0/1 in cell 0

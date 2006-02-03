@@ -4,6 +4,7 @@
 // $LICENSE
 
 #include "Gral/Test/test-sequence-iterator.h"
+#include "Gral/Base/common-grid-basics.h"
 
 #include "Utility/pre-post-conditions.h"
 

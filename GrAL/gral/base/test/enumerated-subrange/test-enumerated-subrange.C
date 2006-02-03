@@ -21,17 +21,18 @@ namespace GrAL {
 }
 
 int main() {
+
+
   using namespace GrAL;
   using namespace std;
   using namespace cartesian2d;
 
-  typedef grid_types<CartesianGrid2D> gt;
-  CartesianGrid2D R(3,3);
-
-  typedef CartesianGrid2D grid_type;  
+  typedef grid_types<grid_type>                gt;
+  typedef CartesianGrid2D                      grid_type;  
   typedef enumerated_subrange<CartesianGrid2D> range_type;
   typedef grid_types<range_type >              rgegt;
 
+  CartesianGrid2D R(3,3);
   cout << "Constructing subrange from 3x3 grid ... " << flush;
   range_type S(R, R);
   cout << " done." << endl;
@@ -50,19 +51,18 @@ int main() {
 
   {   
     // deducing the type of iteration from the lhs
-    rgegt::VertexIterator vb = GrAL::begin(S);
-    rgegt::VertexIterator ve = GrAL::end  (S);
-    rgegt::CellIterator   cb = GrAL::begin(S);
-    rgegt::CellIterator   ce = GrAL::end  (S);
-    rgegt::VertexOnCellIterator vcb = GrAL::begin(*cb);
-    rgegt::VertexOnCellIterator vce = GrAL::end  (*cb);
-    rgegt::EdgeOnCellIterator   ecb = GrAL::begin(*cb);
-    rgegt::EdgeOnCellIterator   ece = GrAL::end  (*cb);
-    int nv  = GrAL::size<0>(S);
-    // int ne = GrAL::size<1>(S);
-    int nc  = GrAL::size<2>(S);
-    int nvc = GrAL::size<0>(*cb);
-    int nec = GrAL::size<1>(*cb);
+    rgegt::VertexIterator vb = GrAL::begin_x(S);
+    rgegt::VertexIterator ve = GrAL::end_x  (S);
+    rgegt::CellIterator   cb = GrAL::begin_x(S);
+    rgegt::CellIterator   ce = GrAL::end_x  (S);
+    rgegt::VertexOnCellIterator vcb = GrAL::begin_x(*cb);
+    rgegt::VertexOnCellIterator vce = GrAL::end_x  (*cb);
+    rgegt::EdgeOnCellIterator   ecb = GrAL::begin_x(*cb);
+    rgegt::EdgeOnCellIterator   ece = GrAL::end_x  (*cb);
+    int nv  = GrAL::size_d<0>(S);
+    int nc  = GrAL::size_d<2>(S);
+    int nvc = GrAL::size_d<0>(*cb);
+    int nec = GrAL::size_d<1>(*cb);
   }
 
 

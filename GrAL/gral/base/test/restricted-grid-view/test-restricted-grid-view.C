@@ -101,9 +101,6 @@ int main() {
 		                           truegt::categories<truegt::VertexOnFaceIterator>::type>::value));
   BOOST_STATIC_ASSERT((1== is_base_or_same<grid_sequence_iterator_category, 
 		                           truegt::categories<truegt::CellIterator>::type>::value));
-  BOOST_STATIC_ASSERT((1== is_base_or_same<grid_types_detail::grid_test_category,
-		                           truegt::categories<truegt::test_type>::type>::value));
-  
   BOOST_STATIC_ASSERT((1== boost::is_same<truegt::VertexOnCellIterator, truegt::VertexOnFaceIterator>::value));
 
 

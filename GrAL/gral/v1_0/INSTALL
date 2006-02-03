@@ -67,16 +67,21 @@ which are written to <module>/lib/<ARCH>/<CCNAME>/<DEBUG>/.
 
   -  If DEBUG=opt, optimized version are built.
   -  CCNAME selects a C++ compiler, default is CCNAME=gcc.
-     If you select a different one (currently only gcc3 for
-     gcc 3.x supported), you will probalby have to adapt the CCC variable
+
+     You will probably have to adapt the CCC variable
      for the actual compiler binary, either by editing
      configuration/defs/<CCNAME>/make.defs,
      or by passing CCC=<path/to/compiler> to make on the command line.
+
      There are two different variables CCNAME and CCC, because CCNAME
      is used to build pathnames, and CCC might contain absolute paths
      to compiler binaries.
      By adding subdirectories configuration/defs/<CCNAME> analogously to
-     those alre
+     those already there, new compilers can be adapted.
+
+   - If a Makefile contains the variable SUBDIRS, you can exclude some of them
+     by passing the varible EXCLUDED to make, e.g.
+     make EXCLUDED="dir1,dir2" 
 
 3) Install it:
 --------------
@@ -106,6 +111,9 @@ $ gmake test-check-clean
 (will clean after check, so it does not need so much
  temporary disk space)
 
+You can exclude some of the directories to test
+by passing the varible EXCLUDED to make, e.g.
+make EXCLUDED="dir1,dir2" .
 
 If you want to check also the correct installation of GrAL under PREFIX,
 use the commandline 
