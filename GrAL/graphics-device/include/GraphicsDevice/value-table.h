@@ -15,6 +15,7 @@ namespace GrAL {
 template<class KEY>
 class generic_value {
 public:
+  virtual ~generic_value() {}
   virtual boost::shared_ptr<generic_value<KEY> > getval()       const         = 0;
   virtual void           setval(boost::shared_ptr<generic_value<KEY> const>)  = 0;
   virtual KEY key() const = 0;
