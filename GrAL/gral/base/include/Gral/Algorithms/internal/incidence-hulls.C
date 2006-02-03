@@ -6,6 +6,8 @@
 
 #include "Gral/Algorithms/incidence-hulls.h"
 #include "Gral/Base/common-grid-basics.h"
+#include "Gral/Subranges/enumerated-element-range.h"
+
 #include "Utility/pre-post-conditions.h"
 
 namespace GrAL {
@@ -50,7 +52,8 @@ void mark_cells_on_cells(CellIt     seed,
   typedef GT                                gt;
   typedef typename gt::Cell                 Cell;
   typedef typename gt::CellOnCellIterator   CellOnCellIterator;
- 
+
+  enumerated_cell_range<grid_type> new_cells(cell_seq.TheGrid()); 
   while(! seed.IsDone()) {
     Cell C = *seed;
     for(CellOnCellIterator cc(C); ! cc.IsDone(); ++cc) 
@@ -58,11 +61,13 @@ void mark_cells_on_cells(CellIt     seed,
 	Cell CC(*cc);
 	if(visited(CC) == 0) {
 	  visited[CC] = level;
-	  cell_seq.append(CC);
+	  //cell_seq.append(CC);
+	  new_cells.append(CC);
 	}
       }
     ++seed;
   }
+  cell_seq.append(new_cells.FirstCell(), new_cells.EndCell());
 }
 
 template<class GT, class VertexIt, class CellSeq, class EltMarker, class CellPred>
