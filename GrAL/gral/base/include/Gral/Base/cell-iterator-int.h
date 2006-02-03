@@ -103,8 +103,9 @@ public:
   typedef typename gt::cell_handle  cell_handle;
   typedef typename gt::Cell         Cell;
 
-  typedef grid_type anchor_type;
-  typedef Cell      value_type;
+  typedef cell_type_tag        element_type_tag;
+  typedef grid_type            anchor_type;
+  typedef Cell                 value_type;
 protected:
   ref_ptr<grid_type const> g;
   cell_handle c;

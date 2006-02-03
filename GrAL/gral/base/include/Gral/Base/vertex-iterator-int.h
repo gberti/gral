@@ -5,6 +5,7 @@
 
 #include "Utility/pre-post-conditions.h"
 #include "Utility/ref-ptr.h"
+
 #include "Gral/Base/common-grid-basics.h"
 
 namespace GrAL {
@@ -120,9 +121,10 @@ class vertex_iterator_int :
  {
   typedef vertex_iterator_int< GT>   self;
   typedef GT                         gt;
-public:
-  typedef typename gt::grid_type     grid_type;
-  typedef typename gt::vertex_handle vertex_handle;
+ public:
+   typedef typename gt::grid_type     grid_type;
+   typedef typename gt::vertex_handle vertex_handle;
+   typedef vertex_type_tag            element_type_tag;
 
    typedef grid_type anchor_type;
    typedef self      value_type;
