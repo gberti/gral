@@ -28,6 +28,8 @@ clean:
 
 else
 
+SUBDIRS := $(filter-out $(EXCLUDED),$(SUBDIRS))
+
 TARGET=dummy # must be called with "gmake generic TARGET=<target>"
 
 all:
@@ -46,13 +48,13 @@ generic:
 new-check-clean:
 	@set -e; \
 	for i in $(SUBDIRS); \
-	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new-check-clean;\
+	do cd $$i;echo 'ENTERING directory' $$i;($(MAKE) new-check-clean && $(MAKE) clean DEPS='') \
 	echo "LEAVING  directory" $$i;cd ..; done 
 
 new-check-clean-force:
 	@set -e; \
 	for i in $(SUBDIRS); \
-	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new-check-clean \
+	do cd $$i;echo 'ENTERING directory' $$i; ($(MAKE) new-check-clean && $(MAKE) clean DEPS='') \
         || echo ">>>>>>>>>>> TARGET new-check-clean-force FAILED for " $$i " (continuing)";\
 	echo "LEAVING  directory" $$i;cd ..; done 
 
@@ -61,6 +63,7 @@ new:
 	for i in $(SUBDIRS); \
 	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) new;\
 	echo "LEAVING  directory" $$i;cd ..; done
+
 new-force:
 	@set -e; \
 	for i in $(SUBDIRS); \
