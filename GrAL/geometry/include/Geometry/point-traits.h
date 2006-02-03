@@ -363,22 +363,32 @@ inline void assign_point(float& p, float q) { p = q;}
 
 
 
+template<class P, class Q>
+struct point_converter {
+  typedef P result_type;
+  typedef Q argument_type;
+  
+  static  result_type act(argument_type const& q) {
+    P p;
+    assign_point(p,q);
+    return p;
+  }
+};
 
+template<class P>
+struct point_converter<P,P> {
+  typedef P const& result_type;
+  typedef P argument_type;
+
+  static  result_type act(argument_type const& q) { return q; }
+};
 /*! \brief conversion between points of arbitrary type
 
    \ingroup algebraicprimitives 
 */
 template<class P, class Q>
-inline P convert_point(Q const& q)
-{
-  P p;
-  assign_point(p,q);
-  return p;
-}
-
-template<class P>
-inline P const& convert_point(P const& p) { return p;}
-
+inline typename point_converter<P,Q>::result_type
+convert_point(Q const& q) { return point_converter<P,Q>::act(q);}
 
 
 } // namespace GrAL 
