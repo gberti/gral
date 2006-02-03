@@ -33,6 +33,7 @@ public:
     typedef archetype_t   grid_type;
     typedef VertexIterator self;
 
+    typedef vertex_type_tag element_type_tag;
     typedef grid_type anchor_type;
     typedef self      value_type;
 
