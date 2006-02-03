@@ -100,7 +100,7 @@ has no type FaceIterator
 has no type FacetIterator
 has    type CellIterator
 has    type VertexOnVertexIterator
-has    type EdgeOnVertexIterator
+has no type EdgeOnVertexIterator
 has no type FaceOnVertexIterator
 has no type FacetOnVertexIterator
 has    type CellOnVertexIterator
