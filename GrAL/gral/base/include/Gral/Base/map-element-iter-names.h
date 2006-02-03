@@ -95,16 +95,8 @@ public:
   unsigned NumOfFacets()     const {  return asER().size();}
 };
 
-/*! \internal
-    \brief Specialization for 2D edge
- 
-    Choose edge AND facet in 2D 
-    if types Edge and Facet coincide.
-*/
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, edge2d_type_tag> : 
-  public map_element_iter_name<EIt, ER, edge_type_tag>,
-  public map_element_iter_name<EIt, ER, facet_type_tag> {};
+
+
 
 //! Specialization for cell types
 template<class EIt, class ER>
@@ -119,14 +111,6 @@ public:
   unsigned NumOfCells()    const { return asER().size();}
 };
 
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, cell2d_type_tag>
-  : public map_element_iter_name<EIt, ER, cell_type_tag> {};
-
-template<class EIt, class ER>
-struct map_element_iter_name<EIt, ER, cell3d_type_tag>
-  : public map_element_iter_name<EIt, ER, cell_type_tag> {};
 
 
 } // namespace GrAL 
