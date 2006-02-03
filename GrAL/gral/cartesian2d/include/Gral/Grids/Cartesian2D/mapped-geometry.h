@@ -30,6 +30,8 @@ class mapped_geometry_base
 {
 public:
   //  typedef typename CoordMap::coord_type  coord_type;
+  typedef grid_geometry_category              category;
+
   typedef CoordMap                            mapping_type;
   typedef typename mapping_type::result_type  coord_type;
   typedef RegGrid2D                           grid_type;

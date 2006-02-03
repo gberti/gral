@@ -28,6 +28,7 @@ class stored_geometry_base : public grid_types<RegGrid2D>,
 			     public algebraic_primitives<Coord2D>
 {
 public:
+  typedef grid_geometry_category category;
   typedef Coord2D   coord_type;
   typedef RegGrid2D grid_type;
 

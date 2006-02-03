@@ -32,6 +32,7 @@ namespace GrAL {
  */
 class stored_geometry_triang2d {
 public:
+  typedef grid_geometry_category    category;
   typedef stored_geometry_triang2d  self;
   typedef Triang2D                  grid_type; 
   typedef grid_types<grid_type>     gt;

@@ -16,7 +16,9 @@ private:
 public:
   typedef Vertex2D             self;
   typedef CellOnVertexIterator CellIterator;
-  typedef vertex_type_tag      element_type_tag;
+
+  typedef grid_element_category_d<0>  category;
+  typedef vertex_type_tag             element_type_tag;
 
 
   //----------  construction -------------------

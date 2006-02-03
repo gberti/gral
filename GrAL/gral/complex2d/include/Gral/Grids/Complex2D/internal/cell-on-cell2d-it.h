@@ -19,6 +19,7 @@ public:
   friend class Cell2D;
   friend class EdgeOnCell2D_Iterator;
 
+  typedef grid_incidence_iterator_category_d<2,2>  category;
   typedef Cell value_type;
   typedef Cell element_type;
   typedef Cell anchor_type;

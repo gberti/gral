@@ -56,6 +56,7 @@ struct grid_types_Triang2D :
 
 
 class Triang2D : public grid_types_Triang2D {
+  typedef Triang2D self;
 private:
   size_type* cells;
   bool owned;
@@ -65,7 +66,8 @@ private:
   mutable size_type  nedges;
   mutable bool       nedges_valid;
 public:
-
+  typedef self                        grid_type;
+  typedef triangulation_category_d<2> category;
   enum { dim = 2};
   unsigned dimension() const { return dim;}
 
@@ -253,6 +255,8 @@ private:
   ref_ptr<grid_type const> g;
   cell_handle      c;
 public:
+  typedef cell_type_tag      element_type_tag;
+  struct category : grid_cell_category, grid_cell_iterator_category {}; 
   typedef grid_type anchor_type;
   typedef self      value_type;
 
@@ -307,6 +311,8 @@ public:
 class Triang2D_Vertex : public grid_types_Triang2D {
   typedef Triang2D_Vertex    self;
 public:
+  struct category : grid_vertex_category, grid_vertex_iterator_category {};
+  typedef vertex_type_tag element_type_tag;
   typedef self      value_type;
   typedef grid_type anchor_type;
 private: 
@@ -350,6 +356,7 @@ private:
   Cell c;
   int  vc;
 public:
+  typedef grid_incidence_iterator_category_d<0,2> category;
   typedef Vertex value_type;
   typedef Cell   anchor_type;
 
@@ -397,6 +404,8 @@ inline
 std::ostream& operator<<(std::ostream& out, edge_handle_Triang2D e)
 { return (out << e.c << ' ' << e.lf);} 
 
+
+
 class Triang2D_FacetOnCellIterator : public grid_types_Triang2D {
   typedef  Triang2D_FacetOnCellIterator self;
   friend class Triang2D;
@@ -404,6 +413,7 @@ private:
   Cell c;
   int  fc;
 public:
+  typedef grid_incidence_iterator_category_d<1,2> category;
   typedef Facet value_type;
   typedef Cell  anchor_type;
 
@@ -451,6 +461,9 @@ class Triang2D_Edge : public grid_types_Triang2D {
 private:
   Triang2D_FacetOnCellIterator fc;
 public:
+  typedef edge_type_tag      element_type_tag;
+  typedef grid_edge_category category;
+
   Triang2D_Edge() {}
   explicit
   Triang2D_Edge(Triang2D_FacetOnCellIterator ffc) : fc(ffc) {}

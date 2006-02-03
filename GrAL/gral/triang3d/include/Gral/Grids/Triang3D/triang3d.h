@@ -67,12 +67,16 @@ class  Triang3D_grid_base : public grid_types_Triang3D {};
 
 
   class Triang3D : public grid_types_Triang3D::grid_base_type {
+    typedef Triang3D self;
 private:
   size_type* cells;
   bool owned;
   size_type  ncells;
   size_type  nvertices;
 public:
+    typedef self                        grid_type;
+    typedef triangulation_category_d<3> category;
+
   //@{
   /*! \name Dimension information
       \brief Combinatorial dimension is 3
@@ -293,6 +297,8 @@ class Triang3D_Cell : public grid_types_Triang3D::cell_base_type {
   typedef grid_types_Triang3D::cell_base_type base;
   friend class     Triang3D_VertexOnCellIterator;
 public:
+  typedef cell_type_tag element_type_tag;
+  struct category : grid_cell_category, grid_cell_iterator_category {};
   typedef grid_type anchor_type;
   typedef self      value_type;
 public:
@@ -335,6 +341,8 @@ public:
 class Triang3D_Vertex : public grid_types_Triang3D {
   typedef Triang3D_Vertex    self;
 public:
+  typedef vertex_type_tag element_type_tag;
+  struct category : grid_vertex_category, grid_vertex_iterator_category {};
   typedef self      value_type;
   typedef grid_type anchor_type;
 private: 
@@ -376,6 +384,7 @@ private:
   Cell c;
   int  vc;
 public:
+  typedef grid_incidence_iterator_category_d<0,3> category;
   typedef Vertex value_type;
   typedef Cell   anchor_type;
 public:

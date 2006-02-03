@@ -16,6 +16,7 @@ private:
   friend class Complex2D;
 
 public:
+  typedef grid_sequence_iterator_category_d<2>  category;
   typedef grid_type anchor_type;
   typedef Cell      value_type;
 

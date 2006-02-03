@@ -11,10 +11,11 @@
 class Edge2D : public complex2d_types {
 public:
 
+  typedef edge_type_tag               element_type_tag;
+  typedef grid_element_category_d<1>  category;
   typedef edge_handle_complex2d   handle_type;
   typedef Complex2D               anchor_type;
   typedef VertexOnEdge2D_Iterator VertexIterator;
-  typedef edge_type_tag           element_type_tag;
 
 private:
   //----- DATA --------

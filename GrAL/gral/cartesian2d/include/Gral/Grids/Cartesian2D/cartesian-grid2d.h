@@ -490,7 +490,8 @@ public:
 
   class Cell : public elem_base {
   public:
-    typedef cell_type_tag    element_type_tag;
+    typedef cell_type_tag      element_type_tag;
+    typedef grid_cell_category category;
 
     friend class RegGrid2D;
     typedef Cell self;
@@ -675,6 +676,7 @@ public:
   class VertexIterator : public seq_iterator_base {
     typedef VertexIterator self;
   public:
+    typedef grid_vertex_iterator_category category;
     typedef Vertex value_type;
     typedef Vertex element_type;
 
@@ -729,6 +731,7 @@ public:
   class EdgeIterator : public seq_iterator_base {
     typedef EdgeIterator self;
   public:
+    typedef grid_edge_iterator_category category;
     typedef Edge value_type;
     typedef Edge element_type;
 
@@ -772,6 +775,7 @@ public:
   class CellIterator : public seq_iterator_base {
     typedef CellIterator self;
   public:  
+    typedef grid_cell_iterator_category category;
     typedef Cell value_type;
     typedef Cell element_type;
 
@@ -841,6 +845,7 @@ public:
   class VertexOnVertexIterator : public inc_iterator_base {
     typedef VertexOnVertexIterator self;
   public:
+    typedef grid_incidence_iterator_category_d<0,0> category;
     typedef Vertex anchor_type;
     typedef Vertex value_type;
     typedef Vertex element_type;
@@ -884,6 +889,7 @@ public:
   class CellOnVertexIterator : public inc_iterator_base {
     typedef CellOnVertexIterator self;
   public:
+    typedef grid_incidence_iterator_category_d<2,0> category;
     typedef Vertex anchor_type;
     typedef Cell   value_type;
     typedef Cell   element_type;
@@ -925,6 +931,7 @@ public:
   class VertexOnCellIterator : public inc_iterator_base {
     typedef VertexOnCellIterator self;
   public:
+    typedef grid_incidence_iterator_category_d<0,2> category;
     typedef Cell   anchor_type;
     typedef Vertex value_type;
     typedef Vertex element_type;
@@ -982,6 +989,7 @@ public:
     typedef grid_types<RegGrid2D::archetype_type> archgt; 
     typedef archgt::Cell archetype_cell;
   public:
+    typedef grid_incidence_iterator_category_d<1,2> category;
     typedef Edge value_type;
     typedef Edge element_type;
     typedef Cell anchor_type;
@@ -1043,6 +1051,7 @@ public:
     typedef CellOnCellIterator self;
 
   public:
+    typedef grid_incidence_iterator_category_d<2,2> category;
     typedef Cell anchor_type;
     typedef Cell element_type;
     typedef Cell value_type;

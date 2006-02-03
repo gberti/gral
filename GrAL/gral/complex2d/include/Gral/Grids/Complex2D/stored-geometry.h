@@ -23,7 +23,8 @@ protected:
 public:
   grid_type *  g;
 public:
-  typedef  grid_type::CoordType     coord_type;
+  typedef grid_geometry_category    category;
+  typedef grid_type::CoordType      coord_type;
   typedef point_traits<coord_type>          pt;
   typedef algebraic_primitives<coord_type>  ap;
 

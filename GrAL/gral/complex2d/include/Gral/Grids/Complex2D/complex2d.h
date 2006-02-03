@@ -282,6 +282,8 @@ namespace GrAL {
     Its $GrAL Facet type is a typedef to its $GrAL Edge type.
  */
 class Complex2D : public complex2d_types  {
+  typedef Complex2D    self;
+
   typedef std::list<EdgeOnCell2D_Iterator>  boundary_facet_list;
   typedef vertex_list_complex2d        v_list;
   typedef cell_list_complex2d          c_list;
@@ -297,6 +299,9 @@ public: // for benchmark only
   archetype_sequence             archetypes;
   std::vector<archetype_handle>  arch_for_n_vertices;
 public:
+  typedef self               grid_type;
+  typedef grid_category_d<2> category;
+
   //--------- types --------------------
 
   // sequence iterators

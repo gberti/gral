@@ -23,6 +23,7 @@ private:
   int             lf; // local facet, \in [0, TheCell().NumOfFacets()]
 
 public:
+  typedef grid_incidence_iterator_category_d<1,2>  category;
   typedef Cell   anchor_type;
   typedef Edge   element_type;
   typedef Edge   value_type;

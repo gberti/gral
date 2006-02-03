@@ -19,6 +19,7 @@ private:
   Complex2D const* _cc;
 
 public:
+  typedef grid_sequence_iterator_category_d<0>  category;
   typedef Vertex    value_type;
   typedef grid_type anchor_type;
 public:

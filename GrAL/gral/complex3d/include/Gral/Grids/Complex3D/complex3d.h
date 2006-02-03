@@ -85,7 +85,9 @@ struct grid_types_Complex3D
 */
 class Complex3D : public grid_types_Complex3D::grid_base_type {
   //  typedef GrAL::signed_size_t size_type;
-
+public:
+  typedef Complex3D          grid_type;
+  typedef grid_category_d<3> category;
  private:
   std::vector<vertex_handle>  cells; // cell-vertex incidences
   std::vector<unsigned>       offset; // pointer into cells, nc+1 entries
@@ -278,6 +280,8 @@ class Cell_Complex3D
 public:
   // these typedefs are superflous (already defined in base classes,
   // but g++ forgets them, because doubly defined!
+  struct category : grid_cell_category, grid_cell_iterator_category {};
+  typedef cell_type_tag       element_type_tag;
   typedef grid_types_Complex3D gt;
   typedef gt::grid_type grid_type;
   typedef gt::cell_handle cell_handle;
@@ -336,6 +340,8 @@ class Vertex_Complex3D : public elem_base_Complex3D {
   typedef Vertex_Complex3D      self;
   typedef elem_base_Complex3D base;
 public:
+  struct category : grid_vertex_category, grid_vertex_iterator_category {};
+  typedef vertex_type_tag  element_type_tag;
   typedef Vertex    value_type;
  private:
   vertex_handle h;
@@ -376,6 +382,7 @@ class VertexOnCellIterator_Complex3D : public elem_base_Complex3D {
   typedef VertexOnCellIterator_Complex3D  self;
   typedef elem_base_Complex3D             base;
 public:
+  typedef grid_incidence_iterator_category_d<0,3> category;
   typedef Vertex value_type;
   typedef Cell   anchor_type;
  private:

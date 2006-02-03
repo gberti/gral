@@ -15,6 +15,7 @@ private:
 public:
   //------------------- types ---------------------
 
+  typedef grid_incidence_iterator_category_d<0,1>  category;
   typedef Complex2D grid_type;
   typedef Vertex    element_type;
   typedef Vertex    value_type;

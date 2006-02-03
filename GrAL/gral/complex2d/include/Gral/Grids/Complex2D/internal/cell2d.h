@@ -15,7 +15,9 @@ private:
   ComplexPtr _cc;   // reference to grid
 
 public: 
-  typedef cell_type_tag            element_type_tag;
+  typedef cell_type_tag               element_type_tag;
+  typedef grid_element_category_d<2>  category;
+
   typedef CellNeighbourIterator    NeighbourIterator;
   typedef EdgeOnCell2D_Iterator    EdgeOnCellIterator;
 

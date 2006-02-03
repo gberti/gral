@@ -19,6 +19,7 @@ private:
   int  lv;
 
 public:
+  typedef grid_incidence_iterator_category_d<0,2>  category;
   typedef Vertex value_type; 
   typedef Vertex element_type;
   typedef Cell   anchor_type;

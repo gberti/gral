@@ -121,6 +121,10 @@ struct grid_types_Cartesian3D : public grid_types_detail::grid_types_root {
  */
 class CartesianGrid3D : public grid_types_Cartesian3D {
 public:
+  typedef CartesianGrid3D              grid_type;
+  typedef cartesian_grid_category_d<3> category;
+  enum { dim = 3 };
+
   typedef Complex2D             archetype_type;
   typedef archetype_type const* archetype_iterator;
 
@@ -409,6 +413,12 @@ class Vertex_Cartesian3D : public elem_base_Cartesian3D {
   vertex_handle            h;
 public:
   typedef self      value_type;
+  struct category :
+    virtual grid_vertex_category,
+    virtual grid_vertex_iterator_category {};
+
+  typedef vertex_type_tag      element_type_tag;
+
 public:
   Vertex_Cartesian3D() {}  
   explicit
@@ -453,6 +463,10 @@ public:
     edge_handle h;
   public: 
     typedef self value_type;
+    struct category :
+      virtual grid_edge_category,
+      virtual grid_edge_iterator_category {};
+    typedef edge_type_tag      element_type_tag;
   public:
     Edge_Cartesian3D() {}
     Edge_Cartesian3D(grid_type const& gg, edge_handle e = 0) 
@@ -504,7 +518,11 @@ class Facet_Cartesian3D : public elem_base_Cartesian3D {
 
   facet_handle h;
 public:
-  typedef self value_type;
+   typedef self value_type;
+   struct category :
+     virtual grid_facet_category,
+     virtual grid_facet_iterator_category {};
+   typedef facet_type_tag      element_type_tag;
 public:
   Facet_Cartesian3D() {}
   Facet_Cartesian3D(grid_type const& gg, facet_handle e = 0) 
@@ -561,7 +579,12 @@ class Cell_Cartesian3D : public elem_base_Cartesian3D {
   grid_type::index_type    I;
 
 public:
-  typedef self value_type;
+   typedef self value_type;
+  struct category :
+    virtual grid_cell_category,
+    virtual grid_cell_iterator_category {};
+
+    typedef cell_type_tag      element_type_tag;
 public:
   Cell_Cartesian3D() {}  
   explicit
@@ -636,6 +659,7 @@ private:
 public:
   typedef Vertex value_type;
   typedef Cell   anchor_type;
+  typedef grid_incidence_iterator_category_d<0,3> category;
 public:
   VertexOnCellIterator_Cartesian3D()  {}
   explicit
@@ -683,6 +707,7 @@ private:
 public:
   typedef Edge value_type;
   typedef Cell anchor_type;
+  typedef grid_incidence_iterator_category_d<1,3> category;
 public:
   EdgeOnCellIterator_Cartesian3D()  {}
   explicit
@@ -730,6 +755,7 @@ private:
 public:
   typedef Facet value_type;
   typedef Cell  anchor_type;
+  typedef grid_incidence_iterator_category_d<2,3> category;
 public:
   FacetOnCellIterator_Cartesian3D()  {}
   explicit
@@ -775,6 +801,7 @@ private:
 public:
   typedef Vertex value_type;
   typedef Facet  anchor_type;
+  typedef grid_incidence_iterator_category_d<0,2> category;
 public:
   VertexOnFacetIterator_Cartesian3D() {}
   explicit
@@ -819,6 +846,7 @@ private:
 public:
   typedef Edge  value_type;
   typedef Facet anchor_type;
+  typedef grid_incidence_iterator_category_d<1,2> category;
 public:
   EdgeOnFacetIterator_Cartesian3D() {}
   explicit
@@ -864,6 +892,7 @@ private:
 public:
   typedef Vertex value_type;
   typedef Edge   anchor_type;
+  typedef grid_incidence_iterator_category_d<0,1> category;
 public:
   VertexOnEdgeIterator_Cartesian3D() {}
   explicit

@@ -16,6 +16,7 @@ private:
   FacetOnCellIterator   _fc; // current edge == current facet of cell
   // invariant: (*(_c) == _fc.TheCell()) || IsDone()
 public:
+  typedef grid_sequence_iterator_category_d<1>  category;
   typedef edge_handle   handle_type;
   typedef Edge          element_type;
   typedef Edge          value_type;

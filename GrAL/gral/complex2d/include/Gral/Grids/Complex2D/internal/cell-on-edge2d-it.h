@@ -19,7 +19,7 @@ public:
   typedef Cell      element_type;
   typedef Cell      value_type;
   typedef Edge2D    anchor_type;
-
+  typedef grid_incidence_iterator_category_d<2,1>  category;
   //----------------- construction -----------------
 
   CellOnEdge2D_Iterator() : e(), ce(0) {}

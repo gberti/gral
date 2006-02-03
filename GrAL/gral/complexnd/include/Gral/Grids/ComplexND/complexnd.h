@@ -302,6 +302,7 @@ namespace complexnd {
     typedef element_handle_t   <GRID, D, CD>  self;
     typedef element_handle_base<GRID, D, CD>  base;
   public:
+    typedef typename get_grid_element_handle_category_d<D,CD>::type category;
     element_handle_t() {}
     explicit element_handle_t(int hh) : base(hh) {}
     explicit element_handle_t(element_handle_t<GRID,ANY,ANY> rhs) : base(rhs.h()) {}
@@ -313,6 +314,8 @@ namespace complexnd {
     typedef element_handle_t<GRID,ANY,ANY>      self;
     typedef element_handle_base<GRID,ANY,ANY>   base;
   public:
+    typedef grid_element_handle_category   category;
+
     element_handle_t() {}
     explicit element_handle_t(int hh) : base(hh) {}
 
@@ -469,6 +472,9 @@ namespace complexnd {
     typedef dimension_mixin_grid<D> mixin;
     typedef grid_types_ComplexND<D> gt;
   public:
+    typedef self               grid_type;
+    typedef grid_category_d<D> category;
+
     typedef typename gt::size_type  size_type;
 
     typedef typename gt::AnyElementIterator AnyElementIterator;
@@ -818,6 +824,8 @@ namespace complexnd {
   public:
     typedef typename base::grid_type grid_type;
     typedef typename base::size_type size_type;
+    typedef typename get_grid_element_category<D,CD>::type category;
+    typedef typename int2element_tag<GRID::dim,D,CD>::type element_type_tag;
   public:
     element_t() {}
     element_t(grid_type const&         gg, element_handle_type hh = 0) : base(gg,hh) {}
@@ -853,8 +861,10 @@ namespace complexnd {
   class element_t<GRID,ANY,ANY> : public element_base_t<GRID,ANY,ANY> {
     typedef element_t     <GRID,ANY,ANY> self;
     typedef element_base_t<GRID,ANY,ANY> base;
+  public:
     typedef typename base::grid_type grid_type;
     typedef typename base::element_handle_type element_handle_type;
+    typedef grid_element_category    category;
   public:
     element_t() {}
     element_t(grid_type const&         gg, unsigned dim, element_handle_type hh = 0) : base(gg,dim,hh) {}
@@ -942,6 +952,7 @@ namespace complexnd {
     typedef element_t<GRID,D,CD> element_type;
     typedef element_type         value_type;
     typedef grid_type            anchor_type;
+    typedef typename get_sequence_iterator_category<typename element_type::category>::type category;
 
     using base::cb;
     using base::cv;
@@ -970,6 +981,7 @@ namespace complexnd {
     typedef typename base::grid_type grid_type;
     typedef typename base::element_handle_type element_handle_type;
   public:
+    typedef grid_sequence_iterator_category category;
     typedef element_t<GRID,ANY,ANY> element_type;
     typedef element_type            value_type;
     typedef grid_type               anchor_type;
@@ -1187,6 +1199,10 @@ namespace complexnd {
 
     int k;
   public:
+    typedef typename base::value_type  value_type;
+    typedef typename base::anchor_type anchor_type;
+    typedef typename get_incidence_iterator_category<typename value_type::category,
+						     typename anchor_type::category>::type category;
     using base::dimension;
     using base::handle;
     using base::TheGrid;
@@ -1194,14 +1210,14 @@ namespace complexnd {
     typedef typename base::size_type size_type;
 
     incidence_iterator_t() {}
-    incidence_iterator_t(typename base::anchor_type const& a, int kk) : base(a,kk) {}
-    incidence_iterator_t(typename base::anchor_type const& a, size_type lhh, int kk) : base(a,kk) 
+    incidence_iterator_t(anchor_type const& a, int kk) : base(a,kk) {}
+    incidence_iterator_t(anchor_type const& a, size_type lhh, int kk) : base(a,kk) 
     { this->lh = lhh;}
 
     // TODO: Add templated constructor for K, CK
     
     self& operator++() { base::incr(); return *this;}
-    typename base::value_type  operator*() const { cv(); return typename base::value_type(TheGrid(), dimension(), handle());}
+    value_type  operator*() const { cv(); return value_type(TheGrid(), dimension(), handle());}
   };
 
 
@@ -1679,10 +1695,10 @@ struct element_traits<complexnd::element_t<complexnd::ComplexND<complexnd::ANY>,
 #define gt grid_types<complexnd::ComplexND<D> >
 
 template<int D, int DE> struct element_d<gt, DE> 
-{ typedef complexnd::element_t<complexnd::ComplexND<D>, D,  complexnd::d2c<D,DE>::value>  type; };
+{ typedef complexnd::element_t<complexnd::ComplexND<D>, DE,  complexnd::d2c<D,DE>::value>  type; };
 
 template<int D, int DE> struct element_handle_d<gt, DE> 
-{ typedef complexnd::element_handle_t<complexnd::ComplexND<D>, D, complexnd::d2c<D,DE>::value>  type; };
+{ typedef complexnd::element_handle_t<complexnd::ComplexND<D>, DE, complexnd::d2c<D,DE>::value>  type; };
 
 
 template<int D, int DE> struct sequence_iterator_d<gt, DE> 

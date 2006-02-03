@@ -33,9 +33,9 @@ namespace cartesiannd {
   class element_handle_t;
   template<class CARTGRID, unsigned K>
   class sequence_iterator_t;
-  template<class CARTGRID, unsigned K, unsigned M>
+  template<class CARTGRID, unsigned DA, unsigned DE>
   class downward_inc_iterator_t;
-  template<class CARTGRID, unsigned K, unsigned M>
+  template<class CARTGRID, unsigned DA, unsigned DE>
   class upward_inc_iterator_t;
   template<unsigned DIM>
   class subrange;
@@ -62,24 +62,24 @@ namespace cartesiannd {
 
 
 
- template<class CARTGRID, unsigned K, unsigned M>
- inline bool operator==(downward_inc_iterator_t<CARTGRID,K, M> lhs, 
-			downward_inc_iterator_t<CARTGRID,K, M> rhs);
+ template<class CARTGRID, unsigned DA, unsigned DE>
+ inline bool operator==(downward_inc_iterator_t<CARTGRID,DA, DE> lhs, 
+			downward_inc_iterator_t<CARTGRID,DA, DE> rhs);
   //#ifndef GRAL_INCLUDES_RELOPS
- template<class CARTGRID, unsigned K, unsigned M>
- inline bool operator!=(downward_inc_iterator_t<CARTGRID,K, M> lhs, 
-			downward_inc_iterator_t<CARTGRID,K, M> rhs);
+ template<class CARTGRID, unsigned DA, unsigned DE>
+ inline bool operator!=(downward_inc_iterator_t<CARTGRID,DA, DE> lhs, 
+			downward_inc_iterator_t<CARTGRID,DA, DE> rhs);
   // #endif
 
 
 
- template<class CARTGRID, unsigned K, unsigned M>
- inline bool operator==(upward_inc_iterator_t<CARTGRID,K, M> lhs, 
-			upward_inc_iterator_t<CARTGRID,K, M> rhs);
+ template<class CARTGRID, unsigned DA, unsigned DE>
+ inline bool operator==(upward_inc_iterator_t<CARTGRID,DA, DE> lhs, 
+			upward_inc_iterator_t<CARTGRID,DA, DE> rhs);
   //#ifndef GRAL_INCLUDES_RELOPS
- template<class CARTGRID, unsigned K, unsigned M>
- inline bool operator!=(upward_inc_iterator_t<CARTGRID,K, M> lhs, 
-			upward_inc_iterator_t<CARTGRID,K, M> rhs);
+ template<class CARTGRID, unsigned DA, unsigned DE>
+ inline bool operator!=(upward_inc_iterator_t<CARTGRID,DA, DE> lhs, 
+			upward_inc_iterator_t<CARTGRID,DA, DE> rhs);
   //#endif
 
   
@@ -102,22 +102,22 @@ namespace cartesiannd {
 
   template<unsigned K, unsigned M> struct less_then { enum { result = ( K <= M ? 1 : 0) }; };
 
-  template<class CARTGRID, unsigned K, unsigned M, unsigned LESS>
+  template<class CARTGRID, unsigned DA, unsigned DE, unsigned LESS>
   struct incidence_iterator_type_aux {};
 
-  // K <= M => <M>On<K> is upward
-  template<class CARTGRID, unsigned K, unsigned M>
-  struct incidence_iterator_type_aux<CARTGRID,K,M,1> 
-  { typedef upward_inc_iterator_t<CARTGRID,K,M> type; };
+  // DA <= DE => <DE>On<DA> is upward
+  template<class CARTGRID, unsigned DA, unsigned DE>
+  struct incidence_iterator_type_aux<CARTGRID,DA,DE,1> 
+  { typedef upward_inc_iterator_t<CARTGRID,DA,DE> type; };
   
   
-  // K > M => <M>On<K> is downward
-  template<class CARTGRID, unsigned K, unsigned M>
-  struct incidence_iterator_type_aux<CARTGRID,K,M,0>
-  { typedef downward_inc_iterator_t<CARTGRID,K,M> type; };
+  // DA > DE => <DE>On<DA> is downward
+  template<class CARTGRID, unsigned DA, unsigned DE>
+  struct incidence_iterator_type_aux<CARTGRID,DA,DE,0>
+  { typedef downward_inc_iterator_t<CARTGRID,DA,DE> type; };
 
-  template<class CARTGRID, unsigned K, unsigned M>
-  struct incidence_iterator_type : public incidence_iterator_type_aux<CARTGRID,K,M, less_then<K,M>::result> {};
+  template<class CARTGRID, unsigned DA, unsigned DE>
+  struct incidence_iterator_type : public incidence_iterator_type_aux<CARTGRID,DA,DE, less_then<DA,DE>::result> {};
 
   template<class CARTGRID, unsigned DIM>
   struct archetype_of_grid_aux {
@@ -222,6 +222,8 @@ namespace cartesiannd {
     typedef element_handle_t<CARTGRID,K> self;
     int h_;
   public:
+    typedef grid_element_handle_category_d<K> category;
+
     element_handle_t() {}
     explicit element_handle_t(int hh) : h_(hh) {}
     int h() const { return h_;}
@@ -520,7 +522,6 @@ namespace cartesiannd {
   public:
     typedef GrAL::cartesian_grid_view_category_d<DIM> category;
 
-    //    typedef grid<DIM> grid_type;
     typedef self grid_type;
     typedef grid<DIM> base_grid_type;
     typedef grid<DIM-1> facet_grid_type;
@@ -633,11 +634,12 @@ namespace cartesiannd {
     typedef grid_types_base<CARTGRID, CARTGRID::dim> base;
     typedef sequence_iterator_t<CARTGRID, K>         self;
   public:
-    struct category : public grid_element_category_d<K>, public grid_sequence_iterator_category_d<K> {};
-    //    typedef grid_element_category_d<K> category;
-    // typedef element_type_tag;
     typedef CARTGRID                                 grid_type;
     enum { dim = K, codim = CARTGRID::dim -K, griddim = CARTGRID::dim};
+    struct category : grid_element_category_d<dim>, grid_sequence_iterator_category_d<dim> {};
+    typedef typename int2element_tag<griddim,dim,codim>::type  element_type_tag;
+
+
     unsigned dimension()   const { return dim;}
     unsigned codimension() const { return codim;}
 
@@ -844,20 +846,20 @@ namespace cartesiannd {
 
   // <M>On<K>Iterator
 
-  template<class CARTGRID, unsigned K, unsigned M>
+  template<class CARTGRID, unsigned DA, unsigned DE>
   class downward_inc_iterator_t : public grid_types_base<CARTGRID, CARTGRID::dim> {
   private:
     typedef grid_types_base<CARTGRID, CARTGRID::dim> base;
-    typedef downward_inc_iterator_t<CARTGRID, K, M>  self;
+    typedef downward_inc_iterator_t<CARTGRID, DA, DE>  self;
   public:
-    typedef grid_incidence_iterator_category_d<M,K>        category;
+    typedef grid_incidence_iterator_category_d<DE,DA>        category;
     typedef CARTGRID                                       grid_type;
     enum { dim = base::dim}; 
     typedef typename base::index_type                      index_type;
     typedef typename grid_type::base_grid_type             base_grid_type;
-    typedef element_handle_t<base_grid_type,M>             element_handle;
-    typedef typename element_type<base_grid_type, K, dim-K>::type anchor_type;
-    typedef typename element_type<base_grid_type, M, dim-M>::type element_type;
+    typedef element_handle_t<base_grid_type,DE>             element_handle;
+    typedef typename element_type<base_grid_type, DA, dim-DA>::type anchor_type;
+    typedef typename element_type<base_grid_type, DE, dim-DE>::type element_type;
     typedef element_type                                   value_type;
   private:
     anchor_type a;
@@ -866,12 +868,12 @@ namespace cartesiannd {
   public:
     downward_inc_iterator_t() {}
     explicit downward_inc_iterator_t(anchor_type const& aa, int ll = 0) : a(aa), loc(ll) 
-    { } //  ::std::cout << "downward_inc_iterator_t<" << K << "," << M << ">" <<  ::std::endl; }
+    { } //  ::std::cout << "downward_inc_iterator_t<" << DA << "," << DE << ">" <<  ::std::endl; }
 
     self& operator++()  { cv(); ++loc; return *this;}
     element_type operator*() const { return element_type(TheGrid(), handle());}
     
-    element_handle handle()   const { cv(); return TheGrid().template index2handle<M>(index(), direction());}
+    element_handle handle()   const { cv(); return TheGrid().template index2handle<DE>(index(), direction());}
     index_type index()        const { cv(); return a.index() + table()[loc].offset;}
     unsigned   direction()    const { cv(); return table()[loc].dir;}
     unsigned   local_handle() const { cb(); return loc;}
@@ -888,19 +890,19 @@ namespace cartesiannd {
     void cv() const { REQUIRE(valid(), "", 1);}
   private:
     typedef typename delta_map<dim>::inc_descriptor incidences;
-     ::std::vector<incidences> table() const { return delta_map<dim>::sd->incs[K][M][a.direction()];}
+     ::std::vector<incidences> table() const { return delta_map<dim>::sd->incs[DA][DE][a.direction()];}
   };
 
 
- template<class CARTGRID, unsigned K, unsigned M>
- inline bool operator==(downward_inc_iterator_t<CARTGRID,K, M> lhs, 
-			downward_inc_iterator_t<CARTGRID,K, M> rhs)
+ template<class CARTGRID, unsigned DA, unsigned DE>
+ inline bool operator==(downward_inc_iterator_t<CARTGRID,DA, DE> lhs, 
+			downward_inc_iterator_t<CARTGRID,DA, DE> rhs)
  { return lhs.local_handle() == rhs.local_handle();} 
 
   //#ifndef GRAL_INCLUDES_RELOPS
- template<class CARTGRID, unsigned K, unsigned M>
- inline bool operator!=(downward_inc_iterator_t<CARTGRID,K, M> lhs, 
-			downward_inc_iterator_t<CARTGRID,K, M> rhs)
+ template<class CARTGRID, unsigned DA, unsigned DE>
+ inline bool operator!=(downward_inc_iterator_t<CARTGRID,DA, DE> lhs, 
+			downward_inc_iterator_t<CARTGRID,DA, DE> rhs)
  { return !(lhs==rhs);}
   //#endif
 
@@ -909,21 +911,21 @@ namespace cartesiannd {
 
   // <M>On<K>Iterator
 
-  template<class CARTGRID, unsigned K, unsigned M>
+  template<class CARTGRID, unsigned DA, unsigned DE>
   class upward_inc_iterator_t : public grid_types_base<CARTGRID, CARTGRID::dim> {
   private:
     typedef CARTGRID                                 grid_type;
     typedef grid_types_base<CARTGRID, CARTGRID::dim> base;
-    typedef upward_inc_iterator_t<CARTGRID, K, M>    self;
+    typedef upward_inc_iterator_t<CARTGRID, DA, DE>    self;
   public:
-    typedef grid_incidence_iterator_category_d<M,K>        category;
+    typedef grid_incidence_iterator_category_d<DE,DA>        category;
 
     enum { dim = base::dim};
     typedef typename base::index_type                      index_type;
     typedef typename grid_type::base_grid_type             base_grid_type;
-    typedef element_handle_t<base_grid_type,M>             element_handle;
-    typedef typename element_type<base_grid_type, K, dim-K>::type anchor_type;
-    typedef typename element_type<base_grid_type, M, dim-M>::type element_type;
+    typedef element_handle_t<base_grid_type,DE>             element_handle;
+    typedef typename element_type<base_grid_type, DA, dim-DA>::type anchor_type;
+    typedef typename element_type<base_grid_type, DE, dim-DE>::type element_type;
     typedef element_type                                   value_type;
   private:
     anchor_type a;
@@ -933,14 +935,14 @@ namespace cartesiannd {
     upward_inc_iterator_t() {}
     explicit upward_inc_iterator_t(anchor_type const&         aa, int ll = 0) : a(aa), loc(ll) 
     {
-      //  ::std::cout << "upward_inc_iterator_t<" << K << "," << M << ">" <<  ::std::endl; 
+      //  ::std::cout << "upward_inc_iterator_t<" << DA << "," << DE << ">" <<  ::std::endl; 
       advance_till_valid();
     }
 
     self& operator++()  { cv(); ++loc; advance_till_valid(); return *this;}
     element_type operator*() const { return element_type(TheGrid(), handle());}
     
-    element_handle handle()   const { cv(); return TheGrid().template index2handle<M>(index(), direction());}
+    element_handle handle()   const { cv(); return TheGrid().template index2handle<DE>(index(), direction());}
     index_type index()        const { cv(); return a.index() + table()[loc].offset;}
     unsigned   direction()    const { cv(); return table()[loc].dir;}
     unsigned   local_handle() const { cb(); return loc;}
@@ -957,23 +959,23 @@ namespace cartesiannd {
     void cv() const { REQUIRE(valid(), "", 1);}
   private:
     void advance_till_valid() {
-      while(! IsDone() && ! TheGrid().template valid_index<M>(table()[loc].dir, a.index()+table()[loc].offset))
+      while(! IsDone() && ! TheGrid().template valid_index<DE>(table()[loc].dir, a.index()+table()[loc].offset))
 	++loc;
     }
     typedef typename delta_map<dim>::inc_descriptor incidences;
-     ::std::vector<incidences> const& table() const { return delta_map<dim>::sd->incs[K][M][a.direction()];}
+     ::std::vector<incidences> const& table() const { return delta_map<dim>::sd->incs[DA][DE][a.direction()];}
   };
 
 
- template<class CARTGRID, unsigned K, unsigned M>
- inline bool operator==(upward_inc_iterator_t<CARTGRID,K, M> lhs, 
-			upward_inc_iterator_t<CARTGRID,K, M> rhs)
+ template<class CARTGRID, unsigned DA, unsigned DE>
+ inline bool operator==(upward_inc_iterator_t<CARTGRID,DA, DE> lhs, 
+			upward_inc_iterator_t<CARTGRID,DA, DE> rhs)
  { return lhs.local_handle() == rhs.local_handle();} 
 
   //#ifndef GRAL_INCLUDES_RELOPS
- template<class CARTGRID, unsigned K, unsigned M>
- inline bool operator!=(upward_inc_iterator_t<CARTGRID,K, M> lhs, 
-			upward_inc_iterator_t<CARTGRID,K, M> rhs)
+ template<class CARTGRID, unsigned DA, unsigned DE>
+ inline bool operator!=(upward_inc_iterator_t<CARTGRID,DA, DE> lhs, 
+			upward_inc_iterator_t<CARTGRID,DA, DE> rhs)
  { return !(lhs==rhs);}
   //#endif
 
@@ -1162,15 +1164,15 @@ struct incidence_iterator_d<grid_types<cartesiannd::subrange<DIM> >, DE, DA>
 
 namespace cartesiannd {
 
-  template<class CARTGRID, unsigned K>
-  template<unsigned M>
+  template<class CARTGRID, unsigned DA>
+  template<unsigned DE>
   inline
-  typename sequence_iterator_t<CARTGRID,K>::size_type
-  sequence_iterator_t<CARTGRID,K>::NumOfElements() const {
-    if(M < K)
-      return delta_map<griddim>::sd->incs[K][M][direction()].size();
+  typename sequence_iterator_t<CARTGRID,DA>::size_type
+  sequence_iterator_t<CARTGRID,DA>::NumOfElements() const {
+    if(DE < DA)
+      return delta_map<griddim>::sd->incs[DA][DE][direction()].size();
     else {
-      typename incidence_iterator_type<CARTGRID,K,M>::type it(FirstElement<M>());
+      typename incidence_iterator_type<CARTGRID,DA,DE>::type it(FirstElement<DE>());
       size_type cnt = 0;
       while(!it.IsDone()) {
 	++it;
@@ -1181,17 +1183,17 @@ namespace cartesiannd {
   }
 
   template<class CARTGRID, unsigned DIM>
-  template<unsigned K>
-  sequence_iterator_t<CARTGRID, K>
-  grid_base<CARTGRID,DIM>::FirstElement() const { return sequence_iterator_t<CARTGRID, K>(to_derived());}
+  template<unsigned DA>
+  sequence_iterator_t<CARTGRID, DA>
+  grid_base<CARTGRID,DIM>::FirstElement() const { return sequence_iterator_t<CARTGRID, DA>(to_derived());}
 
   template<class CARTGRID, unsigned DIM>
-  template<unsigned K>
-  sequence_iterator_t<CARTGRID, K>
+  template<unsigned DA>
+  sequence_iterator_t<CARTGRID, DA>
   grid_base<CARTGRID,DIM>::EndElement() const { 
-    return sequence_iterator_t<CARTGRID, K>(to_derived(), 
-					    element_handle_t<CARTGRID,K>(offsets[K][maps[K].num_of_maps()]), 
-					    maps[K].num_of_maps());
+    return sequence_iterator_t<CARTGRID, DA>(to_derived(), 
+					    element_handle_t<CARTGRID,DA>(offsets[DA][maps[DA].num_of_maps()]), 
+					    maps[DA].num_of_maps());
   }
 
 
@@ -1254,37 +1256,37 @@ namespace cartesiannd {
   template<class CART, unsigned K>
   int                            gral_size (CART const& a, sequence_iterator_t<CART, K>) { return a.template NumOfElements<K>();}
 
-  template<class CART, unsigned K, unsigned M>
-  downward_inc_iterator_t<CART ,K,M>
-  gral_begin(sequence_iterator_t<CART,K> const& a, downward_inc_iterator_t<CART ,K,M>)
-  { return a.template FirstElement <M>(); }
+  template<class CART, unsigned DA, unsigned DE>
+  downward_inc_iterator_t<CART ,DA,DE>
+  gral_begin(sequence_iterator_t<CART,DA> const& a, downward_inc_iterator_t<CART ,DA,DE>)
+  { return a.template FirstElement <DE>(); }
 
-  template<class CART, unsigned K, unsigned M>
-  downward_inc_iterator_t<CART ,K,M>
-  gral_end  (sequence_iterator_t<CART,K> const& a, downward_inc_iterator_t<CART ,K,M>)
-  { return a.template EndElement   <M>(); }
+  template<class CART, unsigned DA, unsigned DE>
+  downward_inc_iterator_t<CART ,DA,DE>
+  gral_end  (sequence_iterator_t<CART,DA> const& a, downward_inc_iterator_t<CART ,DA,DE>)
+  { return a.template EndElement   <DE>(); }
 
-  template<class CART, unsigned K, unsigned M>
+  template<class CART, unsigned DA, unsigned DE>
   int
-  gral_size (sequence_iterator_t<CART,K> const& a, downward_inc_iterator_t<CART ,K,M>) 
-  { return a.template NumOfElements<M>(); }
+  gral_size (sequence_iterator_t<CART,DA> const& a, downward_inc_iterator_t<CART ,DA,DE>) 
+  { return a.template NumOfElements<DE>(); }
  
 
 
-  template<class CART, unsigned K, unsigned M>
-  upward_inc_iterator_t<CART ,K,M>
-  gral_begin(sequence_iterator_t<CART,K> const& a, upward_inc_iterator_t<CART ,K,M>)
-  { return a.template FirstElement <M>(); }
+  template<class CART, unsigned DA, unsigned DE>
+  upward_inc_iterator_t<CART ,DA,DE>
+  gral_begin(sequence_iterator_t<CART,DA> const& a, upward_inc_iterator_t<CART ,DA,DE>)
+  { return a.template FirstElement <DE>(); }
 
-  template<class CART, unsigned K, unsigned M>
-  upward_inc_iterator_t<CART ,K,M>
-  gral_end  (sequence_iterator_t<CART,K> const& a, upward_inc_iterator_t<CART ,K,M>)
-  { return a.template EndElement   <M>(); }
+  template<class CART, unsigned DA, unsigned DE>
+  upward_inc_iterator_t<CART ,DA,DE>
+  gral_end  (sequence_iterator_t<CART,DA> const& a, upward_inc_iterator_t<CART ,DA,DE>)
+  { return a.template EndElement   <DE>(); }
 
-  template<class CART, unsigned K, unsigned M>
+  template<class CART, unsigned DA, unsigned DE>
   int
-  gral_size (sequence_iterator_t<CART,K> const& a, upward_inc_iterator_t<CART ,K,M>) 
-  { return a.template NumOfElements<M>(); }
+  gral_size (sequence_iterator_t<CART,DA> const& a, upward_inc_iterator_t<CART ,DA,DE>) 
+  { return a.template NumOfElements<DE>(); }
 
 
 } // namespace cartesiannd
