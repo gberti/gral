@@ -25,6 +25,8 @@ namespace GrAL {
     typedef typename GF::const_iterator       base_const_iterator;
     
   public:
+    typedef grid_function_view_category<typename category<GF>::type> category;
+
     typedef F                                 mapping_type;
     typedef typename F::result_type           value_type;
     typedef value_type&                       reference;

@@ -12,9 +12,12 @@ namespace GrAL {
 template<class GRID, class element_tag, class GT = grid_types<GRID> >
 struct element_handle_int 
 {
+  typedef grid_element_handle_category_d<etag2dim<GT, element_tag>::value> category;
+
   typedef element_handle_int<GRID,element_tag,GT> self;
   typedef GRID                   grid_type;
   typedef typename GT::size_type size_type;
+
   size_type h;
   element_handle_int() {}
   element_handle_int(size_type hh) : h(hh) {}
@@ -63,10 +66,11 @@ namespace GrAL {
   template<class GRID,class GT = grid_types<GRID> >
 struct vertex_handle_int 
 {
+  typedef grid_vertex_handle_category category;
   typedef vertex_handle_int<GRID,GT> self;
   typedef GRID                    grid_type;
   typedef typename GT::size_type  size_type;
-
+  
   size_type h;
   vertex_handle_int() {}
   vertex_handle_int(size_type hh) : h(hh) {}
@@ -93,6 +97,7 @@ struct vertex_handle_int
 template<class GRID, class GT = grid_types<GRID> >
 struct edge_handle_int 
 {
+  typedef grid_edge_handle_category category;
   typedef edge_handle_int<GRID,GT> self;
   typedef GRID grid_type;
   typedef typename GT::size_type  size_type;
@@ -122,6 +127,7 @@ struct edge_handle_int
 template<class GRID, class GT = grid_types<GRID> >
 struct face_handle_int 
 {
+  typedef grid_face_handle_category category;
   typedef face_handle_int<GRID,GT> self;
   typedef GRID grid_type;
   typedef typename GT::size_type  size_type;
@@ -151,6 +157,7 @@ struct face_handle_int
 template<class GRID, class GT = grid_types<GRID> >
 struct facet_handle_int 
 {
+  typedef grid_facet_handle_category category;
   typedef facet_handle_int<GRID,GT> self;
   typedef GRID grid_type;
   typedef typename GT::size_type  size_type;
@@ -182,6 +189,7 @@ struct facet_handle_int
 template<class GRID, class GT = grid_types<GRID> >
 struct cell_handle_int 
 {
+  typedef grid_cell_handle_category category;
   typedef cell_handle_int<GRID,GT>   self;
   typedef GRID                    grid_type;
   typedef typename GT::size_type  size_type;

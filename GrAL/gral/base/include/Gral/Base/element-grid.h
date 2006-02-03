@@ -52,9 +52,12 @@ class single_element_iterator {
   E   e;
   int ne;
 public:
-  typedef E value_type;
   typedef typename et::handle_type element_handle;
   typedef typename E::grid_type grid_type;
+
+  typedef E         value_type;
+  typedef grid_type anchor_type;
+  typedef typename get_sequence_iterator_category<typename category<E>::type>::type category;
 
   single_element_iterator() {}
   explicit 
@@ -302,15 +305,20 @@ template<class E>
 class element_grid : public detail::element_sides_range<E, element_traits<E>::dim>, // element_dimension_tag::dim>,
 		     public detail::element_grid_mixin<E, element_grid<E> >
 {
-  typedef E element_type;
+  typedef element_grid<E> self;
+  typedef E               element_type;
   typedef detail::element_sides_range<E, element_traits<E>::dim> base; // element_dimension_tag::dim> base;
 public:
   typedef element_traits<E> et;
-  typedef grid_types<typename et::grid_type> gt;
+  typedef self                       grid_type;
+  typedef typename et::grid_type     base_grid_type;  
+  typedef grid_types<base_grid_type> bgt;
+  enum   { dim = GrAL::dim<bgt,E>::value };
+  typedef grid_view_category_d<dim> category;
 
   using base::TheElement;
-  typedef detail::single_element_iterator<E> CellIterator;
-  typedef E                          Cell;
+  typedef detail::single_element_iterator<E>     CellIterator;
+  typedef E                                      Cell;
   typedef typename CellIterator::element_handle  cell_handle;
 
   element_grid() {}
@@ -341,7 +349,7 @@ struct grid_types_elem_grid
     public element_grid_types_mixin<E, element_grid<E> >
 {
   typedef element_grid<E>                  grid_type;
-  typedef typename grid_type::gt           basegt;
+  typedef typename grid_type::bgt          basegt;
 
   typedef typename grid_type::Cell         Cell;
   typedef typename grid_type::CellIterator CellIterator;

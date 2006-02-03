@@ -41,6 +41,7 @@ namespace GrAL {
 template<class E, class T>
 class grid_function_vector {
 public:
+  typedef total_grid_function_category         category;
   // container types
   typedef std::vector<T>                       table_type;
   typedef typename table_type::size_type       size_type;

@@ -176,6 +176,7 @@ class grid_function_hash
 
   using base_gf::table;
 public:
+  typedef total_grid_function_category         category;
   typedef element_traits<E> et1;
   typedef typename et1::ElementIterator     ElementIterator;
   typedef typename base_gf::grid_type       grid_type;

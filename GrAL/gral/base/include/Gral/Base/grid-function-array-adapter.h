@@ -170,6 +170,8 @@ class grid_function_array_adapter
 {
   typedef grid_function_array_adapter<ELEMENT,T,N> self;
 public:
+  typedef total_grid_function_category category;
+
   typedef ELEMENT                      element_type;
   typedef element_traits<element_type> et;
   typedef typename et::grid_type       grid_type;
