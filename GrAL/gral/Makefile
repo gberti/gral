@@ -2,7 +2,7 @@ export CONFIG:=$(shell pwd)/mk.config
 #unexport PWD
 include $(CONFIG)
 
-SUBDIRS =  base \
+SUBDIRS  =  base \
            cartesian2d \
            cartesian3d \
            cartesiannd \
@@ -20,6 +20,8 @@ SUBDIRS =  base \
            triang2d \
            triang3d \
 
+
+SUBDIRS := $(filter-out $(EXCLUDED),$(SUBDIRS))
 
 #include $(GRALROOT)/configuration/defs/recursive-targets
 
