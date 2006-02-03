@@ -341,18 +341,19 @@ public:
 
 #define DEFINE_WRAP_BASE_ELEM(T, TH)					\
   template<int NEW_HAS, int OLD_HAS, class NEW_GT, class OLD_GT>	   \
-  struct wrap_base_elem_aux_##T {};		   \
+  struct wrap_base_elem_aux_##T : public virtual NEW_GT {  };					\
   \
   template<class NEW_GT, class OLD_GT>					\
   struct wrap_base_elem_aux_##T<0,1,NEW_GT, OLD_GT> \
+    : public virtual NEW_GT \
   { \
     /* typedef typename get_from_base_gt_##TH<NEW_GT, OLD_GT>::TH TH;	*/ \
     typedef int TH; \
    typedef wrapped_element<typename NEW_GT::grid_type, typename OLD_GT::T, TH>  T; }; \
   \
   template<class NEW_GT, class OLD_GT> \
-  struct wrap_base_elem_##T : public wrap_base_elem_aux_##T   <has_##T<NEW_GT>::result, \
-                                                               has_##T<OLD_GT>::result, \
+  struct wrap_base_elem_##T : public wrap_base_elem_aux_##T   <has_##T<NEW_GT>::value, \
+                                                               has_##T<OLD_GT>::value, \
                                                                NEW_GT,OLD_GT> \
   {};
 
@@ -375,18 +376,17 @@ public:
 
   template<class NEW_GT, class OLD_GT>
   struct wrap_all_element_types_aux  : 
-    public NEW_GT,
-    public wrap_base_elem_Vertex<NEW_GT, OLD_GT>,
-    public wrap_base_elem_Edge  <NEW_GT, OLD_GT>,
-    public wrap_base_elem_Face  <NEW_GT, OLD_GT>,
-    public wrap_base_elem_Facet <NEW_GT, OLD_GT>,
-    public wrap_base_elem_Cell  <NEW_GT, OLD_GT>
+    public virtual wrap_base_elem_Vertex<NEW_GT, OLD_GT>,
+    public virtual wrap_base_elem_Edge  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_elem_Face  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_elem_Facet <NEW_GT, OLD_GT>,
+    public virtual wrap_base_elem_Cell  <NEW_GT, OLD_GT>
   {};
 
 
   template<class NEW_GT, class OLD_GT>
   struct wrap_all_element_types :
-    public wrap_all_element_types_aux<grid_types_detail::dim_dep_defs<NEW_GT>, OLD_GT>
+    public wrap_all_element_types_aux<dim_dep_defs<NEW_GT>, OLD_GT>
   {};
     
 
@@ -394,10 +394,11 @@ public:
 #define DEFINE_WRAP_BASE_INCIDENCE_ITERATOR(A, E, EH, IT)	\
   \
   template<int NEW_HAS, int OLD_HAS, class NEW_GT, class OLD_GT>	   \
-  struct wrap_base_incidence_iterator_aux_##IT  {};		\
+  struct wrap_base_incidence_iterator_aux_##IT : public virtual NEW_GT {};			\
   \
   template<class NEW_GT, class OLD_GT>					\
   struct wrap_base_incidence_iterator_aux_##IT<0,1,NEW_GT, OLD_GT>  \
+    : public virtual NEW_GT \
   { \
     typedef wrapped_incidence_iterator<typename NEW_GT::grid_type, \
 				       typename NEW_GT::A,	   \
@@ -407,8 +408,8 @@ public:
   \
   template<class NEW_GT, class OLD_GT> \
   struct wrap_base_incidence_iterator_##IT : public wrap_base_incidence_iterator_aux_##IT   \
-  <has_##IT<NEW_GT>::result,						\
-   has_##IT<OLD_GT>::result,						\
+  <has_##IT<NEW_GT>::value,						\
+   has_##IT<OLD_GT>::value,						\
    NEW_GT,OLD_GT> \
   {};
 
@@ -499,20 +500,20 @@ public:
 
   template<class NEW_GT, class OLD_GT, int D>
   struct wrap_all_downward_incidence_iterator_types_dim : 
-    public NEW_GT,
-    public wrap_base_incidence_iterator_VertexOnEdgeIterator<NEW_GT, OLD_GT>,
+    // public NEW_GT,
+    public virtual wrap_base_incidence_iterator_VertexOnEdgeIterator<NEW_GT, OLD_GT>,
 
-    public wrap_base_incidence_iterator_VertexOnFaceIterator<NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_EdgeOnFaceIterator  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_VertexOnFaceIterator<NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_EdgeOnFaceIterator  <NEW_GT, OLD_GT>,
 
-    public wrap_base_incidence_iterator_VertexOnFacetIterator<NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_EdgeOnFacetIterator  <NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_FaceOnFacetIterator  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_VertexOnFacetIterator<NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_EdgeOnFacetIterator  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_FaceOnFacetIterator  <NEW_GT, OLD_GT>,
 
-    public wrap_base_incidence_iterator_VertexOnCellIterator<NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_EdgeOnCellIterator  <NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_FaceOnCellIterator  <NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_FacetOnCellIterator <NEW_GT, OLD_GT>
+    public virtual wrap_base_incidence_iterator_VertexOnCellIterator<NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_EdgeOnCellIterator  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_FaceOnCellIterator  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_FacetOnCellIterator <NEW_GT, OLD_GT>
   { };
 
   template<class NEW_GT, class OLD_GT>
@@ -521,7 +522,6 @@ public:
 
   template<class NEW_GT, class OLD_GT>
   struct wrap_all_downward_incidence_iterator_types_dim<NEW_GT, OLD_GT,1> : 
-    public NEW_GT,
     public wrap_base_incidence_iterator_VertexOnEdgeIterator<NEW_GT, OLD_GT>
   {
     typedef wrap_all_downward_incidence_iterator_types_dim<NEW_GT, OLD_GT,1> base;
@@ -533,10 +533,9 @@ public:
 
   template<class NEW_GT, class OLD_GT>
   struct wrap_all_downward_incidence_iterator_types_dim<NEW_GT, OLD_GT,2> : 
-    public NEW_GT,
-    public wrap_base_incidence_iterator_VertexOnEdgeIterator<NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_VertexOnFaceIterator<NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_EdgeOnCellIterator  <NEW_GT, OLD_GT>
+    public virtual wrap_base_incidence_iterator_VertexOnEdgeIterator<NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_VertexOnFaceIterator<NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_EdgeOnCellIterator  <NEW_GT, OLD_GT>
   {    
     typedef wrap_all_downward_incidence_iterator_types_dim<NEW_GT, OLD_GT,2> base;
 
@@ -552,15 +551,14 @@ public:
 
   template<class NEW_GT, class OLD_GT>
   struct wrap_all_downward_incidence_iterator_types_dim<NEW_GT, OLD_GT,3> : 
-    public NEW_GT,
-    public wrap_base_incidence_iterator_VertexOnEdgeIterator<NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_VertexOnFaceIterator<NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_VertexOnCellIterator<NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_VertexOnEdgeIterator<NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_VertexOnFaceIterator<NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_VertexOnCellIterator<NEW_GT, OLD_GT>,
 
-    public wrap_base_incidence_iterator_EdgeOnFaceIterator  <NEW_GT, OLD_GT>,
-    public wrap_base_incidence_iterator_EdgeOnCellIterator  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_EdgeOnFaceIterator  <NEW_GT, OLD_GT>,
+    public virtual wrap_base_incidence_iterator_EdgeOnCellIterator  <NEW_GT, OLD_GT>,
 
-    public wrap_base_incidence_iterator_FaceOnCellIterator  <NEW_GT, OLD_GT>    
+    public virtual wrap_base_incidence_iterator_FaceOnCellIterator  <NEW_GT, OLD_GT>    
   {
     typedef wrap_all_downward_incidence_iterator_types_dim<NEW_GT, OLD_GT,3> base;
 
