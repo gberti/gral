@@ -269,8 +269,10 @@ namespace collapsed_grid_view {
       typedef typename gt::Vertex        Vertex;
       typedef typename gt::Cell          Cell;
 
-      typedef grid_type anchor_type;
-      typedef Cell      value_type;
+      typedef cell_type_tag      element_type_tag;
+      struct category: virtual grid_cell_category, virtual grid_cell_iterator_category {};
+      typedef grid_type          anchor_type;
+      typedef Cell               value_type;
    private:
       ref_ptr<grid_type  const>  g;
       typename bgt::CellIterator c;
@@ -327,6 +329,8 @@ namespace collapsed_grid_view {
     typedef vertex<GRID>           self;
     typedef local_grid_types<GRID> base;
   public:
+    typedef vertex_type_tag              element_type_tag;
+    typedef grid_vertex_category         category;
     typedef typename base::bgt           bgt;
     typedef typename base::grid_type     grid_type;
     typedef typename base::vertex_handle vertex_handle;
@@ -371,8 +375,9 @@ namespace collapsed_grid_view {
       typedef typename base::Cell          Cell;
       typedef typename base::Vertex        Vertex;
 
-      typedef grid_type anchor_type;
-      typedef Vertex    value_type;
+      typedef grid_vertex_iterator_category   category;
+      typedef grid_type                       anchor_type;
+      typedef Vertex                          value_type;
     private:
 
       ref_ptr<grid_type const>     g;
@@ -430,6 +435,7 @@ namespace collapsed_grid_view {
       typedef typename gt::Vertex        Vertex;
       typedef typename gt::Cell          Cell;
 
+      typedef grid_incidence_iterator_category category;
       typedef Cell   anchor_type;
       typedef Vertex value_type;
     private:

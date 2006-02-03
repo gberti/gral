@@ -30,6 +30,12 @@ struct grid_types_facet_grid {
 
   // typedef typename fgt::FacetIterator  CellIterator;
   typedef typename FACETRANGE::FacetIterator  CellIterator;
+
+  // FIXME: if bgt::dimension_tag::dim == -1 (runtime dim), this must also be
+  enum { dim = (  bgt::dimension_tag::dim > 0 
+		? bgt::dimension_tag::dim - 1 
+		: -1) };
+  typedef grid_dim_tag<dim> dimension_tag;
 };
 
 
@@ -43,8 +49,13 @@ template<class FACETRANGE>
 class facet_grid
   : public grid_types_facet_grid<FACETRANGE>  {
 private:
-  typedef grid_types_facet_grid<FACETRANGE>       gt;
+  typedef facet_grid<FACETRANGE>            self;
+  typedef grid_types_facet_grid<FACETRANGE> gt;
 public:
+  typedef self grid_type;
+  enum { dim = gt::dimension_tag::dim };
+  typedef grid_category_d<dim> category;
+
   typedef typename gt::base_grid_type                base_grid_type;
   typedef enumerated_vertex_range<base_grid_type>    vertex_range_type;
   typedef FACETRANGE                                 facet_range_type;

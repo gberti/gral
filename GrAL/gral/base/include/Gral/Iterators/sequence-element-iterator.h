@@ -24,7 +24,7 @@ namespace GrAL {
   class sequence_element_iterator {
     typedef sequence_element_iterator<E,G,IT,GT> self;
   public:
-    typedef grid_sequence_iterator_category category;
+    typedef typename get_sequence_iterator_category<typename category<E>::type>::type category;
     typedef G grid_type;
     typedef G anchor_type;
     typedef E value_type;

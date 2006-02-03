@@ -102,6 +102,8 @@ namespace GrAL {
       typedef grid_types_base<GRID1,GRID2>    base;
       typedef typename base::vertex_handle_1 vertex_handle_1;
       typedef typename base::vertex_handle_2 vertex_handle_2;
+    public:
+      typedef grid_vertex_handle_category   category;
     private:
       vertex_handle_1 v1_;
       vertex_handle_2 v2_;
@@ -151,6 +153,8 @@ namespace GrAL {
       typedef grid_types_base<GRID1,GRID2>    base;
       typedef typename base::cell_handle_1 cell_handle_1;
       typedef typename base::cell_handle_2 cell_handle_2;
+    public:
+      typedef grid_cell_handle_category    category;
     private:
       cell_handle_1 c1_;
       cell_handle_2 c2_;
@@ -226,6 +230,8 @@ namespace GrAL {
       typedef typename base::grid_type_1 grid_type_1;
       typedef typename base::grid_type_2 grid_type_2;
       typedef typename base::size_type   size_type;
+      enum { dim = base::dimension_tag::dim }; 
+      typedef grid_category_d<dim>       category;      
     private:
       grid_type_1 const& g1;
       grid_type_2 const& g2;
@@ -276,8 +282,10 @@ namespace GrAL {
 
       typedef typename base::grid_type       grid_type;
 
-      typedef grid_type anchor_type;
-      typedef self      value_type;
+      typedef vertex_type_tag      element_type_tag;
+      struct category : virtual grid_vertex_category, virtual grid_vertex_iterator_category {};
+      typedef grid_type            anchor_type;
+      typedef self                 value_type;
     private:
       VertexIterator1 v1_;
       VertexIterator2 v2_;
@@ -350,6 +358,8 @@ namespace GrAL {
       typedef typename base::VertexOnCellIterator2 VertexOnCellIterator2;
 
       typedef typename base::grid_type      grid_type;
+      typedef cell_type_tag        element_type_tag;
+      struct category : virtual grid_cell_category, virtual grid_cell_iterator_category {};
       typedef grid_type                     anchor_type;
       typedef self                          value_type;
     private:
@@ -429,6 +439,7 @@ namespace GrAL {
       // using base::vertex_handle_2;
       using base::TheGrid;
 
+      typedef grid_incidence_iterator_category_d<0,grid_type::dim>  category;
       typedef Cell   anchor_type;
       typedef Vertex value_type;
     private:
@@ -522,6 +533,7 @@ namespace GrAL {
       typedef typename GEOM1::coord_type coord_type_1;
       typedef typename GEOM2::coord_type coord_type_2;
 
+      typedef grid_geometry_category              category;
       typedef grid_view<grid_type_1, grid_type_2> grid_type;
       typedef grid_types<grid_type> gt;
       typedef typename gt::Vertex Vertex;

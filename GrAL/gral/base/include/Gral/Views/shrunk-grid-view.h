@@ -122,6 +122,10 @@ namespace shrink_grid_view {
       typedef grid_view<GRID>        self;
       typedef local_grid_types<GRID> gt;
     public:
+      typedef self grid_type;
+      enum { dim = gt::dimension_tag::dim };
+      typedef grid_view_category_d<dim>       category;
+
       typedef typename gt::archetype_iterator archetype_iterator;
       typedef typename gt::archetype_type     archetype_type;
       typedef typename gt::archetype_handle   archetype_handle;
@@ -185,6 +189,7 @@ namespace shrink_grid_view {
      typedef typename base::bgt bgt;
      typedef typename bgt::vertex_handle base_vertex_handle;
      typedef typename base::cell_handle  cell_handle;
+     typedef grid_vertex_handle_category category;
 
      cell_handle        c;
      base_vertex_handle v;
@@ -215,6 +220,10 @@ namespace shrink_grid_view {
       typedef typename gt::Vertex        Vertex;
 
       typedef cell_type_tag element_type_tag;
+      struct category : 
+	virtual grid_cell_category,
+	virtual grid_cell_iterator_category {};
+
       typedef grid_type anchor_type;
       typedef self      value_type;
    private:
@@ -271,6 +280,9 @@ namespace shrink_grid_view {
       typedef typename gt::Cell          Cell;
 
       typedef vertex_type_tag element_type_tag;
+      struct category : 
+	virtual grid_vertex_category,
+	virtual grid_vertex_iterator_category {};
       typedef grid_type anchor_type;
       typedef self      value_type;
     private:
@@ -342,6 +354,7 @@ namespace shrink_grid_view {
       typedef typename gt::Vertex        Vertex;
       typedef typename gt::Cell          Cell;
 
+      typedef grid_incidence_iterator_category_d<0,grid_type::dim> category;
       typedef Vertex value_type;
       typedef Cell   anchor_type;
     private:
@@ -426,6 +439,7 @@ namespace shrink_grid_view {
       typedef GEOM                   base_geom_type;
       typedef local_grid_types<GRID> gt;
     public:
+      typedef grid_geometry_category              category;
       typedef typename base_geom_type::coord_type coord_type;
       typedef point_traits<coord_type>            pt;
       typedef typename gt::bgt                    bgt;
@@ -615,6 +629,7 @@ namespace shrink_grid_view {
       typedef typename bet::element_type_tag    btag;
       typedef typename GF::const_iterator       base_const_iterator;
     public:
+      typedef grid_function_view_category<typename category<GF>::type>  category;
       typedef typename GF::value_type      value_type;
       typedef typename GF::reference       reference;
       typedef typename GF::const_reference const_reference;

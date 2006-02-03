@@ -357,6 +357,7 @@ public:
    \see Test in \ref test-boundary-grid.C
 
    \todo Implement a dimension-independent version
+   \todo Replace typedef by wrappers of base grid elements
  */
 template<class E>
 class boundary_grid 
@@ -366,6 +367,9 @@ class boundary_grid
   typedef boundary_grid_aux<E,typename element_traits<E>::element_type_tag,
                               typename element_traits<E>::grid_dimension_tag>
   base;
+public:
+  enum { dim = base::dimension_tag::dim };
+  typedef grid_category_d<dim>  category;
 public:
   boundary_grid() {}
   boundary_grid(E const& e) : base(e) {}

@@ -30,7 +30,8 @@ namespace GrAL {
     typedef typename et::grid_type      grid_type;
     typedef typename et::handle_type    handle_type;
     typedef element_type                value_type;
-
+    
+    typedef typename get_sequence_iterator_category<typename category<E>::type>::type category;
   private:
     element_type e;
     int          cnt;

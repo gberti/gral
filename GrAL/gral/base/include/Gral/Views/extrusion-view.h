@@ -87,6 +87,9 @@ namespace extrusion_view {
     typedef typename gt::grid_type  grid_type;
     typedef typename gt::size_type  size_type;
 
+    enum { dim = gt::dimension_tag::dim }; 
+    typedef grid_view_category_d<dim>       category;
+
     typedef typename gt::archetype_type     archetype_type;
     typedef typename gt::archetype_iterator archetype_iterator;
     typedef typename gt::archetype_handle   archetype_handle;
@@ -241,6 +244,9 @@ namespace extrusion_view {
     typedef typename base::bgt        bgt;
   public:
     typedef vertex_type_tag              element_type_tag;
+    struct category : 
+      virtual grid_vertex_category, 
+      virtual grid_vertex_iterator_category {};
     typedef typename base::vertex_handle vertex_handle;
     typedef typename base::grid_type     grid_type;
     typedef self                         value_type;
@@ -282,10 +288,15 @@ namespace extrusion_view {
     typedef cell_iterator_t<GRID2D> self;
   public:
     typedef cell_type_tag              element_type_tag;
+    struct category : 
+      virtual grid_cell_category, 
+      virtual grid_cell_iterator_category {};
+
     typedef typename base::grid_type   grid_type;
     typedef typename base::cell_handle cell_handle;
     typedef typename base::archgt      archgt;
     typedef self                       value_type;
+
   private:
     typedef typename base::bgt bgt;
     typename bgt::CellIterator tri;
@@ -346,9 +357,11 @@ namespace extrusion_view {
     typedef grid_types_base<GRID2D>           gt;
     typedef vertex_on_cell_iterator_t<GRID2D> self;
   public:
+    typedef typename gt::grid_type            grid_type;
     typedef typename gt::vertex_handle        vertex_handle;
     typedef typename gt::Cell                 anchor_type;
     typedef typename gt::Vertex               value_type;
+    typedef grid_incidence_iterator_category_d<0, grid_type::dim> category;
   private:
     typename gt::Cell c;
     int               lv;
@@ -362,9 +375,9 @@ namespace extrusion_view {
     self&  operator++() { cv(); ++lv; return *this;}
     bool IsDone() const { cb(); return lv >= 4;}
 
-    ref_ptr<typename gt::grid_type const> TheGrid() const { cb(); return c.TheGrid();}
-    ref_ptr<typename gt::Cell const>      TheCell() const { cb(); return ref_ptr<typename gt::Cell const>(c);}
-    ref_ptr<typename gt::Cell const>      TheAnchor() const { return TheCell();}
+    ref_ptr<grid_type   const> TheGrid() const { cb(); return c.TheGrid();}
+    ref_ptr<anchor_type const> TheCell() const { cb(); return ref_ptr<typename gt::Cell const>(c);}
+    ref_ptr<anchor_type const> TheAnchor() const { return TheCell();}
 
     bool bound() const { return c.valid();}
     bool valid() const { return bound() && 0 <= lv && lv < 4;}
@@ -565,6 +578,7 @@ namespace extrusion_view {
   template<class GEOM2D, class F>
   class geometry {
  public:
+    typedef grid_geometry_category             category;
     typedef GEOM2D                             base_geom_type;
     typedef typename base_geom_type::grid_type base_grid_type;
     typedef grid_types<base_grid_type>         bgt;

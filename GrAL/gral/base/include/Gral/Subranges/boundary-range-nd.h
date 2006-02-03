@@ -34,8 +34,13 @@ namespace GrAL {
    */
 template<class GRID, class GT = grid_types<GRID> >
 class boundary_range_nd {
-public:
   typedef boundary_range_nd<GRID, GT> self;
+public:
+  typedef typename GT::dimension_tag  dimension_tag;
+  // FIXME: is this correct? No if this were a grid, not a grid_range !
+  enum { dim = dimension_tag::dim };
+  typedef grid_range_category_d<dim>  category;
+
   typedef GRID                        grid_type;
   typedef GT                          gt;
   typedef typename gt::Cell           Cell;
@@ -49,8 +54,7 @@ public:
   typedef typename facet_range_type::FacetIterator        FacetIterator;
   typedef vertex_set_of_facets_iterator<facet_range_type> VertexIterator;
 
-  typedef typename GT::dimension_tag  dimension_tag;
-  enum { dim = grid_type::dim };
+
   unsigned dimension() const { return dim;}
 private:
 
@@ -97,6 +101,8 @@ struct grid_types_boundary_range_nd
   typedef typename range_type::FacetIterator  FacetIterator;
   typedef typename range_type::Vertex         Vertex;
   typedef typename range_type::VertexIterator VertexIterator;
+  // perhaps we should not define incidence iterators in sub*ranges* ... ?
+  // at least no upward incidence iterators 
   typedef typename GT::VertexOnFacetIterator  VertexOnFacetIterator;
 };
 

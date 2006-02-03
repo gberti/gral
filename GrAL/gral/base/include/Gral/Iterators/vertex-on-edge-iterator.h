@@ -28,6 +28,7 @@ public:
   typedef typename GT::vertex_handle vertex_handle;
   typedef typename GT::Edge   Edge;
 
+  typedef grid_incidence_iterator_category_d<0,1> category;
   typedef Edge   anchor_type;
   typedef Vertex value_type;
   typedef Vertex element_type;

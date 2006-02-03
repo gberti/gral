@@ -65,6 +65,9 @@ public:
   typedef typename GT::FacetOnCellIterator FacetOnCellIterator;
   typedef Cell     value_type;
   typedef Cell     anchor_type;
+  typedef typename get_incidence_iterator_category<typename category<value_type> ::type,
+						   typename category<anchor_type>::type>::type
+		   category;
 private:
   ref_ptr<NBTABLE   const> nbs;
   Cell                 c;

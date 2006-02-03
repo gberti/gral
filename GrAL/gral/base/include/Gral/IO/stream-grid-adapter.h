@@ -81,6 +81,8 @@ class stream_grid_mask_vertex {
   typedef stream_grid_mask_vertex<It> self;
 public:
   typedef stream_grid_mask<It> grid_type;
+  typedef vertex_type_tag      element_type_tag;
+  typedef grid_vertex_category category;
   typedef self                 value_type;
   typedef grid_type            anchor_type;
 private:
@@ -130,6 +132,10 @@ class stream_grid_mask_cell {
 public:
   typedef stream_grid_mask<It>                grid_type;
   typedef typename grid_type::size_type       size_type;
+
+  typedef cell_type_tag                       element_type_tag;
+  typedef grid_cell_category                  category;
+
   typedef self                                value_type;
   typedef grid_type                           anchor_type;
 private:
@@ -187,6 +193,7 @@ public:
   typedef stream_grid_mask_vertex<It>  Vertex;
   typedef typename grid_type::size_type size_type;
 
+  typedef grid_incidence_iterator_category category;
   typedef Cell   anchor_type;
   typedef Vertex value_type;
 private:
@@ -232,6 +239,7 @@ class stream_grid_mask {
   typedef grid_types_stream_grid_mask<It> gt;
 public:
   typedef typename gt::size_type   size_type;
+  typedef grid_category_d<2>       category;
 private:
   size_type numv;
   size_type numc;

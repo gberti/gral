@@ -30,6 +30,13 @@ public:
   typedef typename gt::Vertex      Vertex;
   typedef typename gt::Cell        Cell;
   typedef typename gt::cell_handle cell_handle;
+
+  typedef Vertex anchor_type;
+  typedef Cell   value_type;
+  typedef typename get_incidence_iterator_category<typename category<value_type> ::type,
+						   typename category<anchor_type>::type>::type
+		   category;
+
 private:
   typedef grid_function<Vertex, std::vector<cell_handle> > cov_table;
   

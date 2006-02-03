@@ -29,6 +29,9 @@ namespace GrAL {
 
    \see Module \ref boundarycompiter
    \see Module \ref boundaryalgorithms
+
+   \todo Rename to boundary_range_2d
+   \todo Change boundary_range_nd to select boundary_range_2d in the 2D case
 */
 //----------------------------------------------------------------
 
@@ -152,12 +155,14 @@ public:
  */
 template<class GRID>
 class boundary_range_vertex_iterator {
+public:
   typedef GRID                grid_type;
   typedef grid_types<GRID>    gt;
   typedef typename gt::Vertex Vertex;
   typedef typename gt::Edge   Edge;
   typedef typename gt::Facet  Facet;
 
+  typedef grid_sequence_iterator_category_d<0> category;
 private:
   boundary_range_iterator<GRID> base;
 
@@ -182,12 +187,14 @@ public:
  */
 template<class GRID>
 class boundary_range_edge_iterator {
+public:
   typedef GRID                grid_type;
   typedef grid_types<GRID>    gt;
   typedef typename gt::Vertex Vertex;
   typedef typename gt::Edge   Edge;
   typedef typename gt::Facet  Facet;
 
+  typedef grid_sequence_iterator_category_d<1> category;
 private:
   boundary_range_iterator<GRID> base;
 

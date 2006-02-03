@@ -90,6 +90,7 @@ namespace generic_edge {
 	typedef grid_types_edge<gt> base;
 
       public:
+	typedef grid_edge_handle_category    category;
 	typedef typename base::cell_handle 	cell_handle;
 	typedef typename base::arch_edge_handle arch_edge_handle;
 
@@ -131,6 +132,9 @@ namespace generic_edge {
 	typedef typename base::edge_handle   edge_handle;
 	typedef typename base::grid_type     grid_type;
 
+	typedef typename get_incidence_iterator_category<grid_edge_category,
+							 typename category<Cell>::type>::type
+	category;
 	typedef Cell anchor_type;
 	typedef Edge value_type;
 
@@ -194,6 +198,7 @@ namespace generic_edge {
       typedef typename base::grid_type     grid_type;
       
       typedef edge_type_tag                element_type_tag;
+      typedef grid_edge_category           category;
     private:
       edge_on_cell_iterator<gt> e;
     public:
@@ -266,6 +271,7 @@ namespace generic_edge {
       typedef typename base::edge_handle   edge_handle;
       typedef typename base::grid_type     grid_type;
 
+      typedef grid_edge_iterator_category category;
       typedef Edge      value_type;
       typedef grid_type anchor_type;
    private:

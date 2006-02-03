@@ -51,6 +51,7 @@ template<class G, class GT>
 class vertex_on_vertex_iterator {
   typedef vertex_on_vertex_iterator<G,GT> self;
 public:
+  typedef grid_incidence_iterator_category_d<0,0> category;
   typedef G  grid_type;
   typedef GT gt;
   typedef typename gt::Vertex      Vertex;

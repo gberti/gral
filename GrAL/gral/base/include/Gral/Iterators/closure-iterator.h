@@ -13,6 +13,22 @@
 
 namespace GrAL {
 
+  namespace closure_iterator_detail {
+
+    template<class VAL_CAT, class ANCHOR_CAT, int ANCHOR_IS_GRID>
+    struct get_cat_aux 
+      : get_sequence_iterator_category <VAL_CAT> {};
+    template<class VAL_CAT, class ANCHOR_CAT>
+    struct get_cat_aux<VAL_CAT, ANCHOR_CAT,0>
+      : get_incidence_iterator_category<VAL_CAT, ANCHOR_CAT> {};
+
+    template<class VAL, class ANCHOR>
+    struct get_category 
+      : get_cat_aux<typename category<VAL>   ::type,
+		    typename category<ANCHOR>::type, 
+		    is_grid_range<ANCHOR>::value> {};
+
+  } //  namespace closure_iterator_detail
 
 /*! \brief  Iterator over the k-elements incident to a set of n-elements
     \ingroup iterators
@@ -45,6 +61,8 @@ namespace GrAL {
     typedef typename MINORIT::value_type      element_type;
     typedef element_traits<value_type>         min_et;
     typedef element_traits<major_element_type> maj_et;    
+
+    typedef typename closure_iterator_detail::get_category<value_type, anchor_type>::type category;
   private:
     major_iterator_type major_it;
     minor_iterator_type minor_it;

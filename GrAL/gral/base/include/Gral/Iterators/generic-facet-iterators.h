@@ -110,7 +110,7 @@ namespace generic_facet {
       public:
 	typedef typename base::cell_handle 	 cell_handle;
 	typedef typename base::arch_cell_handle  arch_cell_handle;
-
+	typedef grid_facet_handle_category     category;
       public:
 	cell_handle      c;
 	arch_cell_handle lh;
@@ -155,6 +155,10 @@ namespace generic_facet {
 	typedef typename base::archCellIterator archCellIterator;
 	typedef typename base::arch_cell_handle arch_cell_handle;
 	typedef typename base::grid_type        grid_type;
+
+	typedef typename get_incidence_iterator_category<grid_facet_category,
+							 typename category<Cell>::type>::type
+		      category;
 
 	typedef Facet value_type;
 	typedef Cell  anchor_type;
@@ -216,6 +220,7 @@ namespace generic_facet {
       typedef typename base::vtuple_type      vtuple_type;
       typedef typename base::archCell         archCell;
       typedef facet_type_tag                  element_type_tag;
+      typedef grid_facet_category             category;
     private:
       facet_on_cell_iterator<gt> fc;
     public:
@@ -329,8 +334,11 @@ namespace generic_facet {
 	typedef typename base::archVertexOnCellIterator archVertexOnCellIterator;
 	typedef typename base::grid_type        grid_type;
 
-	typedef Facet  anchor_type;
-	typedef Vertex value_type;
+	typedef typename get_incidence_iterator_category<typename category<Vertex>::type,
+							 typename category<Facet>::type>::type
+							 category;
+	typedef Facet                             anchor_type;
+	typedef Vertex                            value_type;
       private:
 	 facet_on_cell_iterator<gt> f;
 	 archVertexOnCellIterator  vf;
@@ -385,8 +393,11 @@ namespace generic_facet {
 	typedef typename base::archEdgeOnCellIterator archEdgeOnCellIterator;
 	typedef typename base::grid_type        grid_type;
 
-	typedef Facet anchor_type;
-	typedef Edge  value_type;
+	typedef typename get_incidence_iterator_category<typename category<Edge> ::type,
+							 typename category<Facet>::type>::type
+							 category;
+	typedef Facet                             anchor_type;
+	typedef Edge                              value_type;
       private:
 	 facet_on_cell_iterator<gt> f;
 	 archEdgeOnCellIterator  ef;
@@ -443,8 +454,9 @@ namespace generic_facet {
       typedef typename base::arch_cell_handle arch_cell_handle;
       typedef typename base::grid_type        grid_type;
 
-      typedef Facet     value_type;
-      typedef grid_type anchor_type;
+      typedef grid_facet_iterator_category    category;
+      typedef Facet                           value_type;
+      typedef grid_type                       anchor_type;
     private:
       CellIterator               c;
       facet_on_cell_iterator<gt> e;

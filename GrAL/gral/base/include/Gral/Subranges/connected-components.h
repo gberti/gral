@@ -65,6 +65,9 @@ namespace connected_components {
   class component /* : public GT ... must re-define sequence iterator types! */ {
     typedef component<GT>            self;
   public:
+    enum { dim = GT::dimension_tag::dim };
+    typedef grid_range_category_d<dim>      category;
+
     typedef typename GT::Cell               Cell;
     typedef typename GT::cell_handle        cell_handle;
     typedef cell_iterator<GT>               CellIterator;
