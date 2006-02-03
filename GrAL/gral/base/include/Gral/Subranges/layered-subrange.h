@@ -173,6 +173,15 @@ private:
 };
 
 
+
+template<class Grid>
+struct grid_types<layered_vertex_range<Grid> >
+  : public grid_types<typename layered_vertex_range<Grid>::base> {};
+
+template<class Grid>
+struct grid_types<layered_cell_range<Grid> >
+  : public grid_types<typename layered_cell_range<Grid>::base> {};
+
 } // namespace GrAL 
 
 #endif
