@@ -3,6 +3,10 @@
 
 // $LICENSE_NEC_2006
 
+#include <boost/mpl/int.hpp>
+#include <boost/mpl/eval_if.hpp>
+#include <boost/mpl/identity.hpp>
+
 #include "Gral/Base/internal/define-grid-entities.h"
 #include "Gral/Base/type-tags.h"
 
@@ -34,6 +38,9 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_TESTFOR);
 
 #undef DEFINE_TESTFOR
 
+  template<class X> struct is_undefined 
+  { enum { value = boost::is_same<X, tags::undefined>::value }; };
+	                          
 
   } // namespace grid_types_detail 
 
@@ -48,12 +55,31 @@ GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_TESTFOR);
 template<class X> struct has_Vertex;
 // dummy declaration to anchor docu.
 
+
 #define DEFINE_HAS_MEMBER(T) \
   template<class X> \
-  struct has_##T { \
-    enum { result = (sizeof(grid_types_detail::test_for_##T<X>(0)) == sizeof(grid_types_detail::size1) ? 1 : 0)}; \
-  };
- 
+  struct has_type_##T { \
+    enum { value = (sizeof(grid_types_detail::test_for_##T<X>(0)) == sizeof(grid_types_detail::size1) ? 1 : 0)}; \
+  };									\
+  template<class X, int HAS_TYPE> \
+  struct has_ ## T ## _aux { \
+    enum { value  = has_type_##T<X>::value };  \
+    enum { result = has_type_##T<X>::value };  \
+  }; \
+  template<class X> \
+  struct has_ ## T ## _aux<X,1> { \
+    enum { type_is_undefined = grid_types_detail::is_undefined<typename X::T>::value }; \
+    enum { result = has_type_##T<X>::value && ! type_is_undefined };	\
+    enum { value  = has_type_##T<X>::value && ! type_is_undefined };	\
+  }; \
+  template<class X> \
+  struct has_##T  { \
+    enum { value = has_ ## T ## _aux<X, has_type_##T<X>::value>::value }; \
+    enum { result = value }; \
+    typedef boost::mpl::int_<value> type; \
+  }; 
+
+
   GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_HAS_MEMBER);
 
   DEFINE_HAS_MEMBER(category);
@@ -79,6 +105,40 @@ template<class X> struct has_Vertex;
   DEFINE_GET_MEMBER(grid_type);
 
 #undef  DEFINE_GET_MEMBER
+
+
+
+  namespace tags {
+
+    template<class GT, class E> struct get_raw   { typedef undefined type;};
+    template<class GT, class E> struct has_raw : boost::mpl::int_<0> {}; 
+    
+#define DEFINE_GET_RAW(T) template<class GT> struct get_raw<GT,T> { typedef typename GT::T type;};
+#define DEFINE_HAS_RAW(T) template<class GT> struct has_raw<GT,T> : has_ ## T <GT> {};
+
+    GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_GET_RAW);
+    GRAL_DEFINE_ENTITY_FOR_ALL_GRID_TYPES(DEFINE_HAS_RAW);
+
+#undef  DEFINE_GET_RAW
+    
+  } // namespace tags
+
+  /*! \brief Templated version of has_XXX
+
+      \templateparams
+      - \c GT grid_types specialization
+      - \c E: one of the dummy types \c tags::Vertex etc.
+   */
+  template<class GT, class E> struct has : tags::has_raw<GT,E> {};
+  /*! \brief Templated version of get_XXX
+   */
+  template<class GT, class E> struct get { 
+    typedef typename boost::mpl::eval_if<typename has<GT,E>::type,
+					 tags::get_raw<GT,E>,
+					 boost::mpl::identity<tags::undefined> >::type type;
+  };
+
+
 
 /*! Print out which types are supported by a \c grid_types<> specialization 
 
