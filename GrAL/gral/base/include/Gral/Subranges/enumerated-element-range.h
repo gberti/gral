@@ -86,6 +86,8 @@ public:
 
   void append(element_handle v) { elements.push_back(v);}
   void append(Element v)    { elements.push_back(v.handle());}
+  template<class EIT>
+  void append(EIT b, EIT e) { while(b != e) { append(*b); ++b; } }
   void push_back(element_handle v) { elements.push_back(v);}
   void push_back(Element v)    { elements.push_back(v.handle());}
   void clear() { elements.clear();}
