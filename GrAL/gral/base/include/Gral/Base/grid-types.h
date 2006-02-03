@@ -8,11 +8,9 @@
 
 #include "Gral/Base/type-tags.h"
 
-#include "Gral/Base/internal/get-range-operations.h"
 #include "Gral/Base/internal/define-grid-entities.h"
 #include "Gral/Base/internal/compile-time-reflection.h"
 #include "Gral/Base/internal/grid-categories.h"
-#include "Gral/Base/internal/get-types-from-base.h"
 #include "Gral/Base/internal/type-aliases.h"
 
 
@@ -184,29 +182,24 @@ namespace GrAL {
 
 template<class GTBASE>  
 struct grid_types_base
-    : public grid_types_detail::dim_dep_defs<GTBASE>
+    : public dim_dep_defs<GTBASE>
 {
   typedef grid_types_base<GTBASE> self;
 public:
   enum { dim = GTBASE::dimension_tag::dim };
-
+ 
   template<class E>
   struct categories {
     //    typedef grid_types_detail::get_grid_categories<GTBASE> cat;
     typedef grid_types_detail::get_grid_categories<self> cat;
     typedef typename cat::template categories<E>::type type;
   };
-
+  
 }; //  grid_types_base<GTBASE>
 
 
 
 
-  template<class T, int IS_SPEC> struct grid_types_of_aux {};
-  template<class T> struct grid_types_of_aux<T,1> { typedef grid_types<T> type; };
-  template<class T> struct grid_types_of_aux<T,0> { typedef grid_types<typename T::grid_type> type; };
-
-  template<class T> struct grid_types_of : public grid_types_of_aux<T, grid_types<T>::is_specialized> {};
 
   /*! \defgroup freefunctioniteration Iteration interface by free functions
 
@@ -240,24 +233,28 @@ public:
    
       The corresponding value type of the iterator can also be specified by dimension:
        \code
-       gt::VertexIterator v     = GrAL::begin<0>(Grid),
-                          v_end = GrAL::end  <0>(Grid);
-       gt::size_type nv  = GrAL::size<0>(Grid);
+       gt::VertexIterator v     = GrAL::begin_c<0>(Grid),
+                          v_end = GrAL::end_c  <0>(Grid);
+       gt::size_type nv  = GrAL::size_d<0>(Grid);
        const int D = gt::dimension_tag::dim;
-       gt::CellOnVertexIterator cv = GrAL::begin<D>(*v);
-       gt::size_type ncv = GrAL::size<D>(*v);
+       gt::CellOnVertexIterator cv = GrAL::begin_d<D>(*v);
+       gt::size_type ncv = GrAL::size_d<D>(*v);
       \endcode
+      Likewise, the functions \c begin_cd, \c end_cd and \size_cd take the \e codimension
+      of the iterator value type as a template argument.
 
       Finally, the value type can often be deduced from the left hand side:
       \code
-       gt::VertexIterator v     = GrAL::begin(Grid),
-                          v_end = GrAL::end  (Grid);
-       gt::size_type nv  = GrAL::size<0>(Grid);
-       gt::CellOnVertexIterator cv = GrAL::begin(*v);
+       gt::VertexIterator v     = GrAL::begin_x(Grid),
+                          v_end = GrAL::end_x  (Grid);
+       gt::size_type nv  = GrAL::size_d<0>(Grid);
+       gt::CellOnVertexIterator cv = GrAL::begin_x(*v);
        const int D = gt::dimension_tag::dim;
-       gt::size_type ncv = GrAL::size<D>(*v);
+       gt::size_type ncv = GrAL::size_d<D>(*v);
        \endcode
        Of course, this cannot work for \c size().
+       In order to avoid ambiguity with begin<E>(E e), these convenience functions
+       had to be name differently, i.e. \c begin_x and \e end_x.
   */
 
 
@@ -367,57 +364,68 @@ public:
 
    */
   template<class A>
-  grid_types_detail::begin_iter<A> begin(A const& a) { return  grid_types_detail::begin_iter<A>(a);}
+  grid_types_detail::begin_iter<A> begin_x(A const& a) { return  grid_types_detail::begin_iter<A>(a);}
 
   /*! \brief Getting the past-the-end iterator of an anchor (grid or grid element)
       
       \ingroup freefunctioniteration
    */
   template<class A>
-  grid_types_detail::end_iter  <A> end  (A const& a) { return  grid_types_detail::end_iter  <A>(a);}
+  grid_types_detail::end_iter  <A> end_x  (A const& a) { return  grid_types_detail::end_iter  <A>(a);}
 
    /*! \brief Getting the first iterator of an anchor (grid or grid element)
       
       \ingroup freefunctioniteration
    */
   template<int D, class A> 
-  typename iterator_d<D,A>::type begin(A const& a) { return begin<typename  iterator_d<D,A>::type>(a);}
+  typename iterator_d<D,A>::type begin_d(A const& a) { return begin<typename  iterator_d<D,A>::type>(a);}
  
   /*! \brief Getting the past-the-end iterator of an anchor (grid or grid element)
       
       \ingroup freefunctioniteration
    */
   template<int D, class A> 
-  typename iterator_d<D,A>::type end  (A const& a) { return end  <typename  iterator_d<D,A>::type>(a);}
+  typename iterator_d<D,A>::type end_d  (A const& a) { return end  <typename  iterator_d<D,A>::type>(a);}
 
  /*! \brief Getting the size of an element sequence of an anchor (grid or grid element)
 
       \ingroup freefunctioniteration
    */
   template<int D, class A> 
-  typename grid_types_of<A>::type::size_type  size(A const& a) 
+  typename grid_types_of<A>::type::size_type  size_d(A const& a) 
   { return size<typename element_d<typename grid_types_of<A>::type,D>::type>(a);}
 
 
+   /*! \brief Getting the first iterator of an anchor (grid or grid element)
+      
+      \ingroup freefunctioniteration
+   */
+  template<int CD, class A> 
+  typename iterator_cd<CD,A>::type begin_cd(A const& a) { return begin<typename  iterator_cd<CD,A>::type>(a);}
+ 
+  /*! \brief Getting the past-the-end iterator of an anchor (grid or grid element)
+      
+      \ingroup freefunctioniteration
+   */
+  template<int CD, class A> 
+  typename iterator_cd<CD,A>::type end_cd  (A const& a) { return end  <typename  iterator_cd<CD,A>::type>(a);}
 
-  /* for instance:
-  template<class Min, class Maj, class A>
-  closure_iterator<Min,Maj> begin(A const&, closure_iterator<Min,Maj>) { return closure_iterator<Min,Maj>(begin(a,Maj()));}
+ /*! \brief Getting the size of an element sequence of an anchor (grid or grid element)
 
-  ??
-  template<class A>
-  A begin(A const& a, A) { return a;}
+      \ingroup freefunctioniteration
+   */
+  template<int CD, class A> 
+  typename grid_types_of<A>::type::size_type  size_cd(A const& a) 
+  { return size<typename element_cd<typename grid_types_of<A>::type,CD>::type>(a);}
 
-  No: begin(Cell a, Cell) -> CellOnCellIterator
-  */
+
 
 
   template<class E, 
 	   class GT = grid_types<typename E::grid_type>, 
 	   class ARCHGT = typename GT::archgt>
   struct grid2archetype {
-    enum { edim = grid_types_detail::element_dim_of<GT,E>::value };
-
+    enum { edim = dim<GT,E>::value };
     typedef typename element_d       <ARCHGT,edim>::type element_type;
     typedef typename element_handle_d<ARCHGT,edim>::type element_handle;
   };
