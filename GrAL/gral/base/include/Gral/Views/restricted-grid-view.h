@@ -11,6 +11,8 @@
 
 #include "Gral/Base/wrap-elements.h"
 
+#include <boost/mpl/if.hpp>
+
 namespace GrAL {
 
 
@@ -60,7 +62,6 @@ namespace restricted_grid_view {
     typedef grid_types_grid_view_base1<GRID, INSIDE_PRED,GT> self;
     typedef grid_view<GRID,INSIDE_PRED, GT>                  grid_type;
 
-    typedef int test_type;
     typedef typename  GT::dimension_tag                   dimension_tag;
     typedef typename  GT::size_type                       size_type;
     typedef typename  GT::vertex_handle                   vertex_handle;
@@ -84,41 +85,30 @@ namespace restricted_grid_view {
   {};
 
 
-  
-
-  template<class GRID, class INSIDE_PRED, class GT, unsigned HASCELLONCELL>
-  struct grid_types_with_cell_on_cell_iterator {};
-
-  template<class GRID, class INSIDE_PRED, class GT>
-  struct grid_types_with_cell_on_cell_iterator<GRID, INSIDE_PRED, GT, 1>
-  {
-    typedef cell_on_cell_iterator<GRID, INSIDE_PRED, GT> CellOnCellIterator;
-  };
-
-  template<class GRID, class INSIDE_PRED, class GT, unsigned HASCELLONVERTEX>
-  struct grid_types_with_cell_on_vertex_iterator {};
-
-  template<class GRID, class INSIDE_PRED, class GT>
-  struct grid_types_with_cell_on_vertex_iterator<GRID, INSIDE_PRED, GT, 1>
-  {
-    typedef cell_on_vertex_iterator<GRID, INSIDE_PRED, GT> CellOnVertexIterator;
-  };
-
 
   template<class GRID, class INSIDE_PRED, class GT>
   struct grid_types_grid_view_all :
-    public grid_types_grid_view_base<GRID, INSIDE_PRED, GT>,
-    public grid_types_with_cell_on_cell_iterator  <GRID, INSIDE_PRED, GT, has_CellOnCellIterator  <GT>::result>,
-    public grid_types_with_cell_on_vertex_iterator<GRID, INSIDE_PRED, GT, has_CellOnVertexIterator<GT>::result>
+    public grid_types_grid_view_base<GRID, INSIDE_PRED, GT>
   {
-    typedef grid_types_grid_view_base<GRID, INSIDE_PRED, GT>  base;
-    typedef closure_iterator<typename base::CellIterator, typename base::EdgeOnCellIterator, base> EdgeIterator;
+    typedef grid_types_grid_view_base<GRID, INSIDE_PRED, GT> base;
+
+    typedef typename boost::mpl::if_c<has_CellOnCellIterator<GT>::value,
+				      cell_on_cell_iterator<GRID, INSIDE_PRED, GT>,
+				      typename incidence_iterator_cd<base,0,0>::type>::type
+    CellOnCellIterator;
+    typedef typename boost::mpl::if_c<has_CellOnVertexIterator<GT>::value,
+				      cell_on_vertex_iterator<GRID, INSIDE_PRED, GT>,
+				      typename incidence_iterator_cd_d<base,0,0>::type>::type
+    CellOnVertexIterator;
+  
+  typedef closure_iterator<typename base::CellIterator, 
+			   typename base::EdgeOnCellIterator, base> EdgeIterator;
 
     static typename base::cell_handle invalid_cell_handle(typename base::grid_type const& g)
     {  return GT::invalid_cell_handle(g.BaseGrid()); }
 
-  };
-
+};
+  
 } // namespace restricted_grid_view
 
 
@@ -183,9 +173,10 @@ namespace restricted_grid_view {
 
   template<class GRID, class INSIDE_PRED, class GT>
   class grid_view : public archetypes_from_base<grid_view<GRID, INSIDE_PRED, GT>, GRID, GT>  {
+    typedef grid_view<GRID,INSIDE_PRED,GT> self;
   public:
-    typedef grid_range_category category;
-    typedef GRID        grid_type;
+    typedef self        grid_type;
+    typedef GRID        base_grid_type;
     typedef INSIDE_PRED pred_type;
     typedef GT          basegt;
     
@@ -198,25 +189,29 @@ namespace restricted_grid_view {
     
     typedef enumerated_vertex_range<GRID>      range_type;
     typedef grid_types_grid_view_base1<GRID, INSIDE_PRED, GT> gt;
+
     typedef typename gt::size_type             size_type;
+    enum { dim = gt::dimension_tag::dim }; 
+    typedef grid_view_category_d<dim> category;
+
   private:
-    ref_ptr<grid_type const>  g;
-    ref_ptr<pred_type>        inside_p;
+    ref_ptr<base_grid_type const>  g;
+    ref_ptr<pred_type>             inside_p;
     
     mutable range_type        range;
     mutable bool              vertices_initialized;
     mutable size_type         num_of_cells;
   public:
     grid_view() {}
-    grid_view(grid_type const& gg,
+    grid_view(base_grid_type const& gg,
 	      pred_type        ins)
     { init(const_ref_to_ref_ptr(gg), copy_to_ref_ptr(ins)); }
 
-    grid_view(ref_ptr<grid_type const> gg,
+    grid_view(ref_ptr<base_grid_type const> gg,
 	      ref_ptr<pred_type>       ins)
     { init(gg, ins);}
 
-    void init(ref_ptr<grid_type const> gg,
+    void init(ref_ptr<base_grid_type const> gg,
 	      ref_ptr<pred_type>       ins)
     {
       g = gg;
@@ -242,8 +237,10 @@ namespace restricted_grid_view {
     size_type      NumOfCells()    const { if(num_of_cells < 0) init_num_cells(); return num_of_cells;}
 
 
-    grid_type const& BaseGrid() const { return *g;}
-    grid_type const& TheGrid()  const { return *g;}
+    base_grid_type const& BaseGrid() const { return *g;}
+    // FIXME: This is necessary when passing restricted_grid_view as subrange to incidence_hull
+    base_grid_type const& TheGrid()  const { return *g;}
+
     pred_type const& pred()     const { return *inside_p;} 
     bool             inside(baseCell const& c)   const { return (*inside_p)(c);}   
 
@@ -276,7 +273,9 @@ namespace restricted_grid_view {
     typedef typename grid_type::baseVertex        baseVertex;
     typedef typename grid_type::baseVertex        base_element_type;
     typedef typename grid_type::vertex_handle     vertex_handle;
+
     typedef vertex_type_tag                       element_type_tag;
+    typedef grid_vertex_category                  category;
   private:
     grid_type   const*  g;
     baseVertex          v;
@@ -320,6 +319,7 @@ namespace restricted_grid_view {
   class vertex_iterator {
     typedef vertex_iterator<GRID,INSIDE_PRED, GT> self;
   public:
+    typedef grid_vertex_iterator_category                category;
     typedef grid_view<GRID,INSIDE_PRED, GT>              grid_type;
     typedef typename grid_type::range_type               range_type;
     typedef typename range_type::VertexIterator          rangeVertexIterator; 
@@ -381,6 +381,7 @@ namespace restricted_grid_view {
     typedef grid_types<typename gt::archetype_type> archgt;
   public:
     typedef cell_type_tag                       element_type_tag;
+    typedef grid_cell_category                  category;
 
     typedef grid_view<GRID,INSIDE_PRED, GT>              grid_type;
     typedef grid_types<typename grid_type ::range_type>  rgt;
@@ -430,6 +431,7 @@ namespace restricted_grid_view {
   class cell_iterator {
     typedef cell_iterator<GRID,INSIDE_PRED, GT> self;
   public:
+    typedef grid_cell_iterator_category                  category;
     typedef grid_view<GRID,INSIDE_PRED, GT>              grid_type;
     typedef grid_types<typename grid_type ::range_type>  rgt;
     typedef typename grid_type::baseCell        baseCell;
@@ -548,12 +550,15 @@ namespace restricted_grid_view {
   class cell_on_cell_iterator {
     typedef cell_on_cell_iterator<GRID,INSIDE_PRED, GT>  self;
   public:
+
     typedef grid_view<GRID,INSIDE_PRED, GT>              grid_type;
     typedef typename GT::CellOnCellIterator              baseCellOnCellIterator;
     typedef typename grid_type::cell_handle              cell_handle;
     typedef typename grid_type::Cell                     Cell;
-    typedef Cell value_type;
-    typedef Cell anchor_type;
+
+    typedef grid_incidence_iterator_category_cd<0,0>     category;
+    typedef Cell                                         value_type;
+    typedef Cell                                         anchor_type;
   private:
     Cell c;
     baseCellOnCellIterator cc;
@@ -617,11 +622,16 @@ namespace restricted_grid_view {
   class cell_on_vertex_iterator {
     typedef cell_on_vertex_iterator<GRID,INSIDE_PRED, GT>  self;
   public:
-    typedef grid_view<GRID,INSIDE_PRED, GT>              grid_type;
+    typedef grid_view<GRID,INSIDE_PRED, GT>                      grid_type;
+
     typedef typename GT::CellOnVertexIterator            baseCellOnVertexIterator;
     typedef typename grid_type::cell_handle              cell_handle;
     typedef typename grid_type::Cell                     Cell;
     typedef typename grid_type::Vertex                   Vertex;
+
+    typedef grid_incidence_iterator_category_d<grid_type::dim,0> category;    
+    typedef Cell                                                 value_type;
+    typedef Vertex                                               anchor_type;
   private:
     Vertex                   v;
     baseCellOnVertexIterator cv;
@@ -632,7 +642,9 @@ namespace restricted_grid_view {
     self& operator++() { ++cv; advance_till_valid(); return *this;}
     Cell  operator*() const { return Cell(TheGrid(),*cv);}
     bool  IsDone() const { return cv.IsDone();}
-    grid_type const& TheGrid() const { return v.TheGrid();} 
+    grid_type   const& TheGrid()   const { return v.TheGrid();} 
+    anchor_type const& TheAnchor() const { return v;}
+
     cell_handle handle() const { return cv.handle();}
 
     bool operator==(self const& rhs) const { return v == rhs.v && cv == rhs.cv;}
