@@ -38,7 +38,7 @@ public:
     { 
       typedef typename GrAL::iterator<Vertex,E>::type VertexOnEIterator;
       v.reserve(GrAL::size<Vertex>(e)); 
-      for(VertexOnEIterator ve = GrAL::begin(e); ! ve.IsDone(); ++ve) {
+      for(VertexOnEIterator ve = GrAL::begin_x(e); ! ve.IsDone(); ++ve) {
 	v.push_back(ve.handle());
       }
       std::sort(v.begin(), v.end());
