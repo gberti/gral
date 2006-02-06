@@ -27,8 +27,8 @@ int main() {
   using namespace std;
   using namespace cartesian2d;
 
-  typedef grid_types<grid_type>                gt;
   typedef CartesianGrid2D                      grid_type;  
+  typedef grid_types<grid_type>                gt;
   typedef enumerated_subrange<CartesianGrid2D> range_type;
   typedef grid_types<range_type >              rgegt;
 
