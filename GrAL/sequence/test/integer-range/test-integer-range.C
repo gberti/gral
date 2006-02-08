@@ -27,9 +27,14 @@ int main() {
     ranges.push_back(range);
     cout << range << endl;
   }
+  int a[] = { 0, 1, 2, -3, -2,  4, 6, 5 };
+
+  ranges.push_back(range_type(a,a+sizeof(a)/sizeof(int)));
+  cout << ranges.back() << endl;
+
   for(unsigned r = 0; r < ranges.size(); ++r)
-    for(range_type::const_iterator rge(ranges[r].begin()); rge != ranges[r].end(); ++rge)
-      for(int x = rge->low(); x <= rge->high(); ++x)
-	REQUIRE_ALWAYS(ranges[r].contains(x), "x=" << x << "  ranges[r]=" << ranges[r],1);
+    for(range_type::const_iterator x(ranges[r].begin()); x != ranges[r].end(); ++x)
+      REQUIRE_ALWAYS(ranges[r].contains(*x), "x=" << *x  << "(x.i = " << x.i << ")" 
+		     << "  ranges[" << r << "]=" << ranges[r],1);
 
 }

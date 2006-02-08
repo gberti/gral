@@ -4,6 +4,7 @@
 // $LICENSE_NEC_2004
 
 #include "Geometry/interval.h"
+#include "Container/sequence-algorithms.h"
 #include "Utility/checked-istream.h"
 #include "Utility/pre-post-conditions.h"
 
@@ -31,7 +32,9 @@ namespace GrAL {  namespace sequence {
     integer_range(INT i) { intervals.push_back(interval_type(i,i));}
     //! Construct range of single interval
     integer_range(interval_type iv) { if(!iv.empty()) intervals.push_back(iv);}
-
+    //! Construct ouf of a range of elements
+    template<class IT>
+    integer_range(IT b, IT e) { init(b,e);}
 
     //! True if no integer is contained
     bool empty() const { return intervals.empty();}
@@ -39,24 +42,66 @@ namespace GrAL {  namespace sequence {
     void clear()       { intervals.clear();}
 
     //! STL-compliant iterator
-    typedef typename std::vector<interval_type>::const_iterator const_iterator;
+    typedef typename std::vector<interval_type>::const_iterator interval_iterator;
     //! First interval
-    const_iterator begin() const { return intervals.begin();}
+    interval_iterator begin_interval() const { return intervals.begin();}
     //! Past-the-end interval
-    const_iterator end()   const { return intervals.end();}
+    interval_iterator end_interval()   const { return intervals.end();}
 
     //! smallest element. The range is contained in [low(), high()]
     element_type low()  const {return intervals.front().low();}
     //! largest element. The range is contained in [low(), high()]
     element_type high() const {return intervals.back() .high();}
 
+    // iterator over all elements in the range
+    struct const_iterator {
+      typedef const_iterator     self;
+      typedef integer_range<INT> integer_range_type;
+      typedef INT                value_type;
 
+      interval_iterator          interval;
+      int                        i;
+
+      const_iterator() {}
+      const_iterator(interval_iterator interval_, int i_) : interval(interval_), i(i_) {}
+      value_type operator*() const { return (*interval).low() + i;}
+      self & operator++() { 
+	++i; 
+	if(i > (*interval).high() - (*interval).low()) { 
+	  ++interval; 
+	  i = 0;
+	}
+	return *this;
+      }
+      bool operator==(self const& rhs) const { return interval == rhs.interval && i == rhs.i;}
+      bool operator!=(self const& rhs) const { return !(*this == rhs);}
+      bool operator< (self const& rhs) const { return interval < rhs.interval || (interval == rhs.interval && i < rhs.i);}
+    };
+    const_iterator begin() const { return const_iterator(begin_interval(), 0);}
+    const_iterator end  () const { return const_iterator(end_interval(),   0);}
+
+    /*! \brief Initialize range with sequence of elements
+
+        The sequence [b,e[ may be unordered and contain duplicates.
+    */
+    template<class IT>
+    void init(IT b, IT e);
+    /*! \brief Add an element to the range.
+        \pre <tt> i > high() </tt>
+    */
+    void push_back(element_type i) {
+      REQUIRE(empty() || i > high(), "i=" << i,1);
+      if(empty() || i > 1 + high())
+	intervals.push_back(interval_type(i,i));
+      else // i == 1 + high()
+	intervals.back() = interval_type(intervals.back().low(), i);
+    }
     //! True iff \c i is contained in an interval
     bool contains(INT i) const { 
-      bool res = false;
-      for(const_iterator iv = begin(); iv != end(); ++iv)
-	res = res || iv->contains(i);
-      return res;
+      for(interval_iterator iv = begin_interval(); iv != end_interval(); ++iv)
+	if(iv->contains(i))
+	  return true;
+      return false;
     }
     void read(std::istream& in);
   private:
@@ -82,14 +127,40 @@ namespace GrAL {  namespace sequence {
   template<class INT>
   std::ostream& operator<<(std::ostream& out, integer_range<INT> const& r)
   { 
-    for(typename integer_range<INT>::const_iterator iv = r.begin(); iv != r.end(); ++iv) {
-      if(iv != r.begin())
+    for(typename integer_range<INT>::interval_iterator iv = r.begin_interval(); iv != r.end_interval(); ++iv) {
+      if(iv != r.begin_interval())
 	out << ',';
       out << iv->l() << '-' << iv->r();
     }
     return out;
   }
 
+  
+  template<class INT>
+  template<class IT>
+  void integer_range<INT>::init(IT b, IT e)
+    {
+      std::vector<element_type> elements(b,e);
+      sequence::sort_and_make_unique(elements);
+      typename std::vector<element_type>::iterator 
+	interval_beg = elements.begin(),
+	interval_end = elements.begin();
+      // get all intervals in elements
+      while(interval_beg != elements.end()) {
+	// find the largest interval in [interval_beg, elements.end()[, 
+	// i.e. make [interval_beg, interval_end[ the largest sequence in elements without gap
+	int n = 0;
+	while(interval_end != elements.end() &&
+	      *interval_end <= n + *interval_beg) {
+	  ++interval_end;
+	  ++n;
+	}
+	// now interval_end == elements.end() || *interval_end > 1 + interval_beg
+	intervals.push_back(interval_type(* interval_beg,
+					  *(interval_end-1)));
+	interval_beg = interval_end;
+      }
+    }
 
 
 
