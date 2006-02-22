@@ -22,28 +22,32 @@
 int main() {
   using namespace GrAL;
   using namespace std;
-  namespace rcv  = restricted_grid_component_view;
-  namespace cart = cartesian2d;
+  namespace rcv    = restricted_grid_component_view;
+  namespace cart   = cartesian2d;
   namespace shapes = geometric_shapes;
 
   typedef cart::CartesianGrid2D grid_type;
-  typedef tuple<float, 2>       coord_type;
+  typedef grid_types<grid_type> gt;
+
+  typedef tuple<float, 2>                     coord_type;
   typedef stdext::identity<coord_type>        mapping_type;
   typedef cart::mapped_geometry<mapping_type> geom_type;
   typedef algebraic_primitives<coord_type>    ap;
 
-  typedef shapes::halfspace<coord_type>          shape_type;
-  typedef cell_intersects<shape_type, geom_type> pred_type;
-  typedef rcv::grid_view<grid_type, pred_type>   component_type;
+  typedef shapes::halfspace<coord_type>             shape_type;
+  typedef cell_intersects<shape_type, geom_type,gt> pred_type;
+  typedef rcv::grid_view<grid_type, pred_type>      component_type;
   
   grid_type R(4,4);
   geom_type GeomR(R);
+
+  typedef grid_types<component_type> cgt;
+ 
   {
     shape_type h(coord_type(1.0,1.0), 1.01);
     pred_type  p(h,GeomR);
     component_type component(R,p, * R.FirstCell());
-    typedef grid_types<component_type> cgt;
-
+    
     {
       component_type comp(R,p, *R.FirstCell());
       cgt::size_type nv  = std::distance(comp.FirstVertex(), comp.EndVertex());
@@ -56,7 +60,7 @@ int main() {
       cgt::size_type nc1 = comp.NumOfCells();
       REQUIRE_ALWAYS(nc == nc1, "NumOfCells() error!",1);
     }
-
+    
     cgt::vertex_handle vh = component.FirstVertex()->handle();
     cgt::cell_handle   ch = component.FirstCell()  ->handle();
 
