@@ -76,9 +76,6 @@ namespace GrAL {
     label_type  operator()(argument_type v) const { return label[label_index(v)];}
     label_type& operator()(argument_type v)       { return label[label_index(v)];}
 
-    label_type low () const { return label.front();}
-    label_type high() const { return label.back ();}
-
     void read (std::istream& in);
     void write(std::ostream& out) const;
 
