@@ -517,7 +517,9 @@ int main() {
 
  {
     cartesiannd::grid<2> R(it2(2,2));
-    cartesiannd::subrange<2> RR(R, R.low_vertex_index(), R.beyond_vertex_index());
+    cartesiannd::subrange<2> RR (R,  R .low_vertex_index(), R .beyond_vertex_index());
+    cartesiannd::subrange<2> RRR(RR, RR.low_vertex_index(), RR.beyond_vertex_index());
+    
     cout << "Subrange 2x2 vertices:\n";
     RR.print(cout);
     print_grid(RR, cout);
@@ -536,10 +538,10 @@ int main() {
     typedef grid_types<cartesiannd::subrange<2> > rgt;
     rgt::VertexIterator v = begin<rgt::VertexIterator>(RR);
     // all these calls are equivalent
-    rgt::CellIterator   c0  = GrAL::begin(RR);
+    rgt::CellIterator   c0  = GrAL::begin_x(RR);
     rgt::CellIterator   c1  = GrAL::begin<rgt::Cell>(RR);
     rgt::CellIterator   c2  = GrAL::begin<rgt::CellIterator>(RR);
-    rgt::VertexOnCellIterator vc = GrAL::begin(*c0);
+    rgt::VertexOnCellIterator vc = GrAL::begin_x(*c0);
  }
 
  {
@@ -549,15 +551,25 @@ int main() {
    typedef grid_types<cartesiannd::subrange<2> > rgt;
 
    // test construction of grid<> elements with subrange<> elements 
-   // rgt::Cell c_sg = * GrAL::begin<rgt::Cell>(RR);
-   rgt::Cell c_sg = * (GrAL::begin(RR));
-   gt ::Cell c_g  = c_sg;
+   rgt::CellIterator c_sg = GrAL::begin_x(RR);
+   gt ::CellIterator c_g  = c_sg;
    cout << "c_g .index()= " << c_g .index() << " c_g .handle()= " << c_g .handle() << "\n"
 	<< "c_sg.index()= " << c_sg.index() << " c_sg.handle()= " << c_sg.handle() << "\n";
- 
+
    // test indexing of grid_function over grid<> with subrange<> elements
    grid_function<gt::Cell,int> gf(R,0);
    gf[c_sg] = 1;
+
+   
+   rgt::VertexOnCellIterator vc_sg(c_sg);
+   gt ::VertexOnCellIterator vc_g (c_g);
+   for( ; ! vc_sg.IsDone(); ++vc_sg, ++vc_g)
+     REQUIRE_ALWAYS(vc_sg.index() == vc_g.index(), "", 1);
+
+   rgt::CellOnCellIterator cc_sg(c_sg);
+   gt ::CellOnCellIterator cc_g (c_g);
+   for( ; ! cc_sg.IsDone(); ++cc_sg, ++cc_g)
+     REQUIRE_ALWAYS(cc_sg.index() == cc_g.index(), "", 1);
  }
 
  {
