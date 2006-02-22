@@ -11,6 +11,15 @@
 
 namespace GrAL {
 
+  /*! \brief Test whether a file \c filenm exists
+    
+     \ingroup io
+
+   */
+inline bool file_exists(std::string filenm) {
+  std::ifstream f(filenm.c_str());
+  return f.is_open();
+}
 
 
 /*! \brief Try to open a file and ask if it does not exist.
