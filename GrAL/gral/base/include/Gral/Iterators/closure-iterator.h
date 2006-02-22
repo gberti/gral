@@ -37,13 +37,16 @@ namespace GrAL {
      - \c MajorIt: Model of $GrAL SequenceIterator for dimension n
      - \c MinorIt: Model of $GrAL IncidenceIterator on elements of dimension n
           - constructible from \c *major, where \c major is of type MAJORIT
-          - typedef value_type
+          - nested type \c value_type is a k-dimensional $GrAL GridElement
      - \c GT
-       - nested type \c grid_type 
-       - 
+       - type \c GT::grid_type 
+       - type \c GT::size_type
     \see Test in \ref  test-closure-iterator.C
     \see \ref iterators module  
 
+    \todo Copying may be expensive. By introducing a shared table of numbered visited nodes 
+     and adding an extra position parameter, copying may be made cheep while still fulfilling 
+     the forward iterator requirements.
 */
 
   template<class MAJORIT, class MINORIT, class GT = grid_types<typename MAJORIT::grid_type> >

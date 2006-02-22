@@ -1,7 +1,7 @@
 # icc/make.defs
 # Settings for INTEL CC 7.1
 
-CCC      =  /usr/net/lnx/INTEL/C++/compiler70/ia32/bin/icc
+CCC      =  /usr/net/fdc/INTEL/C++/compiler70/ia32/bin/icc
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += 
 
@@ -11,6 +11,7 @@ CCFLAGS += -wd1125  ## Virtual override intended?
 #CCFLAGS += -w2 -wd981 
 CCFLAGS += -DINTEL_CC
 CCFLAGS += -DGRAL_HAS_SSTREAM
+LDFLAGS += -Xlinker -rpath -Xlinker /usr/net/fdc/INTEL/C++/compiler70/ia32/lib
 
 DEPEND    =$(CCC)
 DEPFLAGS += -M $(CCFLAGS)
