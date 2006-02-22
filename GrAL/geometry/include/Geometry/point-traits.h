@@ -245,7 +245,7 @@ struct array_operators
     return to_derived(); 
   }
 
-  ARRAY operator*(value_type v) const {
+  ARRAY plus(value_type v) const {
     ARRAY lhs(to_derived());
     return lhs *= v;
   } 
@@ -256,7 +256,8 @@ struct array_operators
   }
 
 
-  friend ARRAY operator*(value_type v, ARRAY const& rhs) { return rhs * v;}
+  friend ARRAY operator*(ARRAY const& a, value_type v) { return a.plus(v);}
+  friend ARRAY operator*(value_type v, ARRAY const& a) { return a.plus(v);}
 
   friend std::ostream& operator<<(std::ostream& out, ARRAY const& a) { 
     for(unsigned i  = 0; i < N-1; ++i) 
