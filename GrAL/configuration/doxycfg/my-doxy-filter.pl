@@ -7,6 +7,8 @@ use Getopt::Long;
 
 
 while(<>) {
+  s|/_\*|/\*|g;
+  s|\*_/|\*/|g;
   s|\$Metis|<A  TARGET="_parent" HREF="%Metis">Metis</A>|g;
   s|\$gral-([^ ]+)[ ]*([a-z\-_A-Z0-9]+)|<A TARGET="_parent" HREF="%ROOT/$1/%DOXYPATH/index.html"> $2 </A>|g;
   s|\$GrAL[ \-]*([a-z\-_A-Z0-9]+)|<A TARGET="_parent" HREF="%GRALCONCEPTS/$1.html">GRALPROTECT$1</A>|g;
