@@ -58,6 +58,7 @@ public:
   typedef typename gt::size_type       size_type;
   typedef typename et::handle_type     elt_handle;
   typedef E                            Element;
+  typedef typename et::handle_type     element_handle;
 
   typedef R                                   range_type;
   typedef typename range_type::const_iterator const_iterator;
@@ -65,6 +66,7 @@ public:
   typedef range_type sequence_type;
   typedef typename  element_range_ref_aux<E,R>::ElementIterator  ElementIterator;
 
+  typedef typename gt::dimension_tag dimension_tag;
 private:
   //---- DATA -----
   size_type ebeg, eend;
@@ -241,6 +243,7 @@ class cell_range_ref
 {
   typedef element_range_ref<typename grid_types<Grid>::Cell, R> base;
 public:
+  typedef typename base::element_handle  cell_handle;
   typedef typename base::Element         Cell;
   typedef typename base::ElementIterator CellIterator;
   typedef typename base::grid_type       grid_type;
@@ -267,6 +270,35 @@ public:
 
 
 namespace detail {
+
+  template<class G, class ETAG> struct map_elem_names {};
+
+  template<class G> struct map_elem_names<G, vertex_type_tag> 
+  {
+    typedef typename G::element_handle  vertex_handle;
+    typedef typename G::Element         Vertex;
+    typedef typename G::ElementIterator VertexIterator;
+  };
+
+  template<class G> struct map_elem_names<G, cell_type_tag> 
+  {
+    typedef typename G::element_handle  cell_handle;
+    typedef typename G::Element         Cell;
+    typedef typename G::ElementIterator CellIterator;
+  };
+
+
+  template<class E, class R>
+  struct grid_types_e_elem_range_ref 
+    : grid_types_detail::grid_types_root,
+      map_elem_names<element_range_ref<E,R>, typename E::element_type_tag> 
+  {
+    typedef element_range_ref<E,R>             range_type;
+    typedef typename range_type::grid_type     grid_type;
+    typedef typename range_type::size_type     size_type;
+    typedef typename range_type::dimension_tag dimension_tag;
+  };
+
 
 template<class Grid, class R>
 struct grid_types_evr_ref { 
@@ -325,11 +357,15 @@ struct grid_types_ecr_ref  {
 
 } // namespace detail
 
+  template<class E, class R>
+  struct grid_types<element_range_ref<E,R> >
+    : public grid_types_base<detail::grid_types_e_elem_range_ref<E,R> > 
+  {};
 
-template<class Grid, class R>
-struct grid_types<vertex_range_ref<Grid,R> > 
-  : public grid_types_base<detail::grid_types_evr_ref<Grid,R> >
-{};
+  template<class Grid, class R>
+  struct grid_types<vertex_range_ref<Grid,R> > 
+    : public grid_types_base<detail::grid_types_evr_ref<Grid,R> >
+  {};
 
 
 template<class Grid, class R>
@@ -347,6 +383,22 @@ template<class Grid, class R>
 struct grid_types<cell_range_ref<Grid,R> > 
   : public grid_types_base<detail::grid_types_ecr_ref<Grid,R> >
 {};
+
+
+  template<class E, class R>
+  typename element_range_ref<E,R>::ElementIterator
+  gral_begin(element_range_ref<E,R> const& a,  typename element_range_ref<E,R>::ElementIterator)
+  { return a.FirstElement(); }
+
+  template<class E, class R>
+  typename element_range_ref<E,R>::ElementIterator
+  gral_end  (element_range_ref<E,R> const& a,  typename element_range_ref<E,R>::ElementIterator)
+  { return a.EndElement(); }
+
+  template<class E, class R>
+  typename element_range_ref<E,R>::size_type
+  gral_size (element_range_ref<E,R> const& a,  typename element_range_ref<E,R>::ElementIterator)
+  { return a.NumOfElements(); }
 
 
 
