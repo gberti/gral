@@ -1,0 +1,64 @@
+checking grid_types_test<1>:
+has  type cell_handle
+has  type Facet
+has  type Cell
+has  type CellIterator
+has  type VertexOnCellIterator
+has  type EdgeOnCellIterator
+checking dim_dep_defs<grid_types_test<1> >
+has  type edge_handle
+has  type cell_handle
+has  type Vertex
+has  type Edge
+has  type Facet
+has  type Cell
+has  type EdgeIterator
+has  type CellIterator
+has  type VertexOnEdgeIterator
+has  type FacetOnEdgeIterator
+has  type CellOnEdgeIterator
+has  type VertexOnCellIterator
+has  type EdgeOnCellIterator
+has  type FacetOnCellIterator
+has  type CellOnCellIterator
+
+
+checking grid_types_test<2>:
+has  type cell_handle
+has  type Facet
+has  type Cell
+has  type CellIterator
+has  type VertexOnCellIterator
+has  type EdgeOnCellIterator
+checking dim_dep_defs<grid_types_test<2> >
+has  type face_handle
+has  type cell_handle
+has  type Edge
+has  type Face
+has  type Facet
+has  type Cell
+has  type FaceIterator
+has  type CellIterator
+has  type VertexOnFaceIterator
+has  type EdgeOnFaceIterator
+has  type FacetOnFaceIterator
+has  type VertexOnCellIterator
+has  type EdgeOnCellIterator
+has  type FacetOnCellIterator
+
+
+checking grid_types_test<3>:
+has  type cell_handle
+has  type Facet
+has  type Cell
+has  type CellIterator
+has  type VertexOnCellIterator
+has  type EdgeOnCellIterator
+checking dim_dep_defs<grid_types_test<3> >
+has  type cell_handle
+has  type Face
+has  type Facet
+has  type Cell
+has  type CellIterator
+has  type VertexOnCellIterator
+has  type EdgeOnCellIterator

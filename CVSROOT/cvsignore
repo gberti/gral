@@ -1,2 +1,3 @@
-*.exe.out  *.out *.tmp core.* *.out.valgrind
+*.exe.out  *.out *.tmp core core.* *.out.valgrind
+*.d
 

@@ -39,6 +39,6 @@ int main() {
   GrAL::stream_grid_mask<int *> tetrahedron(nv,nc,connectivity);
   GrAL::stream_geom_mask<ct  *> tet_geom(coords);
 
-  GrAL::OstreamComplex2DFmt Out("tet.complex2d");
+  GrAL::OstreamComplex2DFmt Out("tet.complex2d.out");
   GrAL::ConstructGrid(Out, tetrahedron, tet_geom);
 }
