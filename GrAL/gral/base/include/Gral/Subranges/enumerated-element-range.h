@@ -8,6 +8,7 @@
 #include "Gral/Iterators/dummy-iterator.h"
 #include "Gral/Base/map-element-iter-names.h"
 #include "Gral/Subranges/enumerated-element-range-ref.h"
+#include "Gral/Subranges/internal/element-range-aux.h"
 
 #include <vector>
 
@@ -16,6 +17,8 @@ namespace GrAL {
   /*! \defgroup enum_elementranges  Enumerated (stored) element ranges
 
       \ingroup enumsubranges
+      \todo The classes with explicit type names like enumerated_vertex_range are obsolete
+      and should be removed.
   */
 
 
@@ -35,7 +38,7 @@ namespace GrAL {
   \ingroup enum_elementranges
   \see Module enum_elementranges
   \see enumerated_vertex_range, enumerated_edge_range, 
-  enumerated_facet_range, enumerated_cell_range,
+  enumerated_facet_range, enumerated_cell_range
 */
 
 
@@ -47,7 +50,6 @@ class enumerated_element_range
 {
   typedef enumerated_element_range<E,R> self;
 public:
-  typedef grid_range_category     category;
 
   //------- referenced types ------------------
   typedef element_traits<E>            et;
@@ -56,6 +58,11 @@ public:
   typedef typename gt::size_type       size_type;
   typedef typename et::handle_type     element_handle;
   typedef E                            Element;
+
+  typedef typename gt::dimension_tag   dimension_tag;
+  enum { dim = dimension_tag::dim };
+
+  typedef grid_range_category_d<dim>   category;
 
   //---------- own types ----------------------
 
@@ -292,210 +299,71 @@ public:
 };
 
 
-namespace detail {
+  namespace detail {
+
+    template<class RANGE>
+    struct grid_types_range_base : 
+      public grid_types_detail::grid_types_root,
+      public map_elem_names<RANGE, typename RANGE::Element::element_type_tag>
+    {
+      typedef RANGE                              range_type;
+      typedef typename range_type::grid_type     grid_type;
+      typedef typename range_type::size_type     size_type;
+      typedef typename range_type::dimension_tag dimension_tag;
+    };
+ 
+  } // namespace detail 
 
 
+  template<class E, class R>
+  struct grid_types<enumerated_element_range<E,R> >
+    : public grid_types_base<detail::grid_types_range_base<enumerated_element_range<E,R> > > 
+  {};
+  
   template<class Grid, class R>
-  struct grid_types_evr : public grid_types_detail::grid_types_root { 
-    typedef Grid                                grid_type;
-    typedef enumerated_vertex_range<Grid,R>     range_type;
-    typedef typename range_type::size_type      size_type;
-    typedef grid_types<grid_type>               gt;
-    typedef typename gt::dimension_tag          dimension_tag;
-
-    typedef typename range_type::VertexIterator VertexIterator;
-    typedef typename range_type::Vertex         Vertex;
-    typedef typename range_type::vertex_handle  vertex_handle;
-
-    
-    //    typedef dummy_element<range_type, cell_type_tag> Cell;
-    // typedef typename Cell::handle_type               cell_handle;
-    typedef typename gt::Cell Cell;
-    typedef typename gt::cell_handle cell_handle;
-    typedef dummy_sequence_iterator<Cell, range_type> CellIterator;
-  };
-
-
-
-
-
+  struct grid_types<enumerated_vertex_range<Grid, R> > 
+    : public grid_types_base<detail::grid_types_range_base<enumerated_vertex_range<Grid,R> > > 
+  {};
+  
+  
   template<class Grid, class R>
-  struct grid_types_eer : public grid_types_detail::grid_types_root { 
-    typedef Grid                              grid_type;
-    typedef enumerated_edge_range<Grid,R>       range_type;
-    typedef typename range_type::size_type      size_type;
-    typedef grid_types<grid_type>             gt;
-    typedef typename gt::dimension_tag        dimension_tag;
-
-    typedef typename range_type::EdgeIterator EdgeIterator;
-    typedef typename range_type::Edge         Edge;
-    typedef typename range_type::edge_handle  edge_handle;
-  };
-
-
-
-
-  template<class Grid,class R>
-  struct grid_types_efr : public grid_types_detail::grid_types_root { 
-    typedef Grid                               grid_type;
-    typedef enumerated_facet_range<Grid,R>       range_type;
-    typedef typename range_type::size_type     size_type;
-    typedef grid_types<grid_type>              gt;
-    typedef typename gt::dimension_tag         dimension_tag;
-
-    typedef typename range_type::FacetIterator FacetIterator;
-    typedef typename range_type::Facet         Facet;
-    typedef typename range_type::facet_handle  facet_handle;
-  };
-
-
-
+  struct grid_types<enumerated_edge_range<Grid,R> > 
+    : public grid_types_base<detail::grid_types_range_base<enumerated_edge_range<Grid,R> > > 
+  {};
+  
+  
   template<class Grid, class R>
-  struct grid_types_ecr  : public grid_types_detail::grid_types_root  {
-    typedef Grid                               grid_type;
-    typedef enumerated_cell_range<Grid,R>      range_type;
-    typedef typename range_type::size_type     size_type;
-    typedef grid_types<grid_type>              gt;
-    typedef typename gt::dimension_tag         dimension_tag;
-
-
-    typedef typename range_type::CellIterator CellIterator;
-    typedef typename range_type::Cell         Cell;
-    typedef typename range_type::cell_handle  cell_handle;
-  };
-
-} // namespace detail 
+  struct grid_types<enumerated_facet_range<Grid,R> > 
+    : public grid_types_base<detail::grid_types_range_base<enumerated_facet_range<Grid,R> > > 
+  {};
+  
+  
+  template<class Grid, class R>
+  struct grid_types<enumerated_cell_range<Grid,R> > 
+    : public grid_types_base<detail::grid_types_range_base<enumerated_cell_range<Grid,R> > > 
+  {};
 
 
 
-template<class Grid, class R>
-struct grid_types<enumerated_vertex_range<Grid, R> > 
-  : public grid_types_base<detail::grid_types_evr<Grid,R> >
-{};
+  // overloads for gral_begin etc.
 
+  template<class E, class R>
+  typename grid_types<enumerated_element_range<E,R> >::ElementIterator
+  gral_begin(enumerated_element_range<E,R> const& a,
+	     typename grid_types<enumerated_element_range<E,R> >::ElementIterator)
+  { return a.FirstElement();}
 
-template<class Grid, class R>
-struct grid_types<enumerated_edge_range<Grid,R> > 
-  : public grid_types_base<detail::grid_types_eer<Grid,R> >
-{};
+  template<class E, class R>
+  typename grid_types<enumerated_element_range<E,R> >::ElementIterator
+  gral_end  (enumerated_element_range<E,R> const& a,
+	     typename grid_types<enumerated_element_range<E,R> >::ElementIterator)
+  { return a.EndElement();}
 
-
-template<class Grid, class R>
-struct grid_types<enumerated_facet_range<Grid,R> > 
-  : public grid_types_base<detail::grid_types_efr<Grid,R> >
-{};
-
-
-template<class Grid, class R>
-struct grid_types<enumerated_cell_range<Grid,R> > 
-  : public grid_types_base<detail::grid_types_ecr<Grid,R> >
-{};
-
-
-
-
-
-template<class Grid, class R>
-typename grid_types<enumerated_vertex_range<Grid,R> >::VertexIterator
-gral_begin(enumerated_vertex_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_vertex_range<Grid,R> >::VertexIterator)
-{ return a.FirstVertex();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_vertex_range<Grid,R> >::VertexIterator
-gral_end  (enumerated_vertex_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_vertex_range<Grid,R> >::VertexIterator)
-{ return a.EndVertex();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_vertex_range<Grid,R> >::size_type
-gral_size (enumerated_vertex_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_vertex_range<Grid,R> >::VertexIterator)
-{ return a.NumOfVertices();}
-
-
-
-template<class Grid, class R>
-typename grid_types<enumerated_edge_range<Grid,R> >::EdgeIterator
-gral_begin(enumerated_edge_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_edge_range<Grid,R> >::EdgeIterator)
-{ return a.FirstEdge();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_edge_range<Grid,R> >::EdgeIterator
-gral_end  (enumerated_edge_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_edge_range<Grid,R> >::EdgeIterator)
-{ return a.EndEdge();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_edge_range<Grid,R> >::size_type
-gral_size (enumerated_edge_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_edge_range<Grid,R> >::EdgeIterator)
-{ return a.NumOfEdges();}
-
-
-template<class Grid, class R>
-typename grid_types<enumerated_facet_range<Grid,R> >::FacetIterator
-gral_begin(enumerated_facet_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_facet_range<Grid,R> >::FacetIterator)
-{ return a.FirstFacet();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_facet_range<Grid,R> >::FacetIterator
-gral_end  (enumerated_facet_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_facet_range<Grid,R> >::FacetIterator)
-{ return a.EndFacet();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_facet_range<Grid,R> >::size_type
-gral_size (enumerated_facet_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_facet_range<Grid,R> >::FacetIterator)
-{ return a.NumOfFacets();}
-
-
-
-template<class Grid, class R>
-typename grid_types<enumerated_cell_range<Grid,R> >::CellIterator
-gral_begin(enumerated_cell_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_cell_range<Grid,R> >::CellIterator)
-{ return a.FirstCell();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_cell_range<Grid,R> >::CellIterator
-gral_end  (enumerated_cell_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_cell_range<Grid,R> >::CellIterator)
-{ return a.EndCell();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_cell_range<Grid,R> >::size_type
-gral_size (enumerated_cell_range<Grid,R> const& a, 
-	   typename grid_types<enumerated_cell_range<Grid,R> >::CellIterator)
-{ return a.NumOfCells();}
-
-
-
-
-
-
-/*
-template<class Grid, class R>
-typename grid_types<enumerated_cell_range<Grid,R> >::CellIterator
-gral_begin(enumerated_cell_range<Grid,R> const& a, 
-	   typename grid_types<Grid>::CellIterator)
-{ return a.FirstCell();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_cell_range<Grid,R> >::CellIterator
-gral_end  (enumerated_cell_range<Grid,R> const& a, 
-	   typename grid_types<Grid>::CellIterator)
-{ return a.EndCell();}
-
-template<class Grid, class R>
-typename grid_types<enumerated_cell_range<Grid,R> >::size_type
-gral_size(enumerated_cell_range<Grid,R> const& a, 
-	  typename grid_types<Grid>::CellIterator)
-{ return a.NumOfCells();}
-*/
+  template<class E, class R>
+  typename grid_types<enumerated_element_range<E,R> >::size_type
+  gral_size (enumerated_element_range<E,R> const& a,
+	     typename grid_types<enumerated_element_range<E,R> >::ElementIterator)
+  { return a.NumOfElements();}
 
 
 

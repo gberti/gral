@@ -6,6 +6,7 @@
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/map-element-iter-names.h"
 
+#include "Gral/Subranges/internal/element-range-aux.h"
 #include "Gral/Iterators/sequence-element-iterator.h"
 
 namespace GrAL {
@@ -19,6 +20,9 @@ namespace GrAL {
 /*! \defgroup enum_elementranges_ref  Light-weight reference-based element ranges
 
     \ingroup enumsubranges
+
+    \todo The classes with explicit type names like vertex_range_ref are obsolete
+    and should be removed.
  */
 
 
@@ -66,7 +70,8 @@ public:
   typedef range_type sequence_type;
   typedef typename  element_range_ref_aux<E,R>::ElementIterator  ElementIterator;
 
-  typedef typename gt::dimension_tag dimension_tag;
+  typedef typename gt::dimension_tag                dimension_tag;
+  typedef grid_range_category_d<dimension_tag::dim> category;
 private:
   //---- DATA -----
   size_type ebeg, eend;
@@ -233,7 +238,7 @@ public:
 
 
 
-/*! \brief Reference to a (possibly subset of) cell range.
+/*! \brief Reference to a subset of a cell range.
     \ingroup enum_elementranges_ref
  */
 
@@ -269,122 +274,52 @@ public:
 };
 
 
-namespace detail {
-
-  template<class G, class ETAG> struct map_elem_names {};
-
-  template<class G> struct map_elem_names<G, vertex_type_tag> 
-  {
-    typedef typename G::element_handle  vertex_handle;
-    typedef typename G::Element         Vertex;
-    typedef typename G::ElementIterator VertexIterator;
-  };
-
-  template<class G> struct map_elem_names<G, cell_type_tag> 
-  {
-    typedef typename G::element_handle  cell_handle;
-    typedef typename G::Element         Cell;
-    typedef typename G::ElementIterator CellIterator;
-  };
-
-
-  template<class E, class R>
-  struct grid_types_e_elem_range_ref 
-    : grid_types_detail::grid_types_root,
-      map_elem_names<element_range_ref<E,R>, typename E::element_type_tag> 
-  {
-    typedef element_range_ref<E,R>             range_type;
-    typedef typename range_type::grid_type     grid_type;
-    typedef typename range_type::size_type     size_type;
-    typedef typename range_type::dimension_tag dimension_tag;
-  };
-
-
-template<class Grid, class R>
-struct grid_types_evr_ref { 
-  typedef Grid                                grid_type;
-  typedef vertex_range_ref<Grid,R>            range_type;
-  typedef typename range_type::size_type      size_type;
-  typedef grid_types<grid_type>               gt;
-  typedef typename gt::dimension_tag          dimension_tag;
-
-  typedef typename range_type::VertexIterator VertexIterator;
-  typedef typename range_type::Vertex         Vertex;
-  typedef typename range_type::vertex_handle  vertex_handle;
-};
-
-
-template<class Grid, class R>
-struct grid_types_eer_ref { 
-  typedef Grid                              grid_type;
-  typedef edge_range_ref<Grid,R>            range_type;
-  typedef typename range_type::size_type    size_type;
-  typedef grid_types<grid_type>             gt;
-  typedef typename gt::dimension_tag        dimension_tag;
-
-  typedef typename range_type::EdgeIterator EdgeIterator;
-  typedef typename range_type::Edge         Edge;
-  typedef typename range_type::edge_handle  edge_handle;
-};
-
-
-template<class Grid, class R>
-struct grid_types_efr_ref { 
-  typedef Grid                               grid_type;
-  typedef facet_range_ref<Grid,R>            range_type;
-  typedef typename range_type::size_type     size_type;
-  typedef grid_types<grid_type>              gt;
-  typedef typename gt::dimension_tag         dimension_tag;
-
-  typedef typename range_type::FacetIterator FacetIterator;
-  typedef typename range_type::Facet         Facet;
-  typedef typename range_type::facet_handle  facet_handle;
-};
-
-
-template<class Grid, class R>
-struct grid_types_ecr_ref  {
-  typedef Grid                              grid_type;
-  typedef cell_range_ref<Grid,R>            range_type;
-  typedef typename range_type::size_type    size_type;
-  typedef grid_types<grid_type>             gt;
-  typedef typename gt::dimension_tag        dimension_tag;
-
-  typedef typename range_type::CellIterator CellIterator;
-  typedef typename range_type::Cell         Cell;
-  typedef typename range_type::cell_handle  cell_handle;
-};
-
-} // namespace detail
+  namespace detail {
+    
+    template<class RANGE>
+    struct grid_types_range_ref_base : 
+      public grid_types_detail::grid_types_root,
+      public map_elem_names<RANGE, typename RANGE::Element::element_type_tag>
+    {
+      typedef RANGE                              range_type;
+      typedef typename range_type::grid_type     grid_type;
+      typedef typename range_type::size_type     size_type;
+      typedef typename range_type::dimension_tag dimension_tag;
+    };
+    
+  } // namespace detail
 
   template<class E, class R>
   struct grid_types<element_range_ref<E,R> >
-    : public grid_types_base<detail::grid_types_e_elem_range_ref<E,R> > 
+    : public grid_types_base<detail::grid_types_range_ref_base<element_range_ref<E,R> > >
   {};
 
   template<class Grid, class R>
   struct grid_types<vertex_range_ref<Grid,R> > 
-    : public grid_types_base<detail::grid_types_evr_ref<Grid,R> >
+    : public  grid_types_base<detail::grid_types_range_ref_base<vertex_range_ref<Grid,R> > >
   {};
 
 
-template<class Grid, class R>
-struct grid_types<edge_range_ref<Grid,R> > 
-  : public grid_types_base<detail::grid_types_eer_ref<Grid,R> >
-{};
-
-template<class Grid, class R>
-struct grid_types<facet_range_ref<Grid,R> > 
-  : public grid_types_base<detail::grid_types_efr_ref<Grid,R> >
-{};
-
-
-template<class Grid, class R>
-struct grid_types<cell_range_ref<Grid,R> > 
-  : public grid_types_base<detail::grid_types_ecr_ref<Grid,R> >
-{};
+  template<class Grid, class R>
+  struct grid_types<edge_range_ref<Grid,R> > 
+    : public  grid_types_base<detail::grid_types_range_ref_base<edge_range_ref<Grid,R> > >
+  {};
+  
+  template<class Grid, class R>
+  struct grid_types<facet_range_ref<Grid,R> > 
+    : public  grid_types_base<detail::grid_types_range_ref_base<facet_range_ref<Grid,R> > >
+  {};
 
 
+  template<class Grid, class R>
+  struct grid_types<cell_range_ref<Grid,R> > 
+    : public  grid_types_base<detail::grid_types_range_ref_base<cell_range_ref<Grid,R> > >
+  {};
+
+
+  /* these overloads for gral_begin etc. are also sufficient for element_specific ranges 
+     like vertex_range_ref
+  */
   template<class E, class R>
   typename element_range_ref<E,R>::ElementIterator
   gral_begin(element_range_ref<E,R> const& a,  typename element_range_ref<E,R>::ElementIterator)
