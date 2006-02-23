@@ -16,6 +16,7 @@
 
 #include <iostream>
 
+
 int main() {
   using namespace GrAL;
   using namespace std;
@@ -50,7 +51,13 @@ int main() {
   }
   ev_range_type_ref Sevr(0, verts.end() - verts.begin(), verts, R); 
   v_range_type_ref  Svr (0, verts.end() - verts.begin(), verts, R); 
-  
+
+
+  test_sequence_iterator<v_gt  ::Element>(Sv,   cout);
+  test_sequence_iterator<ev_gt ::Element>(Sev,  cout);
+  test_sequence_iterator<vr_gt ::Element>(Svr,  cout);
+  test_sequence_iterator<evr_gt::Element>(Sevr, cout);
+
   {
     cout << "Vertex range Sv: " 
 	 << Sv.NumOfVertices() << " vertices" << endl;
@@ -93,10 +100,10 @@ int main() {
     typedef enumerated_element_range<rgt::Cell>               ec_range_type;
     typedef enumerated_cell_range<CartesianGrid2D>            c_range_type;
 
-    typedef ec_range_type_ref  ecr_gt;
-    typedef c_range_type_ref    cr_gt;
-    typedef ec_range_type       ec_gt;
-    typedef c_range_type         c_gt;
+    typedef grid_types<ec_range_type_ref>  ecr_gt;
+    typedef grid_types<c_range_type_ref>    cr_gt;
+    typedef grid_types<ec_range_type>       ec_gt;
+    typedef grid_types<c_range_type>         c_gt;
 
 
     ec_range_type Sec(R);
@@ -110,16 +117,11 @@ int main() {
     ec_range_type_ref Secr(0, cells.end() - cells.begin(), cells, R); 
     c_range_type_ref  Scr (0, cells.end() - cells.begin(), cells, R); 
 
-    typedef grid_types<c_range_type> cellgt;
 
-    BOOST_STATIC_ASSERT( ( 1 == boost::is_same<cellgt::CellIterator, GrAL::sequence_iterator<cellgt, cell_type_tag>::type>::value));
-
-    cellgt::CellIterator ci  = GrAL::begin<cellgt::Cell>(Sc);
-    ci     =  GrAL::end<cellgt::Cell>(Sc);
-    int nc =  GrAL::size<cellgt::Cell>(Sc);
-  
-    cellgt::CellIterator ci1 = GrAL::begin(Sc);
-
+    test_sequence_iterator<c_gt  ::Element>(Sc,   cout);
+    test_sequence_iterator<ec_gt ::Element>(Sec,  cout);
+    test_sequence_iterator<cr_gt ::Element>(Scr,  cout);
+    test_sequence_iterator<ecr_gt::Element>(Secr, cout);
     {
       cout << "Cell range Sc: " 
 	   << Sc.NumOfCells() << " cells" << endl;

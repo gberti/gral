@@ -25,6 +25,7 @@ SUBDIRS = archetype0D \
           geometric-types \
           grid-as-volume \
           grid-function-array-adapter \
+          grid-types \
           incident \
           incidence-hulls \
           mapped-grid-function \
