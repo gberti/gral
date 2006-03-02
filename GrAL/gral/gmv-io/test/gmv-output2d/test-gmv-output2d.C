@@ -28,7 +28,9 @@ int main() {
 
   typedef c2d::CartesianGrid2D               grid_type;
   typedef grid_types<grid_type>              gt;
-  typedef Id<coordN<2> >                     mapping_type;
+  typedef coordN<2>                          coord_type;
+  typedef point_traits<coord_type>           pt;
+  typedef Id<coord_type>                     mapping_type;
   typedef c2d::mapped_geometry<mapping_type> geometry_type;
 
   {
@@ -70,7 +72,10 @@ int main() {
     for(gt::CellIterator c(R); !c.IsDone(); ++c)
       mat[*c] = (*c).index()[0];
 
-    partial_grid_function<gt::Vertex, int> gf2(R,2);
+    partial_grid_function<gt::Vertex, double> gf2(R,0);
+    for(gt::VertexIterator v(R); !v.IsDone(); ++v)
+      gf2[*v] = pt::x(GeomR.coord(*v)) + 0.25 * pt::y(GeomR.coord(*v));
+
     OstreamGMV2DFmt Out("3x3-mat.out");
     Out.output_materials();
     // Try the  experimental version of passing an abritrary list
