@@ -48,9 +48,52 @@ public:
 
   ~OstreamGMV2DFmt();
 
+  void copy_grid_functions(heterogeneous_list::List<END,END>) {}
+
+  template<class GF, class TAIL>
+  void copy_grid_functions(heterogeneous_list::List<GF,TAIL> gfs)
+  {
+    if(num_gfs_of_dim(gfs,0) > 0) {
+      begin_variable();
+      copy_grid_functions_of_dim(gfs,0);
+      end_variable(); 
+    }
+    if(num_gfs_of_dim(gfs,2) > 0) {
+      begin_surfvariable();
+      copy_grid_functions_of_dim(gfs,2);
+      end_surfvariable();
+    }
+    copy_materials_rec(gfs);
+  }
+
 protected:
-  virtual void begin_variable() { Out() << "surfvars\n";}
-  virtual void end_variable()   { Out() << "endsvars\n";}   
+  virtual void begin_variable() { Out() << "variable\n";}
+  virtual void end_variable()   { Out() << "endvars\n";}   
+  virtual void begin_surfvariable() { Out() << "surfvars\n";}
+  virtual void end_surfvariable()   { Out() << "endsvars\n";}  
+
+
+  template<class GF, class TAIL>
+  int num_gfs_of_dim(heterogeneous_list::List<GF, TAIL> gfs, int dim) const
+  {
+    typedef element_traits<typename GF::element_type> et;
+    int val = ( dim == et::dim ? 1 : 0);
+    return val + num_gfs_of_dim(gfs.tail(), dim);
+  }
+  int num_gfs_of_dim(heterogeneous_list::List<END,END>, int) const { return 0;}
+
+  template<class GF, class TAIL>
+  void copy_grid_functions_of_dim(heterogeneous_list::List<GF, TAIL> gfs, int dim) 
+  {
+    typedef element_traits<typename GF::element_type> et;
+    if(dim == et::dim && !(material_treat_special && gfs.head().name == "material")) {
+      copy_gf(*(gfs.head().gf), gfs.head().name);
+      ++num_vars;
+    }
+    copy_grid_functions_of_dim(gfs.tail(), dim);
+  }
+  void copy_grid_functions_of_dim(heterogeneous_list::List<END,END>, int) {}
+
 };
 
 } // namespace GrAL 
