@@ -81,6 +81,9 @@ public:
 
   template<class GF>
   struct gf_name_pair {
+    typedef GF                        grid_function_type;
+    typedef typename GF::element_type element_type;
+
     std::string   name;
     GF const*     gf;
     gf_name_pair(std::string const& nm, GF const& ggf)
@@ -142,7 +145,7 @@ public:
 protected:
   virtual void begin_variable() = 0;
   virtual void end_variable()   = 0;
-private:
+
   template<class GF>
   void copy_gf(GF const& gf, std::string const& varname) 
     {
@@ -215,6 +218,7 @@ private:
     }
     *out << "\n" << std::flush;
   }
+
 
   typedef heterogeneous_list::END END;
   void copy_grid_functions_rec(heterogeneous_list::List<END,END>) {}
