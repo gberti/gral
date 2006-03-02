@@ -35,6 +35,7 @@ graphics-device  -a GrAL/graphics-device
 
 gral             -a GrAL/gral
 gral/base        -a GrAL/gral/base
+gral/gmv-io      -a GrAL/gral/gmv-io
 
 gralall -a  configuration utilities external-control sequence geometry function-algebra graphics-device gral
 
