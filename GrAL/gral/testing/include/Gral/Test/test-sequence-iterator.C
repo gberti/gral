@@ -29,12 +29,12 @@ namespace GrAL {
   {
     typedef typename element_iterator::value_type  value_type;
     typedef typename element_iterator::anchor_type anchor_type;
-    element_iterator e(g);
+    element_iterator e = GrAL::begin_x(g);
     ref_ptr<anchor_type const> a(e.TheAnchor());
   }
 
   int cnt = 0;
-  for(element_iterator e(g); ! e.IsDone(); ++e, ++cnt) {
+  for(element_iterator e = GrAL::begin_x(g); ! e.IsDone(); ++e, ++cnt) {
     element_handle_type h = e.handle();
     element_type        ee (e.TheGrid(), h);
 
