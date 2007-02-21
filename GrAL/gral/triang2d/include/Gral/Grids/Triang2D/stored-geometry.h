@@ -135,7 +135,7 @@ public:
   grid_type const& TheGrid() const { return *g;}
 
   class coord_type;
-  class coord_proxy {
+  class coord_proxy : public array_io_operators<coord_proxy, double, 2>  {
     double* xy_v; // start address of xyz values of a vertex
     friend class coord_type;
   public:
