@@ -7,8 +7,8 @@
 #include <algorithm>
 #include "Geometry/point-traits.h"
 #include "Geometry/algebraic-primitives.h"
+#include "Container/xlimits.h"
 
-#include <boost/limits.hpp>
 
 #include <iostream>
 
@@ -51,12 +51,45 @@ public:
    */
   box() 
   {
+    // equivalent to *this = empty_box(); (this would result in infinite recursion)
     for(int i = pt::LowerIndex(minc); i <= pt::UpperIndex(minc); ++i) {
-      minc[i] =  std::numeric_limits<scalar_type>::max();
-      maxc[i] = -std::numeric_limits<scalar_type>::max();
+      minc[i] = xnumeric_limits<scalar_type>::upper_bound();
+      maxc[i] = xnumeric_limits<scalar_type>::lower_bound();
     }
+
     REQUIRE(empty(), "minc=" << minc << " maxc=" << maxc,1);
   }  
+
+  /*! \brief Return an infinite box
+    \invariant
+     let <tt> i = infinite_box(); </tt>
+     -  <tt> b & i == b </tt> \f$ \forall \f$ boxes b
+     -  <tt> b | i == i </tt> \f$ \forall \f$ boxes b
+  */
+  static self infinite_box() { 
+    self res;
+    for(int i = pt::LowerIndex(res.minc); i <= pt::UpperIndex(res.minc); ++i) {
+      res.minc[i] = xnumeric_limits<scalar_type>::lower_bound();
+      res.maxc[i] = xnumeric_limits<scalar_type>::upper_bound();
+    }
+    return res;
+  }
+   /*! \brief Return an empty box
+    \invariant
+     let e = empty_box()
+     -  intersection: <tt> b & e == e </tt> \f$ \forall \f$ boxes b 
+     -  union:        <tt> b | e == b </tt> \f$ \forall \f$ boxes b
+
+    \note Any box b with b.min()[i] > b.max()[i] for some i  is empty, in the sense
+    that <tt> b.contains(x) == false </tt> for all x. 
+    However, satisfying the above conditions would require some tricky special cases
+    in union and intersections of boxes.
+  */
+ 
+  static self empty_box() {
+    return self();
+  }
+
   /*! \brief Create bounding box of the single point \c p
    */
   box(const coord& p) : minc(p), maxc(p) {}
@@ -135,8 +168,8 @@ public:
   /*! \brief Volume of the box
    */
   scalar_type volume() const {
-    if(empty()) return 0.0;
-    scalar_type res = 1.0;
+    if(empty()) return 0;
+    scalar_type res = 1;
     for(int i = pt::LowerIndex(maxc); i <= pt::UpperIndex(maxc); ++i) {
       res *= (maxc[i] - minc[i]);
     }
