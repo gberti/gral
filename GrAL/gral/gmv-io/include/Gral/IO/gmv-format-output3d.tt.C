@@ -83,12 +83,17 @@ void ConstructGrid_GF(OstreamGMV3DFmt& Out,
     GMV3D::archetype_type const& archetype_gmv(phi_a.ImgGrid());
     out << Out.name(cnt_a) << " "
 	<< archetype_gmv.NumOfVertices() << " ";
-    for(gmv_agt::VertexIterator vc(archetype_gmv); !vc.IsDone(); ++vc)
-      out << G2GMV( (*c).V(phi_a.inverse()(*vc)))  << " ";
+    for(gmv_agt::VertexIterator vc(archetype_gmv); !vc.IsDone(); ++vc) {
+      //FIXME: some "wrapped" types have no V() or maybe the wrong type
+      // perhaps arch2grid(Cell,arch_vertex) ?
+      typename gt::Vertex v(G, (*c).V(phi_a.inverse()(*vc)).handle());
+      out << G2GMV(v) << " ";
+      //out << G2GMV( (*c).V(phi_a.inverse()(*vc)))  << " ";
+    }
     out << '\n';
   }
   out << std::flush;
-  Out.copy_grid_functions(GFS);
+  Out.copy_grid_functions(G,GFS);
   out << "endgmv\n";
   out << std::flush;
 }

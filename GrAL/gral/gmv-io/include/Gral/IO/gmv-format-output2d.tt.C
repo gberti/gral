@@ -72,7 +72,7 @@ void ConstructGrid_GF(OstreamGMV2DFmt& Out,
   }
   out << std::flush;
 
-  Out.copy_grid_functions(GFS);
+  Out.copy_grid_functions(G,GFS);
   out << "endgmv\n" << std::flush;
 }
 

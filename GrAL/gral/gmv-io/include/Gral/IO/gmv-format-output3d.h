@@ -43,9 +43,8 @@ namespace GrAL {
     // ...
 
     OstreamGMV3DFmt Out("grid.gmv");
-    heterogeneous_list::BEGIN B;
     ConstructGrid_GF(Out,MyGrid,MyGeom,
-                     (B, Out.pair("gf1",gf1), Out.pair("gf2",gf2)));
+                     (Out.BeginGF(), Out.pair("gf1",gf1), Out.pair("gf2",gf2)));
 
     \endcode
 

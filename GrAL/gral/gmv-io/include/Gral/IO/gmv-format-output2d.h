@@ -48,22 +48,23 @@ public:
 
   ~OstreamGMV2DFmt();
 
-  void copy_grid_functions(heterogeneous_list::List<END,END>) {}
+  template<class GRID>
+  void copy_grid_functions(GRID const&, heterogeneous_list::List<END,END>) {}
 
-  template<class GF, class TAIL>
-  void copy_grid_functions(heterogeneous_list::List<GF,TAIL> gfs)
+  template<class GRID, class GF, class TAIL>
+  void copy_grid_functions(GRID const& g, heterogeneous_list::List<GF,TAIL> gfs)
   {
     if(num_gfs_of_dim(gfs,0) > 0) {
       begin_variable();
-      copy_grid_functions_of_dim(gfs,0);
+      copy_grid_functions_of_dim(g,gfs,0);
       end_variable(); 
     }
     if(num_gfs_of_dim(gfs,2) > 0) {
       begin_surfvariable();
-      copy_grid_functions_of_dim(gfs,2);
+      copy_grid_functions_of_dim(g,gfs,2);
       end_surfvariable();
     }
-    copy_materials_rec(gfs);
+    copy_materials_rec(g,gfs);
   }
 
 protected:
@@ -82,17 +83,18 @@ protected:
   }
   int num_gfs_of_dim(heterogeneous_list::List<END,END>, int) const { return 0;}
 
-  template<class GF, class TAIL>
-  void copy_grid_functions_of_dim(heterogeneous_list::List<GF, TAIL> gfs, int dim) 
+  template<class GRID, class GF, class TAIL>
+  void copy_grid_functions_of_dim(GRID const& g, heterogeneous_list::List<GF, TAIL> gfs, int dim) 
   {
     typedef element_traits<typename GF::element_type> et;
     if(dim == et::dim && !(material_treat_special && gfs.head().name == "material")) {
-      copy_gf(*(gfs.head().gf), gfs.head().name);
+      copy_gf(g, *(gfs.head().gf), gfs.head().name);
       ++num_vars;
     }
-    copy_grid_functions_of_dim(gfs.tail(), dim);
+    copy_grid_functions_of_dim(g, gfs.tail(), dim);
   }
-  void copy_grid_functions_of_dim(heterogeneous_list::List<END,END>, int) {}
+  template<class GRID>
+  void copy_grid_functions_of_dim(GRID const&, heterogeneous_list::List<END,END>, int) {}
 
 };
 

@@ -90,11 +90,16 @@ public:
       : name(nm), gf(&ggf) {}
   };
 
+  /*! \brief Use to construct entries for grid function list in ConstructGrid_GF
+   */
   template<class GF>
   static gf_name_pair<GF> pair(std::string const& nm, GF const& gf)
     { return gf_name_pair<GF>(nm,gf);}
 
-  heterogeneous_list::BEGIN BeginGFs() const { return heterogeneous_list::BEGIN();}
+  /*! \brief Start grid function list 
+  
+  */
+  static heterogeneous_list::BEGIN BeginGFs()  { return heterogeneous_list::BEGIN();}
 private:
   // map material ids to names
   struct material_names_impl {
@@ -146,45 +151,47 @@ protected:
   virtual void begin_variable() = 0;
   virtual void end_variable()   = 0;
 
-  template<class GF>
-  void copy_gf(GF const& gf, std::string const& varname) 
+  template<class GRID, class GF>
+  void copy_gf(GRID const& g, GF const& gf, std::string const& varname) 
     {
       typedef element_traits<typename GF::element_type> et;
       typedef typename et::element_type_tag   element_type_tag;
       typedef typename et::grid_dimension_tag grid_dimension_tag;
+      typedef typename sequence_iterator<grid_types<GRID>, element_type_tag>::type ElementIterator;
 
       *out << varname << " ";
       *out << element_tag(element_type_tag(), grid_dimension_tag());
       *out << '\n';
-      for(typename et::ElementIterator e(gf.TheGrid()); ! e.IsDone(); ++e) {
+      for(ElementIterator e = GrAL::begin_x(g); ! e.IsDone(); ++e) {
 	// we assume  numbering in gf.TheGrid() 
 	// is the same as numbering in GMV file.
 	*out << gf(*e) << ' ';
       }
       *out << '\n' << std::flush;
     }
-  template<class GF>
-  void copy_material(GF const& gf)
+  template<class GRID, class GF>
+  void copy_material(GRID const& g, GF const& gf) 
   { 
     typedef typename GF::value_type vt;
     // check if vt is an integral type or convertible to one (think of wrappers to integer ...)
     // Apparently, boost thinks float is convertible to long.
     typedef  decide<boost::is_integral<vt>::value 
       || (boost::is_convertible<vt,long>::value && (! boost::is_float<vt>::value)) > decider;
-    copy_material(gf, typename decider::type());
+    copy_material(g, gf, typename decider::type());
   }
 
-  template<class GF>
-  void copy_material(GF const& gf, false_type) {
+  template<class GRID, class GF>
+  void copy_material(GRID const&, GF const&, false_type) {
     std::cerr << "Warning: Materials must have integral type, skipping!" << std::endl;
   }
  
-  template<class GF>
-  void copy_material(GF const& gf, true_type) 
+  template<class GRID, class GF>
+  void copy_material(GRID const& g, GF const& gf, true_type) 
   {
     typedef element_traits<typename GF::element_type> et;
     typedef typename et::element_type_tag   element_type_tag;
     typedef typename et::grid_dimension_tag grid_dimension_tag;
+    typedef typename sequence_iterator<grid_types<GRID>, element_type_tag>::type ElementIterator;
 
     // map material IDs to consecutive range [1, nmats]
     typedef histogram_table<typename GF::value_type> hist_table_type;
@@ -213,7 +220,7 @@ protected:
 
     *out << material_description(element_type_tag(), grid_dimension_tag(), nmats, matnames) 
 	 << "\n";
-    for(typename et::ElementIterator e(gf.TheGrid()); ! e.IsDone(); ++e) {
+    for(ElementIterator e = GrAL::begin_x(g); ! e.IsDone(); ++e) {
       *out << new_mat(gf(*e)) << " ";
     }
     *out << "\n" << std::flush;
@@ -221,41 +228,45 @@ protected:
 
 
   typedef heterogeneous_list::END END;
-  void copy_grid_functions_rec(heterogeneous_list::List<END,END>) {}
 
-  void copy_materials_rec(heterogeneous_list::List<END,END>) {}
+  template<class GRID>
+  void copy_grid_functions_rec(GRID const&, heterogeneous_list::List<END,END>) {}
+
+  template<class GRID>
+  void copy_materials_rec(GRID const&, heterogeneous_list::List<END,END>) {}
 
 
-  template<class GF, class TAIL>
-  void copy_grid_functions_rec(heterogeneous_list::List<GF,TAIL> gfs)
+  template<class GRID, class GF, class TAIL>
+  void copy_grid_functions_rec(GRID const& g, heterogeneous_list::List<GF,TAIL> gfs)
     { 
       if( ! (material_treat_special && gfs.head().name == "material")) {
 	num_vars++;
-	copy_gf(*(gfs.head().gf), gfs.head().name);
+	copy_gf(g, *(gfs.head().gf), gfs.head().name);
       }
-      copy_grid_functions_rec(gfs.tail());
+      copy_grid_functions_rec(g, gfs.tail());
     }
 
-  template<class GF, class TAIL>
-  void copy_materials_rec(heterogeneous_list::List<GF,TAIL> gfs)
+  template<class GRID, class GF, class TAIL>
+  void copy_materials_rec(GRID const& g, heterogeneous_list::List<GF,TAIL> gfs)
     { 
       if(material_treat_special && gfs.head().name == "material") {
-        copy_material(*(gfs.head().gf));
+        copy_material(g, *(gfs.head().gf));
       }
-      copy_materials_rec(gfs.tail());
+      copy_materials_rec(g, gfs.tail());
     }
 
  
 public:
-  void copy_grid_functions(heterogeneous_list::List<END,END>) {}
+  template<class GRID>
+  void copy_grid_functions(GRID const& g, heterogeneous_list::List<END,END>) {}
 
-  template<class GF, class TAIL>
-  void copy_grid_functions(heterogeneous_list::List<GF,TAIL> gfs)
+  template<class GRID, class GF, class TAIL>
+  void copy_grid_functions(GRID const& g, heterogeneous_list::List<GF,TAIL> gfs)
     {
       begin_variable();
-      copy_grid_functions_rec(gfs);
+      copy_grid_functions_rec(g,gfs);
       end_variable(); 
-      copy_materials_rec(gfs);
+      copy_materials_rec(g,gfs);
     }
   
 };
