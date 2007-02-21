@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_VERTEX2D_ITERATOR_H
-#define NMWR_GB_VERTEX2D_ITERATOR_H
+#ifndef GRAL_GB_COMPLEX2D_VERTEX2D_ITERATOR_H
+#define GRAL_GB_COMPLEX2D_VERTEX2D_ITERATOR_H
 
 
 
@@ -8,6 +8,7 @@
 
 #include "Gral/Grids/Complex2D/complex2d.h"
 
+namespace GrAL {
 
 class Vertex2D_Iterator : public complex2d_types {
   friend class Complex2D;
@@ -63,6 +64,8 @@ public:
   const Complex2D& TheGrid  () const { return (*_cc);}
   const Complex2D& TheAnchor() const { return (*_cc);}
 };
+
+} // namespace GrAL {
 
  
 #endif

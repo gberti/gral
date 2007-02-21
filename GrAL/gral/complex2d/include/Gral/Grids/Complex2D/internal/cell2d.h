@@ -1,11 +1,12 @@
-#ifndef NMWR_GB_CELL2D_H
-#define NMWR_GB_CELL2D_H
+#ifndef GRAL_GB_COMPLEX2D_CELL2D_H
+#define GRAL_GB_COMPLEX2D_CELL2D_H
 
 
 // $LICENSE
 
 #include "Gral/Grids/Complex2D/complex2d.h"
 
+namespace GrAL {
 
 class Cell2D : public complex2d_types {
   //----- DATA -----
@@ -104,5 +105,6 @@ public:
 
 };
 
+} // namespace GrAL {
 
 #endif

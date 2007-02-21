@@ -1,8 +1,9 @@
-#ifndef NMWR_GB_VERTEX2D_C
-#define NMWR_GB_VERTEX2D_C
+#ifndef GRAL_GB_COMPLEX2D_VERTEX2D_C
+#define GRAL_GB_COMPLEX2D_VERTEX2D_C
 
 // $LICENSE
 
+namespace GrAL {
 
 inline Vertex2D::Vertex2D(Complex2D const& cc)
   { *this = *(cc.FirstVertex());} 
@@ -25,5 +26,6 @@ inline Vertex2D::cell_handle
 Vertex2D::cell(int c) const
 { return (base()._cells[c]);}
 
+} // namespace GrAL {
 
 #endif

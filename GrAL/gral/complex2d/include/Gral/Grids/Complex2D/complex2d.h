@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_GRIDS_COMPLEX2D_H
-#define NMWR_GB_GRIDS_COMPLEX2D_H
+#ifndef GRAL_GB_GRIDS_COMPLEX2D_H
+#define GRAL_GB_GRIDS_COMPLEX2D_H
 
 
 
@@ -47,8 +47,11 @@ class CellOnVertex2D_Iterator;
 struct edge_handle_complex2d;
 
 
-  struct complex2d_types : public grid_types_detail::grid_types_root { 
-    typedef complex2d_types self;
+struct complex2d_types : public grid_types_detail::grid_types_root { 
+
+  typedef grid_dim_tag<2> dimension_tag;
+  
+  typedef complex2d_types self;
   typedef Complex2D Complex;
   typedef Complex2D grid_type;
   typedef const Complex2D* ComplexPtr;
@@ -234,17 +237,14 @@ namespace STDEXT  {
   
 } // namespace STDEXT
 
-namespace GrAL {
-
-
-
-
 
 #include "Gral/Grids/Complex2D/internal/vertex2d.h"
 #include "Gral/Grids/Complex2D/internal/cell2d.h"
 #include "Gral/Grids/Complex2D/internal/cell-on-cell2d-it.h"
 #include "Gral/Grids/Complex2D/internal/cell-on-vertex2d-it.h"
 #include "Gral/Grids/Complex2D/internal/edge-on-cell2d-it.h"
+
+namespace GrAL {
 
 /*! \brief General 2D grid class
      \ingroup complex2dmodule
@@ -572,8 +572,12 @@ private:
   Complex2D& _cc;
 };
 
+
+} // namespace GrAL
+
 //-----------------------------------------------------------------------------
 //-----------------------------------------------------------------------------
+
 
 #include "Gral/Grids/Complex2D/internal/vertex-on-cell2d-it.h" 
 #include "Gral/Grids/Complex2D/internal/vertex2d-it.h"
@@ -593,6 +597,8 @@ private:
 #include "Gral/Grids/Complex2D/internal/cell2d.C"
 #include "Gral/Grids/Complex2D/internal/complex2d.C"
 
+
+namespace GrAL {
 
 //-----------------------------------------------------------------------------
 //------------  parameterized namespace specialization for Complex2D  ---------
@@ -748,6 +754,7 @@ namespace STDEXT {
   struct hash<GrAL::Cell2D> 
     : public GrAL::hash_cell2d {};
 }
+
 
 #include "Gral/Grids/Complex2D/element-traits.h"
 

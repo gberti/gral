@@ -1,10 +1,11 @@
+#ifndef GRAL_GB_COMPLEX2D_EDGE2D_INLINE_H
+#define GRAL_GB_COMPLEX2D_EDGE2D_INLINE_H
 
 // $LICENSE
 
-#ifndef NMWR_GB_EDGE2D_INLINE_H
-#define NMWR_GB_EDGE2D_INLINE_H
-
 #include "Gral/Grids/Complex2D/internal/edge2d.h"
+
+namespace GrAL {
 
 inline Edge2D::Edge2D(Complex2D const& cc)
     { *this = *(cc.FirstEdge());} 
@@ -22,5 +23,7 @@ inline CellOnEdge2D_Iterator Edge2D::FirstCell() const
 
 inline CellOnEdge2D_Iterator Edge2D::EndCell() const
 { return CellOnEdge2D_Iterator(*this,3); }
+
+} // namespace GrAL {
 
 #endif

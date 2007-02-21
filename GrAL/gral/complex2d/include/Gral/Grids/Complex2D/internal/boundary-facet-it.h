@@ -1,10 +1,11 @@
-#ifndef NMWR_GB_BOUNDARY_FACET_2D_ITERATOR
-#define NMWR_GB_BOUNDARY_FACET_2D_ITERATOR
+#ifndef GRAL_GB_COMPLEX2D_BOUNDARY_FACET_2D_ITERATOR
+#define GRAL_GB_COMPLEX2D_BOUNDARY_FACET_2D_ITERATOR
 
 
 
 // $LICENSE
 
+namespace GrAL {
 
 class BoundaryFacet2D_Iterator {
 public:
@@ -39,5 +40,7 @@ public:
   friend ::std::ostream& operator<<(::std::ostream& out, const BoundaryFacet2D_Iterator& it)
     { return (out << *(it._bf)); }
 };
+
+} // namespace GrAL {
 
 #endif

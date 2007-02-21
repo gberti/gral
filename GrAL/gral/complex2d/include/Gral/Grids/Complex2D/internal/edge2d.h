@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_EDGE2D_H
-#define NMWR_GB_EDGE2D_H
+#ifndef GRAL_GB_COMPLEX2D_EDGE2D_H
+#define GRAL_GB_COMPLEX2D_EDGE2D_H
 
 
 
@@ -7,6 +7,8 @@
 
 
 #include "Gral/Grids/Complex2D/complex2d.h"
+
+namespace GrAL {
 
 class Edge2D : public complex2d_types {
 public:
@@ -116,6 +118,6 @@ inline bool operator<(const Edge2D& s1, const Edge2D& s2)
   return ( (max1 < max2)  || ( (max1 == max2) && (min1 < min2)));
 }
 
-
+} // namespace GrAL {
 
 #endif

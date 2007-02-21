@@ -1,8 +1,9 @@
-#ifndef NMWR_GB_CELL_ON_CELL2D_INLINE_H
-#define NMWR_GB_CELL_ON_CELL2D_INLINE_H
+#ifndef GRAL_GB_COMPLEX2D_CELL_ON_CELL2D_INLINE_H
+#define GRAL_GB_COMPLEX2D_CELL_ON_CELL2D_INLINE_H
 
 // $LICENSE
 
+namespace GrAL {
 
 inline 
 CellOnCell2D_Iterator::CellOnCell2D_Iterator(Cell2D const& C)
@@ -44,5 +45,7 @@ CellOnCell2D_Iterator::operator--()
   } while (  TheGrid().IsOnBoundary(_f) && ! IsDone());
   return (*this);
 }
+
+} // namespace GrAL {
 
 #endif

@@ -1,5 +1,10 @@
+#ifndef GRAL_GB_COMPLEX2D_EDGE_ON_CELL2D_ITERATOR_C
+#define GRAL_GB_COMPLEX2D_EDGE_ON_CELL2D_ITERATOR_C
+
 
 // $LICENSE
+
+namespace GrAL {
 
 inline 
 EdgeOnCell2D_Iterator::EdgeOnCell2D_Iterator(CellOnCell2D_Iterator const& nb)
@@ -45,3 +50,9 @@ void EdgeOnCell2D_Iterator::print(::std::ostream& out)  const
   out << "C: " << C
       << " lf: " << lf; 
 }
+
+
+} // namespace GrAL {
+
+
+#endif

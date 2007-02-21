@@ -1,11 +1,13 @@
-#ifndef NMWR_GB_CELL2D_C
-#define NMWR_GB_CELL2D_C
+#ifndef GRAL_GB_COMPLEX2D_CELL2D_C
+#define GRAL_GB_COMPLEX2D_CELL2D_C
 
 // $LICENSE
 
 
 #include "algorithm"
 #include "functional"
+
+namespace GrAL {
 
 inline Cell2D::Cell2D(Complex2D const&  cc)
 { *this = *(cc.FirstCell());}
@@ -156,5 +158,7 @@ inline void Cell2D::FlipEdge(const Vertex2D& v, Edge2D& e) const
 
 inline Cell2D::archetype_type const& 
 Cell2D::TheArchetype() const { return TheGrid().ArchetypeOf(*this);}
+
+} // namespace GrAL {
 
 #endif

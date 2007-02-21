@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_EDGE2D_ITERATOR_H
-#define NMWR_GB_EDGE2D_ITERATOR_H
+#ifndef GRAL_GB_COMPLEX2D_EDGE2D_ITERATOR_H
+#define GRAL_GB_COMPLEX2D_EDGE2D_ITERATOR_H
 
 
 
@@ -7,6 +7,9 @@
 
 
 #include "Gral/Grids/Complex2D/complex2d.h"
+
+
+namespace GrAL {
 
 class Edge2D_Iterator  : public complex2d_types {
   typedef Edge2D_Iterator       self;
@@ -134,7 +137,7 @@ inline  Edge2D_Iterator& Edge2D_Iterator::operator++()
   return (*this); 
 }
 
-
+} // namespace GrAL {
 
 
 #endif

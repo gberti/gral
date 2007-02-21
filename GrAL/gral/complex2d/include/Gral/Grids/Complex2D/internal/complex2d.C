@@ -1,3 +1,5 @@
+#ifndef GRAL_GB_COMPLEX2D_C
+#define GRAL_GB_COMPLEX2D_C
 
 // $LICENSE
 
@@ -5,6 +7,8 @@
 // to be included in complex2d.h
 
 #include "algorithm"
+
+namespace GrAL {
  
 inline Complex2D::vertex_handle Complex2D::handle(const Complex2D::Vertex& V)  const { 
   REQUIRE(( &(V.TheGrid()) == this),
@@ -185,3 +189,6 @@ inline const Complex2D::CoordType& Complex2D::Coord(const Complex2D::Vertex&   v
 inline  Complex2D::CoordType& Complex2D::Coord(const Complex2D::Vertex&   v)  
 { return (_vertices[v._pos]._coord);}
 
+} // namespace GrAL {
+
+#endif

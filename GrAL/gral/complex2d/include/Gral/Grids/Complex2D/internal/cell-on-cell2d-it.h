@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_CELL_ON_CELL2D_ITERATOR_H
-#define NMWR_GB_CELL_ON_CELL2D_ITERATOR_H
+#ifndef GRAL_GB_COMPLEX2D_CELL_ON_CELL2D_ITERATOR_H
+#define GRAL_GB_COMPLEX2D_CELL_ON_CELL2D_ITERATOR_H
 
 
 
@@ -8,6 +8,8 @@
 
 #include "Gral/Grids/Complex2D/complex2d.h"
 #include "Gral/Grids/Complex2D/internal/edge-on-cell2d-it.h"
+
+namespace GrAL {
 
 class CellOnCell2D_Iterator : public complex2d_types {
   typedef CellOnCell2D_Iterator   self;
@@ -71,5 +73,6 @@ private:
 };
 
 
+} // namespace GrAL {
 
 #endif

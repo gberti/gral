@@ -1,10 +1,12 @@
-#ifndef NMWR_GB_BOUNDARY_VERTEX_COMPLEX2D_ITERATOR_H
-#define NMWR_GB_BOUNDARY_VERTEX_COMPLEX2D_ITERATOR_H
+#ifndef GRAL_GB_COMPLEX2D_BOUNDARY_VERTEX_COMPLEX2D_ITERATOR_H
+#define GRAL_GB_COMPLEX2D_BOUNDARY_VERTEX_COMPLEX2D_ITERATOR_H
 
 
 // $LICENSE
 
 #include "Gral/Grids/Complex2D/complex2d.h"
+
+namespace GrAL {
 
 //----------------------------------------------------------------
 //
@@ -85,5 +87,8 @@ private:
     done = (E == Estart);
   }
 };
+
+
+} // namespace GrAL {
 
 #endif

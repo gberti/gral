@@ -1,11 +1,13 @@
-#ifndef NMWR_GB_VERTEX2D_H
-#define NMWR_GB_VERTEX2D_H
+#ifndef GRAL_GB_COMPLEX2D_VERTEX2D_H
+#define GRAL_GB_COMPLEX2D_VERTEX2D_H
 
 
 // $LICENSE
 
 
 #include "Gral/Grids/Complex2D/complex2d.h"
+
+namespace GrAL {
 
 class Vertex2D : public complex2d_types {
   //---- DATA ----
@@ -70,5 +72,6 @@ private:
   vertex_base const& base() const;
 };
 
+} // namespace GrAL {
 
 #endif

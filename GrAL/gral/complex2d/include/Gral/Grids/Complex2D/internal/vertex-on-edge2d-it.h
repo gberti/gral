@@ -1,10 +1,11 @@
+#ifndef GRAL_GB_COMPLEX2D_VERTEX_ON_EDGE2D_IT_H
+#define GRAL_GB_COMPLEX2D_VERTEX_ON_EDGE2D_IT_H
 
 // $LICENSE
 
-#ifndef NMWR_GB_VERTEX_ON_EDGE2D_IT_H
-#define NMWR_GB_VERTEX_ON_EDGE2D_IT_H
-
 #include "Gral/Grids/Complex2D/complex2d.h"
+
+namespace GrAL {
 
 class VertexOnEdge2D_Iterator : public complex2d_types {
   typedef VertexOnEdge2D_Iterator self;
@@ -51,5 +52,7 @@ public:
     { return !(lhs == rhs);}
 
 };
+
+} // namespace GrAL {
 
 #endif

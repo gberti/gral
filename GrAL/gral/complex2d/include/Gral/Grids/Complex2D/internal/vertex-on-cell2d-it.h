@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_VERTEX_ON_CELL2D_ITERATOR_H
-#define NMWR_GB_VERTEX_ON_CELL2D_ITERATOR_H
+#ifndef GRAL_GB_COMPLEX2D_VERTEX_ON_CELL2D_ITERATOR_H
+#define GRAL_GB_COMPLEX2D_VERTEX_ON_CELL2D_ITERATOR_H
 
 
 
@@ -8,7 +8,7 @@
 
 #include "Gral/Grids/Complex2D/complex2d.h"
 
-
+namespace GrAL {
 
 class VertexOnCell2D_Iterator :  public complex2d_types {
   typedef VertexOnCell2D_Iterator  self;
@@ -74,6 +74,7 @@ public:
  
 };
 
+} // namespace GrAL {
 
 #endif
 

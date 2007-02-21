@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_CELL2D_ITERATOR_H
-#define NMWR_GB_CELL2D_ITERATOR_H
+#ifndef GRAL_GB_COMPLEX2D_CELL2D_ITERATOR_H
+#define GRAL_GB_COMPLEX2D_CELL2D_ITERATOR_H
 
 
 
@@ -7,6 +7,8 @@
 
 
 #include "Gral/Grids/Complex2D/complex2d.h"
+
+namespace GrAL {
 
 class Cell2D_Iterator : public complex2d_types {
 private:
@@ -94,5 +96,7 @@ inline CellOnCell2D_Iterator::operator Cell2D_Iterator() const
   return Cell2D_Iterator(*_nb,_cc);
 }
 */
+
+} // namespace GrAL {
 
 #endif
