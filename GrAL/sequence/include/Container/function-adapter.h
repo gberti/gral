@@ -114,6 +114,10 @@ inline
 unary_map_composition<M1,M2>
 compose_map( M1 const& m1, M2 const& m2)
 { return unary_map_composition<M1,M2>(m1,m2);}
+
+
+
+
  
 /*! \brief Constant function
 
@@ -154,7 +158,7 @@ public:
   map_is_equal(mapping_type const& ff, map_result_type r) : f(ff), res(r) {}
 
   //! Returns true iff <tt> ff(a) == r </tt>
-  bool operator()(argument_type const& a) const { return (*f)(a) == res;}
+  bool operator()(argument_type a) const { return (*f)(a) == res;}
 };
 
 
@@ -175,7 +179,7 @@ public:
   and_pred() {}
   and_pred(P1 pp1, P2 pp2) : p1(pp1), p2(pp2) {}
 
-  bool operator()(argument_type const& a) const { return p1(a) && p2(a);}
+  bool operator()(argument_type a) const { return p1(a) && p2(a);}
 };
 
 /*! \brief Disjunction (or) of two predicates (convenience type)
