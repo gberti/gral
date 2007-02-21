@@ -33,9 +33,10 @@ struct even_pred  { bool operator()(cart_grid_type::Cell c) const { return ( (c.
 namespace GrAL {
 namespace restricted_grid_view {
   typedef cartesian2d::CartesianGrid2D grid_type;
+  typedef grid_types<grid_type>        gt;
+  typedef cfg<gt, true_pred>           cfg_t;
   
-  
-  template class grid_view<grid_type, true_pred>;
+  template class grid_view<cfg_t>; // grid_type, true_pred>;
 }}
 
 
@@ -48,19 +49,26 @@ int main() {
   grid_type R(3,3);
   
   namespace rgv = restricted_grid_view;
-  rgv::grid_view<grid_type, true_pred >  all_view (R, true_pred());
-  rgv::grid_view<grid_type, false_pred>  nil_view (R, false_pred());
-  rgv::grid_view<grid_type, even_pred >  even_view(R, even_pred());
+  typedef rgv::grid_view<rgv::cfg<gt, true_pred > > all_view_type;
+  typedef rgv::grid_view<rgv::cfg<gt, false_pred> > nil_view_type;
+  typedef rgv::grid_view<rgv::cfg<gt, even_pred > > even_view_type;
+
+  typedef grid_types<all_view_type>  truegt;
+  typedef grid_types<nil_view_type>  falsegt;
+  typedef grid_types<even_view_type> evengt;
+
+  all_view_type  all_view (R, true_pred());
+  nil_view_type  nil_view (R, false_pred());
+  even_view_type even_view(R, even_pred());
   
+  typedef rgv::grid_view<rgv::cfg<truegt, true_pred> > all2_view_type;
+  all2_view_type all2_view(all_view, true_pred());
 
   REQUIRE_ALWAYS( all_view.NumOfCells() == R.NumOfCells(), "", 1);
   REQUIRE_ALWAYS( nil_view.NumOfCells() == 0,              "", 1);
   REQUIRE_ALWAYS( all_view.NumOfVertices() == R.NumOfVertices(), "", 1);
   REQUIRE_ALWAYS( nil_view.NumOfVertices() == 0,              "", 1);
 
-  typedef grid_types<rgv::grid_view<grid_type, true_pred  > > truegt;
-  typedef grid_types<rgv::grid_view<grid_type, false_pred > > falsegt;
-  typedef grid_types<rgv::grid_view<grid_type, even_pred  > > evengt;
 
   cout << "checkgt<evengt>\n";
   checkgt<evengt>(cout);
@@ -82,6 +90,8 @@ int main() {
   grid_function_view<evengt::Cell, int> even_gf(even_view, gf);
 
   grid_function_view<evengt::Cell, int, const grid_function<gt::Cell, int> > even_const_gf(even_view, gf);
+  grid_function_view<evengt::Cell, int> even_gf2 = make_grid_function_view(even_view,gf);
+
 
   REQUIRE_ALWAYS(even_gf.size() == even_view.NumOfCells(), "", 1);
 
@@ -114,8 +124,6 @@ int main() {
   test_incidence_iterator<truegt::Edge,  truegt::Cell>(all_view, cout);
   test_incidence_iterator<truegt::Cell,  truegt::Cell>(all_view, cout);
 
-  //  truegt::CellIterator c1 =  begin<truegt::Cell>(all_view);
-  //truegt::CellOnCellIterator cc1 = begin<truegt::Cell>(*c1);
 
   element_numbering<gt::Vertex>  VNum(R,1);
 
