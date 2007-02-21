@@ -4,6 +4,7 @@
 // $LICENSE_NEC_2005
 
 #include "Container/tuple.h"
+#include "Container/sequence-algorithms.h"
 
 #include <boost/graph/graph_traits.hpp>
 #include <boost/graph/properties.hpp>
@@ -74,7 +75,16 @@ namespace GrAL { namespace graph {
 
     // create source / sink clusters
     typedef typename VertexList::const_iterator list_iter;
-    GrAL::tuple<VertexList const*, 2> ss_list(&source_vertices, &sink_vertices);
+
+    VertexList unique_source_vertices = source_vertices;
+    VertexList unique_sink_vertices   = sink_vertices;
+
+    GrAL::sequence::sort_and_make_unique(unique_source_vertices);
+    GrAL::sequence::sort_and_make_unique(unique_sink_vertices);
+    // sink = sink \ source
+    GrAL::sequence::remove_set(unique_sink_vertices,unique_source_vertices);
+
+    GrAL::tuple<VertexList const*, 2> ss_list(&unique_source_vertices, &unique_sink_vertices);
     GrAL::tuple<typename cgt::vertex_descriptor, 2> ss_vertex(c_source, c_sink);
     for(int i = 0; i <= 1; ++i) {
       for(list_iter osv_it = ss_list[i]->begin(); osv_it != ss_list[i]->end(); ++osv_it) {
