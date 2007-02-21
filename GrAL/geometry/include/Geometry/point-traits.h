@@ -208,7 +208,25 @@ point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::dummy_zero = 0;
 
 
 template<class ARRAY, class V, unsigned N>
-struct array_operators 
+struct array_io_operators 
+{
+  friend std::ostream& operator<<(std::ostream& out, ARRAY const& a) { 
+    for(unsigned i  = 0; i < N-1; ++i) 
+      out << a[i] << ' ';
+    out << a[N-1];
+    return out;
+  }
+
+  friend std::istream& operator>>(std::istream& in, ARRAY & a) { 
+    for(unsigned i  = 0; i < N; ++i) 
+      in >> a[i];
+    return in;
+  }
+  
+};
+
+template<class ARRAY, class V, unsigned N>
+struct array_operators : public array_io_operators<ARRAY,V,N>
 {
   ARRAY      & to_derived()       { return static_cast<ARRAY&>(*this);}
   ARRAY const& to_derived() const { return static_cast<ARRAY const&>(*this);}
@@ -259,20 +277,89 @@ struct array_operators
   friend ARRAY operator*(ARRAY const& a, value_type v) { return a.plus(v);}
   friend ARRAY operator*(value_type v, ARRAY const& a) { return a.plus(v);}
 
-  friend std::ostream& operator<<(std::ostream& out, ARRAY const& a) { 
-    for(unsigned i  = 0; i < N-1; ++i) 
-      out << a[i] << ' ';
-    out << a[N-1];
-    return out;
+};
+
+/*! \brief Specialization of point_traits for fixed-size builtin arrays
+
+ */
+template<class T, size_t N>
+struct point_traits_builtin_base
+{
+  typedef T              Ptype[N];
+  typedef T              component_type;
+  typedef component_type value_type;
+  typedef typename dim_tag<N>::dimension_tag dimension_tag;
+  enum { dimension = N };
+
+  static void ConstructWithDim(unsigned d, Ptype&)
+    { REQUIRE(d == N, "Cannot construct! d = " << d 
+	      << ", N = " << N <<'\n',1);
+    }
+  static unsigned Dim(const Ptype&) { return N;}
+  static unsigned Dim() { return N;}
+  
+  static int LowerIndex()             { return 0;}
+  static int LowerIndex(Ptype const&) { return 0;}
+  static int UpperIndex()             { return N-1;}
+  static int UpperIndex(Ptype const&) { return N-1;}
+
+  static Ptype    origin;
+  static Ptype    unitv[N];
+
+  static Ptype const& Origin() { 
+    for(unsigned i = 0; i < N; ++i) 
+      origin[i] = component_type(0.0);
+    return origin;
   }
+  static Ptype const& Origin(unsigned) { return Origin();}
 
-  friend std::istream& operator>>(std::istream& in, ARRAY & a) { 
-    for(unsigned i  = 0; i < N; ++i) 
-      in >> a[i];
-    return in;
+  static Ptype const& unit_vector(int i) {
+    REQUIRE( 0 <= i && i < N, "i=" << i << " ", 1);
+    unitv[i]    = origin;
+    unitv[i][i] = component_type(1);
+    return unitv[i];
   }
+  static Ptype const& unit_vector(int i, unsigned) { return unit_vector(i);}
 
+};
 
+template<class T, size_t N>
+struct point_traits<T[N]> : public point_traits_builtin_base<T,N> 
+{
+  typedef typename  point_traits_builtin_base<T,N>::component_type component_type;
+  typedef typename  point_traits_builtin_base<T,N>::Ptype          Ptype;
+
+  static component_type  x(const Ptype& p) {return p[0];}
+  static component_type& x(      Ptype& p) {return p[0];}
+  static component_type  y(const Ptype& p) {return p[1];}
+  static component_type& y(      Ptype& p) {return p[1];}
+  static component_type  z(const Ptype& p) {return p[2];}
+  static component_type& z(      Ptype& p) {return p[2];}
+};
+
+template<class T>
+struct point_traits<T[1]> : public point_traits_builtin_base<T,1> 
+{
+  typedef typename  point_traits_builtin_base<T,1>::component_type component_type;
+  typedef typename  point_traits_builtin_base<T,1>::Ptype          Ptype;
+
+  static component_type  x(const Ptype& p) {return p[0];}
+  static component_type& x(      Ptype& p) {return p[0];}
+  static component_type  y(const Ptype& p) {return 0;}
+  static component_type  z(const Ptype& p) {return 0;}
+};
+
+template<class T>
+struct point_traits<T[2]> : public point_traits_builtin_base<T,2> 
+{
+  typedef typename  point_traits_builtin_base<T,2>::component_type component_type;
+  typedef typename  point_traits_builtin_base<T,2>::Ptype          Ptype;
+
+  static component_type  x(const Ptype& p) {return p[0];}
+  static component_type& x(      Ptype& p) {return p[0];}
+  static component_type  y(const Ptype& p) {return p[1];}
+  static component_type& y(      Ptype& p) {return p[1];}
+  static component_type  z(const Ptype& p) {return 0;}
 };
 
 
