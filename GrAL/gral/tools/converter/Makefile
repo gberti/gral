@@ -23,7 +23,7 @@ TARGETS = $(EXEC)
 include $(DEPS)
 
 
-LIBS = -lgral-base \
+LIBS = -lgral-complex2d -lgral-base \
        -lexternal-control  -lutilities -lgeometry
 
 LIBSGMV = -lgral-gmv-io
@@ -57,6 +57,8 @@ complex2d2off: complex2d2off.o
 complex2d2dx: complex2d2dx.o
 	$(CC) -o complex2d2dx complex2d2dx.o $(LDFLAGS) $(LIBSDX) $(LIBS)
 
+complex2d2smp: complex2d2smp.o
+	$(CC) -o $@ $< $(LDFLAGS)  $(LIBS)
 rungmv:
 	$(EXECGMV) -g grid.complex2d -o grid.gmv  -off 1
 
