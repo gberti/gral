@@ -39,6 +39,7 @@ public:
 
 /*! \brief Linear simplex finite element
     
+   \ingroup interpolation   
    \see test-linear-simplex.C 
 */
 template<class GEOM, class F, class GT = grid_types<typename GEOM::grid_type> >

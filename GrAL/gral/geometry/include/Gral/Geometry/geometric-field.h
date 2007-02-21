@@ -11,6 +11,15 @@
 
 namespace GrAL {
 
+  /*! \brief A function over the geometric domain of a mesh
+   
+     \ingroup interpolation
+
+     \templateparams
+       - \c GEOM is a model of $GrAL VertexGridGeometry
+       - \c F    is a model of $GrAL TotalGridFunction on vertices
+       - \c I is an interpolation type, for instance  \c linear_cube or \c linear_simplex 
+  */
 template<class GEOM, class F, class I, class GT = grid_types<typename GEOM::grid_type> >
 class geometric_field {
 public:

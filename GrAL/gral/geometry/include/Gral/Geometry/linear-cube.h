@@ -92,7 +92,8 @@ public:
 
 
 /*! \brief Linear cube finite element
-    
+ 
+   \ingroup interpolation   
    \see test-linear-cube.C 
 */
 template<class GEOM, class F, class GT = grid_types<typename GEOM::grid_type> >
