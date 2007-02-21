@@ -121,7 +121,6 @@ template<class X> struct has_Vertex;
 
 #undef  DEFINE_GET_RAW
     
-  } // namespace tags
 
   /*! \brief Templated version of has_XXX
 
@@ -138,6 +137,7 @@ template<class X> struct has_Vertex;
 					 boost::mpl::identity<tags::undefined> >::type type;
   };
 
+  } // namespace tags
 
 
 /*! Print out which types are supported by a \c grid_types<> specialization 

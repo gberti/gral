@@ -18,7 +18,7 @@ namespace GrAL {
   public:    
     typedef NEW_GRID grid_type;
     typedef OLD_EH   base_element_handle;
-    typedef typename grid_type::size_type size_type;
+    typedef typename grid_types<grid_type>::size_type size_type;
     
 
   public:
@@ -189,7 +189,8 @@ public:
   };
   
 
-  
+  // FIXME: should reuse the actual class template used for E.
+  // This might be grid_function_vector  
   template <class GRID, class E, class EH, class T>
   class grid_function<wrapped_element<GRID,E,EH>, T>
     : public grid_function_hash<wrapped_element<GRID,E,EH>, T>
@@ -204,6 +205,32 @@ public:
     grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
   };
   
+
+
+
+  /*
+  template<class GRID, class OLD_E, class NEW_EH, class T>
+  class grid_function<wrapped_element<GRID, OLD_E, NEW_EH>, T>
+    : public grid_function<OLD_E, T> 
+  {
+    typedef grid_function<OLD_E, T> base;
+    typedef GRID                    grid_type;
+ 
+    ref_ptr<grid_type const>  g;
+    
+  public:
+    typedef wrapped_element<GRID, OLD_E, NEW_EH> element_type;
+    typedef element_type                         argument_type;
+    
+    grid_function() {}
+    grid_function(grid_type         const& g)             : base(g) {}
+    grid_function(ref_ptr<grid_type const> g)             : base(g) {}
+    grid_function(grid_type         const& g, T const& t) : base(g,t) {}
+    grid_function(ref_ptr<grid_type const> g, T const& t) : base(g,t) {}
+  };
+  */
+
+
 
   /*! \brief A type wrapper for a grid incidence iterator
 
@@ -296,16 +323,16 @@ public:
     typedef typename gt::size_type size_type;
 
     typedef element_type  value_type;
-    typedef typename base_iterator::element_type base_element_type;
+    typedef typename base_iterator::value_type base_element_type;
     typedef element_traits<base_element_type>  bet;
   private:
     ref_ptr<grid_type const> g;
     base_iterator            it;
   public:
     wrapped_sequence_iterator() {}
-    wrapped_sequence_iterator(grid_type const& gg)                           : g(gg), it(*g) {}
+    wrapped_sequence_iterator(grid_type const& gg)                           : g(gg), it(g->BaseGrid()) {}
     wrapped_sequence_iterator(grid_type const& gg, base_iterator ii)         : g(gg), it(ii) {}
-    wrapped_sequence_iterator(ref_ptr<grid_type const> gg)                   : g(gg), it(*g) {}
+    wrapped_sequence_iterator(ref_ptr<grid_type const> gg)                   : g(gg), it(g->BaseGrid()) {}
     wrapped_sequence_iterator(ref_ptr<grid_type const> gg, base_iterator ii) : g(gg), it(ii) {}
 
     self& operator++()      { cv(); ++it; return *this;}
@@ -347,8 +374,7 @@ public:
   struct wrap_base_elem_aux_##T<0,1,NEW_GT, OLD_GT> \
     : public virtual NEW_GT \
   { \
-    /* typedef typename get_from_base_gt_##TH<NEW_GT, OLD_GT>::TH TH;	*/ \
-    typedef int TH; \
+   typedef wrapped_element_handle<typename NEW_GT::grid_type, typename OLD_GT::TH> TH; \
    typedef wrapped_element<typename NEW_GT::grid_type, typename OLD_GT::T, TH>  T; }; \
   \
   template<class NEW_GT, class OLD_GT> \
@@ -611,8 +637,6 @@ public:
   typename wrapped_sequence_iterator<GRID,E,EH,IT>::size_type
   gral_size (GRID const& a, wrapped_sequence_iterator<GRID,E,EH,IT>)
   { return wrapped_sequence_iterator<GRID,E,EH,IT>::size(a);}
-
-
 
 
 } // namespace GrAL
