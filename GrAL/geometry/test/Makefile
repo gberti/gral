@@ -9,6 +9,7 @@ SUBDIRS = affine-mapping \
           intersections \
           matrix \
           piecewise-linear-function \
+          point-traits \
           simplex \
 
 
