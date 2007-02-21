@@ -1,0 +1,21 @@
+# gcc/make.defs
+# Settings for gcc 4
+
+# avoid ugly UTF quotation marks in emacs
+LANG=en_US
+#GCC4 = /usr/net/fdc/GCC-4.0.0/#
+GCC4     = /usr/net/fdc/GCC-4.1.0#
+CCC      =  $(GCC4)/bin/g++
+CCFLAGS += -Wall
+CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS
+# gcc 4.0.x seems to have a bug related to mpl lambda/arity & default template parameters,
+# see base/include/GrAL/Base/iterator-type-maps and test-restricted-components-view.C 
+# CCFLAGS += -DGRAL_HAS_MPL_ARITY_BUG  
+
+CCFLAGS += -ftemplate-depth-200
+CCFLAGS += -DGRAL_HAS_SSTREAM
+LDFLAGS += -Xlinker -rpath -Xlinker $(GCC4)/lib
+DEPEND    =$(CCC)
+DEPFLAGS += -MM $(CCFLAGS)
+
+
