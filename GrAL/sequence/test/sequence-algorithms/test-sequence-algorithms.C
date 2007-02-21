@@ -7,6 +7,7 @@
 
 #include "Utility/pre-post-conditions.h"
 
+#include <vector>
 
 
 int main() {
@@ -40,4 +41,13 @@ int main() {
 
   REQUIRE_ALWAYS(seq::sum(a,a+sizeof(a)/sizeof(int)) == 6, " result=" << seq::sum(a,a+sizeof(a)/sizeof(int)),1);
 
+  {
+    int a[] = { 1, 2, 3};
+    std::vector<int> va(a+0, a+3);
+    int c[] = { 2 };
+    std::vector<int> vc(c+0, c+1);
+    seq::remove_set(va,vc);
+    REQUIRE_ALWAYS(va.size() == 2, "",1);
+    REQUIRE_ALWAYS(va[0] == 1 && va[1] == 3, "", 1);
+  }
 }
