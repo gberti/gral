@@ -118,7 +118,6 @@ inline bool operator< (restr_gf_iterator_adapter<GF,E_iter> const& ls,
  { return (ls.it <  rs.it);}
 
 
-//----------------------------------------------------------------
 /*! \brief Restricts a grid function of type GF to the range of an 
     element-iterator
    \ingroup restrictedgridfunctions  
@@ -127,7 +126,6 @@ inline bool operator< (restr_gf_iterator_adapter<GF,E_iter> const& ls,
    There is no copying involved, this class has reference semantics
    with respect to the underlying grid function.
 */
-//----------------------------------------------------------------
 
 
 template<class GF, class E_iter>
@@ -277,6 +275,8 @@ Restriction(GF& gf, const ERange& R)
     typedef typename GF::pointer               pointer;
     typedef typename GF::difference_type       difference_type;
 
+    typedef value_type                         result_type;
+    typedef element_type                       argument_type;
   private:
     ref_ptr<grid_type const> g;
     ref_ptr<base_gf_type>    gf;
@@ -297,8 +297,24 @@ Restriction(GF& gf, const ERange& R)
     size_type size() const { return et::size(*g);}
     
   };
+  
+  template<class VIEW, class GF> 
+  struct get_grid_function_view {
+    typedef typename GF::element_type                     base_element_type;
+    typedef typename base_element_type::element_type_tag  base_element_tag;
+    typedef grid_types<VIEW>                              viewgt;
+    typedef grid_function_view<typename element<viewgt, base_element_tag>::type,
+			       typename GF::value_type,
+			       GF>                           
+			       type;
+  };
 
 
+  template<class VIEW, class GF> 
+  inline typename get_grid_function_view<VIEW,GF>::type
+  make_grid_function_view(VIEW const& g, GF & gf)
+  { return typename get_grid_function_view<VIEW,GF>::type(g,gf);}
+ 
 
 } // namespace GrAL 
 
