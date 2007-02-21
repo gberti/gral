@@ -225,12 +225,15 @@ copy-doxy:
 
 .PHONY: doc test demo
 
-.SUFFIXES: .C .cc .d .f
+.SUFFIXES: .C .cc .cpp .d .f
 
 .C.o: 
 	$(CC) $(CCFLAGS) $(IFLAGS) -c $<
 
 .cc.o: 
+	$(CC) $(CCFLAGS) $(IFLAGS) -c $<
+
+.cpp.o: 
 	$(CC) $(CCFLAGS) $(IFLAGS) -c $<
 
 .C.d:
