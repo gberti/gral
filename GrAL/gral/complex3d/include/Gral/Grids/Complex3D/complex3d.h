@@ -323,7 +323,8 @@ public:
   }
   vertex_handle v(archgt::vertex_handle lv) const 
     { c_(); return TheGrid().cells[TheGrid().offset[h]+lv];}
-  inline Vertex V(archgt::Vertex v) const;
+  inline Vertex V(archgt::Vertex v)        const;
+  inline Vertex V(archgt::vertex_handle v) const;
 
   inline edge_handle e(archgt::edge_handle le) const;
 };
@@ -536,8 +537,13 @@ Cell_Complex3D::EndVertex() const
 
 inline
 Vertex_Complex3D
+Cell_Complex3D::V(Cell_Complex3D::archgt::vertex_handle vv) const
+{ return Vertex(TheGrid(), v(vv)); }
+
+inline
+Vertex_Complex3D
 Cell_Complex3D::V(Cell_Complex3D::archgt::Vertex vv) const
-{ return Vertex(TheGrid(), v(vv.handle())); }
+{ return V(vv.handle()); }
 
 inline 
 Cell_Complex3D::edge_handle
