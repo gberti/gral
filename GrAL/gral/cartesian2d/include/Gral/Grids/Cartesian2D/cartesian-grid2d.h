@@ -509,7 +509,7 @@ public:
 
     Cell(const Grid* g, const vertex_base& b) : elem_base(g),  llv(b)  {}
     Cell(const Grid& g, const vertex_base& b) : elem_base(&g), llv(b)  {}
-
+    Cell(const Grid& g, int x, int y)         : elem_base(&g), llv(x,y) {}
 
     inline VertexOnCellIterator FirstVertex()    const;
     inline VertexOnCellIterator EndVertex()      const;
