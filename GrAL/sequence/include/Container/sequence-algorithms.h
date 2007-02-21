@@ -171,7 +171,6 @@ namespace sequence {
     return std::accumulate(first,end, value_type(0), std::plus<value_type>());
   }
 
-
   /*! \brief Calculate average of the sequence
       \ingroup algorithms
       \see \ref test-sequence-algorithms.C
@@ -248,7 +247,6 @@ namespace sequence {
     container.erase(unique(container.begin(), container.end()), container.end());
   }
 
-
    /*! \brief Check whether the sequence is sorted increasingly
        \ingroup algorithms
 
@@ -286,8 +284,26 @@ namespace sequence {
   */
   template<class Container>
   bool is_increasing(Container const& container)
-  { return is_sorted(container.begin(), container.end());}
+  { return is_increasing(container.begin(), container.end());}
 
+
+   /*! \brief Remove second set from first
+
+       \ingroup algorithms
+       
+       The effect is equivalent to \f$ s = s \setminus t \f$
+
+  */
+  template<class Container, class Container2>
+  void remove_set(Container & s, Container2 const& t) 
+  {
+    REQUIRE(is_increasing(s), "",1);
+    REQUIRE(is_increasing(t), "",1);
+    Container s_new;
+    std::set_difference(s.begin(), s.end(),
+			t.begin(), t.end(), std::back_inserter(s_new));
+    std::swap(s,s_new);
+  }
 
   /*! \brief Functor to advance input iterator
 
