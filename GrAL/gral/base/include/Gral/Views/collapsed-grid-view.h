@@ -220,7 +220,6 @@ namespace collapsed_grid_view {
 
       ref_ptr<base_grid_type const> BaseGrid() const { return g;}
 
-
       bool valid(typename bgt::Vertex v) const { return (v.handle() == handle_v(v.handle()));}
       bool valid(typename bgt::Cell   c) const { return (!collapsed_c(c)); }
       // bool collapsed(Vertex v) const { return collapsed_v(v); }
@@ -299,7 +298,7 @@ namespace collapsed_grid_view {
       // Vertex-On-Cell Iteration
       vertex_on_cell_iterator<GRID> FirstVertex() const;
       vertex_on_cell_iterator<GRID> EndVertex()   const;
-      unsigned NumOfVertices() const { return GrAL::size<typename bgt::Vertex>(c);}
+      unsigned NumOfVertices() const { return GrAL::size<typename bgt::Vertex>(*c);}
 
       Vertex V(typename archgt::Vertex av) const
       { return Vertex(*g, BaseCell().v(av.handle())); }
@@ -311,11 +310,11 @@ namespace collapsed_grid_view {
       bool bound() const { return (g!= 0);}
       bool valid() const { return bound() && c.valid();}
 
-      typename bgt::Cell const& BaseCell() const { return *c;}
-      typename bgt::Cell const& Base    () const { return *c;}
+      typename bgt::Cell  BaseCell() const { return *c;}
+      typename bgt::Cell  Base    () const { return *c;}
     private:
       void advance_till_valid() {
-	while(!c.IsDone() && !TheGrid().valid(c))
+	while(!c.IsDone() && !TheGrid().valid(*c))
 	  ++c;
       }
     };
@@ -417,7 +416,7 @@ namespace collapsed_grid_view {
       typename bgt::Vertex Base()       const { return *v;}
     private:
       void advance_till_valid() {
-	while(!v.IsDone() && !TheGrid().valid(v))
+	while(!v.IsDone() && !TheGrid().valid(*v))
 	  ++v;
       }
     };
@@ -445,7 +444,7 @@ namespace collapsed_grid_view {
       vertex_on_cell_iterator() : g(0) {}
       explicit
       vertex_on_cell_iterator(Cell const& c) 
-      	: g(c.TheGrid()), vc(GrAL::begin<typename bgt::Vertex>(c.c)) {} 
+      	: g(c.TheGrid()), vc(GrAL::begin<typename bgt::Vertex>(*(c.c))) {} 
       vertex_on_cell_iterator(Cell const& c, typename  bgt::VertexOnCellIterator vvc) 
 	: g(c.TheGrid()), vc(vvc) {} 
 
