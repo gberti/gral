@@ -1,5 +1,5 @@
-#ifndef NMWR_GB_EDGE_ON_CELL2D_ITERATOR_H
-#define NMWR_GB_EDGE_ON_CELL2D_ITERATOR_H
+#ifndef GRAL_GB_COMPLEX2D_EDGE_ON_CELL2D_ITERATOR_H
+#define GRAL_GB_COMPLEX2D_EDGE_ON_CELL2D_ITERATOR_H
 
 
 
@@ -7,8 +7,15 @@
 
 #include "Utility/pre-post-conditions.h"
 #include "Gral/Grids/Complex2D/complex2d.h"
+#include "Gral/Iterators/iterator-base.h"
 
-class EdgeOnCell2D_Iterator : public complex2d_types {
+
+namespace GrAL { 
+
+class EdgeOnCell2D_Iterator 
+  : public complex2d_types, 
+    public incidence_iter_base<complex2d_types, edge_type_tag, cell_type_tag>
+{
   friend class CellOnCell2D_Iterator;
   friend class Complex2D;
   friend class Cell2D;
@@ -117,5 +124,6 @@ public:
 };
 
 
+} // namespace GrAL
 
 #endif
