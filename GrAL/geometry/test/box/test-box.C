@@ -98,4 +98,9 @@ int main() {
   REQUIRE_ALWAYS(b.the_min() == ct(1.0,1.0), " b.the_min()=" << b.the_min(), 1);
   REQUIRE_ALWAYS(b.the_max() == ct(2.0,2.0), " b.the_max()=" << b.the_max(), 1);
 
+  box_type b_empty     = box_type::empty_box();
+  box_type b_infinite  = box_type::infinite_box();
+
+  cout << "b_empty:    " << b_empty.min()    << " " << b_empty.max()    << "\n"
+       << "b_infinite: " << b_infinite.min() << " " << b_infinite.max() << std::endl;
 }
