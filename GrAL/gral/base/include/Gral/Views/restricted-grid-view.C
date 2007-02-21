@@ -10,8 +10,8 @@ namespace GrAL {
 
 namespace restricted_grid_view {
 
-  template<class GRID, class INSIDE_PRED, class GT>
-  void grid_view<GRID, INSIDE_PRED, GT>::init_num_cells() const 
+  template<class CFG>
+  void grid_view<CFG>::init_num_cells() const 
   { 
     num_of_cells = 0;
     for(CellIterator c(*this); !c.IsDone(); ++c)
@@ -19,8 +19,8 @@ namespace restricted_grid_view {
   }
 
   
-  template<class GRID, class INSIDE_PRED, class GT>
-  void grid_view<GRID, INSIDE_PRED, GT>::init_vertices() const {
+  template<class CFG>
+  void grid_view<CFG>::init_vertices() const {
     if(!vertices_initialized) {
       grid_function<baseVertex, bool> visited(BaseGrid(), false);
       for(CellIterator c(*this); !c.IsDone(); ++c)
