@@ -18,6 +18,7 @@ int main() {
   typedef Triang2D                 grid_type;
   typedef stored_geometry_triang2d geom_type;
   typedef grid_types<grid_type>    gt;
+  typedef geom_type::coord_proxy    coord_type;
 
   typedef int triangle[3];
   typedef double ct[2];
