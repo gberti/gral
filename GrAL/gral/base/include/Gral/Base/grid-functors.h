@@ -16,7 +16,7 @@ namespace GrAL {
 
   Here some function objects  are defined that map between 
   combinatorial grid types and their handle types
-  They are models of STL Adaptable Unary Function.
+  They are models of $STL AdaptableUnaryFunction.
 
   \b Contents:
   -  template<class G> class cell2handle_map;
@@ -588,6 +588,29 @@ template<class Cell>
 cell_is_nb_pred<Cell> IsNeighbourCell(const Cell& rs)
 { return cell_is_nb_pred<Cell>(rs); }
 
+
+  /*! \brief Compute the range of a GrAL-iterator
+    \ingroup functors
+
+      \templateparams
+      - \c It has <tt> It::IsDone() </tt>
+
+     This function is useful if the iterating over the possible 
+     values until no more values are there is the only way of determining
+     the size of the sequence (this is true in particular for implicitly defined sequences)
+
+    \todo We could use iterator_traits<It>::difference_type for the result.
+  */
+
+  template<class It>
+  int iterator_range_size(It it)
+  {
+    int res = 0;
+    for(; ! it.IsDone(); ++it) {
+      ++res;
+    }
+    return res;
+  }
 
 } // namespace GrAL 
 
