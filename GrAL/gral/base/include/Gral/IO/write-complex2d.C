@@ -65,10 +65,10 @@ void write_complex2d(GRID const& G,   ::std::ostream& out, int offset,
   out << "\n";
 
   int cnum = offset;
-  for(CellIterator c = G.FirstCell(); !c.IsDone(); ++c){
+  for(CellIterator c = GrAL::begin_x(G); !c.IsDone(); ++c){
     out	<< (*c).NumOfVertices() << "   ";
     G2Out_c[c.handle()] = cnum; ++cnum;
-    for(VertexOnCellIterator vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc)
+    for(VertexOnCellIterator vc = GrAL::begin_x(*c); ! vc.IsDone(); ++vc)
       out << VNum[*vc] << " ";
     out << "\n";
   }
