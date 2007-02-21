@@ -4,6 +4,7 @@ SUBDIRS = bijective-mapping  \
           bivector \
           bubblesort \
           combinatorial \
+          counting-iterator \
           histogram \
           index-map-nd \
           integer-range \
