@@ -8,7 +8,7 @@
 #include "Geometry/algebraic-primitives.h"
 
 #include <cmath>
-
+#include <limits>
 
 namespace GrAL {
 
@@ -49,7 +49,13 @@ namespace GrAL {
     
     axis = ap::vectorproduct(ra,rb);
     // ra,rb,axis is a right-hand system
-    
+
+    if(ap::norm_2(axis) < 3*std::numeric_limits<real>::epsilon()) {
+      angle = 0.0;
+      axis  = e1; 
+      return true;
+    }
+
     angle = ap::angle(ra, M*ra);
     if(ap::dot(axis, ap::vectorproduct(ra, M*ra)) < 0 )
       angle = -angle;
