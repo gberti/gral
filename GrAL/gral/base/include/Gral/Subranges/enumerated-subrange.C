@@ -51,7 +51,7 @@ void ConstructVertexRange(CELLRANGE const& CR,
 
   partial_grid_function<Vertex,bool> visited(CR.TheGrid(),false);
   for(typename CELLRANGE::CellIterator c=CR.FirstCell(); ! c.IsDone(); ++c) {
-    for(VertexOnCellIterator vc = (*c).FirstVertex(); ! vc.IsDone(); ++vc) {
+    for(VertexOnCellIterator vc = GrAL::begin_x(*c); ! vc.IsDone(); ++vc) {
       if(!visited(*vc)) {
 	visited[*vc] = true;
 	VR.push_back(vc.handle());
@@ -86,7 +86,7 @@ void ConstructSubrangeFromCells
   while(! Cit.IsDone()) {
     Cell C(*Cit);
     R.append_cell(C.handle());
-    for(VertexOnCellIterator vc = C.FirstVertex(); ! vc.IsDone(); ++vc) {
+    for(VertexOnCellIterator vc = GrAL::begin_x(C); ! vc.IsDone(); ++vc) {
       if(!visited(*vc)) {
 	visited[*vc] = true;
 	R.append_vertex(vc.handle());
