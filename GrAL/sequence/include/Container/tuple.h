@@ -130,7 +130,7 @@ class tuple<T,2> : public tuple_base<T,2> {
   }
   */
   //tuple(T const& t1, T const& t2) { X[0] = t1; X[1] = t2;}
-  tuple(T        t1, T        t2) { X[0] = t1; X[1] = t2;}
+  tuple(T        t1, T        t2) { this->X[0] = t1; this->X[1] = t2;}
 
   template<class U>
   tuple(tuple<U,2> const& rhs) { X[0] = T(rhs[0]); X[1] = T(rhs[1]);}
@@ -172,10 +172,10 @@ class tuple<T,3> : public tuple_base<T,3> {
     REQUIRE( (b == e), "invalid range in constructor!\n",1);
   }
 
-  tuple(T const& t1, T const& t2, T const& t3) { X[0] = t1; X[1] = t2; X[2] = t3;}
+  tuple(T const& t1, T const& t2, T const& t3) { this->X[0] = t1; this->X[1] = t2; this->X[2] = t3;}
 
   template<class U>
-  tuple(tuple<U,3> const& rhs) { X[0] = T(rhs[0]); X[1] = T(rhs[1]); X[2] = T(rhs[2]);}
+  tuple(tuple<U,3> const& rhs) { this->X[0] = T(rhs[0]); this->X[1] = T(rhs[1]); this->X[2] = T(rhs[2]);}
 
 
   T  x() const { return X[0];}
