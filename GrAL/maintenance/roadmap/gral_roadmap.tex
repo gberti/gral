@@ -58,6 +58,7 @@ Guntram Berti\\
 
 \subsection{Concepts}
 Some of the \GrAL concepts need to be refined or to be redefined more precisely.
+Concepts need to be checked, both at compile-time and at run-time.
 Also, new concepts need to be introduced, for example for Cartesian grids or grid geometries.
 
 \begin{itemize}
@@ -69,7 +70,28 @@ for instance Cartesian geometry / linear geometry / non-linear (curvilinear) geo
 coordinates on cells (needed or at least useful for FEM).
 \item Create concepts for Cartesian grids 
 (essentially this means to formalize stuff found in \texttt{CartesianGridND}).
-\item $\ldots$
+\item Improve dimension-independent programming support, e.g.\ in addition to iterator access like
+\texttt{FirstVertex()} / \texttt{EndVertex()}. 
+Some efforts have been made to implement a boost-style iteration:
+
+\begin{tabular}{l}
+\texttt{GrAL::begin<gt::\emph{Element}>(anchor)}\\
+\texttt{GrAL::end  <gt::\emph{Element}>(anchor)}\\
+\texttt{GrAL::size <gt::\emph{Element}>(anchor)}
+\end{tabular}
+Here, \texttt{anchor} is either a grid range or a grid element type.
+These template functions select a function from a set of overloaded functions
+like \texttt{gral\_begin(anchor, iterator)}.
+
+\item Mapping between pairs of (archetype elements, grid cells) 
+and corresponding grid elements / cell-anchored incidences iterators.
+A first experimental version is the global template
+\texttt{GrAL::archetype\_element(XXXOnCellIterator)},
+mapping a cell-anchored incidence iterator to the corresponding element of the archetype. 
+The inverse could be named
+\texttt{GrAL::grid\_element(Cell, ArchetypeElement)},
+mapping to the corresponding incidence iterators.
+
 \end{itemize}
 
 \subsection{Components}
@@ -414,7 +436,7 @@ etc. will be hidden behind GrAL interface.
    providing suitably grained environment for grid processing, as illustrated
    on figure:
    \begin{center}
-      \includegraphics{toolspyramid.eps}
+      \includegraphics{toolspyramid}
    \end{center}
    Each level makes the picture complete and it is up to the user to chose the 
    level he wants to operate on.
