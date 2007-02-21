@@ -187,8 +187,7 @@ namespace GrAL { namespace graph {
 
     //    cell_range_t all_seeds(G);
     cell_range_t all_seeds;
-    for(int s = 0; s < seed_sets.size(); ++s)
-      // for(typename rgt::CellIterator c(seed_sets[s]); !c.IsDone(); ++c)
+    for(int s = 0; s < (int)seed_sets.size(); ++s)
       for(typename input_cell_range_t::const_iterator c(seed_sets[s].begin()); c != seed_sets[s].end(); ++c)
 	all_seeds.push_back(*c);
 
@@ -204,18 +203,16 @@ namespace GrAL { namespace graph {
     while(current_seed_set < num_seed_sets-1) {
       namespace rgv =                                       restricted_grid_view;
       typedef   map_is_equal<PARTGF, typename gt::Cell>     restriction_pred_t;
-      typedef   rgv::grid_view<GRID, restriction_pred_t>    grid_view_t;
+      typedef   rgv::grid_view<rgv::cfg<gt,restriction_pred_t> >   grid_view_t;
       typedef   grid_types<grid_view_t>                     restgt;
       typedef   std::vector<typename restgt::Cell>          rest_cell_range_t;
       grid_view_t  RestG (G, restriction_pred_t(partition,current_seed_set));
       rest_cell_range_t seedsA; //(G); // = seed_sets[current_seed_set];
       rest_cell_range_t seedsB; //(G); // = seed_sets[current_seed_set+1, ..., num_seed_sets-1]
-      //     for(typename rgt::CellIterator c(seed_sets[current_seed_set]); !c.IsDone(); ++c)
       for(typename input_cell_range_t::const_iterator c = seed_sets[current_seed_set].begin(); 
 	  c != seed_sets[current_seed_set].end(); ++c)
 	seedsA.push_back(typename restgt::Cell(RestG,*c));
       for(int s = current_seed_set+1; s < num_seed_sets; ++s)
-	//for(typename rgt::CellIterator c(seed_sets[s]); !c.IsDone(); ++c)
 	for(typename input_cell_range_t::const_iterator c(seed_sets[s].begin()); c != seed_sets[s].end(); ++c)
 	   seedsB.push_back(typename restgt::Cell(RestG,*c));
 
