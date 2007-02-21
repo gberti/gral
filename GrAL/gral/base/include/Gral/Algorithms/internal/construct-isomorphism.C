@@ -114,11 +114,11 @@ struct grid_isomorphism_construction {
 		 PHI        & phi)
     {
       REQUIRE( phi.empty(), "construct called with non-empty phi!\n",1);
-      /*
+
       if(  G1.NumOfCells() != G2.NumOfCells() 
 	 ||G1.NumOfVertices() != G2.NumOfVertices())
 	return false;
-      */
+
       typename GT1::CellIterator c1(G1.FirstCell());
       typename GT2::CellIterator c2(G2.FirstCell());
       bool success = false;
