@@ -4,3 +4,11 @@
     algorithms on grids. 
 
 */
+
+/*! \defgroup geometricsearching Searching in meshes
+
+*/
+
+/*! \defgroup interpolation Interpolation on meshes
+
+*/
