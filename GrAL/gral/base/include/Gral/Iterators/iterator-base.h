@@ -21,7 +21,9 @@ namespace GrAL {
     // This must be a signed type! Normally, gt::size_type is also signed,
     // but we could check.
     typedef typename gt::size_type           difference_type;
+    typedef typename gt::grid_type           anchor_type;
     typedef typename element<gt,ETAG>::type  value_type;
+
     typedef typename sequence_iterator<gt,ETAG>::type iterator;
     typedef value_type                       reference;
     typedef value_type*                      pointer;
@@ -61,7 +63,10 @@ namespace GrAL {
     // This must be a signed type! Normally, gt::size_type is also signed,
     // but we could check.
     typedef typename gt::size_type           difference_type;
+    typedef typename element<gt,ATAG>::type  anchor_type;
     typedef typename element<gt,ETAG>::type  value_type;
+    // typedef grid_incidence_iterator_category<category<value_type>::type,
+    //                                          category<value_type>::type> category;
     typedef typename incidence_iterator<gt,ETAG,ATAG>::type iterator;
     typedef value_type                       reference;
     typedef value_type*                      pointer;
