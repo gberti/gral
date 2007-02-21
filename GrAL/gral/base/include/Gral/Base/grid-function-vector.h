@@ -58,6 +58,8 @@ public:
   typedef typename et::handle_type     element_handle;
   typedef typename et::grid_type       grid_type;
 
+  template<class EE, class TT> struct apply { typedef grid_function_vector<EE,TT> type; };
+
   // unary function interface types
   typedef E const& argument_type;
   //typedef T const& result_type;
