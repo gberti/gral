@@ -387,8 +387,10 @@ temporary<T>::operator ref_ptr<T> () const { return ref_ptr<T>(new T(t), ref_ptr
  */
 
   /*! \brief Copy \c t to a ref_ptr
-     \relates ref_ptr
+      \relates ref_ptr
      \ingroup refptrgenerator
+
+     The contents of the result will be writeable.
   */
   template<class T>
   inline ref_ptr<T> copy_to_ref_ptr(T const& t) { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
@@ -416,19 +418,35 @@ temporary<T>::operator ref_ptr<T> () const { return ref_ptr<T>(new T(t), ref_ptr
 
 
   /*! \brief Copy \c t to a const ref_ptr
-    \relates ref_ptr
+ 
+     \ingroup refptrgenerator
+     \relates ref_ptr
+
+     The contents of the results will not be writeable
   */
   template<class T>
   inline ref_ptr<const T> copy_to_const_ref_ptr(T const& t)
   { return ref_ptr<const T>(new T(t), ref_ptr_base::shared);}
   
 
+  /*! \brief Reference \c t in a ref_ptr (no ownership transfer)
 
+     \ingroup refptrgenerator
+     \relates ref_ptr
+
+  */
   template<class T>
   inline ref_ptr<T>  ref_to_ref_ptr(T & t) { return ref_ptr<T>(t);}
 
+  /*! \brief Reference \c t in a ref_ptr (no ownership transfer)
+
+     \ingroup refptrgenerator
+     \relates ref_ptr
+
+  */
   template<class T>
   inline ref_ptr<const T> const_ref_to_ref_ptr(T const& t) { return ref_ptr<const T>(t); }
+
 
   template<class T>
   inline T& ref(T & t) { return t;}
