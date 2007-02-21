@@ -209,6 +209,8 @@ public:
    */
   bool valid(vertex_handle v) const { return 0 <= v && v < nvertices;}
   bool valid(cell_handle   c) const { return 0 <= c && c < ncells;}
+  bool valid_vertex(vertex_handle v) const { return 0 <= v && v < nvertices;}
+  bool valid_cell  (cell_handle   c) const { return 0 <= c && c < ncells;}
   //@}
 
   /*@{*/
@@ -516,6 +518,8 @@ public:
 		   < std::min(rhs.V1().handle(),rhs.V2().handle()))));
   }
 
+  bool bound() const { return fc.bound();}
+  bool valid() const { return fc.valid();}
 };
 
 
