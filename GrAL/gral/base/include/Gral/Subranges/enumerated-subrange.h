@@ -33,7 +33,7 @@ namespace GrAL {
 
 
 
-/*!  A grid subrange that is a simple enumeration of its elements.
+/*! \brief  A grid subrange that is a simple enumeration of its elements.
    \ingroup enumsubranges
    \see enumsubranges
 
@@ -77,7 +77,7 @@ namespace GrAL {
    must be added to element sequences.)
 */
 
-  template<class Grid, class GT = grid_types<Grid> >
+template<class Grid, class GT = grid_types<Grid> >
 class enumerated_subrange : public archetypes_from_base<enumerated_subrange<Grid>, Grid>  {
   typedef enumerated_subrange<Grid, GT> self;
 public:
@@ -89,6 +89,8 @@ public:
   typedef GT   gt;
   typedef typename gt::size_type size_type;
   typedef grid_view_category     category;
+
+  enum { dim = base_grid_type::dim };
 
   typedef typename gt::vertex_handle    base_vertex_handle;
   typedef typename gt::cell_handle      base_cell_handle;
@@ -142,6 +144,10 @@ private:
   mutable bool initialized;
 public:
   //-------------------- construction --------------------------
+
+  /*! \name constructors 
+   */
+  //@{
   /*! \brief  Default constructor, results in unbound range.
    */
   enumerated_subrange()                           :              initialized(false) { init_counts(); }
@@ -149,6 +155,37 @@ public:
    */
   enumerated_subrange(const base_grid_type& g)         : the_grid(g), initialized(false) { init_counts(); }
   enumerated_subrange(ref_ptr<const base_grid_type> g) : the_grid(g), initialized(false) { init_counts(); }
+
+
+  /*! \brief Copy from cell range \c CR  
+ 
+   */
+
+  template<class CELLRANGE>
+  enumerated_subrange(ref_ptr<const base_grid_type> g, 
+		      ref_ptr<CELLRANGE> CR) :  
+    the_grid(g), initialized(false) 
+  { 
+    construct(CR->FirstCell());
+    init_counts();
+  }
+  /*! \brief Copy from cell range \c CR  
+    
+   */
+  template<class CELLRANGE>
+  enumerated_subrange(const base_grid_type& g, CELLRANGE const& CR) :  
+    the_grid(g), initialized(false) 
+  { 
+    construct(CR.FirstCell());
+    init_counts();
+  }
+  //@}
+
+  //! \brief delayed constructor, constructs empty subrange
+  void set_grid(const base_grid_type&         g) { init(g);}
+  //! \brief delayed constructor, constructs empty subrange
+  void set_grid(ref_ptr<const base_grid_type> g) { init(g);}
+
 
   //! \brief delayed constructor, constructs empty subrange
   void init(ref_ptr<const base_grid_type> g) { clear(); the_grid = g; initialized = false; init_counts(); }
@@ -163,26 +200,6 @@ public:
     initialized = false;
   }
 
-  /*! \brief Copy from cell range \c CR  
- 
-   */
-
-  template<class CELLRANGE>
-  enumerated_subrange(ref_ptr<const base_grid_type> g, 
-		      ref_ptr<CELLRANGE> CR) :  
-    the_grid(g), initialized(false) 
-  { 
-    construct(CR->FirstCell());
-    init_counts();
-  }
-  
-  template<class CELLRANGE>
-  enumerated_subrange(const base_grid_type& g, CELLRANGE const& CR) :  
-    the_grid(g), initialized(false) 
-  { 
-    construct(CR.FirstCell());
-    init_counts();
-  }
 
   template<class CELLIT>
   void construct(CELLIT c);
@@ -210,10 +227,10 @@ public:
   c_iterator begin(tp<Cell>  ) const { return c_iterator(0); }//  cells   .begin();}
   c_iterator end  (tp<Cell>  ) const { return c_iterator(cells.size());} // cells   .end  ();}
   */
-  v_iterator begin(tp<Vertex>) const { return vertices.begin();}
-  v_iterator end  (tp<Vertex>) const { return vertices.end  ();}
-  c_iterator begin(tp<Cell>  ) const { return cells   .begin();}
-  c_iterator end  (tp<Cell>  ) const { return cells   .end  ();}
+  v_iterator begin(tp<Vertex>) const { init(); return vertices.begin();}
+  v_iterator end  (tp<Vertex>) const { init(); return vertices.end  ();}
+  c_iterator begin(tp<Cell>  ) const { init(); return cells   .begin();}
+  c_iterator end  (tp<Cell>  ) const { init(); return cells   .end  ();}
 
   size_type NumOfCells()    const { init(); return cells.size();}
   size_type NumOfVertices() const { init(); return vertices.size();}
