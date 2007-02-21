@@ -12,6 +12,7 @@ SUBDIRS = archetype0D \
           collapsed-grid-view \
           connected-components \
           construct-isomorphism  \
+          cut-grid-view \
           disjoint-union \
           edge-iterator-of-cell-set \
           element-grid \
