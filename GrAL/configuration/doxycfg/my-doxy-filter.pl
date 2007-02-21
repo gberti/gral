@@ -26,5 +26,6 @@ while(<>) {
   s|Random Access Container|<A  TARGET="_parent" HREF="%STL/RandomAccessContainer.html">Random Access Container</A>|g;
   s|SGI iota|<A  TARGET="_parent" HREF="%STL/iota.html">SGI iota</A>|g;
   s|STL ([A-Z][a-z]+) ([A-Z][a-z]+) ([A-Z][a-z]+)|STL <A TARGET="_parent" HREF="%STL/$1$2$3.html">$1 $2 $3</A>|g;
+  s|STL "([A-Z][a-zA-Z ]+)"|STL <A TARGET="_parent" HREF="%STL/$1.html">$1</A>|g;
   print;
 }
