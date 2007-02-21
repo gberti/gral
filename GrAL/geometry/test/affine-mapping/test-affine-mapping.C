@@ -134,6 +134,11 @@ int main() {
       get_rotation_axis_angle(R, axis, angle);
       cout << "axis=" << axis << "  angle=" << angle << endl;
     }
+    {
+      matrix_t R =   mapping_t::rotation3d(coord_t(1,0,0), 0.0).TheMatrix();
+      get_rotation_axis_angle(R, axis, angle);
+      cout << "axis=" << axis << "  angle=" << angle << endl;
+    }
 
 
   }
