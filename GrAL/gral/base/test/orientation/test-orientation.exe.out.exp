@@ -1,0 +1,35 @@
+Testing grid "2triangles.complex2d" ...
+2 cells, 4 vertices.
+Changing spacedim from 2 to 3
+Grid is orientable
+Or(cell 0) = 1
+Or(cell 1) = 1
+Testing grid "2triangles-wrongorient.complex2d" ...
+2 cells, 4 vertices.
+Grid is orientable
+Or(cell 0) = 1
+Or(cell 1) = -1
+Testing grid "moebius.complex2d" ...
+2 cells, 4 vertices.
+Grid is not orientable
+Testing grid "cylinder.complex2d" ...
+2 cells, 4 vertices.
+Changing spacedim from 2 to 3
+Grid is orientable
+Or(cell 0) = 1
+Or(cell 1) = 1
+Testing grid "4triangles-2components.complex2d" ...
+4 cells, 8 vertices.
+Changing spacedim from 2 to 3
+Grid is orientable
+Or(cell 0) = 1
+Or(cell 1) = 1
+Or(cell 2) = 2
+Or(cell 3) = 2
+Testing grid "4triangles-wrongorient-2components.complex2d" ...
+4 cells, 8 vertices.
+Grid is orientable
+Or(cell 0) = 1
+Or(cell 1) = -1
+Or(cell 2) = 2
+Or(cell 3) = -2

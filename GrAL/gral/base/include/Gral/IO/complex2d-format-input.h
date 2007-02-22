@@ -32,9 +32,9 @@ public:
   // typedef coordN<2>       coord_type;
   typedef point           coord_type;
 private:
-  unsigned                        spacedim;
+  mutable unsigned                   spacedim;
   mutable  ::std::vector<coord_type> coords;
-  mutable bool                    coords_read;
+  mutable bool                       coords_read;
 public:
   IstreamComplex2DFmt() {}
   IstreamComplex2DFmt( ::std::istream      & in, int off = 0) 
