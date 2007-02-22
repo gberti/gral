@@ -58,9 +58,10 @@ int main() {
     gt::Cell c[3] = { gt::Cell(R, gt::index_type(0,0)), 
 		      gt::Cell(R, gt::index_type(1,1)),
 		      gt::Cell(R, gt::index_type(1,0))};
-    for(int i = 0; i < sizeof(c)/sizeof(gt::Cell); ++i)
-      cout << "Cell " << c[i].index() << " intersection with grid: " << VolR.name(VolR.intersection_check(c[i],GeomR)) << endl;
-    
+    for(int i = 0; i < sizeof(c)/sizeof(gt::Cell); ++i) {
+      cout << "Cell " << c[i].index() << " intersection with grid: " << flush;
+      cout << VolR.name(VolR.intersection_check(c[i],GeomR)) << endl;
+    }
     /*
     IstreamComplex2DFmt In("triangle.complex2d");
     
