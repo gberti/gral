@@ -45,7 +45,11 @@ standard-test-check-clean-force:
 	(cd test; $(MAKE) new-check-clean-force)
 
 # users can define VG_SUPPRESSIONS to suppress errors, e.g. in third party libs
-CHECKER=$(HOME)/bin/valgrind -v --tool=memcheck --leak-check=yes --num-callers=10 $(VG_SUPPRESSIONS)
+VG_SUPPRESSIONS = $(GRAL_VG_SUPPRESSIONS) $(GRAL_EXTRA_VG_SUPPRESSIONS)
+GRAL_VG_SUPPRESSIONS = -suppressions=$(CONFIGURATION)/valgrind-suppressions.txt
+
+VALGRIND=valgrind
+CHECKER=$(VALGRIND) -v --tool=memcheck --leak-check=yes --num-callers=10 $(VG_SUPPRESSIONS)
 FILTER=cat
 
 run-check:
