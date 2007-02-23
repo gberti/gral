@@ -1,0 +1,5 @@
+{
+   istream_iterator
+   Memcheck:Value8
+   fun:_ZNSt16istream_iteratorIdcSt11char_traitsIcEiEC1ERKS2_
+}
