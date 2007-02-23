@@ -32,6 +32,7 @@ SUBDIRS = archetype0D \
           mapped-grid-function \
           morphisms \
           multi-grid-function \
+          orientation \
           partial-grid-morphism \
           polygon1d \
           restricted-component-view \
