@@ -16,7 +16,7 @@ include $(DEPS)
 
 
 
-LIBS = -lgral-gmv-io -lgral-complex2d -lgral-base -lgeometry  
+LIBS = -lgral-gmv-io -lgral-complex2d -lgral-base -lgeometry  -lutilities
 
 
 new-check-clean: new check clean

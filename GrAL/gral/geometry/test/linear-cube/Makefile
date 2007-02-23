@@ -16,7 +16,7 @@ include $(DEPS)
 
 EXTRA_DEPMODULES+= geometry  gral/complex2d gral/cartesiannd
 
-LIBS = -lgral-base -lgral-complex2d -lgeometry 
+LIBS = -lgral-base -lgral-complex2d -lgeometry -lutilities
 
 
 
