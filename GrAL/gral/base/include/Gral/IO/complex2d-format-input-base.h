@@ -17,6 +17,7 @@
 // Misc
 #include "Utility/pre-post-conditions.h"
 #include "Utility/checked-istream.h"
+#include "Utility/ref-ptr.h"
 
 namespace GrAL {
 
@@ -47,9 +48,8 @@ public:
 private:
   //------------- DATA -------------
   int               offset; // start of vertex numbering 
-  mutable  ::std::istream    * in;
-  mutable checked_istream   checked_in;       
-  bool              is_in_owned;
+  mutable ref_ptr<std::istream>     in;
+  mutable checked_istream           checked_in;       
 
   mutable int   nv; // number of vertices
   mutable int   nc; // number of cells
@@ -59,8 +59,9 @@ private:
 
 public:
   IstreamComplex2DFmt_base();
-  IstreamComplex2DFmt_base( ::std::string const& file, int off = 0);
-  IstreamComplex2DFmt_base( ::std::istream     & is,   int off = 0);
+  IstreamComplex2DFmt_base(std::string const& file, int off = 0);
+  IstreamComplex2DFmt_base(std::istream        & is,   int off = 0);
+  IstreamComplex2DFmt_base(ref_ptr<std::istream> is,   int off = 0);
 
   IstreamComplex2DFmt_base(self const& rhs) {                  copy(rhs); }
   self & operator=        (self const& rhs) { if(this != &rhs) copy(rhs); return *this;}
@@ -68,7 +69,7 @@ public:
   virtual ~IstreamComplex2DFmt_base();
 
 
-  virtual void init( ::std::string const& file); 
+  virtual void init(std::string const& file); 
 protected:
   void copy(self const& rhs);
   virtual void init()        const;

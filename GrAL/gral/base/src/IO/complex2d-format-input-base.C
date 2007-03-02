@@ -1,21 +1,18 @@
 #include "Gral/IO/complex2d-format-input-base.h"
 
+#include "Utility/file-utils.h"
+
 namespace GrAL {
 
 IstreamComplex2DFmt_base::IstreamComplex2DFmt_base()    
   : offset(0),
     in(0),
-    checked_in(in),
-    is_in_owned(false),
     nv_nc_read(false),
     cell_iter_instance(false)
 {}
 
-IstreamComplex2DFmt_base::IstreamComplex2DFmt_base( ::std::string const& file, int off)    
+IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::string const& file, int off)    
   : offset(off),
-    // in(new  ::std::ifstream(file.c_str())),
-    //checked_in(in),
-    // is_in_owned(true),
     nv_nc_read(false),
     cell_iter_instance(false)
 
@@ -23,27 +20,33 @@ IstreamComplex2DFmt_base::IstreamComplex2DFmt_base( ::std::string const& file, i
   init(file);
 }
 
-IstreamComplex2DFmt_base::IstreamComplex2DFmt_base( ::std::istream& is, int off)
+IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(std::istream& is, int off)
   : offset(off),
-    in(&is),
-    checked_in(&is),
-    is_in_owned(false),
+    in(is),
+    checked_in(*in),
     nv_nc_read(false),
     cell_iter_instance(false)
+{ }
 
-{
- 
-}
+IstreamComplex2DFmt_base::IstreamComplex2DFmt_base(ref_ptr<std::istream> is, int off)
+  : offset(off),
+    in(is),
+    checked_in(*in),
+    nv_nc_read(false),
+    cell_iter_instance(false)
+{ }
+
+
+
 
 IstreamComplex2DFmt_base::~IstreamComplex2DFmt_base() 
-{ if (is_in_owned) delete in;}
+{ }
 
 void IstreamComplex2DFmt_base::copy(IstreamComplex2DFmt_base const& rhs)
   { 
-    REQUIRE_ALWAYS( !rhs.is_in_owned , "cannot copy istream!",1);
     in = rhs.in;
-    checked_in = checked_istream(in);
-    is_in_owned = false;
+    if(in != 0)
+      checked_in = checked_istream(*in);
     offset = rhs.offset;
     nv = rhs.nv;
     nc = rhs.nc;
@@ -53,13 +56,10 @@ void IstreamComplex2DFmt_base::copy(IstreamComplex2DFmt_base const& rhs)
     // and there must be a call to init(string) later on.
   }
 
-void IstreamComplex2DFmt_base::init( ::std::string const& file) 
+void IstreamComplex2DFmt_base::init(std::string const& file) 
 {
-   ::std::ifstream * fin = new  ::std::ifstream(file.c_str());
-  REQUIRE_ALWAYS( fin->is_open(), "Could not open file \"" << file << "\"\n",1);
-  in = fin;
-  checked_in = checked_istream(in);
-  is_in_owned = true;
+  in = get_file_or_stdin(file);
+  checked_in = checked_istream(*in);
   init();
 }  
 

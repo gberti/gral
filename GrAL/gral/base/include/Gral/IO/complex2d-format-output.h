@@ -8,6 +8,7 @@
 #include <fstream>
 #include <string>
 
+#include "Utility/ref-ptr.h"
 
 // GrAL Base
 #include "Gral/Base/common-grid-basics.h"
@@ -30,8 +31,8 @@ namespace GrAL {
 class OstreamComplex2DFmt {
   typedef OstreamComplex2DFmt self;
 protected:
-   ::std::ostream * out;
-  bool      owned;
+  ref_ptr<std::ostream> out;
+  // bool      owned;
   int       offset;
 
   int nv, nc;
@@ -40,8 +41,9 @@ private:
 
 public: 
   OstreamComplex2DFmt();
-  OstreamComplex2DFmt( ::std::ostream& ot, int off = 0);
-  OstreamComplex2DFmt( ::std::string const& nm, int off = 0);
+  OstreamComplex2DFmt(ref_ptr<std::ostream> ot, int off = 0);
+  OstreamComplex2DFmt(std::ostream        & ot, int off = 0);
+  OstreamComplex2DFmt(std::string const& nm, int off = 0);
 
   OstreamComplex2DFmt(self const& rhs) { copy(rhs);}
   self & operator=   (self const& rhs) { if(this != &rhs) copy(rhs); return *this; }
@@ -50,7 +52,7 @@ public:
 
   void init( ::std::string const& nm);
 
-   ::std::ostream& Out() { return *out;}
+  std::ostream& Out() { return *out;}
 
   int Offset() const { return offset;}
 

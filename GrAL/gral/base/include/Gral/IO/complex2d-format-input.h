@@ -33,14 +33,18 @@ public:
   typedef point           coord_type;
 private:
   mutable unsigned                   spacedim;
-  mutable  ::std::vector<coord_type> coords;
-  mutable bool                       coords_read;
+  mutable std::vector<coord_type> coords;
+  mutable bool                    coords_read;
 public:
   IstreamComplex2DFmt() {}
-  IstreamComplex2DFmt( ::std::istream      & in, int off = 0) 
+  
+  IstreamComplex2DFmt(ref_ptr<std::istream> in, int off = 0) 
     : base(in,off), spacedim(2), coords_read(false) 
   { }
-  IstreamComplex2DFmt( ::std::string  const& fn, int off = 0) 
+  IstreamComplex2DFmt(std::istream      & in, int off = 0) 
+    : base(in,off), spacedim(2), coords_read(false) 
+  { }
+  IstreamComplex2DFmt(std::string  const& fn, int off = 0) 
     : base(fn,off), spacedim(2), coords_read(false)
   { }
 
