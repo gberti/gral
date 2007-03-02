@@ -738,6 +738,22 @@ struct hash_cell2d {
   void operator=(hash_cell2d const&) {} // suppress warnings about statement w/o effect
 };
 
+
+  /*! \brief Compute relative orientation of two representations of the same facet 
+
+      \pre <tt> *e1 == *e2 </tt> 
+      \return +1 if e1 and e2 traverse the vertices in the same order, -1 otherwise.
+    
+  */
+  inline int relative_orientation(EdgeOnCell2D_Iterator e1, 
+				  EdgeOnCell2D_Iterator e2)
+  {
+    REQUIRE(*e1 == *e2, "attempt to check orientation of different edges!",1);
+    return ((*e1).v1() == (*e2).v1() ? 1 : -1);
+  }
+
+
+
 } // namespace GrAL 
 
 namespace STDEXT {
