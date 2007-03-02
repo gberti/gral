@@ -361,7 +361,7 @@ private:
 
 public:
   boundary_component(boundary_range_type const& r, germ_type grm)
-    : range(r), germ(grm), num_of_vertices(-1) {}
+    : range(r), germ(grm), num_of_vertices(-1), num_of_edges(-1) {}
 
   typedef boundary_component_multielem_iterator<GRID> multi_iterator;
   typedef boundary_component_element_iterator<GRID,0> VertexIterator;
