@@ -22,6 +22,15 @@ clean:
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
+libclean:
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) libclean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/mk.config;\
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
+
 realclean:
 	@set -e; \
         (for i in $(SUBDIRS); \
