@@ -48,15 +48,16 @@ generic:
 new-check-clean:
 	@set -e; \
 	for i in $(SUBDIRS); \
-	do cd $$i;echo 'ENTERING directory' $$i;($(MAKE) new-check-clean && $(MAKE) clean DEPS='') \
+	do cd $$i;echo 'ENTERING directory' $$i; ($(MAKE) new-check-clean && $(MAKE) clean DEPS=''); \
 	echo "LEAVING  directory" $$i;cd ..; done 
 
 new-check-clean-force:
 	@set -e; \
 	for i in $(SUBDIRS); \
-	do cd $$i;echo 'ENTERING directory' $$i; ($(MAKE) new-check-clean && $(MAKE) clean DEPS='') \
+	do cd $$i;echo 'ENTERING directory' $$i; ($(MAKE) new-check-clean && $(MAKE) clean DEPS='')  \
         || echo ">>>>>>>>>>> TARGET new-check-clean-force FAILED for " $$i " (continuing)";\
 	echo "LEAVING  directory" $$i;cd ..; done 
+
 
 new:
 	@set -e; \
@@ -104,6 +105,14 @@ clean:
 	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) clean;\
 	echo "LEAVING  directory" $$i;cd ..; done
 	rm -f *.o *~ *.flc core;
+
+libclean:
+	@set -e; \
+	for i in $(SUBDIRS); \
+	do cd $$i;echo 'ENTERING directory' $$i;$(MAKE) libclean;\
+	echo "LEAVING  directory" $$i;cd ..; done
+	rm -f *.o *~ *.flc core;
+
 
 endif
 
