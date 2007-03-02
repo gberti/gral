@@ -74,6 +74,14 @@ clean: stdclean
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
+libclean: stdclean
+	@set -e; \
+        (for i in $(SUBDIRS); \
+        do cd $$i;echo 'ENTERING directory' $$i;\
+        $(MAKE) libclean DEPS='' CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
+        echo "LEAVING  directory" $$i;cd ..; done)
+	rm -f *.o *~ *.flc core;
+
 
 realclean: stdclean
 	rm -rf doxygen/
@@ -82,6 +90,7 @@ realclean: stdclean
         do cd $$i;echo 'ENTERING directory' $$i;\
         $(MAKE) realclean DEPS='' CONFIG=$(GRALROOT)/gral/$$i/mk.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
+
 
 
 test:
