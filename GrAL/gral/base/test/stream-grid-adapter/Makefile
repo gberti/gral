@@ -13,7 +13,7 @@ EXTRA_DEPMODULES = geometry
 
 include $(DEPS)
 
-LIBS += -lgral-base -lgeometry
+LIBS += -lgral-base -lgeometry -lutilities
 
 
 new-check-clean: new check clean

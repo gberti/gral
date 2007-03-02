@@ -13,7 +13,7 @@ EXTRA_DEPMODULES = geometry gral/cartesian2d gral/gmv-io gral/testing
 
 include $(DEPS)
 
-LIBS +=  -lgral-cartesian2d -lgral-gmv-io -lgral-base -lgeometry 
+LIBS +=  -lgral-cartesian2d -lgral-gmv-io -lgral-base -lgeometry -lutilities
 
 
 new-check-clean: new check clean

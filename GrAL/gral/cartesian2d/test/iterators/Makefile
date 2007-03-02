@@ -15,7 +15,7 @@ include $(DEPS)
 
 
 
-LIBS = -lgral-cartesian2d -lgral-base
+LIBS = -lgral-cartesian2d -lgral-base -lutilities
 
 # -lexternal-control -lutilities 
 
