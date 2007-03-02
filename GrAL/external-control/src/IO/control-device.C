@@ -174,4 +174,13 @@ ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
 				name);
 }
 
+  void AddHelp(ControlDevice & Ctrl, std::string const& help)
+  {
+    Mutator  helpmsg =  GetMessageAndExitOnReadMutator(std::cerr,help);
+    Ctrl.add("-h",     helpmsg);
+    Ctrl.add("--help", helpmsg);
+    Ctrl.add("-?",     helpmsg);
+  }
+
+
 } // namespace GrAL 

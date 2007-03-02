@@ -184,6 +184,27 @@ template<class T>
 inline void RegisterAt(ControlDevice& Ctrl, char const*   name, T& t)
 {  Ctrl.add(name, GetMutator(t)); }
 
+/*! \brief Convenience function to add a help text to a ControlDevice
+
+    \ingroup  controldeviceregistrators
+
+    \b Example:
+    \code
+     ControlDevice Ctrl = ...
+     string h = "foo: make bars. Usage:\n";
+    
+     int nbars;
+     RegisterAt(Ctrl, "-n", nbars);
+     h += " -n <nbars> (number of bars)\n";
+
+     // ...
+     AddHelp(Ctrl, h);
+     \endcode
+
+     \note It would probably be better to have the help strings tied to the individual parameters
+     by using and additional optional argument to RegisterAt. 
+ */
+void AddHelp(GrAL::ControlDevice & Ctrl, std::string const& help);
 
 /*! \defgroup ControlDeviceCreators Creator functions for ControlDevice
 
