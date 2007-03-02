@@ -8,6 +8,8 @@
 #include "Geometry/algebraic-primitives.h"
 
 #include "IO/control-device.h"
+#include "Utility/file-utils.h"
+
 
 #include <string>
 
@@ -68,10 +70,12 @@ int main(int argc, char* argv[]) {
   ConstructGrid(G,GeomG, In,In);
   typedef grid_types<Complex2D> gt;
 
-  ofstream stl(grid_out.c_str());
+  ref_ptr<std::ostream> stl = get_file_or_stdout(grid_out);
+
+  //  ofstream stl(grid_out.c_str());
   int num_non_triangles = 0;
 
-  stl << "solid <<" << stl_geom_name << ">>\n";
+  *stl << "solid <<" << stl_geom_name << ">>\n";
   for(gt::CellIterator c(G); !c.IsDone(); ++c) {
     if((*c).NumOfVertices() == 3) {
       coord_type v[3];
@@ -79,20 +83,20 @@ int main(int argc, char* argv[]) {
       v[0] = GeomG.coord(*vc);
       v[1] = GeomG.coord(*++vc);
       v[2] = GeomG.coord(*++vc);
-      stl << "  "   << "facet normal " 
+      *stl << "  "   << "facet normal " 
 	  << ap::normalization(ap::vectorproduct(v[1]-v[0],v[2]-v[0])) << "\n";
-      stl << "    " << "outer loop\n";
+      *stl << "    " << "outer loop\n";
       for(gt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc) {
-	stl << "     " << "vertex " << GeomG.coord(*vc) << "\n";
+	*stl << "     " << "vertex " << GeomG.coord(*vc) << "\n";
       }
-      stl << "    " << "endloop\n";
-      stl << "  " << "end facet\n";
+      *stl << "    " << "endloop\n";
+      *stl << "  " << "end facet\n";
 
     }
     else
       ++num_non_triangles;
   }
-  stl << "endsolid <<" << stl_geom_name << ">>\n";
+  *stl << "endsolid <<" << stl_geom_name << ">>\n";
 
   if(num_non_triangles > 0)
     cerr << "WARNING: " << num_non_triangles << " cells with more than 3 vertices ignored!" << endl;
