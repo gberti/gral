@@ -449,6 +449,18 @@ tuple<typename numeric_types::promote<T,U>::type, N>
 product(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 { return componentwise(lhs,rhs, algebraic_operators::multiply()); }
 
+/*! \brief component-wise inverse.
+
+    Equivalent to  \c quotient(tuble<T,N>(1), rhs)
+   \ingroup compalgtupleoperators
+*/
+template<class T, unsigned N>
+inline
+tuple<T, N>
+inverse(tuple<T,N> const& rhs)
+{ return quotient(tuple<T,N>(1), rhs);}
+
+
 /*! \brief component-wise quotient.
 
     For consistency with product(), the \c operator/ syntax is not used.
@@ -459,6 +471,8 @@ inline
 tuple<typename numeric_types::promote<T,U>::type, N>
 quotient(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 { return componentwise(lhs,rhs, algebraic_operators::divide()); }
+
+
 
 /*! \brief component-wise power
 
@@ -564,6 +578,39 @@ clamp_tuple(tuple<T,N> const& low, tuple<T,N> const& high, tuple<T,N> const p)
     res[i] = (p[i] < low[i] ? low[i] : ( high[i] < p[i] ? high[i] : p[i]));
   return res;
 }
+
+
+
+/*! \brief Component-wise maximum 
+
+    \c max_tuple(lhs, rhs) contains the component-wise maximum
+
+    \ingroup compalgtupleoperators
+*/
+template<class T, unsigned N>
+inline
+tuple<T,N>
+max_tuple(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
+{ 
+  return componentwise(lhs, rhs, algebraic_operators::max());
+}
+
+/*! \brief Component-wise minimum 
+
+    \c min_tuple(lhs, rhs) contains the component-wise minimum
+
+    \ingroup compalgtupleoperators
+*/
+template<class T, unsigned N>
+inline
+tuple<T,N>
+min_tuple(tuple<T,N> const& lhs, tuple<T,N> const& rhs)
+{ 
+  return componentwise(lhs, rhs, algebraic_operators::min());
+}
+
+
+
 
 } // namespace GrAL 
 
