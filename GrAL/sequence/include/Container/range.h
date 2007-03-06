@@ -27,7 +27,14 @@ template<class It>
 struct iter_range {
   It b;
   It e;
-  iter_range(It bb, It ee) : b(bb), e(ee) {}
+  std::string sep;
+  std::string opening;
+  std::string closing;
+  iter_range(It bb, It ee, 
+	     std::string s = " ",
+	     std::string o = "", 
+	     std::string c = "")
+    : b(bb), e(ee), sep(s), opening(o), closing(c) {}
 };
 
 /*! \brief creator function for iter_range<T>
@@ -35,8 +42,11 @@ struct iter_range {
  */
 template<class It>
 inline 
-iter_range<It> range(It bb, It ee) 
-{ return iter_range<It>(bb,ee); }
+iter_range<It> range(It bb, It ee, 
+		     std::string sep     = " ",
+		     std::string opening = "", 
+		     std::string closing = "") 
+{ return iter_range<It>(bb,ee, sep, opening, closing); }
 
 /*! \brief creator function for iter_range<T>
    
@@ -45,8 +55,11 @@ iter_range<It> range(It bb, It ee)
  */
 template<class C>
 inline 
-iter_range<typename C::const_iterator> range_c(C const& c)
-{ return iter_range<typename C::const_iterator>(c.begin(),c.end()); }
+iter_range<typename C::const_iterator> range_c(C const& c,  
+					       std::string sep     = " ",
+					       std::string opening = "", 
+					       std::string closing = "")
+{ return iter_range<typename C::const_iterator>(c.begin(),c.end(), sep, opening, closing); }
 
 
 
@@ -58,7 +71,7 @@ inline
 std::ostream& operator<<(std::ostream& out, iter_range<It> r)
 {
   while(r.b != r.e) {
-    out << *(r.b) << ' ';
+    out << r.opening <<  *(r.b) << r.closing << r.sep;
     ++r.b;
   }
   return out;
