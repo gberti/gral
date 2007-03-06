@@ -155,6 +155,48 @@ int main()
       geom_type Geom_refined(R_refined, GeomR);
       test_geometry(Geom_refined,cout);
     }
+
+    {
+      cout << "Testing refinement (isotropic case)\n";
+      grid_type R(gt::index_type(0,0), gt::index_type(3,3));
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 1.0;
+      matrix_type  A_inv(A);
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      mapping_type M_dummy;
+      geom_type GeomR(R, gt::index_type(0,0), gt::index_type(1,1), M_dummy);
+      GeomR.set_mapping(M);
+      GeomR.set_inverse_mapping(M_inv);
+      grid_type R_refined(gt::index_type(0,0), gt::index_type(5,5));
+      geom_type Geom_refined(R_refined, GeomR);
+      cout << "Master geometry:\n ";
+      test_geometry(GeomR,cout);
+      cout << "Refined geometry:\n";
+      test_geometry(Geom_refined,cout);
+    }
+
+    {
+      cout << "Testing refinement (anisotropic case)\n";
+      grid_type R(gt::index_type(0,0), gt::index_type(3,3));
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 1.0;
+      matrix_type  A_inv(A);
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      mapping_type M_dummy;
+      geom_type GeomR(R, gt::index_type(0,0), gt::index_type(1,1), M_dummy);
+      GeomR.set_mapping(M);
+      GeomR.set_inverse_mapping(M_inv);
+      grid_type R_refined(gt::index_type(0,0), gt::index_type(9,5));
+      geom_type Geom_refined(R_refined, GeomR);
+      cout << "Master geometry:\n ";
+      test_geometry(GeomR,cout);
+      cout << "Refined geometry:\n";
+      test_geometry(Geom_refined,cout);
+    }
+
+
   }   
 
 
