@@ -2,7 +2,8 @@
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 
-SUBDIRS = geometric-field \
+SUBDIRS = bucketing \
+          geometric-field \
           intersection-ray-grid \
           linear-cube \
           linear-simplex \
