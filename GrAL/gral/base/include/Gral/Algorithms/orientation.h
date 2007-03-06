@@ -102,6 +102,43 @@ namespace GrAL {
     return true;
   }
 
+/*! \brief Change orientation of cells such that it is consistent
+
+    \ingroup orientation_algorithms 
+
+    \templateparams
+     - \c G
+        - Model of $GrAL CellRange
+        - type \c FacetOnCellIterator
+        - function \c swap_orientation(Cell)
+	- The function
+          <tt> int relative_orientation(FacetOnCellIterator f1, FacetOnCellIterator f2) </tt> 
+          has been overloaded for <tt> G::FacetOnCellIterator </tt>
+          and returns  the <em> relative orientation </em> of the facet <tt> *f1 == *f2 </tt> 
+	  induced by \c f1 and \c f2. For instance, in a 2D grid, this means that if the edge
+          \c *f1 is represented with opposite vertex ordering by \c f1 and \c f2, 
+          the result should be -1, and +1 otherwise. 
+
+    \param g input grid, orientation of some cells will be changed on output
+    \return true if the grid \g is orientable, and false otherwise.
+
+    \pre \c g is a  Glossary manifold-with-boundary grid
+    \post On return, \c g is oriented such that  a call to \c get_orientation(g, orient) will yield <tt> orientation(c) == 1</tt>
+     for each cell \c c of \c g.
+ 
+     \see Tested in \ref test-orientation.C
+     
+  */
+  template<class G>
+  bool fix_orientation(G & g) {
+    typedef grid_types<G> gt;
+    grid_function<typename gt::Cell, int> orientation(g,0);
+    bool orientable = get_orientation(g, orientation);
+    for(typename gt::CellIterator c(g); !c.IsDone(); ++c)
+      if(orientation(*c) < 0) 
+	g.swap_orientation(*c);
+    return orientable;
+  }
 
 
   /* \brief A potential implementation of relative_orientation
