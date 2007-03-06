@@ -16,7 +16,13 @@ namespace GrAL {
 template<class GT, class COORD>
 class point_location_result {
 public:
-  enum result_tag { inside_tag, outside_tag, projection_tag, failure_tag, num_of_tags };
+  /*! \brief Result type
+   */
+  enum result_tag { inside_tag,      //!< point is inside geometric structure
+                    outside_tag,     //!< point is outside geometric structure
+		    projection_tag,  //!< point is outside geometric structure, but could be projected to nearest point inside
+		    failure_tag,     //!< point location failed
+		    num_of_tags };
   static  std::string tag_names[num_of_tags];
 
    std::string tagname() const { return tag_names[t];}
@@ -38,10 +44,30 @@ public:
   point_location_result(Cell cc, coord_type pp, result_tag tt) : c(cc), p(pp), t(tt) {}
   point_location_result(result_tag tt) : t(tt) {}
 
-  cell_handle handle()   const { return c.handle();}
+  /*! \brief Return the located cell
+
+      This is guaranteed to be a valid cell iff <tt> tag() == inside_tag || tag() == projection_tag </tt>
+  */
   Cell        TheCell()  const { return c;}
+
+  /*! \brief Return the handle of the located cell.
+
+     Equivalent to \c TheCell().handle()
+  */
+  cell_handle handle()   const { return c.handle();}
+
+
+  /*! \brief Return the coordinate of the original point (if <tt> tag() == inside_tag)
+       or its projection (if <tt> tag() == projection_tag </tt>)
+   */ 
   coord_type  TheCoord() const { return p;}
+
+  /*! \brief Return the result tag
+   */
   result_tag  tag   ()   const { return t;}
+
+  /*! \brief True iff <tt> tag() == inside_tag </tt>
+   */
   bool        found()    const { return t == inside_tag;}
 };
 
