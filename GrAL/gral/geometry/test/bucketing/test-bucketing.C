@@ -26,7 +26,7 @@ int main() {
 
   coord_type min_x(1.0,2.0);
   coord_type max_x(5.0,6.0);
-  index_type n(2,3);
+  index_type n(2,4);
   bucket_type b(n, min_x, max_x);
   cout << "Bucket: cells [" << b.TheGrid().low_cell_index()  << "  " << b.TheGrid().high_cell_index() <<"]\n";
   cout << "Bucket: range [" << b.min() << ", " << b.max() << "]\n";
