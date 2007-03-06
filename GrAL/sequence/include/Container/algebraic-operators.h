@@ -46,11 +46,14 @@ namespace algebraic_operators {
     template<class T,class U>  typename nt::promote<T,U>::type operator()(T const& t, U const& u) const { return t-u;} 
   };
 
-
+  /*! \brief Minimum 
+   */
   struct min { 
     template<class T,class U>  typename nt::promote<T,U>::type operator()(T const& t, U const& u) const { return ::std::min(t,u); } 
   };
 
+  /*! \brief Maximum 
+   */
   struct max { 
     template<class T,class U>  typename nt::promote<T,U>::type operator()(T const& t, U const& u) const { return ::std::max(t,u); } 
   };
