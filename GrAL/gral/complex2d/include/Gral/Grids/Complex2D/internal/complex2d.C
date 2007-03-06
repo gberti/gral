@@ -6,7 +6,7 @@
 // inline functions for  class Complex2D,
 // to be included in complex2d.h
 
-#include "algorithm"
+#include <algorithm>
 
 namespace GrAL {
  
@@ -49,9 +49,9 @@ inline Complex2D::edge_handle Complex2D::handle(const Edge2D& E) const
   if (c1 > c2)
     return edge_handle(c1,E._e.lf);
   else // c2 cannot be outer_pos()
-    return edge_handle(c2, ::std::find(_cells[c2]._neighbours.begin(),
+    return edge_handle(c2, std::find(_cells[c2]._neighbours.begin(),
 				     _cells[c2]._neighbours.end(), c1)
-		            - _cells[c2]._neighbours.begin());
+		       - _cells[c2]._neighbours.begin());
 }
 
 inline  bool Complex2D::IsOnBoundary(const EdgeOnCell2D_Iterator& e) const 
@@ -180,6 +180,12 @@ inline void Complex2D::add_cell_on_vertex(const Complex2D::Vertex& V, const Comp
 inline void Complex2D::add_cell_on_vertex(const Complex2D::Vertex& V, const Complex2D::cell_handle& c)
 { _vertices[handle(V)]._cells.push_back(c);}
 
+
+inline void Complex2D::swap_orientation(Complex2D::Cell const& c) 
+{ 
+  std::reverse(_cells[c.handle()]._vertices.begin(),
+	       _cells[c.handle()]._vertices.end());
+}
 
 //---------------------- geometric functionality ------------------------
 

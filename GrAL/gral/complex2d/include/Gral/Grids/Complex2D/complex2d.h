@@ -446,7 +446,11 @@ public:
      archetype is returned. Else the handle of the newly added archetype is returned.
    */
   archetype_handle add_archetype(archetype_type const& A, int nv);
+
+  inline void      swap_orientation(Cell const& c);
   /*@}*/
+
+
   
 private:
   friend class friend_for_input; // work-around class
