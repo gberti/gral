@@ -196,6 +196,26 @@ int main()
       test_geometry(Geom_refined,cout);
     }
 
+    {
+      cout << "Testing refinement (coarsening case)\n";
+      grid_type R(gt::index_type(0,0), gt::index_type(3,3));
+      matrix_type A(0.0);
+      A(0,0) = 1.0; A(1,1) = 1.0;
+      matrix_type  A_inv(A);
+      mapping_type M(A);
+      mapping_type M_inv(A_inv);
+      mapping_type M_dummy;
+      geom_type GeomR(R, coord_type(0.0,0.0), coord_type(0.5,0.5), M_dummy);
+      GeomR.set_mapping(M);
+      GeomR.set_inverse_mapping(M_inv);
+      grid_type R_coarsened(gt::index_type(0,0), gt::index_type(2,2));
+      geom_type Geom_coarsened(R_coarsened, GeomR);
+      cout << "Master geometry:\n ";
+      test_geometry(GeomR,cout);
+      cout << "Coarsened geometry:\n";
+      test_geometry(Geom_coarsened,cout);
+    }
+
 
   }   
 

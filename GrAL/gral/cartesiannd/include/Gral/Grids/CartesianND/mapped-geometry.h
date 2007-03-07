@@ -29,17 +29,22 @@ namespace cartesiannd {
 
      
      The mapping is assumed to be defined on \f$ [0,1]^d \f$.
-     Each vertex gets first assigned a unit coordinate in \f$ [0,1]^d \f$, 
-     such that cells are isotropic hypercubes. This means that in the case of grids
+     Each vertex gets first assigned a unit coordinate in \f$ [0,1]^d \f$. 
+
+     By default, these unit coordinates are chosen such that cells are isotropic hypercubes.
+     This means that in the case of grids
      with different number of vertices in each direction, only the vertices
      with the largest integer indices will have a corresponding unit coordinate of 1.
      For example, in a grid with 4x2 cells, the right upper vertex (index \f$(4,2)\f$) 
      will be mapped to \f$(1, 0.5) \f$.
 
+     In addition, it is possible to prescribe a Cartesian subrange which is mapped onto \f$ [0,1]^d \f$.
+     In this case, an anisotropic (non-hypercubic) subrange leads of course to anisotropic coordinates.
+
      \see Test in \ref test-cartesiannd-geometry.C
 
-     \note In the case of a nonlinear mapping, some predicates do not work correctly.
-     \todo Make it possible to choose also non-isotropic unit cells.
+     \note In the case of a \e nonlinear mapping, some predicates do not work correctly.
+
    */
   template<class CARTGRID, class MAP> //  = identity<cartesiannd::default_coord<CARTGRID>::type > >
   class mapped_geometry {
@@ -65,8 +70,8 @@ namespace cartesiannd {
     ref_ptr<mapping_type const> f;     // defined on unit cube (at least).
     ref_ptr<mapping_type const> f_inverse;
 
-    index_type         low_;
-    index_type         high_; // [low_, high_] will be first mapped to unit cube and
+    coord_type         low_;
+    coord_type         high_; // [low_, high_] will be first mapped to unit cube and
                               // then mapped by f.
     coord_type         delta;
   public:
@@ -77,10 +82,12 @@ namespace cartesiannd {
     mapped_geometry() {}
  
    /*! \brief Initialize with mapping \c ff
-         
-        If \c mapped_geometry(gg) is called, the initialization 
-	is complete only if \c MAP has a sensible default constructor.
-     */
+
+   The unit coordinates are chosen such that cells are isotropic hypercubes.
+   
+   If \c mapped_geometry(gg) is called, the initialization 
+   is complete only if \c MAP has a sensible default constructor.
+   */
     mapped_geometry(grid_type const& gg, mapping_type ff = mapping_type::identity())
       : g(gg) 
     { 
@@ -91,14 +98,17 @@ namespace cartesiannd {
 
     void set_isotropic_box() {
       index_type diff = g->high_vertex_index() - g->low_vertex_index();
-      high_ = low_ + index_type(* std::max_element(diff.begin(), diff.end()));
+      high_ = low_ + coord_type(* std::max_element(diff.begin(), diff.end()));
     }
 
     /*! \brief Initialize with mapping \c ff
          
-        If \c mapped_geometry(gg) is called, the initialization 
-	is complete only if \c MAP has a sensible default constructor.
-     */
+    The unit coordinates are chosen such that cells are isotropic hypercubes, 
+    and the extent of the grid (in unit coordinates) is \e contained in \f$[0,1]^d\f$.
+    
+    If \c mapped_geometry(gg) is called, the initialization 
+    is complete only if \c MAP has a sensible default constructor.
+    */
     mapped_geometry(ref_ptr<grid_type const> gg, ref_ptr<mapping_type> ff)
       : g(gg)
     { 
@@ -108,32 +118,31 @@ namespace cartesiannd {
     }
 
 
-    /*! \brief Initialize with mapping \c ff, mapping the range \c [lw,hgh] into \f$[0,1]^d\f$
+    /*! \brief Initialize with mapping \c ff, mapping the range \c [lw,hgh] onto \f$ ff([0,1]^d)\f$
          
-        The mapping of \c [lw,hgh] into \f$[0,1]^d\f$ is isotropic, that is, images of
-	cells are isotropic cubes.
+        The mapping of \c [lw,hgh] into \f$[0,1]^d\f$ is isotropic \e only if [lw,hgh] is a
+	hypercube.
 
         If \c mapped_geometry(gg, lw, hgh) is called, the initialization 
 	is complete only if \c MAP has a sensible default constructor.
      */
-    mapped_geometry(grid_type const& gg, index_type lw, index_type hgh, 
+    mapped_geometry(grid_type const& gg, 
+		    coord_type lw, coord_type hgh, 
 		    mapping_type ff = mapping_type::identity()) 
       : g(gg),
 	low_(lw), high_(hgh) 
     { 
-      f.make_shared(new mapping_type(ff));
+      f = new_ref_ptr(new mapping_type(ff));
       init();
     }
-    /*! \brief Initialize with mapping \c ff, mapping the range \c [lw,hgh] into \f$[0,1]^d\f$
+    /*! \brief Initialize with mapping \c ff, mapping the range \c [lw,hgh] onto \f$ ff([0,1]^d)\f$
          
-        The mapping of \c [lw,hgh] into \f$[0,1]^d\f$ is isotropic, that is, images of
-	cells are isotropic cubes.
+        The mapping of \c [lw,hgh] \e onto \f$[0,1]^d\f$ is isotropic \e only if [lw,hgh] is a
+	hypercube.
 
-        If \c mapped_geometry(gg, lw, hgh) is called, the initialization 
-	is complete only if \c MAP has a sensible default constructor.
      */
     mapped_geometry(ref_ptr<grid_type const> gg, 
-		    index_type lw, index_type hgh, 
+		    coord_type lw, coord_type hgh, 
 		    ref_ptr<mapping_type> ff)
       : g(gg),
 	low_(lw), high_(hgh) 
@@ -147,6 +156,9 @@ namespace cartesiannd {
 
         This is useful e.g. for hierarchical grids (esp. with anisotropic refinement).
         Using standard unit coordinates would result in different extents of the hierarchies.
+
+	\pre  \c TheGrid() is a refinement of \c master.TheGrid() 
+	\post Extent of geometry equal to extent of master geometry.
      */
     mapped_geometry(grid_type const& gg, self const& master)
       : g(gg)
@@ -155,8 +167,7 @@ namespace cartesiannd {
     }
     /*! \brief Initialize using the unit coordinates of a master geometry
 
-        This is useful e.g. for hierarchical grids (esp. with anisotropic refinement).
-        Using standard unit coordinates would result in different extents of the hierarchies.
+        See mapped_geometry(grid_type const& gg, self const& master)
      */
     mapped_geometry(ref_ptr<grid_type const> gg, 
 		    ref_ptr<self const>      master)
@@ -173,17 +184,21 @@ namespace cartesiannd {
     }
 
     void init_from_master(self const& m) {
-      index_type size_refined =   g->high_vertex_index() -   g->low_vertex_index();
-      index_type size_master  = m.g->high_vertex_index() - m.g->low_vertex_index();
-      index_type refinement_factor = quotient(size_refined, size_master);
+      coord_type size_refined =   g->high_vertex_index() -   g->low_vertex_index();
+      coord_type size_master  = m.g->high_vertex_index() - m.g->low_vertex_index();
+      coord_type refinement_factor = quotient(size_refined, size_master);
 
-      REQUIRE_ALWAYS(product(refinement_factor,size_master) == size_refined, "grid is no refinement of master grid!", 1);
-      low_  = g->low_vertex_index() + product(m.low_  - m.g->low_vertex_index(), refinement_factor);  
-      high_ = g->low_vertex_index() + product(m.high_ - m.g->low_vertex_index(), refinement_factor);  
-      f.make_shared(new mapping_type(* m.f));
+      coord_type g_low   =   g->low_vertex_index();
+      coord_type m_g_low = m.g->low_vertex_index();
+      low_  = g_low + product(m.low_  - m_g_low, refinement_factor);  
+      high_ = g_low + product(m.high_ - m_g_low, refinement_factor);  
+      f = new_ref_ptr(new mapping_type(* m.f));
       if(m.has_inverse())
-	f_inverse.make_shared(new mapping_type(* m.f_inverse));
+	f_inverse = new_ref_ptr(new mapping_type(* m.f_inverse));
       init();
+      // this may fail because of rounding errors ...
+      //REQUIRE_ALWAYS(coord(g-> low_vertex_index()) == m.coord(m.g-> low_vertex_index()), "", 1);
+      //REQUIRE_ALWAYS(coord(g->high_vertex_index()) == m.coord(m.g->high_vertex_index()), "", 1);
     }
 
   public:
@@ -227,19 +242,20 @@ namespace cartesiannd {
   private:
     //! \brief Anisotropic unit coordinate. Inverse of unit2index.
     coord_type unit_coord(index_type idx) const { 
-      coord_type r(idx - low_);
+      coord_type r(coord_type(idx) - low_);
       return product(r, delta);
     }
     //! \brief Index i such that local_p is in cell with index i. Inverse of unit_coord.
     index_type unit2index(coord_type local_p) const {
       //coord_type rational_index = quotient(local_p, delta);
       //index_type integral_index = floor_tuple(rational_index);
-      return floor_tuple(quotient(local_p, delta)) + coord_type(low_);
+      return floor_tuple(quotient(local_p, delta)) + low_;
 
     }
   public:
     //! Coordinate of vertex
     coord_type coord (Vertex const& v) const { cb(); return (*f)(unit_coord(v.index()));}
+    coord_type coord (index_type    v) const { cb(); return (*f)(unit_coord(v));}
 
     /*! \brief length of an edge.
         

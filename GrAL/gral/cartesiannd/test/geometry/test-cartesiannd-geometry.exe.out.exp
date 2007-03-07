@@ -151,6 +151,24 @@ Print Geom of Grid [0 0,8 4]
 8 2 @ 2 1 in cell 7 2 (projection:  2 1)
 8 3 @ 2 1.5 in cell 7 3 (projection:  2 1.5)
 8 4 @ 2 2 in cell 7 3 (projection:  2 2)
+Testing refinement (coarsening case)
+Master geometry:
+ Print Geom of Grid [0 0,2 2]
+0 0 @ 0 0 in cell 0 0 (inside)
+0 1 @ 0 2 in cell 0 1 (inside)
+0 2 @ 0 4 in cell 0 1 (projection:  0 4)
+1 0 @ 2 0 in cell 1 0 (inside)
+1 1 @ 2 2 in cell 1 1 (inside)
+1 2 @ 2 4 in cell 1 1 (projection:  2 4)
+2 0 @ 4 0 in cell 1 0 (projection:  4 0)
+2 1 @ 4 2 in cell 1 1 (projection:  4 2)
+2 2 @ 4 4 in cell 1 1 (projection:  4 4)
+Coarsened geometry:
+Print Geom of Grid [0 0,1 1]
+0 0 @ 0 0 in cell 0 0 (inside)
+0 1 @ 0 4 in cell 0 0 (projection:  0 4)
+1 0 @ 4 0 in cell 0 0 (projection:  4 0)
+1 1 @ 4 4 in cell 0 0 (projection:  4 4)
 Print Geom of Grid [0 0 0,2 2 2]
 0 0 0 @ 0 0 0 in cell 0 0 0 (inside)
 0 0 1 @ 0 0 0.5 in cell 0 0 1 (inside)
