@@ -70,9 +70,22 @@ namespace sequence {
   };
 
 
+  /*! \brief Operator class for joining two operands with optional separator
+
+      \ingroup helperfunctors
+   */
+  template<class T>
+  struct join : public std::binary_function<T,T,T> {
+    T sep;
+    join(T sep_ = "") : sep(sep_) {}
+    T operator()(T const& lhs, T const& rhs) 
+    { return lhs + sep + rhs; }
+  };
 
 
-  /*!
+
+
+  /*! \brief Compute a histogram from a sequence
       \ingroup algorithms
 
       \see histogram_table
@@ -85,10 +98,15 @@ namespace sequence {
       ++begin;
     }
   }
- /*!
+ /*! \brief Compute a histogram from a mapped sequence  
       \ingroup algorithms
 
-      \see histogram_table
+      \note In principle (and more to the spirit of the STL) this could be achieved
+      by using 
+      compute_histogram(ForwardIterator begin, ForwardIterator end, Map & hist)
+      where ForwardIterator is a mapped iterator.
+
+      \see histogram_table 
   */
   template<class ForwardIterator, class Map, class F>
   void compute_histogram(ForwardIterator begin, ForwardIterator end, Map & hist, F f)
@@ -155,7 +173,7 @@ namespace sequence {
   */
  template <typename InputIterator, typename Value>
  inline bool contains(InputIterator first, InputIterator end, Value const& v) {
-   return ::std::find(first,end,v) != end;
+   return std::find(first,end,v) != end;
  }
 
 
@@ -182,6 +200,14 @@ namespace sequence {
     typename std::iterator_traits<InputIterator>::value_type res = sum(first,end);
     return res / distance(first,end);
   }
+
+  /*! \brief Concatenate a sequence of items, with optional separator
+      \ingroup algorithms
+   */
+  template<class It>
+  std::string concat(It start, It end, std::string sep = "")
+  { return std::accumulate(start, end, sep, join<std::string>(sep));}
+
 
   /*! \brief The classic bubble sort.
 
