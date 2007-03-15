@@ -1,5 +1,5 @@
-#ifndef GRAL_GB_UTILITY_ALGEBRAIC_OPERATORS_H
-#define GRAL_GB_UTILITY_ALGEBRAIC_OPERATORS_H
+#ifndef GRAL_GB_SEQUENCE_ALGEBRAIC_OPERATORS_H
+#define GRAL_GB_SEQUENCE_ALGEBRAIC_OPERATORS_H
 
 #include <algorithm>  // min/max
 #include "Utility/numeric-types.h"

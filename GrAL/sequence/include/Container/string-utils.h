@@ -1,14 +1,20 @@
-#ifndef GRAL_GB_UTILITY_STRING_UTILS_H
-#define GRAL_GB_UTILITY_STRING_UTILS_H
+#ifndef GRAL_GB_SEQUENCE_STRING_UTILS_H
+#define GRAL_GB_SEQUENCE_STRING_UTILS_H
 
 // $LICENSE_NEC_2004
 
+#include "Container/sequence-algorithms.h"
+
 #include <string>
-#include <iostream>
+#include <istream>
+#include <ostream>
+
 
 namespace GrAL {
 
   /*! \defgroup stringalgorithms Algorithms on strings
+
+     \ingroup algorithms
    */
 
   /*! \brief Get the first non-empty line from stream \c in
@@ -25,6 +31,16 @@ namespace GrAL {
      \ingroup stringalgorithms
    */
   inline bool is_whitespace_only(std::string const& s) { return s.find_first_not_of(" \t\n\r\f") == std::string::npos; }
+
+ 
+
+  /*! brief Convert  command line args to a string
+      \ingroup stringalgorithms
+   */
+  inline std::string commandline(int argc, char* argv[]) 
+  { return sequence::concat(argv, argv+argc, " ");}
+
+
 
 } // namespace GrAL
 
