@@ -123,8 +123,13 @@ class VertexIterator_istream_complex2d
 public:
   typedef  IstreamComplex2DFmt_base grid_type;
 
-  typedef grid_type anchor_type;
-  typedef self      value_type;
+  typedef vertex_type_tag             element_type_tag;
+  struct category : 
+    public grid_element_category_d<0>, 
+    public grid_sequence_iterator_category_d<0> {};
+
+  typedef grid_type                   anchor_type;
+  typedef self                        value_type;
 private:
   grid_type const* g;
   int v; 
@@ -179,6 +184,11 @@ class CellIterator_istream_complex2d {
   typedef       CellIterator_istream_complex2d   self;
 public:
   typedef  IstreamComplex2DFmt_base  grid_type;
+
+  typedef cell_type_tag               element_type_tag;
+  struct category :
+    public grid_element_category_d<2>, 
+    public grid_sequence_iterator_category_d<2> {};
 
   typedef grid_type anchor_type;
   typedef self      value_type;
@@ -248,6 +258,7 @@ public:
   typedef  VertexIterator_istream_complex2d   Vertex;
   typedef  CellIterator_istream_complex2d     Cell;
 
+  typedef grid_incidence_iterator_category_d<0,2> category;
   typedef Vertex value_type;
   typedef Cell   anchor_type;
 private:
