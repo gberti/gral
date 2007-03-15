@@ -8,7 +8,7 @@
 
 #include <algorithm>  // STL
 
-#include "Utility/assignment-operators.h"
+#include "Container/assignment-operators.h"
 #include "Gral/Base/restricted-grid-function-adapter.h"
 
 namespace GrAL {
