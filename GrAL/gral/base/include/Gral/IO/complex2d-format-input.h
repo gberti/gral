@@ -105,53 +105,44 @@ struct grid_types<IstreamComplex2DFmt>
 #else
 #define gt grid_types<IstreamComplex2DFmt>
 
-template<class It>
-inline typename gt::VertexIterator 
-gral_begin(IstreamComplex2DFmt const& g, typename gt::VertexIterator)
+inline gt::VertexIterator 
+gral_begin(gt::grid_type const& g, gt::VertexIterator)
 { return g.FirstVertex();}
 
-template<class It>
-inline typename gt::VertexIterator 
-gral_end(IstreamComplex2DFmt const& g, typename gt::VertexIterator)
+inline gt::VertexIterator 
+gral_end(gt::grid_type const& g,  gt::VertexIterator)
 { return g.EndVertex();}
 
-template<class It>
-inline typename gt::size_type
-gral_size(IstreamComplex2DFmt const& g, typename gt::VertexIterator)
+inline gt::size_type
+gral_size(gt::grid_type const& g,  gt::VertexIterator)
 { return g.NumOfVertices();}
 
 
-template<class It>
-inline typename gt::CellIterator 
-gral_begin(IstreamComplex2DFmt const& g, typename gt::CellIterator)
+inline  gt::CellIterator 
+gral_begin(gt::grid_type const& g,  gt::CellIterator)
 { return g.FirstCell();}
 
-template<class It>
-inline typename gt::CellIterator 
-gral_end(IstreamComplex2DFmt const& g, typename gt::CellIterator)
+inline  gt::CellIterator 
+gral_end(gt::grid_type const& g,  gt::CellIterator)
 { return g.EndCell();}
 
-template<class It>
-inline typename gt::size_type
-gral_size(IstreamComplex2DFmt const& g, typename gt::CellIterator)
+inline  gt::size_type
+gral_size(gt::grid_type const& g,  gt::CellIterator)
 { return g.NumOfCells();}
 
 
 
-template<class It>
-inline typename gt::VertexOnCellIterator 
-gral_begin(CellIterator_istream_complex2d const& g, typename gt::VertexOnCellIterator)
-{ return g.FirstVertex();}
+inline gt::VertexOnCellIterator 
+gral_begin(gt::CellIterator const& c, gt::VertexOnCellIterator)
+{ return c.FirstVertex();}
 
-template<class It>
-inline typename gt::VertexOnCellIterator 
-gral_end  (CellIterator_istream_complex2d const& g, typename gt::VertexOnCellIterator)
-{ return g.EndVertex();}
+inline gt::VertexOnCellIterator 
+gral_end  (gt::CellIterator const& c, gt::VertexOnCellIterator)
+{ return c.EndVertex();}
 
-template<class It>
-inline typename gt::size_type
-gral_size (CellIterator_istream_complex2d const& g, typename gt::VertexOnCellIterator)
-{ return g.NumOfVertices();}
+inline gt::size_type
+gral_size (gt::CellIterator const& c, gt::VertexOnCellIterator)
+{ return c.NumOfVertices();}
 
 
 #undef gt
@@ -205,35 +196,31 @@ struct grid_types<IstreamComplex2DCombFmt>
 #else
 #define gt grid_types<IstreamComplex2DCombFmt>
 
-template<class It>
-inline typename gt::VertexIterator 
-gral_begin(IstreamComplex2DCombFmt const& g, typename gt::VertexIterator)
+
+inline  gt::VertexIterator 
+gral_begin(IstreamComplex2DCombFmt const& g,  gt::VertexIterator)
 { return g.FirstVertex();}
 
-template<class It>
-inline typename gt::VertexIterator 
-gral_end(IstreamComplex2DCombFmt const& g, typename gt::VertexIterator)
+inline  gt::VertexIterator 
+gral_end(IstreamComplex2DCombFmt const& g,  gt::VertexIterator)
 { return g.EndVertex();}
 
-template<class It>
-inline typename gt::size_type
-gral_size(IstreamComplex2DCombFmt const& g, typename gt::VertexIterator)
+inline  gt::size_type
+gral_size(IstreamComplex2DCombFmt const& g,  gt::VertexIterator)
 { return g.NumOfVertices();}
 
 
-template<class It>
-inline typename gt::CellIterator 
-gral_begin(IstreamComplex2DCombFmt const& g, typename gt::CellIterator)
+
+inline  gt::CellIterator 
+gral_begin(IstreamComplex2DCombFmt const& g, gt::CellIterator)
 { return g.FirstCell();}
 
-template<class It>
-inline typename gt::CellIterator 
-gral_end(IstreamComplex2DCombFmt const& g, typename gt::CellIterator)
+inline  gt::CellIterator 
+gral_end(IstreamComplex2DCombFmt const& g,  gt::CellIterator)
 { return g.EndCell();}
 
-template<class It>
-inline typename gt::size_type
-gral_size(IstreamComplex2DCombFmt const& g, typename gt::CellIterator)
+inline  gt::size_type
+gral_size(IstreamComplex2DCombFmt const& g,  gt::CellIterator)
 { return g.NumOfCells();}
 
 #undef gt
