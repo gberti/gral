@@ -3,7 +3,7 @@ CONFIG=$(shell pwd)/../../mk.config
 include  $(CONFIG)
 
 
-LOCALSOURCES= file-utils.C string-utils.C safe-file.C notifier.C
+LOCALSOURCES= file-utils.C safe-file.C notifier.C
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 
 
