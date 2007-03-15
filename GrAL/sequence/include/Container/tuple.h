@@ -8,8 +8,8 @@
 
 #include "Utility/pre-post-conditions.h"
 #include "Utility/numeric-types.h"
-#include "Utility/algebraic-operators.h"
-#include "Utility/relational-operators.h"
+#include "Container/algebraic-operators.h"
+#include "Container/relational-operators.h"
 
 #include <cmath>
 
