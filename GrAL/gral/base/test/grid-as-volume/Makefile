@@ -16,7 +16,7 @@ include $(DEPS)
 
 
 
-LIBS = -lgral-base -lgral-cartesian2d -lgral-complex2d -lgeometry -lutilities
+LIBS = -lgral-base -lgral-cartesian2d -lgral-complex2d -lgeometry -lsequence -lutilities
 
 
 new-check-clean: new check clean

@@ -13,7 +13,7 @@ EXTRA_DEPMODULES = geometry external-control gral/triang2d gral/gmv-io gral/test
 
 include $(DEPS)
 
-LIBS +=  -lgral-triang2d -lgral-gmv-io -lgral-base -lgeometry -lexternal-control -lutilities
+LIBS +=  -lgral-triang2d -lgral-gmv-io -lgral-base -lgeometry -lexternal-control -lsequence -lutilities
 
 
 new-check-clean: new check clean

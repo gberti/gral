@@ -15,7 +15,7 @@ include $(DEPS)
 
 
 
-LIBS += -lgral-distributed -lgral-complex2d  -lgral-base -lgeometry  -lexternal-control -lutilities 
+LIBS += -lgral-distributed -lgral-complex2d  -lgral-base -lgeometry  -lexternal-control -lsequence -lutilities 
 
 
 

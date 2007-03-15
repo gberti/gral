@@ -14,7 +14,7 @@ EXTRA_DEPMODULES += geometry gral/complex2d gral/complex3d gral/cartesiannd
 include $(DEPS)
 
 
-LIBS = -lgral-complex3d -lgral-complex2d -lgral-base  -lgeometry  -lutilities
+LIBS = -lgral-complex3d -lgral-complex2d -lgral-base  -lgeometry -lsequence  -lutilities
 
 
 new-check-clean: new check clean

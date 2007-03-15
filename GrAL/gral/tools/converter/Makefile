@@ -24,7 +24,7 @@ include $(DEPS)
 
 
 LIBS = -lgral-complex2d -lgral-base \
-       -lexternal-control  -lutilities -lgeometry
+       -lexternal-control -lsequence -lutilities -lgeometry
 
 LIBSGMV = -lgral-gmv-io
 LIBSOFF = -lgral-geomview-io

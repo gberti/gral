@@ -14,7 +14,7 @@ LOCALTARGET = test-distributed test-distri-io
 #MPIRUN=$(MPIPATH)/bin/mpirun
 #IFLAGS += -I$(MPIPATH)/include
 LIBS = -lgral-distributed -lgral-complex2d -lgral-base \
-       -lgeometry -lexternal-control -lutilities
+       -lgeometry -lexternal-control -lsequence -lutilities
 
 
 

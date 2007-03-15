@@ -13,7 +13,7 @@ EXTRA_DEPMODULES = gral/complex2d
 
 include $(DEPS)
 
-LIBS +=  -lgral-complex2d -lgral-base -lgeometry  -lutilities
+LIBS +=  -lgral-complex2d -lgral-base -lgeometry -lsequence -lutilities
 
 
 new-check-clean: new check clean
