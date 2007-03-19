@@ -32,7 +32,19 @@ $(TARGETS): $(OBJECTS)
 run:
 	$(EXEC) 
 
-check: run-check
+check: run-check check-grids
+
+check-grids: run-check
+	@(echo='echo -e'; \
+          for i in *.gmv; \
+          do \
+            if diff $$i $$i.exp; \
+            then  $$echo "\t\t\t" $$i OK; \
+            else  $$echo "\t\t\t" ERROR in $$i; \
+            fi ;\
+           done ;\
+           $$echo "\n"; \
+        )
 
 
 clean: stdclean

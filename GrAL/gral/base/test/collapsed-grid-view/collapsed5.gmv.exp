@@ -1,0 +1,8 @@
+gmvinput ascii
+nodev 3
+0.375 0.21875 0.8125 
+0 1 1 
+0 0 0 
+cells 0
+surface 0
+endgmv

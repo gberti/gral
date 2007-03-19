@@ -531,7 +531,7 @@ namespace collapsed_grid_view {
 	  num_collapsed_vertices[*ic]++;
 	incident_cells[V].clear();
 
-	if(vcnt > 0) {
+	if(v != (*s).FirstVertex()) {
 	  REQUIRE( handle_v(repr_s) != handle_v(v.handle()), 
 		   "identifying already identified vertices: " << repr_s << " and " << v.handle() 
 		<< " in set " << handle_v(repr_s), 1);
