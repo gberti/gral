@@ -1,0 +1,25 @@
+# icc/make.defs
+# Settings for INTEL CC 8.0
+
+CCC      =  /usr/net/fdc/INTEL/C++/compiler90/bin/icc
+CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
+CCFLAGS += 
+
+CCFLAGS += -w2 
+CCFLAGS += -wd186   ## Warning "pointless comparison of unsigned integer with zero"
+CCFLAGS += -wd1125  ## "Virtual override intended?"
+CCFLAGS += -wd444   ## remark "destructor non virtual"
+CCFLAGS += -wd424   ## remark "extra ; ignored"
+CCFLAGS += -wd981   ## remark "operands are evaluated in unspecified order"
+CCFLAGS += -wd279   ## remark "controlling expression is constant"
+CCFLAGS += -wd1418  ## remark "external definition with no prior declaration"
+CCFLAGS += -wd304   ## remark "access control not specified ("public" by default)" (allow struct X : Y {};) 
+#CCFLAGS += -w2 -wd981 
+CCFLAGS += -DINTEL_CC
+CCFLAGS += -DGRAL_HAS_SSTREAM
+LDFLAGS += -Xlinker -rpath -Xlinker /usr/net/fdc/INTEL/C++/compiler90/lib
+
+DEPEND    =$(CCC)
+DEPFLAGS += -M $(CCFLAGS)
+
+
