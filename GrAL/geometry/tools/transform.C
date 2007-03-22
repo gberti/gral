@@ -47,9 +47,22 @@ int main(int argc, char* argv[]) {
    GrAL::RegisterAt(Ctrl, "-rangle", rot_angle);
    h += "    -raxis <x y z> -rangle <rot degrees> (rotation axis and angle)\n";
 
-   double s = 1.0;
-   GrAL::RegisterAt(Ctrl, "-s", s);
+   coord_type rot_from(1,0,0);
+   coord_type rot_to  (1,0,0);
+   GrAL::RegisterAt(Ctrl, "-rot_from", rot_from);
+   GrAL::RegisterAt(Ctrl, "-rot_to",   rot_to);
+
+   double sd(1.0);
+   
+   GrAL::RegisterAt(Ctrl, "-s",sd);
    h += "    -s <scaling=1.0>  (scaling factor)\n";
+
+   coord_type s(1.0);
+   GrAL::RegisterAt(Ctrl, "-S",  s);
+   GrAL::RegisterAt(Ctrl, "-sx", pt::x(s));
+   GrAL::RegisterAt(Ctrl, "-sy", pt::y(s));
+   GrAL::RegisterAt(Ctrl, "-sz", pt::z(s));
+
 
    coord_type t(0.0);
    GrAL::RegisterAt(Ctrl, "-t", t);
@@ -61,26 +74,33 @@ int main(int argc, char* argv[]) {
    GrAL::AddHelp(Ctrl,h);
    Ctrl.update();
 
-   mapping_type M_in = mapping_type::identity();
+   s *= sd;
 
+   mapping_type M_in = mapping_type::identity();
+   /*
    if(id) {
      cout << M_in;
      return 0;
    }
-     
-   if(! (cin >> M_in)) {
+   */
+
+   if(!id) 
+     if(! (cin >> M_in)) {
        std::cerr << "Failed reading transformation from stdin!\n";
        return 2;
-   }
+     }
   
-   mapping_type Rx = mapping_type::rotation3d(coord_type(1,0,0), rot_x*M_PI/180.0);
-   mapping_type Ry = mapping_type::rotation3d(coord_type(0,1,0), rot_y*M_PI/180.0);
-   mapping_type Rz = mapping_type::rotation3d(coord_type(0,0,1), rot_z*M_PI/180.0);
-   mapping_type Ra = mapping_type::rotation3d(rot_axis, rot_angle);
-   mapping_type R  = Ra(Rz(Ry(Rx)));
-   mapping_type S  = mapping_type::scaling(coord_type(s));
-   mapping_type T  = mapping_type::translation(t);
-   mapping_type M_out = T(S(R(M_in)));
+   typedef mapping_type mt;
+   mt Rx = mt::rotation3d(coord_type(1,0,0), rot_x*M_PI/180.0);
+   mt Ry = mt::rotation3d(coord_type(0,1,0), rot_y*M_PI/180.0);
+   mt Rz = mt::rotation3d(coord_type(0,0,1), rot_z*M_PI/180.0);
+   mt Ra = mt::rotation3d(rot_axis, rot_angle);
+   mt R_from_to = mt::rotate_to(rot_from, rot_to);
+   mt R  = R_from_to(Ra(Rz(Ry(Rx))));
+   
+   mt S  = mt::scaling(coord_type(s));
+   mt T  = mt::translation(t);
+   mt M_out = T(S(R(M_in)));
 
    cout.precision(16);
    cout << M_out;
