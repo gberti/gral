@@ -46,7 +46,7 @@ standard-test-check-clean-force:
 
 # users can define VG_SUPPRESSIONS to suppress errors, e.g. in third party libs
 VG_SUPPRESSIONS = $(GRAL_VG_SUPPRESSIONS) $(GRAL_EXTRA_VG_SUPPRESSIONS)
-GRAL_VG_SUPPRESSIONS = -suppressions=$(CONFIGURATION)/valgrind-suppressions.txt
+GRAL_VG_SUPPRESSIONS = --suppressions=$(CONFIGURATION)/defs/valgrind-suppressions.txt
 
 VALGRIND=valgrind
 CHECKER=$(VALGRIND) -v --tool=memcheck --leak-check=yes --num-callers=10 $(VG_SUPPRESSIONS)
@@ -63,7 +63,13 @@ run-check:
            cat $$out; \
            $$echo " End output "; \
          else \
-           $(CHECKER) ./$(EXEC) > $$out.valgrind 2>&1 ; \
+           if ! $(CHECKER) ./$(EXEC) > $$out.valgrind 2>&1 ; \
+           then \
+             $$echo "ERROR running $(CHECKER) ./$(EXEC) "; \
+             $$echo "Output was: "; \
+             cat $$out.valgrind; \
+             $$echo " End output "; \
+           else \
              if  grep "ERROR SUMMARY: [1-9]" $$out.valgrind > /dev/null ; \
              then \
                 echo "Valgrind ERROR in $(EXEC):" ; \
@@ -74,6 +80,7 @@ run-check:
                echo "Valgrind memory leak error detected in $(EXEC):" ; \
                grep "definitely lost: [1-9]" $$out.valgrind ; \
              fi ;\
+           fi ; \
            $$echo "\n"; \
            for i in  *.out; \
            do \
