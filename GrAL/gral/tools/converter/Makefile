@@ -12,12 +12,8 @@ EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io gral/complex2d gral/ca
 SOURCES =  $(shell ls *.C)
 OBJECTS =  $(SOURCES:%.C=%.o)
 DEPS = $(SOURCES:%.C=%.d)
+EXEC = $(subst .C,,$(SOURCES))
 
-EXECOFF = complex2d2off
-EXECGMV = complex2d2gmv
-EXECCOMPLEX2D = complex2d2complex2d 
-EXECCARTCOMPLEX2D = cartesian2complex2d
-EXEC =  $(EXECOFF) $(EXECGMV) $(EXECCOMPLEX2D)  $(EXECCARTCOMPLEX2D)
 TARGETS = $(EXEC)
 
 include $(DEPS)
