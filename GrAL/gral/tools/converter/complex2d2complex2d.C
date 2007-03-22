@@ -73,21 +73,26 @@ int main(int argc, char* argv[]) {
 
   Ctrl.update();
 
+  if(grid_in == "") 
+    return 2;
 
   IstreamComplex2DFmt In(grid_in, offset_in);
   In.set_spacedim(sdim_in);
-
+  
   typedef Complex2D                                     grid_type;
   typedef simple_geometry<grid_type, coord_type>        geom_type;
-
+  
   grid_type  G;
   geom_type  GeomG;
   ConstructGrid(G,GeomG, In,In);
-
+  
   transformed_geom<geom_type, mapping_type> TGeomG(GeomG, M);
-
-
+  
+  if(grid_out == "")
+    grid_out = "-";
+  
   OstreamComplex2DFmt Out(grid_out, offset_out);
-
+  
   ConstructGrid(Out, G, TGeomG);
+
 }

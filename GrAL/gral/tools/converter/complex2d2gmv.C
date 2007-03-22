@@ -12,20 +12,22 @@ int main(int argc, char* argv[]) {
   ControlDevice Ctrl = 
     GetCommandlineAndFileControlDevice(argc,argv,"complex2d2gmv.in","main");
   string h = "complex2d2gmv - converted mesh in complex2d format to gmv format\n";
-  h += "Usage: complex2d2gmv -g <complex2d> -o <gmv>  -d <space dim = 2> -off <offset = 0>\n";
+  h += "Usage: complex2d2gmv -g|-i|-in <complex2d> -o|-out <gmv>  -d <space dim = 2> -off <offset = 0>\n";
   string grid_in;
   RegisterAt(Ctrl, "-g", grid_in);
+  RegisterAt(Ctrl, "-i", grid_in);
+  RegisterAt(Ctrl, "-in", grid_in);
+
   string grid_out;
-  RegisterAt(Ctrl, "-o", grid_out);
+  RegisterAt(Ctrl, "-o",   grid_out);
+  RegisterAt(Ctrl, "-out", grid_out);
+
   unsigned sdim = 2;
   RegisterAt(Ctrl, "-d", sdim);
   unsigned offset = 0;
   RegisterAt(Ctrl, "-off", offset);
 
-  Mutator* helpmsg = new MessageOnReadMutator(cerr,h);
-  Ctrl.add("-h",     helpmsg);
-  Ctrl.add("--help", helpmsg);
-  Ctrl.add("-?",     helpmsg);
+  AddHelp(Ctrl, h);
 
 
   Ctrl.update();

@@ -27,12 +27,7 @@ int main(int argc, char* argv[]) {
   unsigned offset = 0;
   RegisterAt(Ctrl, "-off", offset);
 
-  Mutator* helpmsg = new MessageOnReadMutator(cerr,h);
-  Ctrl.add("-h",     helpmsg);
-  Ctrl.add("--help", helpmsg);
-  Ctrl.add("-?",     helpmsg);
-
-
+  AddHelp(Ctrl, h);
   Ctrl.update();
 
   IstreamComplex2DFmt In(grid_in, offset);

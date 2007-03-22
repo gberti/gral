@@ -22,10 +22,9 @@ int main(int argc, char* argv[]) {
   RegisterAt(Ctrl, "-d", sdim);
   unsigned offset = 0;
   RegisterAt(Ctrl, "-off", offset);
-  Mutator* helpmsg = new MessageOnReadMutator(cerr,helptxt);
-  Ctrl.add("-h",     helpmsg);
-  Ctrl.add("--help", helpmsg);
-  Ctrl.add("-?",     helpmsg);
+
+  AddHelp(Ctrl, helptxt);
+
 
   Ctrl.update();
 
