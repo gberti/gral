@@ -25,12 +25,10 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
   typedef typename pt::component_type scalar;
   /*! \brief real type (ordered field)
 
-      \todo This type is currently not correctly defined e.g. for std::complex<>,
-      we should introduce something like scalar_traits<scalar>::real_type
-      Anyway, some of the functions in this class are not correct if 
+      \todo Some of the functions in this class are not correct if 
       \c scalar_type is \c std::complex<T>.
   */
-  typedef scalar   real; // should use scalar_traits<scalar>::real
+  typedef typename real_type<scalar>::type   real;
 
   //!  \brief Pointwise minimum
   static POINT min(const POINT& p, const POINT& q)

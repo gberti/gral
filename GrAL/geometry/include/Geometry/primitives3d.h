@@ -149,6 +149,7 @@ public:
 
   }
 
+
   static ::std::vector<POINT> basis_completion(::std::vector<POINT> const& dirs) {
     ::std::vector<POINT> res;
     if(dirs.size() == 1) {

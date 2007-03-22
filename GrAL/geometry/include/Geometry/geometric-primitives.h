@@ -299,9 +299,9 @@ class intersection_segment_triangle {
   typedef typename st::coord_type coord_type; 
   typedef algebraic_primitives<coord_type> ap;
   // assume tt::coord_type is the same
-  typedef point_traits<coord_type> pt;
-  typedef typename pt::component_type scalar;
-  typedef scalar                      real;// FIXME: should be scalar_traits::real
+  typedef point_traits<coord_type>         pt;
+  typedef typename pt::component_type      scalar;
+  typedef typename real_type<scalar>::type real;
 
   typename st::const_ref S;
   typename tt::const_ref T;
@@ -363,8 +363,8 @@ class intersection_ray_triangle {
   typedef algebraic_primitives<coord_type> ap;
   // assume tt::coord_type is the same
   typedef point_traits<coord_type> pt;
-  typedef typename pt::component_type scalar;
-  typedef scalar                      real;// FIXME: should be scalar_traits::real
+  typedef typename pt::component_type       scalar;
+  typedef typename real_type<scalar>::type  real;
 
   typename rt::const_ref R;
   typename tt::const_ref T;
