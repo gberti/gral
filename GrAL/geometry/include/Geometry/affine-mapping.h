@@ -29,10 +29,12 @@ public:
   typedef RESTYPE    result_type;
   typedef RESTYPE    coord_type;
 
-  typedef point_traits<argument_type> apt;
-  typedef point_traits<result_type >  rpt;
-  typedef matrix_traits<matrix_type>  mt;
-  typedef typename rpt::component_type         scalar_type;
+  typedef point_traits<argument_type>      apt;
+  typedef point_traits<result_type >       rpt;
+  typedef matrix_traits<matrix_type>       mt;
+  typedef algebraic_primitives<coord_type> ap;
+  typedef typename rpt::component_type           scalar_type;
+  typedef typename real_type<scalar_type>::type  real;
 private:
   matrix_type A;
   coord_type  T; 
@@ -65,6 +67,24 @@ public:
   self operator()(self const& B) const { return self(A*B.A, T + A*B.T);}
 
 
+  /*! \brief Linear part of affine mapping
+   */
+  static self linear_part(self const& A) { return self(A.TheMatrix()); }
+
+  /*! \brief Linear part of this mapping
+   */
+  self linear_part() const { return self::linear_part(*this);}
+
+  /*! \brief Transposed of linear part
+   */
+  static self transposed(self const& A) { return self(mt::transpose(A.TheMatrix()));}
+
+  /*! \brief Transposed of linear part of this mapping
+   */ 
+  self transposed() const { return self::transposed(*this);}
+
+  /*! \brief Construct identity mapping
+   */
   static self identity() 
   {
     typedef matrix_traits<matrix_type> mt;
@@ -74,6 +94,8 @@ public:
     return self(sc);
   }
 
+  /*! \brief Construct translation mapping
+   */
   static self translation(coord_type t)
   {
     typedef matrix_traits<matrix_type> mt;
@@ -83,6 +105,8 @@ public:
     return self(sc, t);
   } 
 
+  /*! brief Construct scaling mapping with diagonal \c s
+   */
   static self scaling(coord_type s) 
   {
     typedef matrix_traits<matrix_type> mt;
@@ -103,10 +127,12 @@ public:
   }
 
   /*! \brief Generate a rotation about \c axis0 counterclockwise
+
+      \param axis0 rotation axis
+      \param angle rotation angle in radians
    */
-  static self rotation3d(coord_type axis0, scalar_type angle) 
+  static self rotation3d(coord_type axis0, real angle) 
   {
-    typedef algebraic_primitives<coord_type> ap;
     ap::normalize(axis0);
     scalar_type ca = cos(angle);
     scalar_type sa = sin(angle);
@@ -138,6 +164,29 @@ public:
 
     return self(R);
   }
+
+  /*! \brief When is an angle considered zero?
+   */
+  static real  angle_eps() { return std::numeric_limits<real>::epsilon(); }
+
+  /*! \brief Return mapping rotating \c x to \c Ax
+   */ 
+  static self rotate_to(coord_type x, coord_type Ax)
+  {
+    x  = ap::normalization( x);
+    Ax = ap::normalization(Ax);
+    coord_type     axis  = ap::vectorproduct(x,Ax);
+    real           angle = ap::angle(x,Ax);
+    if(fabs(angle) < self::angle_eps() )
+      return self::identity();
+    else if( fabs(fabs(angle) - M_PI) < self::angle_eps()) {
+      coord_type perp = ap::any_perp(x);
+      return self::rotation3d(perp, angle);
+    }
+    else
+      return rotation3d(axis,angle);
+  }
+
   /*! \brief Inverse mapping of \c A
 
      This works only if the mapping is invertible.
@@ -155,6 +204,8 @@ public:
   coord_type solve(coord_type const& b) {
     return inverse(*this)(b);
   }
+
+
 };
 
 template<class MATRIX, class ARGTYPE, class RESTYPE>

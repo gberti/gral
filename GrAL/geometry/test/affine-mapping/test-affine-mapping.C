@@ -77,6 +77,13 @@ void test_mapping3d(std::ostream& out)
   cout << "R4=\n" << R4 << '\n'  
        << "R5=\n" << R5 << '\n'  
        << "R6=\n" << R6 << '\n';
+
+  cout << "R4^T=\n" << mapping_t::transposed(R4) << "\n";
+
+  { cout << "rotate_to(e1, e1):\n"    << mapping_t::rotate_to(e1,  e1)    << "\n"; }
+  { cout << "rotate_to(e1, -e1):\n"   << mapping_t::rotate_to(e1, -e1)    << "\n"; }
+  { cout << "rotate_to(e1, e2):\n"    << mapping_t::rotate_to(e1,  e2)    << "\n"; }
+  { cout << "rotate_to(e1, e1+e2):\n" << mapping_t::rotate_to(e1,  e1+e2) << "\n"; }
 }
 
 
