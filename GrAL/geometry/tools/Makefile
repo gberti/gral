@@ -6,7 +6,7 @@ LIBS =  -lexternal-control -lgeometry -lutilities
 
 EXTRA_DEPMODULES = sequence external-control
 
-transform: transform.o
+transform.exe: transform.o
 	$(CC) -o $(<:%.o=%.exe) $< $(LDFLAGS) $(LIBS)
 
 all: rot
