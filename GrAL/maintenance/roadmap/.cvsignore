@@ -1,0 +1,3 @@
+gral_roadmap.pdf gral_roadmap.ps
+toolspyramid.eps toolspyramid.pdf
+*.dvi *.aux *.toc *.log 
