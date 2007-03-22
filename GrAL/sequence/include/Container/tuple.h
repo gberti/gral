@@ -568,14 +568,14 @@ does_divide(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 
     \ingroup compalgtupleoperators
 */
-template<class T, unsigned N>
+template<class T, class U, unsigned N>
 inline
 tuple<T,N>
-clamp_tuple(tuple<T,N> const& low, tuple<T,N> const& high, tuple<T,N> const p)
+clamp_tuple(tuple<U,N> const& low, tuple<U,N> const& high, tuple<T,N> const p)
 { 
   tuple<T,N> res;
   for(unsigned i = 0; i < N; ++i)
-    res[i] = (p[i] < low[i] ? low[i] : ( high[i] < p[i] ? high[i] : p[i]));
+    res[i] = (p[i] < low[i] ? T(low[i]) : ( high[i] < p[i] ? T(high[i]) : p[i]));
   return res;
 }
 
