@@ -1,7 +1,7 @@
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../mk.config
 
-ifdef WITHMETIS
+ifeq ($(WITHMETIS),true)
 METISDIR  = metis
 SUBDIRS  += $(METISDIR)
 endif
@@ -11,6 +11,5 @@ endif
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
 
-check:
-	echo "No checks"
+
 
