@@ -12,6 +12,7 @@
 // Gral Base
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Subranges/enumerated-subrange.h"
+#include "Gral/Subranges/enumerated-element-range.h"
 #include "Gral/Iterators/boundary-iterator.h"
 
 // Utility
