@@ -182,12 +182,12 @@ int main() {
   test_cell_iterator          (C, std::cout);
   test_vertex_on_cell_iterator(C, std::cout);
 
-  int tri[3][2] = { {0, 1}, {1,2}, {2,0}};
+  grid_types<ComplexND<1> >::size_type tri[3][2] = { {0, 1}, {1,2}, {2,0}};
   ComplexND<1> triangle(tri, 3);
   cout << "ComplexND<1> triangle incidences:" << endl;
   print_incidences(triangle, cout);
 
-  int edg[1][2] = { {0,1} };
+  grid_types<ComplexND<1> >::size_type edg[1][2] = { {0,1} };
   ComplexND<1> edges(edg, 1);
   cout << "ComplexND<1> single edge incidences:" << endl;
   print_incidences(edges, cout);

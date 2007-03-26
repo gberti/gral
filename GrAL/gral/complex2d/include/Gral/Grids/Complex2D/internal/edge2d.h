@@ -84,8 +84,8 @@ public:
 
   //---------------- comparision ------------------------
 
-  friend bool operator< (const self& lhs, const self& rhs);
-  friend bool operator==(const self& lhs, const self& rhs);
+  friend inline bool operator< (const self& lhs, const self& rhs);
+  friend inline bool operator==(const self& lhs, const self& rhs);
   friend bool operator!=(const self& lhs, const self& rhs)
     { return !(lhs == rhs);}
 

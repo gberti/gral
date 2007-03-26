@@ -43,8 +43,8 @@ void copy_cells_no_archetypes(Complex2D& G,
     typename vertex_list::iterator lv(cc._cell_vertices(pc).begin());
     src_vertex_on_cell_it src_lv((*src_c).FirstVertex());
     for(; ! src_lv.IsDone(); ++src_lv) {
-      (int&)(*lv) = vtx_corr[src_lv.handle()];
-      (int&)(*ln) = boundary; // correct neighbour is calculated later
+      (*lv) = vtx_corr[src_lv.handle()];
+      (*ln) = boundary; // correct neighbour is calculated later
       ++lv;
       ++ln;
     }
@@ -113,7 +113,7 @@ void copy_cells_archetypes(Complex2D      & G_dst,
        lv_src(G_src.Archetype(a_src).FirstVertex());
     for(; ! vc_src.IsDone(); ++vc_src, ++lv_src) {
       int lv = morphism[a_src][lv_src.handle()];
-      (int&)(verts [lv]) = vtx_corr[vc_src.handle()];
+      verts [lv] = vtx_corr[vc_src.handle()];
     }
 
 
@@ -122,7 +122,7 @@ void copy_cells_archetypes(Complex2D      & G_dst,
                                                 // (used to mark unknown neighbours)
     c2d::cell_list&  neighb(cc._cell_neighbours(pc));
     for(int ln = 0; ln < c_dst.NumOfFacets(); ++ln)
-      (int&)(neighb[ln]) = boundary; // correct neighbour is calculated later
+      neighb[ln] = boundary; // correct neighbour is calculated later
   }
 
 }

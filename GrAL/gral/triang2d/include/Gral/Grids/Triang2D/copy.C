@@ -27,7 +27,7 @@ void copy_cells(Triang2D       & G,
   // first unused cell handle, = 0 if new grid
   cell_handle hc = G.NumOfCells();
 
-  int * cells = new int[3*(G_src.NumOfCells()+hc)];
+  gt::size_type * cells = new gt::size_type[3*(G_src.NumOfCells()+hc)];
 
   //  copy(G.cells_(),G.cells_() + 3*hc, cells + 3*hc);
 

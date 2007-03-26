@@ -20,7 +20,7 @@ int main() {
 
   const int nc = 2;
   const int nv = 5;
-  int    cells [4*nc] = { 0, 1, 2, 3,   1, 3, 2, 4};
+  gt::size_type  cells [4*nc] = { 0, 1, 2, 3,   1, 3, 2, 4};
   double coords[3*nv] = { 0.0, 0.0, 0.0,
 			  1.0, 0.0, 0.0, 
 			  0.0, 1.0, 0.0, 

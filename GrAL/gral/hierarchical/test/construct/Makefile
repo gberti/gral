@@ -37,7 +37,8 @@ $(TARGETS): $(LOCALOBJECTS)
 run:
 	$(EXEC) 
 
-check: run-check
+check:
+	$(MAKE) run-check FILTER=$(CONFIGURATION)/scripts/program-error-mgs-filter.pl
 
 
 clean: stdclean

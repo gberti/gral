@@ -58,7 +58,7 @@ struct grid_types_base_Triang2D : public grid_types_detail::grid_types_root {
 
   typedef polygon1d::polygon                 archetype_type;
   typedef archetype_type const*              archetype_iterator;
-  typedef int                                archetype_handle;
+  typedef size_type                          archetype_handle;
   typedef grid_types<archetype_type>         archgt;
   typedef archetype_geometry<grid_type, archetype_type> archetype_geom_type;
   typedef archetype_geom_type::coord_type    local_coord_type;

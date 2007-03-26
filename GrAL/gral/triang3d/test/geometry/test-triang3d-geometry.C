@@ -18,7 +18,7 @@ int main() {
   typedef Triang3D                 grid_type;
   typedef stored_geometry_triang3d geom_type;
   typedef grid_types<grid_type>    gt;
-  typedef int tet[4];
+  typedef gt::size_type tet[4];
   typedef double ct[3];
 
   {
@@ -48,7 +48,7 @@ int main() {
     int nc = sizeof(tri)/sizeof(tet);
     int nv = sizeof(coords)/sizeof(ct);
 
-    grid_type T((int *)tri, nc, nv);
+    grid_type T((gt::size_type *)tri, nc, nv);
     geom_type GeomT1(T, (double *)coords);
 
     grid_function<gt::Vertex, double> sum_ratios(T,0.0);
@@ -83,7 +83,7 @@ int main() {
     int nc = sizeof(tri)/sizeof(tet);
     int nv = sizeof(coords)/sizeof(ct);
 
-    grid_type T((int *)tri, nc, nv);
+    grid_type T((gt::size_type *)tri, nc, nv);
     geom_type Geom(T, (double *)coords);
   
     cout << "Triangulation: #cells=" << nc << "; #vertices=" << nv << endl;

@@ -40,17 +40,17 @@ int main() {
   using namespace GrAL;
   using namespace std;
 
-  typedef int triangle[3];
+  typedef gt2d::size_type triangle[3];
   triangle t[] = { {0,1,2}, {1,3,2}, {1,4,3}};
   typedef double ct[2];
   typedef coord_type co;
   ct       coords[] = {   {0.0, 0.0},   {1.0, 0.0},   {0.0, 1.0},   {1.0, 1.0},   {1.5, 0.0}};
   co       ff[]     = { co(0.0, 0.0), co(1.0, 0.0), co(0.0, 1.0), co(1.0, 1.0), co(1.5, 0.0)};
   
-  int nc = sizeof(t)/sizeof(triangle);
-  int nv = sizeof(coords)/sizeof(ct);
+  gt2d::size_type nc = sizeof(t)/sizeof(triangle);
+  gt2d::size_type nv = sizeof(coords)/sizeof(ct);
 
-  grid2d_type T    ((int*)t, nc, nv);
+  grid2d_type T    ((gt2d::size_type*)t, nc, nv);
   geom2d_type GeomT(T, (double *)coords);
 
   grid_function<gt2d::Vertex, coord_type> f(T);

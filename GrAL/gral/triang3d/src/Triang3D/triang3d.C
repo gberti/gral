@@ -46,14 +46,14 @@ void Triang3D::clear()
   ncells = nvertices = 0;
 }
 
-int Triang3D::calc_num_of_vertices() 
+  Triang3D::size_type Triang3D::calc_num_of_vertices() 
 {
   std::vector<bool>  found_vertices((dim+1)*ncells, false); // max. number of vertices
-  for(int c = 0; c < ncells; ++c)
+  for(size_type c = 0; c < ncells; ++c)
     for(int vc = 0; vc < dim+1; ++vc)
       found_vertices[cells[(dim+1)*c+vc]] = true;
   bool found = true;
-  int v = -1;
+  size_type v = -1;
   while(found) {
     found &= found_vertices[++v];
   }
@@ -71,7 +71,7 @@ int Triang3D::calc_num_of_vertices()
 
 void Triang3D::do_copy() 
 {
-    int * my_cells = new int[(dim+1)*ncells];
+    size_type * my_cells = new size_type[(dim+1)*ncells];
     std::copy(cells, cells+(dim+1)*ncells, my_cells);
     cells = my_cells;
     owned = true;
@@ -79,7 +79,7 @@ void Triang3D::do_copy()
 
 void Triang3D::DoCopy() { if (!owned) do_copy();}
 
-void Triang3D::Steal(int* c, int nc, int nv)
+void Triang3D::Steal(Triang3D::size_type* c, Triang3D::size_type nc, Triang3D::size_type nv)
 {
   clear();
   cells = c;
