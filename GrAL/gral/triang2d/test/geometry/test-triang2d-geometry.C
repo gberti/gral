@@ -20,7 +20,7 @@ int main() {
   typedef grid_types<grid_type>    gt;
   typedef geom_type::coord_proxy    coord_type;
 
-  typedef int triangle[3];
+  typedef gt::size_type triangle[3];
   typedef double ct[2];
 
   {
@@ -28,10 +28,10 @@ int main() {
     
     ct coords[] = { {0.0, 0.0}, {1.0, 0.0}, {1.0, 1.0}, {0.0,1.0}, {0.5,0.4} };
     
-    int nc = sizeof(tri)/sizeof(triangle);
-    int nv = sizeof(coords)/sizeof(ct);
+    gt::size_type nc = sizeof(tri)/sizeof(triangle);
+    gt::size_type nv = sizeof(coords)/sizeof(ct);
     
-    grid_type T((int *)tri, nc, nv);
+    grid_type T((gt::size_type *)tri, nc, nv);
     geom_type GeomT1(T, (double *)coords);
     
     grid_function<gt::Vertex, double> sum_ratios(T,0.0);
@@ -57,9 +57,9 @@ int main() {
     
     ct coords[] = { {0.0, 0.0}, {1.0, 0.0}, {0.0,1.0}, {1.0, 1.0} };
     
-    int nc = sizeof(tri)/sizeof(triangle);
-    int nv = sizeof(coords)/sizeof(ct);
-    grid_type T((int *)tri, nc, nv);
+    gt::size_type nc = sizeof(tri)/sizeof(triangle);
+    gt::size_type nv = sizeof(coords)/sizeof(ct);
+    grid_type T((gt::size_type *)tri, nc, nv);
     geom_type Geom(T, (double *)coords);
     cout << "Triangulation: #cells=" << nc << "; #vertices=" << nv << endl;
     for(gt::EdgeIterator e(T); !e.IsDone(); ++e)
@@ -87,9 +87,9 @@ int main() {
       lct(0.5, 0.5), lct(0.0, 0.5), lct(0.5, 0.0)
     };
 
-    int nc = sizeof(tri)/sizeof(triangle);
-    int nv = sizeof(coords)/sizeof(ct);
-    grid_type T((int *)tri, nc, nv);
+    gt::size_type nc = sizeof(tri)/sizeof(triangle);
+    gt::size_type nv = sizeof(coords)/sizeof(ct);
+    grid_type T((gt::size_type *)tri, nc, nv);
     geom_type Geom(T, (double *)coords);
     for(gt::CellIterator c(T); !c.IsDone(); ++c) {
       cout << "Cell " << c.handle() << "\n";
