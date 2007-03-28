@@ -233,14 +233,17 @@ namespace GrAL {
       enum { dim = base::dimension_tag::dim }; 
       typedef grid_category_d<dim>       category;      
     private:
-      grid_type_1 const& g1;
-      grid_type_2 const& g2;
+      ref_ptr<grid_type_1 const> g1;
+      ref_ptr<grid_type_2 const> g2;
 
     public:
       grid_view(grid_type_1 const& gg1,
 		grid_type_2 const& gg2)
 	: g1(gg1), g2(gg2) {}
 
+      grid_view(ref_ptr<grid_type_1 const> gg1,
+		ref_ptr<grid_type_2 const> gg2)
+	: g1(gg1), g2(gg2) {}
 
       size_type NumOfVertices() const 
       { return Grid1().NumOfVertices() + Grid2().NumOfVertices();}
@@ -252,8 +255,8 @@ namespace GrAL {
       Cell_view  <GRID1,GRID2>  FirstCell()   const;
       Cell_view  <GRID1,GRID2>  EndCell()   const;
 
-      grid_type_1 const& Grid1() const { return g1;}
-      grid_type_2 const& Grid2() const { return g2;}
+      grid_type_1 const& Grid1() const { return *g1;}
+      grid_type_2 const& Grid2() const { return *g2;}
 
       // morphisms G1 <-> Union
       // class injection1;
@@ -541,14 +544,19 @@ namespace GrAL {
       typedef coord_type_1 coord_type;
     private:
       grid_view<grid_type_1, grid_type_2> const* g;
-      GEOM1 const* geom1;
-      GEOM2 const* geom2;
+      ref_ptr<GEOM1 const> geom1;
+      ref_ptr<GEOM2 const> geom2;
    
     public:
       geom_view() : g(0) {}
+
       geom_view(grid_type const& gg, 
 		geom_type_1 const& geo1,
-		geom_type_2 const& geo2) : g(&gg), geom1(&geo1), geom2(&geo2) {}
+		geom_type_2 const& geo2) : g(&gg), geom1(geo1), geom2(geo2) {}
+
+      geom_view(grid_type const& gg, 
+		ref_ptr<geom_type_1 const> geo1,
+		ref_ptr<geom_type_2 const> geo2) : g(&gg), geom1(geo1), geom2(geo2) {}
 
 
       coord_type coord(Vertex const& v) const {
