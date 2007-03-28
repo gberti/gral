@@ -1,0 +1,17 @@
+/*! \mainpage Index of the  GrAL VTK Adapter Package, part of the GrAL (Grid Algorithms Library)
+
+     This package contains components for adapting VTK grid date structures
+     to GrAL.
+     The major components are:
+     <UL> 
+       <LI> Module \ref vtkugridadaptermodule </LI> 
+     </UL>
+  
+*/
+
+/*! \defgroup vtkugridadaptermodule GrAL adapter for VTK unstructured grid
+
+   This module provides a GrAL-compliant wrapper for vtkUnstructuredGrid.
+   It is assumed that the VTK grid to be wrapped is Glossary dimension-homogeneous.
+
+*/

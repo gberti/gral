@@ -62,7 +62,9 @@ namespace cartesiannd {
     typedef typename gt::Vertex     Vertex;
     typedef typename gt::Edge       Edge;
     typedef typename gt::Cell       Cell;
-    typedef typename gt::index_type index_type;
+    typedef typename gt::index_type        index_type;
+    typedef typename gt::cell_index_type   cell_index_type;
+    typedef typename gt::vertex_index_type vertex_index_type;
 
     typedef point_location_result<gt, coord_type> location_result_type;
   private:
@@ -246,10 +248,10 @@ namespace cartesiannd {
       return product(r, delta);
     }
     //! \brief Index i such that local_p is in cell with index i. Inverse of unit_coord.
-    index_type unit2index(coord_type local_p) const {
+    cell_index_type unit2index(coord_type local_p) const {
       //coord_type rational_index = quotient(local_p, delta);
       //index_type integral_index = floor_tuple(rational_index);
-      return floor_tuple(quotient(local_p, delta)) + low_;
+      return cell_index_type(floor_tuple(quotient(local_p, delta)) + low_);
 
     }
   public:
@@ -301,7 +303,7 @@ namespace cartesiannd {
       REQUIRE( (f_inverse != 0), "Must specifiy inverse mapping!", 1);
       coord_type p; assign_point(p,pp);
       coord_type local_p = (*f_inverse)(p); // in [0,1]^d iff p in some grid cell
-      index_type cell_of_p = unit2index(local_p);
+      cell_index_type cell_of_p = unit2index(local_p);
       if(TheGrid()->valid_cell_index(cell_of_p))
 	return location_result_type(Cell(TheGrid(), cell_of_p), p);
       else {

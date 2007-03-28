@@ -55,7 +55,7 @@ namespace complexnd  {
       // copy cells
       g.incidences[g.dimension()].resize(g_src.NumOfCells());
       for(typename srcgt::CellIterator c_src(g_src.FirstCell()); ! c_src.IsDone(); ++c_src) {
-	typename srcgt::archetype_handle a = g_src.archetype_of(c_src.handle());
+	typename srcgt::archetype_handle a = g_src.archetype_of(*c_src);
 	typename gt   ::cell_handle      c = g.add_cell(a);
 	c_corr[c_src.handle()] = c;
 	g.incidences[g.dimension()][c].resize(g.dimension()+1);

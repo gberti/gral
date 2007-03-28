@@ -662,6 +662,7 @@ namespace complexnd {
     inline
     archetype_type const& ArchetypeOf(Cell const&  c) const;
     archetype_type const& ArchetypeOf(cell_handle  c) const { return archetypes[cell_archetype[c]];}
+    archetype_handle      archetype_of(Cell const& c) const;
     archetype_handle      archetype_of(cell_handle c) const { return cell_archetype[c];}
     
     archetype_iterator BeginArchetype() const { return archetypes.begin();}
@@ -1493,6 +1494,10 @@ namespace complexnd {
   template<int D>
   typename ComplexND<D>::archetype_type const& ComplexND<D>::ArchetypeOf(typename ComplexND<D>::Cell const& c) const 
   { return archetypes[cell_archetype[c.handle()]]; }
+
+  template<int D>
+  typename ComplexND<D>::archetype_handle      ComplexND<D>::archetype_of(typename ComplexND<D>::Cell const& c) const 
+  { return archetype_of(c.handle()); }
   
 
 
@@ -1811,6 +1816,7 @@ namespace GrAL {  namespace complexnd {
   // Dummy specializations for D=0 and D=1: should never be called.
   template<>
   template<int K>
+  inline
   element_t<ComplexND<0>,K,0-K> ComplexND<0>::switched_element(element_t<ComplexND<0>,K-1,0-(K-1)> const& e_k_1,
 							       element_t<ComplexND<0>,K  ,0- K   > const& e_k,
 							       element_t<ComplexND<0>,K+1,0-(K+1)> const& e_k1) const
@@ -1818,6 +1824,7 @@ namespace GrAL {  namespace complexnd {
 
   template<>
   template<int K>
+  inline
   element_t<ComplexND<1>,K,1-K> ComplexND<1>::switched_element(element_t<ComplexND<1>,K-1,1-(K-1)> const& e_k_1,
 							       element_t<ComplexND<1>,K  ,1- K   > const& e_k,
 							       element_t<ComplexND<1>,K+1,1-(K+1)> const& e_k1) const
@@ -1827,6 +1834,7 @@ namespace GrAL {  namespace complexnd {
 
   template<int D>
   template<int K>
+  inline
   element_t<ComplexND<D>,K,D-K> ComplexND<D>::switched_element(element_t<ComplexND<D>,K-1,D-(K-1)> const& e_k_1,
 							       element_t<ComplexND<D>,K  ,D- K   > const& e_k,
 							       element_t<ComplexND<D>,K+1,D-(K+1)> const& e_k1) const
@@ -1842,16 +1850,19 @@ namespace GrAL {  namespace complexnd {
 
   // dummy specializations for D=0
   template<>
+  inline
   ComplexND<0>::Edge 
   ComplexND<0>::switched_edge(ComplexND<0>::Vertex const& v, 
 			      ComplexND<0>::Edge const& e, 
 			      ComplexND<0>::Face const& f) const { return e;}
-  template<>  
+  template<> 
+  inline
   ComplexND<0>::Face 
   ComplexND<0>::switched_face(ComplexND<0>::Edge const& e, 
 			      ComplexND<0>::Face const& f, 
 			      element_t<ComplexND<0>,3,0-3> const& c) const { return f;}
   template<>  
+  inline
   ComplexND<0>::Facet 
   ComplexND<0>::switched_facet(element_t<ComplexND<0>,0-2,2> const& e, 
 			       ComplexND<0>::Facet         const& f, 
@@ -1859,6 +1870,7 @@ namespace GrAL {  namespace complexnd {
 
 
   template<int D>
+  inline
   typename ComplexND<D>::Edge 
   ComplexND<D>::switched_edge(ComplexND<D>::Vertex const& v, 
 			      ComplexND<D>::Edge const& e, 
@@ -1866,6 +1878,7 @@ namespace GrAL {  namespace complexnd {
   { return switched_element(v,e,f);}
 
   template<int D>  
+  inline
   typename ComplexND<D>::Face ComplexND<D>::switched_face(typename ComplexND<D>::Edge const& e, 
 							  typename ComplexND<D>::Face const& f, 
 							  element_t<self,3,D-3> const& c) const

@@ -33,10 +33,10 @@ class archetype_map
   typedef typename gt1::archetype_iterator Arch1Iterator;
   typedef typename gt2::archetype_iterator Arch2Iterator;
 
-private:
-  typedef partial_grid_morphism<archetype1_type, archetype2_type>
-  arch_isomorphism;
+public:
+  typedef partial_grid_morphism<archetype1_type, archetype2_type>  arch_isomorphism;
 
+private:
   G1 const* g1;
   G2 const* g2;
   bijective_mapping<archetype1_handle, arch_isomorphism>  arch_map;
