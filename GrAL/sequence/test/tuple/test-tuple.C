@@ -28,12 +28,48 @@ int main() {
     tuple<float, 3> tf3d; tf3d = ti3;
   }
 
+
+
   {
-    tuple<float, 3> ti3b(tf3.begin(), tf3.end());  
-    tuple<float, 3> ti3c(tf3);
-    tuple<float, 3> ti3d; ti3d = tf3;
+    int x[2] = { 0, 1 };
+    tuple<int, 2>   ti2a(0);
+    tuple<int, 2>   ti2b(x);
+    tuple<int, 2>   ti2c(x, x+2);
+    tuple<float, 2> tf2e(ti2a);
+    // Copy from generic iterator pair has been disabled
+    // for 2D, to avoid ambiguities with constructor t(T t1, T t2)
+    // if actual arguments are of a different type and need implicit conversion
+    // tuple<float, 2> tf2f(ti2a.begin(), ti2a.end());
+    tuple<float, 2> tf2g(tf2e.begin(), tf2e.end());
+    //  tuple<float, 2> tf2h(x,x+2);
   }
-  
+
+
+
+  {
+    int x[3] = { 0, 1, 2 };
+    tuple<int, 3>   ti3a(0);
+    tuple<int, 3>   ti3b(x);
+    tuple<int, 3>   ti3c(x, x+3);
+    tuple<float, 3> tf3b(tf3.begin(), tf3.end());  
+    tuple<float, 3> tf3c(tf3);
+    tuple<float, 3> tf3d; tf3d = tf3;
+    tuple<float, 3> tf3e(ti3a);
+    tuple<float, 3> tf3f(ti3a.begin(), ti3a.end());
+    tuple<float, 3> tf3g(tf3b.begin(), tf3b.end());
+    tuple<float, 3> tf3h(x,x+3);
+  }
+
+  {
+    int x[4] = { 0, 1, 2, 3 };
+    tuple<int, 4>    ti4a(0);
+    tuple<int, 4>    ti4b(x);
+    tuple<int, 4>    ti4c(x, x+4);
+    tuple<double, 4> td4a(ti4a);
+    tuple<double, 4> td4b(ti4a.begin(), ti4a.end());
+    tuple<double, 4> td4c(td4b.begin(), td4b.end());
+    tuple<double, 4> td4d(x, x+4);
+  }  
 
   {
     tuple<int,   3> ti3b = product(ti3,ti3);

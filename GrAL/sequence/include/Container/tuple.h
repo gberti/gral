@@ -19,6 +19,7 @@ namespace GrAL {
 // 'internal' class 
 template<class T, unsigned N>
 class tuple_base {
+  typedef tuple_base<T,N> self;
 public:
   typedef       T*       iterator;
   typedef const T* const_iterator;
@@ -27,6 +28,22 @@ public:
   typedef T  value_type;
   typedef T  c_array[N];
 
+  tuple_base() {}
+  tuple_base(self const& rhs) { copy(rhs.begin(), rhs.end());}
+  self& operator=(self const& rhs) { copy(rhs.begin(), rhs.end()); return *this;}
+
+  tuple_base(c_array const& rs)                  { copy(rs, rs+N);}
+  tuple_base(const_iterator b, const_iterator e) { copy(b,  e);   }
+
+  template<class IT>
+  void copy(IT b, IT e) { 
+    iterator i = begin();
+    while(i != end()) {
+      *i = *b;
+      ++i; ++b;
+    }
+    REQUIRE(b == e, "Input range has wrong size!", 1);
+  }
 
   // range-checking possible
   T& operator[](unsigned i)       {check_range(i); return X[i];}
@@ -66,35 +83,27 @@ class tuple : public tuple_base<T,N> {
   using base::X;
 
  public:
-  // should not be necessary ... but problems with gcc 2.96
   typedef typename base::iterator       iterator;
   typedef typename base::const_iterator const_iterator;
   typedef typename base::c_array        c_array;
 
   using base::begin;
   using base::end;
+  using base::copy;
+
+
   tuple() {}
   explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
-  tuple(const_iterator b, const_iterator /*e */)
-  { 
-    // REQUIRE(((e-b) == N),
-    // 	       "tuple<T," << N << ">::tuple(b,e) :  e-b = " << e-b << "!" ,1)
-    for(iterator it = begin(); it != end(); ++it,++b) 
-      *it = *b; 
-  }
-  template<class It>
-  tuple(It b, It e) {
-    for(iterator it = begin(); it != end(); ++it,++b) 
-      *it = *b; 
-    REQUIRE( (b == e), "invalid range in constructor!\n",1);
-  }
-  template<class U>
-  tuple(tuple<U,N> const& rhs) 
-   { for(unsigned i = 0; i < N; ++i) X[i] = T(rhs[i]);}
+  tuple(const_iterator b, const_iterator e) : base(b,e) {}
 
-  tuple<T,N> operator-() const { tuple<T,N> res; for(int i = 0; i < (int)N; ++i) res[i] = -X[i]; return res;}
-  
+  template<class It>
+  tuple(It b, It e)              { copy(b,e);  }
+
+  template<class U>
+  tuple(tuple<U,N> const& rhs)   { copy(rhs.begin(), rhs.end()); } 
+
+  tuple<T,N> operator-() const { tuple<T,N> res; for(int i = 0; i < (int)N; ++i) res[i] = -X[i]; return res;}  
   tuple<T,N>& operator+=(tuple<T,N> const& rhs) { for(int i = 0; i < (int)N; ++i) X[i] += rhs[i]; return *this;}
   tuple<T,N>& operator*=(T a)                   { for(int i = 0; i < (int)N; ++i) X[i] *= a;      return *this;}
 };
@@ -102,34 +111,19 @@ class tuple : public tuple_base<T,N> {
 template<class T>
 class tuple<T,2> : public tuple_base<T,2> {
   typedef tuple_base<T,2> base;
+  typedef tuple<T,2>      self;
   using base::X;
  public:
-  // should not be necessary ... but problems with gcc 2.96
   typedef typename base::iterator       iterator;
   typedef typename base::const_iterator const_iterator;
   typedef typename base::c_array        c_array;
   using base::begin;
   using base::end;
+  using base::copy;
 
-  // uninitialized tuple gives valgrind errors
-  //tuple() {}
-  //explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   explicit tuple(T t = 0)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
-  explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
-  explicit tuple(const_iterator b, const_iterator /*e */)
-  { 
-    for(iterator it = begin(); it != end(); ++it,++b) 
-      *it = *b; 
-  }
-  /*
-  template<class It>
-  tuple(It b, It e) {
-    for(iterator it = begin(); it != end(); ++it,++b) 
-      *it = *b; 
-    REQUIRE( (b == e), "invalid range in constructor!\n",1);
-  }
-  */
-  //tuple(T const& t1, T const& t2) { X[0] = t1; X[1] = t2;}
+  explicit tuple(const c_array& rs) : base(rs) {}
+  tuple(const_iterator b, const_iterator e) : base(b,e) {}
   tuple(T        t1, T        t2) { this->X[0] = t1; this->X[1] = t2;}
 
   template<class U>
@@ -156,26 +150,20 @@ class tuple<T,3> : public tuple_base<T,3> {
   typedef typename base::c_array        c_array;
   using base::begin;
   using base::end;
+  using base::copy;
 
   tuple() { for(iterator i = begin(); i != end(); ++i)  *i = T(0);}
   explicit tuple(const T& t)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
-  explicit tuple(const c_array& rs) { for(iterator i = begin(); i != end(); ++i)  *i = rs[i-begin()];}
-  tuple(const_iterator b, const_iterator /*e */)
-  { 
-    for(iterator it = begin(); it != end(); ++it,++b) 
-      *it = *b; 
-  }
+  explicit tuple(const c_array& rs)         : base(rs) {}
+  tuple(const_iterator b, const_iterator e) : base(b,e) {}
   template<class It>
-  tuple(It b, It e) {
-    for(iterator it = begin(); it != end(); ++it,++b) 
-      *it = *b; 
-    REQUIRE( (b == e), "invalid range in constructor!\n",1);
-  }
+  tuple(It b, It e) { copy(b,e);}
+
 
   tuple(T const& t1, T const& t2, T const& t3) { this->X[0] = t1; this->X[1] = t2; this->X[2] = t3;}
 
   template<class U>
-  tuple(tuple<U,3> const& rhs) { this->X[0] = T(rhs[0]); this->X[1] = T(rhs[1]); this->X[2] = T(rhs[2]);}
+    tuple(tuple<U,3> const& rhs) { copy(rhs.begin(), rhs.end()); } // this->X[0] = T(rhs[0]); this->X[1] = T(rhs[1]); this->X[2] = T(rhs[2]);}
 
 
   T  x() const { return X[0];}

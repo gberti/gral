@@ -8,6 +8,7 @@
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Config/compiler-config.h"
+#include "Container/tuple.h"
 
 namespace GrAL {
 
@@ -29,17 +30,21 @@ bool operator== (vtuple_2d<GRID> const& ls, vtuple_2d<GRID> const& rs);
  */
 template<class GRID>
 struct vtuple_2d {
+  typedef vtuple_2d<GRID> self;
     typedef grid_types<GRID>           gt;
     typedef GRID                       grid_type;
     typedef typename gt::vertex_handle vertex_handle;
     typedef typename gt::EdgeOnCellIterator EdgeOnCellIterator;
  
  //---- DATA ----
-  vertex_handle v[2];
+  typedef tuple<vertex_handle,2> tuple_type;
+  tuple_type  v;
      
   //---------------- construction ---------------------
 
   vtuple_2d()  {}
+  vtuple_2d(self const& rhs) : v(rhs.v) {}
+
   vtuple_2d(const vertex_handle& v1, const vertex_handle& v2) 
     { 
       if(v1 < v2) {
@@ -58,7 +63,7 @@ struct vtuple_2d {
 	}
     }
 
-  //---------------- comparision ----------------------
+  //---------------- comparison ----------------------
 
   friend bool operator<  <> (const vtuple_2d<GRID>& ls, 
 			     const vtuple_2d<GRID>& rs);
@@ -67,14 +72,14 @@ struct vtuple_2d {
 
   //-------- STL container interface --------------------
 
-  typedef        vertex_handle  value_type;
-  typedef        vertex_handle* iterator;
-  typedef const  vertex_handle* const_iterator;
+  typedef          vertex_handle              value_type;
+  typedef typename tuple_type::iterator       iterator;
+  typedef typename tuple_type::const_iterator const_iterator;
 
-  const_iterator begin() const { return v;}
-  const_iterator end()   const { return (v+2);}
-  iterator       begin()       { return v;}
-  iterator       end()         { return (v+2);}
+  const_iterator begin() const { return v.end();}
+  const_iterator end()   const { return v.begin();}
+  iterator       begin()       { return v.begin();}
+  iterator       end()         { return v.end();}
 
 };
 
