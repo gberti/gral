@@ -31,6 +31,37 @@ facet_on_cell_grid_function<CellMap>
   MakeFacetOnCellGridFunction(CellMap & cm)
   { return facet_on_cell_grid_function<CellMap>(cm) ;}
 
+
+  /*! \brief Iterator for a grid function via the element iterator of the underlying grid
+    
+  \ingroup gridfunctions
+  \todo The class \ref restr_gf_iterator_adapter solves a similar problem.
+        Maybe these classes should be fused.
+   */
+  template<class G, class GF>
+  class gf_const_iterator 
+  {
+    typedef gf_const_iterator<G,GF>      self;
+
+    typedef grid_types<G>                gt;
+    typedef typename GF::element_type    element_type;
+    typedef typename GF::value_type      value_type;
+    typedef element_traits<element_type> et;
+    typedef typename sequence_iterator<gt, typename et::element_type_tag>::type element_iterator;
+
+    element_iterator  it;
+    ref_ptr<GF const> gf;
+  public:
+    gf_const_iterator(element_iterator i, GF const& f) : it(i), gf(f) {}
+
+    self&      operator++()       { ++it; return *this;}
+    value_type operator* () const { return (*gf)(*it);}
+    
+    bool operator==(self const& rhs) const { return   it == rhs.it;}
+    bool operator!=(self const& rhs) const { return !(it == rhs.it);}
+  };
+
+
 } // namespace GrAL 
 
 #endif
