@@ -9,14 +9,19 @@
 #include "Gral/Grids/Triang3D/all.h"
 #include "Gral/Grids/Cartesian3D/all.h"
 #include "Gral/IO/complex2d-format-input.h"
+#include "Gral/IO/complex2d-format-output.h"
 
+#include "Gral/Base/grid-morphism.h"
+#include "Gral/Geometries/simple-geometry.h"
 
 // VTK
 #include "vtkUnstructuredGridWriter.h"
+#include "vtkUnstructuredGridReader.h"
 #include "vtkFloatArray.h"
+#include "vtkUnsignedCharArray.h"
 #include "vtkPointData.h"
 #include "vtkCellData.h"
-
+#include "vtkCellTypes.h"
 
 #include <functional>
 
@@ -42,14 +47,40 @@ int main() {
     stored_geometry_complex2D GeomT(T);
     ConstructGrid(T, GeomT, Gsrc, Gsrc);
     vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
-    
+    typedef grid_types<vtk_ugrid::UGridVTKAdapter<2> > vtkgt;
+
     ConstructGrid(vtkgrid, vtkgrid, T, GeomT);
+    //vtkgrid.GetAdaptee()->GetCellTypesArray()->PrintSelf(std::cerr,0);
+    vtkCellTypes * ct = vtkCellTypes::New();
+    vtkgrid.GetAdaptee()->GetCellTypes(ct);
+    for(int t = 0; t <  ct->GetNumberOfTypes(); ++t) {
+      cerr << "Cell type " << t << " = " << vtkgt::VTK_type(ct->GetCellType(t)) << "\n";
+    }
+      
     
     vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
     writer->SetFileName("tri+quad.vtk");
     writer->SetInput(vtkgrid.GetAdaptee());
     writer->Write();
     writer->Delete();
+  }
+
+  {
+    // read back grid
+    vtkUnstructuredGridReader *reader = vtkUnstructuredGridReader::New();
+    reader->SetFileName("tri+quad.vtk");
+    reader->Update();
+    //vtkUnstructuredGrid * ug = reader->GetOutput();
+    vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
+    vtkgrid.SetAdaptee(reader->GetOutput());
+    reader->Delete();
+    Complex2D G;
+    //    stored_geometry_complex2D Geom;
+    simple_geometry<Complex2D, vtk_ugrid::UGridVTKAdapter<2>::coord_type> Geom;
+    ConstructGrid(G, Geom, vtkgrid, vtkgrid);
+    OstreamComplex2DFmt Out("tri+quad.complex2d");
+    //ConstructGrid(Out, vtkgrid, vtkgrid);
+    ConstructGrid(Out, G, Geom);
   }
 
   {
@@ -100,6 +131,7 @@ int main() {
     writer->SetInput(vtkgrid.GetAdaptee());
     writer->Write();
     writer->Delete();
+
   }
 
   {
@@ -113,6 +145,36 @@ int main() {
 
     vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
     writer->SetFileName("cart3d.vtk");
+    writer->SetInput(vtkgrid.GetAdaptee());
+    writer->Write();
+    writer->Delete();
+  }
+  {
+    typedef cartesian3d::CartesianGrid3D   grid_type;
+    typedef grid_types<grid_type>          gt;
+    grid_type T(2,2,2);
+    cartesian3d::lattice_geometry GeomT(T);
+
+    typedef vtk_ugrid::UGridVTKAdapter<3> vtk_grid_type;
+    vtk_grid_type                             vtkgrid;
+    vertex_morphism<grid_type, vtk_grid_type> cart2vtk_v(T, vtkgrid);
+    cell_morphism  <grid_type, vtk_grid_type> cart2vtk_c(T, vtkgrid);
+    ConstructGridVC(vtkgrid, vtkgrid, T, GeomT, cart2vtk_v, cart2vtk_c);
+    
+    vtkFloatArray *vectors = vtkFloatArray::New();
+    vectors->SetNumberOfComponents(3);
+    vectors->SetNumberOfTuples(vtkgrid.NumOfVertices());
+    for(gt::VertexIterator v(T); !v.IsDone(); ++v) {
+      gt::index_type idx = v.index();
+      float val[3] = { idx[0], idx[1], idx[2] };
+      vectors->SetTuple(cart2vtk_v(v.handle()), val);
+    }
+    
+    vtkgrid.GetAdaptee()->GetPointData()->SetVectors(vectors);
+    vectors->Delete();
+
+    vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
+    writer->SetFileName("cart3d+data.vtk");
     writer->SetInput(vtkgrid.GetAdaptee());
     writer->Write();
     writer->Delete();
