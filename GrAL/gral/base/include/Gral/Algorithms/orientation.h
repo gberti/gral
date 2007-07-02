@@ -84,7 +84,9 @@ namespace GrAL {
 	  Cell c = cells.front(); cells.pop();
 	  for( coc_type cc(c); !cc.IsDone(); ++cc) {
 	    FacetOnCellIterator f1 = cc.TheFacetOnCellIterator();
-	    FacetOnCellIterator f2 = std::find((*cc).FirstFacet(), (*cc).EndFacet(), *f1);
+	    FacetOnCellIterator f2 = std::find(GrAL::begin<FacetOnCellIterator>(*cc),
+					       GrAL::end  <FacetOnCellIterator>(*cc), *f1);
+	    // FacetOnCellIterator f2 = std::find((*cc).FirstFacet(), (*cc).EndFacet(), *f1);
 	    if(visited(*cc)) {
 	      if(orientation(*cc) != - relative_orientation(f1,f2) * orientation(c))
 		// not orientable
@@ -118,26 +120,46 @@ namespace GrAL {
 	  induced by \c f1 and \c f2. For instance, in a 2D grid, this means that if the edge
           \c *f1 is represented with opposite vertex ordering by \c f1 and \c f2, 
           the result should be -1, and +1 otherwise. 
-
+    - \c C
+       - Model of $GrAL GridCell
     \param g input grid, orientation of some cells will be changed on output
+    \param \c guide_cell Cell with reference orientation
     \return true if the grid \g is orientable, and false otherwise.
 
     \pre \c g is a  Glossary manifold-with-boundary grid
-    \post On return, \c g is oriented such that  a call to \c get_orientation(g, orient) will yield <tt> orientation(c) == 1</tt>
+    \pre \c c \f$ \in \f$ \c  g
+    \post On return, \c g is oriented consistent with \c guide_cell, 
+     such that  a call to \c get_orientation(g, orient) will yield <tt> orientation(c) == 1</tt>
      for each cell \c c of \c g.
  
      \see Tested in \ref test-orientation.C
+     \todo Extend to list of guide cells for disconnected grids.
      
   */
-  template<class G>
-  bool fix_orientation(G & g) {
+
+
+  template<class G, class C>
+  bool fix_orientation(G & g, C guide_cell) {
     typedef grid_types<G> gt;
     grid_function<typename gt::Cell, int> orientation(g,0);
     bool orientable = get_orientation(g, orientation);
+    int default_orientation = orientation(guide_cell);
     for(typename gt::CellIterator c(g); !c.IsDone(); ++c)
-      if(orientation(*c) < 0) 
+      if(orientation(*c)*default_orientation < 0) 
 	g.swap_orientation(*c);
     return orientable;
+  }
+
+  /*! \brief Convenience wrapper for orientation
+
+    \ingroup orientation_algorithms 
+   
+     Equivalent to <tt> fix_orientation(g, * g.FirstCell()) </tt>
+
+  */
+  template<class G, class C>
+  bool fix_orientation(G & g) {
+    return fix_orientation(g, * g.FirstCell());
   }
 
 
