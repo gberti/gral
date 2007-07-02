@@ -51,6 +51,8 @@ int main(int argc, char* argv[]) {
    coord_type rot_to  (1,0,0);
    GrAL::RegisterAt(Ctrl, "-rot_from", rot_from);
    GrAL::RegisterAt(Ctrl, "-rot_to",   rot_to);
+   h += "    -rot_from <direction from> -rot_to<direction to> \n";
+   h += "           (rotate direction 'from' to 'to', args are normalised).\n"; 
 
    double sd(1.0);
    
