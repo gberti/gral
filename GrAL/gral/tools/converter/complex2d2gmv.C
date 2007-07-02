@@ -7,7 +7,7 @@ int main(int argc, char* argv[]) {
   using namespace GrAL;
   using namespace std;
 
-  cout << "------ Starting complex2d2gmv -------\n" << endl;
+  cerr << "------ Starting complex2d2gmv -------\n" << endl;
 
   ControlDevice Ctrl = 
     GetCommandlineAndFileControlDevice(argc,argv,"complex2d2gmv.in","main");
@@ -37,7 +37,7 @@ int main(int argc, char* argv[]) {
 
   OstreamGMV2DFmt     Out(grid_out);
 
-  cout << "Reading grid from file " << grid_in << " ... " << flush;
+  cerr << "Reading grid from file " << grid_in << " ... " << flush;
   ConstructGrid(Out, In, In);
-  cout << "Written to gmv file " << grid_out << endl;
+  cerr << "Written to gmv file " << grid_out << endl;
 }

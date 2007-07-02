@@ -12,16 +12,20 @@ int main(int argc, char* argv[]) {
   using namespace GrAL;
   using namespace std;
 
-  cout << "------ Starting complex2d2dx -------\n" << endl;
+  cerr << "------ Starting complex2d2dx -------\n" << endl;
 
   ControlDevice Ctrl = 
     GetCommandlineAndFileControlDevice(argc,argv,"","main");
   string h = "complex2d2dx - converted mesh in complex2d format to Open DX format\n";
-  h += "Usage: complex2d2dx -g <complex2d> -o <gmv>  -d <space dim = 2> -off <offset = 0>\n";
+  h += "Usage: complex2d2dx -g|-i|-in <complex2d file> -o|-out|-dx <dx file>  -d <space dim = 2> -off <offset = 0>\n";
   string grid_in;
-  RegisterAt(Ctrl, "-g", grid_in);
+  RegisterAt(Ctrl, "-g",  grid_in);
+  RegisterAt(Ctrl, "-i",  grid_in);
+  RegisterAt(Ctrl, "-in", grid_in);
   string grid_out;
-  RegisterAt(Ctrl, "-o", grid_out);
+  RegisterAt(Ctrl, "-o",   grid_out);
+  RegisterAt(Ctrl, "-out", grid_out);
+  RegisterAt(Ctrl, "-dx",  grid_out);
   unsigned sdim = 2;
   RegisterAt(Ctrl, "-d", sdim);
   unsigned offset = 0;
@@ -33,21 +37,21 @@ int main(int argc, char* argv[]) {
   IstreamComplex2DFmt In(grid_in, offset);
   In.set_spacedim(sdim);
 
-  cout << "Reading grid from file " << grid_in << " ... " << flush;
+  cerr << "Reading grid from file " << grid_in << " ... " << flush;
 
   Complex2D G;
   typedef coordN<3> coord_type;
   simple_geometry<Complex2D, coordN<3> >  GeomG(G);
   //  stored_geometry_complex2D GeomG(G);
   ConstructGrid(G, GeomG, In, In);
-  cout << " done." << endl; 
+  cerr << " done." << endl; 
 
   typedef grid_types<Complex2D> gt;
   // typedef stored_geometry_complex2D::coord_type coord_type;
 
   typedef point_traits<coord_type> pt;
 
-  cout << "Writing DX file to \"" << grid_out << "\" ... ";
+  cerr << "Writing DX file to \"" << grid_out << "\" ... ";
   ofstream out(grid_out.c_str());
 
   out << "# Created by complex2d2dx\n";
@@ -96,5 +100,5 @@ int main(int argc, char* argv[]) {
   out << "end" << endl;
   out.close();
 
-  cout << " done." << endl;
+  cerr << " done." << endl;
 }
