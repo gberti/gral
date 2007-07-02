@@ -109,7 +109,7 @@ void ConstructGridVC(Triang2D       & G,
  typedef typename grid_types<G2>::VertexIterator   src_vertex_it;
  typedef typename grid_types<Triang2D>::Vertex     Vertex;
  for(src_vertex_it src_v = srcG.FirstVertex(); ! src_v.IsDone(); ++src_v) {
-   Vertex V = VertexCorr(*src_v);
+   Vertex V(G,VertexCorr(src_v.handle()));
    assign_point(destGeom.coord(V) , srcGeom.coord(*src_v));
  }
 }
@@ -141,7 +141,7 @@ void ConstructGrid0(Triang2D       &  G,
   G.init(0, 0, srcG.NumOfVertices());
   int v = 0;
   for(src_vertex_it src_v = srcG.FirstVertex(); ! src_v.IsDone(); ++src_v, ++v) {
-    VertexCorr[*src_v] = Vertex(G,v);
+    VertexCorr[src_v.handle()] = Vertex(G,v).handle();
   }
   
 

@@ -31,17 +31,18 @@ void copy_cells(Triang2D       & G,
 
   //  copy(G.cells_(),G.cells_() + 3*hc, cells + 3*hc);
 
+  //  for(src_cell_it src_c = begin_x(G_src); ! src_c.IsDone(); ++src_c, ++hc){
   for(src_cell_it src_c = G_src.FirstCell(); ! src_c.IsDone(); ++src_c, ++hc){
-    REQUIRE(((*src_c).NumOfVertices() == 3),
-	    "Can handle only triangles, or  NumOfVertices() was "
-	    << (*src_c).NumOfVertices() << "!\n",1);
+    REQUIRE((size_d<0>(*src_c) == 3),
+	    "Can handle only triangles, but  NumOfVertices() was "
+	    << size_d<0>(*src_c) << "!\n",1);
 
     cell_corr[src_c.handle()] = hc;
     
     int lv = 0;
-    src_vertex_on_cell_it src_lv((*src_c).FirstVertex());
+    src_vertex_on_cell_it src_lv = (*src_c).FirstVertex(); // begin_x(*src_c);
     for(; ! src_lv.IsDone(); ++src_lv, ++lv) {
-      cells[3*hc+lv] = vtx_corr(*src_lv).handle();
+      cells[3*hc+lv] = vtx_corr(src_lv.handle());
     }
    
   }
