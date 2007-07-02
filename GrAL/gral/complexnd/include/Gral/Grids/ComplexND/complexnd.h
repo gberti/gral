@@ -619,6 +619,8 @@ namespace complexnd {
 			       : Incidences(f)[dimension()][0])));
     }
 
+    void switch_vertex(Vertex     & v, Edge const& e) const { v = switched_vertex(v,e);}
+    void switch_cell  (Facet const& f, Cell      & c) const { c = switched_cell  (f,c);}
 
     // must make them public because friend definition does not work
     // private:
