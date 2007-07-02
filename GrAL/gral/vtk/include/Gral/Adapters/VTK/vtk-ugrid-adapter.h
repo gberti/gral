@@ -58,13 +58,21 @@ template <int D>
 class UGridVTKAdapter;
 
 
-  template<int D> struct get_archetype_type     { typedef complexnd::ComplexND<D-1> type;};
-  template<>      struct get_archetype_type<3>  { typedef Complex2D                 type;};
-  template<>      struct get_archetype_type<ANY>{ typedef complexnd::ComplexND<ANY> type;};
+template<int D> struct get_archetype_type     { typedef complexnd::ComplexND<D-1> type;};
+template<>      struct get_archetype_type<3>  { typedef Complex2D                 type;};
+template<>      struct get_archetype_type<ANY>{ typedef complexnd::ComplexND<ANY> type;};
     
 
+  class UGridVTKArchetypes_Base {
+  public:
+    static std::string VTK_type(int t);
+  }; 
+
 template <int D>
-struct grid_types_UGridVTKAdapter : public grid_types_detail::grid_types_root {
+struct grid_types_UGridVTKAdapter 
+  : public grid_types_detail::grid_types_root,
+    public UGridVTKArchetypes_Base 
+{
   typedef UGridVTKAdapter<D>       grid_type;
   typedef VertexVTK<grid_type>              Vertex;
   typedef CellVTK<grid_type>                Cell;
@@ -98,7 +106,9 @@ struct grid_types_UGridVTKAdapter : public grid_types_detail::grid_types_root {
 
 // Singleton class
 template <int D>
-class UGridVTKArchetypes : public grid_types_UGridVTKAdapter<D> {
+class UGridVTKArchetypes 
+  : public grid_types_UGridVTKAdapter<D>
+ {
   typedef grid_types_UGridVTKAdapter<D> gt;
   public:
   typedef bijective_mapping<int, std::string> archetype_name_map;
@@ -396,7 +406,8 @@ public:
   typedef typename gt::vertex_handle vertex_handle;
   typedef typename gt::grid_type anchor_type;
   typedef typename gt::grid_type grid_type;
-
+  typedef vertex_type_tag      element_type_tag;
+  typedef grid_vertex_category category;
   private:
     handle_type vid_;
     const grid_type *grid_;
@@ -477,8 +488,10 @@ class VertexIteratorVTK  : public grid_types_UGridVTKAdapter<GRID::dim> {
   typedef typename gt::vertex_handle vertex_handle;
   typedef typename gt::grid_type anchor_type;
   typedef typename gt::grid_type grid_type;
-  typedef  typename gt::Vertex element_type; 
-  typedef  element_type value_type;
+
+  typedef typename gt::Vertex         element_type; 
+  typedef element_type                value_type;
+  typedef grid_cell_iterator_category category;
 
   private:
   handle_type pos_;
@@ -597,7 +610,10 @@ class CellVTK : public grid_types_UGridVTKAdapter<GRID::dim> {
   typedef typename gt::grid_type grid_type;
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
 
-  //friend class vtk_ugrid::VertexOnCellIterator<GRID>;
+  typedef cell_type_tag      element_type_tag;
+  typedef grid_cell_category category;
+
+  friend class vtk_ugrid::VertexOnCellIteratorVTK<GRID>;
 
   private:
 
@@ -702,6 +718,9 @@ class CellVTK : public grid_types_UGridVTKAdapter<GRID::dim> {
     return cellvtk_->GetNumberOfPoints();
   }
 
+  inline VertexOnCellIterator FirstVertex() const;
+  inline VertexOnCellIterator EndVertex() const;
+  
   // checking functions
   inline bool bound() const {  return grid_ != 0; }
   inline bool valid() const { 
@@ -737,9 +756,9 @@ class CellIteratorVTK : public grid_types_UGridVTKAdapter<GRID::dim> {
   typedef typename gt::grid_type anchor_type;
   typedef typename gt::grid_type grid_type;
   typedef typename gt::Cell Cell;
-  typedef  Cell element_type; 
-  typedef  element_type value_type;
-
+  typedef Cell                        element_type; 
+  typedef element_type                value_type;
+  typedef grid_cell_iterator_category category;
   private:
     handle_type pos_;
     handle_type endpos_;
@@ -850,25 +869,28 @@ public:
   typedef typename gt::grid_type grid_type;
   typedef typename gt::Cell Cell;
   typedef typename gt::Vertex Vertex;
-  typedef Vertex element_type; 
-  typedef  element_type value_type;
+
+  typedef Vertex       element_type; 
+  typedef element_type value_type;
+
+  typedef grid_incidence_iterator_category_d<0,GRID::dim> category;
 
 private:
-  Cell const* c_;
-  vertex_handle  vc_;
-  vertex_handle  vc_end_;
+  Cell      c_;
+  int       vc_;
+  int       vc_end_;
   vtkIdList *nodes_;
 
 public:
-  inline VertexOnCellIteratorVTK() : c_(NULL), vc_(-1), vc_end_(-1), 
+  inline VertexOnCellIteratorVTK() : vc_(-1), vc_end_(-1), 
                                      nodes_(NULL) {
     // empty body
   };
 
   inline explicit VertexOnCellIteratorVTK(Cell const& cc, 
-                                       int vvc = 0) : c_(&cc), vc_(vvc) {
-    vc_end_ = c_->NumOfVertices();
-    nodes_ = c_->cellvtk_->GetPointIds();
+                                       int vvc = 0) : c_(cc), vc_(vvc) {
+    vc_end_ = c_.NumOfVertices();
+    nodes_ = c_.cellvtk_->GetPointIds();
   }
 
   inline VertexOnCellIteratorVTK& operator++() {
@@ -888,7 +910,7 @@ public:
   }
 
   inline grid_type const& TheGrid() const {
-    return c_->TheGrid();
+    return c_.TheGrid();
   }
 
   inline Cell const& TheCell() const {
@@ -905,8 +927,8 @@ public:
   }
 
   // checking functions
-  inline bool bound() const { return c_->valid();}
-  inline bool valid() const { return c_ != NULL && c_->valid() 
+  inline bool bound() const { return c_.valid();}
+  inline bool valid() const { return c_.valid() 
                              && (0 <= vc_) && (vc_ < vc_end_); } 
   inline void cb()    const { REQUIRE (bound(), "",1);}
   inline void cv()    const { REQUIRE (valid(), "",1);}
@@ -1045,14 +1067,82 @@ UGridVTKAdapter<D>::add_cell(UGridVTKAdapter<D>::archetype_handle a) {
   return ret;
 }
 
- 
+template<class GRID>
+inline typename CellVTK<GRID>::VertexOnCellIterator
+CellVTK<GRID>::FirstVertex() const { return VertexOnCellIterator(*this); }
+
+template<class GRID>
+inline typename CellVTK<GRID>::VertexOnCellIterator
+CellVTK<GRID>::EndVertex()  const { return VertexOnCellIterator(*this, NumOfVertices()); }
+
 
 } // namespace vtk_ugrid
 
 template<int D>
-struct grid_types<typename vtk_ugrid::UGridVTKAdapter<D> > 
+struct grid_types<vtk_ugrid::UGridVTKAdapter<D> > 
   : public grid_types_base<vtk_ugrid::grid_types_UGridVTKAdapter<D> > 
 {};
+
+
+#define gt typename grid_types<vtk_ugrid::UGridVTKAdapter<D> >
+
+ 
+  template<int D> inline gt::VertexIterator   gral_begin(gt::grid_type const& G, gt::VertexIterator) { return G.FirstVertex();}
+  template<int D> inline gt::VertexIterator   gral_end  (gt::grid_type const& G, gt::VertexIterator) { return G.EndVertex();}
+  template<int D> inline gt::size_type        gral_size (gt::grid_type const& G, gt::VertexIterator) { return G.NumOfVertices();}
+
+  template<int D> inline gt::CellIterator     gral_begin(gt::grid_type const& G, gt::CellIterator)   { return G.FirstCell();}
+  template<int D> inline gt::CellIterator     gral_end  (gt::grid_type const& G, gt::CellIterator)   { return G.EndCell();}
+  template<int D> inline gt::size_type        gral_size (gt::grid_type const& G, gt::CellIterator)   { return G.NumOfCells();}
+
+  //  template<int D> inline gt::VertexOnCellIterator   gral_begin(gt::Cell   a, gt::VertexOnCellIterator) { return a.FirstVertex();}
+  //  template<int D> inline gt::VertexOnCellIterator   gral_end  (gt::Cell   a, gt::VertexOnCellIterator) { return a.EndVertex();}
+  //  template<int D> inline gt::size_type              gral_size (gt::Cell   a, gt::VertexOnCellIterator) { return a.NumOfVertices();}
+
+  template<int D> 
+  inline vtk_ugrid::VertexOnCellIteratorVTK<vtk_ugrid::UGridVTKAdapter<D> >  
+  gral_begin(vtk_ugrid::CellVTK                <vtk_ugrid::UGridVTKAdapter<D> >  a, 
+	     vtk_ugrid::VertexOnCellIteratorVTK<vtk_ugrid::UGridVTKAdapter<D> > ) { return a.FirstVertex();}
+ 
+  template<int D> 
+  inline vtk_ugrid::VertexOnCellIteratorVTK<vtk_ugrid::UGridVTKAdapter<D> >  
+  gral_end  (vtk_ugrid::CellVTK                <vtk_ugrid::UGridVTKAdapter<D> >  a, 
+	     vtk_ugrid::VertexOnCellIteratorVTK<vtk_ugrid::UGridVTKAdapter<D> > ) { return a.EndVertex();}
+
+  template<int D> 
+  inline gt::size_type  
+  gral_size (vtk_ugrid::CellVTK                <vtk_ugrid::UGridVTKAdapter<D> >  a, 
+	     vtk_ugrid::VertexOnCellIteratorVTK<vtk_ugrid::UGridVTKAdapter<D> > ) { return a.NumOfVertices();}
+
+#undef gt
+
+
+template<int D>
+struct element_traits<vtk_ugrid::VertexVTK<vtk_ugrid::UGridVTKAdapter<D> > >
+  : public element_traits_vertex_base<vtk_ugrid::UGridVTKAdapter<D> >
+{
+  typedef element_traits_vertex_base<vtk_ugrid::UGridVTKAdapter<D> > base;
+  struct hasher_type : public base::hasher_type_elem_base {
+    size_t operator()(vtk_ugrid::VertexVTK<vtk_ugrid::UGridVTKAdapter<D> > const& v) const { return v.handle();}
+  };
+
+  //vertices are numbered consecutively
+  typedef consecutive_integer_tag<0> consecutive_tag;
+};
+
+template<int D>
+struct element_traits<vtk_ugrid::CellVTK<vtk_ugrid::UGridVTKAdapter<D> > >
+  : public element_traits_vertex_base<vtk_ugrid::UGridVTKAdapter<D> >
+{
+  typedef element_traits_vertex_base<vtk_ugrid::UGridVTKAdapter<D> > base;
+  struct hasher_type : public base::hasher_type_elem_base {
+    size_t operator()(vtk_ugrid::CellVTK<vtk_ugrid::UGridVTKAdapter<D> > const& c) const { return c.handle();}
+  };
+
+  //cells are numbered consecutively
+  typedef consecutive_integer_tag<0> consecutive_tag;
+};
+
 
 
 } // namespace GrAL
