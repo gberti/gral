@@ -62,7 +62,7 @@ namespace connected_components {
        define  iterator types  for them.
    */ 
   template<class GT>
-  class component /* : public GT ... must re-define sequence iterator types! */ {
+  class component {
     typedef component<GT>            self;
   public:
     enum { dim = GT::dimension_tag::dim };
@@ -119,15 +119,22 @@ namespace connected_components {
     typedef component_type                          grid_type;
     typedef partial_grid_function<Cell,bool>        visited_table_type;
   private:
-    component_type const* comp;
+    //component_type const* comp;
+    ref_ptr<component_type const> comp; // may be temporary object!
     std::queue<cell_handle> Q;
     visited_table_type      visited;
   public:
     cell_iterator() : comp(0) {}
     cell_iterator(component_type const&  comp_) 
-       : comp(&comp_), 
-	 visited(comp_.BaseGrid(), false) 
-    { 
+      : comp(new_ref_ptr(new component_type(comp_))), 
+	visited(comp_.BaseGrid(), false) 
+    { init();}
+    cell_iterator(ref_ptr<component_type const>  comp_) 
+      : comp(comp_), 
+	visited(comp_->BaseGrid(), false) 
+    { init();}
+    
+    void init() { 
       Q.push (comp->Germ().handle());
       visited[comp->Germ()] = true;
     }
@@ -162,7 +169,7 @@ namespace connected_components {
 
   template<class GT> 
   inline
-  cell_iterator<GT> component<GT>::FirstCell() const { return cell_iterator<GT>(*this);}
+  cell_iterator<GT> component<GT>::FirstCell() const { return cell_iterator<GT>(new_ref_ptr(new self(*this)));}
 
 
 
