@@ -79,6 +79,8 @@ namespace restricted_grid_view {
     typedef cell           <CFG>         Cell;
     typedef cell_iterator  <CFG>         CellIterator;
     typedef vertex_iterator<CFG>         VertexIterator;
+ 
+    typedef vertex_on_cell_iterator<CFG> VertexOnCellIterator;
   };
 
 
@@ -453,9 +455,9 @@ struct element_traits<restricted_grid_view::cell<CFG> >
     baseCell  Base() const { return c;}
     grid_type const& TheGrid() const { return *g;} 
     cell_handle handle() const { return c.handle();}
-    //unsigned NumOfVertices() const { return Base().NumOfVertices();}
-    //vertex_on_cell_iterator<CFG> FirstVertex() const;
-    //vertex_on_cell_iterator<CFG> EndVertex  () const;
+    int  NumOfVertices() const { return Base().NumOfVertices();}
+    vertex_on_cell_iterator<CFG> FirstVertex() const;
+    vertex_on_cell_iterator<CFG> EndVertex  () const;
 
     vertex<CFG>  V(typename archgt::Vertex v) const { 
       return vertex<CFG>(TheGrid(), Base().V(v)); 
@@ -535,7 +537,6 @@ struct element_traits<restricted_grid_view::cell<CFG> >
   };
 
 
-    /*
   //--- VertexOnCellIterator ---
   template<class CFG>
   class vertex_on_cell_iterator {
@@ -547,6 +548,7 @@ struct element_traits<restricted_grid_view::cell<CFG> >
     typedef typename grid_type::Cell                     Cell;
     typedef typename grid_type::Vertex                   Vertex;
 
+    typedef grid_incidence_iterator_category_d<0,0>      category;
     typedef Cell   anchor_type;
     typedef Vertex value_type;
   private:
@@ -590,7 +592,7 @@ struct element_traits<restricted_grid_view::cell<CFG> >
   cell<CFG>::EndVertex() const 
   { return vertex_on_cell_iterator<CFG>(*this, Base().EndVertex());}
 
-  */
+ 
 
   //------- CellOnCellIterator ---------
 
@@ -762,6 +764,22 @@ struct element_traits<restricted_grid_view::cell<CFG> >
   { return g.NumOfCells();}
 
  
+  template<class CFG>
+  vertex_on_cell_iterator<CFG> 
+  gral_begin(cell<CFG> const& c, vertex_on_cell_iterator<CFG>)
+  { return c.FirstVertex();}
+
+  template<class CFG>
+  vertex_on_cell_iterator<CFG> 
+  gral_end  (cell<CFG> const& c, vertex_on_cell_iterator<CFG>)
+  { return c.EndVertex();}
+
+  template<class CFG>
+  typename grid_types<grid_view<CFG> >::size_type
+  gral_size  (cell<CFG> const& c, vertex_on_cell_iterator<CFG>)
+  { return c.NumOfVertices();}
+ 
+   
   template<class CFG>
   cell_on_cell_iterator<CFG> 
   gral_begin(cell<CFG> const& c, cell_on_cell_iterator<CFG>)
