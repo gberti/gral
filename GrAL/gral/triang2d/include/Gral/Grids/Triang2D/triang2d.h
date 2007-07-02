@@ -11,6 +11,7 @@
 #include "Gral/Grids/Triang2D/grid-types.h"
 
 #include "Gral/Iterators/vertex-on-edge-iterator.h"
+#include "Gral/Iterators/iterator-base.h"
 
 #include <algorithm>
 
@@ -352,7 +353,10 @@ public:
 
 //----------------- VertexOnCellIterator ---------------------
 
-class Triang2D_VertexOnCellIterator : public grid_types_Triang2D {
+class Triang2D_VertexOnCellIterator 
+  : public grid_types_Triang2D,
+    public incidence_iter_base<grid_types_Triang2D, vertex_type_tag, cell_type_tag> 
+{
   typedef  Triang2D_VertexOnCellIterator self;
 private:
   Cell c;
@@ -408,7 +412,10 @@ std::ostream& operator<<(std::ostream& out, edge_handle_Triang2D e)
 
 
 
-class Triang2D_FacetOnCellIterator : public grid_types_Triang2D {
+class Triang2D_FacetOnCellIterator 
+  : public grid_types_Triang2D,
+    public incidence_iter_base<grid_types_Triang2D, edge_type_tag, cell_type_tag> 
+{
   typedef  Triang2D_FacetOnCellIterator self;
   friend class Triang2D;
 private:
@@ -454,6 +461,7 @@ public:
   friend bool operator==(self const& lhs, self const& rhs) { return lhs.c == rhs.c && lhs.fc == rhs.fc;}
   friend bool operator!=(self const& lhs, self const& rhs) { return !(lhs == rhs);}
 };
+
 
 
 
@@ -547,6 +555,14 @@ namespace GrAL {
 
 inline
 void Triang2D::swap_orientation(Triang2D::Cell const& c) { std::swap(cells[3*c.handle()], cells[3*c.handle()+1]);}
+
+
+inline int relative_orientation(Triang2D_FacetOnCellIterator f1,
+				Triang2D_FacetOnCellIterator f2)
+{
+  REQUIRE(*f1 == *f2, "attempt to check orientation of different edges!",1);
+  return (f1.v1() == f2.v1() ? 1 : -1);
+}
 
 
 Triang2D::size_type
