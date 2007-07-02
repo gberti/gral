@@ -7,6 +7,26 @@ namespace GrAL {
 
 namespace vtk_ugrid {
 
+  std::string  UGridVTKArchetypes_Base::VTK_type(int t) 
+  {
+    switch(t) {
+    case VTK_VERTEX:          return "VTK_VERTEX";        break;
+    case VTK_POLY_VERTEX:     return "VTK_POLY_VERTEX";   break;
+    case VTK_LINE:            return "VTK_LINE";          break;
+    case VTK_POLY_LINE:       return "VTK_POLY_LINE";     break;
+    case VTK_TRIANGLE:        return "VTK_TRIANGLE";      break;
+    case VTK_TRIANGLE_STRIP:  return "VTK_TRIANGLE_STRIP";break;
+    case VTK_QUAD:            return "VTK_QUAD";          break;
+    case VTK_PIXEL:           return "VTK_PIXEL";         break;
+    case VTK_VOXEL:           return "VTK_VOXEL";         break;
+    case VTK_TETRA:           return "VTK_TETRA";         break;
+    case VTK_HEXAHEDRON:      return "VTK_HEXAHEDRON";    break;
+    case VTK_WEDGE:           return "VTK_WEDGE";         break;
+    case VTK_PYRAMID:         return "VTK_PYRAMID";       break;
+    default:
+      return "unknown";
+    }
+  }
 
 template <>
 UGridVTKArchetypes<2>::UGridVTKArchetypes()
@@ -22,7 +42,9 @@ UGridVTKArchetypes<2>::UGridVTKArchetypes()
   vtk_types[i] = VTK_TRIANGLE;
 
   // construct QUAD1 element archetype 
-  int conn_quad1[4][2] = { {0,1}, {1,3}, {3,2}, {2,0}};
+  // this is the VTK_PIXEL connectivity!!
+  // int conn_quad1[4][2] = { {0,1}, {1,3}, {3,2}, {2,0}};
+  int conn_quad1[4][2] = { {0,1}, {1,2}, {2,3}, {3,0}};
   archetype_type  quad1(conn_quad1, 4);
   archetypes.push_back(quad1);
   i = archetypes.size() - 1 ;
