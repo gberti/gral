@@ -10,6 +10,7 @@
 #include "Utility/numeric-types.h"
 #include "Container/algebraic-operators.h"
 #include "Container/relational-operators.h"
+#include "Geometry/point-traits.h"
 
 #include <cmath>
 
@@ -497,6 +498,14 @@ floor_tuple(tuple<T,N> const& a)
     res[i] = floor(a[i]);
   return res;
 }
+
+template<class RES, class T, unsigned N>
+inline
+RES
+floor_tuple(tuple<T,N> const& a)
+{ 
+  return GrAL::convert_point<RES>(floor_tuple(a));
+}
 /*! \brief component-wise ceiling
 
     \f$ (a_0, \ldots, a_{N-1}) \mapsto (\lceil a_0\rceil, \ldots, \lceil a_{N-1}\rceil) \f$
@@ -513,6 +522,16 @@ ceil_tuple(tuple<T,N> const& a)
     res[i] = ceil(a[i]);
   return res;
 }
+
+template<class RES, class T, unsigned N>
+inline
+RES
+ceil_tuple(tuple<T,N> const& a)
+{ 
+  return GrAL::convert_point<RES>(ceil_tuple(a));
+}
+
+
 /*! \brief component-wise rounding to next integer
 
     \f$ (a_0, \ldots, a_{N-1}) \mapsto (\lceil a_0-0.5\rceil, \ldots, \lceil a_{N-1}-0.5\rceil) \f$
@@ -531,6 +550,13 @@ round_tuple(tuple<T,N> const& a)
   return res;
 }
 
+template<class RES, class T, unsigned N>
+inline
+RES
+round_tuple(tuple<T,N> const& a)
+{ 
+  return GrAL::convert_point<RES>(round_tuple(a));
+}
 
 
 /*!  \brief Test for component-wise divisibility
