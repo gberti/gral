@@ -62,13 +62,6 @@ public:
       { xyz[0] = p[0]; xyz[1] = p[1]; xyz[2] = p[2]; }
 };
 
-inline std::ostream&
-operator<<(std::ostream& out, coord_type const& p)
-{ return (out << p[0] << ' ' << p[1] << ' ' << p[2]);}
-
-inline std::istream&
-operator>>(std::istream&  in, coord_type & p)
-{ return (in >> p[0] >> p[1] >> p[2]);}
 
 inline std::ostream&
 operator<<(std::ostream& out, coord_proxy const& p)

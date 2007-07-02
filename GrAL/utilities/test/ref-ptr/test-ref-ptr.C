@@ -252,4 +252,14 @@ int main() {
   pb = pd;
   ref_ptr<Base> pb2(pd);
 
+  {
+    ref_ptr<int> p1 = GrAL::new_ref_ptr(new int(0));
+    ref_ptr<int> p2 = GrAL::new_ref_ptr(int(1));
+    ref_ptr<const int> pc1 = GrAL::new_ref_ptr(new int(0));
+    ref_ptr<const int> pc2 = GrAL::new_ref_ptr(int(1));
+
+    int i = 0;
+    ref_ptr<int>       pr1  = ref_to_ref_ptr(i);
+    ref_ptr<const int> pcr1 = const_ref_to_ref_ptr(i);
+  }
 }

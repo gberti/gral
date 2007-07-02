@@ -414,6 +414,9 @@ temporary<T>::operator ref_ptr<T> () const { return ref_ptr<T>(new T(t), ref_ptr
   template<class T>
   inline ref_ptr<T> new_ref_ptr(T * t) { return ref_ptr<T>(t, ref_ptr_base::shared);}
 
+  template<class T>
+  inline ref_ptr<T> new_ref_ptr(T   t) { return ref_ptr<T>(new T(t), ref_ptr_base::shared);}
+
 
 
 

@@ -53,9 +53,11 @@ void ConstructGrid0_dispatched(UGridVTKAdapter<D>  & G_dest,
     int i=0;
     for(typename vtk_agt::VertexIterator vc(archetype_vtk); 
                                         !vc.IsDone(); ++i, ++vc) {
-       pts[i] = v_corr( (*c).V(phi_a.inverse()(*vc).handle())).handle();
-       std::cout << "In cell " << c.handle() << " map " <<
-	 (*c).V(phi_a.inverse()(*vc).handle()).handle() << " to " << pts[i] << "\n";
+      //FIXME: some "wrapped" types have no V() or maybe the wrong type
+      // (enumerated_subrange<Grid> or the like).
+      // perhaps arch2grid(Cell,arch_vertex) ?
+      typename sgt::Vertex v_src(G_src, (*c).v(phi_a.inverse()(*vc).handle()));
+      pts[i] = v_corr( v_src ).handle();
     }  
     int vtktype = UGridVTKArchetypes<D>::Get().vtk_type(a_map.archetype_of(*c));
     typename gt::cell_handle dstc = G_dest.GetAdaptee()->InsertNextCell(vtktype,i, pts);

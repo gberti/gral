@@ -30,7 +30,9 @@ class IstreamComplex2DFmt : public IstreamComplex2DFmt_base
   typedef IstreamComplex2DFmt_base base;
 public:
   // typedef coordN<2>       coord_type;
-  typedef point           coord_type;
+  typedef point              coord_type;
+  typedef self               grid_type;
+  typedef grid_category_d<2> category;
 private:
   mutable unsigned                   spacedim;
   mutable std::vector<coord_type> coords;

@@ -5,7 +5,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io gral/complex2d gral/cartesian2d \
+EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io gral/complex2d gral/cartesian2d gral/vtk \
              external-control configuration utilities geometry sequence
 
 
@@ -19,13 +19,17 @@ TARGETS = $(EXEC)
 include $(DEPS)
 
 
-LIBS = -lgral-complex2d -lgral-base \
+LIBS = -lgral-complex2d -lgral-base  \
        -lexternal-control -lsequence -lutilities -lgeometry
 
 LIBSGMV = -lgral-gmv-io
 LIBSOFF = -lgral-geomview-io
 LIBSDX  = -lgral-complex2d 
 LIBSCART = -lgral-cartesian2d
+
+include $(CONFIGURATION)/defs/vtk.defs
+EXTRA_CCFLAGS += $(VTK_CCFLAGS) 
+LIBSVTK  = -lgral-vtk $(VTK_LDFLAGS) 
 
 new-check-clean: # new check clean1
 	$(MAKE) new
@@ -47,6 +51,9 @@ complex2d2complex2d: complex2d2complex2d.o
 complex2d2gmv: complex2d2gmv.o
 	$(CC) -o complex2d2gmv complex2d2gmv.o $(LDFLAGS) $(LIBSGMV) $(LIBS)
 
+vtk2any: vtk2any.o
+	$(CC) -o vtk2any vtk2any.o $(LDFLAGS)  $(LIBSVTK) $(LIBSGMV) $(LIBS) $(LIBSVTK)
+
 complex2d2off: complex2d2off.o
 	$(CC) -o complex2d2off complex2d2off.o $(LDFLAGS) $(LIBSOFF) $(LIBS)
 
@@ -58,6 +65,10 @@ complex2d2stl: complex2d2stl.o
 
 complex2d2smp: complex2d2smp.o
 	$(CC) -o $@ $< $(LDFLAGS)  $(LIBS)
+
+combine-grids: combine-grids.o
+	$(CC) -o $@ $< $(LDFLAGS)  $(LIBS)
+
 
 rungmv:
 	$(EXECGMV) -g grid.complex2d -o grid.gmv  -off 1

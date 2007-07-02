@@ -49,6 +49,8 @@ int main() {
   test_partial_grid_functions<gt::Cell>  (T, cout);
 
   test_archetypes(T, cout);
+  grid_type T_tmp;
+  ConstructGrid0(T_tmp, T);
 
   vector<grid_type> TT(2);
   TT[0] = TT[1] = T;

@@ -156,6 +156,8 @@ public:
   map_is_equal() {}
   //! Initialize such that <tt> (*this)(a) </tt> returns true iff <tt> ff(a) == r </tt>
   map_is_equal(mapping_type const& ff, map_result_type r) : f(ff), res(r) {}
+  //! Initialize such that <tt> (*this)(a) </tt> returns true iff <tt> ff(a) == r </tt>
+  map_is_equal(ref_ptr<mapping_type const> ff, map_result_type r) : f(ff), res(r) {}
 
   //! Returns true iff <tt> ff(a) == r </tt>
   bool operator()(argument_type a) const { return (*f)(a) == res;}

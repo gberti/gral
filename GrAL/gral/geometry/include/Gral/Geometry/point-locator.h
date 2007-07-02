@@ -328,7 +328,7 @@ void point_locator<GRID,GEOM,GT>::init()
     edge_length = TheGeometry()->length(* TheGrid()->FirstEdge());
 
   if(edge_length > 0.0) {
-    size = ceil_tuple((boxmax - boxmin)/edge_length);
+    size = GrAL::convert_point<index_type>(ceil_tuple((boxmax - boxmin)/edge_length));
     scale_factor = edge_length*size[maxdiff_idx]; // >= diag[maxdiff_idx]
   }
   else {

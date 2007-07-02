@@ -30,15 +30,15 @@ void copy_cells(Triang3D       & G,
 
   int * cells = new int[(d+1)*(G_src.NumOfCells()+hc)];
 
-  for(src_cell_it src_c = G_src.FirstCell(); ! src_c.IsDone(); ++src_c, ++hc){
-    REQUIRE(((*src_c).NumOfVertices() == d+1),
+  for(src_cell_it src_c = begin_x(G_src); ! src_c.IsDone(); ++src_c, ++hc){
+    REQUIRE((size_d<0>(*src_c) == d+1),
 	    "Can handle only tetrahedra, but  NumOfVertices() was "
-	    << (*src_c).NumOfVertices() << "!\n",1);
+	    << size_d<0>(*src_c) << "!\n",1);
 
     cell_corr[src_c.handle()] = hc;
     
     int lv = 0;
-    src_vertex_on_cell_it src_lv((*src_c).FirstVertex());
+    src_vertex_on_cell_it src_lv = begin_x(*src_c);
     for(; ! src_lv.IsDone(); ++src_lv, ++lv) {
        cells[(d+1)*hc+lv] = vtx_corr(src_lv.handle());
     }

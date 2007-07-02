@@ -22,8 +22,8 @@
 #include "Gral/IO/complex2d-format-input.h"
 #include "Gral/IO/complex2d-format-output.h"
 #include "Gral/Algorithms/cell-neighbor-search.h"
+#include "Gral/Base/grid-morphism.h"
 
-#include "Container/bijective-mapping.h"
 #include "Container/dummy-mapping.h"
 
 #include <boost/static_assert.hpp>
@@ -74,10 +74,12 @@ int main(int argc, char* argv[]) {
 
   typedef grid_types<IstreamComplex2DFmt> srcgt;
   typedef grid_types<Triang2D>            dstgt;
-  bijective_mapping<srcgt::Vertex, dstgt::Vertex> vcorr;
+  vertex_morphism<IstreamComplex2DFmt, Triang2D> vcorr(Gsrc, T);
   dummy_mapping<int,int>     ccorr;
   ConstructGridVC(T,GeomT, Gsrc, Gsrc, vcorr,ccorr);
-
+  
+  Triang2D T_tmp;
+  ConstructGrid0(T_tmp,T);
   
 
   test_vertex_iterator(T, cout);
@@ -115,11 +117,13 @@ int main(int argc, char* argv[]) {
     gt::VertexOnCellIterator vce = GrAL::end_x  (*cb);
     gt::EdgeOnCellIterator   ecb = GrAL::begin_x(*cb);
     gt::EdgeOnCellIterator   ece = GrAL::end_x  (*cb);
-    int nv = GrAL::size_d<0>(T);
-    int ne = GrAL::size_d<1>(T);
-    int nc = GrAL::size_d<2>(T);
-    int nvc = GrAL::size_d<0>(*cb);
-    int nec = GrAL::size_d<1>(*ce);
+    gt::size_type nv = GrAL::size_d<0>(T);
+    gt::size_type ne = GrAL::size_d<1>(T);
+    gt::size_type nc = GrAL::size_d<2>(T);
+    gt::size_type nvc = GrAL::size_d<0>(*cb);
+    gt::size_type nec = GrAL::size_d<1>(*ce);
+    // use 'em
+    nv = ne = nc = nvc = nec = 0;
   }
   {
     gt::VertexIterator vb = GrAL::begin_d<0>(T);

@@ -5,8 +5,8 @@
 
 
 #include "Gral/Grids/Triang3D/copy.h"
+#include "Gral/Base/grid-morphism.h"
 
-#include "Container/partial-mapping.h"
 #include "Container/dummy-mapping.h"
 
 /*! \file
@@ -48,7 +48,7 @@ void ConstructGrid(Triang3D        & G,
 
   // this should be replaced by an array if possible.
   // map also lacks an operator() const  |  operator[] const 
-  partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
+  vertex_morphism<G2,Triang3D> VertexCorr(srcG, G);
   ConstructGridV(G,destGeom,srcG,srcGeom,VertexCorr);
 }
 
@@ -62,9 +62,7 @@ void ConstructGrid0(Triang3D        & G,
   typedef typename grid_types<Triang3D>::vertex_handle  vertex_handle;
   typedef typename grid_types<Triang3D>::cell_handle    cell_handle;
 
-  // this should be replaced by an array if possible.
-  // map also lacks an operator() const  |  operator[] const 
-  partial_mapping<src_vertex_handle,vertex_handle> VertexCorr;
+  vertex_morphism<G2,Triang3D> VertexCorr(srcG, G);
   // here we are not interested in a cell correspondance
   dummy_mapping<src_cell_handle,cell_handle> CellCorr;
   ConstructGrid0(G,srcG,VertexCorr,CellCorr);

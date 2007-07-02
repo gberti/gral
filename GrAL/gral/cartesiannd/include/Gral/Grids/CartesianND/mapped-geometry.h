@@ -208,10 +208,19 @@ namespace cartesiannd {
     void set_mapping(mapping_type const& ff) {
       f.make_shared(new mapping_type(ff));
     }
+    //! \brief Ditto
+    void set_mapping(ref_ptr<mapping_type const> ff) {
+      f = ff;
+    }
     //! \brief Set the inverse mapping (for point location) 
     void set_inverse_mapping(mapping_type const& inv) { 
       f_inverse.make_shared(new mapping_type(inv));
     }
+    //! \brief Ditto
+    void set_inverse_mapping(ref_ptr<mapping_type const> inv) { 
+      f_inverse = inv;
+    }
+
     //! \brief Query inverse mapping
     bool has_inverse() const { return f_inverse != 0;}
 
@@ -251,7 +260,7 @@ namespace cartesiannd {
     cell_index_type unit2index(coord_type local_p) const {
       //coord_type rational_index = quotient(local_p, delta);
       //index_type integral_index = floor_tuple(rational_index);
-      return cell_index_type(floor_tuple(quotient(local_p, delta)) + low_);
+      return convert_point<cell_index_type>(floor_tuple(quotient(local_p, delta)) + low_);
 
     }
   public:
