@@ -16,7 +16,7 @@ namespace GrAL {
 
  */
 template<class FACETRANGE>
-struct grid_types_facet_grid {
+struct grid_types_facet_grid : public grid_types_detail::grid_types_root {
   typedef grid_types<FACETRANGE> fgt;
   //typedef typename fgt::grid_type base_grid_type; 
   typedef typename FACETRANGE::grid_type base_grid_type;
@@ -52,8 +52,8 @@ private:
   typedef facet_grid<FACETRANGE>            self;
   typedef grid_types_facet_grid<FACETRANGE> gt;
 public:
-  typedef self grid_type;
   enum { dim = gt::dimension_tag::dim };
+  typedef self                 grid_type;
   typedef grid_category_d<dim> category;
 
   typedef typename gt::base_grid_type                base_grid_type;
@@ -82,8 +82,11 @@ public:
   unsigned NumOfCells()    const { return facets->NumOfFacets();}
   unsigned NumOfVertices() const { return vertices.NumOfVertices();}
 
-  CellIterator   FirstCell()   const { return facets->FirstFacet();}
+  CellIterator   FirstCell()   const { return begin<CellIterator>(*facets);} 
+  CellIterator   EndCell()     const { return end  <CellIterator>(*facets);} 
+
   VertexIterator FirstVertex() const { return vertices.FirstVertex();}
+  VertexIterator EndVertex()   const { return vertices.EndVertex();}
 };
 
 template<class FACETRANGE>
@@ -93,6 +96,43 @@ struct grid_types<facet_grid<FACETRANGE> >
   typedef typename facet_grid<FACETRANGE>::VertexIterator VertexIterator; 
 };
 
+#define gt typename grid_types<FACETRANGE>
+
+
+template<class FACETRANGE>
+inline gt::VertexIterator gral_begin(facet_grid<FACETRANGE> const& a, 
+				     typename enumerated_vertex_range<typename FACETRANGE::grid_type>::VertexIterator)
+{ return a.FirstVertex();}
+
+template<class FACETRANGE>
+inline gt::VertexIterator gral_end  (facet_grid<FACETRANGE> const& a, 
+				     typename grid_types<FACETRANGE>::VertexIterator)
+{ return a.EndVertex();}
+
+template<class FACETRANGE>
+inline gt::VertexIterator gral_size (facet_grid<FACETRANGE> const& a, 
+				     typename grid_types<FACETRANGE>::VertexIterator)
+{ return a.NumOfVertices();}
+
+
+
+template<class FACETRANGE>
+inline gt::CellIterator gral_begin(facet_grid<FACETRANGE> const& a, 
+				   typename grid_types<FACETRANGE>::CellIterator)
+{ return a.FirstCell();}
+
+template<class FACETRANGE>
+inline gt::CellIterator gral_end  (facet_grid<FACETRANGE> const& a, 
+				   typename grid_types<FACETRANGE>::CellIterator)
+{ return a.EndCell();}
+
+template<class FACETRANGE>
+inline gt::CellIterator gral_size (facet_grid<FACETRANGE> const& a, 
+				   typename grid_types<FACETRANGE>::CellIterator)
+{ return a.NumOfCells();}
+
+
+#undef gt
 
 } // namespace GrAL 
 
