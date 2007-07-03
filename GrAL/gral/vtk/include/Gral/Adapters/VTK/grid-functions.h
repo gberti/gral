@@ -8,7 +8,7 @@
 // generic grid functions
 #include "Gral/Base/grid-function-vector.h"
 #include "Gral/Base/grid-function-hash.h"
-#include "Gral/Base/partial-grid-function.h"
+#include "Gral/Base/partial-grid-function-hash.h"
 
 #include "Utility/ref-ptr.h"
 

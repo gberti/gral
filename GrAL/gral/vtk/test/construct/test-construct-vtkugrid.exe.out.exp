@@ -1,4 +1,6 @@
 allocating 6 3
+Cell type 0 = VTK_TRIANGLE
+Cell type 1 = VTK_QUAD
 allocating 4 1
 allocating 8 1
 allocating 8 1
