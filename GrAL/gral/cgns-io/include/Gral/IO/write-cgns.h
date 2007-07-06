@@ -10,6 +10,7 @@
 
 #include "Geometry/point-traits.h"
 #include "Utility/as-string.h"
+#include "Container/bijective-mapping.h"
 
 #include <string>
 #include <vector>
@@ -19,12 +20,13 @@ namespace GrAL {
   /*! \brief Write triangular unstructured grid to CGNS file
  
   */
-  template<class GRID, class GEOM, class GF>
+  template<class GRID, class GEOM, class GF, class MAP>
   void write_triangular_grid_to_cgns(std::string const& filenm,
 				     GRID const& g,
 				     GEOM const& geom,
 				     GF const& cell_regions,
-				     int num_cell_regions)
+				     int num_cell_regions,
+				     MAP const& names)
   {
     using namespace std;
     typedef grid_types<GRID> gt;
@@ -33,7 +35,7 @@ namespace GrAL {
     cg_open(filenm.c_str(),MODE_WRITE,&cgns_index_file);
 
     int cgns_index_base;
-    string cgns_basename = "MyBase";
+    string cgns_basename = names("Base");
     int cgns_celldim = g    .dimension();
     int cgns_physdim = geom.space_dimension();
     cg_base_write(cgns_index_file,cgns_basename.c_str(),
@@ -41,7 +43,7 @@ namespace GrAL {
 		  &cgns_index_base);
 
     int cgns_index_zone;
-    string cgns_zonename = "MyZone";
+    string cgns_zonename = names("Zone" + as_string(0));
     int cgns_isize[3][1];
     cgns_isize[0][0] = g.NumOfVertices();
     cgns_isize[1][0] = g.NumOfCells();
@@ -89,7 +91,7 @@ namespace GrAL {
       }
     
       int cgns_index_section;
-      string section_name = "MySection" + as_string(reg);
+      string section_name = names("Region" + as_string(reg));
       cg_section_write(cgns_index_file,cgns_index_base,cgns_index_zone,
 		       section_name.c_str(),cgns_element_type, 
 		       nelem_start, nelem_end, nbdyelem, &(cgns_ielem[0]), 
@@ -106,6 +108,17 @@ namespace GrAL {
   }
 
 
+  template<class GRID, class GEOM, class GF>
+  void write_triangular_grid_to_cgns(std::string const& filenm,
+				     GRID const&        g,
+				     GEOM const&        geom,
+				     GF   const&        cell_regions,
+				     int                num_cell_regions)
+  {
+    bijective_mapping<std::string, std::string, identity_if_undefined> names;
+    write_triangular_grid_to_cgns(filenm, g,geom, cell_regions, num_cell_regions, names);
+  }
+
   template<class GRID, class GEOM>
   void write_triangular_grid_to_cgns(std::string const& filenm,
 				     GRID const& g,
@@ -114,7 +127,7 @@ namespace GrAL {
     typedef grid_types<GRID> gt;
     partial_grid_function<typename gt::Cell, int> zero(g,0);
     // constant_grid_function<typename gt::Cell, int> zero(g,0);
-    write_triangular_grid_to_cgns(g,geom,zero, 0);
+    write_triangular_grid_to_cgns(filenm, g,geom,zero, 1);
   }
 
 } // namespace GrAL

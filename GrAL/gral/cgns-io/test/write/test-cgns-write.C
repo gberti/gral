@@ -7,6 +7,7 @@
 #include "Gral/Grids/Triang2D/all.h"
 #include "Gral/Geometries/simple-geometry.h"
 #include "Container/tuple-point-traits.h"
+#include "Container/bijective-mapping.h"
 
 #include <string>
 
@@ -31,7 +32,16 @@ int main() {
   regions[gt::Cell(T,0)] = 0;
   regions[gt::Cell(T,1)] = 1;
 
-  string output = "2tri.cgns";
-
-  GrAL::write_triangular_grid_to_cgns(output, T, GeomT, regions, 2);
+  {
+    string output = "2tri.cgns";
+    GrAL::write_triangular_grid_to_cgns(output, T, GeomT, regions, 2);
+  }
+  {
+    string output = "2tri-names.cgns";
+    GrAL::bijective_mapping<string, string, GrAL::identity_if_undefined> names;
+    names["Base"] = "GrAL test mesh";
+    names["Region0"] = "Domain0";
+    names["Region1"] = "Domain1";
+    GrAL::write_triangular_grid_to_cgns(output, T, GeomT, regions, 2, names);
+  }
 }

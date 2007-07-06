@@ -21,9 +21,11 @@ void test_grid(std::string const& gfile)
   GrAL::grid_function<gt::Cell, int> orientation(G);
   bool orientable = GrAL::get_orientation(G,orientation);
   std::cout << "Grid is " << (orientable ? "" : "not ") << "orientable\n";
-  if(orientable)
+  if(orientable) {
     for(gt::CellIterator c(G); !c.IsDone(); ++c)
       std::cout << "Or(cell " << c.handle() << ") = " << orientation(*c) << "\n";
+    fix_orientation(G);
+  }
 }
 
 int main() {

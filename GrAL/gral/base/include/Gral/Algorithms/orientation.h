@@ -157,7 +157,7 @@ namespace GrAL {
      Equivalent to <tt> fix_orientation(g, * g.FirstCell()) </tt>
 
   */
-  template<class G, class C>
+  template<class G>
   bool fix_orientation(G & g) {
     return fix_orientation(g, * g.FirstCell());
   }
@@ -168,7 +168,7 @@ namespace GrAL {
   template<class FoC>
   int relative_orientation(FoC f1, FoC f2) {
     std::vector<vertex_handle> v[2];
-    F & f[2] { f1, f2 };
+    F & f[2] = { f1, f2 };
     for(int i = 0; i < 2; ++i)
       for(gt::VertexOnFacetIterator vf(f[i]); !vf.IsDone(); ++vf)
 	v[i].push_back(vf.handle());

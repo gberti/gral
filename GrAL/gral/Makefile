@@ -19,6 +19,7 @@ SUBDIRS  =  base \
            testing \
            triang2d \
            triang3d \
+           vtk \
 
 
 SUBDIRS := $(filter-out $(EXCLUDED),$(SUBDIRS))
