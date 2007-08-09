@@ -59,7 +59,7 @@ int main(int argc, char* argv[]) {
   h += "   -ooff <offset=0> (vertex numbering offset of output grid)\n";
 
   // transformation info
-  mapping_type M;
+  mapping_type M = mapping_type::identity();
   RegisterAt(Ctrl, "-map", M);
   h += "    -map  <a11 a12 a13 t1 a21 a22 a23 t2 a31 a32 a33 t3> \n";
   h += "          (mapping coefficients, the aij forming the linear part and the ti the translation part)\n";

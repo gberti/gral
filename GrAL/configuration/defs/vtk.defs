@@ -1,0 +1,8 @@
+export VTK=$(HOME)/lib/VTK/install/
+export VTK_INC=$(VTK)/include/vtk-5.0/
+export VTK_LIB=$(VTK)/lib/
+export VTK_LIBS = -lvtkFiltering -lvtkGraphics -lvtkIO  -lvtkCommon -ldl -lpthread
+
+export VTK_CCFLAGS = -I$(VTK_INC)
+export VTK_LDFLAGS = -L$(VTK_LIB) $(VTK_LIBS)
+

@@ -8,6 +8,7 @@
 #include "Gral/Geometries/point-location-base.h"
 
 #include "Geometry/algebraic-primitives.h"
+#include "Geometry/array-operations.h"
 #include "Container/tuple.h"
 #include "Container/tuple-point-traits.h"
 
@@ -181,8 +182,7 @@ namespace cartesiannd {
     //@}
   private:
     void init() {
-      delta = coord_type(1.0);
-      delta = quotient(delta, coord_type(high_ - low_));
+      delta = GrAL::quotient(coord_type(1.0), coord_type(high_ - low_));
     }
 
     void init_from_master(self const& m) {
@@ -253,7 +253,7 @@ namespace cartesiannd {
   private:
     //! \brief Anisotropic unit coordinate. Inverse of unit2index.
     coord_type unit_coord(index_type idx) const { 
-      coord_type r(coord_type(idx) - low_);
+      coord_type r(convert_point<coord_type>(idx) - low_);
       return product(r, delta);
     }
     //! \brief Index i such that local_p is in cell with index i. Inverse of unit_coord.

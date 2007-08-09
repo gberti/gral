@@ -52,7 +52,7 @@ namespace GrAL {
     typename gt1::VertexIterator v1(g1);
     typename gt2::VertexIterator v2(g2);
     for(; !v1.IsDone(); ++v1,++v2)
-      vcorr[v1] = v2;
+      vcorr[*v1] = *v2;
     typename gt1::CellIterator c1(g1);
     typename gt2::CellIterator c2(g2);
     for(; !c1.IsDone(); ++c1, ++c2) {

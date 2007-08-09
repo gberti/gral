@@ -1,6 +1,6 @@
-# gral/tools/converter
+# gral/tools/gridinfo
 
-EXTRA_DEPMODULES+= gral/base gral/complex2d \
+EXTRA_DEPMODULES+= gral/measurement gral/base gral/complex2d \
              external-control configuration utilities geometry sequence
 
 PWD=$(shell pwd)
@@ -14,14 +14,14 @@ OBJECTS =  $(SOURCES:%.C=%.o)
 DEPS = $(SOURCES:%.C=%.d)
 
 
-EXEC =  gridinfo
+EXEC =  $(SOURCES:%.C=%.exe)
 TARGETS = $(EXEC)
 
 include $(DEPS)
 
 
 LIBS = -lgral-complex2d -lgral-base \
-       -lexternal-control  -lutilities -lgeometry
+       -lexternal-control -lsequence -lutilities -lgeometry
 
 
 
@@ -37,8 +37,12 @@ new : clean all
 all : $(TARGETS)
 
 
-$(EXEC): $(OBJECTS)
-	$(CC) -o $(EXEC) $(OBJECTS) $(LDFLAGS) $(LIBSGMV) $(LIBS)
+gridinfo.exe: gridinfo.o
+	$(CC) -o $@ $< $(LDFLAGS) $(LIBS)
+
+compare-grids.exe: compare-grids.o
+	$(CC) -o $@ $< $(LDFLAGS) $(LIBS)
+
 
 clean: stdclean
 	@rm -f $(EXEC)
