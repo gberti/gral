@@ -12,6 +12,7 @@
 #include "Container/relational-operators.h"
 #include "Geometry/point-traits.h"
 
+
 #include <cmath>
 
 
@@ -204,6 +205,15 @@ public:
 
 template<class T> T tuple<T,0>::tt;
 
+  template<class T>  struct use_componentwise_operations;
+
+  /*! \brief Disable generic componentwise operations
+
+      \c tuple<T,N> defines its own operations below.
+  */
+  template<class T, unsigned N>
+  struct use_componentwise_operations<tuple<T,N> >
+  { enum { value = 0 }; };
 
   /*! \defgroup tupleoperators Operators for  tuple
 
@@ -426,6 +436,8 @@ componentwise(tuple<T,N> const& lhs, tuple<U,N> const& rhs, BinaryAlgebraicOp op
 }
 
 
+
+
 /*! \brief component-wise product
 
     We do not use \c operator* syntax which could be confused with the dot-product.
@@ -437,6 +449,9 @@ inline
 tuple<typename numeric_types::promote<T,U>::type, N>
 product(tuple<T,N> const& lhs, tuple<U,N> const& rhs)
 { return componentwise(lhs,rhs, algebraic_operators::multiply()); }
+
+
+
 
 /*! \brief component-wise inverse.
 
