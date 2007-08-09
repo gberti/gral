@@ -3,6 +3,7 @@ CONFIG=$(PWD)/../mk.config
 
 SUBDIRS = affine-mapping \
           ap \
+          array-operations \
           box \
           coordN \
           geometric-primitives \
