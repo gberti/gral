@@ -238,6 +238,27 @@ copy-doxy:
 
 .SUFFIXES: .C .cc .cpp .d .f
 
+ifdef HIDECMD
+
+.C.o: 
+	@echo "Building $@ ... "
+	@$(CC) $(CCFLAGS) $(IFLAGS) -c $<
+
+.cc.o: 
+	@echo "Building $@ ... "
+	@$(CC) $(CCFLAGS) $(IFLAGS) -c $<
+
+.cpp.o: 
+	@echo "Building $@ ... "
+	@$(CC) $(CCFLAGS) $(IFLAGS) -c $<
+
+
+.C.d:
+	@echo "Building $@ ... "
+	@$(DEPEND) $(DEPFLAGS) $(IFLAGS) $<  > $@
+
+else
+
 .C.o: 
 	$(CC) $(CCFLAGS) $(IFLAGS) -c $<
 
@@ -249,3 +270,7 @@ copy-doxy:
 
 .C.d:
 	$(DEPEND) $(DEPFLAGS) $(IFLAGS) $<  > $@
+
+
+endif
+
