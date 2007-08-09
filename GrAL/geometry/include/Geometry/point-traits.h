@@ -21,7 +21,9 @@ namespace GrAL {
    \see real_point_traits
  */
 template<class P>
-struct point_traits {};
+struct point_traits {
+  enum { is_specialised = 0 };
+};
 
 // TODO: tags system is a mess!
 
@@ -52,7 +54,7 @@ struct point_traits_base
 {
   typedef tag_unknown_dim dimension_tag;
   typedef POINT  Ptype;
-
+  enum { is_specialised = 1 };
 };
 
 // TODO: let all point_traits for fixed dimension types inherit this.
@@ -144,7 +146,7 @@ struct point_traits_fixed_size_array_base :
   enum { dimension = DIM };
 
   static void ConstructWithDim(unsigned d, Ptype&)
-    { REQUIRE(d == DIM, "Cannot construct! d = " << d 
+    { REQUIRE(d <= DIM, "Cannot construct! d = " << d 
 	      << ", DIM = " << DIM <<'\n',1);
     }
   static unsigned Dim(const Ptype&) { return DIM;}
@@ -199,8 +201,32 @@ struct point_traits_fixed_size_array<ARRAY, COMPONENT, 2>
   
   static component_type zero() { return component_type(0);}
   static component_type dummy_zero;
+
+  static typename base::Ptype construct(component_type xx, component_type yy)
+  { 
+    typename base::Ptype res; 
+    x(res) = xx;
+    y(res) = yy;
+    return res;
+  }
 };
 
+template<class ARRAY, class COMPONENT>
+struct point_traits_fixed_size_array<ARRAY, COMPONENT, 3> 
+  : public point_traits_fixed_size_array_base<ARRAY, COMPONENT, 3>
+{
+  typedef point_traits_fixed_size_array_base<ARRAY, COMPONENT, 3> base;
+  typedef typename base::component_type                           component_type;
+
+  static typename base::Ptype construct(component_type xx, component_type yy, component_type zz)
+  { 
+    typename base::Ptype res; 
+    x(res) = xx;
+    y(res) = yy;
+    z(res) = zz;
+    return res;
+  }
+};
 
 template<class ARRAY, class COMPONENT>
 typename 
@@ -226,6 +252,9 @@ struct array_io_operators
   
 };
 
+  /*! \brief CRTP for injecting algebraic operators into an array class
+
+  */
 template<class ARRAY, class V, unsigned N>
 struct array_operators : public array_io_operators<ARRAY,V,N>
 {
@@ -408,7 +437,7 @@ inline void assign_point(P      & p,
  ptP::ConstructWithDim(ptQ::Dim(q), p); 
 
  
- REQUIRE( (ptP::Dim(p) == ptQ::Dim(q)), 
+ REQUIRE( (ptP::Dim(p) >= ptQ::Dim(q)), 
 	  "Cannot assign points of different dimension!" 
 	  << "(dim(p) = " << ptP::Dim(p)  << ", "
 	  << "(dim(q) = " << ptQ::Dim(q), 1);
@@ -417,6 +446,8 @@ inline void assign_point(P      & p,
  int ip = ptP::LowerIndex(p);  
  for(; iq <= ptQ::UpperIndex(q); ++ip, ++iq)
    p[ip] = convert_scalar<typename ptP::component_type>::from(q[iq]); 
+ for(; ip <= ptP::UpperIndex(p); ++ip)
+   p[ip] = 0;
 }  
 
 // P = [b,e)
