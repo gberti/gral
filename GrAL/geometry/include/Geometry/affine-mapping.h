@@ -115,6 +115,9 @@ public:
       sc(i,i) = s[i - mt::LowerRowIndex(sc) + apt::LowerIndex(s)];
     return self(sc);
   }
+
+  static self scaling(scalar_type s) { return scaling(coord_type(s));}
+
   /*! \brief Return the inverse of \c scaling(s)
    */
   static self inverse_scaling(coord_type s) 
