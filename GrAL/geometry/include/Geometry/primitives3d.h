@@ -120,10 +120,23 @@ public:
     { 
       int lp = LowerIndex(p)-1;
       int lq = LowerIndex(q)-1; 
-      return (POINT(p[lp+2]*q[lq+3]-p[lp+3]*q[lq+2], 
-		    p[lp+3]*q[lq+1]-p[lp+1]*q[lq+3], 
-		    p[lp+1]*q[lq+2]-p[lp+2]*q[lq+1]));
+      return (construct(p[lp+2]*q[lq+3]-p[lp+3]*q[lq+2], 
+			p[lp+3]*q[lq+1]-p[lp+1]*q[lq+3], 
+			p[lp+1]*q[lq+2]-p[lp+2]*q[lq+1]));
     }
+
+  /*! \brief Construct a 3D point from 3 scalars
+
+      \note this could go into point_traits<POINT>
+  */
+  static POINT construct(scalar xx, scalar yy, scalar zz) 
+  {
+    POINT res;
+    x(res) = xx;
+    y(res) = yy;
+    z(res) = zz;
+    return res;
+  }
 
   /*! \brief Return a vector perpendicular to \c p 
    */
