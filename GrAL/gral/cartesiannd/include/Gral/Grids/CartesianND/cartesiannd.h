@@ -203,9 +203,59 @@ namespace cartesiannd {
 
     // We could distinguish vertex-  and cell_index_type.
     // This would allow for clearer construction semantics
+    typedef tuple<int, DIM> index_type;
+    /*
+    // simple integer wrappers
+    template<class TAG>
+    struct wrap_int { 
+      typedef wrap_int<TAG> self;
+
+      int i;
+      operator int() const { return i;}
+      wrap_int() {}
+
+      template<class U>
+      wrap_int(U u) : i(int(u)) {}
+      self& operator++() { ++i; return *this;}
+      self& operator--() { --i; return *this;}
+    
+      template<class U>
+      self& operator+=(U r) { i += r; return *this;}
+     
+      template<class U>
+      self& operator-=(U r) { i -= r; return *this;}
+      
+    };
+
+
+    typedef tuple<wrap_int<vertex_type_tag>,dim> vertex_index_type;
+    typedef tuple<wrap_int<cell_type_tag>  ,dim> cell_index_type;
+    */  
     typedef tuple<int, DIM> vertex_index_type;
     typedef tuple<int, DIM> cell_index_type;
-    typedef tuple<int, DIM> index_type;
+
+
+      /*
+    class  vertex_index_type : public index_type 
+    {
+      typedef index_type base;
+    public:
+      vertex_index_type() {}
+      explicit vertex_index_type(int i) : base(i) {}
+      explicit vertex_index_type(base b) : base(b) {}
+    };
+
+    class  cell_index_type : public index_type 
+    {
+      typedef index_type base;
+    public:
+      cell_index_type() {}
+      explicit cell_index_type(int i)  : base(i) {}
+      explicit cell_index_type(base b) : base(b) {}
+    };
+      */
+
+
 
     typedef typename archetype_of_grid_aux<CARTGRID,DIM>::type archetype_type;
     typedef unsigned                                   archetype_handle;
@@ -539,6 +589,7 @@ namespace cartesiannd {
 
   private:
     ref_ptr<base_grid_type const> g;
+    ref_ptr<self const>           this_c;
   public:
     //@{
     //! \name Constructors
@@ -546,54 +597,61 @@ namespace cartesiannd {
     //! \brief Empty subrange
     subrange() {}
 
+    void init(vertex_index_type low, vertex_index_type beyond) {
+      base::init(low,beyond);
+      init_this();}
+    }
     //! \brief Subrange with vertex bounds \c [low,beyond[
     subrange(base_grid_type const&         gg, vertex_index_type low, vertex_index_type beyond) : g(gg) 
-    { init(low,beyond); }
+    { init(low,beyond);  }
     //! \brief Subrange with vertex bounds \c [low,beyond[
     subrange(ref_ptr<base_grid_type const> gg, vertex_index_type low, vertex_index_type beyond) : g(gg) 
-    { init(low,beyond); }
+    { init(low,beyond);  }
 
     //! \brief Subrange with cell bounds \c [clow,chigh]
     subrange(base_grid_type         const& gg, BaseCell const& clow, BaseCell const& chigh)  : g(gg)
-    { init(clow.index(), chigh.index() + index_type(2));}
+    { init(clow.index(), chigh.index() + index_type(2));  }
     //! \brief Subrange with cell bounds \c [clow,chigh]
     subrange(ref_ptr<base_grid_type const> gg, BaseCell const& clow, BaseCell const& chigh)  : g(gg)
-    { init(clow.index(), chigh.index() + index_type(2));}
+    { init(clow.index(), chigh.index() + index_type(2));  }
 
     //! \brief Subrange with vertex bounds \c [vlow,vhigh]
     subrange(base_grid_type         const& gg, BaseVertex const& vlow, BaseVertex const& vhigh)  : g(gg)
-    { init(vlow.index(), vhigh.index() + index_type(1));}
+    { init(vlow.index(), vhigh.index() + index_type(1));  }
     //! \brief Subrange with vertex bounds \c [vlow,vhigh]
     subrange(ref_ptr<base_grid_type const> gg, BaseVertex const& vlow, BaseVertex const& vhigh)  : g(gg)
-    { init(vlow.index(), vhigh.index() + index_type(1));}
+    { init(vlow.index(), vhigh.index() + index_type(1));  }
 
     // Subranges from another subrange
     
     //! \brief Subrange with vertex bounds \c [low,beyond[
     subrange(self         const& gg, vertex_index_type  vlow, vertex_index_type vbeyond) : g(gg .BaseGrid()) 
-    { init(vlow, vbeyond);}
+    { init(vlow, vbeyond);  }
     //! \brief Subrange with vertex bounds \c [low,beyond[
     subrange(ref_ptr<self const> gg, vertex_index_type  vlow, vertex_index_type vbeyond) : g(gg->BaseGrid()) 
-    { init(vlow, vbeyond);}
+    { init(vlow, vbeyond);  }
 
     //! \brief Subrange with vertex bounds \c [vlow,vhigh]
     subrange(self         const& gg, Vertex const& vlow, Vertex const& vhigh) : g(gg .BaseGrid()) 
-    { init(vlow.index(), vhigh.index() + index_type(1)); }
+    { init(vlow.index(), vhigh.index() + index_type(1));  }
     //! \brief Subrange with vertex bounds \c [vlow,vhigh]
     subrange(ref_ptr<self const> gg, Vertex const& vlow, Vertex const& vhigh) : g(gg->BaseGrid()) 
-    { init(vlow.index(), vhigh.index() + index_type(1)); }
+    { init(vlow.index(), vhigh.index() + index_type(1));  }
 
     //! \brief Subrange with cell bounds \c [clow,chigh]
     subrange(self         const& gg, Cell const& clow, Cell const& chigh)  : g(gg .BaseGrid())
-    { init(clow.index(), chigh.index() + index_type(2));}
+    { init(clow.index(), chigh.index() + index_type(2));  }
     //! \brief Subrange with cell bounds \c [clow,chigh]
     subrange(ref_ptr<self const> gg, Cell const& clow, Cell const& chigh)  : g(gg->BaseGrid())
-    { init(clow.index(), chigh.index() + index_type(2));}
+    { init(clow.index(), chigh.index() + index_type(2));  }
 
     //@}
 
+    void init_this() { this_c = ref_ptr<self const>(*this); }
+
     //! \brief Underlying grid
     ref_ptr<base_grid_type const> BaseGrid() const { return g;}
+    ref_ptr<self const>           ThisGrid() const { return this_c;}
 
     //! \brief Conversion of subrange element handle to handle of underlying grid
     template<unsigned K>
@@ -617,6 +675,7 @@ namespace cartesiannd {
     typedef grid_base<grid<DIM>, DIM> base;
     typedef grid<DIM>                 self;
 
+    ref_ptr<self const> this_c;
   public:
     typedef GrAL::cartesian_grid_category_d<(int)DIM>     category;
     typedef self                             grid_type;
@@ -627,13 +686,13 @@ namespace cartesiannd {
     //! \name Constructors
     //@{
     //! Empty grid
-    grid() {}
+    grid() { init_this(); }
     //! Grid with vertex indices \f$ x_i \in [0, b_i[ \f$ with \f$ b = \f$  \c beyond
     grid(vertex_index_type beyond) 
-    { init(vertex_index_type(0), beyond);}
+    { init(vertex_index_type(0), beyond); }
     //! Grid with vertex indices \f$ x_i \in [l_, b_i[ \f$ with \f$ l = \f$ \c  low and  \f$ b = \f$  \c beyond    
     grid(vertex_index_type low, vertex_index_type beyond)
-    { init(low, beyond);}
+    { init(low, beyond); }
 
     //! Grid with vertex indices \f$ (x_1,x_2) \in [0, b_1[\times[0,b_2[ \f$  (only 2D)
     grid(int b1, int b2);
@@ -642,7 +701,14 @@ namespace cartesiannd {
     grid(int b1, int b2, int b3);
     //@}
 
-    ref_ptr<self const> BaseGrid() const { return ref_ptr<self const>(*this);}
+    void init(vertex_index_type low, vertex_index_type beyond) {
+      base::init(low,beyond);
+      init_this();
+    }
+    void init_this() { this_c = ref_ptr<self const>(*this); }
+
+    ref_ptr<self const> BaseGrid() const { return this_c;}
+    ref_ptr<self const> ThisGrid() const { return this_c;}
 
     template<unsigned K>
     element_handle_t<self, K> base_handle(element_handle_t<self, K> h, unsigned dir) const { return h;}
@@ -689,15 +755,15 @@ namespace cartesiannd {
 
   public:
     sequence_iterator_t() {} 
-    explicit sequence_iterator_t(grid_type         const& gg) : g(gg), h(0) { init_m();} 
+    explicit sequence_iterator_t(grid_type         const& gg) : g(gg.ThisGrid()), h(0) { init_m();} 
     explicit sequence_iterator_t(ref_ptr<grid_type const> gg) : g(gg), h(0) { init_m();} 
-    sequence_iterator_t(grid_type         const& gg, local_element_handle hh) : g(gg), h(hh) { init_m();}
+    sequence_iterator_t(grid_type         const& gg, local_element_handle hh) : g(gg.ThisGrid()), h(hh) { init_m();}
     sequence_iterator_t(ref_ptr<grid_type const> gg, local_element_handle hh) : g(gg), h(hh) { init_m();}
-    sequence_iterator_t(grid_type         const& gg, local_element_handle hh, unsigned mm) : g(gg), h(hh), m(mm) {}
+    sequence_iterator_t(grid_type         const& gg, local_element_handle hh, unsigned mm) : g(gg.ThisGrid()), h(hh), m(mm) {}
     sequence_iterator_t(ref_ptr<grid_type const> gg, local_element_handle hh, unsigned mm) : g(gg), h(hh), m(mm) {}
-    sequence_iterator_t(grid_type         const& gg, index_type idx) : g(gg)  { init(idx,0); }
+    sequence_iterator_t(grid_type         const& gg, index_type idx) : g(gg.ThisGrid())  { init(idx,0); }
     sequence_iterator_t(ref_ptr<grid_type const> gg, index_type idx) : g(gg)  { init(idx,0); } 
-    sequence_iterator_t(grid_type         const& gg, index_type idx, unsigned mm) : g(gg)  { init(idx,mm); }
+    sequence_iterator_t(grid_type         const& gg, index_type idx, unsigned mm) : g(gg.ThisGrid())  { init(idx,mm); }
     sequence_iterator_t(ref_ptr<grid_type const> gg, index_type idx, unsigned mm) : g(gg)  { init(idx,mm); } 
 
     void init(index_type idx) {
@@ -912,7 +978,8 @@ namespace cartesiannd {
     void cv() const { REQUIRE(valid(), "", 1);}
   private:
     typedef typename delta_map<dim>::inc_descriptor incidences;
-    std::vector<incidences> table() const { return delta_map<dim>::sd->incs[DA][DE][a.direction()];}
+    std::vector<incidences> const& table() const { return delta_map<dim>::sd->incs[DA][DE][a.direction()];}
+    //std::vector<incidences>  table() const { return delta_map<dim>::sd->incs[DA][DE][a.direction()];}
   };
 
 
@@ -1168,11 +1235,15 @@ namespace cartesiannd {
 
   template<>
   inline 
-  grid<2>::grid(int b1, int b2)         { init(vertex_index_type(0), vertex_index_type(b1,b2)); }
+  grid<2>::grid(int b1, int b2) {
+    init(vertex_index_type(0), vertex_index_type(b1,b2)); 
+  }
 
   template<>
   inline 
-  grid<3>::grid(int b1, int b2, int b3) { init(vertex_index_type(0), vertex_index_type(b1,b2,b3)); }
+  grid<3>::grid(int b1, int b2, int b3) { 
+    init(vertex_index_type(0), vertex_index_type(b1,b2,b3)); 
+  }
 
 
 
