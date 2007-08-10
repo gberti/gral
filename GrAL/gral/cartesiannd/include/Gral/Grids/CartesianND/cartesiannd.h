@@ -597,9 +597,16 @@ namespace cartesiannd {
     //! \brief Empty subrange
     subrange() {}
 
+    subrange(self const& rhs) { init(rhs.low_vertex_index(), rhs.beyond_vertex_index()); }
+    self& operator=(self const& rhs) {
+      if(this != &rhs) 
+	init(rhs.low_vertex_index(), rhs.beyond_vertex_index()); 
+      return *this;
+    }
+
     void init(vertex_index_type low, vertex_index_type beyond) {
       base::init(low,beyond);
-      init_this();}
+      init_this();
     }
     //! \brief Subrange with vertex bounds \c [low,beyond[
     subrange(base_grid_type const&         gg, vertex_index_type low, vertex_index_type beyond) : g(gg) 
@@ -687,6 +694,13 @@ namespace cartesiannd {
     //@{
     //! Empty grid
     grid() { init_this(); }
+
+    grid(self const& rhs) { init(rhs.low_vertex_index(), rhs.beyond_vertex_index()); }
+    self& operator=(self const& rhs) {
+      if(this != &rhs) 
+	init(rhs.low_vertex_index(), rhs.beyond_vertex_index()); 
+      return *this;
+    }
     //! Grid with vertex indices \f$ x_i \in [0, b_i[ \f$ with \f$ b = \f$  \c beyond
     grid(vertex_index_type beyond) 
     { init(vertex_index_type(0), beyond); }
