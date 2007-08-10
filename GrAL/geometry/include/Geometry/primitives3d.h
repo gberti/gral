@@ -132,6 +132,7 @@ public:
   static POINT construct(scalar xx, scalar yy, scalar zz) 
   {
     POINT res;
+    pt::ConstructWithDim(3, res);
     x(res) = xx;
     y(res) = yy;
     z(res) = zz;
