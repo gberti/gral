@@ -219,6 +219,14 @@ extern ControlDevice GetStreamDevice(std::istream& in,
                                      std::string const& name = "");
 
 
+/*! \brief Create a  ControlDevice that reads name-value-pairs from a string
+    
+    \ingroup ControlDeviceCreators 
+ */
+extern ControlDevice GetStringControlDevice(std::string const& params,
+					    std::string const& name = "");
+
+
 /*! \brief Create a  ControlDevice that reads name-value-pairs from a file
 
     \ingroup ControlDeviceCreators 

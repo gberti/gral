@@ -146,16 +146,24 @@ ControlDevice GetDuplexControlDevice(std::istream& in1,
 }
 
   
-  ControlDevice GetDuplexControlDevice(boost::shared_ptr<std::istream> in1,
+ControlDevice GetDuplexControlDevice(boost::shared_ptr<std::istream> in1,
 				     const char* filename, const std::string& name) {
-    boost::shared_ptr<std::istream> in2(new std::ifstream(filename));
-    return ControlDevice(boost::shared_ptr<control_device_impl>(new multi_istream_control_device(in1,in2,name)));
-  }
+  boost::shared_ptr<std::istream> in2(new std::ifstream(filename));
+  return ControlDevice(boost::shared_ptr<control_device_impl>(new multi_istream_control_device(in1,in2,name)));
+}
   
 
 ControlDevice GetDuplexControlDevice(std::istream& in2,
 				     const std::string& filename, const std::string& name) {
   return GetDuplexControlDevice(in2,filename.c_str(),name);
+}
+
+ControlDevice GetStringControlDevice(std::string const& params,
+				     std::string const& name)
+{
+   boost::shared_ptr<std::istream> in(new std::istringstream(params));
+   return ControlDevice(boost::shared_ptr<control_device_impl>
+			(new istream_control_device_impl(in,name)));
 }
 
 ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
