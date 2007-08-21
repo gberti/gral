@@ -223,6 +223,7 @@ class UGridVTKAdapter : public grid_types_UGridVTKAdapter<D>,
   /*! \brief Empty grid
    */
   inline UGridVTKAdapter() : adaptee_(0) {
+    clear();
   }
 
   //! make this an empty grid
@@ -236,6 +237,7 @@ class UGridVTKAdapter : public grid_types_UGridVTKAdapter<D>,
      vtkPoints *points = vtkPoints::New();
      points->Allocate(npoints);
      adaptee_->SetPoints(points);
+     points->Delete();
   }
 
   /*! \brief Construct a view to the vtkUnstructuredGrid \c a

@@ -27,6 +27,9 @@ new : clean all
 
 all : $(EXEC)
 
+test-memory-vtkugrid.exe: test-memory-vtkugrid.o
+	$(CC) -o $@  $< $(LDFLAGS) $(LIBS)
+
 $(EXEC): $(OBJECTS)
 	$(CC) -o $@  $^ $(LDFLAGS) $(LIBS)
 

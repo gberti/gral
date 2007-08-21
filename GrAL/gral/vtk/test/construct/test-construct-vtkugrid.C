@@ -56,7 +56,8 @@ int main() {
     for(int t = 0; t <  ct->GetNumberOfTypes(); ++t) {
       cerr << "Cell type " << t << " = " << vtkgt::VTK_type(ct->GetCellType(t)) << "\n";
     }
-      
+    ct->Delete();
+
     
     vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
     writer->SetFileName("tri+quad.vtk");
