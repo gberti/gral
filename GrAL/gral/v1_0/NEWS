@@ -1,0 +1,5 @@
+
+ uses Boost
+ compiles with ... nicht mehr gcc 2.95??
+ namespace GrAL
+ Better support for archetypes

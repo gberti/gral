@@ -6,10 +6,10 @@ exec perl -w -x $0 ${1+"$@"} # -*- mode: perl; perl-indent-level: 2; -*-
 $license1 = "
 /* ------------------------------------------------------------
 
-    Copyright (C) 1997-2004 Guntram Berti,
-    NEC C&C Research Laboratories, NEC Europe Ltd.,
+    Copyright (C) 1997-2007 Guntram Berti,
+    NEC Laboratories Europe, IT Research Division, NEC Europe Ltd.,
     Rathausallee 10, D-53757 St. Augustin, Germany.
-    Contact: berti AT ccrl-nece DOT de
+    Contact: berti AT it.neclab DOT eu
 
     This file is part of the Grid Algorithms Library (GrAL),
     which is available at

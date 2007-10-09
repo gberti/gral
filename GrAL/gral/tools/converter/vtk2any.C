@@ -24,7 +24,7 @@ int main(int argc, char* argv[]) {
   RegisterAt(Ctrl, "-i",  grid_in);
   RegisterAt(Ctrl, "-in", grid_in);
 
-  bool is_poly;
+  bool is_poly = false;
   Ctrl.add("-p", GetTrueOnReadMutator(is_poly));
 
   string gmv_grid_out;
