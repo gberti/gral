@@ -611,6 +611,9 @@ class CellVTK : public grid_types_UGridVTKAdapter<GRID::dim> {
   typedef typename gt::grid_type anchor_type;
   typedef typename gt::grid_type grid_type;
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
+  typedef typename gt::Vertex               Vertex;
+  typedef typename gt::vertex_handle        vertex_handle;
+  typedef typename gt::archgt archgt;
 
   typedef cell_type_tag      element_type_tag;
   typedef grid_cell_category category;
@@ -723,6 +726,11 @@ class CellVTK : public grid_types_UGridVTKAdapter<GRID::dim> {
   inline VertexOnCellIterator FirstVertex() const;
   inline VertexOnCellIterator EndVertex() const;
   
+  vertex_handle v(typename archgt::vertex_handle lv) const 
+  { cv(); return cellvtk_->GetPointIds()->GetId(lv); }
+  inline Vertex V(typename archgt::Vertex lv)        const { return Vertex(TheGrid(), v(lv.handle()));}
+  //  inline Vertex V(archgt::vertex_handle v) const;
+
   // checking functions
   inline bool bound() const {  return grid_ != 0; }
   inline bool valid() const { 

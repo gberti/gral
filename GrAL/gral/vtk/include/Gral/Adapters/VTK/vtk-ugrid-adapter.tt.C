@@ -23,7 +23,7 @@ UGridVTKArchetypes<3>::UGridVTKArchetypes();
 template <int D>
 typename UGridVTKArchetypes<D>::archetype_type const& 
 UGridVTKArchetypes<D>::ArchetypeOf(UGridVTKArchetypes<D>::Cell const& c) const {
-  return archetypes[archetype_handle(c)];
+  return archetypes[archetype_of(c)];
 }
  
 
