@@ -606,7 +606,7 @@ namespace GrAL {
       differentiation::gradient<F> grad_f(f); // ,eps);
      
       int n = 0;
-      while(fabs(f(x_n)) > 10*eps && n < max_iter) {
+      while(fabs(f(x_n)) > eps && n < max_iter) {
 	x_n = x_n - f(x_n) * grad_f(x_n);
 	++n;
       }
