@@ -142,9 +142,10 @@ void ConstructGridVC_generic (G_DEST        & G_dest,
   Geom_dest.rebind(G_dest);
   typedef grid_types<G_SRC>  srcgt;
   typedef grid_types<G_DEST> destgt;
+  typedef typename GEOM_DEST::coord_type dest_coord_type;
   for(typename srcgt::VertexIterator vs=G_src.FirstVertex(); ! vs.IsDone(); ++vs) {
-    assign_point(Geom_dest.coord(typename destgt::Vertex(G_dest, v_corr[vs.handle()])),
-		 Geom_src .coord(*vs));
+    Geom_dest.coord(typename destgt::Vertex(G_dest, v_corr[vs.handle()]))
+      = convert_point<dest_coord_type>(Geom_src .coord(*vs));
   }
 }
 
