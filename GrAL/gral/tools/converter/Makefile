@@ -54,6 +54,9 @@ complex2d2gmv: complex2d2gmv.o
 vtk2any: vtk2any.o
 	$(CC) -o vtk2any vtk2any.o $(LDFLAGS)  $(LIBSVTK) $(LIBSGMV) $(LIBS) $(LIBSVTK)
 
+vtk3d2any: vtk3d2any.o
+	$(CC) -o vtk3d2any vtk3d2any.o $(LDFLAGS)  $(LIBSVTK) $(LIBSGMV) $(LIBS) $(LIBSVTK)
+
 complex2d2off: complex2d2off.o
 	$(CC) -o complex2d2off complex2d2off.o $(LDFLAGS) $(LIBSOFF) $(LIBS)
 
