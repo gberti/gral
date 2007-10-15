@@ -23,7 +23,7 @@ void ConstructGrid0_dispatched(UGridVTKAdapter<D>  & G_dest,
   // (0) Make G_dest an empty grid
   G_dest.clear();
   G_dest.allocate(G_src.NumOfVertices(), G_src.NumOfCells());
-  std::cerr << "allocating " << G_src.NumOfVertices() << " " << G_src.NumOfCells() <<"\n";
+  // std::cerr << "allocating " << G_src.NumOfVertices() << " " << G_src.NumOfCells() <<"\n";
   typedef grid_types<UGridVTKAdapter<D> > gt;
   typedef grid_types<G_SRC>     sgt;
   typedef typename gt::archetype_type   dst_archetype;
