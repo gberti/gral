@@ -7,6 +7,7 @@
 #include "Geometry/box.h"
 #include "Geometry/coords.h"
 #include "Utility/pre-post-conditions.h"
+#include "Container/tuple-point-traits.h"
 
 #include <iostream>
 #include <iomanip>
@@ -103,4 +104,16 @@ int main() {
 
   cout << "b_empty:    " << b_empty.min()    << " " << b_empty.max()    << "\n"
        << "b_infinite: " << b_infinite.min() << " " << b_infinite.max() << std::endl;
+
+  {
+    typedef tuple<double,2> coord_type_2;
+    coord_type_2 p0(0.0,0.0);
+    coord_type_2 p1(1.0,2.0);
+
+    box<coord_type_2> b2(p0,p1);
+    box_type b2_copy = convert<coord_type>(b2);
+    REQUIRE_ALWAYS(b2_copy.min() == convert_point<coord_type>(b2.min()), "", 1);
+    REQUIRE_ALWAYS(b2_copy.max() == convert_point<coord_type>(b2.max()), "", 1);
+  }
+
 }
