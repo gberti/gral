@@ -134,6 +134,24 @@ struct point_traits<unsigned>
   : public scalar_point_traits<unsigned> {};
 
 
+/*! \brief Hook for indicating different array offset.
+
+    \example
+    \code
+     class MyPoint {
+       double X[3];    
+
+       // offset 1, a la Fortran
+       double operator[](int i) { return X[i-1];}
+     };
+     ...
+     template<> struct GrAL::array_offset<MyPoint> { enum { value = 1}; };
+     
+     template<> struct GrAL::point_trait<MyPoint> 
+       : public GrAL::point_traits_fixed_size_array<MyPoint, double, N> {}; 
+    \endcode
+ */
+template<class ARRAY> struct array_offset { enum { value = 0 }; };
 
 template<class ARRAY, class COMPONENT, unsigned DIM>
 struct point_traits_fixed_size_array_base :
@@ -152,15 +170,17 @@ struct point_traits_fixed_size_array_base :
   static unsigned Dim(const Ptype&) { return DIM;}
   static unsigned Dim() { return DIM;}
   
-  static int LowerIndex()             { return 0;}
-  static int LowerIndex(Ptype const&) { return 0;}
-  static int UpperIndex()             { return DIM-1;}
-  static int UpperIndex(Ptype const&) { return DIM-1;}
+  static int Offset() { return array_offset<ARRAY>::value; }
+  static int LowerIndex()             { return Offset(); } //0;}
+  static int LowerIndex(Ptype const&) { return Offset(); } //0;}
+  static int UpperIndex()             { return Offset() + DIM-1;}
+  static int UpperIndex(Ptype const&) { return Offset() + DIM-1;}
 
 
   static Ptype Origin() {
     Ptype p; 
-    for(unsigned i = 0; i < DIM; ++i) p[i] = component_type(0.0);
+    for(int i = LowerIndex(); i <= UpperIndex(); ++i) 
+      p[i] = component_type(0.0);
     return p;
   }
   static Ptype Origin(unsigned) { return Origin();}
@@ -175,12 +195,12 @@ struct point_traits_fixed_size_array_base :
   static Ptype unit_vector(int i, unsigned) { return unit_vector(i);}
 
   // should branch on DIM here.
-  static component_type  x(const Ptype& p) {return p[0];}
-  static component_type& x(      Ptype& p) {return p[0];}
-  static component_type  y(const Ptype& p) {return p[1];}
-  static component_type& y(      Ptype& p) {return p[1];}
-  static component_type  z(const Ptype& p) {return p[2];}
-  static component_type& z(      Ptype& p) {return p[2];}
+  static component_type  x(const Ptype& p) {return p[Offset()+0];}
+  static component_type& x(      Ptype& p) {return p[Offset()+0];}
+  static component_type  y(const Ptype& p) {return p[Offset()+1];}
+  static component_type& y(      Ptype& p) {return p[Offset()+1];}
+  static component_type  z(const Ptype& p) {return p[Offset()+2];}
+  static component_type& z(      Ptype& p) {return p[Offset()+2];}
 
 };
 
@@ -190,7 +210,7 @@ struct point_traits_fixed_size_array :
 
 
 template<class ARRAY, class COMPONENT>
-struct point_traits_fixed_size_array<ARRAY, COMPONENT, 2> 
+struct point_traits_fixed_size_array<ARRAY, COMPONENT, 2>
   : public point_traits_fixed_size_array_base<ARRAY, COMPONENT, 2>
 {
   typedef point_traits_fixed_size_array_base<ARRAY, COMPONENT, 2> base;
@@ -212,7 +232,7 @@ struct point_traits_fixed_size_array<ARRAY, COMPONENT, 2>
 };
 
 template<class ARRAY, class COMPONENT>
-struct point_traits_fixed_size_array<ARRAY, COMPONENT, 3> 
+struct point_traits_fixed_size_array<ARRAY, COMPONENT, 3>
   : public point_traits_fixed_size_array_base<ARRAY, COMPONENT, 3>
 {
   typedef point_traits_fixed_size_array_base<ARRAY, COMPONENT, 3> base;
@@ -237,16 +257,17 @@ point_traits_fixed_size_array<ARRAY, COMPONENT, 2U>::dummy_zero = 0;
 template<class ARRAY, class V, unsigned N>
 struct array_io_operators 
 {
+  typedef point_traits<ARRAY> pt;
   friend std::ostream& operator<<(std::ostream& out, ARRAY const& a) { 
-    for(unsigned i  = 0; i < N-1; ++i) 
+    for(unsigned i  = pt::LowerIndex(); i < pt::UpperIndex(); ++i) 
       out << a[i] << ' ';
-    out << a[N-1];
+    out << a[pt::UpperIndex()];
     return out;
   }
 
   friend std::istream& operator>>(std::istream& in, ARRAY & a) { 
-    for(unsigned i  = 0; i < N; ++i) 
-      in >> a[i];
+    for(unsigned i  = pt::LowerIndex(); i <= pt::UpperIndex(); ++i) 
+       in >> a[i];
     return in;
   }
   
@@ -263,7 +284,8 @@ struct array_operators : public array_io_operators<ARRAY,V,N>
   typedef V value_type;
 
   ARRAY& operator-=(ARRAY const& rhs) {
-    for(unsigned i  = 0; i < N; ++i) 
+    typedef point_traits<ARRAY> pt;
+    for(int i  = pt::LowerIndex(); i <= pt::UpperIndex(); ++i) 
       to_derived()[i] -= rhs[i];
     return to_derived(); 
   }
@@ -272,7 +294,8 @@ struct array_operators : public array_io_operators<ARRAY,V,N>
     return lhs -= rhs;
   }
   ARRAY& operator+=(ARRAY const& rhs) {
-    for(unsigned i  = 0; i < N; ++i) 
+    typedef point_traits<ARRAY> pt;
+    for(int i  = pt::LowerIndex(); i <= pt::UpperIndex(); ++i) 
       to_derived()[i] += rhs[i];
     return to_derived(); 
   }
@@ -282,13 +305,15 @@ struct array_operators : public array_io_operators<ARRAY,V,N>
   }
 
   ARRAY& operator*=(value_type v) {
-    for(unsigned i  = 0; i < N; ++i) 
+    typedef point_traits<ARRAY> pt;
+    for(int i  = pt::LowerIndex(); i <= pt::UpperIndex(); ++i)  
       to_derived()[i] *= v;
     return to_derived(); 
   }  
   
   ARRAY& operator/=(value_type v) {
-    for(unsigned i  = 0; i < N; ++i) 
+    typedef point_traits<ARRAY> pt;
+    for(int i  = pt::LowerIndex(); i <= pt::UpperIndex(); ++i) 
       to_derived()[i] /= v;
     return to_derived(); 
   }
@@ -487,7 +512,8 @@ template<class P, class Q>
 struct point_converter {
   typedef P result_type;
   typedef Q argument_type;
-  
+
+  result_type operator()(argument_type const& q) { return act(q);}
   static  result_type act(argument_type const& q) {
     P p;
     assign_point(p,q);
@@ -510,6 +536,17 @@ template<class P, class Q>
 inline typename point_converter<P,Q>::result_type
 convert_point(Q const& q) { return point_converter<P,Q>::act(q);}
 
+
+
+template<unsigned N, unsigned M>
+struct is_equal {
+  enum { value = (N==M) };
+};
+
+template<class P, unsigned N>
+struct point_has_dimension {
+  enum { value = is_equal<N, point_traits<P>::dimension>::value };
+};
 
 } // namespace GrAL 
 
