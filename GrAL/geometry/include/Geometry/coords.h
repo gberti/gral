@@ -177,102 +177,12 @@ inline ::std::istream& operator>>(::std::istream& in, coordN<N>& P)
 }
 
 
-template<unsigned N>
-struct point_traits_for_coordN 
-  : public point_traits_base<coordN<N> > {
-
-
-  typedef typename dim_tag<N>::dimension_tag dimension_tag;
-  enum { dimension = N };
-  typedef coordN<N>                      Ptype;
-  typedef typename Ptype::component      component_type;
-  typedef component_type                 value_type;
-
-  static int LowerIndex()             { return 1;}
-  static int UpperIndex()             { return N;}
-  static int LowerIndex(const Ptype&) { return 1;}
-  static int UpperIndex(const Ptype&) { return N;}
-  // static unsigned Dimension(const Ptype&)  { return N;}
-  static unsigned  Dim      (const Ptype&)  { return N;}
-
-  // static unsigned  Dimension()                 { return N;}
-  static unsigned  Dim      ()                 { return N;}
-
-  static void ConstructWithDim(unsigned, Ptype&) {}
-  //static fixed_size_tag point_size_tag() { return fixed_size_tag();}
-
-  static Ptype Origin()         { return Ptype(0.0);}
-  static Ptype Origin(unsigned) { return Ptype(0.0);}
-
-  static component_type  x(const Ptype& p) {return p[1];}
-  static component_type& x(      Ptype& p) {return p[1];}
-  static component_type  y(const Ptype& p) {return p[2];}
-  static component_type& y(      Ptype& p) {return p[2];}
-  static component_type  z(const Ptype& p) {return p[3];}
-  static component_type& z(      Ptype& p) {return p[3];}
-
-  //static string name() { return "coordN<N=" + make_string(N) +">";} 
-};
-
-// specialization for N=2 ( no reference for z() - functional)
-struct point_traits_for_coordN_2
-  : public point_traits_base<coordN<2> > {
-  typedef coordN<2>                 Ptype;
-  typedef Ptype::component          component_type;
-  typedef component_type            value_type;
-  typedef tag2D                     dimension_tag;
-  enum { dimension = 2 };
-
-  static int LowerIndex()             { return 1;}
-  static int UpperIndex()             { return 2;}
-  static int LowerIndex(const Ptype&) { return 1;}
-  static int UpperIndex(const Ptype&) { return 2;}
-  // static int Dimension(const Ptype&)  { return 2;}
-  static unsigned Dim      (const Ptype&)  { return 2;}
-
-  //static int Dimension()                 { return 2;}
-  static unsigned Dim()                       { return 2;}
-  static void ConstructWithDim(unsigned, Ptype&) {}
-  //static fixed_size_tag point_size_tag() { return fixed_size_tag();}
-
-  static Ptype Origin()         { return Ptype(0.0);}
-  static Ptype Origin(unsigned) { return Ptype(0.0);}
-
-  static component_type  x(const Ptype& p) {return p[1];}
-  static component_type& x(      Ptype& p) {return p[1];}
-  static component_type  y(const Ptype& p) {return p[2];}
-  static component_type& y(      Ptype& p) {return p[2];}
-  static component_type  z(const Ptype&  ) {return 0;}
-
-  static const char* name() { return "coord<2>"; }
-};
+template<unsigned N> struct array_offset<coordN<N> > { enum { value = 1}; };
 
 template<unsigned N>
-struct point_traits<coordN<N> > :  public point_traits_for_coordN<N> {};
+struct point_traits<coordN<N> >
+  : public point_traits_fixed_size_array<coordN<N>, typename coordN<N>::component, N> {};
 
-template<>
-struct point_traits<coordN<2> > : public point_traits_for_coordN_2  {};
-
-/*
-struct point_traits<coordN<3> > : public point_traits_for_coordN<3> {};
-struct point_traits<coordN<4> > : public point_traits_for_coordN<4> {};
-struct point_traits<coordN<5> > : public point_traits_for_coordN<5> {};
-*/
-
-
-// total specializations, could be made partial in
-// algebraic-primitives.
-// these should really be elsewhere, because not everyone
-// wants to use them.
-
-/*
-struct dimension_dependent_primitives<coordN<3> >
-  : public dimension_dependent_primitives_3d<coordN<3> > {};
-
-template<>
-struct dimension_dependent_primitives<coordN<2> >
-  : public dimension_dependent_primitives_2d<coordN<2> > {};
-*/
 
 } // namespace GrAL 
 
