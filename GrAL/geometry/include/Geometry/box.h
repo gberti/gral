@@ -93,11 +93,13 @@ public:
   /*! \brief Create bounding box of the single point \c p
    */
   box(const coord& p) : minc(p), maxc(p) {}
+
   /*! \brief Create bounding box of the set <tt> {cmin, cmax} </tt>
    */
   box(const coord& cmin, const coord& cmax) : minc(cmin), maxc(cmin)
   { *this |= cmax; }
-  
+
+
   /*! \brief Create bounding box of the sequence <tt> [begin, end[ </tt>
    */
   template<class INPUTITERATOR >
@@ -267,7 +269,14 @@ public:
    return (out << b.the_min() << "  " << b.the_max());
  }
 
-
+  /*! \brief Box conversion
+    
+  \see \c box<COORD>
+  \ingroup boundingbox
+  */
+  template<class COORD, class P>
+  inline box<COORD> convert(box<P> const& b) 
+  { return box<COORD>(convert_point<COORD>(b.min()), convert_point<COORD>(b.max()));}
 
 /*! \brief Box intersection.
 
