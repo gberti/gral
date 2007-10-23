@@ -4,6 +4,7 @@
 // $LICENSE_NEC_2007
 
 #include "Container/algebraic-operators.h"
+#include "Container/relational-operators.h"
 #include "Container/mathematical-operators.h"
 #include "Geometry/point-traits.h"
 
@@ -101,6 +102,26 @@ namespace GrAL {
     res[i] = op(lhs[i], rhs[i]);
     return res;
   }
+
+  /*! \brief Generic binary componentwise operations
+
+      \ingroup compwise_arrayoperations
+   */
+  template<class P, class BinaryRelationalOp>
+  inline 
+  typename boost::enable_if<use_componentwise_operations<P>, bool>::type
+  componentwise_compare(P const& lhs, P const& rhs,  BinaryRelationalOp op)
+  {
+    bool res = true;
+    typedef point_traits<P> pt;
+    for(int i = pt::LowerIndex(lhs); i <= pt::UpperIndex(lhs); ++i)
+      res = res && op(lhs[i], rhs[i]);
+    return res;
+  }
+
+
+  
+
 
   /*! \brief Generic unary componentwise operations
 
@@ -344,6 +365,57 @@ namespace GrAL {
   typename boost::enable_if<use_componentwise_operations<P>, P>::type 
   min_tuple(P const& lhs, P const& rhs)
   { return componentwise(lhs,rhs, algebraic_operators::min()); }
+
+ /*! \brief Componentwise equal
+
+    \ingroup componentwise_comparison_arrayoperations
+  */
+  template<class P>
+  inline
+  typename boost::enable_if<use_componentwise_operations<P>, bool>::type 
+  componentwise_equal(P const& lhs, P const& rhs)
+  { return componentwise_compare(lhs, rhs, relational_operators::eq()); }
+
+
+ /*! \brief Componentwise less
+
+    \ingroup componentwise_comparison_arrayoperations
+  */
+  template<class P>
+  inline
+  typename boost::enable_if<use_componentwise_operations<P>, bool>::type 
+  componentwise_less(P const& lhs, P const& rhs)
+  { return componentwise_compare(lhs, rhs, relational_operators::lt()); }
+
+ /*! \brief Componentwise greater
+
+    \ingroup componentwise_comparison_arrayoperations
+  */
+  template<class P>
+  inline
+  typename boost::enable_if<use_componentwise_operations<P>, bool>::type 
+  componentwise_greater(P const& lhs, P const& rhs)
+  { return componentwise_compare(lhs, rhs, relational_operators::gt()); }
+
+ /*! \brief Componentwise less or equal
+
+    \ingroup componentwise_comparison_arrayoperations
+  */
+  template<class P>
+  inline
+  typename boost::enable_if<use_componentwise_operations<P>, bool>::type 
+  componentwise_less_equal(P const& lhs, P const& rhs)
+  { return componentwise_compare(lhs, rhs, relational_operators::leq()); }
+
+ /*! \brief Componentwise greater or equal
+
+    \ingroup componentwise_comparison_arrayoperations
+  */
+  template<class P>
+  inline
+  typename boost::enable_if<use_componentwise_operations<P>, bool>::type 
+  componentwise_greater_equal(P const& lhs, P const& rhs)
+  { return componentwise_compare(lhs, rhs, relational_operators::geq()); }
 
 
 

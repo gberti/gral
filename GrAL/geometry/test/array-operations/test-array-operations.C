@@ -97,4 +97,24 @@ int main()
     REQUIRE_ALWAYS(z == coord_type(2,6), "z= " << z, 1);
     z = x * 2.0;
   }  
+
+  {
+    // does not work: componentwise ops disabled for tuple,
+    // because it defines its own
+    // typedef GrAL::tuple<double,2>            coord_type;
+    typedef GrAL::coordN<2>                coord_type;
+    typedef GrAL::point_traits<coord_type> pt;
+    coord_type a = pt::construct(0.0,0.0);
+    coord_type b(1.0,0.0);
+    coord_type c(1.0,1.0);
+    bool bb  = GrAL::componentwise_compare(a,a, GrAL::relational_operators::eq());
+    REQUIRE_ALWAYS(GrAL::componentwise_equal(a,a), "",1);
+    REQUIRE_ALWAYS(GrAL::componentwise_less   (a,c), "",1);
+    REQUIRE_ALWAYS(GrAL::componentwise_greater(c,a), "",1);
+    REQUIRE_ALWAYS(GrAL::componentwise_less_equal   (a,b), "",1);
+    REQUIRE_ALWAYS(GrAL::componentwise_greater_equal(b,a), "",1);
+    REQUIRE_ALWAYS(!GrAL::componentwise_less  (a,b), "",1);
+    REQUIRE_ALWAYS(!GrAL::componentwise_greater(b,a), "",1);
+    
+  }
 }
