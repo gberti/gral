@@ -21,11 +21,15 @@ int main() {
   uf.join(0,1);
   uf.join(2,3);
   uf.join(1,3);
+  // test joining of items of the same set
+  uf.join(1,3);
 
   uf.join(4,5);
   uf.join(5,6);
   uf.join(7,8);
   uf.join(5,8);
+  // test joining of items of the same set
+  uf.join(4,8);
 
   for(int i = 0; i < 10; ++i)
     cout << "uf(" << i << ") = " << uf(i) << " size = " << uf.size(i) << "\n";
