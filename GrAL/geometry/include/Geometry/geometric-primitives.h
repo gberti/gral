@@ -65,8 +65,9 @@ template<class P>
 class segment {
   typedef segment<P> self;
 public:
-  typedef P coord_type;
-  typedef point_traits<P> pt;
+  typedef P                           coord_type;
+  typedef point_traits<P>             pt;
+  typedef algebraic_primitives<P>     ap;
   typedef typename pt::component_type scalar_type;
 private:
   coord_type  p[2];
@@ -90,6 +91,15 @@ public:
   typedef coord_type const*  geom_vertex_iterator;
   geom_vertex_iterator begin_vertex() const { return p;}
   geom_vertex_iterator end_vertex()   const { return p+2;}
+
+  scalar_type project(coord_type const& q) const { return ap::dot(q-p0(), p1()-p0())/squared_length(); }
+  scalar_type squared_length()   const { return ap::squared_norm_2(p1()-p0()); }
+  scalar_type length()           const { return sqrt(squared_length());}
+  coord_type  nearest(coord_type const& q) const { 
+    scalar_type t = project(q);
+    return (t <= 0 ? p0() : (t >=1 ? p1() : this->operator()(t)));
+  }
+
 };
 
 
@@ -261,6 +271,8 @@ struct geom_traits<line<P> > {
   
 
 /*! Calculate normal from 3-point plane representation 
+
+      \ingroup geometric_primitives
    */
 template<class Triangle>
 inline
@@ -274,6 +286,9 @@ plane_normal(Triangle const& T)
 }
 
 /*! Calculate normal from 3-point plane representation 
+
+      \ingroup geometric_primitives
+
    */
 template<class Triangle>
 inline
@@ -287,8 +302,10 @@ plane_normed_normal(Triangle const& T)
 
 
 
-/*! Class for intersecting a segment and a triangle in 3D
+/*! \brief Class for intersecting a segment and a triangle in 3D
       
+      \ingroup geometric_primitives
+
      \todo: optimize by introducing caches for calculated quantities.
    */
 
@@ -352,6 +369,8 @@ public:
 
 /*! Class for intersecting a ray and a triangle in 3D
       
+      \ingroup geometric_primitives
+
      \todo: optimize by introducing caches for calculated quantities.
    */
 
@@ -430,6 +449,22 @@ public:
     return rt::p0(R) + t * rt::dir(R);
   }
 };
+
+
+
+template<class P> 
+inline typename segment<P>::scalar_type
+distance(space_point<P> const& p, segment<P> const& s) 
+{ 
+  typedef algebraic_primitives<P> ap;
+  return ap::distance(p.p0(), s.nearest(p.p0())); 
+}
+
+template<class P> 
+inline typename segment<P>::scalar_type
+distance(segment<P> const& s, space_point<P> const& p)
+{ return distance(s,p);}
+
 
 } // namespace GrAL 
 

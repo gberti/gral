@@ -45,4 +45,19 @@ int main() {
   for(int i = 0; i < boost::size(p); ++i)
     cout << "Point " << p[i] << " is" << (C.inside(p[i]) ? "     " : " not ") << "inside finite, " 
 	 << (CI.inside(p[i]) ? "     " : " not ") << "inside infinite\n";
+
+  {
+    coord_type p0(0.0,0.0), p1(1.0,0.0);
+    segment<coord_type> s(p0,p1);
+    coord_type n(0,1);
+
+    coord_type p[] = { p0, p1, 0.5*(p0+p1), 0.5*(p0+p1) + n, ct(-2,0), p0+ct(-4.0,3), p0+n, p1+n, ct(2.,0), p1+ct(4.0,3.0) };
+    cout << "Segment s = [" << s.p0() << "," << s.p1() << "]\n";
+    for(int i = 0; i < sizeof(p)/sizeof(ct); ++i) {
+      cout << "Point " << p[i] << ": " 
+	   << "s.project(p) = " << s.project(p[i]) << "; "
+	   << "s.nearest(p) = " << s.nearest(p[i]) << "; "
+	   << "distance(p,s) = " << distance(space_point<coord_type>(p[i]),s) << "\n";  
+    }
+  }
 }
