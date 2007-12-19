@@ -89,7 +89,8 @@ namespace GrAL { namespace differentiation {
       explicit gradient(F const& f) : base(f) {}
     };
 
-
+  // This may be inefficient - may be overloaded.
+  // FIXME: This is a global unconstrained template ...
     template<class F> 
     typename F::argument_type grad(F& f, typename F::argument_type x) { gradient<F> g(f); return g(x); }
 

@@ -123,7 +123,7 @@ class tuple<T,2> : public tuple_base<T,2> {
   using base::end;
   using base::copy;
 
-  explicit tuple(T t = 0)        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
+  explicit tuple(T t = T(0))        { for(iterator i = begin(); i != end(); ++i)  *i = t;}
   explicit tuple(const c_array& rs) : base(rs) {}
   tuple(const_iterator b, const_iterator e) : base(b,e) {}
   tuple(T        t1, T        t2) { this->X[0] = t1; this->X[1] = t2;}
