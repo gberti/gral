@@ -110,6 +110,10 @@ public:
   }
   //! Dimension of embedding space
   unsigned space_dimension() const { return 2;}
+
+  //! \brief Return raw coordinat data
+  double const* get_coords() const { return xy;}
+
 private:
   void clear() { if (owned) delete [] xy; xy = 0;}
   void copy(self const& rhs)

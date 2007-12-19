@@ -152,6 +152,9 @@ public:
    */
   void init (size_type* c, size_type nc, size_type nv) { Steal(c,nc,nv); owned = false; }
   //@}
+
+  //! \brief Return raw cell data
+  size_type const* get_cells() const { return cells;}
 private:
   void clear(); 
   void do_copy();
