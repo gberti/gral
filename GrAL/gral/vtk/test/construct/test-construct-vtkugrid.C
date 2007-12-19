@@ -41,29 +41,73 @@ int main() {
       "3  0 1 2\n"
       "3  0 2 3\n"
       "4  0 1 5 4\n";
+ 
     std::istringstream gridstream(grid_data); 
     IstreamComplex2DFmt Gsrc(gridstream); 
     Complex2D T;
     stored_geometry_complex2D GeomT(T);
     ConstructGrid(T, GeomT, Gsrc, Gsrc);
-    vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
+ 
     typedef grid_types<vtk_ugrid::UGridVTKAdapter<2> > vtkgt;
-
-    ConstructGrid(vtkgrid, vtkgrid, T, GeomT);
-    //vtkgrid.GetAdaptee()->GetCellTypesArray()->PrintSelf(std::cerr,0);
-    vtkCellTypes * ct = vtkCellTypes::New();
-    vtkgrid.GetAdaptee()->GetCellTypes(ct);
-    for(int t = 0; t <  ct->GetNumberOfTypes(); ++t) {
-      cerr << "Cell type " << t << " = " << vtkgt::VTK_type(ct->GetCellType(t)) << "\n";
+    {
+      vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
+      ConstructGrid(vtkgrid, vtkgrid, T, GeomT);
+      //vtkgrid.GetAdaptee()->GetCellTypesArray()->PrintSelf(std::cerr,0);
+      vtkCellTypes * ct = vtkCellTypes::New();
+      vtkgrid.GetAdaptee()->GetCellTypes(ct);
+      for(int t = 0; t <  ct->GetNumberOfTypes(); ++t) {
+	cerr << "Cell type " << t << " = " << vtkgt::VTK_type(ct->GetCellType(t)) << "\n";
+      }
+      ct->Delete();
+      
+      
+      vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
+      writer->SetFileName("tri+quad.vtk");
+      writer->SetInput(vtkgrid.GetAdaptee());
+      writer->Write();
+      writer->Delete();
     }
-    ct->Delete();
+    {
+      vtkUnstructuredGrid * vtk_ptr = vtkUnstructuredGrid::New();
+      vtk_ugrid::UGridVTKAdapter<2> vtkgrid(vtk_ptr);
+      ConstructGrid(vtkgrid, vtkgrid, T, GeomT);
+      vtkCellTypes * ct = vtkCellTypes::New();
+      vtk_ptr->GetCellTypes(ct);
+      for(int t = 0; t <  ct->GetNumberOfTypes(); ++t) {
+	cerr << "Cell type " << t << " = " << vtkgt::VTK_type(ct->GetCellType(t)) << "\n";
+      }
+      ct->Delete();
+      
+      
+      vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
+      writer->SetFileName("tri+quad2.vtk");
+      writer->SetInput(vtk_ptr);
+      writer->Write();
+      writer->Delete();
+      vtk_ptr->Delete();
+    }
+    {
+      vtkUnstructuredGrid * vtk_ptr = vtkUnstructuredGrid::New();
+      vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
+      vtkgrid.SetAdaptee(vtk_ptr);
+      ConstructGrid(vtkgrid, vtkgrid, T, GeomT);
+      vtkCellTypes * ct = vtkCellTypes::New();
+      vtk_ptr->GetCellTypes(ct);
+      for(int t = 0; t <  ct->GetNumberOfTypes(); ++t) {
+	cerr << "Cell type " << t << " = " << vtkgt::VTK_type(ct->GetCellType(t)) << "\n";
+      }
+      ct->Delete();
+      
+      
+      vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
+      writer->SetFileName("tri+quad3.vtk");
+      writer->SetInput(vtk_ptr);
+      writer->Write();
+      writer->Delete();
+      vtk_ptr->Delete();
+    }
 
-    
-    vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
-    writer->SetFileName("tri+quad.vtk");
-    writer->SetInput(vtkgrid.GetAdaptee());
-    writer->Write();
-    writer->Delete();
+
   }
 
   {

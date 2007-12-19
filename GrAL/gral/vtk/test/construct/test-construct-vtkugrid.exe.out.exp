@@ -1,2 +1,6 @@
 Cell type 0 = VTK_TRIANGLE
 Cell type 1 = VTK_QUAD
+Cell type 0 = VTK_TRIANGLE
+Cell type 1 = VTK_QUAD
+Cell type 0 = VTK_TRIANGLE
+Cell type 1 = VTK_QUAD

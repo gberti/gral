@@ -211,25 +211,44 @@ class UGridVTKAdapter : public grid_types_UGridVTKAdapter<D>,
 
   private:
   Adaptee *adaptee_;
+  bool     owned_;
 
   inline void make_empty() {
     if (adaptee_) {
-      adaptee_->UnRegister(NULL);
-      adaptee_ = NULL;  
+      if(owned_) {
+	// adaptee_->UnRegister(NULL);
+	// adaptee_ = NULL;  
+	adaptee_->Delete();
+	adaptee_ = 0;
+      }
+      else
+	allocate(0,0);
+    }
+  }
+
+  inline void release() {
+    if(adaptee_) {
+      // adaptee_->UnRegister(NULL);
+      // adaptee_ = NULL;  
+      adaptee_->Delete();
+      adaptee_ = 0;
     }
   }
   public:
 
   /*! \brief Empty grid
    */
-  inline UGridVTKAdapter() : adaptee_(0) {
+  inline UGridVTKAdapter() : adaptee_(0), owned_(true) {
     clear();
   }
 
   //! make this an empty grid
   inline void clear() {
     make_empty();
-    adaptee_ = vtkUnstructuredGrid::New();
+    if(adaptee_ == 0) {
+      adaptee_ = vtkUnstructuredGrid::New();
+      owned_   = true;
+    }
   }
 
   inline void allocate(int npoints, int ncells) {
@@ -241,21 +260,27 @@ class UGridVTKAdapter : public grid_types_UGridVTKAdapter<D>,
   }
 
   /*! \brief Construct a view to the vtkUnstructuredGrid \c a
+
+     This view is read/write: Any changes made to this view will be reflected in \c a.
    */
-  inline explicit UGridVTKAdapter(Adaptee *a) : adaptee_(a) {
+  inline explicit UGridVTKAdapter(Adaptee *a) : adaptee_(a), owned_(false) {
+    REQUIRE(a != NULL, "Initalization with NULL pointer", 1);
     if (adaptee_) {
       adaptee_->Register(NULL); // VTK objects are reference counted
     }
   }
 
   inline ~UGridVTKAdapter() {
-    make_empty();
+    //make_empty();
+    release(); 
   }
 
   inline void SetAdaptee(Adaptee *a) {
     REQUIRE(a != NULL, "Initalization with NULL pointer", 1);
-    make_empty();
+    //make_empty();
+    release();
     adaptee_ = a;
+    owned_   = false;
     adaptee_->Register(NULL);
   }
 
