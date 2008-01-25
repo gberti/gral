@@ -316,6 +316,9 @@ public:
     return *this;
   }
 
+  template<class U>
+  void swap(ref_ptr<U> const& rhs) { ptr.swap(rhs.get_ptr());}
+
 
   /*! \brief Set to a shared pointer to \c uptr
       \pre \c tuptr must point to dynamically allocated memory,
