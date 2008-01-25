@@ -21,21 +21,25 @@ int main(int argc, char* argv[]) {
   using namespace GrAL;
   using namespace std;
 
-  cerr << "------ Starting complex2d2vtk -------\n" << endl;
+  cerr << "------ Starting complex2d2any -------\n" << endl;
 
   ControlDevice Ctrl = 
     GetCommandlineAndFileControlDevice(argc,argv,"complex2d2gmv.in","main");
-  string h = "complex2d2gmv - converted mesh in complex2d format to gmv format\n";
-  h += "Usage: complex2d2gmv -g|-i|-in <complex2d> -o|-out <gmv>  -d <space dim = 2> -off <offset = 0>\n";
+  string h = "complex2d2gmv - converted mesh in complex2d format to other formats\n";
+  h += "Usage: complex2d2gmv <OPTIONS>\n";
+  string p = "   ";
   string grid_in;
   RegisterAt(Ctrl, "-g", grid_in);
   RegisterAt(Ctrl, "-i", grid_in);
   RegisterAt(Ctrl, "-in", grid_in);
+  h += p + "-i|-in|-g <grid> (grid in complex2d format)\n";
 
   string gmv_grid_out;
   RegisterAt(Ctrl, "-gmv", gmv_grid_out);
+  h += p + "-gmv <GMV file> (GMV output file)\n";
   string vtk_grid_out;
   RegisterAt(Ctrl, "-vtk", vtk_grid_out);
+  h += p + "-vtk <VTK file> (VTK ASCII unstructured mesh file)\n";
 
   AddHelp(Ctrl, h);
 
