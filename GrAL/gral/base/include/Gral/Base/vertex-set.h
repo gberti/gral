@@ -43,8 +43,10 @@ public:
       }
       std::sort(v.begin(), v.end());
     }
+  vertex_set(unsigned n) : v(n) {}
 
-  vertex_handle operator[](int n) const { check_range(n); return v[n];}
+  vertex_handle  operator[](int n) const { check_range(n); return v[n];}
+  vertex_handle& operator[](int n)       { check_range(n); return v[n];}
   unsigned      size() const { return v.size();}
 
   bool operator==(self const& rhs) const { 

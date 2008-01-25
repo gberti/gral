@@ -4,6 +4,9 @@
 // $LICENSE
 
 #include "Gral/Base/common-grid-basics.h"
+#include "Gral/Base/vertex-set.h"
+
+#include "Container/bijective-mapping.h"
 
 namespace GrAL {
 
@@ -128,7 +131,7 @@ private:
 
 /*! \brief Grid cell isomorphism 
 
-   Representation for a one-to-one mapping between vertices of 
+   Representation for a one-to-one mapping between cells of 
    two grids. Despite the name, this correspondence does not need
    to come from a grid isomorphism.
 
@@ -236,6 +239,142 @@ private:
     inv = pinv;
   }
 };
+
+
+/*!  \brief Grid element morphism 
+
+   Representation for a one-to-one mapping between elements of type E of 
+   two grids. Despite the name, this correspondence does not need
+   to come from a grid isomorphism.
+
+   \ingroup gridmorphisms
+   \see  \ref gridmorphisms module
+
+ */
+  template<class E_DEF, class E_IMG>
+  class element_morphism {
+    typedef element_morphism<E_DEF,E_IMG> self;
+    
+    typedef element_traits<E_DEF> et_def;
+    typedef element_traits<E_IMG> et_img;
+    
+    typedef typename et_def::grid_type   grid_type_def;
+    typedef typename et_img::grid_type   grid_type_img;
+    typedef grid_types<grid_type_def>    gtdef;
+    typedef grid_types<grid_type_img>    gtimg;
+    typedef E_DEF                        element_def;
+    typedef E_IMG                        element_img;
+    typedef typename et_def::handle_type element_handle_def;
+    typedef typename et_img::handle_type element_handle_img;
+
+    typedef element_morphism<element_img, element_def>    inverse_type;
+    typedef vertex_morphism<grid_type_def, grid_type_img> vertex_morphism_type;
+
+    // data
+    grid_function<element_def,element_handle_img> f;
+    ref_ptr<grid_type_img const>    g_img;
+    mutable  ref_ptr<inverse_type const>  inv;
+
+    void copy(self const& rhs) {
+      f = rhs.f;
+      g_img = rhs.g_img;
+    }
+
+  public:
+    typedef element_img result_type;
+    typedef element_def argument_type;
+    
+    element_morphism() {}
+    
+    element_morphism(grid_type_def const& g_def, grid_type_img const& gg_img)
+      : f(g_def), g_img(gg_img) {}
+
+    element_morphism(grid_type_def const& g_def, grid_type_img const& gg_img, inverse_type const& inverse)
+      : f(g_def), g_img(gg_img), inv(inverse) {}
+
+
+      /*! \brief Initialise from a vertex isomorphism
+	
+          This constructor assumes that every element is uniquely determined by its vertex set.
+      */
+    element_morphism(vertex_morphism_type const & v_corr)
+      : f(v_corr.DefGrid()), g_img(v_corr.ImgGrid()) 
+    { init(v_corr); }
+
+	
+    void init(vertex_morphism_type const & v_corr);
+    
+    self & operator=(self const& rhs) { if(this != &rhs) copy(rhs); return *this;}
+
+    inverse_type const& inverse()  const {
+      if(inv == 0) init_inverse();
+      return *inv;
+    }
+
+    result_type operator()(argument_type const& e) const { 
+      REQUIRE((g_img != 0), "No image grid!\n",1);
+      return element_img(*g_img,f(e));
+    }
+
+    element_handle_img operator()(element_handle_def h) const {
+      REQUIRE((g_img != 0), "No image grid!\n",1);
+      return f(element_def(f.TheGrid(),h));
+    }
+
+    element_handle_img & operator[](element_handle_def h)  {
+      REQUIRE((g_img != 0), "No image grid!\n",1);
+      return f[element_def(f.TheGrid(),h)];
+    }
+
+
+    struct element_handle_img_proxy {
+      element_handle_img & h;
+      element_handle_img_proxy(element_handle_img& hh) : h(hh) {}
+      void operator=(element_img const& c) { h = c.handle();}
+      void operator=(element_handle_img const& c) { h = c;}
+    };
+    
+    element_handle_img_proxy operator[](element_def const& c) {
+      REQUIRE((g_img != 0), "No image grid!\n",1);
+      return element_handle_img_proxy(f[c]);
+    }
+    
+    
+    grid_type_def const& DefGrid() const { return f.TheGrid();}
+    grid_type_img const& ImgGrid() const {
+      REQUIRE((g_img != 0), "No image grid!\n",1);
+      return *g_img;
+    }
+    
+  private:
+    void init_inverse() const {
+      // must use a writable version of inverse
+      GrAL::ref_ptr<inverse_type> w_inv = new_ref_ptr(new inverse_type(ImgGrid(),DefGrid(), *this));
+      for(typename et_def::ElementIterator e(DefGrid()); ! e.IsDone(); ++e)
+	(*w_inv)[(*this)(*e).handle()] = e.handle();
+      inv = w_inv;
+    }
+  };
+
+  template<class E_DEF, class E_IMG>
+  void element_morphism<E_DEF, E_IMG>::init(typename element_morphism<E_DEF, E_IMG>::vertex_morphism_type const& v_corr)
+  {
+    bijective_mapping<vertex_set<element_img>, element_handle_img> vertex_set_to_element_img;
+    for(typename et_img::ElementIterator e = GrAL::begin_x(ImgGrid()); e != GrAL::end_x(ImgGrid()); ++e) {
+      vertex_set<element_img> vs_img(*e);
+      vertex_set_to_element_img[vs_img] = e.handle();
+    }
+    typename et_def::ElementIterator e_end = GrAL::end_x(DefGrid());
+    for(typename et_def::ElementIterator e = GrAL::begin_x(DefGrid()); e != e_end; ++e) {
+      vertex_set<element_def> vs_def(*e);
+      vertex_set<element_img> vs_img(vs_def.size());
+      for(int v = 0; v < (int)vs_def.size(); ++v)
+	vs_img[v] = v_corr(vs_def[v]);
+      f[*e] = vertex_set_to_element_img(vs_img);
+    }
+  }
+
+
 
 } // namespace GrAL 
 
