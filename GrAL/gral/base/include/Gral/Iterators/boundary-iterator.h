@@ -108,7 +108,7 @@ public:
 
   /*! \pre ins(E1.C1()) != ins(E1.C2()) (that is, E1 is boundary facet)
    */
-  BoundaryComponentIterator2D(const Edge&   E1, const CellPred& ins)
+  BoundaryComponentIterator2D(const Edge&   E1, const CellPred& ins = CellPred())
    : inside(ins),
       V(E1.V2()), 
       E(E1), 
