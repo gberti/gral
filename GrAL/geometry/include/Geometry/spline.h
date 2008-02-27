@@ -61,18 +61,41 @@ namespace GrAL {
      \f$ s(0) = s0, s'(0) = ds0, s''(0) = dds(0), s'(1) = ds1, s''(1) = dds1 \f$.
 
   */
-  template<class T>
-  polynomial<4,T> make_quartic(T s0, T ds0, T dds0, T ds1, T dds1)
+  template<class T, class U>
+  polynomial<4,U,T> make_quartic(T s0, T ds0, T dds0, T ds1, T dds1)
   {
-    typedef polynomial<4,T> poly_type;
+    typedef polynomial<4,U,T> poly_type;
     typedef typename poly_type::coefficients_type ct;
     T coeff[5] = { s0, ds0, 
-		   T(0.5)  * dds0, 
-		   T(1.0/3)*(-dds1 + 3*ds1 - 3*ds0 -2*dds0), 
-		   T(0.25)  * ( dds1 - 2*ds1 + 2*ds0 +  dds0) };
+		   U(0.5)  * dds0, 
+		   U(1.0/3)*(-dds1 + U(3)*ds1 - U(3)*ds0 -U(2)*dds0), 
+		   U(0.25) *( dds1 - U(2)*ds1 + U(2)*ds0 +     dds0) };
     return poly_type(ct(coeff, coeff+5));
   }
+
+  /*! \brief Produce an anti-symmetric quintic s-shaped interpolation function
   
+     \f$ s(\pm 1) = \pm 1, s'(\pm 1) = s''(\pm 1) = 0 \f$
+   */
+  template<class T>
+  polynomial<5,T> make_quintic_s_shape()
+  {
+    typedef polynomial<5,T> poly_type;
+    // typedef typename poly_type::coefficients_type ct;
+    T coeff[6] = { T(0), T(15)/T(8), T(0), T(-5)/T(4), T(0), T(3)/T(8) };
+    //  return poly_type(ct(coeff, coeff+sizeof(coeff)/sizeof(T)));
+    return poly_type(coeff);
+  }
+
+  /*
+  template<class T>
+  polynomial<5,T> make_quintic_s_shape(T a, T b) 
+  {
+    polynomial<1,T> affine_transf(-1 -2*a/(b-a), 2/(b-a));
+    // composition currently not implemented 
+    return make_quintic_s_shape()(affine_transf);
+  }
+  */
 
 };
 

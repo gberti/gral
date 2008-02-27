@@ -47,8 +47,9 @@ namespace GrAL {
     coefficients_type coefficients;
 
   public:
-    polynomial() : coefficients(0) {}
+    polynomial() : coefficients(result_type(0)) {}
     polynomial(coefficients_type const& coeff) : coefficients(coeff) {}
+    polynomial(result_type (&a)[N+1]) : coefficients(a+0, a+N+1) {}
     result_type & operator[](int i)       { return coefficients[i];}
     result_type   operator[](int i) const { return coefficients[i];}
 
@@ -56,6 +57,17 @@ namespace GrAL {
     {
       return horner_eval(t, coefficients.begin(), coefficients.end());
     }
+
+    /*
+    // composition
+    template<unsigned K>
+    polynomial<result_type, N*K> operator()(polynomial<result_type, K> const& p) const
+    {
+        
+    }
+    */
+
+
     derivative_type d() const { 
       // tuple<result_type,N> d_coefficients;
       typename derivative_type::coefficients_type d_coefficients;
