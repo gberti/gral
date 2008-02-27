@@ -78,6 +78,11 @@ int main() {
       for(gt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc)
 	cout << "vc" << vc.handle() << " angle: " << GeomG.solid_angle(vc) << " (" << GeomG.solid_angle_ratio(vc) << ")  ";
       cout << "\n";
+
+      for(gt::EdgeOnCellIterator ec(*c); !ec.IsDone(); ++ec) {
+	cout << "ec" << ec.handle() << " outer normal: " << GeomG.outer_normal(ec) << "   "; 
+      }
+      cout << "\n";
     }
 
   } 

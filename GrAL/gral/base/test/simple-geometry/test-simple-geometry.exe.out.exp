@@ -27,7 +27,9 @@ e [4,3]  length:  1.41421
 f0 area: 1
 f1 area: 0.707107
 c0  vc0 angle: 0.785398 (0.125)  vc1 angle: 2.35619 (0.375)  vc2 angle: 0.785398 (0.125)  vc3 angle: 2.35619 (0.375)  
+ec0 0 outer normal: 0 -1 0   ec0 1 outer normal: 0.707107 -0.707107 0   ec0 2 outer normal: 0 1 0   ec0 3 outer normal: -0.707107 0.707107 0   
 c1  vc3 angle: 1.5708 (0.25)  vc2 angle: 0.955317 (0.152043)  vc4 angle: 0.61548 (0.0979566)  
+ec1 0 outer normal: 0 -0.707107 -0.707107   ec1 1 outer normal: 0.816497 0.408248 0.408248   ec1 2 outer normal: -1 0 0   
 v0 @ 0 0 0
 v1 @ 0 0 1
 v2 @ 0 1 0
