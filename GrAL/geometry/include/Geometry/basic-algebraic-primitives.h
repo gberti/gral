@@ -30,6 +30,8 @@ struct basic_algebraic_primitives : public point_traits<POINT> {
   */
   typedef typename real_type<scalar>::type   real;
 
+  static real sign(real t) { return (t > 0 ? 1 : (t < 0 ? -1 : 0));}
+
   //!  \brief Pointwise minimum
   static POINT min(const POINT& p, const POINT& q)
   {
