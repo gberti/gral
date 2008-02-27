@@ -108,19 +108,31 @@ public:
 
   /*! \pre ins(E1.C1()) != ins(E1.C2()) (that is, E1 is boundary facet)
    */
-  BoundaryComponentIterator2D(const Edge&   E1, const CellPred& ins = CellPred())
+  BoundaryComponentIterator2D(const Edge&   E1, const CellPred& ins)
    : inside(ins),
       V(E1.V2()), 
       E(E1), 
       Estart(E1), 
       done(false) 
-    {
-      // why necessary?
-      if(! TheGrid().IsInside(E1.C1()))
-       C = E1.C2();
-      else 
-       C = (! inside(E1.C1()) ? E1.C2() : E1.C1());
-    }
+  {init(E1);}
+
+  BoundaryComponentIterator2D(const Edge&   E1)
+    : inside(E1.TheGrid()),
+      V(E1.V2()), 
+      E(E1), 
+      Estart(E1), 
+      done(false) 
+  { init(E1);}
+  
+  
+  void init(const Edge& E1)   
+  {
+    // why necessary?
+    if(! TheGrid().IsInside(E1.C1()))
+      C = E1.C2();
+    else 
+      C = (! inside(E1.C1()) ? E1.C2() : E1.C1());
+  }
 
   //--- copying ----
   BoundaryComponentIterator2D(const self& rs) 
