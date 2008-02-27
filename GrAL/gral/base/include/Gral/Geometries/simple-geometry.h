@@ -175,6 +175,7 @@ class simple_geometry :
   typedef typename gt::Vertex Vertex;
   typedef typename gt::Edge   Edge;
   typedef typename gt::Cell   Cell;
+  typedef typename gt::FacetOnCellIterator FacetOnCellIterator;
 
   typedef point_traits<coord_type> pt;
   typedef algebraic_primitives<coord_type> ap;
@@ -276,7 +277,36 @@ public:
   }
   //! \brief Area of the face \c f
   scalar_type volume(typename gt::Face const& f) const { return area(f);}
- 
+
+  /*! \brief Normal pointing outside the cell of f
+
+      The normal points outside c = f.TheCell() and is contained in the affine subspace
+      of c.
+
+     \todo This works only for 2D meshes so far.
+  */
+  coord_type outer_normal(FacetOnCellIterator const& f) const
+  {
+    coord_type center_c = barycenter(f.TheCell());
+    typename gt::VertexOnEdgeIterator ve(*f);
+    coord_type v1 = coord(*ve);
+    ++ve;
+    coord_type v2 = coord(*ve);
+    coord_type edge = ap::normalization(v2-v1);
+    coord_type n    = v1 - center_c;
+    n = n - ap::dot(n, edge) * edge;
+    return ap::normalization(n);
+  }
+
+  //! \brief direction vector of Edge e  
+  coord_type direction(Edge const& e) const
+  {
+    typename gt::VertexOnEdgeIterator ve(e);
+    coord_type v1 = coord(*ve);
+    ++ve;
+    coord_type v2 = coord(*ve);
+    return v2 - v1;
+  }
 
   //! \brief Barycenter of the vertices of cell \c c 
   coord_type barycenter(Cell const& c) const { 
