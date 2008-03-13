@@ -12,6 +12,7 @@ SUBDIRS = affine-mapping \
           piecewise-linear-function \
           point-traits \
           simplex \
+          splines \
           vcg \
 
 
