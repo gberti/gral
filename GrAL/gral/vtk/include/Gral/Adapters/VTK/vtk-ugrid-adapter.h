@@ -767,7 +767,7 @@ class CellVTK : public grid_types_UGridVTKAdapter<GRID::dim> {
   /*!
    * Protocol STL_EqualityComparable
    */
-  bool operator==(const self& rhs) { 
+  bool operator==(const self& rhs) const { 
     REQUIRE((grid_ == rhs.grid_), 
 	    "cannot compare cells from different grids !\n",1);
     return (cid_ == rhs.cid_);
@@ -776,7 +776,7 @@ class CellVTK : public grid_types_UGridVTKAdapter<GRID::dim> {
   /*!
    * Protocol STL_EqualityComparable
    */
-  bool operator!=(const self& rhs) { return !(*this == rhs);}
+  bool operator!=(const self& rhs) const { return !(*this == rhs);}
 };
 
 
