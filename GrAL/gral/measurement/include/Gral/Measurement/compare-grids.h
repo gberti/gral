@@ -56,10 +56,18 @@ namespace GrAL {
     typename gt1::CellIterator c1(g1);
     typename gt2::CellIterator c2(g2);
     for(; !c1.IsDone(); ++c1, ++c2) {
+      // check correspondance of vertex sequences.
+      // This does not check whether a re-ordering of vertex sequences could yield an isomorphism
+      // (e.g. a cyclic rotation of the vertex sequence in the polygonal case).
+      if( (*c1).NumOfVertices() != (*c2).NumOfVertices())
+	return grid_comparison_result::not_trivially_isomorphic;
       typename gt1::VertexOnCellIterator vc1(*c1);
       typename gt2::VertexOnCellIterator vc2(*c2);
-      if(vcorr(*vc1) != *vc2)
-	return grid_comparison_result::not_trivially_isomorphic;
+      while(! vc1.IsDone()) {
+	if(vcorr(*vc1) != *vc2)
+	  return grid_comparison_result::not_trivially_isomorphic;
+	++vc1; ++vc2;
+      }
     }
     return grid_comparison_result::trivially_isomorphic;
   }
