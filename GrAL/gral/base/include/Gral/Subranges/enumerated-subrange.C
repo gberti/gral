@@ -16,8 +16,7 @@ namespace GrAL {
   if(! initialized) {
     initialized = true;
     if(! cells.empty()) {
-      REQUIRE_ALWAYS(vertices.empty(), 
-		     "enumerated_subrange<GRID>::init(): Vertex range must be empty!\n",1);
+      const_cast<self *>(this)->vertices.clear();
       cell_range_ref<GRID,cell_sequence> cell_wrapper(0, cells.end()-cells.begin(), cells, TheGrid());
       ConstructVertexRange(cell_wrapper,
 			   const_cast<self *>(this)->vertices);
