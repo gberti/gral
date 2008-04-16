@@ -5,7 +5,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../mk.config
 include $(CONFIG)
 
-EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io gral/complex2d gral/cartesian2d gral/vtk \
+EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io gral/complex2d gral/cartesian2d gral/vtk gral/cgns-io \
              external-control configuration utilities geometry sequence
 
 
@@ -28,8 +28,12 @@ LIBSDX  = -lgral-complex2d
 LIBSCART = -lgral-cartesian2d
 
 include $(CONFIGURATION)/defs/vtk.defs
-EXTRA_CCFLAGS += $(VTK_CCFLAGS) 
+CCFLAGS += $(VTK_CCFLAGS) 
 LIBSVTK  = -lgral-vtk $(VTK_LDFLAGS) 
+
+include $(CONFIGURATION)/defs/cgns.defs
+CCFLAGS += $(CGNS_CCFLAGS)
+LIBSCGNS       = $(CGNS_LDFLAGS)
 
 new-check-clean: # new check clean1
 	$(MAKE) new
@@ -52,7 +56,7 @@ complex2d2gmv: complex2d2gmv.o
 	$(CC) -o complex2d2gmv complex2d2gmv.o $(LDFLAGS) $(LIBSGMV) $(LIBS)
 
 vtk2any: vtk2any.o
-	$(CC) -o vtk2any vtk2any.o $(LDFLAGS)  $(LIBSVTK) $(LIBSGMV) $(LIBS) $(LIBSVTK)
+	$(CC) -o vtk2any vtk2any.o $(LDFLAGS)  $(LIBSVTK) $(LIBSGMV) $(LIBSCGNS) $(LIBS) $(LIBSVTK) 
 
 vtk3d2any: vtk3d2any.o
 	$(CC) -o vtk3d2any vtk3d2any.o $(LDFLAGS)  $(LIBSVTK) $(LIBSGMV) $(LIBS) $(LIBSVTK)
