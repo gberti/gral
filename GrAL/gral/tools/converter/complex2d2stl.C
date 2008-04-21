@@ -1,6 +1,8 @@
 /*! \file */
 
 #include "Gral/IO/complex2d-format-input.h"
+#include "Gral/IO/write-stl.h"
+
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/Geometries/simple-geometry.h"
 
@@ -15,11 +17,15 @@
 
 /*! \brief complex2d2stl - Convert into STL format
 
-    Inferior format used by a number of commercial tools ("industry standard")
+    STL is an inferior format used by a number of commercial tools ("industry standard").
+    It contains a simple list of triangles given by vertex coordinates and thus looses
+    connectivity information.
 */
 
 
 int main(int argc, char* argv[]) {
+  bool res = true;
+
   using namespace std;
   using namespace GrAL;
 
@@ -60,44 +66,18 @@ int main(int argc, char* argv[]) {
 
   IstreamComplex2DFmt In(grid_in, offset);
   In.set_spacedim(sdim);
-
-  typedef tuple<double,3>                  coord_type;
-  typedef point_traits<coord_type>         pt;
-  typedef algebraic_primitives<coord_type> ap;
  
-  Complex2D G;
+  typedef tuple<double,3>    coord_type;
+  Complex2D                              G;
   simple_geometry<Complex2D, coord_type> GeomG;
   ConstructGrid(G,GeomG, In,In);
-  typedef grid_types<Complex2D> gt;
 
   ref_ptr<std::ostream> stl = get_file_or_stdout(grid_out);
-
-  //  ofstream stl(grid_out.c_str());
+  if(stl == 0) return 2;
   int num_non_triangles = 0;
-
-  *stl << "solid <<" << stl_geom_name << ">>\n";
-  for(gt::CellIterator c(G); !c.IsDone(); ++c) {
-    if((*c).NumOfVertices() == 3) {
-      coord_type v[3];
-      gt::VertexOnCellIterator vc(*c);
-      v[0] = GeomG.coord(*vc);
-      v[1] = GeomG.coord(*++vc);
-      v[2] = GeomG.coord(*++vc);
-      *stl << "  "   << "facet normal " 
-	  << ap::normalization(ap::vectorproduct(v[1]-v[0],v[2]-v[0])) << "\n";
-      *stl << "    " << "outer loop\n";
-      for(gt::VertexOnCellIterator vc(*c); !vc.IsDone(); ++vc) {
-	*stl << "     " << "vertex " << GeomG.coord(*vc) << "\n";
-      }
-      *stl << "    " << "endloop\n";
-      *stl << "  " << "end facet\n";
-
-    }
-    else
-      ++num_non_triangles;
-  }
-  *stl << "endsolid <<" << stl_geom_name << ">>\n";
-
+  res = res && write_stl_ascii(*stl, G, GeomG, stl_geom_name, num_non_triangles);
   if(num_non_triangles > 0)
     cerr << "WARNING: " << num_non_triangles << " cells with more than 3 vertices ignored!" << endl;
+
+  return res;
 }
