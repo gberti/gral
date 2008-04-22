@@ -52,9 +52,9 @@ int main() {
     {
       vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
       ConstructGrid(vtkgrid, vtkgrid, T, GeomT);
-      //vtkgrid.GetAdaptee()->GetCellTypesArray()->PrintSelf(std::cerr,0);
+      //vtkgrid.TheAdaptee()->GetCellTypesArray()->PrintSelf(std::cerr,0);
       vtkCellTypes * ct = vtkCellTypes::New();
-      vtkgrid.GetAdaptee()->GetCellTypes(ct);
+      vtkgrid.TheAdaptee()->GetCellTypes(ct);
       for(int t = 0; t <  ct->GetNumberOfTypes(); ++t) {
 	cerr << "Cell type " << t << " = " << vtkgt::VTK_type(ct->GetCellType(t)) << "\n";
       }
@@ -63,9 +63,24 @@ int main() {
       
       vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
       writer->SetFileName("tri+quad.vtk");
-      writer->SetInput(vtkgrid.GetAdaptee());
+      writer->SetInput(vtkgrid.TheAdaptee());
       writer->Write();
       writer->Delete();
+      
+      vtkgrid.write         ("tri+quad-builtin.vtk");
+      vtkgrid.write_polydata("tri+quad-poly.vtk");
+
+      // try reading
+      {
+	vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
+	vtkgrid.read ("tri+quad-builtin.vtk");
+	vtkgrid.write("tri+quad-builtin2.vtk");
+      }
+      {
+	vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
+	vtkgrid.read ("tri+quad-poly.vtk");
+	vtkgrid.write("tri+quad-poly2.vtk");
+      }
     }
     {
       vtkUnstructuredGrid * vtk_ptr = vtkUnstructuredGrid::New();
@@ -155,7 +170,7 @@ int main() {
 	float value = v.handle();
 	scalars->InsertValue(v.handle(), value);
       }
-      vtkgrid.GetAdaptee()->GetPointData()->SetScalars(scalars);
+      vtkgrid.TheAdaptee()->GetPointData()->SetScalars(scalars);
       scalars->Delete();
     }
     {
@@ -166,14 +181,14 @@ int main() {
 	float value = c.handle();
 	scalars->InsertValue(c.handle(), value);
       }
-      vtkgrid.GetAdaptee()->GetCellData()->SetScalars(scalars);
+      vtkgrid.TheAdaptee()->GetCellData()->SetScalars(scalars);
       scalars->Delete();
     }
 
 
     vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
     writer->SetFileName("tet3d.vtk");
-    writer->SetInput(vtkgrid.GetAdaptee());
+    writer->SetInput(vtkgrid.TheAdaptee());
     writer->Write();
     writer->Delete();
 
@@ -190,7 +205,7 @@ int main() {
 
     vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
     writer->SetFileName("cart3d.vtk");
-    writer->SetInput(vtkgrid.GetAdaptee());
+    writer->SetInput(vtkgrid.TheAdaptee());
     writer->Write();
     writer->Delete();
   }
@@ -215,12 +230,12 @@ int main() {
       vectors->SetTuple(cart2vtk_v(v.handle()), val);
     }
     
-    vtkgrid.GetAdaptee()->GetPointData()->SetVectors(vectors);
+    vtkgrid.TheAdaptee()->GetPointData()->SetVectors(vectors);
     vectors->Delete();
 
     vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
     writer->SetFileName("cart3d+data.vtk");
-    writer->SetInput(vtkgrid.GetAdaptee());
+    writer->SetInput(vtkgrid.TheAdaptee());
     writer->Write();
     writer->Delete();
   }

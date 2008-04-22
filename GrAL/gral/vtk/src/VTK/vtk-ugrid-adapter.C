@@ -3,9 +3,173 @@
 #include "Utility/pre-post-conditions.h"
 #include "Gral/IO/stream-grid-adapter.h"
 
+#include "vtkUnstructuredGridWriter.h"
+#include "vtkUnstructuredGridReader.h"
+#include "vtkPolyDataWriter.h"
+#include "vtkPolyDataReader.h"
+#include "vtkPolyData.h"
+#include "vtkCellTypes.h"
+
 namespace GrAL { 
 
 namespace vtk_ugrid {
+
+  UGridVTKAdapter_base::UGridVTKAdapter_base()
+    : adaptee_(0), owned_(true) 
+  {
+    clear();
+  }
+
+   UGridVTKAdapter_base::UGridVTKAdapter_base(Adaptee *a) 
+    : adaptee_(a), owned_(false) 
+  {
+    REQUIRE(a != NULL, "Initalization with NULL pointer", 1);
+    if (adaptee_) {
+      adaptee_->Register(NULL); // VTK objects are reference counted
+    }
+  }
+
+  UGridVTKAdapter_base::~UGridVTKAdapter_base() { 
+    release();
+  }
+
+  void UGridVTKAdapter_base::SetAdaptee(Adaptee *a) {
+    REQUIRE(a != NULL, "Initalization with NULL pointer", 1);
+    //make_empty();
+    release();
+    adaptee_ = a;
+    owned_   = false;
+    adaptee_->Register(NULL);
+  }
+
+  bool UGridVTKAdapter_base::IsOwner() const 
+  { 
+    if (adaptee_) {
+      return (adaptee_->GetReferenceCount() <= 1);
+    }
+    return false;
+  }
+
+  void UGridVTKAdapter_base::make_empty()  
+  {
+    if (adaptee_) {
+      if(owned_) {
+	adaptee_->Delete();
+	adaptee_ = 0;
+      }
+      else
+	allocate(0,0);
+    }
+  }
+
+  void UGridVTKAdapter_base::release() 
+  {
+    if(adaptee_) {
+      adaptee_->Delete();
+      adaptee_ = 0;
+    }
+  }
+  
+  void UGridVTKAdapter_base::clear() 
+  {
+    make_empty();
+    if(adaptee_ == 0) {
+      adaptee_ = vtkUnstructuredGrid::New();
+      owned_   = true;
+    }
+  }
+
+  void UGridVTKAdapter_base::allocate(int npoints, int ncells) 
+  {
+    adaptee_->Allocate(ncells);
+    vtkPoints *points = vtkPoints::New();
+    points->Allocate(npoints);
+    adaptee_->SetPoints(points);
+    points->Delete();
+  }
+
+  
+  bool UGridVTKAdapter_base::read(std::string const& filename)
+  {
+    // FIXME: Warn if dimensions do not match.
+    clear();
+    // try VTK  unstructured grid format
+    bool done = false;
+    if(! done) {
+      vtkUnstructuredGridReader *reader = vtkUnstructuredGridReader::New();
+      reader->SetFileName(filename.c_str());
+      if(reader->IsFileUnstructuredGrid()) {
+	reader->Update();
+	SetAdaptee(reader->GetOutput());
+	done = true;
+      }
+      reader->Delete();
+    }
+    if(! done) {
+      vtkPolyDataReader *reader = vtkPolyDataReader::New();
+      reader->SetFileName(filename.c_str());
+      if(reader->IsFilePolyData()) {
+	reader->Update();
+	CopyFrom(reader->GetOutput());
+	done = true;
+      }
+      reader->Delete();
+    }
+    return  done;
+  }
+
+
+  bool UGridVTKAdapter_base::write(std::string const& filename) const
+  {
+    vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
+    writer->SetFileName(filename.c_str());
+    writer->SetInput(GetAdaptee());
+    writer->Write();
+    writer->Delete();
+    return true;
+  }
+
+  bool UGridVTKAdapter_base::write_polydata(std::string const& filename) const
+  {
+    vtkPolyData * poly = vtkPolyData::New();
+    CopyTo(poly);
+    vtkPolyDataWriter *writer = vtkPolyDataWriter::New();
+    writer->SetFileName(filename.c_str());
+    writer->SetInput(poly);
+    writer->Write();
+    writer->Delete();
+    poly->Delete();
+    return true;
+  }
+
+
+  void UGridVTKAdapter_base::CopyTo(vtkPolyData * poly) const 
+  {
+    poly->SetPoints(GetAdaptee()->GetPoints());
+    poly->Allocate(GetAdaptee()->GetNumberOfCells());
+    for(int c = 0; c < NumOfCells(); ++c) {
+      vtkIdList * pts = vtkIdList::New();
+      GetAdaptee()->GetCellPoints(vtkIdType(c), pts);
+      poly->InsertNextCell(GetAdaptee()->GetCellType(c), pts);
+      pts->Delete();
+    }
+  }
+
+  void UGridVTKAdapter_base::CopyFrom(vtkPolyData * poly) 
+  {
+    //    vtkUnstructuredGrid * ug = vtkUnstructuredGrid::New();
+    clear();
+    adaptee_->SetPoints(poly->GetPoints());
+    adaptee_->Allocate (poly->GetNumberOfCells());
+    for(int c = 0; c < poly->GetNumberOfCells(); ++c) {
+      vtkIdList * pts = vtkIdList::New();
+      poly->GetCellPoints(vtkIdType(c),pts); 
+      adaptee_->InsertNextCell(poly->GetCellType(c), pts);
+      pts->Delete();
+    }
+  }
+
+
 
   std::string  UGridVTKArchetypes_Base::VTK_type(int t) 
   {

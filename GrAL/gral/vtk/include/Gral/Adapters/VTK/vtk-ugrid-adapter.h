@@ -31,6 +31,8 @@
 #include <vtkIdList.h>
 
 
+class vtkPolyData;
+
 
 namespace GrAL {
 namespace vtk_ugrid {
@@ -68,10 +70,15 @@ template<>      struct get_archetype_type<ANY>{ typedef complexnd::ComplexND<ANY
     static std::string VTK_type(int t);
   }; 
 
+  struct grid_types_UGridVTKAdapter_base : public grid_types_detail::grid_types_root 
+  {
+    typedef vtkUnstructuredGrid                Adaptee;  
+  };
+
 template <int D>
 struct grid_types_UGridVTKAdapter 
-  : public grid_types_detail::grid_types_root,
-    public UGridVTKArchetypes_Base 
+  : public UGridVTKArchetypes_Base,
+    public grid_types_UGridVTKAdapter_base
 {
   typedef UGridVTKAdapter<D>       grid_type;
   typedef VertexVTK<grid_type>              Vertex;
@@ -95,7 +102,6 @@ struct grid_types_UGridVTKAdapter
   typedef typename archetype_sequence::const_iterator archetype_iterator;
   typedef int                                archetype_handle;
   typedef grid_types<archetype_type>         archgt;
-  typedef vtkUnstructuredGrid                Adaptee;  
 
   typedef vtk::coord_type coord_type;
   typedef vtk::coord_proxy coord_proxy;
@@ -178,6 +184,76 @@ struct dimension_mixin_grid {
 };
 
 
+  class UGridVTKAdapter_base {
+    typedef UGridVTKAdapter_base self;
+  protected:
+    typedef grid_types_UGridVTKAdapter_base::Adaptee Adaptee;
+    Adaptee *adaptee_;
+    bool     owned_;
+    
+    UGridVTKAdapter_base();
+    UGridVTKAdapter_base(Adaptee * a);
+    ~UGridVTKAdapter_base();
+
+    void make_empty();
+    void release();
+
+  public:
+    void SetAdaptee(Adaptee * a);
+    /*! \brief Copy data structure from polydata
+
+    \pre poly != 0
+    \post this contains an equivalent data structure 
+    */
+    void CopyFrom (vtkPolyData * poly);
+
+    /*! \brief Copy to poly
+      
+    \pre poly != 0
+    \post poly contains an equivalent data structure
+    \example 
+    \code
+    vtkPolyData * poly = vtkPolyData::New();
+    grid.CopyTo(poly);
+    // use poly
+    ...
+    poly->Delete(); // poly not used any more.
+    \endcode
+    */
+    void CopyTo(vtkPolyData *) const;
+ 
+   // VTK is not const-correct, so sometimes Adaptee * needed for logically const operations.
+    Adaptee      * GetAdaptee() const { return const_cast<self *>(this)->adaptee_; }
+    Adaptee      * TheAdaptee()       { return adaptee_; }
+    Adaptee const* TheAdaptee() const { return adaptee_;}
+    bool IsOwner() const;
+    
+    bool read (std::string const& filenm);
+    bool write(std::string const& filenm)          const;
+    // Only possible if dim <= 2. 
+    bool write_polydata(std::string const& filenm) const;
+
+    int NumOfVertices() const {
+      REQUIRE(IsBound(), "not bound", 1);
+      return adaptee_->GetNumberOfPoints();
+    } 
+
+    int NumOfCells() const {
+      REQUIRE(IsBound(), "not bound", 1);
+      return adaptee_->GetNumberOfCells();
+    }
+  
+    bool IsBound() const { return adaptee_ != NULL; }
+
+
+  public:
+    //! make this an empty grid
+    void clear();
+    // should be protected
+    void allocate(int npoints, int ncells);
+
+  }; // class UGridVTKAdapter_base
+
   /*! \brief Gral grid adapter for vtkUnstructuredGrid
 
     \ingroup vtkugridadaptermodule 
@@ -189,12 +265,15 @@ struct dimension_mixin_grid {
   */
 template <int D>
 class UGridVTKAdapter : public grid_types_UGridVTKAdapter<D>, 
-                        public dimension_mixin_grid<D> {
-  typedef dimension_mixin_grid<D> mixin;
+                        public dimension_mixin_grid<D>,
+			public UGridVTKAdapter_base  
+{
+  typedef dimension_mixin_grid      <D> mixin;
   typedef grid_types_UGridVTKAdapter<D> gt;
-  public:
-  typedef typename gt::grid_type  grid_type;
-  typedef typename gt::grid_type anchor_type;
+  typedef UGridVTKAdapter_base          base;
+public:
+  typedef typename gt::grid_type      grid_type;
+  typedef typename gt::grid_type      anchor_type;
   typedef typename gt::VertexIterator VertexIterator;
   typedef typename gt::CellIterator   CellIterator;
   typedef typename gt::Cell           Cell;
@@ -202,135 +281,37 @@ class UGridVTKAdapter : public grid_types_UGridVTKAdapter<D>,
   typedef typename gt::VertexOnCellIterator VertexOnCellIterator;
 
   typedef typename gt::vertex_handle vertex_handle;
-  typedef typename gt::cell_handle cell_handle;
+  typedef typename gt::cell_handle   cell_handle;
 
-  typedef typename gt::archetype_handle archetype_handle;
-  typedef typename gt::archetype_type   archetype_type;
+  typedef typename gt::archetype_handle   archetype_handle;
+  typedef typename gt::archetype_type     archetype_type;
   typedef typename gt::archetype_iterator archetype_iterator;
-  typedef typename gt::Adaptee Adaptee;
 
-  private:
-  Adaptee *adaptee_;
-  bool     owned_;
-
-  inline void make_empty() {
-    if (adaptee_) {
-      if(owned_) {
-	// adaptee_->UnRegister(NULL);
-	// adaptee_ = NULL;  
-	adaptee_->Delete();
-	adaptee_ = 0;
-      }
-      else
-	allocate(0,0);
-    }
-  }
-
-  inline void release() {
-    if(adaptee_) {
-      // adaptee_->UnRegister(NULL);
-      // adaptee_ = NULL;  
-      adaptee_->Delete();
-      adaptee_ = 0;
-    }
-  }
-  public:
+public:
 
   /*! \brief Empty grid
    */
-  inline UGridVTKAdapter() : adaptee_(0), owned_(true) {
-    clear();
-  }
-
-  //! make this an empty grid
-  inline void clear() {
-    make_empty();
-    if(adaptee_ == 0) {
-      adaptee_ = vtkUnstructuredGrid::New();
-      owned_   = true;
-    }
-  }
-
-  inline void allocate(int npoints, int ncells) {
-     adaptee_->Allocate(ncells);
-     vtkPoints *points = vtkPoints::New();
-     points->Allocate(npoints);
-     adaptee_->SetPoints(points);
-     points->Delete();
-  }
+  UGridVTKAdapter() {}
 
   /*! \brief Construct a view to the vtkUnstructuredGrid \c a
 
      This view is read/write: Any changes made to this view will be reflected in \c a.
    */
-  inline explicit UGridVTKAdapter(Adaptee *a) : adaptee_(a), owned_(false) {
-    REQUIRE(a != NULL, "Initalization with NULL pointer", 1);
-    if (adaptee_) {
-      adaptee_->Register(NULL); // VTK objects are reference counted
-    }
-  }
-
-  inline ~UGridVTKAdapter() {
-    //make_empty();
-    release(); 
-  }
-
-  inline void SetAdaptee(Adaptee *a) {
-    REQUIRE(a != NULL, "Initalization with NULL pointer", 1);
-    //make_empty();
-    release();
-    adaptee_ = a;
-    owned_   = false;
-    adaptee_->Register(NULL);
-  }
-
-  Adaptee* GetAdaptee() const {
-    return adaptee_;
-  }
-
-  inline bool IsOwner() const { 
-    if (adaptee_) {
-      return (adaptee_->GetReferenceCount() <= 1);
-    }
-    return false;
-  }
-
-  inline int NumOfVertices() const {
-    REQUIRE(adaptee_ != NULL, "not bound", 1);
-    return adaptee_->GetNumberOfPoints();
-  } 
-
-  inline int NumOfCells() const {
-    REQUIRE(adaptee_ != NULL, "not bound", 1);
-    return adaptee_->GetNumberOfCells();
-  }
-  
-  inline bool IsBound() const {
-    return adaptee_ != NULL;
-  }
-
-  inline const Adaptee* TheAdaptee() const {
-    return adaptee_;
-  }
+  explicit UGridVTKAdapter(Adaptee *a) : base(a) {}
 
   //@{
   /*! \name Sequence iteration
       \todo STL-style EndXXX() 
   */
   inline VertexIterator FirstVertex() const;
-
-  inline VertexIterator EndVertex() const;
-
-  inline vertex_handle handle(const Vertex& V)  const;
-  inline Vertex vertex(const vertex_handle& v) const;
+  inline VertexIterator EndVertex()   const;
+  inline vertex_handle handle(const Vertex&        V) const;
+  inline Vertex        vertex(const vertex_handle& v) const;
 
   inline CellIterator   FirstCell()   const;
-
-  inline CellIterator   EndCell() const;
-
-  inline cell_handle handle(const Cell& C)  const;
-
-  inline Cell cell(const cell_handle& c) const;
+  inline CellIterator   EndCell  ()   const;
+  inline cell_handle    handle(const Cell& C)  const;
+  inline Cell           cell  (const cell_handle& c) const;
     
   //@}
 
@@ -341,7 +322,7 @@ class UGridVTKAdapter : public grid_types_UGridVTKAdapter<D>,
   bool valid(cell_handle c) const {
     return (0 <= c && c < NumOfCells());
   }
-//@}
+  //@}
 
   /*@{*/
   /*! \name Archetype handling
