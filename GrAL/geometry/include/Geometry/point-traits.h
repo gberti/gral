@@ -259,7 +259,7 @@ struct array_io_operators
 {
   typedef point_traits<ARRAY> pt;
   friend std::ostream& operator<<(std::ostream& out, ARRAY const& a) { 
-    for(unsigned i  = pt::LowerIndex(); i < pt::UpperIndex(); ++i) 
+    for(int i  = pt::LowerIndex(); i < pt::UpperIndex(); ++i) 
       out << a[i] << ' ';
     out << a[pt::UpperIndex()];
     return out;
