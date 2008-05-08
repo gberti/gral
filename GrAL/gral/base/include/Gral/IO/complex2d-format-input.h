@@ -15,6 +15,7 @@
 namespace GrAL {
 
 /*! \brief Input adapter for Complex2D Format
+
     \ingroup complex2dformat
  
     Model of $GrAL Cell-VertexInputGridRange 

@@ -75,7 +75,7 @@ namespace GrAL {
    <LI>  POSTCONDITION:
      <UL>
        <LI> \f$ FM2 \cap I = \emptyset \f$
-       <LI> \f$ FM2 = (FM1 \ B) \cup (B \ FM1) \f$
+       <LI> \f$ FM2 = (FM1 \setminus B) \cup (B \setminus FM1) \f$
      </UL>
   </UL>
 

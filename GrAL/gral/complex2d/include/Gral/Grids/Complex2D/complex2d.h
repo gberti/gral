@@ -254,7 +254,10 @@ namespace GrAL {
     The cells can be arbitrary simple polygons. 
     The vertex sets of facets must be unique, else the facet-cell incidence
     relation will not be calculated correctly.
-       
+  
+    \note If the grid contains non-manifold edges (having more than 2 incident cells),
+    edge iteration (and number of edges) will not work correctly.
+    The method check_manifold_property can be used to detect such a situation.
 
     Complex2D is a model of 
     $GrAL Grid-With-Boundary,
@@ -327,6 +330,9 @@ private:
   void clear();
 public:
   //-------------- iteration ------------------
+
+  self const& TheGrid() const { return *this;}
+  self      & TheGrid()       { return *this;}
 
   //@{ @name Dimension information
   enum { dim = 2};

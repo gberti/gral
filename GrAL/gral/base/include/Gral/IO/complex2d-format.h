@@ -4,17 +4,19 @@
 #include "Gral/IO/complex2d-format-input.h"
 #include "Gral/IO/complex2d-format-output.h"
 
-//----------------------------------------------------------------
-/*! \defgroup complex2dformat Complex2D-Format I/O Adapter 
+
+/*! \defgroup complex2dformat Complex2D format I/O Adapter 
+
   \brief A grid interface for a file in complex2d-format.
   \ingroup gridio
   \see  Module gridio
-  \example
- \code
- ifstream gridfile("my.complexd");
- IstreamComplex2DFmt Gfile(gridfile,1);  // 1 == offset, default: 0
- ConstructGrid(G,Geom,Gfile,Gfile);
- \endcode 
+
+  \par Example
+  \code
+  ifstream gridfile("my.complexd");
+  IstreamComplex2DFmt Gfile(gridfile,1);  // 1 == offset, default: 0
+  ConstructGrid(G,Geom,Gfile,Gfile);
+  \endcode 
 
  \warning
  The constructor \e modifies the stream, therefore \e never
