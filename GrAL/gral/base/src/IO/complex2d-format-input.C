@@ -22,7 +22,6 @@ IstreamComplex2DFmt::read_coords() const
 		  std::istream_iterator<double>(is),
 		  std::istream_iterator<double>());
   if(coords_1.size() != spacedim) {
-    std::cerr << "Changing spacedim from " << spacedim << " to " << coords_1.size() << std::endl;
     spacedim = coords_1.size();
   }
   unsigned v = 0;
