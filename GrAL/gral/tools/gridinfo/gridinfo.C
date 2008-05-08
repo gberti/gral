@@ -15,7 +15,7 @@
 
 int main(int argc, char* argv[]) {
   using namespace GrAL;
-  using std::string;
+  using namespace std;
 
   typedef Complex2D grid_type;
   typedef grid_types<grid_type> gt;
@@ -48,11 +48,7 @@ int main(int argc, char* argv[]) {
   bool do_bbox = false;
   Ctrl.add("-bbox", GetTrueOnReadMutator(do_bbox)); help += " -bbox (print bounding box)\n";
  
-  Mutator* helpmsg = new MessageOnReadMutator(cerr,help);
-  Ctrl.add("-h",     helpmsg);
-  Ctrl.add("--help", helpmsg);
-  Ctrl.add("-?",     helpmsg);
-
+  AddHelp(Ctrl,help);
   Ctrl.update();
 
   IstreamComplex2DFmt In(grid_in, offset);
