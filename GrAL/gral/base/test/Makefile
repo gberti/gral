@@ -29,6 +29,7 @@ SUBDIRS = archetype0D \
           grid-types \
           incident \
           incidence-hulls \
+          manifold-check \
           mapped-grid-function \
           morphisms \
           multi-grid-function \

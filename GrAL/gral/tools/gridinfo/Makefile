@@ -25,7 +25,6 @@ LIBS = -lgral-complex2d -lgral-base \
 
 
 
-
 new-check-clean: # new check clean1
 	$(MAKE) new
 	$(MAKE) check
@@ -43,6 +42,8 @@ gridinfo.exe: gridinfo.o
 compare-grids.exe: compare-grids.o
 	$(CC) -o $@ $< $(LDFLAGS) $(LIBS)
 
+check-manifold.exe: check-manifold.o
+	$(CC) -o $@ $< $(LDFLAGS) $(LIBS)
 
 clean: stdclean
 	@rm -f $(EXEC)

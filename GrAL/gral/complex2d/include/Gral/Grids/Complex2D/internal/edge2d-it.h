@@ -137,7 +137,7 @@ inline  Edge2D_Iterator& Edge2D_Iterator::operator++()
   return (*this); 
 }
 
-} // namespace GrAL {
+} // namespace GrAL 
 
 
 #endif
