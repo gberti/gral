@@ -108,6 +108,31 @@ int main(int argc, char* argv[]) {
     testout << '\n';
   }
 
+  testout << "Testing the switch operators:\n";
+  for(gt::CellIterator c(T); ! c.IsDone(); ++c) {
+    for(gt::FacetOnCellIterator fc(*c); !fc.IsDone(); ++fc) {
+      testout << "fc = " << fc.handle() 
+	      << " Nb: " << nbf[fc] << "\n";
+      for(gt::VertexOnFacetIterator vfc(*fc); !vfc.IsDone(); ++vfc) {
+	gt::Vertex v2 = T.switched_vertex(*vfc,*fc);
+	testout << "  switch_vertex(" << vfc.handle() << "," << fc.handle() << ") = "<< v2.handle() << "\n";
+	REQUIRE_ALWAYS(*vfc == T.switched_vertex(v2,*fc), "", 1); 
+	gt::Facet f2  = T.switched_facet(*vfc, *fc, *c);
+	testout << "  switch_facet(" << vfc.handle() << "," << fc.handle() << "," << c.handle() << ") = "
+		<< f2.handle() << "\n";
+	REQUIRE_ALWAYS(*fc == T.switched_facet(*vfc, f2, *c), "", 1);
+	if(nbf[fc] != -1) {
+	  gt::Cell nb_c(T, nbf[fc]);
+	  gt::Facet f2 = T.switched_facet(*vfc, *fc, nb_c);
+	  testout << "  switch_facet(" << vfc.handle() << ","<< fc.handle() << "," << nb_c.handle() << ") = " 
+		  << f2.handle() << "\n";
+	  REQUIRE_ALWAYS(*fc == T.switched_facet(*vfc, f2, nb_c), "", 1);
+	}
+      }
+    }
+
+  }
+
   {   
     gt::VertexIterator vb = GrAL::begin_x(T);
     gt::VertexIterator ve = GrAL::end_x  (T);

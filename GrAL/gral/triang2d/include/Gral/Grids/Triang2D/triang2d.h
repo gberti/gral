@@ -178,6 +178,9 @@ public:
   friend class Triang2D_Cell;
   friend class Triang2D_Vertex;
 
+  self const& TheGrid() const { return *this;}
+  self      & TheGrid()       { return *this;}
+
   /*! \name Sequence iteration
       \todo STL-style EndXXX() 
   */
@@ -203,8 +206,11 @@ public:
    */
   inline void switch_vertex(Vertex      & v, Edge const& e) const;
   inline void switch_edge  (Vertex const& v, Edge      & e, Cell const& c) const;
+  inline void switch_facet (Vertex const& v, Edge      & e, Cell const& c) const { switch_edge(v,e,c);}
   inline Vertex switched_vertex(Vertex const& v, Edge const& e) const;
   inline Edge   switched_edge  (Vertex const& v, Edge const& e, Cell const& c) const;
+  inline Edge   switched_facet (Vertex const& v, Edge const& e, Cell const& c) const;
+
   //@}
 
   //@{
@@ -507,10 +513,10 @@ public:
 
   friend bool operator==(self const& lhs, self const& rhs)
   { 
-    vertex_handle lv1 = lhs.V1().handle();
-    vertex_handle lv2 = lhs.V2().handle();
-    vertex_handle rv1 = rhs.V1().handle();
-    vertex_handle rv2 = rhs.V2().handle();
+    vertex_handle lv1 = lhs.v1();
+    vertex_handle lv2 = lhs.v2();
+    vertex_handle rv1 = rhs.v1();
+    vertex_handle rv2 = rhs.v2();
     return (((lv1 == rv1) && (lv2 == rv2))
 	    ||
 	    ((lv2 == rv1) && (lv1 == rv2)));
@@ -519,14 +525,14 @@ public:
 
   friend bool operator<(self const& lhs, self const& rhs)
   {
-    vertex_handle max1(std::max(lhs.V1().handle(),lhs.V2().handle()));
-    vertex_handle max2(std::max(rhs.V1().handle(),rhs.V2().handle()));
+    vertex_handle max1(std::max(lhs.v1(),lhs.v2()));
+    vertex_handle max2(std::max(rhs.v1(),rhs.v2()));
   
     return ( ( max1 < max2)  
 	     || 
 	     ((max1 == max2) 
-	       && (  std::min(lhs.V1().handle(),lhs.V2().handle()) 
-		   < std::min(rhs.V1().handle(),rhs.V2().handle()))));
+	       && (  std::min(lhs.v1(),lhs.v2()) 
+		   < std::min(rhs.v1(),rhs.v2()))));
   }
 
   bool bound() const { return fc.bound();}
@@ -601,10 +607,20 @@ void Triang2D::switch_vertex(Triang2D::Vertex & v, Triang2D::Edge const& e) cons
 inline 
 void Triang2D::switch_edge(Triang2D::Vertex const& v, Triang2D::Edge & e, Triang2D::Cell const& c) const
 {
-  if(v == e.V1())
-    e = Edge(FacetOnCellIterator(c, (e.fc.fc  == 0 ? 2 : e.fc.fc-1)));
+  FacetOnCellIterator fc = e.fc;
+  // make sure fc sits on c, and not on the adjacent cell
+  if(c != e.fc.c) {
+    // fc = reverse(c, fc)
+    fc = FacetOnCellIterator(c);
+    while(*fc != e) 
+      ++fc;
+    REQUIRE(*fc == e, "e and c not incident! e= " << e.fc.c.handle() << "," << e.fc.fc, 1);
+  }
+  int lf = fc.fc;
+  if(v.handle() == fc.v1())
+    e = Edge(FacetOnCellIterator(c, (lf  == 0 ? 2 : lf-1)));
   else
-    e = Edge(FacetOnCellIterator(c, (e.fc.fc  == 2 ? 0 : e.fc.fc+1)));
+    e = Edge(FacetOnCellIterator(c, (lf  == 2 ? 0 : lf+1)));
 }
 
 
@@ -618,6 +634,10 @@ Triang2D::Edge
 Triang2D::switched_edge(Triang2D::Vertex const& v, Triang2D::Edge const& e, Triang2D::Cell const& c) const
 { Edge e1(e); switch_edge(v,e1,c); return e1; }
 
+inline 
+Triang2D::Edge
+Triang2D::switched_facet(Triang2D::Vertex const& v, Triang2D::Edge const& e, Triang2D::Cell const& c) const
+{ return switched_edge(v,e,c);}
 
 inline
 Triang2D::FaceIterator
