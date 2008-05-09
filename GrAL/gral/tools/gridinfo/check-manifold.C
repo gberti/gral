@@ -29,6 +29,7 @@ void check(std::string const& gfile, std::ostream& out)
 
   enumerated_element_range<typename gt::Vertex> singular_interior_vertices(G);
   enumerated_element_range<typename gt::Vertex> singular_boundary_vertices(G);
+  enumerated_element_range<typename gt::Vertex> isolated_vertices(G);
   enumerated_element_range<typename gt::Facet>  singular_facets  (G);
   typedef grid_types<enumerated_element_range<typename gt::Vertex> > vgt;
   typedef grid_types<enumerated_element_range<typename gt::Facet > > fgt;
@@ -36,6 +37,7 @@ void check(std::string const& gfile, std::ostream& out)
 
 
   bool is_mf = check_manifold_property(G, singular_facets, 
+				       isolated_vertices,
 				       singular_interior_vertices,
 				       singular_boundary_vertices);
 
@@ -45,6 +47,12 @@ void check(std::string const& gfile, std::ostream& out)
       out << singular_facets.size() << " singular edges: ";
       for(typename fgt::EdgeIterator e = GrAL::begin_x(singular_facets); !e.IsDone(); ++e)
 	out << "[" << (*e).v1() << "," << (*e).v2() << "] ";
+      out << "\n";
+    }
+    if(isolated_vertices.size() > 0) {
+      out << isolated_vertices.size() << " isolated vertices: ";
+      for(typename vgt::VertexIterator v = GrAL::begin_x(isolated_vertices); !v.IsDone(); ++v)
+	out << v.handle() << ",";
       out << "\n";
     }
     if(singular_interior_vertices.size() > 0) {

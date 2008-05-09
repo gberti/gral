@@ -1,0 +1,22 @@
+Grid "manifold.complex2d" is a manifold grid
+Grid "isolated-vertex.complex2d" is not a manifold grid
+|V|=4 |E|=3 |C|=1
+1 isolated vertices: 3,
+
+Grid "singular-edge.complex2d" is not a manifold grid
+|V|=5 |E|=7 |C|=3
+1 singular edges: [0,1] 
+
+Grid "singular-bd-vertex.complex2d" is not a manifold grid
+|V|=5 |E|=6 |C|=2
+1 singular boundary vertices: 0,
+
+Grid "singular-interior-vertex.complex2d" is not a manifold grid
+|V|=7 |E|=12 |C|=6
+1 singular interior vertices: 0,
+
+Grid "all-singularities.complex2d" is not a manifold grid
+|V|=7 |E|=15 |C|=9
+3 singular edges: [1,2] [2,0] [0,4] 
+1 singular boundary vertices: 6,
+

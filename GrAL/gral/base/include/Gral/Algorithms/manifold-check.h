@@ -71,6 +71,7 @@ namespace GrAL {
      See also [1].
 
     \post singular_facets contains all singular facets
+    \post isolated_vertices contains all isolated vertices (without an incident cell)
     \post singular_interior_vertices contains singular interior vertices 
      that are not incident to singular facets
     \post singular_boundary_vertices contains all singular boundary vertices
@@ -93,6 +94,7 @@ namespace GrAL {
   template<class RANGE, class GF_F, class GF_V>
   bool check_manifold_property(RANGE const&  R,
 			       GF_F & singular_facets, 
+			       GF_V & isolated_vertices,
 			       GF_V & singular_interior_vertices,
 			       GF_V & singular_boundary_vertices)
   {
@@ -110,15 +112,20 @@ namespace GrAL {
     typedef typename gt::FacetOnCellIterator   FacetOnCellIterator;
 
     //--- find singular facets ---
+
     typedef std::vector<Cell> cell_range;
-    grid_function<Facet, cell_range> cells_of_facet(R);
-    //    compute_cell_facet_incidence(R, cells_of_facet);
+    //FIXME: will this always work if e.g. FacetIterator duplicates facets?
+    //Should use a mapping  vertex set of facet -> {incident cells}
+    grid_function<Facet, cell_range> cells_of_facet(R,0);
     compute_incidence<CellIterator, FacetOnCellIterator>(R, cells_of_facet);
+
+    // here we could check wether there are facets with zero incident cells.
 
     GF_F boundary_facets(R);
     // avoid FacetIterator, it might not work properly for non-manifold grids
     for(CellIterator c = GrAL::begin_x(R); !c.IsDone(); ++c) {
       for(FacetOnCellIterator fc = GrAL::begin_x(*c); !fc.IsDone(); ++fc) {
+	ENSURE(! cells_of_facet(*fc).empty(), "fc = << " << fc.handle(), 1);
 	if(c == cells_of_facet(*fc)[0]) {
 	  if(cells_of_facet(*fc).size() > 2) 
 	    singular_facets.push_back(*fc);
@@ -129,6 +136,7 @@ namespace GrAL {
     }
 
     //--- find singular vertices ---
+
     partial_grid_function<Vertex, bool> vertex_of_singular_facet(R,false);
     partial_grid_function<Vertex, bool> boundary_vertex         (R,false);
     for(typename GF_F::ElementIterator sf = GrAL::begin_x(singular_facets); !sf.IsDone(); ++sf)
@@ -141,12 +149,22 @@ namespace GrAL {
     grid_function<Vertex,cell_range> cells_of_vertex(R);
     compute_incidence<CellIterator, VertexOnCellIterator>(R, cells_of_vertex);
 
-    // count number of cells in the first connected component of the vertex star 
-    // In 2D this must be the whole set of incident cells, 
-    // and if it is, it must be homeomorphic to a disk.
-    // (Because singular edges are already excluded)
+    // A vertex is a (2-)manifold vertex if its star is homeomorphic to a (2-)ball
+    // (a small neighorhood of v in the star is sufficient.) 
+    // To check this, we count number of cells in the first connected component of the vertex star. 
+    // If this covers the whole star, 
+    // it must be (in 2D) already homeomorphic to a disk,
+    // because singular edges are excluded:
+    // We can construct a homeomorphism
+    // by mapping each corner of an incident cell to a cake-segment of the disk,
+    // and this is continuous across edges (because of connectedness) 
+    // and one-to-one (because of non-singularity).
     // In higher dimensions, we would have to check for homeomorphism explicitely.
     for(VertexIterator v = GrAL::begin_x(R); !v.IsDone(); ++v) {
+      if(cells_of_vertex(*v).empty()) {
+	isolated_vertices.push_back(*v);
+	continue;
+      }
       if(! vertex_of_singular_facet(*v)) {
         Cell  start_c = cells_of_vertex(*v)[0];
 	Facet start_f = incident_facet(*v,start_c);
@@ -187,6 +205,7 @@ namespace GrAL {
       }
     }
     res = (   0 == singular_facets.size()
+	   && 0 == isolated_vertices.size()
 	   && 0 == singular_interior_vertices.size() 
 	   && 0 == singular_boundary_vertices.size()); 	
     return res;
