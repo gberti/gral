@@ -116,7 +116,7 @@ namespace GrAL {
     typedef std::vector<Cell> cell_range;
     //FIXME: will this always work if e.g. FacetIterator duplicates facets?
     //Should use a mapping  vertex set of facet -> {incident cells}
-    grid_function<Facet, cell_range> cells_of_facet(R,0);
+    grid_function<Facet, cell_range> cells_of_facet(R);
     compute_incidence<CellIterator, FacetOnCellIterator>(R, cells_of_facet);
 
     // here we could check wether there are facets with zero incident cells.
