@@ -6,13 +6,12 @@
 // Output
 #include "Gral/IO/gmv-format-output2d.h"
 #include "Gral/Adapters/VTK/all.h"
+#include "Gral/IO/write-stl.h"
+#include "Gral/IO/write-cgns.h"
 
 // Intermediate representation
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/Geometries/simple-geometry.h"
-
-
-#include "vtkUnstructuredGridWriter.h"
 
 #include "Container/tuple-point-traits.h"
 #include "IO/control-device.h"
@@ -25,7 +24,7 @@ int main(int argc, char* argv[]) {
 
   ControlDevice Ctrl = 
     GetCommandlineAndFileControlDevice(argc,argv,"complex2d2gmv.in","main");
-  string h = "complex2d2gmv - converted mesh in complex2d format to other formats\n";
+  string h = "complex2d2gmv - convert mesh in complex2d format to other formats\n";
   h += "Usage: complex2d2gmv <OPTIONS>\n";
   string p = "   ";
   string grid_in;
@@ -37,9 +36,27 @@ int main(int argc, char* argv[]) {
   string gmv_grid_out;
   RegisterAt(Ctrl, "-gmv", gmv_grid_out);
   h += p + "-gmv <GMV file> (GMV output file)\n";
-  string vtk_grid_out;
-  RegisterAt(Ctrl, "-vtk", vtk_grid_out);
-  h += p + "-vtk <VTK file> (VTK ASCII unstructured mesh file)\n";
+
+  string vtk_ugrid_out;
+  RegisterAt(Ctrl, "-vtk_ug", vtk_ugrid_out);
+  h += p + "-vtk|-vtk_ug\t <VTK file name>\t (write to VTK unstructured grid format file)\n";
+
+  string vtk_poly_out;
+  RegisterAt(Ctrl, "-vtk_poly", vtk_poly_out);
+  h += p + "-vtk_poly\t <VTK file name>\t (write to VTK polydata format file)\n";
+
+  string stl_ascii_out;
+  RegisterAt(Ctrl, "-stl_ascii", stl_ascii_out);
+  h += p + "-stl_ascii\t <STL file name>\t (write to STL ASCII format file)\n";
+
+  string stl_geom_name;
+  RegisterAt(Ctrl, "-geom_name", stl_geom_name);
+  h += p + "-geom_name\t <string>\t (geometry name for STL output)\n";
+
+  string cgns_grid_out;
+  RegisterAt(Ctrl, "-cgns", cgns_grid_out);
+  h += p + "-cgns\t <CGNS file name>\t (write CGNS surface mesh)\n";
+
 
   AddHelp(Ctrl, h);
 
@@ -60,15 +77,28 @@ int main(int argc, char* argv[]) {
     cerr << "Written to gmv file " << gmv_grid_out << endl;
   }
 
-  if(vtk_grid_out != "") {
+  if(vtk_ugrid_out != "") {
     vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
-    ConstructGrid(vtkgrid, vtkgrid, G, GeomG);
-    //vtkgrid.write(vtk_grid_out);
-    vtkUnstructuredGridWriter *writer = vtkUnstructuredGridWriter::New();
-    writer->SetFileName(vtk_grid_out.c_str());
-    writer->SetInput(vtkgrid.GetAdaptee());
-    writer->Write();
-    writer->Delete();
+    ConstructGrid(vtkgrid, vtkgrid, G,GeomG);
+    vtkgrid.write(vtk_ugrid_out);
+    cerr << "Written to VTK unstructured grid file \"" << vtk_ugrid_out << "\"" << endl;
   }
+
+  if(vtk_poly_out != "") {
+    vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
+    ConstructGrid(vtkgrid, vtkgrid, G,GeomG);
+    vtkgrid.write_polydata(vtk_poly_out);
+    cerr << "Written to VTK polydata file \"" << vtk_poly_out << "\"" << endl;
+  }
+
+  if(stl_ascii_out != "") {
+    ofstream stl_out(stl_ascii_out.c_str());
+    int num_non_triangles = 0;
+    write_stl_ascii(stl_out, G, GeomG, stl_geom_name, num_non_triangles);
+    if(num_non_triangles > 0)
+      cerr << "WARNING: " << num_non_triangles << " non-triangular cells detected in STL output!" << endl;
+    cerr << "Written to file \"" << stl_ascii_out << "\"" << endl;
+  }
+
 
 }
