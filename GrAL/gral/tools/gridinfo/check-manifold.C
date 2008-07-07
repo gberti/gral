@@ -4,9 +4,16 @@
 */
 
 #include "Gral/Algorithms/manifold-check.h"
+
 #include "Gral/Subranges/enumerated-element-range.h"
+#include "Gral/Subranges/enumerated-subrange.h"
+
 #include "Gral/Grids/Complex2D/all.h"
+#include "Gral/Geometries/simple-geometry.h"
+
 #include "Gral/IO/complex2d-format-input.h"
+#include "Gral/IO/complex2d-format-output.h"
+
 
 #include "IO/control-device.h"
 
@@ -14,15 +21,46 @@
 #include <iostream>
 
 template<class GRID>
-void check(std::string const& gfile, std::ostream& out)
+int check(int argc, char* argv[]) // std::string const& gfile, std::ostream& out)
 {
   using namespace GrAL;
-  out << "Checking grid \"" << gfile << "\" ... " << std::endl;
+  using namespace std;
 
-  typedef grid_types<GRID> gt;
-  GRID G;
-  GrAL::IstreamComplex2DFmt In(gfile);
-  ConstructGrid0(G, In);
+  int res = 0;
+
+  ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"","main");
+
+  string p = "     ";
+  string command = argv[0];
+  string h = command + ": Check if input grid is a manifold with boundary\n";
+  h += "Usage: " + command + " <options>\n";
+  string grid_in;
+  RegisterAt(Ctrl, "-in", grid_in);
+  h += (p + "-in <file> (grid in Complex2D format)\n");
+  string grid_out;
+  RegisterAt(Ctrl, "-out", grid_out);
+  h += (p + "-out <file> (fixed mesh in Complex2D format, currently only isolated vertices are fixed)\n");
+
+  AddHelp(Ctrl, h);
+  Ctrl.update();
+
+  if(grid_in == "") {
+    cerr << h << endl;
+    return 2;
+  }
+
+  std::ostream& out = cerr;
+
+  out << "Checking grid \"" << grid_in << "\" ... " << std::endl;
+
+  typedef GRID grid_type;
+  typedef grid_types<grid_type> gt;
+  typedef GrAL::IstreamComplex2DFmt::coord_type coord_type;
+  typedef simple_geometry<grid_type, coord_type> geom_type;
+  grid_type G;
+  geom_type GeomG(G);
+  GrAL::IstreamComplex2DFmt In(grid_in);
+  ConstructGrid(G, GeomG, In, In);
 
   out << "|V|=" << G.NumOfVertices() << " |E|=" << G.NumOfEdges() << " |C|=" << G.NumOfCells() 
       << std::endl;
@@ -41,7 +79,7 @@ void check(std::string const& gfile, std::ostream& out)
 				       singular_interior_vertices,
 				       singular_boundary_vertices);
 
-  out << "Grid \"" << gfile << "\" is" << (is_mf ? "" : " not" ) << " a manifold grid\n";
+  out << "Grid \"" << grid_in << "\" is" << (is_mf ? "" : " not" ) << " a manifold grid\n";
   if(! is_mf) {
     if(singular_facets.size() > 0) {
       out << singular_facets.size() << " singular edges: ";
@@ -70,6 +108,32 @@ void check(std::string const& gfile, std::ostream& out)
 
     out << "\n";
   }
+
+
+  if(grid_out != "") {
+    if(is_mf) {
+      out << "Writing unchanged grid to \"" << grid_out << "\" ... " << flush;
+      OstreamComplex2DFmt Out(grid_out);
+      ConstructGrid(Out, G, GeomG);
+      out << " done." << endl;
+    }
+    else {
+      if(singular_facets           .size() > 0 ||
+	 singular_interior_vertices.size() > 0 ||
+	 singular_boundary_vertices.size() > 0)
+	out << "WARNING: Can only fix isolated vertices!" << endl;
+      enumerated_subrange<grid_type> fixed_grid(G);
+      for(typename gt::CellIterator c = GrAL::begin_x(G); !c.IsDone(); ++c)
+	fixed_grid.push_back(*c);
+      out << "Writing fixed grid to \"" << grid_out << "\" ... " << flush;
+      OstreamComplex2DFmt Out(grid_out);
+      ConstructGrid(Out, fixed_grid, GeomG);
+      out << " done." << endl;
+    }
+    
+  }
+
+  return res;
 }
 
 int main(int argc, char * argv[]) {
@@ -77,27 +141,8 @@ int main(int argc, char * argv[]) {
   using namespace GrAL;
   using namespace std;
 
-  ControlDevice Ctrl = GetCommandlineAndFileControlDevice(argc,argv,"","main");
+  typedef GrAL::Complex2D grid_type;
 
-  string p = "     ";
-  string command = argv[0];
-  string h = command + ": Check if input grid is a manifold with boundary\n";
-  h += "Usage: " + command + " <options>\n";
-  string grid_in;
-  RegisterAt(Ctrl, "-in", grid_in);
-  h += (p + "-in <file> (grid in Complex2D format)\n");
-
-  AddHelp(Ctrl, h);
-  Ctrl.update();
-
-  if(grid_in == "") {
-    cerr << h << endl;
-    return 2;
-  }
-
-
-  typedef Complex2D grid_type;
-  
-  check<grid_type>(grid_in,cout);
-
+  int res = check<grid_type>(argc, argv);
+  return res;
 }
