@@ -83,12 +83,13 @@ int check(int argc, char* argv[]) // std::string const& gfile, std::ostream& out
   string command = argv[0];
   string h = command + ": Check if input grid is a manifold with boundary\n";
   h += "Usage: " + command + " <options>\n";
+  h += " Return is 0 if mesh is manifold or could be fixed, 1 if it is not, 2 if file not found.\n";
   string grid_in;
   RegisterAt(Ctrl, "-in", grid_in);
   h += (p + "-in <file> (grid in Complex2D format)\n");
   string grid_out;
   RegisterAt(Ctrl, "-out", grid_out);
-  h += (p + "-out <file> (fixed mesh in Complex2D format, currently only isolated vertices are fixed)\n");
+  h += (p + "-out <file> (fixed mesh in Complex2D format, currently only isolated vertices and duplicated cells are fixed)\n");
 
   AddHelp(Ctrl, h);
   Ctrl.update();
