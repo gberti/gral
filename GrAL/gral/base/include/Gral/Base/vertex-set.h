@@ -32,7 +32,9 @@ private:
   typedef grid_types<typename et::grid_type> gt;
   typedef typename gt::vertex_handle         vertex_handle;
   typedef typename gt::Vertex                Vertex;
-  std::vector<vertex_handle> v;
+  typedef std::vector<vertex_handle>         table_type;
+  
+  table_type v;
 public:
   vertex_set(E const& e) 
     { 
@@ -47,7 +49,14 @@ public:
 
   vertex_handle  operator[](int n) const { check_range(n); return v[n];}
   vertex_handle& operator[](int n)       { check_range(n); return v[n];}
-  unsigned      size() const { return v.size();}
+
+  typedef typename table_type::size_type      size_type;
+  typedef typename table_type::const_iterator const_iterator;
+  size_type      size()  const { return v.size();}
+  bool           empty() const { return v.empty();}
+  const_iterator begin() const { return v.begin();}
+  const_iterator end()   const { return v.end();}
+
 
   bool operator==(self const& rhs) const { 
     return ( ::std::equal(v    .begin(),    v.end(),
