@@ -3,6 +3,9 @@
 #include "vtkUnstructuredGridReader.h"
 #include "vtkPolyDataReader.h"
 #include "vtkPolyData.h"
+#include "vtkDoubleArray.h"
+#include "vtkPointData.h"
+#include "vtkCellData.h"
 
 #include "Gral/IO/gmv-format-output2d.h"
 #include "Gral/IO/complex2d-format-output.h"
@@ -66,6 +69,20 @@ int main(int argc, char* argv[]) {
   RegisterAt(Ctrl, "-geom_name", stl_geom_name);
   h += id + "-geom_name\t <string>\t (geometry name for STL output)\n";
 
+  string field_file_in;
+  RegisterAt(Ctrl, "-field", field_file_in);
+
+  string field_name;
+  RegisterAt(Ctrl, "-field_name", field_name);
+
+  // 0 = vertices, 2 = cells;
+  int field_dim_loc = 0;
+  RegisterAt(Ctrl, "-field-loc", field_dim_loc);
+
+  int field_dim = 1;
+  RegisterAt(Ctrl, "-field-dim", field_dim);
+
+
   AddHelp(Ctrl, h);
 
   Ctrl.update();
@@ -81,7 +98,62 @@ int main(int argc, char* argv[]) {
   vtk_ugrid::UGridVTKAdapter<2> vtkgrid;
   vtkgrid.read(grid_in);
   cerr << " done." << std::endl;
-  
+
+  // conditionally read field
+  std::vector<double> field_data;
+  if(field_file_in != "") {
+    cerr << "Reading field  from file \"" << field_file_in << "\" ... " << endl;
+    ifstream file(field_file_in.c_str());
+    if(! file.is_open()) {
+      cerr << "Could not open field file \"" << field_file_in << "\", quitting." << endl;
+      return 2;
+    }
+    double x;
+    while(file >> x)
+      field_data.push_back(x);
+    file.close();
+  }
+  if(field_file_in != "") {
+    int req_size = (field_dim_loc == 0 ? vtkgrid.NumOfVertices() : vtkgrid.NumOfCells() );
+    if(field_data.size() != field_dim * req_size) {
+      cerr << "Field has wrong size " << field_data.size() << ", should be " << field_dim * req_size << endl;
+      return 2;
+    }
+    if(field_name == "")
+      field_name = field_file_in;
+    vtkDoubleArray *field = vtkDoubleArray::New();
+    field->Allocate(req_size);
+    field->SetName(field_name.c_str());
+    if(field_dim == 1) {
+      for(int i = 0; i < req_size; ++i) 
+	field->InsertValue(i, field_data[i]);
+      if(field_dim_loc == 0) // vertex field
+	vtkgrid.TheAdaptee()->GetPointData()->SetScalars(field);
+      else // Cells
+	vtkgrid.TheAdaptee()->GetCellData() ->SetScalars(field);
+    }
+    else {
+      field->SetNumberOfComponents(field_dim);
+      field->SetNumberOfTuples(req_size);
+      double* val = new double[field_dim];
+      for(int i = 0; i < req_size; ++i) {
+	for(int j = 0; j < field_dim; ++j)
+	  val[j] = field_data[field_dim*i +j];
+	field->SetTuple(i,val);
+      }
+      delete val;
+      if(field_dim_loc == 0) // vertex field
+	vtkgrid.TheAdaptee()->GetPointData()->SetVectors(field);
+      else // Cells
+	vtkgrid.TheAdaptee()->GetCellData() ->SetVectors(field);
+    }
+    field->Delete();
+    cout << "done." << endl;
+  }
+
+
+
+
   if(gmv_grid_out != "") {
     OstreamGMV2DFmt     Out(gmv_grid_out);
     ConstructGrid(Out, vtkgrid, vtkgrid);
