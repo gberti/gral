@@ -12,6 +12,7 @@
 #include <boost/shared_ptr.hpp>
 #include "IO/mutator.h"
 #include "IO/checker.h"
+#include "IO/command-line.h"
 
 namespace GrAL {
 
@@ -239,6 +240,18 @@ extern ControlDevice GetFileControlDevice(char const*   filename,
     \ingroup ControlDeviceCreators 
  */
 extern ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
+							std::string const& filename, 
+							std::string const& name);
+
+/*! \brief Create a ControlDevice that first reads from file and then from command line
+
+    The parameter \c f can be used to wrap arguments containing spaces with double quotes
+    (using f = \c Commandline::protect_args_with_spaces).
+
+    \ingroup ControlDeviceCreators 
+ */
+extern ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
+							Commandline::format f,
 							std::string const& filename, 
 							std::string const& name);
 

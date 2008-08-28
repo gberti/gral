@@ -170,7 +170,16 @@ ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
 						 const std::string& filename, 
 						 const std::string& name) 
 {
-  Commandline cmd(argc,argv);
+  return GetCommandlineAndFileControlDevice(argc, argv, Commandline::plain,
+					    filename, name);
+}
+
+ControlDevice GetCommandlineAndFileControlDevice(int argc, char* argv[],
+						 Commandline::format f,
+						 const std::string& filename, 
+						 const std::string& name) 
+{
+  Commandline cmd(argc,argv,f);
   //  istringstream* in = new istringstream(cmd.get().str());
 #ifdef GRAL_HAS_SSTREAM
   boost::shared_ptr<std::istream> in(new std::istringstream(cmd.str()));

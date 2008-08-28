@@ -11,20 +11,31 @@
 
 namespace GrAL {
 
+  static bool has_spaces(std::string const& s) { return s.find(' ') < s.size();}
+  static bool has_spaces(const char*        s) { return has_spaces(std::string(s));}
 
-Commandline::Commandline(int argc, char* argv[]) : commands("") {
-  //  ostringstream cmds;
+  Commandline::Commandline(int argc, char* argv[], Commandline::format f) : commands("") {
+
+  std::string pre, post;
 #ifdef GRAL_HAS_SSTREAM
   std::ostringstream cmds;
-  for(int i = 1; i < argc; ++i)
-    cmds << argv[i] << " ";
-  cmds << '\n';
-  commands = cmds.str();
 #else
   ostrstream cmds;
-  for(int i = 1; i < argc; ++i)
-    cmds << argv[i] << " ";
-  cmds << '\n' << std::ends;
+#endif
+  for(int i = 1; i < argc; ++i) {
+    if(f == protect_args_with_spaces) 
+      if(has_spaces(argv[i]))
+	pre = post = "\"";
+      else
+	pre = post = "";
+    cmds << pre << argv[i] << post << " ";
+  }
+  cmds << '\n';
+
+#ifdef GRAL_HAS_SSTREAM
+  commands = cmds.str();
+#else
+  cmds << std::ends;
   int n = strlen(cmds.str());
   char* copy = new char[n+1];
   strcpy(copy,cmds.str());

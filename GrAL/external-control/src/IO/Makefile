@@ -3,7 +3,7 @@ include $(CONFIG)
 
 
 LOCALSOURCES= control-device.C istream-control-device.C\
-              read-parameters.C command-line.C 	skip-comments.C
+              read-parameters.C command-line.C 	skip-comments.C quoted-string.C
 
 LOCALOBJECTS= $(LOCALSOURCES:%.C=%.o)
 

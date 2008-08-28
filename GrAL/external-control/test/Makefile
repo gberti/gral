@@ -1,6 +1,6 @@
 CONFIG=$(shell pwd)/../mk.config
 
-SUBDIRS = textline
+SUBDIRS = command-line quoted-string textline
 
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
