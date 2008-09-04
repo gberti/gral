@@ -178,6 +178,8 @@ public:
   {
     x  = ap::normalization( x);
     Ax = ap::normalization(Ax);
+    if(ap::distance(x,Ax) < self::angle_eps())
+      return self::identity();
     coord_type     axis  = ap::vectorproduct(x,Ax);
     real           angle = ap::angle(x,Ax);
     if(fabs(angle) < self::angle_eps() )
