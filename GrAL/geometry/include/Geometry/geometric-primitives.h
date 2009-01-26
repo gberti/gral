@@ -230,6 +230,27 @@ public:
 };
 
 
+  /*! \brief Hyperplane   
+
+      \ingroup geometric_primitives
+   */
+  template<class P>  class hyper_plane {
+    typedef P coord_type;
+    P p0, n;
+    typedef algebraic_primitives<coord_type> ap;
+    typedef point_traits<coord_type>         pt;
+    typedef typename pt::scalar_type              scalar_type;
+    typedef typename real_type<scalar_type>::type real_type;
+  public:
+    hyper_plane() {}
+    hyper_plane(P const& pp0, P const& nn) : p0(pp0), n(nn) { ap::normalize(n);}
+    //! \brief Constructor for 3D case only
+    hyper_plane(P const& pp0, P const& a1, P const& a2) 
+      : p0(pp0), n(ap::vectorproduct(a1,a2)) 
+    { ap::normalize(n);}
+
+    real_type oriented_distance(P const& x) const { return ap::dot(n,x-p0);}
+  };
 
 template<class P>
 struct geom_traits<segment<P> > {
@@ -451,7 +472,10 @@ public:
 };
 
 
-
+/*! Absolute distance between a point and a segment
+      
+   \ingroup geometric_primitives
+*/
 template<class P> 
 inline typename segment<P>::scalar_type
 distance(space_point<P> const& p, segment<P> const& s) 
@@ -460,10 +484,34 @@ distance(space_point<P> const& p, segment<P> const& s)
   return ap::distance(p.p0(), s.nearest(p.p0())); 
 }
 
+/*! \brief Absolute distance between a point and a segment
+      
+   \ingroup geometric_primitives
+*/
 template<class P> 
 inline typename segment<P>::scalar_type
 distance(segment<P> const& s, space_point<P> const& p)
 { return distance(s,p);}
+
+/*! \brief Signed distance between a point and a hyperplane
+      
+   \ingroup geometric_primitives
+*/
+template<class P>
+inline typename space_point<P>::scalar_type
+oriented_distance(hyper_plane<P> const& pl, space_point<P> const& p)
+{ return pl.oriented_distance(p);}
+
+  /*! \brief Absolute distance between a point and a hyperplane
+      
+  \ingroup geometric_primitives
+  */
+  template<class P>
+  inline typename space_point<P>::scalar_type
+  distance(hyper_plane<P> const& pl, space_point<P> const& p)
+  { return fabs(distance(pl,p)); }
+
+
 
 
 } // namespace GrAL 
