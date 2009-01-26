@@ -264,7 +264,7 @@ public:
   //! Coordinate of vertex \c v (read/write access)
   coord_type      & coord(Vertex const& v)       { cb(); return coords[v];}
 
-  //! \brief Euclidean lenght of edge \c e
+  //! \brief Euclidean length of edge \c e
   scalar_type length(typename gt::Edge const& e) const { cb(); return ap::distance(coord(e.V1()), coord(e.V2()));}
   //! \brief Euclidean length of edge \c e
   scalar_type volume(typename gt::Edge const& e) const {       return length(e);}
