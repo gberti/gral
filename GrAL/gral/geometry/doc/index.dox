@@ -12,3 +12,8 @@
 /*! \defgroup interpolation Interpolation on meshes
 
 */
+
+/*! \defgroup geometricmeasures Geometric measures on meshes
+
+   Examples are volumes, curvatures, perimeter etc.
+*/
