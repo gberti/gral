@@ -1,7 +1,20 @@
 #ifndef GRAL_GB_ALGORITHM_CONSTRUCT_ISOMORPHISM_C
 #define GRAL_GB_ALGORITHM_CONSTRUCT_ISOMORPHISM_C
 
-// $LICENSE_NEC
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2001 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 #include "Gral/Algorithms/construct-isomorphism.h"
 #include "Gral/Subranges/boundary-grid.h"

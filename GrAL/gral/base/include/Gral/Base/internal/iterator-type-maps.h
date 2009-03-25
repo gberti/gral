@@ -1,7 +1,20 @@
 #ifndef GRAL_GB_BASE_INTERNAL_ITERATOR_TYPE_MAPS_H
 #define GRAL_GB_BASE_INTERNAL_ITERATOR_TYPE_MAPS_H
 
-// $LICENSE_NEC_2006
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2006 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 #include "Gral/Base/type-tags.h"
 #include "Gral/Base/internal/compile-time-reflection.h"

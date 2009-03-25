@@ -1,7 +1,20 @@
 #ifndef GRAL_GB_BASE_SUBRANGES_ENUMERATED_SUBRANGE_REF_H
 #define GRAL_GB_BASE_SUBRANGES_ENUMERATED_SUBRANGE_REF_H
 
-// $LICENSE_NEC_2006
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2006 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 #include "Utility/pre-post-conditions.h"
 #include "Utility/ref-ptr.h"

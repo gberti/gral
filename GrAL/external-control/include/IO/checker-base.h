@@ -1,7 +1,20 @@
 #ifndef GRAL_RP_EXTERNAL_CONTROL_CHECKER_BASE_H
 #define GRAL_RP_EXTERNAL_CONTROL_CHECKER_BASE_H
 
-// $LICENSE_NEC_2005
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2005 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 /*! \file
     \author: Roman Putanowicz

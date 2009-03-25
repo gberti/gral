@@ -1,7 +1,20 @@
 #ifndef GRAL_GB_COMPLEX2D_CELL_ON_EDGE2D_IT_H
 #define GRAL_GB_COMPLEX2D_CELL_ON_EDGE2D_IT_H
 
-// $LICENSE
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 1997 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 
 #include "Gral/Grids/Complex2D/complex2d.h"

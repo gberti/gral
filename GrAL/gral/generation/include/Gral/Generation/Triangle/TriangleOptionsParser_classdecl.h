@@ -1,6 +1,20 @@
 #ifndef TRIANGLE_OPTIONS_PARSER_CLASSDECL_H
 #define TRIANGLE_OPTIONS_PARSER_CLASSDECL_H
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2005 - 2009 Roman Putanowicz
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 #include <map>
+
 class TriangleOptionsParser : public yyFlexLexer {
   public:
   TriangleOptionsParser() : _minangle(20),

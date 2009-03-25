@@ -1,7 +1,20 @@
 #ifndef GRAL_GB_GEOMETRY_PIECEWISE_FUNCTION_H
 #define GRAL_GB_GEOMETRY_PIECEWISE_FUNCTION_H
 
-// $LICENSE_NEC_2007
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2007 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 #include "Utility/checked-istream.h"
 #include "Utility/pre-post-conditions.h"

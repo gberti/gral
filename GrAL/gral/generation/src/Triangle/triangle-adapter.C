@@ -1,3 +1,16 @@
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2005 - 2009 Roman Putanowicz
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 #include "Gral/Generation/Triangle/triangle-adapter.h"
 
 namespace GrAL {

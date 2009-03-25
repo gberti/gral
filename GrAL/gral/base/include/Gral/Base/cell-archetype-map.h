@@ -1,7 +1,20 @@
 #ifndef GRAL_GB_BASE_CELL_ARCH_MAP_H
 #define GRAL_GB_BASE_CELL_ARCH_MAP_H
 
-// $LICENSE_NEC
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2001 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 #include "Gral/Base/common-grid-basics.h"
 

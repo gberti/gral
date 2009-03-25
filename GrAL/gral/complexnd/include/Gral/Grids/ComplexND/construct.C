@@ -5,6 +5,19 @@
 
 */
 
+/* ------------------------------------------------------------
+
+    Copyright (C) 2001 - 2009 Guntram Berti,
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 #include "Gral/Grids/ComplexND/complexnd.h"
 #include "Gral/Base/grid-morphism.h"
 #include "Gral/Base/construct-grid.h"

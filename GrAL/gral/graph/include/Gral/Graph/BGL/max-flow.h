@@ -1,7 +1,20 @@
 #ifndef GRAL_GB_GRAPH_BGL_MAX_FLOW_H
 #define GRAL_GB_GRAPH_BGL_MAX_FLOW_H
 
-// $LICENSE_NEC_2005
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 2005 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 #include "Container/tuple.h"
 #include "Container/sequence-algorithms.h"

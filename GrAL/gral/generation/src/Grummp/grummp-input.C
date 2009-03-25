@@ -1,15 +1,26 @@
-/*
- * Bodies of the functions:
- *   SetupPolyline
- *   SetupCircle
- *   SetupArc
- *   SetupBezier
- *   SetupSpline
- *   SetupBdry2D
- * are almost verbatim copied from GRUMMP source (file Bdry2D.cxx).
- *
- * This file is copyrighted as stated in GRUMMP license.
- */
+/* ------------------------------------------------------------
+
+    Copyright (C) 2005 - 2009 Roman Putanowicz, GRUMMP
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+    Bodies of the functions:
+      *   SetupPolyline
+      *   SetupCircle
+      *   SetupArc
+      *   SetupBezier
+      *   SetupSpline
+      *   SetupBdry2D
+    are almost verbatim copied from GRUMMP source (file Bdry2D.cxx).
+ 
+    This file is copyrighted as stated in GRUMMP license.
+
+--------------------------------------------------------------- */
+
 #include <iostream>
 #include "Gral/Generation/Grummp/grummp-input.h"
 #include "GR_Bdry2D.h"

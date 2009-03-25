@@ -2,7 +2,20 @@
 #define NMWR_GB_GRIDS_ALGORITHM_CELL_NEIGHBOR_SEARCH_H
 
 
-// $LICENSE
+
+/* ------------------------------------------------------------
+
+    Copyright (C) 1997 - 2009 Guntram Berti, 
+    Contact: guntram AT users DOT berlios DOT de
+
+    This file is part of the Grid Algorithms Library (GrAL),
+    available at http://gral.berlios.de
+
+    GrAL is distributed under the MIT license,
+    see the file LICENSE or http://gral.berlios.de/license
+
+--------------------------------------------------------------- */
+
 
 /*! \defgroup  cell_neighbor_search Cell Neighbor Search
    \ingroup combinatoric_grid_algorithms
