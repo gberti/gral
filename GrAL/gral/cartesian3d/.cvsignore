@@ -1,1 +1,2 @@
-lib doxy.log doxygenlocal.config
+lib doxy.log doxygen
+local.config
