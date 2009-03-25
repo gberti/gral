@@ -1,0 +1,19 @@
+###################################
+#
+# Copy this file to local.vtk.defs
+# and adapt to your needs.
+#
+###################################
+
+export VTK=/path/to/vtk/#
+
+export VTK_INC  ?= $(VTK)/include/vtk-5.0/
+export VTK_LIB  ?= $(VTK)/lib/
+export VTK_LIBS ?= -lvtkFiltering -lvtkGraphics -lvtkIO  -lvtkCommon -ldl -lpthread
+
+
+# include generic definitions
+include $(CONFIGURATION)/defs/vtk.defs
+
+# make any additional local changes to generic defs here 
+

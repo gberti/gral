@@ -1,8 +1,13 @@
-CGNS_ROOT = $(HOME)/BioNum/AneurIST/WP3/Code/cgnslib_2.4/installed
-CGNS_INC  = $(CGNS_ROOT)/include
-CGNS_LIB  = $(CGNS_ROOT)/lib
-CGNS_LIBS = -lcgns
 
-export CGNS_CCFLAGS = -I$(CGNS_INC)
-export CGNS_LDFLAGS = -L$(CGNS_LIB) $(CGNS_LIBS)
 
+
+CGNS_INC  ?= $(CGNS_ROOT)/include
+CGNS_LIB  ?= $(CGNS_ROOT)/lib
+CGNS_LIBS ?= -lcgns
+
+export CGNS_CCFLAGS ?= -I$(CGNS_INC)
+export CGNS_LDFLAGS ?= -L$(CGNS_LIB) $(CGNS_LIBS)
+
+## For using these variables, set (where needed):
+CCFLAGS += $(CGNS_CCFLAGS)
+LDFLAGS += $(CGNS_LDFLAGS)

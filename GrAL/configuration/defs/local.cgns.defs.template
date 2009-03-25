@@ -1,0 +1,15 @@
+
+###################################
+#
+# Copy this file to local.cgns.defs
+# and adapt to your needs.
+#
+###################################
+
+
+CGNS_ROOT = /path/to/cgns
+
+# include generic definitions
+include $(CONFIGURATION)/defs/cgns.defs
+
+# make any additional local changes to generic defs here 
