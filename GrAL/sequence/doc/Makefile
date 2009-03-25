@@ -1,4 +1,4 @@
-CONFIG=../mk.config
+CONFIG=../local.config
 
 include $(CONFIG)
 

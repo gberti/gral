@@ -1,7 +1,7 @@
 # gral/hierarchical/test/geometry
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/complex2d  gral/cartesiannd 

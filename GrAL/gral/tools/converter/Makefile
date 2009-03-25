@@ -2,7 +2,7 @@
 
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io gral/complex2d gral/cartesian2d gral/vtk gral/cgns-io \

@@ -1,6 +1,6 @@
 SUBDIRS = Geometry
 
-CONFIG=$(shell pwd)/../mk.config
+CONFIG=$(shell pwd)/../local.config
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)
 

@@ -1,7 +1,7 @@
 # gral/transformation/test/transformed-grid-view
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  test-transformed-grid-view.C

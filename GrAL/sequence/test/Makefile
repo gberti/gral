@@ -1,4 +1,4 @@
-CONFIG=$(shell pwd)/../mk.config
+CONFIG=$(shell pwd)/../local.config
 
 SUBDIRS = bijective-mapping  \
           bivector \

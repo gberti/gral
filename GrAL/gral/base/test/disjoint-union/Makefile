@@ -1,7 +1,7 @@
 # gral/base/test/disjoint-union
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 

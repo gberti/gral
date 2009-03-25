@@ -1,7 +1,7 @@
 # gral/complex2d/test/construct
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 

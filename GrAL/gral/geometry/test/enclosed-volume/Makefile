@@ -1,7 +1,7 @@
 # gral/geometry/test/enclosed-volume
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  test-enclosed-volume.C

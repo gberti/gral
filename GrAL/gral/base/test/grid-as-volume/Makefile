@@ -1,7 +1,7 @@
 # gral/base/test/grid-as-volume
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 LOCALSOURCES =  test-grid-as-volume.C

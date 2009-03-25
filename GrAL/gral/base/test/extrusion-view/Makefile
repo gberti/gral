@@ -1,7 +1,7 @@
 # gral/base/test/extrusion-view
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 LOCALSOURCES =  test-extrusion-view.C

@@ -1,7 +1,7 @@
 # gral/measurement/test/corner-jacobian
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 

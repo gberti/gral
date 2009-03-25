@@ -1,6 +1,6 @@
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../mk.config
+CONFIG=$(PWD)/../local.config
 
 SUBDIRS = gmv-output2d gmv-output3d
 

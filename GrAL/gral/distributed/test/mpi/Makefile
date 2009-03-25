@@ -1,6 +1,6 @@
 # gral/distributed/test/mpi
 
-CONFIG=../../mk.config
+CONFIG=../../local.config
 include $(CONFIG)
 
 IFLAGS  += $(MPI_INCLUDES)

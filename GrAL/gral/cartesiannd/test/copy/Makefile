@@ -1,7 +1,7 @@
 # gral/cartesiannd/test/construct
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += geometry gral/testing gral/complexnd gral/complex2d gral/complex3d gral/gmv-io

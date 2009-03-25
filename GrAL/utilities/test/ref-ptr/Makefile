@@ -1,7 +1,7 @@
 # utilities/test/ref-ptr
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 LOCALSOURCES =  test-ref-ptr.C

@@ -1,7 +1,7 @@
 # gral/base/test/orientation
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  test-manifold-check.C

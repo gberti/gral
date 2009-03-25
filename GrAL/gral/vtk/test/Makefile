@@ -1,8 +1,10 @@
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../mk.config
+CONFIG=$(PWD)/../local.config
 
+ifeq ($(WITHVTK),true)
 SUBDIRS = construct
+endif
 
 include  $(CONFIG)
 include  $(RECURSIVETARGETS)

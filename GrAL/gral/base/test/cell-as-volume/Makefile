@@ -1,7 +1,7 @@
 # gral/base/test/cell-as-volume
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  $(shell ls *.C)

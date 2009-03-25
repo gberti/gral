@@ -1,7 +1,7 @@
 # gral/base/test/single-element-iterator
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  test-single-element-iterator.C

@@ -3,16 +3,13 @@
 
 # avoid ugly UTF quotation marks in emacs
 LANG=en_US
-GCC4 = /usr/net/fdc/GCC-4.0.0/#
-# GCC4 = $(HOME)/lib/gcc-4.0.0/install/#
-CCC      =  $(GCC4)/bin/g++
+CCC      =  g++
 CCFLAGS += -Wall
 CCFLAGS += -DNMWR_INCLUDE_TEMPLATE_DEFS 
 CCFLAGS += 
 CCFLAGS += -ftemplate-depth-200
 CCFLAGS += -DGRAL_HAS_SSTREAM
-LDFLAGS += -Xlinker -rpath -Xlinker $(GCC4)/lib
-DEPEND    =$(CCC)
+DEPEND   = $(CCC)
 DEPFLAGS += -MM $(CCFLAGS)
 
 

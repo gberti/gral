@@ -3,3 +3,4 @@ doxygen
 *.tmp
  doxy.log 
 lib
+local.config

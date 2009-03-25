@@ -1,7 +1,7 @@
 # gral/geometry/test/intersection-ray-grid
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 

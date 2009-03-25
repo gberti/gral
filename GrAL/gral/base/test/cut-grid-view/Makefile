@@ -1,7 +1,7 @@
 # gral/base/test/cut-grid-view
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  test-cut-grid-view.C

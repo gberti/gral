@@ -1,7 +1,7 @@
 # utilities/test/context
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  $(shell ls *.C)

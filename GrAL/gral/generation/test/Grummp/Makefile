@@ -1,7 +1,7 @@
 # gral/generaton/test/Grummp
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_CCFLAGS+=-DLINUX -DANSI_DECLARATORS

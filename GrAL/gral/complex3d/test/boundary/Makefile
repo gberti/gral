@@ -1,7 +1,7 @@
 # gral/complex3d/test/boundary
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 LOCALSOURCES =  test-boundary.C

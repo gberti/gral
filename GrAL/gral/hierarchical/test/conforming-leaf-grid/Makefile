@@ -1,7 +1,7 @@
 # gral/hierarchical/test/conforming-leaf-grid
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/complex2d  gral/cartesiannd

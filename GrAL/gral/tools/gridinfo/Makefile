@@ -4,7 +4,7 @@ EXTRA_DEPMODULES+= gral/measurement gral/base gral/complex2d \
              external-control configuration utilities geometry sequence
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 

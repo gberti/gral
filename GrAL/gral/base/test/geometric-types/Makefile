@@ -1,7 +1,7 @@
 # gral/base/test/geometric-types
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 LOCALSOURCES =  test-geometric-types.C

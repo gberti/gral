@@ -1,7 +1,7 @@
 # gral/base/test/extend-grid-types
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/cartesian2d gral/complex2d gral/cartesian3d gral/complex3d geometry

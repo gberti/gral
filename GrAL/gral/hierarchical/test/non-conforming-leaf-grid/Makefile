@@ -1,7 +1,7 @@
 # gral/hierarchical/test/non-conforming-leaf-grid
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/complex2d  gral/cartesian3d gral/cartesian2d gral/cartesiannd gral/geomview-io gral/testing gral/gmv-io

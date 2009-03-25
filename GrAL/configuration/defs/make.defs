@@ -20,6 +20,8 @@ ifndef CONFIGURATION
 export CONFIGURATION=$(GRALROOT)/configuration
 endif
 
+include $(CONFIGURATION)/defs/local.defs
+
 ifndef ARCH
 export ARCH   =linux#  
 endif

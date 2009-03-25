@@ -1,7 +1,7 @@
 # gral/base/test/element-grid
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 LOCALSOURCES =  test-element-grid.C

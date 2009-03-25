@@ -1,7 +1,7 @@
 # gral/cartesian2d/test/mapped-geometry
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES +=  geometry

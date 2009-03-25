@@ -1,7 +1,7 @@
 # gral/transformation/test/barycentric-subdivision
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  test-barycentric-subdivision.C

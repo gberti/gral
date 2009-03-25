@@ -1,4 +1,4 @@
-export CONFIG:=$(shell pwd)/mk.config
+export CONFIG:=$(shell pwd)/local.config
 include $(CONFIG)
 
 

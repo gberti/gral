@@ -1,7 +1,7 @@
 # gral/base/test/polygon1d
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 LOCALSOURCES =  test-polygon1d.C

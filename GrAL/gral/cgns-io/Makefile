@@ -1,14 +1,16 @@
-export CONFIG:=$(shell pwd)/mk.config
+export CONFIG:=$(shell pwd)/local.config
 include $(CONFIG)
 
 
 TARGET=all
 
 all:
-	(cd src; $(MAKE) all)
+
+#	(cd src; $(MAKE) all)
 
 new: libclean
-	(cd src; $(MAKE) new)
+
+#	(cd src; $(MAKE) new)
 
 
 compile:
@@ -30,13 +32,13 @@ install: install-headers  install-libs
 
 clean: stdclean
 	find . -name "*~" -exec rm {} \; -print
-	(cd src;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
+#	(cd src;  $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 	(cd test; $(MAKE) clean DEPS="" GRALROOT=$(GRALROOT))
 
 realclean: clean
 	rm -rf lib/$(ARCH)/
 	rm -rf doxygen/
-	(cd src;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
+#	(cd src;  $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
 	(cd test; $(MAKE) realclean DEPS="" GRALROOT=$(GRALROOT))
 
 

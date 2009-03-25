@@ -1,7 +1,7 @@
 # sequence/test/counting-iterator
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  test-counting-iterator.C

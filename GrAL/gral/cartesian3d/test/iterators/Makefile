@@ -1,7 +1,7 @@
 # gral/cartesian3d/test/iterators
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 

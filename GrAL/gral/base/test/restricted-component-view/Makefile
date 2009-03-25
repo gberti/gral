@@ -1,7 +1,7 @@
 # gral/base/test/restricted-components-view
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 EXTRA_DEPMODULES += gral/cartesian2d gral/gmv-io

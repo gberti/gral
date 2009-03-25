@@ -1,8 +1,9 @@
-CONFIG=$(shell pwd)/../mk.config
+CONFIG=$(shell pwd)/../local.config
 
 include  $(CONFIG)
 
-ifdef WITHVTK
+
+ifeq ($(WITHVTK),true)
 VTKDIR = VTK
 SUBDIRS += $(VTKDIR)
 endif

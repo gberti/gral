@@ -1,7 +1,7 @@
 # gral/complex2d/test/custom-grids
 
 PWD=$(shell pwd)
-CONFIG=$(PWD)/../../mk.config
+CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
 SOURCES =  test-custom-grids.C
