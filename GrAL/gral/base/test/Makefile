@@ -21,7 +21,7 @@ SUBDIRS = archetype0D \
           enumerated-subrange \
           extend-grid-types \
           extrusion-view \
-          facet-grid \
+          # facet-grid \
           facet-iterator-of-cell-set \
           flag \
           geometric-types \
