@@ -14,9 +14,9 @@
     see the file LICENSE or http://gral.berlios.de/license
 
 --------------------------------------------------------------- */
-_2003
 
-//#include "Gral/Base/common-grid-basics.h"
+
+#include "Gral/Base/common-grid-basics.h"
 #include "Gral/Base/element-traits.h"
 #include "Utility/pre-post-conditions.h"
 

@@ -14,7 +14,7 @@
     see the file LICENSE or http://gral.berlios.de/license
 
 --------------------------------------------------------------- */
-_2003
+
 
 #include "Gral/Geometries/geometric-types-nd.h"
 #include "Geometry/intersections.h"

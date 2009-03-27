@@ -14,7 +14,7 @@
     see the file LICENSE or http://gral.berlios.de/license
 
 --------------------------------------------------------------- */
-_2003
+
 
 #include "Gral/Base/common-grid-basics.h"
 #include "Gral/Geometry/point-locator.h"

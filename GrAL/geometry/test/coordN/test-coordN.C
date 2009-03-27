@@ -17,7 +17,7 @@
     see the file LICENSE or http://gral.berlios.de/license
 
 --------------------------------------------------------------- */
-_2003
+
 
 #include "Geometry/coords.h"
 
