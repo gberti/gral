@@ -67,6 +67,6 @@ additional-postdoc:
 
 additional-copydoc:
 	mkdir -p $(DOCDEST)/$(CONCEPTSPATH)
-	cp -r $(CONCEPTSPATH)/* $(DOCDEST)/$(CONCEPTSPATH)
+	cp -rL $(CONCEPTSPATH)/* $(DOCDEST)/$(CONCEPTSPATH)
 
 

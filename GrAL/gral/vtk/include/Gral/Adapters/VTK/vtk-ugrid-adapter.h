@@ -196,7 +196,9 @@ struct dimension_mixin_grid {
   unsigned dimension() const { return D;} 
 };
 
+/*! \brief Non-template base class for UGridVTKAdapter
 
+*/
   class UGridVTKAdapter_base {
     typedef UGridVTKAdapter_base self;
   protected:
@@ -213,6 +215,7 @@ struct dimension_mixin_grid {
 
   public:
     void SetAdaptee(Adaptee * a);
+
     /*! \brief Copy data structure from polydata
 
     \pre poly != 0
@@ -243,7 +246,10 @@ struct dimension_mixin_grid {
     
     bool read (std::string const& filenm);
     bool write(std::string const& filenm)          const;
-    // Only possible if dim <= 2. 
+    /*! \brief Write to VTK  polydata file 
+         
+        Only possible if dim <= 2. 
+    */
     bool write_polydata(std::string const& filenm) const;
 
     int NumOfVertices() const {
@@ -314,7 +320,7 @@ public:
 
   //@{
   /*! \name Sequence iteration
-      \todo STL-style EndXXX() 
+
   */
   inline VertexIterator FirstVertex() const;
   inline VertexIterator EndVertex()   const;
@@ -374,6 +380,7 @@ public:
   static archetype_handle handle(archetype_iterator a) {
     return UGridVTKArchetypes<D>::Get().handle(a);
   }
+  /*@}*/
 
   // Vertex Geometry part
   

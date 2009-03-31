@@ -227,7 +227,7 @@ local-installdox:
 DOCDEST=/dev/null
 copy-doxy: 
 	mkdir -p $(DOCDEST)/$(DOXYPATH)
-	cp -r $(DOXYPATH)/* $(DOCDEST)/$(DOXYPATH)
+	cp -rL $(DOXYPATH)/* $(DOCDEST)/$(DOXYPATH)
 
 
 ###########################

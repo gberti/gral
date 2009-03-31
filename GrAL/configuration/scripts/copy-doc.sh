@@ -1,16 +1,19 @@
 #! /bin/bash
 
+DOCDEST=$1
+shift
+MODULES="$@"
 
-cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
-MODULES=`$cvswork/configuration/scripts/modules.sh`;
+GRALWORK=${HOME}/Sources/GrAL
+MODULES_DEFAULT=`$GRALWORK/configuration/scripts/modules.sh`;
+
 #MODULES="configuration configuration utilities"
 
-DOCDEST=$1
-
+echo $MODULES
 for i in ${MODULES}
 do
   #echo "mkdir ${DOCDEST}/$i";
   mkdir -p ${DOCDEST}/$i
-  (cd ${cvswork}/$i; gmake copydoc DOCDEST=${DOCDEST}/$i)
+  (cd ${GRALWORK}/$i; gmake copydoc DOCDEST=${DOCDEST}/$i)
 done;
 

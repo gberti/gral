@@ -6,29 +6,24 @@ echo `which perl`
 perl -v;
 
 TAG=${1-HEAD}
-cvswork=${CVSWORK-${HOME}/CVS-work/GrAL}
-scripts=${cvswork}/configuration/scripts;
+GRALWORK=${HOME}/Sources/GrAL
+scripts=${GRALWORK}/configuration/scripts;
 MODULES=`$scripts/modules-v1_0.sh`;
 EXCLUDED=`$scripts/excluded-v1_0.sh`;
 TOPLEVELMODULES=`$scripts/modules-toplevel-v1_0.sh`;
-CVSREPO=`cat $cvswork/configuration/CVS/Root`;
+CVSREPO=guntram@cvs.berlios.de/cvsroot/gral
 
 
 TMP=${HOME}/tmp;
-GRALROOT=${TMP}/modules;
+GRALROOT=${TMP}/GrAL;
 DOC=doc
 cd ${HOME}/tmp; 
 rm -rf ${GRALROOT};
-mkdir -p  ${GRALROOT};
-cd  ${GRALROOT};
 
-echo "####################################"
-echo "Exporting modules ${TOPLEVELMODULES}"
-for i in ${TOPLEVELMODULES}
-do
- echo "##########  " $i "  #############"; 
- cvs -d ${CVSREPO} export -r ${TAG} $i;
-done;
+#cd  ${GRALROOT};
+
+cvs -d $CVSREPO export -r ${TAG} GrAL
+cd $GRALROOT
 
 echo "####################################"
 echo "Excluding modules ${EXCLUDED}"
@@ -38,26 +33,20 @@ do
  rm -rf $i
 done;
 
-
+cp configuration/defs/local.defs.template configuration/defs/local.defs
 mv configuration/defs/mpi/mpi.defs.template configuration/defs/mpi/mpi.defs
 cp gral/v1_0/index.dox gral/doc
 cp gral/v1_0/Makefile.gral gral/Makefile
 rm -rf gral/v1_0
 
-for i in ${MODULES}
-do
- cd ${GRALROOT}/$i;
- gmake predoc GRALROOT=${GRALROOT} DOXYGEN=$HOME/bin/doxygen
-done;
+make init
+make predoc  GRALROOT=${GRALROOT} DOXYGEN=$HOME/bin/doxygen
 
 for i in ${MODULES}
 do
  cd ${GRALROOT}/$i;
  gmake postdoc GRALROOT=${GRALROOT} DOCROOT=../ DOXYGEN=$HOME/bin/doxygen
 done;
-
-cd ${GRALROOT};
-find ./gral/base/doc -name "*.html" -exec $scripts/reduce-underscores.pl {} \; 
 
 mkdir ${GRALROOT}/${DOC};
 cd ${GRALROOT}/${DOC};

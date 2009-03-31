@@ -91,6 +91,8 @@
         Components for output to GMV file format (3D and 2D versions).
       <LI> $gral-gral/geomview-io GrAL-Geomview-IO package:
         Components for output to OFF file format used by Geomview
+      <LI> $gral-gral/cgns-io GrAL-CGNS-IO package:
+	Components for output to CGNS (incomplete)
       <LI> $gral-gral/vtk GrAL-VTK-Adapter package:
         Adapters for VTK grid data structures
    </UL>
