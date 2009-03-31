@@ -1,6 +1,4 @@
 doxygen
-doxy.cfg
- doxygen 
- doxy.log 
+doxy.cfg doxy.log 
 lib
 local.config
