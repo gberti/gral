@@ -1,4 +1,4 @@
-/*!  \mainpage Index to <A HREF="http://www.math.tu-cottbus.de/~berti/gral"> GrAL </A>  Packages
+/*!  \mainpage Index to GrAL   Packages
 
      GrAL is partitioned from the beginning
      into manageable packages
@@ -85,11 +85,13 @@
       <LI> $gral-gral/hierarchical GrAL-Hierarchical package:
            Components for hierarchical grids
       </UL>
-      <H3> I/O to various file formats</H3>
+      <H3> Adapters and I/O to various file formats</H3>
       <UL>
       <LI> $gral-gral/gmv-io GrAL-GMV-IO package:
         Components for output to GMV file format (3D and 2D versions).
       <LI> $gral-gral/geomview-io GrAL-Geomview-IO package:
         Components for output to OFF file format used by Geomview
+      <LI> $gral-gral/vtk GrAL-VTK-Adapter package:
+        Adapters for VTK grid data structures
    </UL>
 */
