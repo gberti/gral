@@ -10,8 +10,8 @@ print "
 \\newcommand{\\GRALINC}[2]{\\GRALROOT/#2/$DOXYPATH/#1.html}
 \\newcommand{\\STLURL}{STLURL}
 \\newcommand{\\STLPATH}[1]{\\STLURL/#1}
-\\newcommand{\\BERTIURL}{http://www.math.tu-cottbus.de/\\~{}berti}
-\\newcommand{\\GRALURL}{\\BERTIURL/gral}
+\\newcommand{\\BERTIURL}{http://gral.berlios.de/guntram}
+\\newcommand{\\GRALURL}{http://gral.berlios.de}
 \\newcommand{\\traitsURL}{}
 
 ";

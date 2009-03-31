@@ -1,4 +1,4 @@
-/*! \mainpage Index of the GrAL %Triang3D Grid Package
+/*! \mainpage Index of the GrAL Triang3D Grid Package
 
    This module contains the concrete grid component Triang3D.
    An object of type Triang2D represents a three-dimensional triangulation.

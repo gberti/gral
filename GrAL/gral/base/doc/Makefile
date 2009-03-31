@@ -17,16 +17,18 @@ install-doc1:
 install-doc: install-doc1  make-links
 concepts: gen-paths latex
 
+HYPERLATEX=hyperlatex
+
 latex:
 	(cd hyperlatex;\
            rm -f html/*; \
           (cd bilder; $(MAKE) all; $(MAKE) clean);\
-          hyperlatex-2.3.1 top;\
+          $(HYPERLATEX) top;\
           cp not-yet-done.html html/)
 
 make-links:
 	(cd hyperlatex;\
-          cp *.xbm html/;\
+          cp *.png html/;\
           (cd html; \
            ln -s ../gralconcepts.css .; \
            rm -f bilder; ln -s ../bilder ./; \

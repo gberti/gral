@@ -68,5 +68,8 @@ while(<>) {
   # insert style sheet
   s|<HEAD>|<HEAD> <link  type="text/css" rel="stylesheet" href="gralconcepts.css">|;
   s|<head>|<head> <link  type="text/css" rel="stylesheet" href="gralconcepts.css">|;
+
+  #replace Placeholders left by hyperlatex
+  s|HLXHTMLCIRCUMFLEX|&#094;|g;
   print;
 }
