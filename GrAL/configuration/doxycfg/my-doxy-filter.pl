@@ -16,7 +16,7 @@ while(<>) {
   s|\$GrAL[ \-]*([a-z\-_A-Z0-9]+)|<A TARGET="_parent" HREF="%GRALCONCEPTS/$1.html">GRALPROTECT$1</A>|g;
   s|\$GRALCONCEPTSTOP[ ]+'([^']+)'|<A HREF="%GRALCONCEPTSTOP">$1</A>|g;
   s|\$GRALCONCEPTSTOP[ ]+([^ ]+)|<A HREF="%GRALCONCEPTSTOP">$1</A>|g;
-  s|\$DISS|<A HREF="http://www.math.tu-cottbus.de/~berti/diss"> [Berti00] </A>|g;
+  s|\$DISS|<A HREF="http://gral.berlios.de/diss"> [Berti00] </A>|g;
   s|Adaptable Unary Function|<A  TARGET="_parent" HREF="%STL/AdaptableUnaryFunction.html"> Adaptable Unary Function</A>|g;
   s|Unary Function|<A  TARGET="_parent" HREF="%STL/UnaryFunction.html">Unary Function</A>|g;
   s|Adaptable Binary Function|<A  TARGET="_parent" HREF="%STL/AdaptableBinaryFunction.html"> Adaptable Binary Function</A>|g;

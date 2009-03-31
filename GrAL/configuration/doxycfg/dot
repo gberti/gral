@@ -2,4 +2,4 @@
 
 # The color is the same as body bgcolor in gral.css
 # echo "Dot ..."
-$HOME/bin/dot -Gbgcolor='#FFFFF0'  "$@"
+dot -Gbgcolor='#FFFFF0'  "$@"
