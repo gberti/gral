@@ -7,8 +7,7 @@
 
 /* ------------------------------------------------------------
 
-    Copyright (C) 1997 - 2009 Guntram Berti,
-    Contact: guntram AT users DOT berlios DOT de
+    Copyright (C) 1997 - 2009 Guntram Berti
 
     This file is part of the Grid Algorithms Library (GrAL),
     available at http://gral.berlios.de

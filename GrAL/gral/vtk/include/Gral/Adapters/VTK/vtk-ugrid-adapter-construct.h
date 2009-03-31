@@ -4,8 +4,7 @@
 
 /* ------------------------------------------------------------
 
-    Copyright (C) 2007 - 2009 Guntram Berti,  Roman Putanowicz, 
-    Contact: guntram AT users DOT berlios DOT de
+    Copyright (C) 2007 - 2009 Guntram Berti,  Roman Putanowicz
 
     This file is part of the Grid Algorithms Library (GrAL),
     available at http://gral.berlios.de
