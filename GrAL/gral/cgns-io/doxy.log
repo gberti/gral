@@ -1,0 +1,2 @@
+Warning: source src is not a readable file or directory... skipping.
+/home/guntram/Sources/GrAL/gral/cgns-io/test/write/test-cgns-write.C:28: Warning: Member main() (function) of file test-cgns-write.C is not documented.

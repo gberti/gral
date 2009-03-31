@@ -1,0 +1,8 @@
+/*! \mainpage Index of the  GrAL CGNS Adapter Package, part of the GrAL (Grid Algorithms Library)
+
+     This package contains components for adapting the CGNS file format
+     to GrAL. This package is incomplete and only contains a generic function 
+     to write a (labelled) triangular 2D surface mesh to a CGNS file.
+  
+*/
+
