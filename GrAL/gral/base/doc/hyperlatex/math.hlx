@@ -28,12 +28,12 @@
 \newcommand{\Bbb}{\bf}
 
 %\newcommand{\cup}{ cup }
-\newcommand{\cup}{ \begin{rawhtml} <TT>U</TT> \end{rawhtml} }
+\newcommand{\cup}{ \begin{ifhtml} <TT>U</TT> \end{ifhtml} }
 %\newcommand{\cap}{ cap }
-\newcommand{\cap}{\begin{rawhtml} <TT>n</TT> \end{rawhtml} }
+\newcommand{\cap}{\begin{ifhtml} <TT>n</TT> \end{ifhtml} }
 %\newcommand{\cap}{\begin{rawhtml}<MATH> &caps;</MATH>\end{rawhtml}}
 \newcommand{\in}{ in }
-\newcommand{\bigcup}{ \begin{rawhtml} <BIG><TT>U</TT></BIG> \end{rawhtml}}
+\newcommand{\bigcup}{ \begin{ifhtml} <BIG><TT>U</TT></BIG> \end{ifhtml}}
 \newcommand{\bigcap}{INTER}
 \newcommand{\overline}{}
 \newcommand{\ell}{l}
@@ -45,9 +45,10 @@
 \newcommand{\reversemarginpar}{}
 \newcommand{\normalmarginpar}{}
 
-\newcommand{\vee}{\begin{rawhtml} \/ \end{rawhtml}}
-\newcommand{\wedge}{\begin{rawhtml} /\ \end{rawhtml}}
+\newcommand{\vee}{\begin{ifhtml} \/ \end{ifhtml}}
+\newcommand{\wedge}{\begin{ifhtml} /\ \end{ifhtml}}
 \newcommand{\hashmark}{\#}
-\newcommand{\circumflex}{\begin{rawhtml}&\end{rawhtml}\hashmark\begin{rawhtml}094;\end{rawhtml}}
+%\newcommand{\circumflex}{\begin{ifhtml}\&\end{ifhtml}\hashmark\begin{ifhtml}094;\end{ifhtml}}
+\newcommand{\circumflex}{\begin{ifhtml}HLXHTMLCIRCUMFLEX\end{ifhtml}}
 \newcommand{\hat}[1]{\circumflex{}#1}
 \newcommand{\|}{|}

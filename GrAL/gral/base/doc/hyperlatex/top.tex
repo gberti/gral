@@ -13,7 +13,7 @@
 \htmltitle{Documentation of the Grid Category Components}
 \title{Documentation of the Grid Category Components}
 \author{Guntram Berti}
-\htmladdress{\xlink{Guntram Berti}{http://www.ccrl-nece.de/staff/berti.html}}
+\htmladdress{\xlink{Guntram Berti}{\BERTIURL}}
 %\htmlattributes{TABLE}{BORDER}
 %\htmlattributes{BODY}{MARGIN-LEFT=8%}  % BGCOLOR="ff0000"}
 %\htmlattributes{BODY}{BACKGROUND=ff0000}
@@ -37,11 +37,12 @@
 %\T\parskip0.25cm
 
 \newcommand{\htmlfill}{\ifhtml{%
-    \begin{rawhtml}
+    %\begin{rawhtml}
       <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR>
       <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR>
       <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR> <BR>
-    \end{rawhtml}}}
+    %\end{rawhtml}
+    }}
 
 \T\newcommand{\nix}{\rule{0cm}{0cm}}
 \W\newcommand{\nix}{}
@@ -112,8 +113,8 @@
 
 \newcommand{\htmlcolor}[2]{#2}
 
-\newcommand{\undefcb}{\begin{rawhtml}<FONT COLOR="008F00">\end{rawhtml}}
-\newcommand{\undefce}{\begin{rawhtml}</FONT>\end{rawhtml}}
+\newcommand{\undefcb}{\begin{ifhtml}<FONT COLOR="008F00">\end{ifhtml}}
+\newcommand{\undefce}{\begin{ifhtml}</FONT>\end{ifhtml}}
 
 \newcommand{\sectionlinkUNDEF}[2]{\texorhtml{#1}{\xlink{#1}{not-yet-done.html}}}
 %\newcommand{\xlinkUNDEF}[2]{\texorhtml{#1}{\xlink{#1}{not-yet-done.html}}}
@@ -188,7 +189,7 @@
 \newcommand{\Image}[1]{%
  \texorhtml{\includegraphics{#1.eps}}{\htmlimage{#1.gif}}}
 
-\newcommand{\rhtml}[1]{\begin{rawhtml}#1\end{rawhtml}}
+\newcommand{\rhtml}[1]{\begin{ifhtml}#1\end{ifhtml}}
 
 % Status
 \newcommand{\needswork}[1]{ {\begin{center}{\LARGE #1} \end{center}}}
