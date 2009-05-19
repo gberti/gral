@@ -20,6 +20,9 @@
 #include "Gral/IO/write-complex2d.h"
 #include "Container/dummy-mapping.h"
 
+#include <iomanip>
+#include <limits>
+
 namespace GrAL {
 
 //-------------------------------------------------------------------------
@@ -118,7 +121,7 @@ void write_complex2d(GRID const& G, GEOM const& Geo,  ::std::ostream& out, int o
   grid_function<Vertex,int> VNum(* baseG);
   int vnum = offset;
   for(VertexIterator v= G.FirstVertex(); ! v.IsDone(); ++v){
-    out << Geo.coord(*v) << "\n"; 
+    out << std::setprecision(std::numeric_limits<double>::digits10) << Geo.coord(*v) << "\n"; 
     VNum[*v] = vnum;
     vnum++;
   }

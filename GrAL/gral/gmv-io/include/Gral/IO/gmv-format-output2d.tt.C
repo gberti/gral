@@ -22,6 +22,9 @@
 #include "Gral/Base/element-numbering.h"
 #include "Geometry/point-traits.h"
 
+#include <iomanip>
+#include <limits>
+
 namespace GrAL {
 
 template<class GRID,class GEOM, class GF, class MOREGFS>
@@ -54,6 +57,7 @@ void ConstructGrid_GF(OstreamGMV2DFmt& Out,
   out << "gmvinput ascii\n";
   out << "nodev " << G.NumOfVertices() << '\n';
 
+  out << std::setprecision(std::numeric_limits<double>::digits10);
   for(typename gt::VertexIterator v = G.FirstVertex(); ! v.IsDone(); ++v)
     out << pt::x(GEO.coord(*v)) << ' '
 	<< pt::y(GEO.coord(*v)) << ' '
