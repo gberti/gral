@@ -209,8 +209,9 @@ template <>
 UGridVTKArchetypes<2>::UGridVTKArchetypes()
 {
   int i;
+  typedef grid_types<archetype_type>::size_type arch_size_type;
   // construct TRIANGLE1 element archetype
-  int conn_triangle1[3][2] = {{0,1}, {1,2}, {2,0}};
+  arch_size_type conn_triangle1[3][2] = {{0,1}, {1,2}, {2,0}};
   archetype_type triangle1(conn_triangle1, 3);
   
   archetypes.push_back(triangle1);
@@ -221,8 +222,8 @@ UGridVTKArchetypes<2>::UGridVTKArchetypes()
   // construct QUAD1 element archetype 
   // this is the VTK_PIXEL connectivity!!
   // int conn_quad1[4][2] = { {0,1}, {1,3}, {3,2}, {2,0}};
-  int conn_quad1[4][2] = { {0,1}, {1,2}, {2,3}, {3,0}};
-  archetype_type  quad1(conn_quad1, 4);
+  arch_size_type conn_quad1[4][2] = { {0,1}, {1,2}, {2,3}, {3,0}};
+  archetype_type quad1(conn_quad1, 4);
   archetypes.push_back(quad1);
   i = archetypes.size() - 1 ;
   names[i]     = "VTK_QUAD";
