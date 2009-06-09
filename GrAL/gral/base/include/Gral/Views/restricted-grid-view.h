@@ -152,7 +152,18 @@ struct element_traits<restricted_grid_view::vertex<CFG> >
   : public element_traits_vertex_base<restricted_grid_view::grid_view<CFG> >
 {
   typedef element_traits_vertex_base<restricted_grid_view::grid_view<CFG> > base;
-  typedef typename base::hasher_type_elem_base       hasher_type;
+  //  typedef typename base::hasher_type_elem_base       hasher_type;
+
+  struct hasher_type : public base::hasher_type_elem_base {
+    typedef typename base::element_type             Vertex; 
+    typedef element_traits<typename Vertex::baseVertex> bet;
+    typedef typename bet::hasher_type               base_hasher_type;
+  
+    typename base_hasher_type::result_type operator()(Vertex const& v) const {
+      base_hasher_type bh;
+      return bh(v.Base());
+    }
+  };
 };
 
 
@@ -161,7 +172,18 @@ struct element_traits<restricted_grid_view::cell<CFG> >
   : public element_traits_cell_base<restricted_grid_view::grid_view<CFG> >
 {
   typedef element_traits_cell_base<restricted_grid_view::grid_view<CFG> > base;
-  typedef typename base::hasher_type_elem_base       hasher_type;
+  // typedef typename base::hasher_type_elem_base       hasher_type;
+
+  struct hasher_type : public base::hasher_type_elem_base {
+    typedef typename base::element_type             Cell; 
+    typedef element_traits<typename Cell::baseCell> bet;
+    typedef typename bet::hasher_type               base_hasher_type;
+  
+    typename base_hasher_type::result_type operator()(Cell const& c) const {
+      base_hasher_type bh;
+      return bh(c.Base());
+    }
+  };
 };
 
 
