@@ -50,7 +50,7 @@ int main() {
   typedef cell_intersects<shape_type, geom_type,gt> pred_type;
   typedef rcv::grid_view<grid_type, pred_type>      component_type;
   
-  grid_type R(4,4);
+  grid_type R(5,5);
   geom_type GeomR(R);
 
   typedef grid_types<component_type> cgt;

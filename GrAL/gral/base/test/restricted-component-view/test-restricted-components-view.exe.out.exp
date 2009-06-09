@@ -1,6 +1,6 @@
-Component: 15 vertices, 8 cells
-Component: 13 vertices, 6 cells
-Component: 13 vertices, 6 cells
+Component: 22 vertices, 13 cells
+Component: 19 vertices, 10 cells
+Component: 19 vertices, 10 cells
 checkgt<grid_types<rcv::grid_view<grid_type, pred_type> > >
 has    type vertex_handle
 has    type edge_handle
