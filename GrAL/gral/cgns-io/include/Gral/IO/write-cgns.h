@@ -77,7 +77,7 @@ namespace GrAL {
       y_coords[nv] = pt::y(geom.coord(*v));
       z_coords[nv] = pt::z(geom.coord(*v));
     }
-    int cgns_index_coord;
+    int cgns_index_coord  = -1;
     cg_coord_write(cgns_index_file,cgns_index_base,cgns_index_zone,
 		   RealDouble,"CoordinateX",&(x_coords[0]),&cgns_index_coord);
     cg_coord_write(cgns_index_file,cgns_index_base,cgns_index_zone,
