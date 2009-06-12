@@ -12,28 +12,29 @@ export ARCH   = linux#
 export CCNAME = gcc4# 
 export DEBUG  = debug# 
 
+export BOOST=$(HOME)/sources/boost/#
 
-export WITHMPI = false
+export WITHMPI = false#
 
-export WITHMETIS = false 
+export WITHMETIS = false#
 #export METIS=$(HOME)/lib/metis-4.0#
 #export METIS_INC=$(METIS)/Lib/#
 #export METIS_LIB=$(METIS)/#
 
 
-export WITHTRIANGLE = false
+export WITHTRIANGLE = false#
 #export TRIANGLE=/path/to/triangle#
 #export TRIANGLE_INC=$(TRIANGLE)/include/triangle
 #export TRIANGLE_LIB=$(TRIANGLE)/lib
 
-export WITHGRUMMP = false
+export WITHGRUMMP = false#
 #export GRUMMP=/path/to/grummp#
 #export GRUMMP_INC=$(GRUMMP)/include/GRUMMP
 #export GRUMMP_LIB=$(GRUMMP)/lib
 
 
-export WITHCGNS = false
-# if true, set up a cgns.defs in this dir [$(CONFIGURATION)/defs]
+export WITHCGNS = false#
+# if true, set up a local.cgns.defs in this dir [$(CONFIGURATION)/defs]
 
-export WITHVTK = false
-# if true, set up a vtk.defs in this dir [$(CONFIGURATION)/defs]
+export WITHVTK = false#
+# if true, set up a local.vtk.defs in this dir [$(CONFIGURATION)/defs]

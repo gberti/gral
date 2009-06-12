@@ -44,8 +44,6 @@ endif
 export SCRIPTS=$(CONFIGURATION)/scripts
 export STLURL=http://www.sgi.com/tech/stl
 
-export BOOST=$(HOME)/sources/boost/#
-
 
 ifndef LOCALBINPATH
 export LOCALBINPATH=/opt/local/bin#
