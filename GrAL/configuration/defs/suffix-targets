@@ -274,3 +274,10 @@ else
 
 endif
 
+###########################
+# Debugging makefiles
+# Usage: PRINT-VARIABLENAME
+###########################
+
+PRINT-%:
+	@echo $* = $($*)
