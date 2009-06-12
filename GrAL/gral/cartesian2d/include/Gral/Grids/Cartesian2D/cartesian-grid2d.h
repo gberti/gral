@@ -430,9 +430,9 @@ public:
 
     void init(const vertex_base& w1, const vertex_base& w2)
       {
-	REQUIRE((    (w1.x() == w2.x()) && (w1.y() == w2.y()+1 || w1.y() == w2.y()-1)
-		  || (w1.y() == w2.y()) && (w1.x() == w2.x()+1 || w1.x() == w2.x()-1)),
-		"Edge(w1,w2): (w1,w2) = (" << w1 << ','  << w2 << ')' << "is no edge!\n",1);
+	REQUIRE((    ((w1.x() == w2.x()) && (w1.y() == w2.y()+1 || w1.y() == w2.y()-1))
+	          || ((w1.y() == w2.y()) && (w1.x() == w2.x()+1 || w1.x() == w2.x()-1))),
+		     "Edge(w1,w2): (w1,w2) = (" << w1 << ','  << w2 << ')' << "is no edge!\n",1);
 	if(w1.y() == w2.y()) {
 	  dir = x_dir;
 	  v1_ = ( w1.x() < w2.x() ? w1 : w2);

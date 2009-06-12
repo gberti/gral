@@ -198,7 +198,7 @@ struct grid_isomorphism_construction {
 	  // both facets internal => proceed
 	  // both on boundary: skip
 	  bool onbd1 = G1.IsOnBoundary(f1), onbd2 = G2.IsOnBoundary(f2);
-	  if( !onbd1 && onbd2 || onbd1 && !onbd2) {
+	  if( (!onbd1 && onbd2) || (onbd1 && !onbd2)) {
 	    //phi.clear(); 
 	    return false;
 	  } 

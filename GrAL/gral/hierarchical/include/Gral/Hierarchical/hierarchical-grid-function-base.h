@@ -101,9 +101,13 @@ namespace hierarchical {
     void         remove_finest_level();
     void         remove_coarsest_level();
 
-    bool valid() const { return  (empty() && TheGrid()->empty() )
-			   ||    (gfs.coarsest_level() == TheGrid()->coarsest_level()) 
-			      && (gfs.finest_level()   == TheGrid()->finest_level());}
+    bool valid() const { 
+      return  
+	(empty() && TheGrid()->empty() )
+	||    
+	(   (gfs.coarsest_level() == TheGrid()->coarsest_level()) 
+	 && (gfs.finest_level()   == TheGrid()->finest_level()));
+    }
     bool valid(level_handle lev) const { return (lev >= gfs.coarsest_level()) && (lev <= gfs.finest_level());}
     void cv(level_handle lev) const { REQUIRE(valid(lev), "lev=" << lev, 1); }
 

@@ -17,6 +17,8 @@
 
 #include "Utility/pre-post-conditions.h"
 
+#include <limits>
+
 namespace GrAL { namespace combinatorial {
 
 /*! \defgroup combinatorialalgorithms Combinatorial algorithms
