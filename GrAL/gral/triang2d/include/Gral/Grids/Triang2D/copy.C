@@ -58,7 +58,9 @@ void copy_cells(Triang2D       & G,
     }
    
   }
-  G.Steal(cells, G_src.NumOfCells(), G_src.NumOfVertices());
+  G.Steal(cells, 
+	  static_cast<gt::size_type>(G_src.NumOfCells()), 	
+	  static_cast<gt::size_type>(G_src.NumOfVertices()));
 }
 
 } // namespace GrAL 

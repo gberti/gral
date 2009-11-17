@@ -40,7 +40,7 @@ void copy_cells(Triang3D       & G,
   // first unused cell handle, = 0 if new grid
   cell_handle hc = G.NumOfCells();
 
-  int * cells = new int[(d+1)*(G_src.NumOfCells()+hc)];
+  gt::size_type * cells = new gt::size_type[(d+1)*(G_src.NumOfCells()+hc)];
 
   for(src_cell_it src_c = begin_x(G_src); ! src_c.IsDone(); ++src_c, ++hc){
     REQUIRE((size_d<0>(*src_c) == d+1),
@@ -56,7 +56,10 @@ void copy_cells(Triang3D       & G,
     }
    
   }
-  G.Steal(cells, G_src.NumOfCells(), G_src.NumOfVertices());
+  G.Steal(cells, 
+          static_cast<gt::size_type>(G_src.NumOfCells()),
+          static_cast<gt::size_type>(G_src.NumOfVertices()));
+
 }
 
 } // namespace GrAL 
