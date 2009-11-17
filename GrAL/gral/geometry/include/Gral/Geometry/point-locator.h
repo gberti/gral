@@ -91,6 +91,7 @@ private:
   bucket_type                                               intersecting;  
  
   double edge_length;      // prescribed edge length of bucket grid
+  double halo_relsize;     // relative size of halo region around grid covered by bucket grid
   bool   assume_cartesian; // try to build optimal bucket grid for Cartesian target grid
   // control location of additional points used to associate cells to buckets
   // = 0.0: use vertices, = 0.5: use midpoints between centers and vertices
@@ -125,6 +126,7 @@ public:
   
   void init_parameters() { 
     edge_length      = -1.0; 
+    halo_relsize     = 0.0;
     shrink_factor    = 0.25; 
     assume_cartesian = false;
     search_region_growth_factor = 1.0;
@@ -161,9 +163,8 @@ public:
 
 
   void do_assume_cartesian() { assume_cartesian = true;}
-  void set_edge_length(double el) { 
-    edge_length = el;
-  }
+  void set_edge_length(double el) {  edge_length = el; }
+  void set_halo_size  (double hs) {  halo_relsize = hs; }
   void set_search_region_growth(double gr) { 
     REQUIRE_ALWAYS(gr >= 0.0, "Must use positive growth factor",1);
     search_region_growth_factor = gr;
@@ -173,7 +174,7 @@ public:
   /*! \brief Find a cell containing \c p
 
       \post
-      If a cell containing \c p is found, <tt> locate(p).tag() == point_location_base::insided_tag </tt>,
+      If a cell containing \c p is found, <tt> locate(p).tag() == point_location_base::inside_tag </tt>,
       and \c locate(p).TheCell() is the cell containing p. <BR>
       If no such cell is found,  <tt> locate(p).tag() == point_location_base::projection_tag </tt>,
       \c locate(p).TheCoord() is the projection of \c p to the grid, and \c locate(p).TheCell() 
@@ -328,8 +329,11 @@ void point_locator<GRID,GEOM,GT>::init()
   // create a Cartesian bucket grid
   box<coord_type> bbox = get_grid_bounding_box(*TheGrid(), *TheGeometry());
   index_type size(0);
-  cart_coord_type boxmin = convert_point<cart_coord_type>(bbox.the_min());
-  cart_coord_type boxmax = convert_point<cart_coord_type>(bbox.the_max());
+  cart_coord_type boxmin_sharp = convert_point<cart_coord_type>(bbox.the_min());
+  cart_coord_type boxmax_sharp = convert_point<cart_coord_type>(bbox.the_max());
+
+  cart_coord_type boxmin = boxmin_sharp - halo_relsize * (boxmax_sharp - boxmin_sharp);
+  cart_coord_type boxmax = boxmax_sharp + halo_relsize * (boxmax_sharp - boxmin_sharp);
 
   // get adequate cartesian grid size 
   cart_coord_type  diag = boxmax-boxmin;
