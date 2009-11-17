@@ -20,14 +20,14 @@ init:
          done;\
          cd gral; $(MAKE) init; cd ..;)
 
-all:
+all: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) all GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/local.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-clean:
+clean: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -35,7 +35,7 @@ clean:
         echo "LEAVING  directory" $$i;cd ..; done)
 	rm -f *.o *~ *.flc core;
 
-libclean:
+libclean: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -44,7 +44,7 @@ libclean:
 	rm -f *.o *~ *.flc core;
 
 
-realclean:
+realclean: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -53,13 +53,14 @@ realclean:
 	rm -f *.o *~ *.flc core;
 
 
-new:
+new: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) new GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/local.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
-new-force:
+
+new-force: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -67,7 +68,7 @@ new-force:
         || echo ">>>>>>>>>>> TARGET new-force FAILED for " $$i " (continuing)";\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-install:
+install: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -75,13 +76,14 @@ install:
         echo "LEAVING  directory" $$i;cd ..; done)
 
 
-test:
+test: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) test TARGET=$(TARGET) GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/local.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
-test-force:
+
+test-force: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -89,14 +91,14 @@ test-force:
         || echo ">>>>>>>>>>> TARGET test-force FAILED for " $$i " (continuing)";\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-check:
+check: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) check GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/local.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-check-force:
+check-force: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -106,14 +108,14 @@ check-force:
 
 new-check-clean: new test-check-clean
 
-test-check-clean:
+test-check-clean: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) test-check-clean GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/local.config; \
         echo "LEAVING  directory" $$i;cd ..; done)
 
-test-check-clean-force:
+test-check-clean-force: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -126,14 +128,14 @@ test-check-clean-force:
 # predoc  = generate docs
 # postdoc = install docs (replace dummy links)
 
-doxy:
+doxy: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) doxy GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/local.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-installdox:
+installdox: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
@@ -142,14 +144,14 @@ installdox:
 
 doc: predoc postdoc
 
-predoc:	
+predoc:	init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
         $(MAKE) predoc GRALROOT=$(GRALROOT) CONFIG=$(GRALROOT)/$$i/local.config;\
         echo "LEAVING  directory" $$i;cd ..; done)
 
-postdoc:
+postdoc: init
 	@set -e; \
         (for i in $(SUBDIRS); \
         do cd $(GRALROOT)/$$i;echo 'ENTERING directory' $$i;\
