@@ -5,7 +5,7 @@ PWD=$(shell pwd)
 CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
-EXTRA_DEPMODULES+= gral/base gral/gmv-io gral/geomview-io gral/complex2d gral/cartesian2d gral/vtk gral/cgns-io \
+EXTRA_DEPMODULES += gral/base gral/gmv-io gral/geomview-io gral/complex2d gral/cartesian2d gral/vtk gral/cgns-io \
              external-control configuration utilities geometry sequence
 
 
@@ -27,13 +27,13 @@ LIBSOFF = -lgral-geomview-io
 LIBSDX  = -lgral-complex2d 
 LIBSCART = -lgral-cartesian2d
 
-include $(CONFIGURATION)/defs/vtk.defs
+include $(CONFIGURATION)/defs/local.vtk.defs
 CCFLAGS += $(VTK_CCFLAGS) 
 LIBSVTK  = -lgral-vtk $(VTK_LDFLAGS) 
 
-include $(CONFIGURATION)/defs/cgns.defs
+include $(CONFIGURATION)/defs/local.cgns.defs
 CCFLAGS += $(CGNS_CCFLAGS)
-LIBSCGNS       = $(CGNS_LDFLAGS)
+LIBSCGNS = $(CGNS_LDFLAGS)
 
 new-check-clean: # new check clean1
 	$(MAKE) new
