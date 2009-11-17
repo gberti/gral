@@ -22,6 +22,7 @@
 #include "vtkPolyDataReader.h"
 #include "vtkPolyData.h"
 #include "vtkCellTypes.h"
+#include "vtkAppendFilter.h"
 
 namespace GrAL { 
 
@@ -170,16 +171,12 @@ namespace vtk_ugrid {
 
   void UGridVTKAdapter_base::CopyFrom(vtkPolyData * poly) 
   {
-    //    vtkUnstructuredGrid * ug = vtkUnstructuredGrid::New();
     clear();
-    adaptee_->SetPoints(poly->GetPoints());
-    adaptee_->Allocate (poly->GetNumberOfCells());
-    for(int c = 0; c < poly->GetNumberOfCells(); ++c) {
-      vtkIdList * pts = vtkIdList::New();
-      poly->GetCellPoints(vtkIdType(c),pts); 
-      adaptee_->InsertNextCell(poly->GetCellType(c), pts);
-      pts->Delete();
-    }
+
+    vtkAppendFilter * filter = vtkAppendFilter::New();
+    filter->SetInput(poly);
+    filter->Update();
+    adaptee_->ShallowCopy(filter->GetOutput());
   }
 
 
