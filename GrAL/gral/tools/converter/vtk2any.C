@@ -29,7 +29,33 @@
 #include <iostream>
 #include <fstream>
 
+/*! \file
+
+   \todo There seems to be a bug in vtk_ugrid which means only one field of each domain type 
+   (cell, vertex) is actually created.
+   
+*/
+
 static const char* version = "$Id$";
+
+
+struct field_input {
+  std::string file;
+  std::string name;
+  int         dim_loc; // 0 = vertices, 2 = cells
+  int         dim; // 1 = scalar field
+
+  field_input() : dim(1) {}
+};
+
+
+inline std::istream& operator>>(std::istream& in, field_input& f)
+{ return (in >> f.file >> f.name >> f.dim_loc >> f.dim); }
+
+inline std::ostream& operator<<(std::ostream& out, field_input const& f)
+{ return (out << f.file << f.name << f.dim_loc << f.dim); }
+
+
 
 int main(int argc, char* argv[]) {
   using namespace GrAL;
@@ -81,19 +107,10 @@ int main(int argc, char* argv[]) {
   RegisterAt(Ctrl, "-geom_name", stl_geom_name);
   h += id + "-geom_name\t <string>\t (geometry name for STL output)\n";
 
-  string field_file_in;
-  RegisterAt(Ctrl, "-field", field_file_in);
-
-  string field_name;
-  RegisterAt(Ctrl, "-field_name", field_name);
-
-  // 0 = vertices, 2 = cells;
-  int field_dim_loc = 0;
-  RegisterAt(Ctrl, "-field-loc", field_dim_loc);
-
-  int field_dim = 1;
-  RegisterAt(Ctrl, "-field-dim", field_dim);
-
+  vector<field_input> fields;
+  Ctrl.add("-field", GrAL::GetPushbackMutator(fields));
+  h += id + "-field\t <string filename> <string name> <int dim_of_loc> <int dim> \n";
+  h += id + "   (Field in file filename, with name, dim_of_loc =0|2 (vertex|cell), dim = 1 for scalar fields)\n";
 
   AddHelp(Ctrl, h);
 
@@ -112,57 +129,58 @@ int main(int argc, char* argv[]) {
   cerr << " done." << std::endl;
 
   // conditionally read field
-  std::vector<double> field_data;
-  if(field_file_in != "") {
-    cerr << "Reading field  from file \"" << field_file_in << "\" ... " << endl;
-    ifstream file(field_file_in.c_str());
-    if(! file.is_open()) {
-      cerr << "Could not open field file \"" << field_file_in << "\", quitting." << endl;
-      return 2;
-    }
-    double x;
-    while(file >> x)
-      field_data.push_back(x);
-    file.close();
-  }
-  if(field_file_in != "") {
-    int req_size = (field_dim_loc == 0 ? vtkgrid.NumOfVertices() : vtkgrid.NumOfCells() );
-    if(field_data.size() != field_dim * req_size) {
-      cerr << "Field has wrong size " << field_data.size() << ", should be " << field_dim * req_size << endl;
-      return 2;
-    }
-    if(field_name == "")
-      field_name = field_file_in;
-    vtkDoubleArray *field = vtkDoubleArray::New();
-    field->Allocate(req_size);
-    field->SetName(field_name.c_str());
-    if(field_dim == 1) {
-      for(int i = 0; i < req_size; ++i) 
-	field->InsertValue(i, field_data[i]);
-      if(field_dim_loc == 0) // vertex field
-	vtkgrid.TheAdaptee()->GetPointData()->SetScalars(field);
-      else // Cells
-	vtkgrid.TheAdaptee()->GetCellData() ->SetScalars(field);
-    }
-    else {
-      field->SetNumberOfComponents(field_dim);
-      field->SetNumberOfTuples(req_size);
-      double* val = new double[field_dim];
-      for(int i = 0; i < req_size; ++i) {
-	for(int j = 0; j < field_dim; ++j)
-	  val[j] = field_data[field_dim*i +j];
-	field->SetTuple(i,val);
+  for(int i = 0; i < fields.size(); ++i) {
+    std::vector<double> field_data;
+    if(fields[i].file != "") {
+      cerr << "Reading field  from file \"" << fields[i].file << "\" ... " << endl;
+      ifstream file(fields[i].file.c_str());
+      if(! file.is_open()) {
+	cerr << "Could not open field file \"" << fields[i].file << "\", quitting." << endl;
+	return 2;
       }
-      delete val;
-      if(field_dim_loc == 0) // vertex field
-	vtkgrid.TheAdaptee()->GetPointData()->SetVectors(field);
-      else // Cells
-	vtkgrid.TheAdaptee()->GetCellData() ->SetVectors(field);
+      double x;
+      while(file >> x)
+	field_data.push_back(x);
+      file.close();
     }
-    field->Delete();
-    cout << "done." << endl;
+    if(fields[i].file != "") {
+      int req_size = (fields[i].dim_loc == 0 ? vtkgrid.NumOfVertices() : vtkgrid.NumOfCells() );
+      if(field_data.size() != fields[i].dim * req_size) {
+	cerr << "Field has wrong size " << field_data.size() << ", should be " << fields[i].dim * req_size << endl;
+	return 2;
+      }
+      if(fields[i].name == "")
+	fields[i].name = fields[i].file;
+      vtkDoubleArray *field = vtkDoubleArray::New();
+      field->Allocate(req_size);
+      field->SetName(fields[i].name.c_str());
+      if(fields[i].dim == 1) {
+	for(int k = 0; k < req_size; ++k) 
+	  field->InsertValue(k, field_data[k]);
+	if(fields[i].dim_loc == 0) // vertex field
+	  vtkgrid.TheAdaptee()->GetPointData()->SetScalars(field);
+	else // Cells
+	  vtkgrid.TheAdaptee()->GetCellData() ->SetScalars(field);
+      }
+      else {
+	field->SetNumberOfComponents(fields[i].dim);
+	field->SetNumberOfTuples(req_size);
+	double* val = new double[fields[i].dim];
+	for(int k = 0; k < req_size; ++k) {
+	  for(int j = 0; j < fields[i].dim; ++j)
+	    val[j] = field_data[fields[i].dim*k +j];
+	  field->SetTuple(k,val);
+	}
+	delete val;
+	if(fields[i].dim_loc == 0) // vertex field
+	  vtkgrid.TheAdaptee()->GetPointData()->SetVectors(field);
+	else // Cells
+	  vtkgrid.TheAdaptee()->GetCellData() ->SetVectors(field);
+      }
+      field->Delete();
+      cout << "done." << endl;
+    }
   }
-
 
 
 
