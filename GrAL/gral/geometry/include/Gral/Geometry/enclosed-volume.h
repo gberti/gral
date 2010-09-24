@@ -73,7 +73,7 @@ namespace GrAL {
     \pre G is a manifold mesh (without boundary)
     \pre G is oriented
     \pre dim(G) = spacedim(GeomG) - 1
-    \result The volume of the region enclosed by G.
+    \result The signed volume of the region enclosed by G.
 
    \note Could also pass orientation as a third parameter (GF with values in {+1,-1})
   */
@@ -111,15 +111,16 @@ namespace GrAL {
     return res;
   }
 
-  /*! \brief Find volume enclosed by surface mesh
+  /*! \brief Find (signed) volume enclosed by surface mesh
 
     \ingroup geometricmeasures
 
     \pre G is a manifold mesh (without boundary)
     \pre dim(G) = spacedim(GeomG) - 1
+    \pre G is orientable
 
     \post G is oriented
-    \result The volume of the region enclosed by G.
+    \result The (signed) volume of the region enclosed by G.
   */
   template<class GRID, class GEOM>
   double 
@@ -132,6 +133,24 @@ namespace GrAL {
     return enclosed_volume_oriented(G, GeomG);
   }
 
+  /*! \brief Fix geometric orientation of a grid
+    
+  The input grid is oriented such that the signed enclosed volume is 
+  positive (vol * sign > 0)
+
+
+  \ingroup orientation_algorithms
+  \ingroup geometricmeasures
+  */
+  template<class GRID, class GEOM>
+  bool fix_geometric_orientation(GRID & G, GEOM const& GeomG, int sign = 1)
+  {
+    bool res = fix_orientation(G);
+    double vol = enclosed_volume_oriented(G,GeomG);
+    if(vol * sign < 0)
+      res = res && fix_orientation(G, -1);
+    return res;
+  }
 
 
 } // namespace GrAL

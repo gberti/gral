@@ -1,0 +1,62 @@
+Outer vertex normals for grid "unit-tet.complex2d":
+Vertex 0 @ 0 0 0 has normal -0.57735 -0.57735 -0.57735
+Vertex 1 @ 1 0 0 has normal 0.694747 -0.50859 -0.50859
+Vertex 2 @ 0 1 0 has normal -0.50859 0.694747 -0.50859
+Vertex 3 @ 0 0 1 has normal -0.50859 -0.50859 0.694747
+
+Outer vertex normals for grid "unit-tet-neg.complex2d":
+Vertex 0 @ 0 0 0 has normal -0.57735 -0.57735 -0.57735
+Vertex 1 @ 1 0 0 has normal 0.694747 -0.50859 -0.50859
+Vertex 2 @ 0 1 0 has normal -0.50859 0.694747 -0.50859
+Vertex 3 @ 0 0 1 has normal -0.50859 -0.50859 0.694747
+
+Outer vertex normals for grid "unit-cube.complex2d":
+Vertex 0 @ 0 0 0 has normal -0.57735 -0.57735 -0.57735
+Vertex 1 @ 1 0 0 has normal 0.57735 -0.57735 -0.57735
+Vertex 2 @ 1 1 0 has normal 0.57735 0.57735 -0.57735
+Vertex 3 @ 0 1 0 has normal -0.57735 0.57735 -0.57735
+Vertex 4 @ 0 0 1 has normal -0.57735 -0.57735 0.57735
+Vertex 5 @ 1 0 1 has normal 0.57735 -0.57735 0.57735
+Vertex 6 @ 1 1 1 has normal 0.57735 0.57735 0.57735
+Vertex 7 @ 0 1 1 has normal -0.57735 0.57735 0.57735
+
+Outer vertex normals for grid "unit-cube-centered.complex2d":
+Vertex 0 @ -1 -1 -1 has normal -0.57735 -0.57735 -0.57735
+Vertex 1 @ 1 -1 -1 has normal 0.57735 -0.57735 -0.57735
+Vertex 2 @ 1 1 -1 has normal 0.57735 0.57735 -0.57735
+Vertex 3 @ -1 1 -1 has normal -0.57735 0.57735 -0.57735
+Vertex 4 @ -1 -1 1 has normal -0.57735 -0.57735 0.57735
+Vertex 5 @ 1 -1 1 has normal 0.57735 -0.57735 0.57735
+Vertex 6 @ 1 1 1 has normal 0.57735 0.57735 0.57735
+Vertex 7 @ -1 1 1 has normal -0.57735 0.57735 0.57735
+
+Outer vertex normals for grid "unit-cube-1st-octant.complex2d":
+Vertex 0 @ 2 2 2 has normal -0.57735 -0.57735 -0.57735
+Vertex 1 @ 3 2 2 has normal 0.57735 -0.57735 -0.57735
+Vertex 2 @ 3 3 2 has normal 0.57735 0.57735 -0.57735
+Vertex 3 @ 2 3 2 has normal -0.57735 0.57735 -0.57735
+Vertex 4 @ 2 2 3 has normal -0.57735 -0.57735 0.57735
+Vertex 5 @ 3 2 3 has normal 0.57735 -0.57735 0.57735
+Vertex 6 @ 3 3 3 has normal 0.57735 0.57735 0.57735
+Vertex 7 @ 2 3 3 has normal -0.57735 0.57735 0.57735
+
+Outer vertex normals for grid "unit-cube-not-oriented.complex2d":
+Vertex 0 @ 0 0 0 has normal -0.57735 -0.57735 -0.57735
+Vertex 1 @ 1 0 0 has normal 0.57735 -0.57735 -0.57735
+Vertex 2 @ 1 1 0 has normal 0.57735 0.57735 -0.57735
+Vertex 3 @ 0 1 0 has normal -0.57735 0.57735 -0.57735
+Vertex 4 @ 0 0 1 has normal -0.57735 -0.57735 0.57735
+Vertex 5 @ 1 0 1 has normal 0.57735 -0.57735 0.57735
+Vertex 6 @ 1 1 1 has normal 0.57735 0.57735 0.57735
+Vertex 7 @ 0 1 1 has normal -0.57735 0.57735 0.57735
+
+Outer vertex normals for grid "unit-cube-triangulated.complex2d":
+Vertex 0 @ 0 0 0 has normal -0.57735 -0.57735 -0.57735
+Vertex 1 @ 1 0 0 has normal 0.816497 -0.408248 -0.408248
+Vertex 2 @ 1 1 0 has normal 0.408248 0.408248 -0.816497
+Vertex 3 @ 0 1 0 has normal -0.408248 0.816497 -0.408248
+Vertex 4 @ 0 0 1 has normal -0.408248 -0.408248 0.816497
+Vertex 5 @ 1 0 1 has normal 0.408248 -0.816497 0.408248
+Vertex 6 @ 1 1 1 has normal 0.57735 0.57735 0.57735
+Vertex 7 @ 0 1 1 has normal -0.816497 0.408248 0.408248
+

@@ -55,8 +55,12 @@ namespace GrAL {
   public:
     bucket_table() {}
     bucket_table(index_type n, coord_type min_x, coord_type max_x) { init(n, min_x, max_x);}
+    template<class COORD>
+    bucket_table(index_type n, COORD min_x, COORD max_x) { init(n, min_x, max_x);}
 
     void init(index_type n, coord_type min_x, coord_type max_x);
+    template<class COORD>
+    void init(index_type n, COORD min_x, COORD max_x) { init(n, convert_point<coord_type>(min_x), convert_point<coord_type>(max_x));}
 
     template<class COORD>
     Cell locate(COORD x) const { 

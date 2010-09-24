@@ -17,6 +17,7 @@
 #include "Gral/Algorithms/orientation.h"
 #include "Gral/Grids/Complex2D/all.h"
 #include "Gral/IO/complex2d-format-input.h"
+#include "Gral/IO/complex2d-format-output.h"
 
 #include <iostream>
 #include <string>
@@ -38,6 +39,15 @@ void test_grid(std::string const& gfile)
     for(gt::CellIterator c(G); !c.IsDone(); ++c)
       std::cout << "Or(cell " << c.handle() << ") = " << orientation(*c) << "\n";
     fix_orientation(G);
+    {
+      GrAL::OstreamComplex2DFmt Out(gfile + "-pos-oriented.complex2d");
+      ConstructGrid0(Out, G);
+    }
+    fix_orientation(G, *G.FirstCell(), -1);
+    {
+      GrAL::OstreamComplex2DFmt Out(gfile + "-neg-oriented.complex2d");
+      ConstructGrid0(Out, G);
+    }
   }
 }
 

@@ -1,0 +1,24 @@
+Volume of grid "unit-tet.complex2d" is 0.166667 (assumed it's oriented)
+Volume of grid "unit-tet.complex2d" is 0.166667 (forced orientation)
+Volume of neg. oriented grid "output/unit-tet.complex2d-neg-oriented.complex2d" is -0.166667
+Volume of pos. oriented grid "output/unit-tet.complex2d-pos-oriented.complex2d" is 0.166667
+Volume of grid "unit-tet-neg.complex2d" is -0.166667 (assumed it's oriented)
+Volume of grid "unit-tet-neg.complex2d" is 0.166667 (forced orientation)
+Volume of neg. oriented grid "output/unit-tet-neg.complex2d-neg-oriented.complex2d" is -0.166667
+Volume of pos. oriented grid "output/unit-tet-neg.complex2d-pos-oriented.complex2d" is 0.166667
+Volume of grid "unit-cube.complex2d" is 1 (assumed it's oriented)
+Volume of grid "unit-cube.complex2d" is 1 (forced orientation)
+Volume of neg. oriented grid "output/unit-cube.complex2d-neg-oriented.complex2d" is -1
+Volume of pos. oriented grid "output/unit-cube.complex2d-pos-oriented.complex2d" is 1
+Volume of grid "unit-cube-centered.complex2d" is 8 (assumed it's oriented)
+Volume of grid "unit-cube-centered.complex2d" is 8 (forced orientation)
+Volume of neg. oriented grid "output/unit-cube-centered.complex2d-neg-oriented.complex2d" is -8
+Volume of pos. oriented grid "output/unit-cube-centered.complex2d-pos-oriented.complex2d" is 8
+Volume of grid "unit-cube-1st-octant.complex2d" is 1 (assumed it's oriented)
+Volume of grid "unit-cube-1st-octant.complex2d" is 1 (forced orientation)
+Volume of neg. oriented grid "output/unit-cube-1st-octant.complex2d-neg-oriented.complex2d" is -1
+Volume of pos. oriented grid "output/unit-cube-1st-octant.complex2d-pos-oriented.complex2d" is 1
+Volume of grid "unit-cube-not-oriented.complex2d" is 0.333333 (assumed it's oriented)
+Volume of grid "unit-cube-not-oriented.complex2d" is 1 (forced orientation)
+Volume of neg. oriented grid "output/unit-cube-not-oriented.complex2d-neg-oriented.complex2d" is -1
+Volume of pos. oriented grid "output/unit-cube-not-oriented.complex2d-pos-oriented.complex2d" is 1

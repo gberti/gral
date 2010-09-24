@@ -29,6 +29,8 @@ namespace GrAL {
     \ingroup combinatoric_grid_algorithms
 
     \brief Algorithms related to orientation of grids.
+
+    \see fix_geometric_orientation
 */
 
 
@@ -134,8 +136,10 @@ namespace GrAL {
           the result should be -1, and +1 otherwise. 
     - \c C
        - Model of $GrAL GridCell
+    
     \param g input grid, orientation of some cells will be changed on output
     \param \c guide_cell Cell with reference orientation
+    \param \c sign       Integer \f$ \in \{+1, -1\}\f$ indicating whether to flip the orientation of \c guide_cell
     \return true if the grid \g is orientable, and false otherwise.
 
     \pre \c g is a  Glossary manifold-with-boundary grid
@@ -151,11 +155,12 @@ namespace GrAL {
 
 
   template<class G, class C>
-  bool fix_orientation(G & g, C guide_cell) {
+  bool fix_orientation(G & g, C guide_cell, int sign = 1) {
+    REQUIRE_ALWAYS(sign != 0, "sign must be +1 or -1",1);
     typedef grid_types<G> gt;
     grid_function<typename gt::Cell, int> orientation(g,0);
     bool orientable = get_orientation(g, orientation);
-    int default_orientation = orientation(guide_cell);
+    int default_orientation = sign*orientation(guide_cell);
     for(typename gt::CellIterator c(g); !c.IsDone(); ++c)
       if(orientation(*c)*default_orientation < 0) 
 	g.swap_orientation(*c);
@@ -173,6 +178,19 @@ namespace GrAL {
   bool fix_orientation(G & g) {
     return fix_orientation(g, * g.FirstCell());
   }
+
+  /*! \brief Convenience wrapper for orientation
+
+    \ingroup orientation_algorithms 
+   
+     Equivalent to <tt> fix_orientation(g, * g.FirstCell(), -1) </tt>
+
+  */
+  template<class G>
+  bool fix_orientation(G & g, int sign) {
+    return fix_orientation(g, * g.FirstCell(), sign);
+  }
+
 
 
   /* \brief A potential implementation of relative_orientation

@@ -1,10 +1,10 @@
-# gral/geometry/test/enclosed-volume
+# gral/geometry/test/vertex-normals
 
 PWD=$(shell pwd)
 CONFIG=$(PWD)/../../local.config
 include $(CONFIG)
 
-SOURCES =  test-enclosed-volume.C
+SOURCES =  test-vertex-normals.C
 OBJECTS =  $(SOURCES:%.C=%.o)
 DEPS = $(SOURCES:%.C=%.d)
 EXEC = $(SOURCES:%.C=%.exe)
@@ -27,32 +27,15 @@ all : $(TARGETS)
 $(TARGETS): $(OBJECTS)
 	$(CC) -o $(EXEC) $(OBJECTS) $(LDFLAGS) $(LIBS)
 
-mkoutput:
-	mkdir -p output
-
-run-check: mkoutput
-
-run: mkoutput
+run:
 	$(EXEC) 
 
 check: run-check
-	@(echo='echo -e'; \
-        /bin/rm -rf output/*.filtered.out; \
-        for i in output/*; \
-        do \
-         $(FILTER) $$i > $$i.filtered.out; \
-         b=`basename $$i`; \
-         if diff $$i.filtered.out exp/$$b; \
-             then  $$echo "\t\t\t" $$i OK; \
-             else  $$echo "\t\t\t" ERROR in $$i; \
-         fi ;\
-        done;)
 
 
 clean: stdclean
 	rm -f $(EXEC)
 	rm -f *.o *~ *.flc core
 	rm -f .depend *.oogl *.out 
-	rm -rf output
 
 
