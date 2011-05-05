@@ -112,11 +112,11 @@ public:
   void clear() { elements.clear();}
 
   template<class RANGE>
-  void copy(RANGE const& R)
+  void copy(RANGE const& r)
   {
     typedef grid_types<RANGE> rgt;
     typedef typename sequence_iterator<rgt, typename et::element_type_tag>::type RangeElementIterator;
-    for(RangeElementIterator e(R);!e.IsDone(); ++e)
+    for(RangeElementIterator e(r);!e.IsDone(); ++e)
       push_back(*e);
   }
 
