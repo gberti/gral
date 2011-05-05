@@ -51,6 +51,8 @@ namespace GrAL {
     ref_ptr<grid_type>                                   g;
     ref_ptr<geom_type>                                   geom;
     ref_ptr<table_type>                                  b;
+
+    coord_type m_cell_width;
   
   public:
     bucket_table() {}
@@ -61,6 +63,8 @@ namespace GrAL {
     void init(index_type n, coord_type min_x, coord_type max_x);
     template<class COORD>
     void init(index_type n, COORD min_x, COORD max_x) { init(n, convert_point<coord_type>(min_x), convert_point<coord_type>(max_x));}
+
+    void clear_table() { b->clear(); }
 
     template<class COORD>
     Cell locate(COORD x) const { 
@@ -116,6 +120,7 @@ namespace GrAL {
 
     coord_type min() const { return geom->coord(typename gt::Vertex(g, g->low_vertex_index()));}
     coord_type max() const { return geom->coord(typename gt::Vertex(g, g->high_vertex_index()));}
+    coord_type cell_width() const { return m_cell_width; }
     
   }; // class bucket_table
 
@@ -133,6 +138,7 @@ namespace GrAL {
       min_x = min_x - 0.5*adjust;
       max_x = max_x + 0.5*adjust;
       coord_type dist  = max_x - min_x;
+      m_cell_width = quotient(dist, n);
 
       g    = new_ref_ptr(new grid_type(n+index_type(1)));
       typedef mapping_type mt;
