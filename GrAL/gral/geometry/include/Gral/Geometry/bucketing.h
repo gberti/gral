@@ -56,13 +56,19 @@ namespace GrAL {
   
   public:
     bucket_table() {}
-    bucket_table(index_type n, coord_type min_x, coord_type max_x) { init(n, min_x, max_x);}
-    template<class COORD>
-    bucket_table(index_type n, COORD min_x, COORD max_x) { init(n, min_x, max_x);}
+    bucket_table(index_type n, coord_type min_x, coord_type max_x, double adjust_factor = 0.5) 
+      { init(n, min_x, max_x, adjust_factor); }
 
-    void init(index_type n, coord_type min_x, coord_type max_x);
     template<class COORD>
-    void init(index_type n, COORD min_x, COORD max_x) { init(n, convert_point<coord_type>(min_x), convert_point<coord_type>(max_x));}
+    bucket_table(index_type n, COORD min_x, COORD max_x, double adjust_factor = 0.5) 
+      { init(n, min_x, max_x, adjust_factor);}
+
+    void init(index_type n, coord_type min_x, coord_type max_x, double adjust_factor = 0.5);
+ 
+    template<class COORD>
+    void init(index_type n, COORD min_x, COORD max_x, double adjust_factor = 0.5) 
+    { init(n, convert_point<coord_type>(min_x), convert_point<coord_type>(max_x), adjust_factor);}
+
 
     void clear_table() { b->clear(); }
 
@@ -128,15 +134,16 @@ namespace GrAL {
   template<class T, int N>
   void bucket_table<T,N>::init(typename bucket_table<T,N>::index_type n,
 			       typename bucket_table<T,N>::coord_type min_x,
-			       typename bucket_table<T,N>::coord_type max_x)
+			       typename bucket_table<T,N>::coord_type max_x,
+			       double adjust_factor)
  
     { 
       // make the window a bit larger, to avoid boundary situations
       // and dist values of zero.
       n = max_tuple(n, index_type(1));
       coord_type adjust = quotient(coord_type(1.0), coord_type(n));
-      min_x = min_x - 0.5*adjust;
-      max_x = max_x + 0.5*adjust;
+      min_x = min_x - adjust_factor*adjust;
+      max_x = max_x + adjust_factor*adjust;
       coord_type dist  = max_x - min_x;
       m_cell_width = quotient(dist, n);
 
