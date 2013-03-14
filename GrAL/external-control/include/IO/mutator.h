@@ -255,7 +255,22 @@ protected:
   virtual bool read_var(std::istream& in) { (*out) << text; if(do_ex) exit(0); return true; }
 }; 
 
-
+/*! \brief Mutator executing a callback if read
+  Template parameters:
+  - \c F is the callback type with signatur <code>void F()</code>
+*/
+template<class F>
+class CallbackMutator  : public mutator_impl {
+  F f;
+public:
+  CallbackMutator(F f) : f(f) {}
+  
+  virtual void print(std::ostream&)                      const {}
+  virtual void print(std::ostream&, std::string const& ) const {}
+  virtual std::string vartypename() const { return "void"; }
+protected:
+  virtual bool read_var(std::istream& in) { f(); return true; }
+}; 
 
 ////////////////////////////////
 // Mutator-generating Functions
@@ -348,6 +363,12 @@ inline Mutator GetSetOnReadMutator(T& t, TObs& obs, TObs deflt)
 { return Mutator(new SetOnReadMutator<T,TObs>(t,obs,deflt)); }
 
 
+/*! \brief Creator function for CallbackMutator
+    
+    \ingroup mutatorcreators 
+ */
+template<class F>
+inline Mutator GetCallbackMutator(F f) { return Mutator(new CallbackMutator<F>(f)); }
 
 /*! \brief Creator function for MessageOnReadMutator
     
