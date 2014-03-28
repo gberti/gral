@@ -234,7 +234,7 @@ copy-doxy:
 ##  Standard suffix rule ##
 ###########################
 
-.PHONY: doc test demo
+.PHONY: doc test demo makefile
 
 .SUFFIXES: .C .cc .cpp .d .f
 
