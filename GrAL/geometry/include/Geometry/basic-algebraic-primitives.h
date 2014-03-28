@@ -33,6 +33,10 @@ template<class POINT>
 struct basic_algebraic_primitives : public point_traits<POINT> {
 
   typedef point_traits<POINT> pt;
+  using pt::Dim;
+  using pt::LowerIndex;
+  using pt::UpperIndex;
+
   //! \brief scalar type of point (member of field)
   typedef typename pt::component_type scalar;
   /*! \brief real type (ordered field)

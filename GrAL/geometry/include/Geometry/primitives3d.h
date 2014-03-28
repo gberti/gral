@@ -48,6 +48,12 @@ private:
 public:
   typedef typename base::scalar scalar;
   typedef typename base::real   real;
+  using base::Dim;
+  using base::LowerIndex;
+  using base::UpperIndex;
+  using base::norm_2;
+  using base::dot;
+
 
   struct matrix_type {
     typedef point_traits<POINT>         pt;
@@ -145,9 +151,9 @@ public:
   {
     POINT res;
     pt::ConstructWithDim(3, res);
-    x(res) = xx;
-    y(res) = yy;
-    z(res) = zz;
+    pt::x(res) = xx;
+    pt::y(res) = yy;
+    pt::z(res) = zz;
     return res;
   }
 
