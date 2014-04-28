@@ -40,7 +40,7 @@ namespace GrAL {
       std::basic_ios    <cT, traits>(&m_sbuf),
       std::basic_ostream<cT, traits>(&m_sbuf)
     {
-      init(&m_sbuf);
+      this->init(&m_sbuf);
     }
     
   private:
