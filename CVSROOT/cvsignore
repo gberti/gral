@@ -1,3 +1,0 @@
-*.exe.out  *.out *.tmp core core.* *.out.valgrind
-*.d
-
