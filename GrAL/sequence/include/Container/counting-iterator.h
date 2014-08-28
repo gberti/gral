@@ -65,7 +65,7 @@ namespace GrAL {
     typedef I                        value_type;
     typedef proxy_type               reference;
     typedef I*                       pointer;
-    typedef ptrdiff_t                difference_type;
+    typedef std::ptrdiff_t           difference_type;
     typedef size_t                   size_type;
     typedef std::output_iterator_tag iterator_category;
   public:
@@ -80,7 +80,7 @@ namespace GrAL {
     //! \brief preincrement
     self& operator++() { ++cnt; return *this;} 
     //! \brief postincrement
-    self& operator++(int) { self res = *this; ++cnt; return res;}
+    self  operator++(int) { self res = *this; ++cnt; return res;}
  
     //! \brief number of increments
     I size()  const { return cnt;}

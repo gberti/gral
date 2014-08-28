@@ -227,6 +227,8 @@ struct point_traits_fixed_size_array<ARRAY, COMPONENT, 2>
 {
   typedef point_traits_fixed_size_array_base<ARRAY, COMPONENT, 2> base;
   typedef typename base::component_type component_type;  
+  using base::x;
+  using base::y;
 
   static component_type  z(typename base::Ptype const& p) {return zero();}
   static component_type& z(typename base::Ptype      & p) {return (dummy_zero=component_type(0));}

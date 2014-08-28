@@ -58,6 +58,8 @@ public:
   using base::Dim;
   using base::LowerIndex;
   using base::UpperIndex;
+  using base::x;
+  using base::y;
   using base::norm_2;
   using base::dot;
 

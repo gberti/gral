@@ -51,7 +51,9 @@ public:
   using base::Dim;
   using base::LowerIndex;
   using base::UpperIndex;
+  using base::norm_1;
   using base::norm_2;
+  using base::squared_norm_2;
   using base::dot;
 
 

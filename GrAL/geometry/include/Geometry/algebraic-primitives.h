@@ -75,17 +75,21 @@ namespace GrAL {
 
 template<class POINT>
 struct dimension_dependent_primitives<POINT, tag2D>
-  : public dimension_dependent_primitives_2d<POINT>  {};
+  : public virtual dimension_dependent_primitives_2d<POINT>  {};
 
 template<class POINT>
 struct dimension_dependent_primitives<POINT, tag3D>
-  : public  dimension_dependent_primitives_3d<POINT>  {};
+  : public virtual dimension_dependent_primitives_3d<POINT>  {};
 
 template<class POINT>
 struct dimension_dependent_primitives<POINT, variable_dimension_tag>
-  : public dimension_dependent_primitives_2d<POINT>,
-    public dimension_dependent_primitives_3d<POINT>
-  {};
+  // : public basic_algebraic_primitives<POINT> {};
+    : public virtual dimension_dependent_primitives_2d<POINT>,
+      public virtual dimension_dependent_primitives_3d<POINT>
+  {
+    using dimension_dependent_primitives_2d<POINT>::dot;
+  };
+ 
 
 /*! \defgroup algebraicprimitives Primitive algebraic and geometric operations
     
