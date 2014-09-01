@@ -192,7 +192,7 @@ namespace collapsed_grid_view {
       }
       
       void init() { 
-	init_iterators(*this);
+	this->init_iterators(*this);
 	num_of_vertices = BaseGrid()->NumOfVertices();
 	num_of_cells    = BaseGrid()->NumOfCells();
       }

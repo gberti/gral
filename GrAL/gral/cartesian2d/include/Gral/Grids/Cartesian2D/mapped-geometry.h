@@ -301,11 +301,11 @@ public:
   mapped_geometry() {}
   //! Standard geometry
   mapped_geometry(const RegGrid2D& gg, const CM& ff = CM())
-    { init(gg,ff, gg.ll(), gg.ur()); }
+    { this->init(gg,ff, gg.ll(), gg.ur()); }
   //! Map \c [LL, UR] to \c ff(\f$[0,1]^2\f$\c)
   mapped_geometry( const RegGrid2D& gg,  const CM& ff,
 		   const index_type& LL, const index_type& UR) 
-    { init(gg,ff,LL,UR); }
+    { this->init(gg,ff,LL,UR); }
   //@}
 
   /*! \brief geometric representation of edges

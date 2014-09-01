@@ -97,6 +97,7 @@ public:
   polytope_aux_dim(ref_ptr<GEOM const> geo, E const& ee) : base(geo,ee) {}
 
   using base::directions;
+  using base::direction;
 
    ::std::vector<typename base::coord_type> directions(typename base::Face f)  const { 
      ::std::vector<typename base::coord_type> res(2);

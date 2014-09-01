@@ -54,6 +54,7 @@ public:
   typedef typename base::coord_type coord_type;
   typedef typename base::index_type index_type;
 
+  using base::coord;
 protected:
   GEOM      * _sub()       { return static_cast<GEOM      *>(this);}
   GEOM const* _sub() const { return static_cast<GEOM const*>(this);}

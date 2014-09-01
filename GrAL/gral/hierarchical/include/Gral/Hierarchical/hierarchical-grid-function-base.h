@@ -43,6 +43,7 @@ namespace hierarchical {
     typedef typename base::notifier_base              notifier_base;
     typedef typename base::notifier_type              notifier_type;
 
+    using base::connect;
   public:
     typedef GF                                            flat_gf_type; 
     typedef typename flat_gf_type::value_type             value_type;

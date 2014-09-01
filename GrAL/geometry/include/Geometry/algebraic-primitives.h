@@ -32,47 +32,40 @@
 
 namespace GrAL {
 
-//----------------------------------------------------------------
-//
-//  this file contains some generic implementations for 
-//  elementary algebraic & geometric operations,
-//  such as determinants or area-calculations.
-//
-//  class structure:
-//  
-//                + - - - ddp 2d - - - +
-//                |                    |
-//                + - - - ddp 3d - - - +
-//                |                    |
-// ap ---- ddp -- + - - - - - - - - - -+--- bap
-//
-// where:
-// ap  - algebraic_primitives:            user-interface class
-// bap - basic_algebraic_primitives:      non-dimension-dependent functions
-// ddp - dimension_dependent_primitives : bap + possible extensions for 2D/3D. 
-//       This class may be specialized for concrete POINT types.
-// ddp{2d,3d} - dimension_dependent_primitives_{2d,3d} : special functions
-//       for 2D or 3D. 
-//       This can be used to specialize ddp, e.g.:
-//       dimension_dependent_primitives<mypoint> : 
-//         public dimension_dependent_primitives_2d<mypoint> {};
-//
-//----------------------------------------------------------------
+/*! \file 
+
+  This file contains some generic implementations for 
+  elementary algebraic & geometric operations,
+  such as determinants or area-calculations.
+
+  class structure:
+ <pre> 
+                + - - - ddp 2d - - - +
+                |                    |
+                + - - - ddp 3d - - - +
+                |                    |
+ ap ---- ddp -- + - - - - - - - - - -+--- bap
+</pre>
+ where:
+ - ap  - algebraic_primitives:            user-interface class
+ - bap - basic_algebraic_primitives:      non-dimension-dependent functions
+ - ddp - dimension_dependent_primitives : bap + possible extensions for 2D/3D. 
+         This class provides a hook to be specialized for concrete POINT types.
+ - ddp{2d,3d} - dimension_dependent_primitives_{2d,3d} : special functions for 2D or 3D. 
+       This can be used to specialize ddp, e.g.:
+\code
+       dimension_dependent_primitives<mypoint> : 
+          public dimension_dependent_primitives_2d<mypoint> {};
+\endcode
+*/
 
 
+/*! \defgroup algebraicprimitives_impl
 
+    \ingroup algebraicprimitives  
 
-////////////////////////////////////////////////////////////////
-//
-// dimension dependent functions 
-//
-////////////////////////////////////////////////////////////////
-
-
-
-
-
-
+    Hook for introducing special functionality into algebraic_primitives 
+ */
 template<class POINT>
 struct dimension_dependent_primitives<POINT, tag2D>
   : public virtual dimension_dependent_primitives_2d<POINT>  {};
@@ -83,20 +76,20 @@ struct dimension_dependent_primitives<POINT, tag3D>
 
 template<class POINT>
 struct dimension_dependent_primitives<POINT, variable_dimension_tag>
-  // : public basic_algebraic_primitives<POINT> {};
-    : public virtual dimension_dependent_primitives_2d<POINT>,
-      public virtual dimension_dependent_primitives_3d<POINT>
+   : public basic_algebraic_primitives<POINT> 
   {
-    using dimension_dependent_primitives_2d<POINT>::dot;
+    typedef dimension_dependent_primitives_2d<POINT> ap2d;
+    typedef dimension_dependent_primitives_3d<POINT> ap3d;
   };
  
 
 /*! \defgroup algebraicprimitives Primitive algebraic and geometric operations
     
-    The class intended for general use is <code> algebraic_primitives </code>.
+    The class is intended for general use is <code> algebraic_primitives </code>.
     If the point type \c P is  known at compile-time to be of dimension 2 or 3,
-    extended functionality is automatically defined beyond the basic dimension-independend
+    extended functionality is automatically defined beyond the basic dimension-independent
     stuff in \c basic_algebraic_primitives.
+    Otherwise, specific 2D or 3D functionality is available via nested types ap2d and ap3d.
 
     Example:
     \code

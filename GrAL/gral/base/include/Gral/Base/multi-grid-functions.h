@@ -149,6 +149,7 @@ public:
   typedef T    value_type;
   typedef typename base::size_type size_type;
 
+
   multi_grid_function() {}
   multi_grid_function(const grid_type& g) :  base(g) {}
   multi_grid_function(const grid_type& g, T const& t) :  base(g,t) {}
@@ -165,23 +166,23 @@ public:
 
   /*! \brief Element-wise grid function */
   template<class E>
-  typename element_wise<E>::function const& ElementFunction() const { return ElementFunction_(E());}
+  typename element_wise<E>::function const& ElementFunction() const { return base::ElementFunction_(E());}
 
   /*! \name  Element-wise iterator */
   //@{
   template<class E>
-  typename element_wise<E>::element_iterator FirstElement() const { return FirstElement_(E());}
+    typename element_wise<E>::element_iterator FirstElement() const { return base::FirstElement_(E());}
   template<class E>
-  typename element_wise<E>::element_iterator EndElement()   const { return EndElement_(E());}
+  typename element_wise<E>::element_iterator EndElement()   const { return base::EndElement_(E());}
 
   template<class E>
-  typename element_wise<E>::const_iterator begin() const { return begin_(E());}
+  typename element_wise<E>::const_iterator begin() const { return base::begin_(E());}
   template<class E>
-  typename element_wise<E>::const_iterator end  () const { return end_  (E());}
+  typename element_wise<E>::const_iterator end  () const { return base::end_  (E());}
   template<class E>
-  typename element_wise<E>::iterator       begin()       { return begin_(E());}
+  typename element_wise<E>::iterator       begin()       { return base::begin_(E());}
   template<class E>
-  typename element_wise<E>::iterator       end  ()       { return end_  (E());}
+  typename element_wise<E>::iterator       end  ()       { return base::end_  (E());}
   //@}
 
 
@@ -192,11 +193,11 @@ public:
   size_type size() const { return base::total_size();}
 
   //! \brief Set value to t for each element
-  void set_value(value_type const& t) { set_value_(t);}
+  void set_value(value_type const& t) { base::set_value_(t);}
   //! \brief Set the grid
-  void set_grid(grid_type const& g)   { set_grid_(g);}
+  void set_grid(grid_type const& g)   { base::set_grid_(g);}
   //! \brief Set grid and values for all elements
-  void set_grid(grid_type const& g, value_type const& t) { set_grid_(g); set_value(t); }
+  void set_grid(grid_type const& g, value_type const& t) { set_grid(g); set_value(t); }
   //! \brief Set grid and values for all elements
   void init(        grid_type const& g, value_type const& t) { set_grid(g,t);}
   //! \brief Set grid and values for all elements

@@ -1062,9 +1062,10 @@ struct element_traits<cartesian3d::Cell_Cartesian3D>
   typedef consecutive_integer_tag<0>  consecutive_tag;
 };
 
+ namespace cartesian3d {
 
+ #define gt grid_types<cartesian3d::CartesianGrid3D>
 
-#define gt grid_types<cartesian3d::CartesianGrid3D>
 
   inline gt::VertexIterator   gral_begin(gt::grid_type const& G, gt::VertexIterator) { return G.FirstVertex();}
   inline gt::VertexIterator   gral_end  (gt::grid_type const& G, gt::VertexIterator) { return G.EndVertex();}
@@ -1112,7 +1113,7 @@ struct element_traits<cartesian3d::Cell_Cartesian3D>
   inline gt::size_type              gral_size (gt::Cell   a, gt::FacetOnCellIterator)   { return a.NumOfFacets();}
 
 #undef gt
-
+ }
 
 
 } // namespace GrAL 

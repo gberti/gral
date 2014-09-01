@@ -195,6 +195,7 @@ public:
   typedef typename base_gf::reference       reference;
   typedef typename base_gf::const_reference const_reference;
   using base_gf::TheGrid;
+  using base_gf::defined;
 
   template<class EE, class TT> struct apply { typedef grid_function_hash<EE,TT> type; };
 

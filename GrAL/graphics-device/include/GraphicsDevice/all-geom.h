@@ -196,7 +196,7 @@ inline RenderableGeom RCylinder(double r, P const& p, P const& q)
   typedef  RenderableGeom::coord_type ct;
   typedef point_traits<P>  pt;
   typedef point_traits<ct> ptc;
-  typedef algebraic_primitives<ct> ap;
+  typedef algebraic_primitives<ct>::ap3d ap;
   ct p1(pt::x(p), pt::y(p), pt::z(p));
   ct q1(pt::x(q), pt::y(q), pt::z(q));
   ct axis(q1-p1);
