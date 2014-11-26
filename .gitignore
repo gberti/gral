@@ -1,0 +1,10 @@
+lib
+obj.tmp
+*.out
+*.out.valgrind
+*.d
+local.config
+local.defs
+*.gmv
+*.dat
+
